@@ -25,7 +25,7 @@ namespace Easyrewardz_TicketSystem.DBContext
         MySqlConnection conn = new MySqlConnection();
         public ETSContext()
         {
-            conn.ConnectionString = "Data Source = 13.67.69.216; port = 3306; Initial Catalog = DB_Ticketing_ER; User Id = brainvire; password = Logitech@123";
+            conn.ConnectionString = "Data Source = 13.67.69.216; port = 3306; Initial Catalog = Ticketing; User Id = brainvire; password = Logitech@123";
         }
 
         private MySqlHelper _connection;
@@ -37,7 +37,8 @@ namespace Easyrewardz_TicketSystem.DBContext
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("sp_insertER_CurrentSession", conn);
+                //MySqlCommand cmd1 = new MySqlCommand("sp_insertER_CurrentSession", conn);
+                MySqlCommand cmd1 = new MySqlCommand("prc_insertCurrentSession", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@UserName", userId);
                 cmd1.Parameters.AddWithValue("@SecurityToken", newToken);
@@ -69,7 +70,7 @@ namespace Easyrewardz_TicketSystem.DBContext
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("sp_validateToken", conn);
+                MySqlCommand cmd1 = new MySqlCommand("prc_validateToken", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@SecurityToken", SecretToken);
                 cmd1.Parameters.AddWithValue("@ModuleID", ModuleID);
