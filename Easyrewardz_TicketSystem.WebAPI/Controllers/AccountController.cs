@@ -83,41 +83,27 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         //Send mail for Forgot Password
         [HttpPost]
-        public ActionResult ForgetPassword(string emailToAddress= "shlob.barot@brainvire.com", string EmailId = "shlob.barot@brainvire.com", string subject= "Forget Password")
+        public JsonResult ForgetPassword(string EmailId = "shlok.barot@brainvire.com")
         {
-            
+
             try
             {
-                string gmailUserName = EmailId;
-                string mailbody = "Hello DemoUser, This is link for change password";
-                string gmailUserPassword = "Asdzxc#411";
-                string SMTPSERVER = "smtp.gmail.com";
-                int PORTNO = 587;
+                CommonService objSmdService = new CommonService();
+                SMTPDetails objSmtpDetail = new SMTPDetails();
 
-                SmtpClient smtpClient = new SmtpClient(SMTPSERVER, PORTNO);
-                smtpClient.EnableSsl = false;
-                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtpClient.UseDefaultCredentials = false;
-                smtpClient.Credentials = new NetworkCredential(gmailUserName, gmailUserPassword);
-                {
-                    using (MailMessage message = new MailMessage())
-                    {
-                        message.From = new MailAddress(gmailUserName, "Finocart");
-                        message.Subject = subject == null ? "" : subject;
-                        message.Body = mailbody;
-                        message.IsBodyHtml = true;
-                        message.To.Add(emailToAddress);
+                string subject = "Forgot Password";
+                string body = "Hello, This is Demo Mail for testing purpose.";
+                objSmtpDetail.FromEmailId = "shlok.barot@brainvire.com";
+                objSmtpDetail.Password = "Brainvire@2019";
+                //objSmtpDetail.SMTPHost = "";
+                objSmtpDetail.SMTPServer = "smtp.gmail.com";
+                objSmtpDetail.SMTPPort = 587;
+                objSmtpDetail.IsBodyHtml = true;
 
-                        try
-                        {
-                            smtpClient.Send(message);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw ex;
-                        }
-                    }
-                }
+
+
+                objSmdService.SendEmail(objSmtpDetail, EmailId, subject, body);
+
             }
 
             catch (Exception ex)
@@ -125,7 +111,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 throw ex;
             }
             return null;
-            
+
         }
         #endregion
     }
