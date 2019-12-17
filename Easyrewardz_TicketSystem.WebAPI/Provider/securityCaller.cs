@@ -1,5 +1,6 @@
 ﻿
 using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.Services;
 using System.Data;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
@@ -17,6 +18,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _SecurityRepository = security;
             return _SecurityRepository.validateTokenGetPermission(SecretToken,ModuleID);
+        }
+        public bool UpdatePassword(string cipherEmailId,string Password)
+        {
+            CommonService objSmdService = new CommonService();
+            string plainEmailId = objSmdService.Decrypt(cipherEmailId);
+            string encryptedPassword = objSmdService.Encrypt(Password);
+
+            return _SecurityRepository.UpdatePassword(plainEmailId, encryptedPassword);
         }
     }
 }

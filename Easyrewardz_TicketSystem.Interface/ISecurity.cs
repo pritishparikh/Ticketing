@@ -10,5 +10,7 @@ namespace Easyrewardz_TicketSystem.Interface
         string getToken(string programCode, string AppID, string Domainname,string userId,string password);
 
         DataSet validateTokenGetPermission(string secertCode,int ModuleID);
+
+        bool UpdatePassword(string cipherEmailId, string Password);
     }
 }
