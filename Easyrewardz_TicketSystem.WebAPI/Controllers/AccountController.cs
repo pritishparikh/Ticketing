@@ -85,6 +85,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         //Send mail for Forgot Password
         [HttpPost]
+        [Route("ForgetPassword")]
         [AllowAnonymous]
         public JsonResult ForgetPassword(string EmailId)
         {
@@ -123,6 +124,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="cipherEmailId">Email Id in encrypted text</param>
         /// <returns></returns>
         [HttpPost]
+        [Route("UpdatePassword")]
         [AllowAnonymous]
         public JsonResult UpdatePassword(string cipherEmailId, string Password)
         {
@@ -130,7 +132,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 securityCaller _newSecurityCaller = new securityCaller();
                 
-                bool isUpdate = _newSecurityCaller.UpdatePassword(cipherEmailId, Password);
+                bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(),cipherEmailId, Password);
             }
 
             catch (Exception ex)
