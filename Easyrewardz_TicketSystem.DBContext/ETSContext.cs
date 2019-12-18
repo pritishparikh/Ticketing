@@ -96,6 +96,36 @@ namespace Easyrewardz_TicketSystem.DBContext
             }
             return ds;
         }
+
+        public bool updatePassword(string EmailId,string Password)
+        {
+            bool isUpdated = false;
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_UpdatePassword", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@EmailId", EmailId);
+                cmd1.Parameters.AddWithValue("@Password", Password);
+                cmd1.ExecuteScalar();
+                isUpdated = true;
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return isUpdated;
+        }
     }
     public class UserDetails
     {

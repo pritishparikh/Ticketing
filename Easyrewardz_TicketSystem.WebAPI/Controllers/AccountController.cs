@@ -19,9 +19,9 @@ using Newtonsoft.Json;
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
-   
+
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class AccountController : ControllerBase
     {
         //CommonServices _CommonRepository = new CommonServices();
@@ -40,9 +40,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string userId = HttpContext.Request.Headers["X-Authorized-userId"];
                 string password = HttpContext.Request.Headers["X-Authorized-password"];
 
-                
+
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(applicationid) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
-                 {
+                {
                     string token = _newSecurityCaller.generateToken(new SecurityService(), Programcode, applicationid, Domainname, userId, password);
                     resp.IsResponse = true;
                     resp.statusCode = 200;
@@ -58,11 +58,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     resp.ErrorMessage = resp.ErrorMessage;
                     return JsonConvert.SerializeObject(resp);
                 }
-              
+
             }
             catch (Exception _ex)
             {
-                
+
                 resp.IsResponse = false;
                 resp.statusCode = 500;
                 resp.Message = "Request Error";
@@ -73,8 +73,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 GC.Collect();
             }
-            
+
         }
+
+
 
         #region Forgot password screen
         /// <summary>
@@ -83,24 +85,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         //Send mail for Forgot Password
         [HttpPost]
-        public JsonResult ForgetPassword(string EmailId = "shlok.barot@brainvire.com")
+        [Route("ForgetPassword")]
+        [AllowAnonymous]
+        public JsonResult ForgetPassword(string EmailId)
         {
 
             try
             {
                 CommonService objSmdService = new CommonService();
+                string encryptedEmailId = objSmdService.Encrypt(EmailId);
                 SMTPDetails objSmtpDetail = new SMTPDetails();
 
                 string subject = "Forgot Password";
-                string body = "Hello, This is Demo Mail for testing purpose.";
+                string url = "http://easyrewardz.brainvire.net/changePassword";
+                string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url + "?Id=" + encryptedEmailId;
                 objSmtpDetail.FromEmailId = "shlok.barot@brainvire.com";
                 objSmtpDetail.Password = "Brainvire@2019";
-                //objSmtpDetail.SMTPHost = "";
                 objSmtpDetail.SMTPServer = "smtp.gmail.com";
                 objSmtpDetail.SMTPPort = 587;
                 objSmtpDetail.IsBodyHtml = true;
-
-
 
                 objSmdService.SendEmail(objSmtpDetail, EmailId, subject, body);
 
@@ -113,6 +116,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return null;
 
         }
+
         #endregion
+        /// <summary>
+        /// Update Password
+        /// </summary>
+        /// <param name="cipherEmailId">Email Id in encrypted text</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdatePassword")]
+        [AllowAnonymous]
+        public JsonResult UpdatePassword(string cipherEmailId, string Password)
+        {
+            try
+            {
+                securityCaller _newSecurityCaller = new securityCaller();
+                
+                bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(),cipherEmailId, Password);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return null;
+
+        }
     }
 }

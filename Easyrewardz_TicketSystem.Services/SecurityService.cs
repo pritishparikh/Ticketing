@@ -164,6 +164,12 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        public bool UpdatePassword(string EmailId,string Password)
+        {
+            ETSContext _DBContext = new ETSContext();
+            bool isUpdated = _DBContext.updatePassword(EmailId, Password);
+            return isUpdated;
+        }
         #endregion
     }
 }
