@@ -18,10 +18,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     public class BrandController : ControllerBase
     {
         private IConfiguration configuration;
-       
+        private readonly string _connectioSting;
+
         public BrandController(IConfiguration _iConfig)
         {
-            configuration = _iConfig;        
+            configuration = _iConfig;
+            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
         }
 
         [HttpPost]
@@ -31,9 +33,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel GetBrandList(int TenantID)
         {
 
-            string dbConn = configuration.GetSection("ConnectionStrings").GetSection("DataAccessMySqlProvider").Value;
-            string dbConn2 = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-
             List<Brand> objBrandList = new List<Brand>();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -42,7 +41,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 MasterCaller _newMasterBrand = new MasterCaller();
 
-                objBrandList = _newMasterBrand.GetBrandList(new BrandServices(dbConn2), TenantID);
+                objBrandList = _newMasterBrand.GetBrandList(new BrandServices(_connectioSting), TenantID);
 
                 StatusCode =
                 objBrandList.Count == 0? 

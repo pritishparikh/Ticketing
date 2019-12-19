@@ -14,15 +14,8 @@ namespace Easyrewardz_TicketSystem.Services
     public class BrandServices : IBrand
     {
 
-        /// <summary>
-        /// Get Brand list for drop down 
-        /// </summary>
-        /// <param name="EncptToken"></param>
-        /// <returns></returns>
-
-
         MySqlConnection conn = new MySqlConnection();
-                public BrandServices(string _connectionString)
+        public BrandServices(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }

@@ -8,6 +8,7 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -15,10 +16,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
+        private IConfiguration configuration;
+        private readonly string _connectioSting;
+
+        public CategoryController(IConfiguration _iConfig)
+        {
+            configuration = _iConfig;
+            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+        }
+
         [HttpPost]
         [Route("GetCategoryList")]
         [AllowAnonymous]
-
         public List<Category> GetCategoryList(int TenantID)
         {
             List<Category> objCategoryList = new List<Category>();
@@ -26,7 +35,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 MasterCaller _newMasterCategory = new MasterCaller();
 
-                objCategoryList = _newMasterCategory.GetCategoryList(new CategoryServices(), TenantID);
+                objCategoryList = _newMasterCategory.GetCategoryList(new CategoryServices(_connectioSting), TenantID);
             }
             catch (Exception ex)
             {
@@ -34,7 +43,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 throw ex;
             }
             return objCategoryList;
-
         }
     }
 }
