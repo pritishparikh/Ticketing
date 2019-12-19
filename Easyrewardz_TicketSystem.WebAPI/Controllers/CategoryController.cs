@@ -9,6 +9,7 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -16,10 +17,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
+        private IConfiguration configuration;
+        private readonly string _connectioSting;
+
+        public CategoryController(IConfiguration _iConfig)
+        {
+            configuration = _iConfig;
+            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+        }
+
         [HttpPost]
         [Route("GetCategoryList")]
         [AllowAnonymous]
-
         public List<Category> GetCategoryList(int TenantID)
         {
             List<Category> objCategoryList = new List<Category>();
@@ -29,19 +38,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
                 MasterCaller _newMasterCategory = new MasterCaller();
-
-                objCategoryList = _newMasterCategory.GetCategoryList(new CategoryServices(), TenantID);
-
-                StatusCode =
-                objCategoryList.Count == 0 ?
-                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objCategoryList;
+                objCategoryList = _newMasterCategory.GetCategoryList(new CategoryServices(_connectioSting), TenantID);
             }
             catch (Exception ex)
             {
@@ -54,7 +51,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.ResponseData = null;
             }
             return objCategoryList;
-
         }
     }
 }
