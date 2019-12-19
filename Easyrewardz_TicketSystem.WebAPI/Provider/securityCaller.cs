@@ -19,7 +19,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _SecurityRepository = security;
             return _SecurityRepository.validateTokenGetPermission(SecretToken,ModuleID);
         }
-        public bool UpdatePassword(string cipherEmailId,string Password)
+        public bool UpdatePassword(ISecurity security,string cipherEmailId,string Password)
         {
             CommonService objSmdService = new CommonService();
             string plainEmailId = objSmdService.Decrypt(cipherEmailId);
