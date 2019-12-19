@@ -10,6 +10,7 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -18,12 +19,22 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class BrandController : ControllerBase
     {
+        private IConfiguration configuration;
+        private readonly string _connectioSting;
+
+        public BrandController(IConfiguration _iConfig)
+        {
+            configuration = _iConfig;
+            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+        }
+
         [HttpPost]
         [Route("GetBrandList")]
         [AllowAnonymous]
 
         public ResponseModel GetBrandList(int TenantID)
         {
+
             List<Brand> objBrandList = new List<Brand>();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -32,7 +43,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 MasterCaller _newMasterBrand = new MasterCaller();
 
-                objBrandList = _newMasterBrand.GetBrandList(new BrandServices(), TenantID);
+                objBrandList = _newMasterBrand.GetBrandList(new BrandServices(_connectioSting), TenantID);
 
                 StatusCode =
                 objBrandList.Count == 0? 

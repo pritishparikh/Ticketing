@@ -11,6 +11,7 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -20,6 +21,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class CustomerController : ControllerBase
     {
+        private IConfiguration configuration;
+        private readonly string _connectioSting;
+
+        public CustomerController(IConfiguration _iConfig)
+        {
+            configuration = _iConfig;
+            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+        }
         [HttpPost]
         [Route("getcustomerdetailsbyid")]
         public ResponseModel getcustomerdetailsbyid(int CustomerID)

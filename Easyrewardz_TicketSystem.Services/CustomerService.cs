@@ -10,12 +10,11 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class CustomerService : ICustomer
     {
+        
         MySqlConnection conn = new MySqlConnection();
-        public CustomerService()
+        public CustomerService(string _connectionString)
         {
-            //conn.ConnectionString = "Data Source = 13.67.69.216; port = 3306; Initial Catalog = Ticketing; User Id = brainvire; password = Logitech@123";
-
-            conn.ConnectionString = "Data Source = 192.168.11.19; port = 3306; Initial Catalog = ticketing; User Id = ticketing; password = Frv810FM#bBgI88";
+            conn.ConnectionString = _connectionString;
         }
         public CustomerMaster getCustomerbyId(int CustomerID)
         {

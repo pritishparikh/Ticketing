@@ -14,18 +14,12 @@ namespace Easyrewardz_TicketSystem.Services
     public class BrandServices : IBrand
     {
 
-        /// <summary>
-        /// Get Brand list for drop down 
-        /// </summary>
-        /// <param name="EncptToken"></param>
-        /// <returns></returns>
-
-
         MySqlConnection conn = new MySqlConnection();
-        public BrandServices()
+        public BrandServices(string _connectionString)
         {
-            conn.ConnectionString = "Data Source = 13.67.69.216; port = 3306; Initial Catalog = Ticketing; User Id = brainvire; password = Logitech@123";
+            conn.ConnectionString = _connectionString;
         }
+
         public List<Brand> GetBrandList(int TenantID)
         {
 
