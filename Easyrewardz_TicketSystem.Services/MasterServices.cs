@@ -10,17 +10,10 @@ namespace Easyrewardz_TicketSystem.Services
 {
    public class MasterServices : IMasterInterface
     {
-        /// <summary>
-        /// Get ChannelOfPurchase list for drop down 
-        /// </summary>
-        /// <param name="EncptToken"></param>
-        /// <returns></returns>
-
-
         MySqlConnection conn = new MySqlConnection();
-        public MasterServices()
+        public MasterServices(string _connectionString)
         {
-            conn.ConnectionString = "Data Source = 13.67.69.216; port = 3306; Initial Catalog = Ticketing; User Id = brainvire; password = Logitech@123";
+            conn.ConnectionString = _connectionString;
         }
         public List<ChannelOfPurchase> GetChannelOfPurchaseList(int TenantID)
         {

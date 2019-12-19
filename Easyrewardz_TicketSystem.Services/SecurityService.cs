@@ -7,11 +7,17 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Linq;
 using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class SecurityService : ISecurity
     {
+        MySqlConnection conn = new MySqlConnection();
+        public SecurityService(string _connectionString)
+        {
+            conn.ConnectionString = _connectionString;
+        }
         #region Declartion 
 
         /// <summary>

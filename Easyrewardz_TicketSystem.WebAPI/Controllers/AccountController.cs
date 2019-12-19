@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -25,7 +26,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     //[Authorize(AuthenticationSchemes = PermissionModuleConst.ModuleAuthenticationDefaultScheme)]
     public class AccountController : ControllerBase
     {
-        //CommonServices _CommonRepository = new CommonServices();
+        private IConfiguration configuration;
+        private readonly string _connectioSting;
+
+        public AccountController(IConfiguration _iConfig)
+        {
+            configuration = _iConfig;
+            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+        }
 
         [AllowAnonymous]
         [HttpGet]
@@ -44,7 +52,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(applicationid) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
-                    string token = _newSecurityCaller.generateToken(new SecurityService(), Programcode, applicationid, Domainname, userId, password);
+                    string token = _newSecurityCaller.generateToken(new SecurityService(_connectioSting), Programcode, applicationid, Domainname, userId, password);
                     resp.IsResponse = true;
                     resp.statusCode = 200;
                     resp.Message = token;
@@ -133,7 +141,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 securityCaller _newSecurityCaller = new securityCaller();
                 
-                bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(),cipherEmailId, Password);
+                bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_connectioSting),cipherEmailId, Password);
             }
 
             catch (Exception ex)

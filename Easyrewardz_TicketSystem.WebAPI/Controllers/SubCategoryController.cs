@@ -10,6 +10,7 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -18,6 +19,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class SubCategoryController : ControllerBase
     {
+        private IConfiguration configuration;
+        private readonly string _connectioSting;
+
+        public SubCategoryController(IConfiguration _iConfig)
+        {
+            configuration = _iConfig;
+            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+        }
         [HttpPost]
         [Route("GetSubCategoryByCategoryID")]
         [AllowAnonymous]
@@ -32,7 +41,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 MasterCaller _newMasterSubCat = new MasterCaller();
 
-                objSubCategory = _newMasterSubCat.GetSubCategoryByCategoryID(new SubCategoryService(), CategoryID);
+                objSubCategory = _newMasterSubCat.GetSubCategoryByCategoryID(new SubCategoryService(_connectioSting), CategoryID);
 
                 StatusCode =
                 objSubCategory.Count == 0 ?

@@ -10,6 +10,7 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -18,6 +19,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class PriorityController : ControllerBase
     {
+        private IConfiguration configuration;
+        private readonly string _connectioSting;
+
+        public PriorityController(IConfiguration _iConfig)
+        {
+            configuration = _iConfig;
+            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+        }
         [HttpPost]
         [Route("GetPriorityList")]
         [AllowAnonymous]
@@ -31,7 +40,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 MasterCaller _newMasterSubCat = new MasterCaller();
 
-                objPriority = _newMasterSubCat.GetPriorityList(new PriorityService(), TenantID);
+                objPriority = _newMasterSubCat.GetPriorityList(new PriorityService(_connectioSting), TenantID);
 
                 StatusCode =
                 objPriority.Count == 0 ?

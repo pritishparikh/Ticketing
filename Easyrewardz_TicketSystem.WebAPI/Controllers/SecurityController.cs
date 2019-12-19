@@ -9,6 +9,7 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -18,6 +19,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     
     public class SecurityController : ControllerBase
     {
+        private IConfiguration configuration;
+        private readonly string _connectioSting;
+
+        public SecurityController(IConfiguration _iConfig)
+        {
+            configuration = _iConfig;
+            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+        }
         [HttpGet]
         public string authenticate()
         {
@@ -33,7 +42,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(applicationid) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
-                    string token = _newSecurityCaller.generateToken(new SecurityService(), Programcode, applicationid, Domainname, userId, password);
+                    string token = _newSecurityCaller.generateToken(new SecurityService(_connectioSting), Programcode, applicationid, Domainname, userId, password);
                     resp.IsResponse = true;
                     resp.statusCode = 200;
                     resp.Message = token;

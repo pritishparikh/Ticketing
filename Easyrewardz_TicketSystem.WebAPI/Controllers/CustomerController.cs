@@ -43,7 +43,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 if(CustomerID > 0)
                 {
-                    _objcustomerMaster = _customercaller.getCustomerDetailsById(new CustomerService(), CustomerID);
+                    _objcustomerMaster = _customercaller.getCustomerDetailsById(new CustomerService(_connectioSting), CustomerID);
                     StatusCode =
                        _objcustomerMaster != null ?
                                (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -88,7 +88,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
 
-                _objcustomerMaster = _customercaller.getCustomerDetailsByEmailIdandPhone(new CustomerService(), Email, Phoneno);
+                _objcustomerMaster = _customercaller.getCustomerDetailsByEmailIdandPhone(new CustomerService(_connectioSting), Email, Phoneno);
 
                 StatusCode =
                       _objcustomerMaster != null ?
@@ -121,8 +121,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                int result = _customercaller.addCustomer(new CustomerService(), customerMaster);
-                CustomerMaster customer = _customercaller.getCustomerDetailsById(new CustomerService(), result);
+                int result = _customercaller.addCustomer(new CustomerService(_connectioSting), customerMaster);
+                CustomerMaster customer = _customercaller.getCustomerDetailsById(new CustomerService(_connectioSting), result);
                 StatusCode =
                 result == 1 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -150,7 +150,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                int result = _customercaller.updateCustomer(new CustomerService(), customerMaster);
+                int result = _customercaller.updateCustomer(new CustomerService(_connectioSting), customerMaster);
                 StatusCode =
                 result == 1 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

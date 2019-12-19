@@ -11,6 +11,7 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -19,6 +20,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class TicketingController : ControllerBase
     {
+        private IConfiguration configuration;
+        private readonly string _connectioSting;
+
+        public TicketingController(IConfiguration _iConfig)
+        {
+            configuration = _iConfig;
+            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+        }
         [HttpPost]
         [Route("gettitlesuggestions")]
         [AllowAnonymous]
@@ -33,7 +42,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 TicketingCaller _newTicket = new TicketingCaller();
 
-                objTicketList = _newTicket.GetAutoSuggestTicketList(new TicketingService(), TikcketTitle);
+                objTicketList = _newTicket.GetAutoSuggestTicketList(new TicketingService(_connectioSting), TikcketTitle);
                 StatusCode =
                 objTicketList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
