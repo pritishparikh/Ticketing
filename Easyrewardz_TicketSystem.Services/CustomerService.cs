@@ -69,7 +69,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@objEmailId", Email);
                 cmd1.Parameters.AddWithValue("@objCustomerPhoneNumber", Phoneno);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                MySqlDataAdapter da = new MySqlDataAdapter();
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
                 if (dt != null && dt.Rows.Count > 0)
@@ -146,6 +146,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_updateCustomer", conn);
+                cmd1.Parameters.AddWithValue("@objCustomerID", customerMaster.CustomerID);
                 cmd1.Parameters.AddWithValue("@TenantID", customerMaster.TenantID);
                 cmd1.Parameters.AddWithValue("@CustomerName", customerMaster.CustomerName);
                 cmd1.Parameters.AddWithValue("@CustomerPhoneNumber", customerMaster.CustomerPhoneNumber);
