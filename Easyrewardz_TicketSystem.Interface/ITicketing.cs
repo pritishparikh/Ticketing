@@ -6,10 +6,9 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public interface ITicketing
     {
-        /// <summary>
-        /// Get Employees 
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<TicketingDetails> getTcikets();
+       
+        //IEnumerable<TicketingDetails> getTcikets();
+
+        List<TicketingDetails> GetTicketList(string TikcketTitle);
     }
 }

@@ -15,10 +15,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class SecurityController : ControllerBase
     {
         [HttpGet]
-        public string get()
+        public string authenticate()
         {
             Result resp = new Result();
             try
@@ -53,13 +54,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 resp.IsResponse = false;
                 resp.statusCode = 500;
                 resp.Message = "Request Error";
-                resp.ErrorMessage = resp.ErrorMessage;
+                resp.ErrorMessage = _ex.InnerException.ToString();
                 return JsonConvert.SerializeObject(resp);
             }
         }
-
-
-
     }
     public class Result
     {
@@ -67,6 +65,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public string Message { get; set; }
         public bool IsResponse { get; set; }
         public string ErrorMessage { get; set; }
+        public string customerFullName { get; set; }
+        public string emailid { get; set; }
+        public string alternateemail { get; set; }
+        public string MobileNumber { get; set; }
+        public int Gender { get; set; }
+        public string AlternateNumber { get; set; }
     }
 
 }

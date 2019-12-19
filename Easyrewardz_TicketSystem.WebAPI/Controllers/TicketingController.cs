@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
+using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -13,56 +15,44 @@ using Microsoft.AspNetCore.Mvc;
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
-    [EnableCors("*")]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
-    //[Authorize(AuthenticationSchemes = PermissionModuleConst.ModuleAuthenticationDefaultScheme)]
     [ApiController]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class TicketingController : ControllerBase
     {
-                      
-        private readonly ITicketing _TicketingRepository;
-
-        #region Constructor 
-
-        
-        /// <param name="TicketingRepository"></param>
-        public TicketingController(ITicketing TicketingRepository)
-        {
-            _TicketingRepository = TicketingRepository;
-        }
-        #endregion
-
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<TicketingDetails> Get()
-        {
-            var objData = _TicketingRepository.getTcikets();
-            return objData;
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+        [Route("gettitlesuggestions")]
+        [AllowAnonymous]
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ResponseModel gettitlesuggestions(string TikcketTitle)
         {
-        }
+            List<TicketingDetails> objTicketList = new List<TicketingDetails>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                TicketingCaller _newTicket = new TicketingCaller();
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+                objTicketList = _newTicket.GetAutoSuggestTicketList(new TicketingService(), TikcketTitle);
+                StatusCode =
+                objTicketList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objTicketList;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
         }
     }
 }

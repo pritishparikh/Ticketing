@@ -21,7 +21,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Route("api/[controller]")]
 
     [ApiController]
-    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    //[Authorize(AuthenticationSchemes = PermissionModuleConst.ModuleAuthenticationDefaultScheme)]
     public class AccountController : ControllerBase
     {
         //CommonServices _CommonRepository = new CommonServices();

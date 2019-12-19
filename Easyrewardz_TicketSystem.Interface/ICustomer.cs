@@ -8,6 +8,12 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public interface ICustomer
     {
-        List<CustomerMaster> getCustomerbyId(int CustomerID);
+        CustomerMaster getCustomerbyId(int CustomerID);
+
+        CustomerMaster getCustomerbyEmailIdandPhoneNo(string Email, string Phoneno);
+
+        int addCustomerDetails(CustomerMaster customerMaster);
+
+        int updateCustomerDetails(CustomerMaster customerMaster);
     }
 }
