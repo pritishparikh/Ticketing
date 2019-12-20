@@ -32,7 +32,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetBrandList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@TenantID", TenantID);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
