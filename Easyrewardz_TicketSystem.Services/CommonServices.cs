@@ -5,7 +5,9 @@ using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.Reflection;
 using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -68,6 +70,7 @@ namespace Easyrewardz_TicketSystem.Services
                 //}
             }
         }
+
     }
     
     

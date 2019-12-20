@@ -15,5 +15,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             return _commonRepository.SendEmail(smtpDetails, emailToAddress, subject, body);
         }
+
     }
 }
