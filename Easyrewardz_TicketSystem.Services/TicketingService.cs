@@ -1,44 +1,51 @@
 ﻿using Easyrewardz_TicketSystem.DBContext;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-    public class TicketingService /*: ITicketing*/
+    public class TicketingService : ITicketing
     {
-        #region Declartion 
 
-        /// <summary>
-        /// Context
-        /// </summary>
-        private readonly ETSContext _eContext;
-
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="context"></param>
-        public TicketingService(ETSContext context)
+        MySqlConnection conn = new MySqlConnection();
+        public TicketingService(string _connectionString)
         {
-            _eContext = context;
+            conn.ConnectionString = _connectionString;
         }
-
-        #endregion
-
-        /// <summary>
-        /// Getting list of employees
-        /// </summary>
-        /// <returns></returns>
-        //public IEnumerable<TicketingDetails> getTcikets()
-        //{
-        //    RepositoryService<TicketingDetails> objTicket = new RepositoryService<TicketingDetails>(_eContext);
-
-        //    return objTicket.SelectAll();
-        //}
+        public List<TicketingDetails> GetTicketList(string TikcketTitle)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<TicketingDetails> ticketing = new List<TicketingDetails>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_getTitleSuggestions", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@TikcketTitle", TikcketTitle);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        TicketingDetails ticketingDetails = new TicketingDetails();
+                        ticketingDetails.Ticket_title = Convert.ToString(ds.Tables[0].Rows[i]["TikcketTitle"]);
+                        ticketing.Add(ticketingDetails);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ticketing;
+        }
     }
 }

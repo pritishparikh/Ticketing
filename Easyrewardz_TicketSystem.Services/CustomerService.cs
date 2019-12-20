@@ -10,14 +10,15 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class CustomerService : ICustomer
     {
+        
         MySqlConnection conn = new MySqlConnection();
-        public CustomerService()
+        public CustomerService(string _connectionString)
         {
-            conn.ConnectionString = "Data Source = 13.67.69.216; port = 3306; Initial Catalog = Ticketing; User Id = brainvire; password = Logitech@123";
+            conn.ConnectionString = _connectionString;
         }
-        public List<CustomerMaster> getCustomerbyId(int CustomerID)
+        public CustomerMaster getCustomerbyId(int CustomerID)
         {
-            List<CustomerMaster> customerMasters = new List<CustomerMaster>();
+            CustomerMaster customerMasters = new CustomerMaster();
             MySqlCommand cmd = new MySqlCommand();
             try
             {
@@ -30,19 +31,16 @@ namespace Easyrewardz_TicketSystem.Services
                 DataTable dt = new DataTable();
                 sd.Fill(dt);
                 conn.Close();
-                foreach (DataRow dr in dt.Rows)
+                if (dt != null && dt.Rows.Count > 0)
                 {
-                    customerMasters.Add(
-                        new CustomerMaster
-                        {
-                            TenantID = Convert.ToInt32(dr["TenantID"]),
-                            CustomerName = Convert.ToString(dr["CustomerName"]),
-                            CustomerPhoneNumber = Convert.ToString(dr["CustomerPhoneNumber"]),
-                            CustomerEmailId = Convert.ToString(dr["CustomerEmailId"]),
-                            GenderID = Convert.ToInt32(dr["GenderID"]),
-                            AltNumber = Convert.ToString(dr["AltNumber"]),
-                            AltEmailID = Convert.ToString(dr["AltEmailID"])
-                        });
+                    customerMasters.TenantID = Convert.ToInt32(dt.Rows[0]["TenantID"]);
+                    customerMasters.CustomerName = Convert.ToString(dt.Rows[0]["CustomerName"]);
+                    customerMasters.CustomerPhoneNumber = Convert.ToString(dt.Rows[0]["CustomerPhoneNumber"]);
+                    customerMasters.CustomerEmailId = Convert.ToString(dt.Rows[0]["CustomerEmailId"]);
+                    customerMasters.GenderID = Convert.ToInt32(dt.Rows[0]["GenderID"]);
+                    customerMasters.AltNumber = Convert.ToString(dt.Rows[0]["AltNumber"]);
+                    customerMasters.AltEmailID = Convert.ToString(dt.Rows[0]["AltEmailID"]);
+                    customerMasters.IsActive = Convert.ToInt32(dt.Rows[0]["IsActive"]);
                 }
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
@@ -56,8 +54,124 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-
             return customerMasters;
+        }
+        public CustomerMaster getCustomerbyEmailIdandPhoneNo(string Email, string Phoneno)
+        {
+            CustomerMaster customerMasters = new CustomerMaster();
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_searchCustomerByEmailAndPhone", conn);
+                cmd1.Parameters.AddWithValue("@objEmailId", Email);
+                cmd1.Parameters.AddWithValue("@objCustomerPhoneNumber", Phoneno);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    customerMasters.TenantID = Convert.ToInt32(dt.Rows[0]["TenantID"]);
+                    customerMasters.CustomerName = Convert.ToString(dt.Rows[0]["CustomerName"]);
+                    customerMasters.CustomerPhoneNumber = Convert.ToString(dt.Rows[0]["CustomerPhoneNumber"]);
+                    customerMasters.CustomerEmailId = Convert.ToString(dt.Rows[0]["CustomerEmailId"]);
+                    customerMasters.GenderID = Convert.ToInt32(dt.Rows[0]["GenderID"]);
+                    customerMasters.AltNumber = Convert.ToString(dt.Rows[0]["AltNumber"]);
+                    customerMasters.AltEmailID = Convert.ToString(dt.Rows[0]["AltEmailID"]);
+                }
+                conn.Close();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return customerMasters;
+        }
+
+        public int addCustomerDetails(CustomerMaster customerMaster)
+        {
+            
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_createCustomer", conn);
+                cmd1.Parameters.AddWithValue("@TenantID", customerMaster.TenantID);
+                cmd1.Parameters.AddWithValue("@CustomerName", customerMaster.CustomerName);
+                cmd1.Parameters.AddWithValue("@CustomerPhoneNumber", customerMaster.CustomerPhoneNumber);
+                cmd1.Parameters.AddWithValue("@CustomerEmailId", customerMaster.CustomerEmailId);
+                cmd1.Parameters.AddWithValue("@GenderID", customerMaster.GenderID);
+                cmd1.Parameters.AddWithValue("@AltNumber", customerMaster.AltNumber);
+                cmd1.Parameters.AddWithValue("@AltEmailID", customerMaster.AltEmailID);
+                cmd1.Parameters.AddWithValue("@IsActive", customerMaster.IsActive);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = Convert.ToInt32(cmd1.ExecuteScalar());
+                conn.Close();
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
+
+        public int updateCustomerDetails(CustomerMaster customerMaster)
+        {
+
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_updateCustomer", conn);
+                cmd1.Parameters.AddWithValue("@objCustomerID", customerMaster.CustomerID);
+                cmd1.Parameters.AddWithValue("@TenantID", customerMaster.TenantID);
+                cmd1.Parameters.AddWithValue("@CustomerName", customerMaster.CustomerName);
+                cmd1.Parameters.AddWithValue("@CustomerPhoneNumber", customerMaster.CustomerPhoneNumber);
+                cmd1.Parameters.AddWithValue("@CustomerEmailId", customerMaster.CustomerEmailId);
+                cmd1.Parameters.AddWithValue("@GenderID", customerMaster.GenderID);
+                cmd1.Parameters.AddWithValue("@AltNumber", customerMaster.AltNumber);
+                cmd1.Parameters.AddWithValue("@AltEmailID", customerMaster.AltEmailID);
+                cmd1.Parameters.AddWithValue("@IsActive", customerMaster.IsActive);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = cmd1.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
         }
     }
 }

@@ -8,10 +8,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
     {
         public enum StatusCode
         {
-            //Record_Not_Found = 1001,
+            //Record Not Found = 1001,
             //Property_is_empty or null = 1002,
             //Incorrect Data type = 1003,
-            //  Database Server not responding = 1004,
+            //Database Server not responding = 1004,
             //Server memory exception = 1005,
             //Service unavailable = 1006,
             //Subscribed Package is expired = 1007,

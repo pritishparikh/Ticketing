@@ -1,115 +1,179 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
+using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class CustomerController : ControllerBase
     {
+        private IConfiguration configuration;
+        private readonly string _connectioSting;
+
+        public CustomerController(IConfiguration _iConfig)
+        {
+            configuration = _iConfig;
+            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+        }
         [HttpPost]
         [Route("getcustomerdetailsbyid")]
-        public string getcustomerdetailsbyid(int CustomerID)
+        public ResponseModel getcustomerdetailsbyid(int CustomerID)
         {
-            Result resp = new Result();
+           
+            CustomerMaster _objcustomerMaster = null;
+            Customercaller _customercaller = new Customercaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
             try
             {
                 if(CustomerID > 0)
                 {
-                    Customercaller _customercaller = new Customercaller();
-                    CustomerMaster objcu = new CustomerMaster();                   
-                    var customer = _customercaller.getCustomerDetailsById(new CustomerService(), CustomerID);
-                    string customername = customer[0].CustomerName;
-                    string EmailID = customer[0].CustomerEmailId;
-                    string AltEmailID = customer[0].AltEmailID;
-                    string MobileNo = customer[0].CustomerPhoneNumber;
-                    int GenderID = customer[0].GenderID;
-                    string AlternateNo = customer[0].AltNumber;
-                    resp.IsResponse = true;
-                    resp.statusCode = 200;
-                    resp.customerFullName = customername;
-                    resp.emailid = EmailID;
-                    resp.alternateemail = AltEmailID;
-                    resp.MobileNumber = MobileNo;
-                    resp.Gender = GenderID;
-                    resp.AlternateNumber = AlternateNo;
-                    resp.ErrorMessage = null;
+                    _objcustomerMaster = _customercaller.getCustomerDetailsById(new CustomerService(_connectioSting), CustomerID);
+                    StatusCode =
+                       _objcustomerMaster == null ?
+                               (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                     statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                    _objResponseModel.Status = true;
+                    _objResponseModel.StatusCode = StatusCode;
+                    _objResponseModel.Message = statusMessage;
+                    _objResponseModel.ResponseData = _objcustomerMaster;                   
                 }
                 else
                 {
-                    resp.IsResponse = false;
-                    resp.statusCode = 1001;
-                    resp.Message = "Record Not Found";
-                    resp.ErrorMessage = resp.ErrorMessage;
-                    return JsonConvert.SerializeObject(resp);
+                    StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                    statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                    _objResponseModel.Status = true;
+                    _objResponseModel.StatusCode = StatusCode;
+                    _objResponseModel.Message = statusMessage;
+                    _objResponseModel.ResponseData = null;
                 }
-
             }
             catch (Exception _ex)
             {
-
-                resp.IsResponse = false;
-                resp.statusCode = 500;
-                resp.Message = "Request Error";
-                resp.ErrorMessage = _ex.InnerException.ToString();
-                return JsonConvert.SerializeObject(resp);
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
             }
-            finally
-            {
-                GC.Collect();
-            }
-            return "";
+            return _objResponseModel;
         }
-
-        //public string searchCustomer()
-        //{
-        //    Result resp = new Result();
-        //    try
-        //    {
-
-        //    }
-        //    catch (Exception _ex)
-        //    {
-
-        //        resp.IsResponse = false;
-        //        resp.statusCode = 500;
-        //        resp.Message = "Request Error";
-        //        resp.ErrorMessage = _ex.InnerException.ToString();
-        //        return JsonConvert.SerializeObject(resp);
-        //    }
-        //    finally
-        //    {
-        //        GC.Collect();
-        //    }
-
-        //}
-
-
-
-
-
-
-        public class Result
+        [HttpPost]
+        [Route("searchCustomer")]
+        public ResponseModel searchCustomer(string Email, string Phoneno)
         {
-            public int statusCode { get; set; }
-            public string Message { get; set; }
-            public bool IsResponse { get; set; }
-            public string ErrorMessage { get; set; }
-            public string customerFullName { get; set; }
-            public string emailid { get; set; }
-            public string alternateemail { get; set; }
-            public string MobileNumber { get; set; }
-            public int Gender { get; set; }
-            public string AlternateNumber { get; set; }
+            
+            CustomerMaster _objcustomerMaster = null;
+            Customercaller _customercaller = new Customercaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+
+                _objcustomerMaster = _customercaller.getCustomerDetailsByEmailIdandPhone(new CustomerService(_connectioSting), Email, Phoneno);
+
+                StatusCode =
+                      _objcustomerMaster == null ?
+                              (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _objcustomerMaster;
+            }
+            catch (Exception _ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+        [HttpPost]
+        [Route("createCustomer")]
+        [AllowAnonymous]
+        public ResponseModel createCustomer([FromBody]CustomerMaster customerMaster)
+        {
+            Customercaller _customercaller = new Customercaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                int result = _customercaller.addCustomer(new CustomerService(_connectioSting), customerMaster);
+                CustomerMaster customer = _customercaller.getCustomerDetailsById(new CustomerService(_connectioSting), result);
+                StatusCode =
+                result == 0?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                //_objResponseModel.ResponseData = _objcustomerMaster;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+        [HttpPost]
+        [Route("updateCustomer")]
+        [AllowAnonymous]
+        public ResponseModel updateCustomer([FromBody]CustomerMaster customerMaster)
+        {
+            Customercaller _customercaller = new Customercaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                int result = _customercaller.updateCustomer(new CustomerService(_connectioSting), customerMaster);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+            }
+            catch (Exception _ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;               
+            }
+            return _objResponseModel;
         }
     }
-    
 }

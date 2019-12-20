@@ -9,16 +9,26 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class SecurityController : ControllerBase
     {
+        private IConfiguration configuration;
+        private readonly string _connectioSting;
+
+        public SecurityController(IConfiguration _iConfig)
+        {
+            configuration = _iConfig;
+            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+        }
         [HttpGet]
-        public string get()
+        public string authenticate()
         {
             Result resp = new Result();
             try
@@ -32,7 +42,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(applicationid) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
-                    string token = _newSecurityCaller.generateToken(new SecurityService(), Programcode, applicationid, Domainname, userId, password);
+                    string token = _newSecurityCaller.generateToken(new SecurityService(_connectioSting), Programcode, applicationid, Domainname, userId, password);
                     resp.IsResponse = true;
                     resp.statusCode = 200;
                     resp.Message = token;
@@ -53,13 +63,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 resp.IsResponse = false;
                 resp.statusCode = 500;
                 resp.Message = "Request Error";
-                resp.ErrorMessage = resp.ErrorMessage;
+                resp.ErrorMessage = _ex.InnerException.ToString();
                 return JsonConvert.SerializeObject(resp);
             }
         }
-
-
-
     }
     public class Result
     {
@@ -67,6 +74,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public string Message { get; set; }
         public bool IsResponse { get; set; }
         public string ErrorMessage { get; set; }
+        public string customerFullName { get; set; }
+        public string emailid { get; set; }
+        public string alternateemail { get; set; }
+        public string MobileNumber { get; set; }
+        public int Gender { get; set; }
+        public string AlternateNumber { get; set; }
     }
 
 }

@@ -13,7 +13,6 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class BrandServices : IBrand
     {
-
         MySqlConnection conn = new MySqlConnection();
         public BrandServices(string _connectionString)
         {
