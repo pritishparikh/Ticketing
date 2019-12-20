@@ -7,6 +7,6 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public interface IIssueType
     {
-        List<IssueType> GetIssueTypeList(int TenantID);
+        List<IssueType> GetIssueTypeList(int TenantID,int SubCategoryID);
     }
 }

@@ -41,7 +41,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("GetIssueTypeList")]
         [AllowAnonymous]
-        public ResponseModel GetIssueTypeList(int TenantID)
+        public ResponseModel GetIssueTypeList(int TenantID,int SubCategoryID)
         {
             List<IssueType> objIssueTypeList = new List<IssueType>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -51,7 +51,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 MasterCaller _newMasterBrand = new MasterCaller();
 
-                objIssueTypeList = _newMasterBrand.GetIssueTypeList(new IssueTypeServices(_connectioSting), TenantID);
+                objIssueTypeList = _newMasterBrand.GetIssueTypeList(new IssueTypeServices(_connectioSting), TenantID, SubCategoryID);
 
                 StatusCode =
                 objIssueTypeList.Count == 0 ?

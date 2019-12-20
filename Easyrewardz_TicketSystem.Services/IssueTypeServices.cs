@@ -21,9 +21,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Issue Type List
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name="TenantID">Tenant Id</param>
+        /// <param name="SubCategoryID">SubCategory ID</param>
         /// <returns></returns>
-        public List<IssueType> GetIssueTypeList(int TenantID)
+        public List<IssueType> GetIssueTypeList(int TenantID,int SubCategoryID)
         {
 
             DataSet ds = new DataSet();
@@ -37,6 +38,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetIssueTypeList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@SubCategory_ID", SubCategoryID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
