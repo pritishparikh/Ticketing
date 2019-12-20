@@ -1,37 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
+    /// <summary>
+    /// Brand controller to manage Brand
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class BrandController : ControllerBase
     {
+        #region Variable Declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        #endregion
 
+        #region Constructor
+
+        /// <summary>
+        /// Brand Controller
+        /// </summary>
+        /// <param name="_iConfig"></param>
         public BrandController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
         }
 
+        #endregion
+
+        #region Custom Methods 
+
+        /// <summary>
+        /// Get brand list for the Brand dropdown
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetBrandList")]
         [AllowAnonymous]
-
         public ResponseModel GetBrandList(int TenantID)
         {
 
@@ -71,6 +87,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
-
+        #endregion
     }
 }
