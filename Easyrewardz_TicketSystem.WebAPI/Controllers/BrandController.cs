@@ -18,7 +18,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [ApiController]
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class BrandController : ControllerBase
-    {
+    { 
         #region Variable Declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
