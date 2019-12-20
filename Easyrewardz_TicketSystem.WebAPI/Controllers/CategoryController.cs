@@ -19,6 +19,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class CategoryController : ControllerBase
     {
+
         #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
