@@ -54,7 +54,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
             /// <summary>
             /// Success 
             /// </summary>
-            [Description("Sucess")]
+            [Description("Success")]
             Success = 200,
 
            

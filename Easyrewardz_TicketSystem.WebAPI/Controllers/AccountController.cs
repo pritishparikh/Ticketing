@@ -36,6 +36,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         [AllowAnonymous]
+        [Route("authenticate")]
         [HttpGet]
         public string authenticate()
         {
@@ -43,11 +44,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
                 securityCaller _newSecurityCaller = new securityCaller();
-                string Programcode = HttpContext.Request.Headers["X-Authorized-Programcode"];
-                string Domainname = HttpContext.Request.Headers["X-Authorized-Domainname"];
-                string applicationid = HttpContext.Request.Headers["X-Authorized-applicationid"];
-                string userId = HttpContext.Request.Headers["X-Authorized-userId"];
-                string password = HttpContext.Request.Headers["X-Authorized-password"];
+                string Programcode = HttpContext.Request.Headers["X_Authorized_Programcode"];
+                string Domainname = HttpContext.Request.Headers["X_Authorized_Domainname"];
+                string applicationid = HttpContext.Request.Headers["X_Authorized_applicationid"];
+                string userId = HttpContext.Request.Headers["X_Authorized_userId"];
+                string password = HttpContext.Request.Headers["X_Authorized_password"];
 
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(applicationid) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
@@ -84,7 +85,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
 
         }
-
 
 
         #region Forgot password screen
