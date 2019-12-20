@@ -8,8 +8,16 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-   public class CommonService
-    {
+    public class CommonService
+    { 
+        /// <summary>
+      /// Send Email
+      /// </summary>
+      /// <param name="smtpDetails"></param>
+      /// <param name="emailToAddress"></param>
+      /// <param name="subject"></param>
+      /// <param name="body"></param>
+      /// <returns></returns>
         public string SendEmail(SMTPDetails smtpDetails, string emailToAddress, string subject, string body)
         {
             try
@@ -45,7 +53,7 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -58,7 +66,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public  string Encrypt(string Planetext)
+        public string Encrypt(string Planetext)
         {
             try
             {

@@ -20,14 +20,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class TicketingController : ControllerBase
     {
+        #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        #endregion
 
+        #region Cunstructor
         public TicketingController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
         }
+        #endregion
+
+        #region Custom Methods
+        /// <summary>
+        /// Get Ticket Title Suggestion
+        /// </summary>
+        /// <param name="TikcketTitle"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("gettitlesuggestions")]
         [AllowAnonymous]
@@ -63,5 +74,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+        #endregion
     }
 }

@@ -19,15 +19,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class CategoryController : ControllerBase
     {
+        #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        #endregion
 
+        #region Cunstructor
         public CategoryController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
         }
+        #endregion
 
+        #region Custom Methods
+        /// <summary>
+        /// Get CategoryList
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetCategoryList")]
         [AllowAnonymous]
@@ -54,5 +64,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return objCategoryList;
         }
+        #endregion
     }
 }

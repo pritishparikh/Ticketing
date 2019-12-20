@@ -10,12 +10,20 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class TicketingService : ITicketing
     {
-
+        #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
         public TicketingService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
+
+
+        /// <summary>
+        /// Get Auto Suggest Ticket Title
+        /// </summary>
+        /// <param name="TikcketTitle"></param>
+        /// <returns></returns>
         public List<TicketingDetails> GetTicketList(string TikcketTitle)
         {
             DataSet ds = new DataSet();

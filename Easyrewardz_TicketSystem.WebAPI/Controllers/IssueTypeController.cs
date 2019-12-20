@@ -19,18 +19,28 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class IssueTypeController : ControllerBase
     {
+        #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        #endregion
 
+        #region Cunstructor
         public IssueTypeController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
         }
+        #endregion
+
+        #region Custom Methods
+        /// <summary>
+        /// Get IssueTypeList
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetIssueTypeList")]
         [AllowAnonymous]
-
         public ResponseModel GetIssueTypeList(int TenantID)
         {
             List<IssueType> objIssueTypeList = new List<IssueType>();
@@ -68,5 +78,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+        #endregion
     }
 }

@@ -9,6 +9,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
     public class TicketingCaller
     {
+        /// <summary>
+        /// Get Auto Suggest Ticket Title
+        /// </summary>
         private ITicketing _ticketList;
         public List<TicketingDetails> GetAutoSuggestTicketList(ITicketing _ticket, string TikcketTitle)
         {

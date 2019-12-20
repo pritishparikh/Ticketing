@@ -10,12 +10,20 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class CustomerService : ICustomer
     {
-        
+        #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
         public CustomerService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
+
+
+        /// <summary>
+        /// Get Customer By Id
+        /// </summary>
+        /// <param name="CustomerID"></param>
+        /// <returns></returns>
         public CustomerMaster getCustomerbyId(int CustomerID)
         {
             CustomerMaster customerMasters = new CustomerMaster();
@@ -55,7 +63,15 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return customerMasters;
-        }
+        }  
+
+
+        /// <summary>
+        /// Get Customer BY Email and PhoneNo
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <param name="Phoneno"></param>
+        /// <returns></returns>
         public CustomerMaster getCustomerbyEmailIdandPhoneNo(string Email, string Phoneno)
         {
             CustomerMaster customerMasters = new CustomerMaster();
@@ -98,6 +114,11 @@ namespace Easyrewardz_TicketSystem.Services
             return customerMasters;
         }
 
+        /// <summary>
+        /// Add Customer Detail
+        /// </summary>
+        /// <param name="customerMaster"></param>
+        /// <returns></returns>
         public int addCustomerDetails(CustomerMaster customerMaster)
         {
             
@@ -136,6 +157,12 @@ namespace Easyrewardz_TicketSystem.Services
             return i;
         }
 
+
+        /// <summary>
+        /// Update Customer
+        /// </summary>
+        /// <param name="customerMaster"></param>
+        /// <returns></returns>
         public int updateCustomerDetails(CustomerMaster customerMaster)
         {
 

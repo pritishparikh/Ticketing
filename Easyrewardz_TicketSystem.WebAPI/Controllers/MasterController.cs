@@ -19,13 +19,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class MasterController : ControllerBase
     {
+        #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        #endregion
+
+        #region Cunstructor
         public MasterController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
         }
+        #endregion
+
+        #region Custom Methods
+        /// <summary>
+        /// Get Channel Of PurchaseList
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetChannelOfPurchaseList")]
         [AllowAnonymous]
@@ -60,5 +72,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+        #endregion
     }
 }

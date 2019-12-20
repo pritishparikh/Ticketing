@@ -10,11 +10,19 @@ namespace Easyrewardz_TicketSystem.Services
 {
    public class IssueTypeServices : IIssueType
     {
+        #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
         public IssueTypeServices(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion 
+
+        /// <summary>
+        /// Get Issue Type List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         public List<IssueType> GetIssueTypeList(int TenantID)
         {
 

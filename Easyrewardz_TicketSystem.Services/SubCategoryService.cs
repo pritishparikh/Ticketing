@@ -10,11 +10,19 @@ namespace Easyrewardz_TicketSystem.Services
 {
    public class SubCategoryService : ISubCategories
     {
+        #region
         MySqlConnection conn = new MySqlConnection();
         public SubCategoryService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
+
+        /// <summary>
+        /// Get Sub Category By Category ID
+        /// </summary>
+        /// <param name="CategoryID"></param>
+        /// <returns></returns>
         public List<SubCategory> GetSubCategoryByCategoryID(int CategoryID)
         {
 

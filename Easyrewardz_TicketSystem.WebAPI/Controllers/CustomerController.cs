@@ -18,19 +18,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class CustomerController : ControllerBase
     {
+        #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        #endregion
 
+        #region Cunstructor
         public CustomerController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
         }
+        #endregion
+      
+        #region Custom Methods
+        /// <summary>
+        /// Get Customer Details By ID
+        /// </summary>
+        /// <param name="CustomerID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("getcustomerdetailsbyid")]
+        [AllowAnonymous]
         public ResponseModel getcustomerdetailsbyid(int CustomerID)
         {
            
@@ -75,8 +87,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+        /// <summary>
+        ///  Get Customer Details By ID/Contact No
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <param name="Phoneno"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("searchCustomer")]
+        [AllowAnonymous]
         public ResponseModel searchCustomer(string Email, string Phoneno)
         {
             
@@ -110,6 +129,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+        /// <summary>
+        /// Add customer
+        /// </summary>
+        /// <param name="customerMaster"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("createCustomer")]
         [AllowAnonymous]
@@ -143,6 +167,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+        /// <summary>
+        /// Update Customer
+        /// </summary>
+        /// <param name="customerMaster"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("updateCustomer")]
         [AllowAnonymous]
@@ -175,5 +204,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+        #endregion
     }
 }

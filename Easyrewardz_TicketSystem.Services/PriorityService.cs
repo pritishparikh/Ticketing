@@ -10,11 +10,19 @@ namespace Easyrewardz_TicketSystem.Services
 {
   public class PriorityService :IPriority
     {
+        #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
         public PriorityService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
+
+        /// <summary>
+        /// Get Priority List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         public List<Priority> GetPriorityList(int TenantID)
         {
 

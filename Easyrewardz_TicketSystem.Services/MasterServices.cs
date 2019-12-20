@@ -10,11 +10,20 @@ namespace Easyrewardz_TicketSystem.Services
 {
    public class MasterServices : IMasterInterface
     {
+        #region
         MySqlConnection conn = new MySqlConnection();
         public MasterServices(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
+
+
+        /// <summary>
+        /// Get Channel Of Purchase List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         public List<ChannelOfPurchase> GetChannelOfPurchaseList(int TenantID)
         {
 

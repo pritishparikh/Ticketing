@@ -19,14 +19,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class SubCategoryController : ControllerBase
     {
+        #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        #endregion 
 
+        #region Custom Methods
         public SubCategoryController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
         }
+        #endregion 
+
+        #region Custom Methods
+        /// <summary>
+        /// Get SubCategoryBy CategoryID
+        /// </summary>
+        /// <param name="CategoryID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetSubCategoryByCategoryID")]
         [AllowAnonymous]
@@ -68,5 +79,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+        #endregion
     }
 }
