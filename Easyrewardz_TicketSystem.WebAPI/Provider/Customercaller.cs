@@ -14,10 +14,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public ICustomer _customerRepository;
         #endregion
 
+        #region Customer wrapper method
+
         /// <summary>
         /// Get Customer Detail by id
         /// </summary>
-        public CustomerMaster getCustomerDetailsById(ICustomer customer,int CustomerID)
+        public CustomerMaster getCustomerDetailsById(ICustomer customer, int CustomerID)
         {
             _customerRepository = customer;
             return _customerRepository.getCustomerbyId(CustomerID);
@@ -36,18 +38,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _customerRepository.getCustomerbyEmailIdandPhoneNo(Email, Phoneno);
         }
 
-
         /// <summary>
         /// Add Customer
         /// </summary>
         /// <param name="customer"></param>
         /// <param name="customerMaster"></param>
         /// <returns></returns>
-        public int addCustomer(ICustomer customer,CustomerMaster customerMaster)
+        public int addCustomer(ICustomer customer, CustomerMaster customerMaster)
         {
             _customerRepository = customer;
             return _customerRepository.addCustomerDetails(customerMaster);
-        } 
+        }
 
         /// <summary>
         /// Update Customer
@@ -60,6 +61,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _customerRepository = customer;
             return _customerRepository.updateCustomerDetails(customerMaster);
         }
+
+        #endregion
 
     }
 }
