@@ -16,3 +16,12 @@ D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.CustomModel\o
 D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
 D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
 D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.csprojAssemblyReference.cache
+D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.CustomModel\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.deps.json
+D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.CustomModel\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
+D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.CustomModel\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
+D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.csprojAssemblyReference.cache
+D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.csproj.CoreCompileInputs.cache
+D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.AssemblyInfoInputs.cache
+D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.AssemblyInfo.cs
+D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
+D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb

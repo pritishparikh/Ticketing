@@ -2888,6 +2888,19 @@
           "lib/netstandard2.0/MySql.Data.dll": {}
         }
       },
+      "MySql.Data.EntityFrameworkCore/8.0.18": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "2.1.2",
+          "MySql.Data": "8.0.18"
+        },
+        "compile": {
+          "lib/netstandard2.0/MySql.Data.EntityFrameworkCore.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/MySql.Data.EntityFrameworkCore.dll": {}
+        }
+      },
       "NETStandard.Library/2.0.3": {
         "type": "package",
         "dependencies": {
@@ -5016,6 +5029,16 @@
           "lib/netstandard1.3/System.Xml.XPath.XmlDocument.dll": {}
         }
       },
+      "Easyrewardz_TicketSystem.CustomModel/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.2",
+        "compile": {
+          "bin/placeholder/Easyrewardz_TicketSystem.CustomModel.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Easyrewardz_TicketSystem.CustomModel.dll": {}
+        }
+      },
       "Easyrewardz_TicketSystem.DBContext/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.2",
@@ -6461,7 +6484,7 @@
       ]
     },
     "Microsoft.CodeAnalysis.CSharp.Workspaces/2.8.0": {
-      "sha512": "EJWaxi2bI47iEZen/nZkJEDZCrP9Oj3PJtMwBv34Z0ZvvdSkpgsdqlHSud8d5vC53LnCXLfBLewfqHcILDVSDw==",
+      "sha512": "4JcQJNDSyGXtz9ccBzSBmcPmKg7GiL4LYvtv+YG8C9waNP/xhwuvIycSQOF4a0V+J73JwUopA503O7vb8p5ZUQ==",
       "type": "package",
       "path": "microsoft.codeanalysis.csharp.workspaces/2.8.0",
       "files": [
@@ -6490,7 +6513,7 @@
       ]
     },
     "Microsoft.CodeAnalysis.Workspaces.Common/2.8.0": {
-      "sha512": "tJlJ99SD8bHBAXShOG/pXQ1K118cnsF01obEf9aAtdgLbw3yEPahZ7qvWeGMjrheUhvOsSkv/wTKYg9euKa8MQ==",
+      "sha512": "AqCiNju6UZy9Sd8HKzxGbpbZf+P8gWpojfvs9hIRfwstqFMZ6OJXf69EUvqJ5C4rWrcf08F7G8WII74KBEFImQ==",
       "type": "package",
       "path": "microsoft.codeanalysis.workspaces.common/2.8.0",
       "files": [
@@ -8329,6 +8352,23 @@
         "mysql.data.nuspec"
       ]
     },
+    "MySql.Data.EntityFrameworkCore/8.0.18": {
+      "sha512": "aM45hME7scc0UOkY0PW/wUSaDOjXokgZNt/pt8WxjIf0jA6gZbmeH6XqGi75ngNOubfbDMkIgy1/T8MUp4a9yg==",
+      "type": "package",
+      "path": "mysql.data.entityframeworkcore/8.0.18",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net452/MySql.Data.EntityFrameworkCore.dll",
+        "lib/net452/MySql.Data.EntityFrameworkCore.xml",
+        "lib/net461/MySql.Data.EntityFrameworkCore.dll",
+        "lib/net461/MySql.Data.EntityFrameworkCore.xml",
+        "lib/netstandard2.0/MySql.Data.EntityFrameworkCore.dll",
+        "lib/netstandard2.0/MySql.Data.EntityFrameworkCore.xml",
+        "mysql.data.entityframeworkcore.8.0.18.nupkg.sha512",
+        "mysql.data.entityframeworkcore.nuspec"
+      ]
+    },
     "NETStandard.Library/2.0.3": {
       "sha512": "st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
       "type": "package",
@@ -8503,7 +8543,7 @@
       ]
     },
     "NuGet.Frameworks/4.7.0": {
-      "sha512": "qbXaB76XYUVLocLBs8Z9TS/ERGK2wm797feO+0JEPFvT7o7MRadOR77mqaSD4J1k8G+DlZQyq+MlkCuxrkr3ag==",
+      "sha512": "KuqDbPzjOWbUM6gPMbkvdhlQ10roQAoMM7mNZ8hcY/fH+9J4Zc+qT8dLWoNzGyr0OrxQVdZdbSjy/fxwoICgGg==",
       "type": "package",
       "path": "nuget.frameworks/4.7.0",
       "files": [
@@ -8632,12 +8672,11 @@
       ]
     },
     "runtime.native.System.IO.Compression/4.3.0": {
-      "sha512": "INBPonS5QPEgn7naufQFXJEp3zX6L4bwHgJ/ZH78aBTpeNfQMtf7C6VrAFhlq2xxWBveIOWyFzQjJ8XzHMhdOQ==",
+      "sha512": "b+V9JC/Ii3sR659flBeaBJww111425tgjcDS1k+hqV4sGh9FALRDBvJnDtQ895gAzpPTUOFDHdqaZ2Et7BpZMg==",
       "type": "package",
       "path": "runtime.native.system.io.compression/4.3.0",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/netstandard1.0/_._",
@@ -8739,7 +8778,7 @@
       ]
     },
     "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
-      "sha512": "nyFNiCk/r+VOiIqreLix8yN+q3Wga9+SE8BCgkf+2BwEKiNx6DyvFjCgkfV743/grxv8jHJ8gUK4XEQw7yzRYg==",
+      "sha512": "T5NvFgmHX0WH4c7lP72krsnk+IJI10vJf2j2twGE+5QBRA4RyRAgD+ZjEgdmpLOjW4B+nZGaadewTCUcR899OQ==",
       "type": "package",
       "path": "runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
       "files": [
@@ -9153,12 +9192,11 @@
       ]
     },
     "System.Collections.NonGeneric/4.3.0": {
-      "sha512": "prtjIEMhGUnQq6RnPEYLpFt8AtLbp9yq2zxOSrY7KJJZrw25Fi97IzBqY7iqssbM61Ek5b8f3MG/sG1N2sN5KA==",
+      "sha512": "LE/oChpRvkSi3U25u0KnJcI44JeDZ1QJCyN4qFDx2uusEypdqR24w7lKYw21eYe5esuCBuc862wRmpF63Yy1KQ==",
       "type": "package",
       "path": "system.collections.nongeneric/4.3.0",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -13824,6 +13862,11 @@
         "system.xml.xpath.xmldocument.nuspec"
       ]
     },
+    "Easyrewardz_TicketSystem.CustomModel/1.0.0": {
+      "type": "project",
+      "path": "../Easyrewardz_TicketSystem.CustomModel/Easyrewardz_TicketSystem.CustomModel.csproj",
+      "msbuildProject": "../Easyrewardz_TicketSystem.CustomModel/Easyrewardz_TicketSystem.CustomModel.csproj"
+    },
     "Easyrewardz_TicketSystem.DBContext/1.0.0": {
       "type": "project",
       "path": "../Easyrewardz_TicketSystem.DBContext/Easyrewardz_TicketSystem.DBContext.csproj",
@@ -13847,33 +13890,35 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.2": [
+      "Easyrewardz_TicketSystem.CustomModel >= 1.0.0",
       "Easyrewardz_TicketSystem.DBContext >= 1.0.0",
       "Easyrewardz_TicketSystem.Interface >= 1.0.0",
       "Easyrewardz_TicketSystem.Services >= 1.0.0",
       "Microsoft.AspNetCore.App >= 2.2.0",
       "Microsoft.AspNetCore.Razor.Design >= 2.2.0",
       "Microsoft.NETCore.App >= 2.2.0",
-      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.2.0"
+      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.2.0",
+      "MySql.Data.EntityFrameworkCore >= 8.0.18"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\hitesh.gopal\\.nuget\\packages\\": {},
+    "C:\\Users\\pritish.parikh\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\EMR-Ticketing\\Easyrewardz_TicketSystem\\Easyrewardz_TicketSystem.WebAPI\\Easyrewardz_TicketSystem.WebAPI.csproj",
+      "projectUniqueName": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.WebAPI\\Easyrewardz_TicketSystem.WebAPI.csproj",
       "projectName": "Easyrewardz_TicketSystem.WebAPI",
-      "projectPath": "D:\\EMR-Ticketing\\Easyrewardz_TicketSystem\\Easyrewardz_TicketSystem.WebAPI\\Easyrewardz_TicketSystem.WebAPI.csproj",
-      "packagesPath": "C:\\Users\\hitesh.gopal\\.nuget\\packages\\",
-      "outputPath": "D:\\EMR-Ticketing\\Easyrewardz_TicketSystem\\Easyrewardz_TicketSystem.WebAPI\\obj\\",
+      "projectPath": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.WebAPI\\Easyrewardz_TicketSystem.WebAPI.csproj",
+      "packagesPath": "C:\\Users\\pritish.parikh\\.nuget\\packages\\",
+      "outputPath": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\hitesh.gopal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\pritish.parikh\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -13886,14 +13931,17 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "D:\\EMR-Ticketing\\Easyrewardz_TicketSystem\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj": {
-              "projectPath": "D:\\EMR-Ticketing\\Easyrewardz_TicketSystem\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj"
+            "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj": {
+              "projectPath": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj"
             },
-            "D:\\EMR-Ticketing\\Easyrewardz_TicketSystem\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj": {
-              "projectPath": "D:\\EMR-Ticketing\\Easyrewardz_TicketSystem\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj"
+            "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj": {
+              "projectPath": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj"
             },
-            "D:\\EMR-Ticketing\\Easyrewardz_TicketSystem\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj": {
-              "projectPath": "D:\\EMR-Ticketing\\Easyrewardz_TicketSystem\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj"
+            "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj": {
+              "projectPath": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj"
+            },
+            "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj": {
+              "projectPath": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj"
             }
           }
         }
@@ -13927,6 +13975,10 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[2.2.0, )"
+          },
+          "MySql.Data.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[8.0.18, )"
           }
         },
         "imports": [

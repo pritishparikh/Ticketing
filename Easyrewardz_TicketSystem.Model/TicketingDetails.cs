@@ -26,51 +26,51 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string Ticket_notes { get; set; }
         /// <summary>
-        /// Ticket Notes
+        /// Ticket Source Id
         /// </summary>
         public int TicketSource_ID { get; set; }
         /// <summary>
-        /// Ticket Notes
+        /// Brand Id
         /// </summary>
         public int Brand_ID { get; set; }
         /// <summary>
-        /// Ticket Notes
+        /// Category Id
         /// </summary>
         public int Category_ID { get; set; }
         /// <summary>
-        /// Ticket Notes
+        /// Subcategory Id
         /// </summary>
         public int SubCategory_ID { get; set; } 
         /// <summary>
-        /// Ticket Notes
+        /// Issue Type Id
         /// </summary>
         public int IssueType_ID { get; set; }  
         /// <summary>
-        /// Ticket Notes
+        /// Priority Id
         /// </summary>
         public int Priority_ID { get; set; } 
         /// <summary>
-        /// Ticket Notes
+        /// Customer Id
         /// </summary>
         public int Customer_ID { get; set; } 
         /// <summary>
-        /// Ticket Notes
+        /// Order Id
         /// </summary>
         public int Order_ID { get; set; }
         /// <summary>
-        /// Ticket Notes
+        /// Created By
         /// </summary>
         public int CreatedBy { get; set; }
         /// <summary>
-        /// Ticket Notes
+        /// Created Date
         /// </summary>
         public DateTime CreatedDate { get; set; }  
         /// <summary>
-        /// Ticket Notes
+        /// Updated By
         /// </summary>
         public int UpdatedBy { get; set; } 
         /// <summary>
-        /// Ticket Notes
+        /// Updated Date
         /// </summary>
         public DateTime UpdatedDate { get; set; }
     }
