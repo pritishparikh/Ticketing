@@ -42,15 +42,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         private IMasterInterface _ImasterChannel;
         #endregion
 
-        #region Methods
-
-
+        #region Methods for the Brand
+        
         public List<Brand> GetBrandList(IBrand _brand, int TenantID)
         {
             _brandList = _brand;
             return _brandList.GetBrandList(TenantID);
         }
 
+        #endregion
+
+        #region Methods for the Category
 
         public List<Category> GetCategoryList(ICategory _category, int TenantID)
         {
@@ -58,7 +60,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _categoryList.GetCategoryList(TenantID);
         }
 
+        #endregion
 
+        #region Methods for the Subcategories
 
         public List<SubCategory> GetSubCategoryByCategoryID(ISubCategories _SubCategory, int CategoryID)
         {
@@ -66,6 +70,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _subCategoryList.GetSubCategoryByCategoryID(CategoryID);
         }
 
+        #endregion
+
+        #region Methods for the Priority
 
         public List<Priority> GetPriorityList(IPriority _priority, int TenantID)
         {
@@ -73,19 +80,22 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _priorityList.GetPriorityList(TenantID);
         }
 
+        #endregion
+
+        #region Methods for the Channel of the Purchase
         public List<ChannelOfPurchase> GetChannelOfPurchaseList(IMasterInterface _IChannel, int TenantID)
         {
             _ImasterChannel = _IChannel;
             return _ImasterChannel.GetChannelOfPurchaseList(TenantID);
         }
+        #endregion
 
+        #region Methods for the Issue type list
         public List<IssueType> GetIssueTypeList(IIssueType _issue, int TenantID, int SubCategoryID)
         {
             _issueList = _issue;
             return _issueList.GetIssueTypeList(TenantID, SubCategoryID);
         }
-
-
         #endregion
 
     }

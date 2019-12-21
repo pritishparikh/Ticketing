@@ -1,16 +1,18 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
+    /// <summary>
+    /// Order
+    /// </summary>
     public class OrderCaller
     {
+        #region Variable declaration
         public IOrder _orderRepository;
+        #endregion
 
+        #region Methods
 
         /// <summary>
         /// Get Order By Number
@@ -36,7 +38,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _orderRepository.addOrderDetails(orderMaster);
         }
 
-
+        #endregion
 
     }
 }

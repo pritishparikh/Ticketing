@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
+    /// <summary>
+    /// Common function 
+    /// </summary>
     public static class CommonFunction
     {
         /// <summary>
