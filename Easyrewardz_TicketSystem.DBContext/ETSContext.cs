@@ -25,7 +25,7 @@ namespace Easyrewardz_TicketSystem.DBContext
         MySqlConnection conn = new MySqlConnection();
         public ETSContext()
         {
-            conn.ConnectionString = "Data Source = 13.67.69.216; port = 3306; Initial Catalog = Ticketing; User Id = brainvire; password = Logitech@123";
+            conn.ConnectionString = "server=192.168.11.19;userid=ticketing;password=Frv810FM#bBgI88;database=ticketing;";
         }
 
         private MySqlHelper _connection;

@@ -51,15 +51,20 @@ namespace Easyrewardz_TicketSystem.Services
                 string _Programcode = Decrypt(ProgramCode);
                 string _Domainname = Decrypt(Domainname);
                 string _applicationid = Decrypt(applicationid);
-                string _userId = Decrypt(userId);
-                string _password = Decrypt(password);
+                //string _userId = Decrypt(userId);
+                //string _password = Decrypt(password);
+                string _userId =  userId;
+                string _password = password;
 
                 string sessionid = "";
                 string newToken = generatetoken(_Programcode, _Domainname, _applicationid, _userId);
                 _DBContext.SaveRecord(_Programcode, _Domainname, _applicationid, sessionid, _userId, _password, newToken);
                 _Token = newToken;
             }
-            catch (Exception _ex) { }
+            catch (Exception _ex)
+            {
+                throw _ex;
+            }
 
             return _Token;
         }
@@ -130,7 +135,7 @@ namespace Easyrewardz_TicketSystem.Services
                 byte[] key = Guid.NewGuid().ToByteArray();
                 string SecreateToken = Encrypt(token) + "." + Convert.ToBase64String(time.Concat(key).ToArray());
 
-                updatecache(userid, SecreateToken);
+                //updatecache(userid, SecreateToken);
 
                 return SecreateToken;
             }
@@ -146,10 +151,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="SecretToken"></param>
         /// <returns></returns>
-        public DataSet validateTokenGetPermission(string SecretToken,int ModuleID)
+        public DataSet validateTokenGetPermission(string SecretToken, int ModuleID)
         {
             ETSContext _DBContext = new ETSContext();
-            DataSet ds = _DBContext.validateSecurityToken(SecretToken,ModuleID);
+            DataSet ds = _DBContext.validateSecurityToken(SecretToken, ModuleID);
             return ds;
         }
 
@@ -170,7 +175,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
-        public bool UpdatePassword(string EmailId,string Password)
+        public bool UpdatePassword(string EmailId, string Password)
         {
             try
             {
@@ -183,7 +188,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw;
             }
-          
+
         }
         #endregion
     }

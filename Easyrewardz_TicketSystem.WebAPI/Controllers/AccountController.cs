@@ -19,10 +19,11 @@ using Newtonsoft.Json;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
+
     [Route("api/[controller]")]
 
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     //[Authorize(AuthenticationSchemes = PermissionModuleConst.ModuleAuthenticationDefaultScheme)]
     public class AccountController : ControllerBase
     {
@@ -37,18 +38,24 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [AllowAnonymous]
         [Route("authenticate")]
-        [HttpGet]
-        public string authenticate()
+        [HttpPost]
+        public string authenticate(string X_Authorized_Programcode, string X_Authorized_Domainname, string X_Authorized_applicationid, string X_Authorized_userId, string X_Authorized_password)
+        //public string authenticate()
         {
             Result resp = new Result();
             try
             {
                 securityCaller _newSecurityCaller = new securityCaller();
-                string Programcode = HttpContext.Request.Headers["X_Authorized_Programcode"];
-                string Domainname = HttpContext.Request.Headers["X_Authorized_Domainname"];
-                string applicationid = HttpContext.Request.Headers["X_Authorized_applicationid"];
-                string userId = HttpContext.Request.Headers["X_Authorized_userId"];
-                string password = HttpContext.Request.Headers["X_Authorized_password"];
+                //string Programcode = HttpContext.Request.Headers["X_Authorized_Programcode"];
+                //string Domainname = HttpContext.Request.Headers["X_Authorized_Domainname"];
+                //string applicationid = HttpContext.Request.Headers["X_Authorized_applicationid"];
+                //string userId = HttpContext.Request.Headers["X_Authorized_userId"];
+                //string password = HttpContext.Request.Headers["X_Authorized_password"];
+                string Programcode = X_Authorized_Programcode;
+                string Domainname = X_Authorized_Domainname;
+                string applicationid = X_Authorized_applicationid;
+                string userId = X_Authorized_userId;
+                string password = X_Authorized_password;
 
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(applicationid) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
@@ -98,7 +105,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [AllowAnonymous]
         public JsonResult ForgetPassword(string EmailId)
         {
-
+            //string EmailId = email;
             try
             {
                 CommonService objSmdService = new CommonService();
