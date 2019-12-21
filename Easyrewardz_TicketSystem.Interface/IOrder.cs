@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
+    /// <summary>
+    /// Interface for the Order
+    /// </summary>
     public interface IOrder
     {
         OrderMaster getOrderbyNumber(string OrderNumber);

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
+    /// <summary>
+    /// Interface for the Master tables
+    /// </summary>
    public interface IMasterInterface
     {
         List<ChannelOfPurchase> GetChannelOfPurchaseList(int TenantID);

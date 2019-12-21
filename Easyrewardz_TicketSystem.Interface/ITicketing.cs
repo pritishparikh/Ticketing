@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
+    /// <summary>
+    /// Interface for the Ticketing
+    /// </summary>
     public interface ITicketing
     {
        

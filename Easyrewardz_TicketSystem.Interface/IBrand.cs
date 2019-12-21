@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
+    /// <summary>
+    /// Interface for the Brand
+    /// </summary>
     public interface IBrand
     {
         List<Brand> GetBrandList(int TenantID);

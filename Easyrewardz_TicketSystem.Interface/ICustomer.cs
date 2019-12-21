@@ -6,6 +6,9 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
+    /// <summary>
+    /// Interface for the Customer
+    /// </summary>
     public interface ICustomer
     {
         CustomerMaster getCustomerbyId(int CustomerID);

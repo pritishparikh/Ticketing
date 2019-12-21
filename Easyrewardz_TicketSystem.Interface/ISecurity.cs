@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
+    /// <summary>
+    /// Interface for the Security
+    /// </summary>
     public interface ISecurity
     {
         string getToken(string programCode, string AppID, string Domainname,string userId,string password);
