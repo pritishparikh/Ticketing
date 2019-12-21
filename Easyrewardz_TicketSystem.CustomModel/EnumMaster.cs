@@ -47,9 +47,9 @@ namespace Easyrewardz_TicketSystem.CustomModel
 
 
 
-        #endregion
+            #endregion
 
-           #region HTTP Request/Response Code
+            #region HTTP Request/Response Code
 
             /// <summary>
             /// Success 
@@ -57,12 +57,11 @@ namespace Easyrewardz_TicketSystem.CustomModel
             [Description("Success")]
             Success = 200,
 
-           
             [Description("We had an error! Sorry about that")]
             InternalServerError = 500,
 
             [Description("Request fulfilled, but no body")]
-            RequestFulfilled,ButNoBody = 204,
+            RequestFulfilled, ButNoBody = 204,
 
             [Description("The request was formatted improperly")]
             TheRequestWasFormattedImproperly = 400,
@@ -79,14 +78,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
             [Description("We had an error! Sorry about that.")]
             WehadanerrorSorryaboutthat = 404,
 
-
             #endregion
-                //200 (OK) - Everything went as planned
-
-
-
-
-
 
         }
     }
