@@ -136,7 +136,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("createCustomer")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public ResponseModel createCustomer([FromBody]CustomerMaster customerMaster)
         {
             Customercaller _customercaller = new Customercaller();

@@ -12,7 +12,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Customer Id
         /// </summary>
-        public int CustomerID { get;set; }
+        public int CustomerID { get; set; }
 
         /// <summary>
         /// Tenant Id
@@ -43,6 +43,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// Alternate Number
         /// </summary>
         public string AltNumber { get; set; }
+
+        /// <summary>
+        /// Date of Birth
+        /// </summary>
+        public DateTime DateOfBirth { get; set; }
 
         /// <summary>
         /// Alternate Email Id
