@@ -137,6 +137,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@AltNumber", customerMaster.AltNumber);
                 cmd1.Parameters.AddWithValue("@AltEmailID", customerMaster.AltEmailID);
                 cmd1.Parameters.AddWithValue("@IsActive", customerMaster.IsActive);
+                cmd1.Parameters.AddWithValue("@DOB", customerMaster.DateOfBirth);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmd1.ExecuteScalar());
                 conn.Close();

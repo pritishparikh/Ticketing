@@ -146,7 +146,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
                 int result = _customercaller.addCustomer(new CustomerService(_connectioSting), customerMaster);
-                CustomerMaster customer = _customercaller.getCustomerDetailsById(new CustomerService(_connectioSting), result);
+                //CustomerMaster customer = _customercaller.getCustomerDetailsById(new CustomerService(_connectioSting), result);
                 StatusCode =
                 result == 0?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
