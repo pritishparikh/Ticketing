@@ -63,5 +63,86 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objChannel;
         }
+
+        /// <summary>
+        /// Get DepartMent List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        public List<DepartmentMaster> GetDepartmentList(int TenantID)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<DepartmentMaster> departmentMasters = new List<DepartmentMaster>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetDepartmentList", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        DepartmentMaster department = new DepartmentMaster();
+                        department.DepartmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["DepartmentID"]);
+                        department.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+                        department.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        departmentMasters.Add(department);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return departmentMasters;
+        }
+        /// <summary>
+        /// Get Function By DepartmentID
+        /// </summary>
+        /// <param name="DepartmentID"></param>
+        /// <returns></returns>
+        public List<FuncationMaster> GetFunctionByDepartment(int DepartmentID)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<FuncationMaster> funcationMasters = new List<FuncationMaster>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_getFunctionByDepartmentId", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Department_ID", DepartmentID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        FuncationMaster function = new FuncationMaster();
+                        function.FuncationName = Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]);
+                        funcationMasters.Add(function);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return funcationMasters;
+        }
     }
 }
