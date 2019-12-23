@@ -8,6 +8,7 @@ using System.Text;
 using System.Linq;
 using System.Data;
 using MySql.Data.MySqlClient;
+using System.IO;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -39,6 +40,21 @@ namespace Easyrewardz_TicketSystem.Services
         //}
 
         #endregion
+        /// <summary>
+        /// Decrypt
+        /// </summary>
+        /// <param name="DecryptStringAES"></param>
+        /// <returns></returns>
+        public static string DecryptStringAES(string cipherText)
+        {
+
+            var keybytes = Encoding.UTF8.GetBytes("sblw-3hn8-sqoy19");
+            var iv = Encoding.UTF8.GetBytes("sblw-3hn8-sqoy19");
+
+            var encrypted = Convert.FromBase64String(cipherText);
+            var decriptedFromJavascript = Decrypt(encrypted, keybytes, iv);
+            return string.Format(decriptedFromJavascript);
+        }
 
         public string getToken(string ProgramCode, string Domainname, string applicationid, string userId, string password)
         {
@@ -48,13 +64,11 @@ namespace Easyrewardz_TicketSystem.Services
 
                 ETSContext _DBContext = new ETSContext();
 
-                string _Programcode = Decrypt(ProgramCode);
-                string _Domainname = Decrypt(Domainname);
-                string _applicationid = Decrypt(applicationid);
-                //string _userId = Decrypt(userId);
-                //string _password = Decrypt(password);
-                string _userId =  userId;
-                string _password = password;
+                string _Programcode = DecryptStringAES(ProgramCode);
+                string _Domainname = DecryptStringAES(Domainname);
+                string _applicationid = DecryptStringAES(applicationid);
+                string _userId = DecryptStringAES(userId);
+                string _password = DecryptStringAES(password);
 
                 string sessionid = "";
                 string newToken = generatetoken(_Programcode, _Domainname, _applicationid, _userId);
@@ -69,61 +83,192 @@ namespace Easyrewardz_TicketSystem.Services
             return _Token;
         }
 
+
         /// <summary>
         /// Encrypt
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        private static string Encrypt(string token)
+        //private static string Encrypt(string token, byte[] key, byte[] iv)
+        //{
+        //    try
+        //    {
+        //        var key = "sblw-3hn8-sqoy19";
+        //        byte[] inputArray = UTF8Encoding.UTF8.GetBytes(token);
+        //        TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();
+        //        tripleDES.Key = UTF8Encoding.UTF8.GetBytes(key);
+        //        tripleDES.Mode = CipherMode.ECB;
+        //        tripleDES.Padding = PaddingMode.PKCS7;
+        //        ICryptoTransform cTransform = tripleDES.CreateEncryptor();
+        //        byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
+        //        tripleDES.Clear();
+        //        var finaltoken = Convert.ToBase64String(resultArray, 0, resultArray.Length);
+        //        return finaltoken;
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw ex;
+        //    }
+
+        //}
+
+
+
+        /// <summary>
+        /// Decrypt
+        /// </summary>
+        /// <param name="DecryptStringFromBytes"></param>
+        /// <returns></returns>
+        private static string Decrypt(byte[] cipherText, byte[] key, byte[] iv)
         {
-            try
+            // Check arguments.
+            if (cipherText == null || cipherText.Length <= 0)
             {
-                var key = "sblw-3hn8-sqoy19";
-                byte[] inputArray = UTF8Encoding.UTF8.GetBytes(token);
-                TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();
-                tripleDES.Key = UTF8Encoding.UTF8.GetBytes(key);
-                tripleDES.Mode = CipherMode.ECB;
-                tripleDES.Padding = PaddingMode.PKCS7;
-                ICryptoTransform cTransform = tripleDES.CreateEncryptor();
-                byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
-                tripleDES.Clear();
-                var finaltoken = Convert.ToBase64String(resultArray, 0, resultArray.Length);
-                return finaltoken;
-
+                throw new ArgumentNullException("cipherText");
             }
-            catch (Exception ex)
+            if (key == null || key.Length <= 0)
             {
-
-                throw ex;
+                throw new ArgumentNullException("key");
             }
+            if (iv == null || iv.Length <= 0)
+            {
+                throw new ArgumentNullException("key");
+            }
+
+            // Declare the string used to hold
+            // the decrypted text.
+            string plaintext = null;
+
+            // Create an RijndaelManaged object
+            // with the specified key and IV.
+            using (var rijAlg = new RijndaelManaged())
+            {
+                //Settings
+                rijAlg.Mode = CipherMode.CBC;
+                rijAlg.Padding = PaddingMode.PKCS7;
+                rijAlg.FeedbackSize = 128;
+
+                rijAlg.Key = key;
+                rijAlg.IV = iv;
+
+                // Create a decrytor to perform the stream transform.
+                var decryptor = rijAlg.CreateDecryptor(rijAlg.Key, rijAlg.IV);
+                try
+                {
+                    using (var msDecrypt = new MemoryStream(cipherText))
+                    {
+                        using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                        {
+
+                            using (var srDecrypt = new StreamReader(csDecrypt))
+                            {
+                                plaintext = srDecrypt.ReadToEnd();
+
+                            }
+
+                        }
+                    }
+                }
+                catch
+                {
+                    plaintext = "keyError";
+                }
+            }
+
+            return plaintext;
         }
+        /// <summary>
+        /// Decrypt
+        /// </summary>
+        /// <param name="Encrypt"></param>
+        /// <returns></returns>
+        private static string Encrypt(string plainText)
+        {
+
+            var key = Encoding.UTF8.GetBytes("sblw-3hn8-sqoy19");
+            var iv = Encoding.UTF8.GetBytes("sblw-3hn8-sqoy19");
+            // Check arguments.
+            if (plainText == null || plainText.Length <= 0)
+            {
+                throw new ArgumentNullException("plainText");
+            }
+            if (key == null || key.Length <= 0)
+            {
+                throw new ArgumentNullException("key");
+            }
+            if (iv == null || iv.Length <= 0)
+            {
+                throw new ArgumentNullException("key");
+            }
+            byte[] encrypted;
+
+
+            using (var rijAlg = new RijndaelManaged())
+            {
+                rijAlg.Mode = CipherMode.CBC;
+                rijAlg.Padding = PaddingMode.PKCS7;
+                rijAlg.FeedbackSize = 128;
+
+                rijAlg.Key = key;
+                rijAlg.IV = iv;
+
+                // Create a decrytor to perform the stream transform.
+                var encryptor = rijAlg.CreateEncryptor(rijAlg.Key, rijAlg.IV);
+
+                // Create the streams used for encryption.
+                using (var msEncrypt = new MemoryStream())
+                {
+                    using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (var swEncrypt = new StreamWriter(csEncrypt))
+                        {
+                            //Write all data to the stream.
+                            swEncrypt.Write(plainText);
+                        }
+                        encrypted = msEncrypt.ToArray();
+                    }
+                }
+            }
+
+            string finaltoken = Convert.ToBase64String(encrypted, 0, encrypted.Length);
+
+            // Return the encrypted bytes from the memory stream.
+            return finaltoken;
+        }
+
+
+
 
         /// <summary>
         /// Decrypt
         /// </summary>
         /// <param name="EncptToken"></param>
         /// <returns></returns>
-        private static string Decrypt(string EncptToken)
-        {
-            try
-            {
-                var key = "sblw-3hn8-sqoy19";
-                byte[] inputArray = Convert.FromBase64String(EncptToken.Replace(".", "+"));
-                TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();
-                tripleDES.Key = UTF8Encoding.UTF8.GetBytes(key);
-                tripleDES.Mode = CipherMode.ECB;
-                tripleDES.Padding = PaddingMode.PKCS7;
-                ICryptoTransform cTransform = tripleDES.CreateDecryptor();
-                byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
-                tripleDES.Clear();
-                var finalDecrptToken = UTF8Encoding.UTF8.GetString(resultArray);
-                return finalDecrptToken;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //private static string Decrypt(string EncptToken)
+        //{
+        //    try
+        //    {
+        //        var key = "sblw-3hn8-sqoy19";
+        //        byte[] inputArray = Convert.FromBase64String(EncptToken.Replace(".", "+"));
+        //        TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();
+        //        tripleDES.Key = UTF8Encoding.UTF8.GetBytes(key);
+        //        tripleDES.Mode = CipherMode.ECB;
+        //        tripleDES.Padding = PaddingMode.PKCS7;
+        //        ICryptoTransform cTransform = tripleDES.CreateDecryptor();
+        //        byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
+        //        tripleDES.Clear();
+        //        var finalDecrptToken = UTF8Encoding.UTF8.GetString(resultArray);
+        //        return finalDecrptToken;
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
 
         private string generatetoken(string Programcode, string Domainname, string applicationid, string userid)
         {
@@ -134,8 +279,6 @@ namespace Easyrewardz_TicketSystem.Services
                 byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
                 byte[] key = Guid.NewGuid().ToByteArray();
                 string SecreateToken = Encrypt(token) + "." + Convert.ToBase64String(time.Concat(key).ToArray());
-
-                //updatecache(userid, SecreateToken);
 
                 return SecreateToken;
             }

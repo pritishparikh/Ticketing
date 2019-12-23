@@ -29,89 +29,47 @@ namespace Easyrewardz_TicketSystem.WebAPI
         public IConfiguration Configuration { get; }
         public ISecurity Security { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        //     public void ConfigureServices(IServiceCollection services)
-        //     {
-        //         services.AddCors(options =>
-        //         {
-        //             options.AddPolicy("CorsPolicy",
-        //                 builder => builder.AllowAnyOrigin()
-        //                 .AllowAnyMethod()
-        //                 .AllowAnyHeader()
-        //                 .AllowCredentials());
-
-        //         });
-        //         services.AddOptions();
-
-        //         ////Register Appsetting---------------------------------------------------------- 
-        //         services.AddSingleton<IConfiguration>(Configuration);
-        //         //services.AddSingleton<ISecurity>(Security);
-
-        //         //services.AddDbContext<ETSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("EmployeeDatabase")));
-        //         services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-        //         ////----------Register Interface-------------------------------------------------
-        //         services.AddTransient<ISecurity, SecurityService>();
-        //         #region AuthenticationAddTransient
-        //         services.AddAuthentication(o =>
-        //         {
-        //             o.DefaultScheme = SchemesNamesConst.TokenAuthenticationDefaultScheme;
-
-        //         })
-        //         .AddScheme<TokenAuthenticationOptions, TokenAuthenticationHandler>(SchemesNamesConst.TokenAuthenticationDefaultScheme, o => { });
-
-        //         services.AddAuthentication(o =>
-        //         {
-        //             o.DefaultScheme = PermissionModuleConst.ModuleAuthenticationDefaultScheme;
-
-        //         })
-        //         .AddScheme<ModuleAuthenticationOptions, PermissionRequirement>(PermissionModuleConst.ModuleAuthenticationDefaultScheme, o => { });
-
-        //         #endregion
-        //     }
-
-        //     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        //     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        //     {
-        //         if (env.IsDevelopment())
-        //         {
-        //             app.UseDeveloperExceptionPage();
-        //         }
-        //         else
-        //         {
-        //             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-        //             app.UseHsts();
-        //         }
-
-        //         app.UseHttpsRedirection();
-        //         app.UseCors(
-        //    options => options.WithOrigins("*").AllowAnyMethod()
-        //);
-        //         app.UseMvc();
-        //     }
-
-
-        public void ConfigureServices(IServiceCollection services)
+        //This method gets called by the runtime.Use this method to add services to the container.
+             public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll",
-                    builder =>
-                    {
-                        builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
-                    });
-            });
+                 {
+                     options.AddPolicy("AllowAll",
+                         builder =>
+                         {
+                             builder
+                             .AllowAnyOrigin()
+                             .AllowAnyMethod()
+                             .AllowAnyHeader();
+                         });
+                 });
+            services.AddOptions();
 
-            services.AddCors();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            ////Register Appsetting---------------------------------------------------------- 
+            services.AddSingleton<IConfiguration>(Configuration);
+            //services.AddSingleton<ISecurity>(Security);
 
-            services.Configure<MvcOptions>(options =>
+            //services.AddDbContext<ETSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("EmployeeDatabase")));
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            ////----------Register Interface-------------------------------------------------
+            services.AddTransient<ISecurity, SecurityService>();
+            #region AuthenticationAddTransient
+            services.AddAuthentication(o =>
             {
-                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAll"));
-            });
+                o.DefaultScheme = SchemesNamesConst.TokenAuthenticationDefaultScheme;
+
+            })
+            .AddScheme<TokenAuthenticationOptions, TokenAuthenticationHandler>(SchemesNamesConst.TokenAuthenticationDefaultScheme, o => { });
+
+            services.AddAuthentication(o =>
+            {
+                o.DefaultScheme = PermissionModuleConst.ModuleAuthenticationDefaultScheme;
+
+            })
+            .AddScheme<ModuleAuthenticationOptions, PermissionRequirement>(PermissionModuleConst.ModuleAuthenticationDefaultScheme, o => { });
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -123,13 +81,57 @@ namespace Easyrewardz_TicketSystem.WebAPI
             }
             else
             {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-            app.UseCors("AllowAll");
-            app.UseAuthentication();
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
+            app.UseCors(
+       options => options.WithOrigins("*").AllowAnyMethod()
+   );
             app.UseMvc();
         }
+
+
+        //public void ConfigureServices(IServiceCollection services)
+        //{
+        //    services.AddCors(options =>
+        //    {
+        //        options.AddPolicy("AllowAll",
+        //            builder =>
+        //            {
+        //                builder
+        //                .AllowAnyOrigin()
+        //                .AllowAnyMethod()
+        //                .AllowAnyHeader();
+        //            });
+        //    });
+
+        //    services.AddCors();
+        //    services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+        //    services.Configure<MvcOptions>(options =>
+        //    {
+        //        options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAll"));
+        //    });
+        //}
+
+        //// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        //public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        //{
+        //    if (env.IsDevelopment())
+        //    {
+        //        app.UseDeveloperExceptionPage();
+        //    }
+        //    else
+        //    {
+        //        app.UseHsts();
+        //    }
+
+        //    app.UseCors("AllowAll");
+        //    app.UseAuthentication();
+        //    //app.UseHttpsRedirection();
+        //    app.UseMvc();
+        //}
     }
 }
