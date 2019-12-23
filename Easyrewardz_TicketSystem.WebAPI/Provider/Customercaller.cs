@@ -1,5 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -14,7 +15,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <summary>
         /// Get Customer Detail by id
         /// </summary>
-        public CustomerMaster getCustomerDetailsById(ICustomer customer, int CustomerID)
+        public List<CustomerMaster> getCustomerDetailsById(ICustomer customer, int CustomerID)
         {
             _customerRepository = customer;
             return _customerRepository.getCustomerbyId(CustomerID);
