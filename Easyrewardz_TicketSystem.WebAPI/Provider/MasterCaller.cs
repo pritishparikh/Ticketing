@@ -98,5 +98,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
         #endregion
 
+
+        private IMasterInterface _ImasterDepartment;
+        public List<DepartmentMaster> GetDepartmentListDetails(IMasterInterface _department, int TenantID)
+        {
+            _ImasterDepartment = _department;
+            return _ImasterDepartment.GetDepartmentList(TenantID);
+        }
+
+        private IMasterInterface _ImasterFunctionbyDepartment;
+        public List<FuncationMaster> GetFunctionbyDepartment(IMasterInterface _function, int DepartmentID)
+        {
+            _ImasterFunctionbyDepartment = _function;
+            return _ImasterFunctionbyDepartment.GetFunctionByDepartment(DepartmentID);
+        }
+
     }
 }

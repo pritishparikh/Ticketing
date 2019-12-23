@@ -24,31 +24,36 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="CustomerID"></param>
         /// <returns></returns>
-        public CustomerMaster getCustomerbyId(int CustomerID)
+        public List<CustomerMaster> getCustomerbyId(int CustomerID)
         {
-            CustomerMaster customerMasters = new CustomerMaster();
+            DataSet ds = new DataSet();
+            List<CustomerMaster> customerMasters = new List<CustomerMaster>();
             MySqlCommand cmd = new MySqlCommand();
             try
             {
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getCustomerDetailsById", conn);
-                cmd1.Parameters.AddWithValue("@CustomerID", CustomerID);
+                cmd1.Parameters.AddWithValue("@Customer_ID", CustomerID);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                MySqlDataAdapter sd = new MySqlDataAdapter(cmd1);
-                DataTable dt = new DataTable();
-                sd.Fill(dt);
-                conn.Close();
-                if (dt != null && dt.Rows.Count > 0)
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
                 {
-                    customerMasters.TenantID = Convert.ToInt32(dt.Rows[0]["TenantID"]);
-                    customerMasters.CustomerName = Convert.ToString(dt.Rows[0]["CustomerName"]);
-                    customerMasters.CustomerPhoneNumber = Convert.ToString(dt.Rows[0]["CustomerPhoneNumber"]);
-                    customerMasters.CustomerEmailId = Convert.ToString(dt.Rows[0]["CustomerEmailId"]);
-                    customerMasters.GenderID = Convert.ToInt32(dt.Rows[0]["GenderID"]);
-                    customerMasters.AltNumber = Convert.ToString(dt.Rows[0]["AltNumber"]);
-                    customerMasters.AltEmailID = Convert.ToString(dt.Rows[0]["AltEmailID"]);
-                    customerMasters.IsActive = Convert.ToInt32(dt.Rows[0]["IsActive"]);
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomerMaster customerMaster = new CustomerMaster();
+                        customerMaster.TenantID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
+                        customerMaster.CustomerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
+                        customerMaster.CustomerPhoneNumber = Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
+                        customerMaster.CustomerEmailId = Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
+                        customerMaster.GenderID = Convert.ToInt32(ds.Tables[0].Rows[i]["GenderID"]);
+                        customerMaster.AltNumber = Convert.ToString(ds.Tables[0].Rows[i]["AltNumber"]);
+                        customerMaster.AltEmailID = Convert.ToString(ds.Tables[0].Rows[i]["AltEmailID"]);
+                        customerMaster.IsActive = Convert.ToInt32(ds.Tables[0].Rows[i]["IsActive"]);
+                        customerMasters.Add(customerMaster);
+                    }
                 }
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
@@ -63,7 +68,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return customerMasters;
-        }  
+        }
 
 
         /// <summary>
@@ -137,6 +142,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@AltNumber", customerMaster.AltNumber);
                 cmd1.Parameters.AddWithValue("@AltEmailID", customerMaster.AltEmailID);
                 cmd1.Parameters.AddWithValue("@IsActive", customerMaster.IsActive);
+                cmd1.Parameters.AddWithValue("@DOB", customerMaster.DateOfBirth);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmd1.ExecuteScalar());
                 conn.Close();

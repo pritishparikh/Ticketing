@@ -11,7 +11,7 @@ namespace Easyrewardz_TicketSystem.Interface
     /// </summary>
     public interface ICustomer
     {
-        CustomerMaster getCustomerbyId(int CustomerID);
+        List<CustomerMaster> getCustomerbyId(int CustomerID);
 
         CustomerMaster getCustomerbyEmailIdandPhoneNo(string Email, string Phoneno);
 
