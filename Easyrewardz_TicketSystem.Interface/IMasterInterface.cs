@@ -11,5 +11,9 @@ namespace Easyrewardz_TicketSystem.Interface
    public interface IMasterInterface
     {
         List<ChannelOfPurchase> GetChannelOfPurchaseList(int TenantID);
+
+        List<DepartmentMaster> GetDepartmentList(int TenantID);
+
+        List<FuncationMaster> GetFunctionByDepartment(int DepartmentID);
     }
 }
