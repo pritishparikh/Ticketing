@@ -21,6 +21,10 @@ namespace Easyrewardz_TicketSystem.WebAPI
 {
     public class Startup
     {
+        /// <summary>
+        /// Start Up method
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
