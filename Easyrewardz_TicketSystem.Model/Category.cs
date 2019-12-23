@@ -9,7 +9,7 @@ namespace Easyrewardz_TicketSystem.Model
     /// </summary>
     public class Category
     {
-        /// <summary>
+        /// <summary>        
         /// Category Id
         /// </summary>
         public int CategoryID { get; set; }
@@ -42,12 +42,12 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Modified By
         /// </summary>
-        public int ModifyBy { get; set; }
+        public int? ModifyBy { get; set; }
 
         /// <summary>
         /// Modified On
         /// </summary>
-        public DateTime ModifyDate { get; set; }
+        public DateTime? ModifyDate { get; set; }
 
         /// <summary>
         /// Created By Name
