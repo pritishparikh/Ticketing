@@ -80,8 +80,7 @@ namespace Easyrewardz_TicketSystem.Services
         public List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText)
         {
             List<CustomerMaster> customerMasters = new List<CustomerMaster>();
-
-            CustomerMaster customer = new CustomerMaster();
+            
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
             try
@@ -98,6 +97,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
+                        CustomerMaster customer = new CustomerMaster();
                         customer.CustomerName = Convert.ToString(dt.Rows[i]["CustomerName"]);
                         customer.CustomerID = Convert.ToInt32(dt.Rows[i]["CustomerID"]);
 
