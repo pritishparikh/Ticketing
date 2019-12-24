@@ -13,7 +13,7 @@ namespace Easyrewardz_TicketSystem.Interface
     {
         List<CustomerMaster> getCustomerbyId(int CustomerID);
 
-        CustomerMaster getCustomerbyEmailIdandPhoneNo(string Email, string Phoneno);
+        List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText);
 
         int addCustomerDetails(CustomerMaster customerMaster);
 

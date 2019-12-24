@@ -25,13 +25,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// Get Customer Detail by id/Phone
         /// </summary>
         /// <param name="customer"></param>
-        /// <param name="Email"></param>
-        /// <param name="Phoneno"></param>
+        /// <param name="SearchText"></param>
         /// <returns></returns>
-        public CustomerMaster getCustomerDetailsByEmailIdandPhone(ICustomer customer, string Email, string Phoneno)
+        public List<CustomerMaster> getCustomerDetailsByEmailIdandPhone(ICustomer customer, string SearchText)
         {
             _customerRepository = customer;
-            return _customerRepository.getCustomerbyEmailIdandPhoneNo(Email, Phoneno);
+            return _customerRepository.getCustomerbyEmailIdandPhoneNo(SearchText);
         }
 
         /// <summary>

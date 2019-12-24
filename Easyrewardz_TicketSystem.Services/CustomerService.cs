@@ -77,9 +77,11 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="Email"></param>
         /// <param name="Phoneno"></param>
         /// <returns></returns>
-        public CustomerMaster getCustomerbyEmailIdandPhoneNo(string Email, string Phoneno)
+        public List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText)
         {
-            CustomerMaster customerMasters = new CustomerMaster();
+            List<CustomerMaster> customerMasters = new List<CustomerMaster>();
+
+            CustomerMaster customer = new CustomerMaster();
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
             try
@@ -87,21 +89,20 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_searchCustomerByEmailAndPhone", conn);
-                cmd1.Parameters.AddWithValue("@objEmailId", Email);
-                cmd1.Parameters.AddWithValue("@objCustomerPhoneNumber", Phoneno);
+                cmd1.Parameters.AddWithValue("@searchText", searchText);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
                 if (dt != null && dt.Rows.Count > 0)
                 {
-                    customerMasters.TenantID = Convert.ToInt32(dt.Rows[0]["TenantID"]);
-                    customerMasters.CustomerName = Convert.ToString(dt.Rows[0]["CustomerName"]);
-                    customerMasters.CustomerPhoneNumber = Convert.ToString(dt.Rows[0]["CustomerPhoneNumber"]);
-                    customerMasters.CustomerEmailId = Convert.ToString(dt.Rows[0]["CustomerEmailId"]);
-                    customerMasters.GenderID = Convert.ToInt32(dt.Rows[0]["GenderID"]);
-                    customerMasters.AltNumber = Convert.ToString(dt.Rows[0]["AltNumber"]);
-                    customerMasters.AltEmailID = Convert.ToString(dt.Rows[0]["AltEmailID"]);
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        customer.CustomerName = Convert.ToString(dt.Rows[0]["CustomerName"]);
+                        customer.CustomerPhoneNumber = Convert.ToString(dt.Rows[0]["CustomerID"]);
+
+                        customerMasters.Add(customer);
+                    }
                 }
                 conn.Close();
             }

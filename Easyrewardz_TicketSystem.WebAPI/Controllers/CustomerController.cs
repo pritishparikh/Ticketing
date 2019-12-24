@@ -89,19 +89,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
         /// <summary>
         ///  Get Customer Details By ID/Contact No
         /// </summary>
-        /// <param name="Email"></param>
-        /// <param name="Phoneno"></param>
+        /// <param name="SearchText"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("searchCustomer")]
         [AllowAnonymous]
-        public ResponseModel searchCustomer(string Email, string Phoneno)
+        public ResponseModel searchCustomer(string SearchText)
         {
-            
-            CustomerMaster _objcustomerMaster = null;
+
+            List<CustomerMaster> _objcustomerMaster = new List<CustomerMaster>();
             Customercaller _customercaller = new Customercaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -109,7 +109,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
 
-                _objcustomerMaster = _customercaller.getCustomerDetailsByEmailIdandPhone(new CustomerService(_connectioSting), Email, Phoneno);
+                _objcustomerMaster = _customercaller.getCustomerDetailsByEmailIdandPhone(new CustomerService(_connectioSting), SearchText);
 
                 StatusCode =
                       _objcustomerMaster == null ?
