@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
@@ -39,13 +40,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [AllowAnonymous]
         [Route("authenticate")]
         [HttpPost]
-        public string authenticate(string X_Authorized_Programcode, string X_Authorized_Domainname, string X_Authorized_applicationid, string X_Authorized_userId, string X_Authorized_password)
+        public ResponseModel authenticate(string X_Authorized_Programcode, string X_Authorized_Domainname, string X_Authorized_applicationid, string X_Authorized_userId, string X_Authorized_password)
         //public string authenticate()
         {
-            Result resp = new Result();
+            ResponseModel resp = new ResponseModel();
             try
             {
                 securityCaller _newSecurityCaller = new securityCaller();
+                AccountModal objAccount = new AccountModal();
                 //string Programcode = HttpContext.Request.Headers["X_Authorized_Programcode"];
                 //string Domainname = HttpContext.Request.Headers["X_Authorized_Domainname"];
                 //string applicationid = HttpContext.Request.Headers["X_Authorized_applicationid"];
@@ -57,40 +59,34 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string userId = X_Authorized_userId;
                 string password = X_Authorized_password;
 
+                
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(applicationid) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
                     string token = _newSecurityCaller.generateToken(new SecurityService(_connectioSting), Programcode, applicationid, Domainname, userId, password);
-                    resp.IsResponse = true;
-                    resp.statusCode = 200;
-                    resp.Message = token;
-                    resp.ErrorMessage = null;
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(resp);
+
+                    objAccount.Message = "Valid login";
+                    objAccount.Token = token;
+
+                    resp.StatusCode = (int)EnumMaster.StatusCode.Success;
+                    resp.ResponseData = objAccount;
                 }
                 else
                 {
-                    resp.IsResponse = false;
-                    resp.statusCode = 500;
-                    resp.Message = "Request Error";
-                    resp.ErrorMessage = resp.ErrorMessage;
-                    return JsonConvert.SerializeObject(resp);
+                    ///In valid code here
+                    
                 }
-
             }
             catch (Exception _ex)
             {
-
-                resp.IsResponse = false;
-                resp.statusCode = 500;
-                resp.Message = "Request Error";
-                resp.ErrorMessage = _ex.InnerException.ToString();
-                return JsonConvert.SerializeObject(resp);
+                resp.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                resp.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
             }
             finally
             {
                 GC.Collect();
             }
-
+            return resp;
         }
 
 
