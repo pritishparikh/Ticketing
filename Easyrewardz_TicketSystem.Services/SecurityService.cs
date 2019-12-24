@@ -72,6 +72,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 string sessionid = "";
                 string newToken = generatetoken(_Programcode, _Domainname, _applicationid, _userId);
+                 updatetocache(_userId, newToken);
                 _DBContext.SaveRecord(_Programcode, _Domainname, _applicationid, sessionid, _userId, _password, newToken);
                 _Token = newToken;
             }
@@ -82,7 +83,20 @@ namespace Easyrewardz_TicketSystem.Services
 
             return _Token;
         }
-
+        private void updatetocache(string userid, string securittoken)
+        {
+            try
+            {
+                ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+                IDatabase db = redis.GetDatabase();
+                db.StringSet(userid, securittoken);
+                string abc = db.StringGet(userid);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         /// <summary>
         /// Encrypt

@@ -110,7 +110,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="DepartmentID"></param>
         /// <returns></returns>
-        public List<FuncationMaster> GetFunctionByDepartment(int DepartmentID)
+        public List<FuncationMaster> GetFunctionByDepartment(int DepartmentID,int TenantID)
         {
 
             DataSet ds = new DataSet();
@@ -124,6 +124,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_getFunctionByDepartmentId", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Department_ID", DepartmentID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -132,6 +133,7 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         FuncationMaster function = new FuncationMaster();
+                        function.FunctionID = Convert.ToInt32(ds.Tables[0].Rows[i]["FunctionID"]);
                         function.FuncationName = Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]);
                         funcationMasters.Add(function);
                     }

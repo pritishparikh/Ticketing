@@ -107,10 +107,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
         private IMasterInterface _ImasterFunctionbyDepartment;
-        public List<FuncationMaster> GetFunctionbyDepartment(IMasterInterface _function, int DepartmentID)
+        public List<FuncationMaster> GetFunctionbyDepartment(IMasterInterface _function, int DepartmentID ,int TenantID)
         {
             _ImasterFunctionbyDepartment = _function;
-            return _ImasterFunctionbyDepartment.GetFunctionByDepartment(DepartmentID);
+            return _ImasterFunctionbyDepartment.GetFunctionByDepartment(DepartmentID,TenantID);
         }
 
     }
