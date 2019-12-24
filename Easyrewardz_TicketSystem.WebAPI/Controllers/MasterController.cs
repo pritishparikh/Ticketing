@@ -98,7 +98,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StatusCode =
                 _objDepartmentList.Count == 0 ?
-                     (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.Success;
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
@@ -139,7 +139,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objFunctionList = _newMasterChannel.GetFunctionbyDepartment(new MasterServices(_connectioSting), DepartmentId, TenantID);
                 StatusCode =
                 objFunctionList.Count == 0 ?
-                     (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.Success;
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
