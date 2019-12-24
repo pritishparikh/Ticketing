@@ -90,9 +90,11 @@ namespace Easyrewardz_TicketSystem.WebAPI
             }
 
             app.UseHttpsRedirection();
-            app.UseCors(
-       options => options.WithOrigins("*").AllowAnyMethod()
-   );
+            app.UseCors("AllowAll");
+            app.UseAuthentication();
+            //         app.UseCors(
+            //    options => options.WithOrigins("*").AllowAnyMethod()
+            //);
             app.UseMvc();
         }
 
