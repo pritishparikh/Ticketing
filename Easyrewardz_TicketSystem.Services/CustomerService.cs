@@ -98,8 +98,8 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        customer.CustomerName = Convert.ToString(dt.Rows[0]["CustomerName"]);
-                        customer.CustomerPhoneNumber = Convert.ToString(dt.Rows[0]["CustomerID"]);
+                        customer.CustomerName = Convert.ToString(dt.Rows[i]["CustomerName"]);
+                        customer.CustomerID = Convert.ToInt32(dt.Rows[i]["CustomerID"]);
 
                         customerMasters.Add(customer);
                     }
