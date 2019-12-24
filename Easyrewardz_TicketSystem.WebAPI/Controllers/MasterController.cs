@@ -127,7 +127,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("getFunctionNameByDepartmentId")]
         [AllowAnonymous]
-        public ResponseModel getFunctionNameByDepartmentId(int DepartmentId)
+        public ResponseModel getFunctionNameByDepartmentId(int DepartmentId,int TenantID)
         {
             List<FuncationMaster> objFunctionList = new List<FuncationMaster>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -136,7 +136,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
                 MasterCaller _newMasterChannel = new MasterCaller();
-                objFunctionList = _newMasterChannel.GetFunctionbyDepartment(new MasterServices(_connectioSting), DepartmentId);
+                objFunctionList = _newMasterChannel.GetFunctionbyDepartment(new MasterServices(_connectioSting), DepartmentId, TenantID);
                 StatusCode =
                 objFunctionList.Count == 0 ?
                      (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.Success;

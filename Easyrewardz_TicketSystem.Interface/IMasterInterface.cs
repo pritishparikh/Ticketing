@@ -14,6 +14,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<DepartmentMaster> GetDepartmentList(int TenantID);
 
-        List<FuncationMaster> GetFunctionByDepartment(int DepartmentID);
+        List<FuncationMaster> GetFunctionByDepartment(int DepartmentID,int TenantID);
     }
 }
