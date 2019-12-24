@@ -53,11 +53,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 //string applicationid = HttpContext.Request.Headers["X_Authorized_applicationid"];
                 //string userId = HttpContext.Request.Headers["X_Authorized_userId"];
                 //string password = HttpContext.Request.Headers["X_Authorized_password"];
-                string Programcode = X_Authorized_Programcode;
-                string Domainname = X_Authorized_Domainname;
-                string applicationid = X_Authorized_applicationid;
-                string userId = X_Authorized_userId;
-                string password = X_Authorized_password;
+                string Programcode = X_Authorized_Programcode.Replace(' ', '+');
+                string Domainname = X_Authorized_Domainname.Replace(' ','+');
+                string applicationid = X_Authorized_applicationid.Replace(' ', '+');
+                string userId = X_Authorized_userId.Replace(' ', '+');
+                string password = X_Authorized_password.Replace(' ', '+');
 
                 
 
