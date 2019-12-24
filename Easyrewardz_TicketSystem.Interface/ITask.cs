@@ -8,6 +8,7 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface ITask
     {
         int AddTaskDetails(TaskMaster taskMaster);
-        //IEnumerable<TaskMaster> GetTaskMasters();
+        TaskMaster GetTaskbyId(int taskID);
+        List<TaskMaster> GetTaskList();
     }
 }

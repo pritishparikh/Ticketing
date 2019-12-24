@@ -66,5 +66,8 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public DateTime ModifiedDate { get; set; }
 
-    }
+        public DepartmentMaster departments { get; set; }
+        public StatusMaster statusMasters { get; set; }
+    } 
+   
 }

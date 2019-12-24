@@ -58,33 +58,95 @@ namespace Easyrewardz_TicketSystem.Services
             return taskId;
         }
 
-        //public IEnumerable<TaskMaster> GetTaskMasters()
-        //{
-        //    //List<TaskMaster> lsttask = new List<Employee>();
 
-        //    //using (SqlConnection con = new SqlConnection(connectionString))
-        //    //{
-        //    //    SqlCommand cmd = new SqlCommand("spGetAllEmployees", con);
-        //    //    cmd.CommandType = CommandType.StoredProcedure;
 
-        //    //    con.Open();
-        //    //    SqlDataReader rdr = cmd.ExecuteReader();
+        public TaskMaster GetTaskbyId(int taskID)
+        {
+           // MySqlCommand cmd  = new MySqlCommand();
+            TaskMaster taskMaster = new TaskMaster();
+            try        
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("sp_GetTaskbyId", conn);
+                cmd.Connection = conn;       
+                cmd.Parameters.AddWithValue("@taskID", taskID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                //conn.Open();
+                MySqlDataReader rdr = cmd.ExecuteReader();
 
-        //    //    while (rdr.Read())
-        //    //    {
-        //    //        Employee employee = new Employee();
+                while (rdr.Read())
+                {
+                    DepartmentMaster department = new DepartmentMaster();
 
-        //    //        employee.ID = Convert.ToInt32(rdr["EmployeeID"]);
-        //    //        employee.Name = rdr["Name"].ToString();
-        //    //        employee.Gender = rdr["Gender"].ToString();
-        //    //        employee.Department = rdr["Department"].ToString();
-        //    //        employee.City = rdr["City"].ToString();
+                    department.DepartmentName = Convert.ToString(rdr["Department"]);
+                    taskMaster.departments = department;
+                    StatusMaster statusMaster = new StatusMaster();
+                    statusMaster.TaskStatusName = Convert.ToString(rdr["Status"]);
+                    taskMaster.statusMasters = statusMaster;
+                    
+                    taskMaster.TicketingTaskID = Convert.ToInt32(rdr["ID"].ToString());
+                    taskMaster.TaskTitle = Convert.ToString(rdr["TaskTitle"].ToString());
+                    //taskMaster.CreatedBy = Convert.ToInt32(rdr["CreatedBy"]);
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
 
-        //    //        lstemployee.Add(employee);
-        //    //    }
-        //    //    con.Close();
-        //    //}
-        //    //return lstemployee;
-        //}
+            }
+            //finally
+            //{
+            //    if (conn != null)
+            //    {
+            //        conn.Close();
+            //    }
+            //}
+            return taskMaster;                
+        }
+
+        public List<TaskMaster> GetTaskList()
+        {
+
+            DataSet ds = new DataSet();
+            List<TaskMaster> lsttask = new List<TaskMaster>();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("sp_GetTaskList", conn);
+                //cmd1.Parameters.AddWithValue("@ID", taskID);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        TaskMaster taskMaster = new TaskMaster();
+                        DepartmentMaster department = new DepartmentMaster();
+
+                        department.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["Department"]);
+                        taskMaster.departments = department;
+                        StatusMaster statusMaster = new StatusMaster();
+                        statusMaster.TaskStatusName = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
+                        taskMaster.statusMasters = statusMaster;
+                        taskMaster.TicketingTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                        taskMaster.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
+                        
+                        //taskMaster.departments.Departmentname = ds.Tables[0].Rows[i]["Department"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Department"]);
+                        //TaskMaster.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
+                        //TaskMaster.CreatedDate = Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
+                        //TaskMaster.AssignToID = Convert.ToInt32(ds.Tables[0].Rows[i]["GenderID"]);                     
+                        lsttask.Add(taskMaster);
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            return lsttask;
+        }
     }
 }

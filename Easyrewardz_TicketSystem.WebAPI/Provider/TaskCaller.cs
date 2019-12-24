@@ -23,6 +23,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _TaskRepository = task;
             return _TaskRepository.AddTaskDetails(taskMaster);
         }
-
+        public TaskMaster gettaskDetailsById(ITask task , int taskID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetTaskbyId(taskID);
+        }
+        public List<TaskMaster> gettaskList(ITask task)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetTaskList();
+        }
     }
 }
