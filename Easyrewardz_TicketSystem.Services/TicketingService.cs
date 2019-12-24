@@ -35,7 +35,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getTitleSuggestions", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@TikcketTitle", TikcketTitle);
+                //cmd1.Parameters.AddWithValue("@TikcketTitle", TikcketTitle);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
