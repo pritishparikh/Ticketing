@@ -18,13 +18,20 @@ namespace Easyrewardz_TicketSystem.Services
       /// <param name="subject"></param>
       /// <param name="body"></param>
       /// <returns></returns>
-        public string SendEmail(SMTPDetails smtpDetails, string emailToAddress, string subject, string body)
+        public bool SendEmail(string emailToAddress, string subject, string body,string[] cc = null, string[] bcc = null)
         {
+            bool isMailSent = false;
             try
             {
+                SMTPDetails smtpDetails = new SMTPDetails();
+                smtpDetails.FromEmailId = "pritish.parikh@brainvire.com";
+                smtpDetails.Password = "Brain@2019";
+                smtpDetails.SMTPServer = "smtp.gmail.com";
+                smtpDetails.SMTPPort = 587;
+                smtpDetails.IsBodyHtml = true;
+
                 string gmailUserName = smtpDetails.FromEmailId;
                 string gmailUserPassword = smtpDetails.Password;
-                string smtpAddress = emailToAddress;
                 string SMTPSERVER = smtpDetails.SMTPServer;
                 int PORTNO = Convert.ToInt32(smtpDetails.SMTPPort);
 
@@ -41,24 +48,18 @@ namespace Easyrewardz_TicketSystem.Services
                         message.Body = body == null ? "" : body;
                         message.IsBodyHtml = smtpDetails.IsBodyHtml;
                         message.To.Add(emailToAddress);
-
-                        try
-                        {
+                        
                             smtpClient.Send(message);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw ex;
-                        }
                     }
                 }
+
+                isMailSent = true;
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
             }
-            return null;
-
+            return isMailSent;
         }
 
         /// <summary>

@@ -347,6 +347,25 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
         }
+
+        public bool sendMailForForgotPassword(string emailId, string content)
+        {
+            bool isSent = false;
+            try
+            {
+                CommonService commonService = new CommonService();
+                isSent = commonService.SendEmail(emailId, "Forgot Password", content, null, null);
+
+                return isSent;
+            }
+            catch (Exception ex)
+            {
+                isSent = false;
+            }
+
+            return isSent;
+        }
+
         #endregion
     }
 }

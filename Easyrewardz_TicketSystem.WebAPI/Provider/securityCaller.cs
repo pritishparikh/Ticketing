@@ -42,7 +42,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public DataSet validateTokenGetPermission(ISecurity security, string SecretToken, int ModuleID)
         {
             _SecurityRepository = security;
-            return _SecurityRepository.validateTokenGetPermission(SecretToken,ModuleID);
+            return _SecurityRepository.validateTokenGetPermission(SecretToken, ModuleID);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="cipherEmailId">Encrypted email Id</param>
         /// <param name="Password">Plain text Password </param>
         /// <returns></returns>
-        public bool UpdatePassword(ISecurity security, string cipherEmailId,string Password)
+        public bool UpdatePassword(ISecurity security, string cipherEmailId, string Password)
         {
             _SecurityRepository = security;
             CommonService objSmdService = new CommonService();
@@ -61,6 +61,24 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
             return _SecurityRepository.UpdatePassword(plainEmailId, encryptedPassword);
         }
+
+
+        /// <summary>
+        /// Send Mail 
+        /// </summary>
+        /// <param name="security">Interface </param>
+        /// <param name="cipherEmailId">Encrypted email Id</param>
+        /// <param name="Password">Plain text Password </param>
+        /// <returns></returns>
+        public bool sendMail(ISecurity security, string EmailId, string content)
+        {
+            _SecurityRepository = security;
+            CommonService commonService = new CommonService();
+
+
+            return _SecurityRepository.sendMailForForgotPassword(EmailId, content);
+        }
+
 
         #endregion
     }
