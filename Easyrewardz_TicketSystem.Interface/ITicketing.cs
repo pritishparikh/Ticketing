@@ -13,5 +13,7 @@ namespace Easyrewardz_TicketSystem.Interface
         //IEnumerable<TicketingDetails> getTcikets();
 
         List<TicketingDetails> GetTicketList(string TikcketTitle);
+
+        int addTicket(TicketingDetails ticketingDetails);
     }
 }

@@ -112,6 +112,53 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// Get Orderdetail list with item
+        /// </summary>
+        /// <param name="OrderNumber"></param>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("getOrderListWithItemDetails")]
+        [AllowAnonymous]
+        public ResponseModel getOrderListWithItemDetails(string OrderNumber,int TenantID)
+        {
+
+            List <OrderMaster> _objorderMaster = new List<OrderMaster>();
+            OrderCaller _ordercaller = new OrderCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+
+                _objorderMaster = _ordercaller.GetOrderItemList(new OrderService(_connectioSting), OrderNumber, TenantID);
+                    StatusCode =
+                       _objorderMaster.Count == 0 ?
+                               (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                    statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+
+                    _objResponseModel.Status = true;
+                    _objResponseModel.StatusCode = StatusCode;
+                    _objResponseModel.Message = statusMessage;
+                    _objResponseModel.ResponseData = _objorderMaster;
+                
+            }
+            catch (Exception _ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
         #endregion
     }
 }

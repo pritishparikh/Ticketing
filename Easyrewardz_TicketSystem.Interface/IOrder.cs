@@ -13,5 +13,7 @@ namespace Easyrewardz_TicketSystem.Interface
         OrderMaster getOrderbyNumber(string OrderNumber);
 
         int addOrderDetails(OrderMaster orderMaster);
+
+        List<OrderMaster> getOrderListwithItemDetail(string OrderNumber, int TenantID);
     }
 }

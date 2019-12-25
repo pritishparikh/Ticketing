@@ -30,6 +30,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ticketList = _ticket;
             return _ticketList.GetTicketList(TikcketTitle);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_ticket"></param>
+        /// <param name="TikcketTitle"></param>
+        /// <returns></returns>
+        public int addTicketDetails(ITicketing _ticket, TicketingDetails ticketingDetails)
+        {
+            _ticketList = _ticket;
+            return _ticketList.addTicket(ticketingDetails);
+        }
         #endregion
     }
 }

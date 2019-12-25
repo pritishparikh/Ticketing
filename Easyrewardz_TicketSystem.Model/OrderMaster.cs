@@ -25,6 +25,10 @@ namespace Easyrewardz_TicketSystem.Model
         public int RequireSize { get; set; }
         public DateTime CreatedDate { get; set; }
         public int ModifiedBy { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime ModifiedDate { get; set; } 
+
+        public string StoreName { get; set; }
+        public int StoreCode { get; set; }
+        List<StoreMaster> storeMasters { get; set; }
     }
 }
