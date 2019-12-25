@@ -122,11 +122,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 securityCaller _securityCaller = new securityCaller();
                 string url = configuration.GetValue<string>("websiteURL") + "/changePassword";
-                
                 string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url + "?Id=" + encryptedEmailId;
-
                 bool isUpdate = _securityCaller.sendMail(new SecurityService(_connectioSting), EmailId, body);
-
 
                 if (isUpdate)
                 {
@@ -151,7 +148,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.ResponseData = "Mail sent failure";
             }
             return _objResponseModel;
-
         }
 
         #endregion
@@ -163,21 +159,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("UpdatePassword")]
         [AllowAnonymous]
-        public JsonResult UpdatePassword(string cipherEmailId, string Password)
+        public ResponseModel UpdatePassword(string cipherEmailId, string Password)
         {
+            ResponseModel _objResponseModel = new ResponseModel();
+
             try
             {
                 securityCaller _newSecurityCaller = new securityCaller();
-                
                 bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_connectioSting),cipherEmailId, Password);
-            }
 
+                if (isUpdate)
+                {
+                    _objResponseModel.Status = true;
+                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                    _objResponseModel.ResponseData = "Update password successfully";
+                }
+            }
             catch (Exception ex)
             {
-                throw ex;
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                _objResponseModel.ResponseData = "Issue while update password";
             }
             return null;
-
         }
     }
 }
