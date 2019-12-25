@@ -9,6 +9,7 @@ using System.Linq;
 using System.Data;
 using MySql.Data.MySqlClient;
 using System.IO;
+using Easyrewardz_TicketSystem.Model;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -56,14 +57,13 @@ namespace Easyrewardz_TicketSystem.Services
             return string.Format(decriptedFromJavascript);
         }
 
-        public string getToken(string ProgramCode, string Domainname, string applicationid, string userId, string password)
+        public AccountModal getToken(string ProgramCode, string Domainname, string applicationid, string userId, string password)
         {
-            string _Token = "";
+            //string _Token = "";
+            AccountModal accountModals = new AccountModal();
             try
             {
-
                 ETSContext _DBContext = new ETSContext();
-
                 string _Programcode = DecryptStringAES(ProgramCode);
                 string _Domainname = DecryptStringAES(Domainname);
                 string _applicationid = DecryptStringAES(applicationid);
@@ -74,14 +74,31 @@ namespace Easyrewardz_TicketSystem.Services
                 string newToken = generatetoken(_Programcode, _Domainname, _applicationid, _userId);
                  updatetocache(_userId, newToken);
                 _DBContext.SaveRecord(_Programcode, _Domainname, _applicationid, sessionid, _userId, _password, newToken);
-                _Token = newToken;
+
+                if (!string.IsNullOrEmpty(newToken) && !string.IsNullOrEmpty(_userId))
+                {
+                    accountModals.Token = newToken;
+                    accountModals.Message = "Valid login";
+                    accountModals.UserID = _userId;
+                    accountModals.IsActive = true;
+                    accountModals.LoginTime = DateTime.Now;
+                }
+                else
+                {
+                    accountModals.Message = "InValid login";
+
+                }
+                
+
+                
+                //_Token = newToken;
             }
             catch (Exception _ex)
             {
                 throw _ex;
             }
 
-            return _Token;
+            return accountModals;
         }
         private void updatetocache(string userid, string securittoken)
         {

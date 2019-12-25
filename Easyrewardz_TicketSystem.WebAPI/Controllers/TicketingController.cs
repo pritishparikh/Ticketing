@@ -74,6 +74,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// Create Ticket
+        /// </summary>
+        /// <param name="ticketingDetails"></param>
+        /// <returns></returns>
+        public ResponseModel createTicket([FromBody] TicketingDetails ticketingDetails)
+        {
+            List<TicketingDetails> objTicketList = new List<TicketingDetails>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                TicketingCaller _newTicket = new TicketingCaller();
+
+                int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+
+            }
+            return _objResponseModel;
+        }
+
+
         #endregion
     }
 }

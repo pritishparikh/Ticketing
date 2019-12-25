@@ -55,5 +55,39 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return ticketing;
         }
+
+
+        public int addTicket(TicketingDetails ticketingDetails)
+        {
+
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = Convert.ToInt32(cmd1.ExecuteScalar());
+                conn.Close();
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
+
+
+
     }
 }
