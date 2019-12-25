@@ -163,7 +163,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             ResponseModel _objResponseModel = new ResponseModel();
 
-            try
+            try 
             {
                 securityCaller _newSecurityCaller = new securityCaller();
                 bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_connectioSting),cipherEmailId, Password);
@@ -183,7 +183,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
                 _objResponseModel.ResponseData = "Issue while update password";
             }
-            return null;
+            return _objResponseModel;
         }
     }
 }
