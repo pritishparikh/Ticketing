@@ -1,5 +1,6 @@
 ﻿
 using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using System.Data;
 
@@ -26,7 +27,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="userId"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public string generateToken(ISecurity security, string ProgramCode, string Domainname, string applicationid, string userId, string password)
+        public AccountModal generateToken(ISecurity security, string ProgramCode, string Domainname, string applicationid, string userId, string password)
         {
             _SecurityRepository = security;
             return _SecurityRepository.getToken(ProgramCode, applicationid, Domainname, userId, password);
