@@ -100,34 +100,55 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("ForgetPassword")]
         [AllowAnonymous]
-        public JsonResult ForgetPassword(string EmailId)
+        public ResponseModel ForgetPassword(string EmailId)
         {
-            //string EmailId = email;
+            ResponseModel _objResponseModel = new ResponseModel();
+
             try
             {
                 CommonService objSmdService = new CommonService();
                 string encryptedEmailId = objSmdService.Encrypt(EmailId);
-                SMTPDetails objSmtpDetail = new SMTPDetails();
+                //SMTPDetails objSmtpDetail = new SMTPDetails();
 
-                string subject = "Forgot Password";
-                string url = "http://easyrewardz.brainvire.net/changePassword";
+                //string subject = "Forgot Password";
+                //string url = configuration.GetValue<string>("websiteURL") + "/changePassword";
+                //string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url + "?Id=" + encryptedEmailId;
+                //objSmtpDetail.FromEmailId = "shlok.barot@brainvire.com";
+                //objSmtpDetail.Password = "Brainvire@2019";
+                //objSmtpDetail.SMTPServer = "smtp.gmail.com";
+                //objSmtpDetail.SMTPPort = 587;
+                //objSmtpDetail.IsBodyHtml = true;
+
+                //objSmdService.SendEmail(objSmtpDetail, EmailId, subject, body);
+
+                securityCaller _securityCaller = new securityCaller();
+                string url = configuration.GetValue<string>("websiteURL") + "/changePassword";
                 string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url + "?Id=" + encryptedEmailId;
-                objSmtpDetail.FromEmailId = "shlok.barot@brainvire.com";
-                objSmtpDetail.Password = "Brainvire@2019";
-                objSmtpDetail.SMTPServer = "smtp.gmail.com";
-                objSmtpDetail.SMTPPort = 587;
-                objSmtpDetail.IsBodyHtml = true;
+                bool isUpdate = _securityCaller.sendMail(new SecurityService(_connectioSting), EmailId, body);
 
-                objSmdService.SendEmail(objSmtpDetail, EmailId, subject, body);
-
+                if (isUpdate)
+                {
+                    _objResponseModel.Status = true;
+                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                    _objResponseModel.ResponseData = "Mail sent successfully";
+                }
+                else
+                {
+                    _objResponseModel.Status = true;
+                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                    _objResponseModel.ResponseData = "Mail sent failure";
+                }
             }
-
             catch (Exception ex)
             {
-                throw ex;
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                _objResponseModel.ResponseData = "Mail sent failure";
             }
-            return null;
-
+            return _objResponseModel;
         }
 
         #endregion
@@ -139,21 +160,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("UpdatePassword")]
         [AllowAnonymous]
-        public JsonResult UpdatePassword(string cipherEmailId, string Password)
+        public ResponseModel UpdatePassword(string cipherEmailId, string Password)
         {
-            try
+            ResponseModel _objResponseModel = new ResponseModel();
+
+            try 
             {
                 securityCaller _newSecurityCaller = new securityCaller();
-                
                 bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_connectioSting),cipherEmailId, Password);
-            }
 
+                if (isUpdate)
+                {
+                    _objResponseModel.Status = true;
+                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                    _objResponseModel.ResponseData = "Update password successfully";
+                }
+            }
             catch (Exception ex)
             {
-                throw ex;
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                _objResponseModel.ResponseData = "Issue while update password";
             }
-            return null;
-
+            return _objResponseModel;
         }
     }
 }

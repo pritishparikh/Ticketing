@@ -16,5 +16,7 @@ namespace Easyrewardz_TicketSystem.Interface
         DataSet validateTokenGetPermission(string secertCode,int ModuleID);
 
         bool UpdatePassword(string cipherEmailId, string Password);
+
+        bool sendMailForForgotPassword(string emailId,string content);
     }
 }
