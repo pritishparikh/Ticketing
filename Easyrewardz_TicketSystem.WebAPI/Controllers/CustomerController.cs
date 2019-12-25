@@ -46,7 +46,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel getcustomerdetailsbyid(int CustomerID)
         {
 
-            List<CustomerMaster> _objcustomerMaster = new List<CustomerMaster>();
+            CustomerMaster _objcustomerMaster = new CustomerMaster();
             Customercaller _customercaller = new Customercaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -57,7 +57,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 {
                     _objcustomerMaster = _customercaller.getCustomerDetailsById(new CustomerService(_connectioSting), CustomerID);
                     StatusCode =
-                       _objcustomerMaster.Count == 0 ?
+                       _objcustomerMaster != null ?
                                (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                     statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -149,7 +149,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
                 int result = _customercaller.addCustomer(new CustomerService(_connectioSting), customerMaster);
-                List<CustomerMaster> customer = _customercaller.getCustomerDetailsById(new CustomerService(_connectioSting), result);
                 StatusCode =
                 result == 0?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

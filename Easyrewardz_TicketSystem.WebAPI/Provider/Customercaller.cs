@@ -15,7 +15,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <summary>
         /// Get Customer Detail by id
         /// </summary>
-        public List<CustomerMaster> getCustomerDetailsById(ICustomer customer, int CustomerID)
+        public CustomerMaster getCustomerDetailsById(ICustomer customer, int CustomerID)
         {
             _customerRepository = customer;
             return _customerRepository.getCustomerbyId(CustomerID);
