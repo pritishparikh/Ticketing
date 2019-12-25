@@ -113,7 +113,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 //string url = configuration.GetValue<string>("websiteURL") + "/changePassword";
                 //string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url + "?Id=" + encryptedEmailId;
                 //objSmtpDetail.FromEmailId = "shlok.barot@brainvire.com";
-                //objSmtpDetail.Password = "Brainvire@2019";
+                //objSmtpDetail.Password = "brain@2020;
                 //objSmtpDetail.SMTPServer = "smtp.gmail.com";
                 //objSmtpDetail.SMTPPort = 587;
                 //objSmtpDetail.IsBodyHtml = true;
