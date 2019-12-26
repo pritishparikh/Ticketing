@@ -132,6 +132,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_createCustomer", conn);
                 cmd1.Parameters.AddWithValue("@TenantID", customerMaster.TenantID);
                 cmd1.Parameters.AddWithValue("@CustomerName", customerMaster.CustomerName);
+                cmd1.Parameters.AddWithValue("@CreatedBy", customerMaster.CreatedBy);
                 cmd1.Parameters.AddWithValue("@CustomerPhoneNumber", customerMaster.CustomerPhoneNumber);
                 cmd1.Parameters.AddWithValue("@CustomerEmailId", customerMaster.CustomerEmailId);
                 cmd1.Parameters.AddWithValue("@GenderID", customerMaster.GenderID);
