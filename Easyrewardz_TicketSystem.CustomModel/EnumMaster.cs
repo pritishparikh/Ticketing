@@ -5,8 +5,14 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.CustomModel
 {
+    /// <summary>
+    /// Enum Master
+    /// </summary>
     public class EnumMaster
     {
+        /// <summary>
+        /// Status Code 
+        /// </summary>
         public enum StatusCode
         {
 
@@ -82,34 +88,65 @@ namespace Easyrewardz_TicketSystem.CustomModel
 
         }
 
+        /// <summary>
+        /// Ticekt Status
+        /// </summary>
         public enum TicketStatus
         {
-            
-
             /// <summary>
             ///TicketStatus - Draft
             /// </summary>
             [Description("Draft")]
-            Draft = 301,
+            Draft = 100,
 
             /// <summary>
-            ///TicketStatus - Submit
+            ///TicketStatus - New
             /// </summary>
-            [Description("Submit")]
-            Submit = 302,
-
-
-            /// <summary>
-            ///TicketStatus - Close
-            /// </summary>
-            [Description("Close")]
-            Close = 303,
+            [Description("New")]
+            New = 101,
 
             /// <summary>
             ///TicketStatus - Open
             /// </summary>
             [Description("Open")]
-            Open = 304,
+            Open = 102,
+
+            /// <summary>
+            ///TicketStatus - Resolved
+            /// </summary>
+            [Description("Resolved")]
+            Resolved = 103,
+
+            /// <summary>
+            ///TicketStatus - Closed
+            /// </summary>
+            [Description("Closed")]
+            Closed = 104,
+
+            /// <summary>
+            ///TicketStatus - Re-Opened
+            /// </summary>
+            [Description("Re-Opened")]
+            ReOpened = 105,
+
+        }
+
+        /// <summary>
+        /// Ticekt Action
+        /// </summary>
+        public enum TicketAction
+        {
+            /// <summary>
+            ///TicketStatus - Draft
+            /// </summary>
+            [Description("QC")]
+            QC = 200,
+
+            /// <summary>
+            ///TicketStatus - New
+            /// </summary>
+            [Description("ETB")]
+            ETB = 201
 
         }
     }
