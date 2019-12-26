@@ -60,14 +60,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Modified By
         /// </summary>
-        public int ModifiedBy  { get; set; }
+        public int ModifiedBy { get; set; }
         /// <summary>
         ///Modified Date
         /// </summary>
         public DateTime ModifiedDate { get; set; }
+    }
 
-        public DepartmentMaster departments { get; set; }
-        public StatusMaster statusMasters { get; set; }
-    } 
-   
 }

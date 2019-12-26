@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
+﻿using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
-using Easyrewardz_TicketSystem.Interface;
+using System;
+using System.Collections.Generic;
+using System.Data;
 namespace Easyrewardz_TicketSystem.Services
 {
-    public class TaskServices:ITask
+    public class TaskServices : ITask
     {
-        #region Cunstructor
+        #region Constructor
         MySqlConnection conn = new MySqlConnection();
         public TaskServices(string _connectionString)
         {
@@ -24,13 +24,13 @@ namespace Easyrewardz_TicketSystem.Services
         public int AddTaskDetails(TaskMaster taskMaster)
         {
 
-           // MySqlCommand cmd = new MySqlCommand();
+            // MySqlCommand cmd = new MySqlCommand();
             int taskId = 0;
             try
             {
                 conn.Open();
                 MySqlCommand cmd1 = new MySqlCommand("SP_createTask", conn);
-                cmd1.Connection = conn;              
+                cmd1.Connection = conn;
                 cmd1.Parameters.AddWithValue("@TicketID", taskMaster.TicketID);
                 cmd1.Parameters.AddWithValue("@TaskTitle", taskMaster.TaskTitle);
                 cmd1.Parameters.AddWithValue("@TaskDescription", taskMaster.TaskDescription);
@@ -57,87 +57,85 @@ namespace Easyrewardz_TicketSystem.Services
 
             return taskId;
         }
-
-
-
-        public TaskMaster GetTaskbyId(int taskID)
+        /// <summary>
+        /// GetTask By ID
+        /// </summary>
+        /// <param name="customerMaster"></param>
+        /// <returns></returns>
+        public CustomTaskMasterDetails GetTaskbyId(int taskID)
         {
-           // MySqlCommand cmd  = new MySqlCommand();
-            TaskMaster taskMaster = new TaskMaster();
-            try        
+            DataSet ds = new DataSet();
+            CustomTaskMasterDetails taskMaster = new CustomTaskMasterDetails();
+            try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("sp_GetTaskbyId", conn);
-                cmd.Connection = conn;       
-                cmd.Parameters.AddWithValue("@taskID", taskID);
+                MySqlCommand cmd = new MySqlCommand("SP_GetTaskById", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@task_ID", taskID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                //conn.Open();
-                MySqlDataReader rdr = cmd.ExecuteReader();
-
-                while (rdr.Read())
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
                 {
-                    DepartmentMaster department = new DepartmentMaster();
-
-                    department.DepartmentName = Convert.ToString(rdr["Department"]);
-                    taskMaster.departments = department;
-                    StatusMaster statusMaster = new StatusMaster();
-                    statusMaster.TaskStatusName = Convert.ToString(rdr["Status"]);
-                    taskMaster.statusMasters = statusMaster;
-                    
-                    taskMaster.TicketingTaskID = Convert.ToInt32(rdr["ID"].ToString());
-                    taskMaster.TaskTitle = Convert.ToString(rdr["TaskTitle"].ToString());
-                    //taskMaster.CreatedBy = Convert.ToInt32(rdr["CreatedBy"]);
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        taskMaster.TicketingTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                        taskMaster.TaskStatus = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
+                        taskMaster.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
+                        taskMaster.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+                        taskMaster.StoreCode = Convert.ToInt32(ds.Tables[0].Rows[i]["Storecode"]);
+                        taskMaster.CreatedBy = Convert.ToInt32(ds.Tables[0].Rows[i]["CreatedBy"]);
+                        taskMaster.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
+                        taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
+                    }
                 }
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
 
             }
-            //finally
-            //{
-            //    if (conn != null)
-            //    {
-            //        conn.Close();
-            //    }
-            //}
-            return taskMaster;                
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return taskMaster;
         }
-
-        public List<TaskMaster> GetTaskList()
+        /// <summary>
+        /// Get Task List
+        /// </summary>
+        /// <param name="customerMaster"></param>
+        /// <returns></returns>
+        public List<CustomTaskMasterDetails> GetTaskList()
         {
 
             DataSet ds = new DataSet();
-            List<TaskMaster> lsttask = new List<TaskMaster>();
-            MySqlCommand cmd = new MySqlCommand();
+            List<CustomTaskMasterDetails> lsttask = new List<CustomTaskMasterDetails>();
             try
             {
                 conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetTaskList", conn);
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("sp_GetTaskList", conn);
-                //cmd1.Parameters.AddWithValue("@ID", taskID);
-                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                da.SelectCommand = cmd;
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        TaskMaster taskMaster = new TaskMaster();
-                        DepartmentMaster department = new DepartmentMaster();
-
-                        department.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["Department"]);
-                        taskMaster.departments = department;
-                        StatusMaster statusMaster = new StatusMaster();
-                        statusMaster.TaskStatusName = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
-                        taskMaster.statusMasters = statusMaster;
+                        CustomTaskMasterDetails taskMaster = new CustomTaskMasterDetails();
                         taskMaster.TicketingTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                        taskMaster.TaskStatus = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
                         taskMaster.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        
-                        //taskMaster.departments.Departmentname = ds.Tables[0].Rows[i]["Department"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Department"]);
-                        //TaskMaster.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
-                        //TaskMaster.CreatedDate = Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
-                        //TaskMaster.AssignToID = Convert.ToInt32(ds.Tables[0].Rows[i]["GenderID"]);                     
+                        taskMaster.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["Departmentname"]);
+                        taskMaster.StoreCode = Convert.ToInt32(ds.Tables[0].Rows[i]["Storecode"]);
+                        taskMaster.CreatedBy = Convert.ToInt32(ds.Tables[0].Rows[i]["Createdby"]);
+                        taskMaster.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreationOn"]);
+                        taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
                         lsttask.Add(taskMaster);
                     }
                 }
@@ -146,7 +144,45 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
             return lsttask;
+        }
+        /// <summary>
+        /// Soft Delete Task 
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        public int DeleteTask(int taskId)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_DeleteTask", conn);
+                cmd1.Parameters.AddWithValue("@task_ID", taskId);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = cmd1.ExecuteNonQuery();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
         }
     }
 }

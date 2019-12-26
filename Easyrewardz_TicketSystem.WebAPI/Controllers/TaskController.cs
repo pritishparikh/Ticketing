@@ -30,7 +30,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             _connectionSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
         }
         #endregion
-
+        #region Custom Methods
         /// <summary>
         /// Add Task
         /// </summary>
@@ -68,43 +68,35 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Get Task Detail By ID
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("gettaskdetailsbyid")]
         [AllowAnonymous]
         public ResponseModel gettaskdetailsbyid(int taskId)
         {
 
-            TaskMaster _objtaskMaster = new TaskMaster();
+            CustomTaskMasterDetails _objtaskMaster = new CustomTaskMasterDetails();
             TaskCaller _taskcaller = new TaskCaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                if (taskId > 0)
-                {
-                    _objtaskMaster = _taskcaller.gettaskDetailsById(new TaskServices(_connectionSting), taskId);
-                    //StatusCode =
-                    //_objtaskMaster.Count == 0 ?
-                    // (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                _objtaskMaster = _taskcaller.gettaskDetailsById(new TaskServices(_connectionSting), taskId);
+                StatusCode =
+               _objtaskMaster == null ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                    //statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-
-                    _objResponseModel.Status = true;
-                    _objResponseModel.StatusCode = StatusCode;
-                    _objResponseModel.Message = statusMessage;
-                    _objResponseModel.ResponseData = _objtaskMaster;
-                }
-                else
-                {
-                    StatusCode = (int)EnumMaster.StatusCode.RecordNotFound;
-                    statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                    _objResponseModel.Status = true;
-                    _objResponseModel.StatusCode = StatusCode;
-                    _objResponseModel.Message = statusMessage;
-                    _objResponseModel.ResponseData = null;
-                }
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _objtaskMaster;
             }
             catch (Exception _ex)
             {
@@ -117,17 +109,23 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// Get Task List
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("gettasklist")]
         public ResponseModel gettasklist()
         {
-            List<TaskMaster> _objtaskMaster = new List<TaskMaster>();
+            List<CustomTaskMasterDetails> _objtaskMaster = new List<CustomTaskMasterDetails>();
             TaskCaller _taskcaller = new TaskCaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
-            {        
+            {
                 _objtaskMaster = _taskcaller.gettaskList(new TaskServices(_connectionSting));
                 StatusCode =
                    _objtaskMaster.Count == 0 ?
@@ -140,7 +138,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = _objtaskMaster;
-            }          
+            }
+            catch (Exception _ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+        #endregion
+        /// <summary>
+        ///Soft Delete Task
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("deleteask")]
+        public ResponseModel deletetask(int task_Id)
+        {
+            //CustomTaskMasterDetails _objtaskMaster = new CustomTaskMasterDetails();
+            TaskCaller _taskcaller = new TaskCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                int result = _taskcaller.DeleteTask(new TaskServices(_connectionSting), task_Id);
+                StatusCode =
+               result == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+            }
             catch (Exception _ex)
             {
                 StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
@@ -153,7 +189,5 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
-
     }
 }
-
