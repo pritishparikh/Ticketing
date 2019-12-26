@@ -80,6 +80,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <param name="ticketingDetails"></param>
         /// <returns></returns>
+
+        [HttpPost]
+        [Route("createTicket")]
+        
         public ResponseModel createTicket([FromBody] TicketingDetails ticketingDetails)
         {
             List<TicketingDetails> objTicketList = new List<TicketingDetails>();

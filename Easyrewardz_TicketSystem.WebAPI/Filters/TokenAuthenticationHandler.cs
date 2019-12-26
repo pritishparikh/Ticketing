@@ -31,16 +31,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
         private AuthenticateResult Authenticate()
         {
 
-            ETSContext _DBContext = new ETSContext();
+            //ETSContext _DBContext = new ETSContext();
             string token = Context.Request.Headers["X-Authorized-Header"];
             string userId = Context.Request.Headers["X-Authorized-userId"];
-            int ModuleID = 1;
             if (token == null)  return AuthenticateResult.Fail("No Authorization token provided");
             try
             {
                 string _userId = Decrypt(userId);
                 string isValidToken = validatetoken(token, _userId);
-                validateSecurityToken(token, ModuleID);
+                
                 if (isValidToken =="1")
                 {
                     var claims = new[] { new Claim(ClaimTypes.Name, isValidToken) };
@@ -221,13 +220,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                 throw ex;
             }
         }
-        public DataSet validateSecurityToken(string SecretToken,int ModuleID)
-        {
-            ETSContext _DBContext = new ETSContext();
-            DataSet ds = _DBContext.validateSecurityToken(SecretToken, ModuleID);
-            return ds;
+        //public DataSet validateSecurityToken(string SecretToken,int ModuleID)
+        //{
+        //    ETSContext _DBContext = new ETSContext();
+        //    DataSet ds = _DBContext.validateSecurityToken(SecretToken, ModuleID);
+        //    return ds;
            
-        }
+        //}
     }
     public static class SchemesNamesConst
     {

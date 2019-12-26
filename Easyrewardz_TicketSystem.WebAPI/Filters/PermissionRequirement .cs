@@ -1,4 +1,5 @@
 ﻿using Easyrewardz_TicketSystem.DBContext;
+using Easyrewardz_TicketSystem.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
@@ -49,8 +50,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
         }
         public DataSet validateSecurityToken(string SecretToken, int ModuleID)
         {
-            ETSContext _DBContext = new ETSContext();
-            DataSet ds = _DBContext.validateSecurityToken(SecretToken, ModuleID);
+           
+            DataSet ds = validateSecurityToken(SecretToken, ModuleID);
             return ds;
 
         }

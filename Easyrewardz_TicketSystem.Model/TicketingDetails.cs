@@ -10,72 +10,68 @@ namespace Easyrewardz_TicketSystem.Model
         /// Ticket Id
         /// </summary>
         [Key]
-        public int Ticket_ID { get; set; }
+        public int TicketID { get; set; }
         /// <summary>
         /// TenantID
         /// </summary>
-        public int Tenant_ID { get; set; }
+        public int TenantID { get; set; }
 
         /// <summary>
         /// Ticket Title
         /// </summary>
-        public string Ticket_title { get; set; }
+        public string TikcketTitle { get; set; }
 
         /// <summary>
         /// Ticket Description
         /// </summary>
-        public string Ticket_description { get; set; }
+        public string Ticketdescription { get; set; }
 
-        /// <summary>
-        /// TicketSourceID
-        /// </summary>
-        public int TicketSourceID { get; set; }
 
         /// <summary>
         /// Ticket Notes
         /// </summary>
-        public string Ticket_notes { get; set; }
+        public string Ticketnotes { get; set; }
         /// <summary>
         /// Ticket Source Id
         /// </summary>
-        public int TicketSource_ID { get; set; }
+        public int TicketSourceID { get; set; }
         /// <summary>
         /// Brand Id
         /// </summary>
-        public int Brand_ID { get; set; }
+        public int BrandID { get; set; }
         /// <summary>
         /// Category Id
         /// </summary>
-        public int Category_ID { get; set; }
+        public int CategoryID { get; set; }
         /// <summary>
         /// Subcategory Id
         /// </summary>
-        public int SubCategory_ID { get; set; } 
+        public int SubCategoryID { get; set; }
         /// <summary>
         /// Issue Type Id
         /// </summary>
-        public int IssueType_ID { get; set; }  
+        public int IssueTypeID { get; set; }
         /// <summary>
         /// Priority Id
         /// </summary>
-        public int Priority_ID { get; set; } 
+        public int PriorityID { get; set; }
         /// <summary>
         /// Customer Id
         /// </summary>
-        public int Customer_ID { get; set; }
+        public int CustomerID { get; set; }
         /// <summary>
         /// ChannelOfPurchaseID
         /// </summary>
-        public int ChannelOfPurchase_ID { get; set; }
+        public int ChannelOfPurchaseID { get; set; }
         /// <summary>
         /// AssignedID
         /// </summary>
-        public int Assigned_ID { get; set; }
+        public int AssignedID { get; set; }
 
         /// <summary>
         /// TicketActionID
         /// </summary>
-        public int TicketAction_ID { get; set; }
+        public int TicketActionID { get; set; }
 
         /// <summary>
         /// IsInstantEscalateToHighLevel
@@ -85,7 +81,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Order Id
         /// </summary>
-        public int Order_ID { get; set; }
+        public int OrderMasterID { get; set; }
         /// <summary>
         /// Created By
         /// </summary>
@@ -93,11 +89,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Created Date
         /// </summary>
-        public DateTime CreatedDate { get; set; }  
+        public DateTime CreatedDate { get; set; }
         /// <summary>
         /// Updated By
         /// </summary>
-        public int UpdatedBy { get; set; } 
+        public int UpdatedBy { get; set; }
         /// <summary>
         /// Updated Date
         /// </summary>
@@ -106,7 +102,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// StatusID
         /// </summary>
-        public int Status_ID { get; set; }
+        public int StatusID { get; set; }
 
         /// <summary>
         /// IsWantToVisitedStore
@@ -127,7 +123,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// TicketTemplateID
         /// </summary>
-        public int TicketTemplate_ID { get; set; }
+        public int TicketTemplateID { get; set; }
 
 
         /// <summary>
@@ -138,12 +134,12 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// ModifiedBy
         /// </summary>
-        public int ModifiedBy { get; set; }
+        public int? ModifiedBy { get; set; }
 
         /// <summary>
         /// ModifiedDate
         /// </summary>
-        public DateTime ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
         /// <summary>
         /// Store Details
@@ -151,9 +147,14 @@ namespace Easyrewardz_TicketSystem.Model
         List<StoreMaster> storeMasters { get; set; }
 
         /// <summary>
-        /// Customer Details
+        /// Store id foe Comma seperate
         /// </summary>
-        List<CustomerMaster> customerMasters { get; set; }
+        public int storeIds { get; set; }
+
+        /// <summary>
+        /// Customer Details(Not Neede for now)
+        /// </summary>
+        //List<CustomerMaster> customerMasters { get; set; }
 
         /// <summary>
         /// Order Details

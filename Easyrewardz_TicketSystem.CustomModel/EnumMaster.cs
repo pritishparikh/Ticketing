@@ -81,5 +81,36 @@ namespace Easyrewardz_TicketSystem.CustomModel
             #endregion
 
         }
+
+        public enum TicketStatus
+        {
+            
+
+            /// <summary>
+            ///TicketStatus - Draft
+            /// </summary>
+            [Description("Draft")]
+            Draft = 301,
+
+            /// <summary>
+            ///TicketStatus - Submit
+            /// </summary>
+            [Description("Submit")]
+            Submit = 302,
+
+
+            /// <summary>
+            ///TicketStatus - Close
+            /// </summary>
+            [Description("Close")]
+            Close = 303,
+
+            /// <summary>
+            ///TicketStatus - Open
+            /// </summary>
+            [Description("Open")]
+            Open = 304,
+
+        }
     }
 }
