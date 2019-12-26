@@ -104,5 +104,56 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return i;
         }
+        /// <summary>
+        /// Get Order Detail with Item List
+        /// </summary>
+        /// <param name="OrderNumber"></param>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        public List<OrderMaster> getOrderListwithItemDetail(string OrderNumber, int TenantID)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<OrderMaster> objorderMaster = new List<OrderMaster>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_getOrderLisItemDetail", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Order_NO", OrderNumber);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        OrderMaster orderMaster = new OrderMaster();
+                        orderMaster.TenantID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
+                        orderMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
+                        orderMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
+                        orderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
+                        orderMaster.OrderPrice = Convert.ToDecimal(ds.Tables[0].Rows[i]["OrderPrice"]);
+                        orderMaster.PricePaid = Convert.ToDecimal(ds.Tables[0].Rows[i]["PricePaid"]);
+                        orderMaster.StoreName  = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        orderMaster.StoreCode = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreCode"]);
+                        objorderMaster.Add(orderMaster);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return objorderMaster;
+        }
+
+
     }
 }

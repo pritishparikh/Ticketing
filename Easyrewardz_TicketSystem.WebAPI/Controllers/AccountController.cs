@@ -44,6 +44,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         //public string authenticate()
         {
             ResponseModel resp = new ResponseModel();
+            
             try
             {
                 securityCaller _newSecurityCaller = new securityCaller();
@@ -63,18 +64,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(applicationid) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
-                    string token = _newSecurityCaller.generateToken(new SecurityService(_connectioSting), Programcode, applicationid, Domainname, userId, password);
-
-                    objAccount.Message = "Valid login";
-                    objAccount.Token = token;
-
+                    var token = _newSecurityCaller.generateToken(new SecurityService(_connectioSting), Programcode, applicationid, Domainname, userId, password);
+                    //objAccount.Message = 
+                    //objAccount.Token = token;
+                    resp.Status  = true;
                     resp.StatusCode = (int)EnumMaster.StatusCode.Success;
-                    resp.ResponseData = objAccount;
+                    resp.ResponseData = token;
                 }
                 else
                 {
-                    ///In valid code here
-                    
+                    resp.Status = false;
+                    resp.ResponseData = null;
+                    resp.Message = "Invalid Login";
                 }
             }
             catch (Exception _ex)
@@ -113,7 +114,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 //string url = configuration.GetValue<string>("websiteURL") + "/changePassword";
                 //string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url + "?Id=" + encryptedEmailId;
                 //objSmtpDetail.FromEmailId = "shlok.barot@brainvire.com";
-                //objSmtpDetail.Password = "Brainvire@2019";
+                //objSmtpDetail.Password = "brain@2020;
                 //objSmtpDetail.SMTPServer = "smtp.gmail.com";
                 //objSmtpDetail.SMTPPort = 587;
                 //objSmtpDetail.IsBodyHtml = true;
