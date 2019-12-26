@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Easyrewardz_TicketSystem.CustomModel\Easyrewardz_TicketSystem.CustomModel.csproj" />
     <ProjectReference Include="..\Easyrewardz_TicketSystem.Model\Easyrewardz_TicketSystem.Model.csproj" />
   </ItemGroup>
 
