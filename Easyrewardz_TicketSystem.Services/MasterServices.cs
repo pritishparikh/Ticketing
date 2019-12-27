@@ -172,9 +172,8 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         PaymentMode paymentMode = new PaymentMode();
-                        //department.DepartmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["DepartmentID"]);
-                        //department.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
-                        //department.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        paymentMode.PaymentModeID = Convert.ToInt32(ds.Tables[0].Rows[i]["PaymentModeID"]);
+                        paymentMode.PaymentModename = Convert.ToString(ds.Tables[0].Rows[i]["PaymentModename"]);
                         paymentModes.Add(paymentMode);
                     }
                 }
@@ -184,6 +183,14 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
             return paymentModes;
         }
 
