@@ -41,15 +41,16 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-                        customerMaster.CustomerID = Convert.ToInt32(ds.Tables[0].Rows[0]["CustomerID"]);
-                        customerMaster.TenantID = Convert.ToInt32(ds.Tables[0].Rows[0]["TenantID"]);
-                        customerMaster.CustomerName = Convert.ToString(ds.Tables[0].Rows[0]["CustomerName"]);
-                        customerMaster.CustomerPhoneNumber = Convert.ToString(ds.Tables[0].Rows[0]["CustomerPhoneNumber"]);
-                        customerMaster.CustomerEmailId = Convert.ToString(ds.Tables[0].Rows[0]["CustomerEmailId"]);
-                        customerMaster.GenderID = Convert.ToInt32(ds.Tables[0].Rows[0]["GenderID"]);
-                        customerMaster.AltNumber = Convert.ToString(ds.Tables[0].Rows[0]["AltNumber"]);
-                        customerMaster.AltEmailID = Convert.ToString(ds.Tables[0].Rows[0]["AltEmailID"]);
-                        customerMaster.IsActive = Convert.ToInt32(ds.Tables[0].Rows[0]["IsActive"]);
+                    customerMaster.CustomerID = Convert.ToInt32(ds.Tables[0].Rows[0]["CustomerID"]);
+                    customerMaster.TenantID = Convert.ToInt32(ds.Tables[0].Rows[0]["TenantID"]);
+                    customerMaster.CustomerName = Convert.ToString(ds.Tables[0].Rows[0]["CustomerName"]);
+                    customerMaster.CustomerPhoneNumber = Convert.ToString(ds.Tables[0].Rows[0]["CustomerPhoneNumber"]);
+                    customerMaster.CustomerEmailId = Convert.ToString(ds.Tables[0].Rows[0]["CustomerEmailId"]);
+                    customerMaster.GenderID = Convert.ToInt32(ds.Tables[0].Rows[0]["GenderID"]);
+                    customerMaster.AltNumber = Convert.ToString(ds.Tables[0].Rows[0]["AltNumber"]);
+                    customerMaster.AltEmailID = Convert.ToString(ds.Tables[0].Rows[0]["AḍltEmailID"]);
+                    customerMaster.DateOfBirth = Convert.ToDateTime(ds.Tables[0].Rows[0]["DOB"]);
+                    customerMaster.IsActive = Convert.ToInt32(ds.Tables[0].Rows[0]["IsActive"]);
                 }
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
@@ -76,7 +77,7 @@ namespace Easyrewardz_TicketSystem.Services
         public List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText)
         {
             List<CustomerMaster> customerMasters = new List<CustomerMaster>();
-            
+
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
             try
@@ -123,7 +124,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int addCustomerDetails(CustomerMaster customerMaster)
         {
-            
+
             MySqlCommand cmd = new MySqlCommand();
             int i = 0;
             try
