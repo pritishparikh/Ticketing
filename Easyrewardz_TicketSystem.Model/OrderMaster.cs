@@ -28,6 +28,7 @@ namespace Easyrewardz_TicketSystem.Model
         public DateTime ModifiedDate { get; set; } 
         public string StoreName { get; set; }
         public int StoreCode { get; set; }
+        public int CreatedBy { get; set; }
         List<OrderItem> orderItems { get; set; }
     }
 }

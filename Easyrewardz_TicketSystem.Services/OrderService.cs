@@ -73,6 +73,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createOrder", conn);
                 cmd1.Parameters.AddWithValue("@TenantID", orderMaster.TenantID);
+                cmd1.Parameters.AddWithValue("@ProductBarCode", orderMaster.ProductBarCode);
                 cmd1.Parameters.AddWithValue("@OrderNumber", orderMaster.OrderNumber);
                 cmd1.Parameters.AddWithValue("@BillID", orderMaster.BillID);
                 cmd1.Parameters.AddWithValue("@TicketSourceID", orderMaster.TicketSourceID);
@@ -87,6 +88,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Discount", orderMaster.Discount);
                 cmd1.Parameters.AddWithValue("@Size", orderMaster.Size);
                 cmd1.Parameters.AddWithValue("@RequireSize", orderMaster.RequireSize);
+                cmd1.Parameters.AddWithValue("@CreatedBy", orderMaster.CreatedBy);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmd1.ExecuteScalar());
                 conn.Close();
