@@ -1,4 +1,5 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
@@ -58,6 +59,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = null;
             }
+            return _objResponseModel;
+        }
+
+        /// <summary>
+        /// Search Store
+        /// </summary>
+        /// <param name="store"></param>
+        /// <param name="searchText"></param>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
+        public ResponseModel getStores(IStore _store, string searchText, int tenantID)
+        {
+            List<StoreMaster> storeMasters = new List<StoreMaster>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                StoreCaller _newMasterBrand = new StoreCaller();
+
+                storeMasters = _newMasterBrand.getStores(new StoreService(_connectioSting), searchText, tenantID);
+
+                StatusCode =
+                storeMasters.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = storeMasters;
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
             return _objResponseModel;
         }
 

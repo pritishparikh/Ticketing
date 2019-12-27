@@ -18,5 +18,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _storeRepository = store;
             return _storeRepository.getStoreDetailByStorecodenPincode(Storename, Storecode, Pincode);
         }
+
+        public List<StoreMaster> getStores(IStore store, string searchText, int tenantID)
+        {
+            _storeRepository = store;
+            return _storeRepository.getStores(searchText, tenantID);
+        }
+        
+
     }
 }

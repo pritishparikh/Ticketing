@@ -63,5 +63,52 @@ namespace Easyrewardz_TicketSystem.Services
             return storeMaster;
         }
 
+        /// <summary>
+        /// Get list of the Stores
+        /// </summary>
+        /// <param name="searchText"></param>
+        /// <returns></returns>
+        public List<StoreMaster> getStores(string searchText, int tenantID)
+        {
+            List<StoreMaster> storeMaster = new List<StoreMaster>();
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_getStores", conn);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", tenantID);
+                cmd1.Parameters.AddWithValue("@searchText", searchText);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreMaster store = new StoreMaster();
+                        store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
+                        store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        store.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+
+                        storeMaster.Add(store);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return storeMaster;
+        }
     }
 }
