@@ -59,6 +59,13 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
             return objPriority;
         }
     }
