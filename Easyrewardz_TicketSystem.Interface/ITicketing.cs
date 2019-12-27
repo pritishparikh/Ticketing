@@ -15,5 +15,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<TicketingDetails> GetTicketList(string TikcketTitle);
 
         int addTicket(TicketingDetails ticketingDetails);
+
+        List<TicketingDetails> FilterByTicketStatus(int Status);
     }
 }
