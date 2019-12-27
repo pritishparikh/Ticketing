@@ -40,7 +40,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@PriorityID", taskMaster.PriorityID);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 taskId = Convert.ToInt32(cmd1.ExecuteScalar());
-                conn.Close();
 
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
@@ -183,6 +182,45 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return i;
+        }
+
+        public List<CustomUserAssigned> GetAssignedTo(int Function_ID)
+        {
+            DataSet ds = new DataSet();
+            List<CustomUserAssigned> Assignedto = new List<CustomUserAssigned>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetAssignedTo", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Function_ID", Function_ID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomUserAssigned assigned = new CustomUserAssigned() ;
+                        assigned.UserID= Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        assigned.UserName = Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
+                        Assignedto.Add(assigned);
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return Assignedto;
         }
     }
 }
