@@ -15,5 +15,6 @@ namespace Easyrewardz_TicketSystem.Interface
         CustomTaskMasterDetails GetTaskbyId(int taskID);
         List<CustomTaskMasterDetails> GetTaskList();
         int DeleteTask(int task_Id);
+        List<CustomUserAssigned> GetAssignedTo(int Function_ID);
     }
 }

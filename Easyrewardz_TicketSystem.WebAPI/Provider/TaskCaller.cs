@@ -39,5 +39,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _TaskRepository = task;
             return _TaskRepository.DeleteTask(task_Id);
         }
+        public List<CustomUserAssigned> GetAssignedTo(ITask task,int Function_ID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetAssignedTo(Function_ID);
+        }
     }
 }
