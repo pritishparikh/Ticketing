@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Customer By Id
         /// </summary>
-        /// <param name="CustomerID"></param>
+        /// <param name="CustomerID"></param>  
         /// <returns></returns>
         public CustomerMaster getCustomerbyId(int CustomerID)
         {
