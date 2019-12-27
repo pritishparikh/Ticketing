@@ -115,7 +115,9 @@ namespace Easyrewardz_TicketSystem.Services
             return i;
         }
 
-
-
+        public List<TicketingDetails> FilterByTicketStatus(int Status)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
