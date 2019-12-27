@@ -61,6 +61,13 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
             return objChannel;
         }
 
@@ -103,6 +110,13 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
             return departmentMasters;
         }
         /// <summary>
@@ -143,6 +157,13 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
                 throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
             }
             return funcationMasters;
         }

@@ -127,7 +127,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("getFunctionNameByDepartmentId")]
         [AllowAnonymous]
-        public ResponseModel getFunctionNameByDepartmentId(int DepartmentId,int TenantID)
+        public ResponseModel getFunctionNameByDepartmentId(int DepartmentId, int TenantID)
         {
             List<FuncationMaster> objFunctionList = new List<FuncationMaster>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -145,6 +145,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = objFunctionList;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Payment mode
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("getPaymentMode")]
+        [AllowAnonymous]
+        public ResponseModel getPaymentMode()
+        {
+            List<PaymentMode> paymentModes = new List<PaymentMode>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                MasterCaller _newMasterChannel = new MasterCaller();
+                paymentModes = _newMasterChannel.GetPaymentMode(new MasterServices(_connectioSting));
+                StatusCode =
+                paymentModes.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = paymentModes;
             }
             catch (Exception ex)
             {

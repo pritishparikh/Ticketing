@@ -40,10 +40,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// ChannelOfPurchase
         /// </summary>
         private IMasterInterface _ImasterChannel;
+
+        private IMasterInterface _Imaster;
+
         #endregion
 
         #region Methods for the Brand
-        
+
         public List<Brand> GetBrandList(IBrand _brand, int TenantID)
         {
             _brandList = _brand;
@@ -107,11 +110,23 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
         private IMasterInterface _ImasterFunctionbyDepartment;
-        public List<FuncationMaster> GetFunctionbyDepartment(IMasterInterface _function, int DepartmentID ,int TenantID)
+        public List<FuncationMaster> GetFunctionbyDepartment(IMasterInterface _function, int DepartmentID, int TenantID)
         {
             _ImasterFunctionbyDepartment = _function;
-            return _ImasterFunctionbyDepartment.GetFunctionByDepartment(DepartmentID,TenantID);
+            return _ImasterFunctionbyDepartment.GetFunctionByDepartment(DepartmentID, TenantID);
         }
+
+        #region PaymentMode
+
+        public List<PaymentMode> GetPaymentMode(IMasterInterface _ImasterInterface)
+        {
+            _Imaster = _ImasterInterface;
+            return _Imaster.GetPaymentMode();
+        }
+
+        #endregion
+
+
 
     }
 }
