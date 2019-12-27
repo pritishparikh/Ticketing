@@ -146,5 +146,47 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return funcationMasters;
         }
+
+        /// <summary>
+        /// Get Payment List
+        /// </summary>
+        /// <returns></returns>
+        public List<PaymentMode> GetPaymentMode()
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<PaymentMode> paymentModes = new List<PaymentMode>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_getPaymentModeMaster", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        PaymentMode paymentMode = new PaymentMode();
+                        //department.DepartmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["DepartmentID"]);
+                        //department.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+                        //department.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        paymentModes.Add(paymentMode);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return paymentModes;
+        }
+
+
     }
 }
