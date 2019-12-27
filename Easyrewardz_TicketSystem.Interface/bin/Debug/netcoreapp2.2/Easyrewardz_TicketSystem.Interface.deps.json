@@ -8,10 +8,16 @@
     ".NETCoreApp,Version=v2.2": {
       "Easyrewardz_TicketSystem.Interface/1.0.0": {
         "dependencies": {
+          "Easyrewardz_TicketSystem.CustomModel": "1.0.0",
           "Easyrewardz_TicketSystem.Model": "1.0.0"
         },
         "runtime": {
           "Easyrewardz_TicketSystem.Interface.dll": {}
+        }
+      },
+      "Easyrewardz_TicketSystem.CustomModel/1.0.0": {
+        "runtime": {
+          "Easyrewardz_TicketSystem.CustomModel.dll": {}
         }
       },
       "Easyrewardz_TicketSystem.Model/1.0.0": {
@@ -23,6 +29,11 @@
   },
   "libraries": {
     "Easyrewardz_TicketSystem.Interface/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Easyrewardz_TicketSystem.CustomModel/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

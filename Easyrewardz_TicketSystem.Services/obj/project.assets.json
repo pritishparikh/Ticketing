@@ -1644,6 +1644,16 @@
           "lib/netstandard1.3/System.Xml.XPath.XmlDocument.dll": {}
         }
       },
+      "Easyrewardz_TicketSystem.CustomModel/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.2",
+        "compile": {
+          "bin/placeholder/Easyrewardz_TicketSystem.CustomModel.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Easyrewardz_TicketSystem.CustomModel.dll": {}
+        }
+      },
       "Easyrewardz_TicketSystem.DBContext/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.2",
@@ -1663,6 +1673,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.2",
         "dependencies": {
+          "Easyrewardz_TicketSystem.CustomModel": "1.0.0",
           "Easyrewardz_TicketSystem.Model": "1.0.0"
         },
         "compile": {
@@ -6014,6 +6025,11 @@
         "system.xml.xpath.xmldocument.nuspec"
       ]
     },
+    "Easyrewardz_TicketSystem.CustomModel/1.0.0": {
+      "type": "project",
+      "path": "../Easyrewardz_TicketSystem.CustomModel/Easyrewardz_TicketSystem.CustomModel.csproj",
+      "msbuildProject": "../Easyrewardz_TicketSystem.CustomModel/Easyrewardz_TicketSystem.CustomModel.csproj"
+    },
     "Easyrewardz_TicketSystem.DBContext/1.0.0": {
       "type": "project",
       "path": "../Easyrewardz_TicketSystem.DBContext/Easyrewardz_TicketSystem.DBContext.csproj",
@@ -6041,23 +6057,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\pritish.parikh\\.nuget\\packages\\": {},
+    "C:\\Users\\shlok.barot\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj",
+      "projectUniqueName": "D:\\Shlok Barot\\Projects\\Easy Rewardz\\Ticketing Web Api\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj",
       "projectName": "Easyrewardz_TicketSystem.Services",
-      "projectPath": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj",
-      "packagesPath": "C:\\Users\\pritish.parikh\\.nuget\\packages\\",
-      "outputPath": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.Services\\obj\\",
+      "projectPath": "D:\\Shlok Barot\\Projects\\Easy Rewardz\\Ticketing Web Api\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj",
+      "packagesPath": "C:\\Users\\shlok.barot\\.nuget\\packages\\",
+      "outputPath": "D:\\Shlok Barot\\Projects\\Easy Rewardz\\Ticketing Web Api\\Ticketing\\Easyrewardz_TicketSystem.Services\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\pritish.parikh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\shlok.barot\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -6070,14 +6086,14 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj": {
-              "projectPath": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj"
+            "D:\\Shlok Barot\\Projects\\Easy Rewardz\\Ticketing Web Api\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj": {
+              "projectPath": "D:\\Shlok Barot\\Projects\\Easy Rewardz\\Ticketing Web Api\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj"
             },
-            "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj": {
-              "projectPath": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj"
+            "D:\\Shlok Barot\\Projects\\Easy Rewardz\\Ticketing Web Api\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj": {
+              "projectPath": "D:\\Shlok Barot\\Projects\\Easy Rewardz\\Ticketing Web Api\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj"
             },
-            "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
-              "projectPath": "D:\\Projects\\E-Ticketing\\Development\\WebAPI\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
+            "D:\\Shlok Barot\\Projects\\Easy Rewardz\\Ticketing Web Api\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
+              "projectPath": "D:\\Shlok Barot\\Projects\\Easy Rewardz\\Ticketing Web Api\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
             }
           }
         }

@@ -48,7 +48,7 @@ namespace Easyrewardz_TicketSystem.Services
                     customerMaster.CustomerEmailId = Convert.ToString(ds.Tables[0].Rows[0]["CustomerEmailId"]);
                     customerMaster.GenderID = Convert.ToInt32(ds.Tables[0].Rows[0]["GenderID"]);
                     customerMaster.AltNumber = Convert.ToString(ds.Tables[0].Rows[0]["AltNumber"]);
-                    customerMaster.AltEmailID = Convert.ToString(ds.Tables[0].Rows[0]["AḍltEmailID"]);
+                    customerMaster.AltEmailID = Convert.ToString(ds.Tables[0].Rows[0]["AltEmailID"]);
                     customerMaster.DateOfBirth = Convert.ToDateTime(ds.Tables[0].Rows[0]["DOB"]);
                     customerMaster.IsActive = Convert.ToInt32(ds.Tables[0].Rows[0]["IsActive"]);
                 }

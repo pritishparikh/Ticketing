@@ -1028,6 +1028,11 @@
           }
         }
       },
+      "Easyrewardz_TicketSystem.CustomModel/1.0.0": {
+        "runtime": {
+          "Easyrewardz_TicketSystem.CustomModel.dll": {}
+        }
+      },
       "Easyrewardz_TicketSystem.DBContext/1.0.0": {
         "dependencies": {
           "Easyrewardz_TicketSystem.Model": "1.0.0",
@@ -1040,6 +1045,7 @@
       },
       "Easyrewardz_TicketSystem.Interface/1.0.0": {
         "dependencies": {
+          "Easyrewardz_TicketSystem.CustomModel": "1.0.0",
           "Easyrewardz_TicketSystem.Model": "1.0.0"
         },
         "runtime": {
@@ -1737,6 +1743,11 @@
       "sha512": "sha512-Zm2BdeanuncYs3NhCj4c9e1x3EXFzFBVv2wPEc/Dj4ZbI9R8ecLSR5frAsx4zJCPBtKQreQ7Q/KxJEohJZbfzA==",
       "path": "system.xml.xpath.xmldocument/4.0.1",
       "hashPath": "system.xml.xpath.xmldocument.4.0.1.nupkg.sha512"
+    },
+    "Easyrewardz_TicketSystem.CustomModel/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "Easyrewardz_TicketSystem.DBContext/1.0.0": {
       "type": "project",
