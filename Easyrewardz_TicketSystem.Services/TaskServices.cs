@@ -183,7 +183,11 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return i;
         }
-
+        /// <summary>
+        /// Get Assigned To 
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
         public List<CustomUserAssigned> GetAssignedTo(int Function_ID)
         {
             DataSet ds = new DataSet();
@@ -202,8 +206,8 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        CustomUserAssigned assigned = new CustomUserAssigned() ;
-                        assigned.UserID= Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        CustomUserAssigned assigned = new CustomUserAssigned();
+                        assigned.UserID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
                         assigned.UserName = Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
                         Assignedto.Add(assigned);
                     }

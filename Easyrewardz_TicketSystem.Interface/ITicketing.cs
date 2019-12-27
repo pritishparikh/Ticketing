@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
+using Easyrewardz_TicketSystem.CustomModel;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
@@ -16,6 +17,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int addTicket(TicketingDetails ticketingDetails);
 
-        List<TicketingDetails> FilterByTicketStatus(int Status);
+        List<CustomDraftDetails> GetDraft(int UserID);
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Easyrewardz_TicketSystem.CustomModel;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -41,6 +42,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ticketList = _ticket;
             return _ticketList.addTicket(ticketingDetails);
         }
+        /// <summary>
+        /// Get Draft
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public List<CustomDraftDetails> GetDraft(ITicketing _ticket, int UserID)
+        {
+            _ticketList = _ticket;
+            return _ticketList.GetDraft(UserID);
+
+        }
         #endregion
     }
 }
+
