@@ -117,5 +117,27 @@ namespace Easyrewardz_TicketSystem.Services
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Get details from the Token
+        /// </summary>
+        /// <param name="secreatetoken"></param>
+        /// <returns></returns>
+        public Dictionary<string, string> getTokenData(string secreatetoken)
+        {
+            Dictionary<string, string> tokenData = new Dictionary<string, string>();
+
+            string[] _splitstr = secreatetoken.Split('.');
+            byte[] date = Convert.FromBase64String(_splitstr[1]);
+            byte[] contactdata = Convert.FromBase64String(_splitstr[0]);
+            string actualtoken_value = Encoding.ASCII.GetString(contactdata);
+            string[] _splitactualvalue = actualtoken_value.Split("_");
+
+            tokenData.Add("ProgramCode", _splitactualvalue[0]);
+            tokenData.Add("DomainName", _splitactualvalue[1]);
+            tokenData.Add("AppId", _splitactualvalue[2]);
+
+            return tokenData;
+        }
     }
 }
