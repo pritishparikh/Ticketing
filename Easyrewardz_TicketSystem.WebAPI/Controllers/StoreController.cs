@@ -69,7 +69,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="searchText"></param>
         /// <param name="tenantID"></param>
         /// <returns></returns>
-        public ResponseModel getStores(IStore _store, string searchText, int tenantID)
+        public ResponseModel getStores(string searchText, int tenantID)
         {
             List<StoreMaster> storeMasters = new List<StoreMaster>();
             ResponseModel _objResponseModel = new ResponseModel();
