@@ -30,6 +30,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             _connectionSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
         }
         #endregion
+        /// <summary>
+        /// search by Issue type ,category and subcategory
+        /// </summary>
+        /// <param name="Type_ID"></param>
+        /// <param name="Category_ID"></param>
+        /// <param name="SubCategor_ID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("searchbycategory")]
         [AllowAnonymous]
