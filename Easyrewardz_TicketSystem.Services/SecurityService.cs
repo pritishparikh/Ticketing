@@ -490,5 +490,173 @@ namespace Easyrewardz_TicketSystem.Services
 
         //}
         #endregion
+
+        #region Login/Authenticate Methods
+
+        /// <summary>
+        /// Authenticate User for first login
+        /// </summary>
+        /// <param name="Program_Code"> Program Code </param>
+        /// <param name="Domain_Name"> Domain Name </param>
+        /// <param name="User_EmailID"> User EmailID </param>
+        /// <param name="User_Password"> User Password </param>
+        /// <returns>Authenticate</returns>
+        public Authenticate AuthenticateUser(string Program_Code, string Domain_Name, string User_EmailID, string User_Password)
+        {
+            Authenticate authenticate = new Authenticate();
+            
+            try
+            {
+                ////Check whether Login is valid or not
+                authenticate = isValidLogin(Program_Code, Domain_Name, User_EmailID, User_Password);
+                
+                if (authenticate.UserMasterID > 0)
+                {
+                    /*Valid User then generate token and save to the database */
+
+                    ////Generate Token 
+                    string _token = generateAuthenticateToken(authenticate.ProgramCode, authenticate.Domain_Name, authenticate.AppID);
+
+                    authenticate.Message = "Valid user";
+                    authenticate.Token = _token;
+
+                    //Save User Token
+                    SaveUserToken(authenticate);
+                }
+                else {
+                    //Wrong Username or password
+                    authenticate.Message = "Invalid username or password";
+                    authenticate.Token = "";
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally {
+
+            }
+
+            return authenticate;
+        }
+
+        private Authenticate isValidLogin(string Program_Code, string Domain_Name, string User_EmailID, string User_Password)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            Authenticate authenticate = new Authenticate();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_ValidateUserLogin", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Program_Code", Program_Code);
+                cmd1.Parameters.AddWithValue("@Domain_Name", Domain_Name);
+                cmd1.Parameters.AddWithValue("@User_EmailID", User_EmailID);
+                cmd1.Parameters.AddWithValue("@User_Password", User_Password);
+
+                DataSet ds = new DataSet();
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+
+                        bool status = Convert.ToBoolean(ds.Tables[0].Rows[0]["Status"]);
+
+                        if (status)
+                        {
+                            authenticate.AppID = Convert.ToString(ds.Tables[0].Rows[0]["ApplicationId"]);
+                            authenticate.ProgramCode = Program_Code;
+                            authenticate.Domain_Name = Domain_Name;
+                            authenticate.UserMasterID = Convert.ToInt32(ds.Tables[0].Rows[0]["UserID"]);
+                            authenticate.TenantId = Convert.ToInt32(ds.Tables[0].Rows[0]["Tenant_Id"]);
+                            authenticate.Message = "Valid user";
+                        }
+                        else
+                        {
+                            authenticate.AppID = "";
+                            authenticate.ProgramCode = "";
+                            authenticate.Domain_Name = "";
+                            authenticate.Message = "In-valid username or passowrd";
+                            authenticate.Token = "";
+                            authenticate.UserMasterID = 0;
+                            authenticate.TenantId = 0;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return authenticate;
+        }
+
+        private string generateAuthenticateToken(string Programcode, string Domainname, string applicationid)
+        {
+            try
+            {
+                byte[] bytes = Encoding.ASCII.GetBytes(Programcode + "_" + Domainname + "_" + applicationid);
+                string token = Convert.ToBase64String(bytes);
+                byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
+                byte[] key = Guid.NewGuid().ToByteArray();
+                string SecreateToken = Encrypt(token) + "." + Convert.ToBase64String(time.Concat(key).ToArray());
+
+                return SecreateToken;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Save user token to current session
+        /// </summary>
+        /// <param name="accountModal"></param>
+        /// <returns></returns>
+        private Authenticate SaveUserToken(Authenticate authenticate)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_createCurrentSession", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@UserMaster_ID", authenticate.UserMasterID);
+                cmd1.Parameters.AddWithValue("@Security_Token", authenticate.Token);
+                cmd1.Parameters.AddWithValue("@App_Id", authenticate.AppID);
+                cmd1.Parameters.AddWithValue("@Program_Code", authenticate.ProgramCode);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", authenticate.TenantId);
+                cmd1.ExecuteNonQuery();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return authenticate;
+        }
+        #endregion
+
     }
 }
+

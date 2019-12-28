@@ -30,6 +30,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region Custom Methods
+
+        /// <summary>
+        /// Search Store details
+        /// </summary>
+        /// <param name="Storename"></param>
+        /// <param name="Storecode"></param>
+        /// <param name="Pincode"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("searchStoreDetail")]
         public ResponseModel searchStoreDetail(string Storename, string Storecode, int Pincode)
         {
             List<StoreMaster> objstoreList = new List<StoreMaster>();
@@ -69,6 +79,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="searchText"></param>
         /// <param name="tenantID"></param>
         /// <returns></returns>
+        [HttpPost]
+        [Route("getStores")]
         public ResponseModel getStores(string searchText, int tenantID)
         {
             List<StoreMaster> storeMasters = new List<StoreMaster>();
