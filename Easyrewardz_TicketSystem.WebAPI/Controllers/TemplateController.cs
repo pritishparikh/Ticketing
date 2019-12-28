@@ -32,9 +32,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         #region Custom Methods
         [HttpPost]
-        [Route("getOrderListWithItemDetails")]
+        [Route("getListOfTemplateForNote")]
         [AllowAnonymous]
-        public ResponseModel getListOfTemplateForNote()
+        public ResponseModel getListOfTemplateForNote(int IssueTypeID, int TenantID)
         {
 
             List<Template> _objTemplate = new List<Template>();
@@ -45,7 +45,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
 
-                _objTemplate = _templatecaller.GetOrderItemList(new TemplateService(_connectioSting));
+                _objTemplate = _templatecaller.GetTemplateForNote(new TemplateService(_connectioSting), IssueTypeID, TenantID);
                 StatusCode =
                    _objTemplate.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

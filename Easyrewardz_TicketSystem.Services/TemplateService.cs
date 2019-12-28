@@ -17,7 +17,7 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
         #endregion
-        public List<Template> getTemplateForNote()
+        public List<Template> getTemplateForNote(int IssueTypeId, int TenantID)
         {
 
             DataSet ds = new DataSet();
@@ -28,10 +28,10 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_getListOfTemplate", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_getTemplateList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                //cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
-                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@IssueType_ID", IssueTypeId);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -43,7 +43,7 @@ namespace Easyrewardz_TicketSystem.Services
                         template.TenantID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
                         template.TemplateID = Convert.ToInt32(ds.Tables[0].Rows[i]["TemplateID"]);
                         template.TemplateName = Convert.ToString(ds.Tables[0].Rows[i]["TemplateName"]);
-                        template.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        //template.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
                         objtemplate.Add(template);
                     }
                 }
