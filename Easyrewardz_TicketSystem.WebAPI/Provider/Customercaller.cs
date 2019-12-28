@@ -57,6 +57,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _customerRepository.updateCustomerDetails(customerMaster);
         }
 
+        /// <summary>
+        /// validate Customer Exist
+        /// </summary>
+        /// <param name="Cust_EmailId"></param>
+        /// <param name="Cust_PhoneNumber"></param>
+        /// <param name="TenantId"></param>
+        /// <returns>Message</returns>
+        public string validateCustomerExist(ICustomer customer, string Cust_EmailId, string Cust_PhoneNumber, int TenantId)
+        {
+            _customerRepository = customer;
+            return _customerRepository.validateCustomerExist(Cust_EmailId, Cust_PhoneNumber, TenantId);
+        }
+
+
         #endregion
 
     }

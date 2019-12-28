@@ -18,5 +18,14 @@ namespace Easyrewardz_TicketSystem.Interface
         int addCustomerDetails(CustomerMaster customerMaster);
 
         int updateCustomerDetails(CustomerMaster customerMaster);
+
+        /// <summary>
+        /// validate Customer Exist
+        /// </summary>
+        /// <param name="Cust_EmailId"></param>
+        /// <param name="Cust_PhoneNumber"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
+        string validateCustomerExist(string Cust_EmailId, string Cust_PhoneNumber, int TenantId);
     }
 }

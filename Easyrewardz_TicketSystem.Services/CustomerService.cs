@@ -206,5 +206,45 @@ namespace Easyrewardz_TicketSystem.Services
 
             return i;
         }
+
+        /// <summary>
+        /// Check Customer exist or not
+        /// </summary>
+        /// <param name="Cust_EmailId">Customer Email Id</param>
+        /// <param name="Cust_PhoneNumber">Customer Phone Number </param>
+        /// <param name="TenantId">Tenant Id</param>
+        /// <returns></returns>
+        public string validateCustomerExist(string Cust_EmailId, string Cust_PhoneNumber, int TenantId)
+        {
+
+            MySqlCommand cmd = new MySqlCommand();
+            string message = "";
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("Sp_ValidateCustomerExists", conn);
+                cmd1.Parameters.AddWithValue("@Cust_EmailId", Cust_EmailId);
+                cmd1.Parameters.AddWithValue("@Cust_PhoneNumber", Cust_PhoneNumber);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantId);
+               
+                cmd1.CommandType = CommandType.StoredProcedure;
+                message = Convert.ToString(cmd1.ExecuteScalar());
+                conn.Close();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return message;
+        }
     }
 }
