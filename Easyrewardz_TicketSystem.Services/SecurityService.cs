@@ -511,11 +511,6 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                ////Decrypt Data 
-                Program_Code = DecryptStringAES(Program_Code);
-                Domain_Name = DecryptStringAES(Domain_Name);
-                User_EmailID = DecryptStringAES(User_EmailID);
-
                 Authenticate authenticate = new Authenticate();
                 ////Check whether Login is valid or not
                 authenticate = isValidLogin(Program_Code, Domain_Name, User_EmailID, User_Password);
