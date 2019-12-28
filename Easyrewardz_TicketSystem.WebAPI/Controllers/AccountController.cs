@@ -30,11 +30,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly string _radisCacheServerAddress;
 
         public AccountController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
 
         [AllowAnonymous]
@@ -200,6 +202,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             try
             {
+                ////RedisCacheService redisCacheService = new RedisCacheService(_radisCacheServerAddress);
+                ////redisCacheService.Set("ggg", "uuuuU");
+                ////string _data = redisCacheService.Get("ggg");
+                ////bool isExist = redisCacheService.Exists("ggg");
+                ////redisCacheService.Remove("ggg");
+                ////bool isExist1 = redisCacheService.Exists("ggg");
+
                 securityCaller _newSecurityCaller = new securityCaller();
                 AccountModal account = new AccountModal();
                 string Programcode = X_Authorized_Programcode.Replace(' ', '+');
@@ -209,7 +218,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
-                    account = _newSecurityCaller.validateUser(new SecurityService(_connectioSting), Programcode, Domainname, userId, password);
+                    account = _newSecurityCaller.validateUser(new SecurityService(_connectioSting,_radisCacheServerAddress), Programcode, Domainname, userId, password);
 
                     if (!string.IsNullOrEmpty(account.Token))
                     {
@@ -247,8 +256,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return resp;
         }
 
-        #endregion
+        [Route("Logout")]
+        [HttpPost]
+        public void Logout(string _token)
+        {
+            RedisCacheService radisCacheService = new RedisCacheService(_radisCacheServerAddress);
+            if (!radisCacheService.Exists(_token))
+            {
+                radisCacheService.Remove(_token);
+            }
+        }
 
+        #endregion
 
     }
 }
