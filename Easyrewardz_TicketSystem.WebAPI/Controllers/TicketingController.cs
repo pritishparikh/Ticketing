@@ -121,7 +121,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="ticketingDetails"></param>
         /// <returns></returns>
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetDraftDetails")]
         public ResponseModel GetDraftDetails( int UserID)
         {
