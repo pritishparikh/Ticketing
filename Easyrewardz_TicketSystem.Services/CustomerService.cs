@@ -51,6 +51,7 @@ namespace Easyrewardz_TicketSystem.Services
                     customerMaster.AltEmailID = Convert.ToString(ds.Tables[0].Rows[0]["AltEmailID"]);
                     customerMaster.DateOfBirth = Convert.ToDateTime(ds.Tables[0].Rows[0]["DOB"]);
                     customerMaster.IsActive = Convert.ToInt32(ds.Tables[0].Rows[0]["IsActive"]);
+                    customerMaster.DOB = customerMaster.DateOfBirth.ToString("dd/MM/yyyy");
                 }
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)

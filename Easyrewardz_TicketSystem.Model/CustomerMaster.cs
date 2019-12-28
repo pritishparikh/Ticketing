@@ -79,5 +79,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public DateTime ModifiedDate { get; set; }
 
+        /// <summary>
+        /// DOB format
+        /// </summary>
+        public string DOB { get; set; }
+
     }
 }
