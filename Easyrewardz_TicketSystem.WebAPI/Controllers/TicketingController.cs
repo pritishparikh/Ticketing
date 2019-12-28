@@ -123,7 +123,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("GetDraftDetails")]
-        public ResponseModel GetDraftDetails( int UserID)
+        public ResponseModel GetDraftDetails(int UserID)
         {
             List<CustomDraftDetails> objDraftDetails = new List<CustomDraftDetails>();
             ResponseModel _objResponseModel = new ResponseModel();
