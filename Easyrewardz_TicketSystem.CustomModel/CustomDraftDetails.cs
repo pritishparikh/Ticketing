@@ -9,6 +9,12 @@ namespace Easyrewardz_TicketSystem.CustomModel
     /// </summary>
     public class CustomDraftDetails
     {
+
+        /// <summary>
+        /// Ticket Id
+        /// </summary>
+        public Int32 TicketId { get; set; }
+
         /// <summary>
         /// TikcketTitle
         /// </summary>

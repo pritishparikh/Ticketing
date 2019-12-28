@@ -125,6 +125,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;            
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@TicketStatusID", (int) EnumMaster.TicketStatus.Draft); 
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
@@ -133,6 +134,7 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CustomDraftDetails DraftDetails  = new CustomDraftDetails();
+                        DraftDetails.TicketId = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketId"]);
                         DraftDetails.TicketTitle = Convert.ToString(ds.Tables[0].Rows[i]["TikcketTitle"]);
                         DraftDetails.TicketDescription = Convert.ToString(ds.Tables[0].Rows[i]["TicketDescription"]);
                         DraftDetails.CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
