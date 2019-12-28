@@ -63,5 +63,50 @@ namespace Easyrewardz_TicketSystem.Services
             return objtemplate;
         }
 
+        public Template getTemplateContent(int TemplateId)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            Template objtemplate = new Template();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_getTemplateContent", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Template_ID", TemplateId);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        objtemplate.TenantID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
+                        objtemplate.TemplateID = Convert.ToInt32(ds.Tables[0].Rows[i]["TemplateID"]);
+                        objtemplate.TemplateName = Convert.ToString(ds.Tables[0].Rows[i]["TemplateName"]);
+                        objtemplate.TemplateSubject = Convert.ToString(ds.Tables[0].Rows[i]["TemplateSubject"]);
+                        objtemplate.TemplateBody = Convert.ToString(ds.Tables[0].Rows[i]["TemplateBody"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return objtemplate;
+        }
+
+        
     }
 }

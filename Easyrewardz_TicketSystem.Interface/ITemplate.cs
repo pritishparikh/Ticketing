@@ -8,5 +8,7 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface ITemplate
     {
         List<Template> getTemplateForNote(int IssueTypeId, int TenantID);
+
+        Template getTemplateContent(int TemplateID);
     }
 }

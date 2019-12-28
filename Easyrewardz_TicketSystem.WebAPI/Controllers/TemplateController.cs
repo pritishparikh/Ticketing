@@ -70,6 +70,48 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+
+        [HttpPost]
+        [Route("getTemplateContent")]
+        [AllowAnonymous]
+        public ResponseModel getTemplateContent(int TemplateId)
+        {
+            Template _objTemplate = new Template();
+            TemplateCaller _templatecaller = new TemplateCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+
+                _objTemplate = _templatecaller.GetTemplateContent(new TemplateService(_connectioSting), TemplateId);
+                StatusCode =
+                   _objTemplate == null  ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _objTemplate;
+
+            }
+            catch (Exception _ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+
         #endregion
     }
 }

@@ -23,5 +23,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _templateRepository = _template;
             return _templateRepository.getTemplateForNote(IssueTypeId, TenantID);
         }
+
+        public Template GetTemplateContent(ITemplate _template, int TemplateId)
+        {
+            _templateRepository = _template;
+            return _templateRepository.getTemplateContent(TemplateId);
+        }
     }
 }
