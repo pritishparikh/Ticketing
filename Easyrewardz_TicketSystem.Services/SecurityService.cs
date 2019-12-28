@@ -10,6 +10,10 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using System.IO;
 using Easyrewardz_TicketSystem.Model;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -193,8 +197,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                 string sessionid = "";
                 string newToken = generatetoken(_Programcode, _Domainname, _applicationid, _userId);
-                 updatetocache(_userId, newToken);
-                 SaveRecord(_Programcode, _Domainname, _applicationid, sessionid, _userId, _password, newToken);
+                updatetocache(_userId, newToken);
+                SaveRecord(_Programcode, _Domainname, _applicationid, sessionid, _userId, _password, newToken);
 
                 if (!string.IsNullOrEmpty(newToken) && !string.IsNullOrEmpty(_userId))
                 {
@@ -209,9 +213,9 @@ namespace Easyrewardz_TicketSystem.Services
                     accountModals.Message = "InValid login";
 
                 }
-                
 
-                
+
+
                 //_Token = newToken;
             }
             catch (Exception _ex)
@@ -501,15 +505,16 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="User_EmailID"> User EmailID </param>
         /// <param name="User_Password"> User Password </param>
         /// <returns>Authenticate</returns>
-        public Authenticate AuthenticateUser(string Program_Code, string Domain_Name, string User_EmailID, string User_Password)
+        public AccountModal AuthenticateUser(string Program_Code, string Domain_Name, string User_EmailID, string User_Password)
         {
-            Authenticate authenticate = new Authenticate();
-            
+            AccountModal accountModal = new AccountModal();
+
             try
             {
+                Authenticate authenticate = new Authenticate();
                 ////Check whether Login is valid or not
                 authenticate = isValidLogin(Program_Code, Domain_Name, User_EmailID, User_Password);
-                
+
                 if (authenticate.UserMasterID > 0)
                 {
                     /*Valid User then generate token and save to the database */
@@ -522,22 +527,31 @@ namespace Easyrewardz_TicketSystem.Services
 
                     //Save User Token
                     SaveUserToken(authenticate);
+
+                    //Serialise Token & save token to Cache 
+                    string jsonString = JsonConvert.SerializeObject(authenticate);
+                    setRadishCacheData(authenticate.Token, jsonString);
+
+                    accountModal.Message = "Valid user";
+                    accountModal.Token = _token;
                 }
-                else {
+                else
+                {
                     //Wrong Username or password
-                    authenticate.Message = "Invalid username or password";
-                    authenticate.Token = "";
+                    accountModal.Message = "Invalid username or password";
+                    accountModal.Token = "";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+
             }
-            finally {
+            finally
+            {
 
             }
 
-            return authenticate;
+            return accountModal;
         }
 
         private Authenticate isValidLogin(string Program_Code, string Domain_Name, string User_EmailID, string User_Password)
@@ -588,9 +602,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                //throw;
             }
             finally
             {
@@ -643,7 +657,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
-                
+
             }
             finally
             {
@@ -652,9 +666,48 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-
             return authenticate;
         }
+
+        /// <summary>
+        /// Set data to Radhish Cache memory
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="Value"></param>
+        public void setRadishCacheData(string key, string Value)
+        {
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+            IDatabase db = redis.GetDatabase();
+            db.StringSet(key, Value);
+        }
+
+        /// <summary>
+        /// Get Data from the Radish cache memory
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string getDataFromRadishCache(string key)
+        {
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+            IDatabase _db = redis.GetDatabase();
+            return _db.StringGet(key);
+        }
+
+        public void removeDataFromRadishCache(string key)
+        {
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+            IDatabase _db = redis.GetDatabase();
+            _db.KeyDelete(key);
+        }
+
+        public bool checkDataExistInRadishCache(string key)
+        {
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+            IDatabase _db = redis.GetDatabase();
+            return _db.KeyExists(key);
+        }
+
+
         #endregion
 
     }

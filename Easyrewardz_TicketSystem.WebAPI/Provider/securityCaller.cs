@@ -63,7 +63,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _SecurityRepository.UpdatePassword(plainEmailId, encryptedPassword);
         }
 
-
         /// <summary>
         /// Send Mail 
         /// </summary>
@@ -80,6 +79,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _SecurityRepository.sendMailForForgotPassword(EmailId, content);
         }
 
+
+        /// <summary>
+        /// Validate User Account
+        /// </summary>
+        /// <param name="security"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="Domainname"></param>
+        /// <param name="userId"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public AccountModal validateUser (ISecurity security, string ProgramCode, string Domainname, string userId, string password)
+        {
+            _SecurityRepository = security;
+            return _SecurityRepository.AuthenticateUser(ProgramCode, Domainname, userId, password);
+        }
 
         #endregion
     }

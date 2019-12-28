@@ -186,5 +186,69 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        #region Authenticate User
+
+        [AllowAnonymous]
+        [Route("authenticateUser")]
+        [HttpPost]
+        public ResponseModel authenticateUser(string X_Authorized_Programcode, string X_Authorized_Domainname, string X_Authorized_userId, string X_Authorized_password)
+        {
+            string _programCode = Convert.ToString(Request.Headers["X-Authorized-Programcode"]);
+
+            ResponseModel resp = new ResponseModel();
+
+            try
+            {
+                securityCaller _newSecurityCaller = new securityCaller();
+                AccountModal account = new AccountModal();
+                string Programcode = X_Authorized_Programcode.Replace(' ', '+');
+                string Domainname = X_Authorized_Domainname.Replace(' ', '+');
+                string userId = X_Authorized_userId.Replace(' ', '+');
+                string password = X_Authorized_password.Replace(' ', '+');
+
+                if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
+                {
+                    account = _newSecurityCaller.validateUser(new SecurityService(_connectioSting), Programcode, Domainname, userId, password);
+
+                    if (!string.IsNullOrEmpty(account.Token))
+                    {
+                        account.IsActive = true;
+                        resp.Status = true;
+                        resp.StatusCode = (int)EnumMaster.StatusCode.Success;
+                        resp.ResponseData = account;
+                        resp.Message = "Valid Login";
+                    }
+                    else
+                    {
+                        account.IsActive = false;
+                        resp.Status = true;
+                        resp.StatusCode = (int)EnumMaster.StatusCode.Success;
+                        resp.ResponseData = account;
+                        resp.Message = "In-Valid Login";
+                    }
+                }
+                else
+                {
+                    resp.Status = false;
+                    resp.ResponseData = account;
+                    resp.Message = "Invalid Login";
+                }
+            }
+            catch (Exception _ex)
+            {
+                resp.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                resp.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+            }
+            finally
+            {
+                GC.Collect();
+            }
+            return resp;
+        }
+
+        #endregion
+
+
     }
 }

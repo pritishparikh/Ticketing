@@ -7,42 +7,52 @@ namespace Easyrewardz_TicketSystem.Model
     /// <summary>
     /// AccountModel
     /// </summary>
+    [Serializable]
     public class Authenticate
     {
         /// <summary>
         /// Message
         /// </summary>
         public string Message { get; set; }
+
         /// <summary>
         /// Token
         /// </summary>
         public string Token { get; set; }
 
-        //public int SessionID { get; set; }
+        /// <summary>
+        /// User Email Id
+        /// </summary>
+        public string UserEmailID { get; set; }
 
-        public string UserID { get; set; }
-
-        //public string SecurityToken { get; set; }
-
-        public  bool IsActive { get; set; }
-
-        //public string SystemSessionID { get; set; }
-
+        /// <summary>
+        /// Application ID
+        /// </summary>
         public string AppID { get; set; }
         
+        /// <summary>
+        /// Program Code
+        /// </summary>
         public string ProgramCode { get; set; }
 
-        //public DateTime ExpiryDate { get; set; }
-
+        /// <summary>
+        /// Login Time
+        /// </summary>
         public DateTime LoginTime { get; set; }
 
-        //public int IndexID { get; set; }    
-        
+        /// <summary>
+        /// Domain Name
+        /// </summary>
         public string Domain_Name { get; set; }
 
-
+        /// <summary>
+        /// User Master Id
+        /// </summary>
         public Int32 UserMasterID { get; set; }
 
+        /// <summary>
+        /// Tenant ID
+        /// </summary>
         public int TenantId { get; set; }
     }
 }

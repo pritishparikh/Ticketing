@@ -18,5 +18,15 @@ namespace Easyrewardz_TicketSystem.Interface
         bool UpdatePassword(string cipherEmailId, string Password);
 
         bool sendMailForForgotPassword(string emailId,string content);
+
+        /// <summary>
+        /// Authenticate User 
+        /// </summary>
+        /// <param name="Program_Code"></param>
+        /// <param name="Domain_Name"></param>
+        /// <param name="User_EmailID"></param>
+        /// <param name="User_Password"></param>
+        /// <returns></returns>
+        AccountModal AuthenticateUser(string Program_Code, string Domain_Name, string User_EmailID, string User_Password);
     }
 }
