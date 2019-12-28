@@ -20,14 +20,15 @@ namespace Easyrewardz_TicketSystem.Services
     public class SecurityService : ISecurity
     {
         #region Variable Declartion 
-        private readonly ETSContext _eContext;
+        private readonly string radisCacheServerAddress;
         #endregion 
 
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
-        public SecurityService(string _connectionString)
+        public SecurityService(string _connectionString, string _radisCacheServerAddress = null)
         {
             conn.ConnectionString = _connectionString;
+            radisCacheServerAddress = _radisCacheServerAddress;
         }
         #endregion
 
@@ -530,7 +531,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                     //Serialise Token & save token to Cache 
                     string jsonString = JsonConvert.SerializeObject(authenticate);
-                    setRadishCacheData(authenticate.Token, jsonString);
+                    //setRadishCacheData(authenticate.Token, jsonString);
+
+                    RedisCacheService radisCacheService = new RedisCacheService(radisCacheServerAddress);
+                    radisCacheService.Set(authenticate.Token, jsonString);
 
                     accountModal.Message = "Valid user";
                     accountModal.Token = _token;
@@ -676,7 +680,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="Value"></param>
         public void setRadishCacheData(string key, string Value)
         {
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+            //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
             IDatabase db = redis.GetDatabase();
             db.StringSet(key, Value);
         }
@@ -688,21 +693,24 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public string getDataFromRadishCache(string key)
         {
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+            //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
             IDatabase _db = redis.GetDatabase();
             return _db.StringGet(key);
         }
 
         public void removeDataFromRadishCache(string key)
         {
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+            //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
             IDatabase _db = redis.GetDatabase();
             _db.KeyDelete(key);
         }
 
         public bool checkDataExistInRadishCache(string key)
         {
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+            //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
             IDatabase _db = redis.GetDatabase();
             return _db.KeyExists(key);
         }
