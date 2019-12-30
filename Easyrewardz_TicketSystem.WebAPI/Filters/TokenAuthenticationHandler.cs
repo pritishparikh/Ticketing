@@ -1,5 +1,8 @@
 ﻿using Easyrewardz_TicketSystem.DBContext;
+using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
@@ -17,12 +20,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
 {
     public class TokenAuthenticationHandler : AuthenticationHandler<TokenAuthenticationOptions>
     {
-        public const string SchemeName = "TokenAuth";
+        private const string SchemeName = "TokenAuth";
+        private readonly string _radisCacheServerAddress;
+
         public TokenAuthenticationHandler(IOptionsMonitor<TokenAuthenticationOptions> options,
-            ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
+            ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IConfiguration configuration)
                 : base(options, logger, encoder, clock)
         {
-
+            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
@@ -32,17 +37,34 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
         {
 
             //ETSContext _DBContext = new ETSContext();
-            string token = Context.Request.Headers["X-Authorized-Header"];
+            string token = Context.Request.Headers["X-Authorized-Token"];
             string userId = Context.Request.Headers["X-Authorized-userId"];
-            if (token == null)  return AuthenticateResult.Fail("No Authorization token provided");
+            if (token == null) return AuthenticateResult.Fail("No Authorization token provided");
             try
             {
-                string _userId = Decrypt(userId);
-                string isValidToken = validatetoken(token, _userId);
-                
-                if (isValidToken =="1")
+                //string _userId = Decrypt(userId);
+                //string isValidToken = validatetoken(token, _userId);
+
+                //if (isValidToken == "1")
+                //{
+                //    var claims = new[] { new Claim(ClaimTypes.Name, isValidToken) };
+                //    var identity = new ClaimsIdentity(claims, Scheme.Name);
+                //    var principal = new ClaimsPrincipal(identity);
+                //    var ticket = new AuthenticationTicket(principal, Scheme.Name);
+                //    return AuthenticateResult.Success(ticket);
+
+                //}
+                //else
+                //{
+                //    return AuthenticateResult.Fail("Invalid Authorization");
+                //}
+
+
+                Authenticate authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                if (!string.IsNullOrEmpty(authenticate.Token))
                 {
-                    var claims = new[] { new Claim(ClaimTypes.Name, isValidToken) };
+                    var claims = new[] { new Claim(ClaimTypes.Name, "1") };
                     var identity = new ClaimsIdentity(claims, Scheme.Name);
                     var principal = new ClaimsPrincipal(identity);
                     var ticket = new AuthenticationTicket(principal, Scheme.Name);
@@ -72,7 +94,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
             }
             if (iv == null || iv.Length <= 0)
             {
-                
+
                 throw new ArgumentNullException("key");
             }
 
@@ -225,13 +247,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
         //    ETSContext _DBContext = new ETSContext();
         //    DataSet ds = _DBContext.validateSecurityToken(SecretToken, ModuleID);
         //    return ds;
-           
+
         //}
     }
     public static class SchemesNamesConst
     {
         public const string TokenAuthenticationDefaultScheme = "TokenAuthenticationScheme";
-       
+
     }
     public class TokenAuthenticationOptions : AuthenticationSchemeOptions
     {

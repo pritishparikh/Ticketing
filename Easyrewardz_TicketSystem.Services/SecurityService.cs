@@ -541,6 +541,33 @@ namespace Easyrewardz_TicketSystem.Services
 
         #endregion
 
+        /// <summary>
+        /// Get data from token (Radish)
+        /// </summary>
+        /// <param name="_radisCacheServerAddress"></param>
+        /// <param name="_token"></param>
+        /// <returns></returns>
+        public static Authenticate GetAuthenticateDataFromToken(string _radisCacheServerAddress,string _token)
+        {
+            Authenticate authenticate = new Authenticate();
+
+            try
+            {
+                RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                if (cacheService.Exists(_token))
+                {
+                    string _data = cacheService.Get(_token);
+                    authenticate = JsonConvert.DeserializeObject<Authenticate>(_data);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return authenticate;
+        }
+
         #endregion
 
     }
