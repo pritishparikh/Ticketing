@@ -286,7 +286,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("deletesavedsearch")]
 
         public ResponseModel deletesavedsearch(int SearchParamID, int UserID)
-        {         
+        {
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";

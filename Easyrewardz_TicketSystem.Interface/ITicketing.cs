@@ -9,7 +9,7 @@ namespace Easyrewardz_TicketSystem.Interface
     /// Interface for the Ticketing
     /// </summary>
     public interface ITicketing
-    {     
+    {
         //IEnumerable<TicketingDetails> getTcikets();
 
         List<TicketingDetails> GetTicketList(string TikcketTitle);
@@ -18,7 +18,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<CustomDraftDetails> GetDraft(int UserID);
 
-       List <CustomSearchTicketAgent> SearchAgent(string FirstName,string LastName,string Email,int DesignationID);
+        List<CustomSearchTicketAgent> SearchAgent(string FirstName, string LastName, string Email, int DesignationID);
 
         List<UserTicketSearchMaster> ListSavedSearch(int UserID);
 
@@ -26,6 +26,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int DeleteSavedSearch(int SearchParamID, int UserID);
 
-        int AddSearch(int UserID, string SearchSaveName,string parameter);
+        int AddSearch(int UserID, string SearchSaveName, string parameter);
     }
 }

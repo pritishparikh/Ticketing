@@ -122,10 +122,10 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_GetDraft", conn);
-                cmd.Connection = conn;            
+                cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
-                cmd.Parameters.AddWithValue("@TicketStatusID", (int) EnumMaster.TicketStatus.Draft); 
+                cmd.Parameters.AddWithValue("@TicketStatusID", (int)EnumMaster.TicketStatus.Draft);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
@@ -133,7 +133,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        CustomDraftDetails DraftDetails  = new CustomDraftDetails();
+                        CustomDraftDetails DraftDetails = new CustomDraftDetails();
                         DraftDetails.TicketId = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketId"]);
                         DraftDetails.TicketTitle = Convert.ToString(ds.Tables[0].Rows[i]["TikcketTitle"]);
                         DraftDetails.TicketDescription = Convert.ToString(ds.Tables[0].Rows[i]["TicketDescription"]);
@@ -217,7 +217,7 @@ namespace Easyrewardz_TicketSystem.Services
         public List<UserTicketSearchMaster> ListSavedSearch(int UserID)
         {
             DataSet ds = new DataSet();
-            List<UserTicketSearchMaster> listSavedSearch  = new List<UserTicketSearchMaster>();
+            List<UserTicketSearchMaster> listSavedSearch = new List<UserTicketSearchMaster>();
             try
             {
                 conn.Open();
@@ -234,7 +234,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         UserTicketSearchMaster Savedsearch = new UserTicketSearchMaster();
                         Savedsearch.SearchParamID = Convert.ToInt32(ds.Tables[0].Rows[i]["SearchParamID"]);
-                        Savedsearch.SearchName = Convert.ToString(ds.Tables[0].Rows[i]["SearchName"]);                    
+                        Savedsearch.SearchName = Convert.ToString(ds.Tables[0].Rows[i]["SearchName"]);
                         listSavedSearch.Add(Savedsearch);
                     }
                 }
@@ -276,9 +276,9 @@ namespace Easyrewardz_TicketSystem.Services
                 if (ds != null && ds.Tables[0] != null)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {                      
+                    {
                         Savedsearch.SearchParamID = Convert.ToInt32(ds.Tables[0].Rows[i]["SearchParamID"]);
-                        Savedsearch.SearchParameters = Convert.ToString(ds.Tables[0].Rows[i]["SearchParameters"]);                    
+                        Savedsearch.SearchParameters = Convert.ToString(ds.Tables[0].Rows[i]["SearchParameters"]);
                     }
                 }
             }
@@ -303,13 +303,13 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="UserID"></param>s
         /// <returns></returns>
         public int DeleteSavedSearch(int SearchParamID, int UserID)
-        {         
+        {
             int i = 0;
             try
             {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteSearchByID_UTSM", conn);
-                cmd.Connection = conn;         
+                cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@SearchParam_ID", SearchParamID);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
                 cmd.CommandType = CommandType.StoredProcedure;

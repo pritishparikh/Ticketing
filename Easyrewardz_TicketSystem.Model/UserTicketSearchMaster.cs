@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Model
 {
-   public class UserTicketSearchMaster
+    public class UserTicketSearchMaster
     {
         /// <summary>
         /// SearchParamID

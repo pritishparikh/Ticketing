@@ -81,16 +81,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ticketList.GetSavedSearchByID(SearchID);
 
         }
-        public int DeleteSavedSearch(ITicketing _ticket, int SearchParamID ,int UserID)
+        public int DeleteSavedSearch(ITicketing _ticket, int SearchParamID, int UserID)
         {
             _ticketList = _ticket;
             return _ticketList.DeleteSavedSearch(SearchParamID, UserID);
 
         }
-        public int SaveSearch(ITicketing _ticket, int UserID , string SearchParamID, string parameter)
+        public int SaveSearch(ITicketing _ticket, int UserID, string SearchParamID, string parameter)
         {
             _ticketList = _ticket;
-            return _ticketList.AddSearch(UserID,SearchParamID, parameter);
+            return _ticketList.AddSearch(UserID, SearchParamID, parameter);
 
         }
         #endregion
