@@ -18,6 +18,14 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<CustomDraftDetails> GetDraft(int UserID);
 
-       List <CustomSearchTicketAgent> SearchAgent(string FirstName,string LastName,string Email,int DesignationID);      
+       List <CustomSearchTicketAgent> SearchAgent(string FirstName,string LastName,string Email,int DesignationID);
+
+        List<UserTicketSearchMaster> ListSavedSearch(int UserID);
+
+        UserTicketSearchMaster GetSavedSearchByID(int SearchParamID);
+
+        int DeleteSavedSearch(int SearchParamID, int UserID);
+
+        int AddSearch(int UserID, string SearchSaveName,string parameter);
     }
 }

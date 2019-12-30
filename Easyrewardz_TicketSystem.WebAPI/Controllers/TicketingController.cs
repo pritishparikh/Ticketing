@@ -196,6 +196,168 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// List of Saved Search
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("listSavedSearch")]
+        public ResponseModel listSavedSearch(int UserID)
+        {
+            List<UserTicketSearchMaster> objSavedSearch = new List<UserTicketSearchMaster>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                TicketingCaller _TicketCaller = new TicketingCaller();
+
+                objSavedSearch = _TicketCaller.ListSavedSearch(new TicketingService(_connectioSting), UserID);
+                StatusCode =
+                objSavedSearch.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objSavedSearch;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Saved Search By ID 
+        /// </summary>
+        /// <param name="SearchParamID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("getsavedsearchbyid")]
+        public ResponseModel getsavedsearchbyid(int SearchParamID)
+        {
+            UserTicketSearchMaster objSavedSearchbyID = new UserTicketSearchMaster();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                TicketingCaller _TicketCaller = new TicketingCaller();
+
+                objSavedSearchbyID = _TicketCaller.SavedSearchByID(new TicketingService(_connectioSting), SearchParamID);
+                StatusCode =
+               objSavedSearchbyID == null ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objSavedSearchbyID;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+        /// <summary>
+        /// Delete Saved Searcht
+        /// </summary>
+        /// <param name="ticketingDetails"></param>
+        /// <returns></returns>
+
+        [HttpPost]
+        [Route("deletesavedsearch")]
+
+        public ResponseModel deletesavedsearch(int SearchParamID, int UserID)
+        {         
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                TicketingCaller _TicketCaller = new TicketingCaller();
+
+                int result = _TicketCaller.DeleteSavedSearch(new TicketingService(_connectioSting), SearchParamID, UserID);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+
+            }
+            return _objResponseModel;
+        }
+
+
+        /// <summary>
+        /// save search
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// /// <param name="SearchSaveName"></param>
+        /// /// <param name="parameter"></param>
+        /// <returns></returns>
+
+        [HttpPost]
+        [Route("savesearch")]
+
+        public ResponseModel savesearch(int UserID, string SearchSaveName, string parameter)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                TicketingCaller _TicketCaller = new TicketingCaller();
+
+                int result = _TicketCaller.SaveSearch(new TicketingService(_connectioSting), UserID, SearchSaveName, parameter);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+
+            }
+            return _objResponseModel;
+        }
         #endregion
     }
 }

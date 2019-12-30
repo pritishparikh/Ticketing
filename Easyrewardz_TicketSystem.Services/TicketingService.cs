@@ -209,6 +209,160 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return listSearchagent;
         }
+        /// <summary>
+        /// List Saved Search
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public List<UserTicketSearchMaster> ListSavedSearch(int UserID)
+        {
+            DataSet ds = new DataSet();
+            List<UserTicketSearchMaster> listSavedSearch  = new List<UserTicketSearchMaster>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetSearchUTSMList", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        UserTicketSearchMaster Savedsearch = new UserTicketSearchMaster();
+                        Savedsearch.SearchParamID = Convert.ToInt32(ds.Tables[0].Rows[i]["SearchParamID"]);
+                        Savedsearch.SearchName = Convert.ToString(ds.Tables[0].Rows[i]["SearchName"]);                    
+                        listSavedSearch.Add(Savedsearch);
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return listSavedSearch;
+        }
+
+        /// <summary>
+        /// Get Saved Search By ID
+        /// </summary>
+        /// <param name="SearchParamID"></param>
+
+        /// <returns></returns>
+        public UserTicketSearchMaster GetSavedSearchByID(int SearchParamID)
+        {
+            DataSet ds = new DataSet();
+            UserTicketSearchMaster Savedsearch = new UserTicketSearchMaster();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetSaveSearchByID_UTSM", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@SearchParam_ID", SearchParamID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {                      
+                        Savedsearch.SearchParamID = Convert.ToInt32(ds.Tables[0].Rows[i]["SearchParamID"]);
+                        Savedsearch.SearchParameters = Convert.ToString(ds.Tables[0].Rows[i]["SearchParameters"]);                    
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return Savedsearch;
+        }
+
+        /// <summary>
+        /// Soft Delete Saved Search
+        /// </summary>
+        /// <param name="SearchParamID"></param>
+        /// <param name="UserID"></param>s
+        /// <returns></returns>
+        public int DeleteSavedSearch(int SearchParamID, int UserID)
+        {         
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_DeleteSearchByID_UTSM", conn);
+                cmd.Connection = conn;         
+                cmd.Parameters.AddWithValue("@SearchParam_ID", SearchParamID);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
+
+        /// <summary>
+        /// Add Search
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="SearchSaveName"></param>
+        /// <param name="parameter"></param>s
+        /// <returns></returns>
+        public int AddSearch(int UserID, string SearchSaveName, string parameter)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_SaveSearchUTSM", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Search_Parameters", parameter);
+                cmd.Parameters.AddWithValue("@Search_Name", SearchSaveName);
+                cmd.CommandType = CommandType.StoredProcedure;
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
     }
 }
 

@@ -69,6 +69,30 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ticketList.SearchAgent(FirstName, LastName, Email, DesignationID);
 
         }
+        public List<UserTicketSearchMaster> ListSavedSearch(ITicketing _ticket, int UserID)
+        {
+            _ticketList = _ticket;
+            return _ticketList.ListSavedSearch(UserID);
+
+        }
+        public UserTicketSearchMaster SavedSearchByID(ITicketing _ticket, int SearchID)
+        {
+            _ticketList = _ticket;
+            return _ticketList.GetSavedSearchByID(SearchID);
+
+        }
+        public int DeleteSavedSearch(ITicketing _ticket, int SearchParamID ,int UserID)
+        {
+            _ticketList = _ticket;
+            return _ticketList.DeleteSavedSearch(SearchParamID, UserID);
+
+        }
+        public int SaveSearch(ITicketing _ticket, int UserID , string SearchParamID, string parameter)
+        {
+            _ticketList = _ticket;
+            return _ticketList.AddSearch(UserID,SearchParamID, parameter);
+
+        }
         #endregion
     }
 }
