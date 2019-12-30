@@ -275,7 +275,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
 
             securityCaller _newSecurityCaller = new securityCaller();
-            int user_Id = 0;
             _newSecurityCaller.Logout(new SecurityService(_connectioSting), _token);
         }
 
