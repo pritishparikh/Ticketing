@@ -24,5 +24,11 @@ namespace Easyrewardz_TicketSystem.Model
 
         public DateTime LoginTime { get; set; }
 
+        /// <summary>
+        /// Is Valid
+        /// </summary>
+        public bool IsValidUser { get; set; }
+
+
     }
 }

@@ -528,7 +528,6 @@ namespace Easyrewardz_TicketSystem.Services
                     ////Generate Token 
                     string _token = generateAuthenticateToken(authenticate.ProgramCode, authenticate.Domain_Name, authenticate.AppID);
 
-                    authenticate.Message = "Valid user";
                     authenticate.Token = _token;
 
                     //Save User Token
@@ -536,19 +535,22 @@ namespace Easyrewardz_TicketSystem.Services
 
                     //Serialise Token & save token to Cache 
                     string jsonString = JsonConvert.SerializeObject(authenticate);
-                    //setRadishCacheData(authenticate.Token, jsonString);
 
                     RedisCacheService radisCacheService = new RedisCacheService(radisCacheServerAddress);
                     radisCacheService.Set(authenticate.Token, jsonString);
 
                     accountModal.Message = "Valid user";
-                    accountModal.Token = _token;
+
+                    ////Double encryption: We are doing encryption of encrypted token 
+                    accountModal.Token = Encrypt( _token);
+                    accountModal.IsValidUser = true;
                 }
                 else
                 {
                     //Wrong Username or password
                     accountModal.Message = "Invalid username or password";
                     accountModal.Token = "";
+                    accountModal.IsValidUser = false;
                 }
             }
             catch (Exception ex)
