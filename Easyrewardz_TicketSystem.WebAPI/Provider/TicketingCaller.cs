@@ -54,6 +54,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ticketList.GetDraft(UserID);
 
         }
+        /// <summary>
+        /// Search Ticket Agent
+        /// </summary>
+        /// <param name="FirstName"></param>
+        /// <param name="LastName"></param>
+        /// <param name="Email"></param>
+        /// <param name="DesignationID"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public List<CustomSearchTicketAgent> SearchAgent(ITicketing _ticket, string FirstName, string LastName, string Email, int DesignationID)
+        {
+            _ticketList = _ticket;
+            return _ticketList.SearchAgent(FirstName, LastName, Email, DesignationID);
+
+        }
         #endregion
     }
 }

@@ -158,6 +158,57 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return Draftlist;
         }
+        /// <summary>
+        /// Search ticket agent
+        /// </summary>
+        /// <param name="FirstName"></param>
+        /// <param name="LastName"></param>
+        /// <param name="Email"></param>
+        /// <param name="DesignationID"></param>
+        /// <returns></returns>
+        public List<CustomSearchTicketAgent> SearchAgent(string FirstName, string LastName, string Email, int DesignationID)
+        {
+            DataSet ds = new DataSet();
+            List<CustomSearchTicketAgent> listSearchagent = new List<CustomSearchTicketAgent>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_SearchAgent", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@First_Name", FirstName);
+                cmd.Parameters.AddWithValue("@Last_Name", LastName);
+                cmd.Parameters.AddWithValue("@Email_ID", Email);
+                cmd.Parameters.AddWithValue("@Designation_ID", DesignationID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomSearchTicketAgent Searchagent = new CustomSearchTicketAgent();
+                        Searchagent.User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        Searchagent.AgentName = Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
+                        Searchagent.Designation = Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
+                        Searchagent.Email = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                        listSearchagent.Add(Searchagent);
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return listSearchagent;
+        }
     }
 }
 
