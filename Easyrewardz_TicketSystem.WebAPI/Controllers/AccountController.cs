@@ -263,8 +263,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [Route("Logout")]
         [HttpPost]
-        public void Logout(string _token)
+        public void Logout()
         {
+            string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+            _token = SecurityService.DecryptStringAES(_token);
+
             RedisCacheService radisCacheService = new RedisCacheService(_radisCacheServerAddress);
             if (!radisCacheService.Exists(_token))
             {
@@ -273,7 +276,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             securityCaller _newSecurityCaller = new securityCaller();
             int user_Id = 0;
-            _newSecurityCaller.Logout(new SecurityService(_connectioSting),_token, user_Id);
+            _newSecurityCaller.Logout(new SecurityService(_connectioSting), _token);
         }
 
         #endregion

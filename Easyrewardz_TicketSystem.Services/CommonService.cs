@@ -125,6 +125,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public Dictionary<string, string> getTokenData(string secreatetoken)
         {
+            ///As we have double encrypt token
+            //1. De-Encrypt
+            string seceateTokendata = SecurityService.DecryptStringAES(secreatetoken);
+
             Dictionary<string, string> tokenData = new Dictionary<string, string>();
 
             string[] _splitstr = secreatetoken.Split('.');

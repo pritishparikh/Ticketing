@@ -29,6 +29,6 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <returns></returns>
         AccountModal AuthenticateUser(string Program_Code, string Domain_Name, string User_EmailID, string User_Password);
 
-        void Logout(string token,int user_Id);
+        void Logout(string token);
     }
 }
