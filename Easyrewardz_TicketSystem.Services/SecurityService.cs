@@ -685,44 +685,44 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="key"></param>
         /// <param name="Value"></param>
-        public void setRadishCacheData(string key, string Value)
-        {
-            //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
-            IDatabase db = redis.GetDatabase();
-            db.StringSet(key, Value);
-        }
+        //public void setRadishCacheData(string key, string Value)
+        //{
+        //    //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+        //    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
+        //    IDatabase db = redis.GetDatabase();
+        //    db.StringSet(key, Value);
+        //}
 
-        /// <summary>
-        /// Get Data from the Radish cache memory
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public string getDataFromRadishCache(string key)
-        {
-            //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
-            IDatabase _db = redis.GetDatabase();
-            return _db.StringGet(key);
-        }
+        ///// <summary>
+        ///// Get Data from the Radish cache memory
+        ///// </summary>
+        ///// <param name="key"></param>
+        ///// <returns></returns>
+        //public string getDataFromRadishCache(string key)
+        //{
+        //    //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+        //    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
+        //    IDatabase _db = redis.GetDatabase();
+        //    return _db.StringGet(key);
+        //}
 
-        public void removeDataFromRadishCache(string key)
-        {
-            //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
-            IDatabase _db = redis.GetDatabase();
-            _db.KeyDelete(key);
-        }
+        //public void removeDataFromRadishCache(string key)
+        //{
+        //    //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+        //    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
+        //    IDatabase _db = redis.GetDatabase();
+        //    _db.KeyDelete(key);
+        //}
 
-        public bool checkDataExistInRadishCache(string key)
-        {
-            //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
-            IDatabase _db = redis.GetDatabase();
-            return _db.KeyExists(key);
-        }
-
-        public void Logout(string token_data, int user_Id)
+        //public bool checkDataExistInRadishCache(string key)
+        //{
+        //    //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
+        //    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
+        //    IDatabase _db = redis.GetDatabase();
+        //    return _db.KeyExists(key);
+        //}
+               
+        public void Logout(string token_data)
         {
             MySqlCommand cmd = new MySqlCommand();
             try
@@ -732,7 +732,6 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_LogoutUser", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@token_data", token_data);
-                cmd1.Parameters.AddWithValue("@user_Id", user_Id);
                 cmd1.ExecuteNonQuery();
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
