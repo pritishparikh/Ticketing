@@ -112,7 +112,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objcustomerMaster = _customercaller.getCustomerDetailsByEmailIdandPhone(new CustomerService(_connectioSting), SearchText);
 
                 StatusCode =
-                      _objcustomerMaster == null ?
+                      _objcustomerMaster.Count == 0 ?
                               (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
