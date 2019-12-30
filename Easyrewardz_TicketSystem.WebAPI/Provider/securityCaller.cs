@@ -95,6 +95,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _SecurityRepository.AuthenticateUser(ProgramCode, Domainname, userId, password);
         }
 
+        public void Logout(ISecurity security, string token,int user_Id)
+        {
+            _SecurityRepository = security;
+            _SecurityRepository.Logout(token, user_Id);
+        }
+
+
         #endregion
     }
 }

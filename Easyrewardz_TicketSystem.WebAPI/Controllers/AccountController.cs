@@ -45,6 +45,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel authenticate(string X_Authorized_Programcode, string X_Authorized_Domainname, string X_Authorized_applicationid, string X_Authorized_userId, string X_Authorized_password)
         //public string authenticate()
         {
+            string _programCode = Convert.ToString(Request.Headers["X-Authorized-Programcode"]);
+
             ResponseModel resp = new ResponseModel();
             
             try
@@ -265,6 +267,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 radisCacheService.Remove(_token);
             }
+
+            securityCaller _newSecurityCaller = new securityCaller();
+            int user_Id = 0;
+            _newSecurityCaller.Logout(new SecurityService(_connectioSting),_token, user_Id);
         }
 
         #endregion
