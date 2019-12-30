@@ -720,7 +720,32 @@ namespace Easyrewardz_TicketSystem.Services
             return _db.KeyExists(key);
         }
 
+        public void Logout(string token_data, int user_Id)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_LogoutUser", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@token_data", token_data);
+                cmd1.Parameters.AddWithValue("@user_Id", user_Id);
+                cmd1.ExecuteNonQuery();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
 
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+        }
+    
         #endregion
 
     }
