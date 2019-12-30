@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-   public class MasterServices : IMasterInterface
+    public class MasterServices : IMasterInterface
     {
         #region
         MySqlConnection conn = new MySqlConnection();
@@ -124,7 +124,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="DepartmentID"></param>
         /// <returns></returns>
-        public List<FuncationMaster> GetFunctionByDepartment(int DepartmentID,int TenantID)
+        public List<FuncationMaster> GetFunctionByDepartment(int DepartmentID, int TenantID)
         {
 
             DataSet ds = new DataSet();
@@ -215,6 +215,49 @@ namespace Easyrewardz_TicketSystem.Services
             return paymentModes;
         }
 
+        /// <summary>
+        /// Ticket Source Master
+        /// </summary>
+        /// <returns></returns>
+        public List<TicketSourceMaster> GetTicketSources()
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<TicketSourceMaster> ticketSourceMasters = new List<TicketSourceMaster>();
 
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_getTicketSourceMaster", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        TicketSourceMaster ticketSource = new TicketSourceMaster();
+                        ticketSource.TicketSourceId = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketSourceId"]);
+                        ticketSource.TicketSourceName = Convert.ToString(ds.Tables[0].Rows[i]["TicketSourceName"]);
+                        ticketSourceMasters.Add(ticketSource);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return ticketSourceMasters;
+        }
     }
 }

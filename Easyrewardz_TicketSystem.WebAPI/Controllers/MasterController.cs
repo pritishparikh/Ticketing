@@ -199,5 +199,41 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Get Ticket Sources
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("getTicketSources")]
+        public ResponseModel getTicketSources()
+        {
+            List<TicketSourceMaster> ticketSourceMasters = new List<TicketSourceMaster>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                MasterCaller _newMasterChannel = new MasterCaller();
+                ticketSourceMasters = _newMasterChannel.GetTicketSource(new MasterServices(_connectioSting));
+                StatusCode =
+                ticketSourceMasters.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = ticketSourceMasters;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
     }
 }

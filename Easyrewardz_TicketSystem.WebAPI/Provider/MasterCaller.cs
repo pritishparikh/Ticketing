@@ -126,6 +126,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #endregion
 
+        #region PaymentMode
+
+        public List<TicketSourceMaster> GetTicketSource(IMasterInterface _ImasterInterface)
+        {
+            _Imaster = _ImasterInterface;
+            return _Imaster.GetTicketSources();
+        }
+
+        #endregion
 
 
     }
