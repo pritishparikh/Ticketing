@@ -28,55 +28,5 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
         }
-        [HttpGet]
-        public ResponseModel authenticate()
-        {
-            ResponseModel resp = new ResponseModel();
-            try
-            {
-                securityCaller _newSecurityCaller = new securityCaller();
-                string Programcode = HttpContext.Request.Headers["X_Authorized_Programcode"];
-                string Domainname = HttpContext.Request.Headers["X_Authorized_Domainname"];
-                string applicationid = HttpContext.Request.Headers["X_Authorized_applicationid"];
-                string userId = HttpContext.Request.Headers["X_Authorized_userId"];
-                string password = HttpContext.Request.Headers["X_Authorized_password"];
-
-                if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(applicationid) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
-                {
-                    var token = _newSecurityCaller.generateToken(new SecurityService(_connectioSting), Programcode, applicationid, Domainname, userId, password);
-                    //resp.IsResponse = true;
-                    resp.Status = true;
-                    resp.StatusCode = (int)EnumMaster.StatusCode.Success;
-                    resp.ResponseData = token;
-                }
-                else
-                {
-                    resp.Status = false;
-                    resp.ResponseData = null;
-                    resp.Message = "Invalid Login";
-                }
-            }
-            catch (Exception _ex)
-            {
-                resp.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                resp.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-            }
-
-            return resp;
-        }
     }
-    public class Result
-    {
-        public int statusCode { get; set; }
-        public string Message { get; set; }
-        public bool IsResponse { get; set; }
-        public string ErrorMessage { get; set; }
-        public string customerFullName { get; set; }
-        public string emailid { get; set; }
-        public string alternateemail { get; set; }
-        public string MobileNumber { get; set; }
-        public int Gender { get; set; }
-        public string AlternateNumber { get; set; }
-    }
-
 }

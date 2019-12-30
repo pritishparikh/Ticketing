@@ -11,12 +11,22 @@ namespace Easyrewardz_TicketSystem.Interface
     /// </summary>
     public interface ISecurity
     {
-        AccountModal getToken(string programCode, string AppID, string Domainname,string userId,string password);
-
         DataSet validateTokenGetPermission(string secertCode,int ModuleID);
 
+        /// <summary>
+        /// Update password
+        /// </summary>
+        /// <param name="cipherEmailId"></param>
+        /// <param name="Password"></param>
+        /// <returns></returns>
         bool UpdatePassword(string cipherEmailId, string Password);
 
+        /// <summary>
+        /// Send mail for the forgot password
+        /// </summary>
+        /// <param name="emailId"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
         bool sendMailForForgotPassword(string emailId,string content);
 
         /// <summary>
@@ -29,6 +39,10 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <returns></returns>
         AccountModal AuthenticateUser(string Program_Code, string Domain_Name, string User_EmailID, string User_Password);
 
+        /// <summary>
+        /// Logout 
+        /// </summary>
+        /// <param name="token"></param>
         void Logout(string token);
     }
 }

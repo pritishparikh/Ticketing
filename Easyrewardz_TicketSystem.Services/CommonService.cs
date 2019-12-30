@@ -86,7 +86,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

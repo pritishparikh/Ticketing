@@ -28,72 +28,22 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     //[Authorize(AuthenticationSchemes = PermissionModuleConst.ModuleAuthenticationDefaultScheme)]
     public class AccountController : ControllerBase
     {
+        #region Variable
         private IConfiguration configuration;
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
+        #endregion
 
+        #region Constructor
         public AccountController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
+        #endregion
 
-        [AllowAnonymous]
-        [Route("authenticate")]
-        [HttpPost]
-        public ResponseModel authenticate(string X_Authorized_Programcode, string X_Authorized_Domainname, string X_Authorized_applicationid, string X_Authorized_userId, string X_Authorized_password)
-        //public string authenticate()
-        {
-            string _programCode = Convert.ToString(Request.Headers["X-Authorized-Programcode"]);
-
-            ResponseModel resp = new ResponseModel();
-            
-            try
-            {
-                securityCaller _newSecurityCaller = new securityCaller();
-                AccountModal objAccount = new AccountModal();
-                //string Programcode = HttpContext.Request.Headers["X_Authorized_Programcode"];
-                //string Domainname = HttpContext.Request.Headers["X_Authorized_Domainname"];
-                //string applicationid = HttpContext.Request.Headers["X_Authorized_applicationid"];
-                //string userId = HttpContext.Request.Headers["X_Authorized_userId"];
-                //string password = HttpContext.Request.Headers["X_Authorized_password"];
-                string Programcode = X_Authorized_Programcode.Replace(' ', '+');
-                string Domainname = X_Authorized_Domainname.Replace(' ','+');
-                string applicationid = X_Authorized_applicationid.Replace(' ', '+');
-                string userId = X_Authorized_userId.Replace(' ', '+');
-                string password = X_Authorized_password.Replace(' ', '+');
-
-                
-
-                if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(applicationid) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
-                {
-                    var token = _newSecurityCaller.generateToken(new SecurityService(_connectioSting), Programcode, applicationid, Domainname, userId, password);
-                    //objAccount.Message = 
-                    //objAccount.Token = token;
-                    resp.Status  = true;
-                    resp.StatusCode = (int)EnumMaster.StatusCode.Success;
-                    resp.ResponseData = token;
-                }
-                else
-                {
-                    resp.Status = false;
-                    resp.ResponseData = null;
-                    resp.Message = "Invalid Login";
-                }
-            }
-            catch (Exception _ex)
-            {
-                resp.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                resp.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-            }
-            finally
-            {
-                GC.Collect();
-            }
-            return resp;
-        }
-
+        #region Custom Methos 
 
         #region Forgot password screen
         /// <summary>
@@ -110,20 +60,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             try
             {
-                CommonService objSmdService = new CommonService();
-                string encryptedEmailId = objSmdService.Encrypt(EmailId);
-                //SMTPDetails objSmtpDetail = new SMTPDetails();
-
-                //string subject = "Forgot Password";
-                //string url = configuration.GetValue<string>("websiteURL") + "/changePassword";
-                //string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url + "?Id=" + encryptedEmailId;
-                //objSmtpDetail.FromEmailId = "shlok.barot@brainvire.com";
-                //objSmtpDetail.Password = "brain@2020;
-                //objSmtpDetail.SMTPServer = "smtp.gmail.com";
-                //objSmtpDetail.SMTPPort = 587;
-                //objSmtpDetail.IsBodyHtml = true;
-
-                //objSmdService.SendEmail(objSmtpDetail, EmailId, subject, body);
+                CommonService commonService = new CommonService();
+                string encryptedEmailId = commonService.Encrypt(EmailId);
 
                 securityCaller _securityCaller = new securityCaller();
                 string url = configuration.GetValue<string>("websiteURL") + "/changePassword";
@@ -156,6 +94,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         #endregion
+
+        #region Update Password 
         /// <summary>
         /// Update Password
         /// </summary>
@@ -168,10 +108,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             ResponseModel _objResponseModel = new ResponseModel();
 
-            try 
+            try
             {
                 securityCaller _newSecurityCaller = new securityCaller();
-                bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_connectioSting),cipherEmailId, Password);
+                bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_connectioSting), cipherEmailId, Password);
 
                 if (isUpdate)
                 {
@@ -191,6 +131,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        #endregion
+
         #region Authenticate User
 
         [AllowAnonymous]
@@ -207,13 +149,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             try
             {
-                ////RedisCacheService redisCacheService = new RedisCacheService(_radisCacheServerAddress);
-                ////redisCacheService.Set("ggg", "uuuuU");
-                ////string _data = redisCacheService.Get("ggg");
-                ////bool isExist = redisCacheService.Exists("ggg");
-                ////redisCacheService.Remove("ggg");
-                ////bool isExist1 = redisCacheService.Exists("ggg");
-
                 securityCaller _newSecurityCaller = new securityCaller();
                 AccountModal account = new AccountModal();
                 string Programcode = X_Authorized_Programcode.Replace(' ', '+');
@@ -223,7 +158,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
-                    account = _newSecurityCaller.validateUser(new SecurityService(_connectioSting,_radisCacheServerAddress), Programcode, Domainname, userId, password);
+                    account = _newSecurityCaller.validateUser(new SecurityService(_connectioSting, _radisCacheServerAddress), Programcode, Domainname, userId, password);
 
                     if (!string.IsNullOrEmpty(account.Token))
                     {
@@ -277,6 +212,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             securityCaller _newSecurityCaller = new securityCaller();
             _newSecurityCaller.Logout(new SecurityService(_connectioSting), _token);
         }
+
+        #endregion
 
         #endregion
 

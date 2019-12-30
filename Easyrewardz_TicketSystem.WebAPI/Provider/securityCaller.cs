@@ -18,22 +18,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #region Custom Methods
 
         /// <summary>
-        /// Generate token for the security
-        /// </summary>
-        /// <param name="security"></param>
-        /// <param name="ProgramCode"></param>
-        /// <param name="Domainname"></param>
-        /// <param name="applicationid"></param>
-        /// <param name="userId"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public AccountModal generateToken(ISecurity security, string ProgramCode, string Domainname, string applicationid, string userId, string password)
-        {
-            _SecurityRepository = security;
-            return _SecurityRepository.getToken(ProgramCode, applicationid, Domainname, userId, password);
-        }
-
-        /// <summary>
         /// Validate token and get permission
         /// </summary>
         /// <param name="security"></param>
@@ -56,9 +40,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public bool UpdatePassword(ISecurity security, string cipherEmailId, string Password)
         {
             _SecurityRepository = security;
-            CommonService objSmdService = new CommonService();
-            string plainEmailId = objSmdService.Decrypt(cipherEmailId);
-            string encryptedPassword = objSmdService.Encrypt(Password);
+            CommonService commonService = new CommonService();
+            string plainEmailId = commonService.Decrypt(cipherEmailId);
+            string encryptedPassword = commonService.Encrypt(Password);
 
             return _SecurityRepository.UpdatePassword(plainEmailId, encryptedPassword);
         }
@@ -79,7 +63,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _SecurityRepository.sendMailForForgotPassword(EmailId, content);
         }
 
-
         /// <summary>
         /// Validate User Account
         /// </summary>
@@ -95,12 +78,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _SecurityRepository.AuthenticateUser(ProgramCode, Domainname, userId, password);
         }
 
+        /// <summary>
+        /// Logout user
+        /// </summary>
+        /// <param name="security"></param>
+        /// <param name="token"></param>
         public void Logout(ISecurity security, string token)
         {
             _SecurityRepository = security;
             _SecurityRepository.Logout(token);
         }
-
 
         #endregion
     }
