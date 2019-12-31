@@ -8,7 +8,17 @@ namespace Easyrewardz_TicketSystem.Model
     {
         public int pageNo { get; set; }
         public int pageSize { get; set; }
+
+        public bool isByStatus { get; set; }
+        public bool isByFilter { get; set; }
+
         public bool ByDate { get; set; }
+        public bool ByCustomerType { get; set; }
+        public bool ByTicketType { get; set; }
+        public bool ByCategory { get; set; }
+        public bool byAll { get; set; }
+
+
 
         public DateTime creationDate { get; set; }
         public DateTime lastUpdatedDate { get; set; }
@@ -16,28 +26,28 @@ namespace Easyrewardz_TicketSystem.Model
         public string ticketStatus { get; set; }
 
 
-        public bool ByCustomerType { get; set; }
+
 
         public string customerMob { get; set; }
         public string customerEmail { get; set; }
         public int TicketID { get; set; }
 
 
-        public bool ByTicketType { get; set; }
+
 
         public string Priority { get; set; }
         public string chanelOfPurchase { get; set; }
         public string ticketActionType { get; set; }
 
 
-        public bool ByCategory { get; set; }
+
 
         public string Category { get; set; }
         public string subCategory { get; set; }
         public string issueType { get; set; }
 
 
-        public bool byAll { get; set; }
+
         public string ticketSource { get; set; }
         public int claimID { get; set; }
 
@@ -74,6 +84,8 @@ namespace Easyrewardz_TicketSystem.Model
         public DateTime CreatedOn { get; set; }
 
         public string creationDetails { get; set; }
+
+        public TicketStatus ticketStatusCount { get; set; }
         //public string createdBy { get; set; }
         //public string updatedBy { get; set; }
         //public string assignedTo { get; set; }
