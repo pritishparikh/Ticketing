@@ -149,5 +149,56 @@ namespace Easyrewardz_TicketSystem.CustomModel
             ETB = 201
 
         }
+
+        /// <summary>
+        /// Claim Status
+        /// </summary>
+        public enum ClaimStatus
+        {
+            /// <summary>
+            ///ClaimStatus - Draft
+            /// </summary>
+            [Description("New")]
+            New = 210,
+
+            /// <summary>
+            ///ClaimStatus - Open
+            /// </summary>
+            [Description("Open/Pending")]
+            Open = 211,
+
+            /// <summary>
+            ///ClaimStatus - Pending 
+            /// </summary>
+            [Description("Resolved")]
+            Resolved = 212
+        }
+
+
+
+        /// <summary>
+        /// Task Status
+        /// </summary>
+        public enum TaskStatus
+        {
+            /// <summary>
+            ///TaskStatus - Draft
+            /// </summary>
+            [Description("New")]
+            New = 220,
+
+            /// <summary>
+            ///TaskStatus - Open
+            /// </summary>
+            [Description("Open/Pending")]
+            Open = 221,
+
+            /// <summary>
+            ///TaskStatus - Pending 
+            /// </summary>
+            [Description("Resolved")]
+            Resolved = 222
+        }
+
     }
 }
