@@ -17,7 +17,7 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
         #endregion
-        public List<StoreMaster> getStoreDetailByStorecodenPincode(string Storename, string Storecode, int Pincode)
+        public List<StoreMaster> getStoreDetailByStorecodenPincode(string searchText)
         {
             List<StoreMaster> storeMaster = new List<StoreMaster>();
             MySqlCommand cmd = new MySqlCommand();
@@ -26,10 +26,8 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("", conn);
-                cmd1.Parameters.AddWithValue("@objEmailId", Storename);
-                cmd1.Parameters.AddWithValue("@objCustomerPhoneNumber", Storecode);
-                cmd1.Parameters.AddWithValue("@objCustomerPhoneNumber", Pincode);
+                MySqlCommand cmd1 = new MySqlCommand("SP_getStoreSDetialwithStorenamenPincode", conn);
+                cmd1.Parameters.AddWithValue("@searchText", searchText);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
                 da.SelectCommand = cmd1;
