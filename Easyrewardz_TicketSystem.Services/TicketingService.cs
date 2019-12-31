@@ -45,7 +45,7 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         TicketingDetails ticketingDetails = new TicketingDetails();
-                        ticketingDetails.TikcketTitle = Convert.ToString(ds.Tables[0].Rows[i]["TikcketTitle"]);
+                        ticketingDetails.TicketTitle = Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"]);
                         ticketing.Add(ticketingDetails);
                     }
                 }
@@ -68,7 +68,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createTicket", conn);
                 cmd1.Parameters.AddWithValue("@TenantID", ticketingDetails.TenantID);
-                cmd1.Parameters.AddWithValue("@TikcketTitle", ticketingDetails.TikcketTitle);
+                cmd1.Parameters.AddWithValue("@TikcketTitle", ticketingDetails.TicketTitle);
                 cmd1.Parameters.AddWithValue("@TicketDescription", ticketingDetails.Ticketdescription);
                 cmd1.Parameters.AddWithValue("@TicketSourceID", ticketingDetails.TicketSourceID);
                 cmd1.Parameters.AddWithValue("@BrandID", ticketingDetails.BrandID);
