@@ -39,9 +39,10 @@ namespace Easyrewardz_TicketSystem.Services
                         StoreMaster store = new StoreMaster();
                         store.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
                         store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        store.PincodeID = Convert.ToInt32(ds.Tables[0].Rows[i]["PincodeID"]);
-
-
+                        store.Pincode = Convert.ToString(ds.Tables[0].Rows[i]["Pincode"]);
+                        store.StoreEmailID = Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
+                        store.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
                         storeMaster.Add(store);
                     }
                 }
