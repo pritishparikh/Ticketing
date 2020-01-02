@@ -125,7 +125,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel getOrderListWithItemDetails(string OrderNumber,int TenantID)
         {
 
-            List <OrderMaster> _objorderMaster = new List<OrderMaster>();
+            List <CustomOrderMaster> _objorderMaster = new List<CustomOrderMaster>();
             OrderCaller _ordercaller = new OrderCaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;

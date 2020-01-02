@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System.Collections.Generic;
 
@@ -46,7 +47,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="OrderNumber"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<OrderMaster> GetOrderItemList(IOrder _orderMaster, string OrderNumber, int TenantID)
+        public List<CustomOrderMaster> GetOrderItemList(IOrder _orderMaster, string OrderNumber, int TenantID)
         {
             _orderRepository = _orderMaster;
             return _orderRepository.getOrderListwithItemDetail(OrderNumber, TenantID);

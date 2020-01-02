@@ -1,10 +1,12 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -112,40 +114,56 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="OrderNumber"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<OrderMaster> getOrderListwithItemDetail(string OrderNumber, int TenantID)
+        public List<CustomOrderMaster> getOrderListwithItemDetail(string OrderNumber, int TenantID)
         {
 
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
-            List<OrderMaster> objorderMaster = new List<OrderMaster>();
-
+            List<CustomOrderMaster> objorderMaster = new List<CustomOrderMaster>();
             try
             {
                 conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_getOrderLisItemDetail", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Order_NO", OrderNumber);
-                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
-                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlCommand cmd  = new MySqlCommand("SP_OrderDetails", conn);
+                cmd.Connection = conn;        
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Order_ID", OrderNumber);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                da.SelectCommand = cmd;
                 da.Fill(ds);
+            
                 if (ds != null && ds.Tables[0] != null)
                 {
+                    
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        OrderMaster orderMaster = new OrderMaster();
-                        orderMaster.TenantID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
-                        orderMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
-                        orderMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
-                        orderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
-                        orderMaster.OrderPrice = Convert.ToDecimal(ds.Tables[0].Rows[i]["OrderPrice"]);
-                        orderMaster.PricePaid = Convert.ToDecimal(ds.Tables[0].Rows[i]["PricePaid"]);
-                        orderMaster.StoreName  = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        orderMaster.StoreCode = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreCode"]);
-                        objorderMaster.Add(orderMaster);
+                        CustomOrderMaster customOrderMaster = new CustomOrderMaster();
+                        customOrderMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
+                        customOrderMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
+                        customOrderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
+                        customOrderMaster.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        customOrderMaster.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        customOrderMaster.Discount = Convert.ToInt32(ds.Tables[0].Rows[i]["Discount"]);
+                        int orderMasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
+                        customOrderMaster.OrderItems = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("OrderMasterID")).
+                        Equals(orderMasterId)).Select(x => new OrderItem()
+                        {
+                            OrderItemID= Convert.ToInt32(x.Field<int>("OrderItemID")),
+                            OrderMasterID = Convert.ToInt32(x.Field<int>("OrderMasterID")),
+                            InvoiceNo = Convert.ToString(x.Field<string>("InvoiceNo")),
+                            Size = Convert.ToInt32(x.Field<int>("Size")),
+                            ItemPrice = Convert.ToInt32(x.Field<decimal>("ItemPrice")),
+                            PricePaid = Convert.ToInt32(x.Field<decimal>("PricePaid")),
+                            Discount = Convert.ToInt32(x.Field<decimal>("Discount")),
+                            RequireSize = Convert.ToInt32(x.Field<int>("RequireSize"))
+                           
+                        }).ToList();
+                        customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
+                        customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
+                        customOrderMaster.PricePaid= customOrderMaster.OrderItems.Sum(item => item.PricePaid);
+                        objorderMaster.Add(customOrderMaster);
                     }
+                    
                 }
             }
             catch (Exception ex)
