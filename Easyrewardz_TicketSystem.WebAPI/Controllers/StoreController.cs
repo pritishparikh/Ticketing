@@ -53,7 +53,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objstoreList = _newStore.getStoreDetailbyNameAndPincode(new StoreService(_connectioSting), SearchText);
                 StatusCode =
                 objstoreList.Count == 0 ?
-                     (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.Success;
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
