@@ -133,8 +133,7 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
             
                 if (ds != null && ds.Tables[0] != null)
-                {
-                    
+                {              
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CustomOrderMaster customOrderMaster = new CustomOrderMaster();
@@ -155,8 +154,7 @@ namespace Easyrewardz_TicketSystem.Services
                             ItemPrice = Convert.ToInt32(x.Field<decimal>("ItemPrice")),
                             PricePaid = Convert.ToInt32(x.Field<decimal>("PricePaid")),
                             Discount = Convert.ToInt32(x.Field<decimal>("Discount")),
-                            RequireSize = Convert.ToInt32(x.Field<int>("RequireSize"))
-                           
+                            RequireSize = Convert.ToInt32(x.Field<int>("RequireSize"))                       
                         }).ToList();
                         customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                         customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);

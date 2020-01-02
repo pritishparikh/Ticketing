@@ -17,5 +17,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string StoreAddress { get; set; }
         public decimal Discount { get; set; }
         public List<OrderItem> OrderItems  { get; set; }
+
     }
 }

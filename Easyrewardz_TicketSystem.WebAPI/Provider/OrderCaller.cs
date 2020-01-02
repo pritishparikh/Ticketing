@@ -51,6 +51,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _orderRepository = _orderMaster;
             return _orderRepository.getOrderListwithItemDetail(OrderNumber, TenantID);
+
         }
         #endregion
 
