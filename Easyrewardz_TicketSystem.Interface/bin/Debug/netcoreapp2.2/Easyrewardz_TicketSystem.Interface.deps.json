@@ -16,6 +16,9 @@
         }
       },
       "Easyrewardz_TicketSystem.CustomModel/1.0.0": {
+        "dependencies": {
+          "Easyrewardz_TicketSystem.Model": "1.0.0"
+        },
         "runtime": {
           "Easyrewardz_TicketSystem.CustomModel.dll": {}
         }

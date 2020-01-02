@@ -50,17 +50,19 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string ticketSource { get; set; }
         public int claimID { get; set; }
+        public string ticketTitle { get; set; }
 
 
         public int itemID { get; set; }
+        public int invoiceSubOrderNo { get; set; }
         public string assignedTo { get; set; }
         public bool didVisitStore { get; set; }
         public string purchaseStoreCodeAddress { get; set; }
         public string SLAstatus { get; set; }
         public bool wantToVisitStore { get; set; }
         public bool wantToVisitStoreCodeAddress { get; set; }
-        public string withClaim { get; set; }
-        public string withTask { get; set; }
+        public bool withClaim { get; set; } //boolean if claim exist or not
+        public bool withTask { get; set; }//boolean if task exist or not
         public string claimStatus { get; set; }
         public string taskStatus { get; set; }
         public string claimCategory { get; set; }
@@ -81,11 +83,14 @@ namespace Easyrewardz_TicketSystem.Model
         public string subCategory { get; set; }
         public string IssueType { get; set; }
         public string Assignee { get; set; }
+        public string Priority { get; set; }
         public DateTime CreatedOn { get; set; }
 
         public string creationDetails { get; set; }
 
-        public TicketStatus ticketStatusCount { get; set; }
+        public List<string> ticketStatusCount { get; set; }
+
+
         //public string createdBy { get; set; }
         //public string updatedBy { get; set; }
         //public string assignedTo { get; set; }
@@ -99,17 +104,6 @@ namespace Easyrewardz_TicketSystem.Model
 
     }
 
-    public class TicketStatus
-    {
-        public double ticketEscalated { get; set; }
-        public double ticketNew { get; set; }
-        public double ticketOpen { get; set; }
-        public double ticketResolved { get; set; }
-        public double ticketReassigned { get; set; }
-        public double ticketClosed { get; set; }
-        public double AllCount { get; set; }
 
-
-    }
 }
 

@@ -92,6 +92,7 @@ namespace Easyrewardz_TicketSystem.WebAPI
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");
             app.UseAuthentication();
+            app.UseForwardedHeaders();
             //         app.UseCors(
             //    options => options.WithOrigins("*").AllowAnyMethod()
             //);
