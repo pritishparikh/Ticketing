@@ -198,8 +198,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [Route("Logout")]
         [HttpPost]
-        public void Logout()
+        public ResponseModel Logout()
         {
+            ResponseModel resp = new ResponseModel();
+
             string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
             _token = SecurityService.DecryptStringAES(_token);
 
@@ -211,6 +213,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             securityCaller _newSecurityCaller = new securityCaller();
             _newSecurityCaller.Logout(new SecurityService(_connectioSting), _token);
+
+            resp.Status = true;
+            resp.StatusCode = (int)EnumMaster.StatusCode.Success;
+            resp.ResponseData = null ;
+            resp.Message = "Logout Successfully!";
+
+            return resp;
         }
 
         #endregion

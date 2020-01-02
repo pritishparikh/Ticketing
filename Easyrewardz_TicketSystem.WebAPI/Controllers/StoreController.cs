@@ -40,7 +40,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("searchStoreDetail")]
-        public ResponseModel searchStoreDetail(string Storename, string Storecode, int Pincode)
+        public ResponseModel searchStoreDetail(string SearchText)
         {
             List<StoreMaster> objstoreList = new List<StoreMaster>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -50,10 +50,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 StoreCaller _newStore = new StoreCaller();
 
-                objstoreList = _newStore.getStoreDetailbyNameAndPincode(new StoreService(_connectioSting), Storename, Storecode, Pincode);
+                objstoreList = _newStore.getStoreDetailbyNameAndPincode(new StoreService(_connectioSting), SearchText);
                 StatusCode =
                 objstoreList.Count == 0 ?
-                     (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.Success;
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;

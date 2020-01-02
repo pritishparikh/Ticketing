@@ -17,7 +17,7 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
         #endregion
-        public List<StoreMaster> getStoreDetailByStorecodenPincode(string Storename, string Storecode, int Pincode)
+        public List<StoreMaster> getStoreDetailByStorecodenPincode(string searchText)
         {
             List<StoreMaster> storeMaster = new List<StoreMaster>();
             MySqlCommand cmd = new MySqlCommand();
@@ -26,10 +26,8 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("", conn);
-                cmd1.Parameters.AddWithValue("@objEmailId", Storename);
-                cmd1.Parameters.AddWithValue("@objCustomerPhoneNumber", Storecode);
-                cmd1.Parameters.AddWithValue("@objCustomerPhoneNumber", Pincode);
+                MySqlCommand cmd1 = new MySqlCommand("SP_getStoreSDetialwithStorenamenPincode", conn);
+                cmd1.Parameters.AddWithValue("@searchText", searchText);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
                 da.SelectCommand = cmd1;
@@ -39,11 +37,12 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         StoreMaster store = new StoreMaster();
-                        store.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["ToString"]);
+                        store.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
                         store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        store.PincodeID = Convert.ToInt32(ds.Tables[0].Rows[i]["PincodeID"]);
-
-
+                        store.Pincode = Convert.ToString(ds.Tables[0].Rows[i]["Pincode"]);
+                        store.StoreEmailID = Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
+                        store.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
                         storeMaster.Add(store);
                     }
                 }

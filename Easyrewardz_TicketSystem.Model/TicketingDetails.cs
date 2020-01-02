@@ -19,7 +19,12 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Ticket Title
         /// </summary>
-        public string TikcketTitle { get; set; }
+        //public string TikcketTitle { get; set; }
+
+        /// <summary>
+        /// Ticket Title
+        /// </summary>
+        public string TicketTitle { get; set; }
 
         /// <summary>
         /// Ticket Description
