@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class MasterController : ControllerBase
     {
         #region variable declaration
@@ -42,7 +42,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetChannelOfPurchaseList")]
-        [AllowAnonymous]
         public ResponseModel GetChannelOfPurchaseList()
         {
             List<ChannelOfPurchase> objChannelPuerchaseList = new List<ChannelOfPurchase>();
@@ -88,7 +87,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getDepartmentList")]
-        [AllowAnonymous]
         public ResponseModel getDepartmentList()
         {
 
@@ -136,7 +134,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getFunctionNameByDepartmentId")]
-        [AllowAnonymous]
         public ResponseModel getFunctionNameByDepartmentId(int DepartmentId)
         {
             List<FuncationMaster> objFunctionList = new List<FuncationMaster>();
@@ -179,7 +176,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getPaymentMode")]
-        [AllowAnonymous]
         public ResponseModel getPaymentMode()
         {
             List<PaymentMode> paymentModes = new List<PaymentMode>();
