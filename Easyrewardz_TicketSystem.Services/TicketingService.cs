@@ -58,16 +58,16 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-        public int addTicket(TicketingDetails ticketingDetails)
+        public int addTicket(TicketingDetails ticketingDetails,int TenantId)
         {
             MySqlCommand cmd = new MySqlCommand();
-            int i = 0;
+            int ticketID = 0;
             try
             {
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createTicket", conn);
-                cmd1.Parameters.AddWithValue("@TenantID", ticketingDetails.TenantID);
+                cmd1.Parameters.AddWithValue("@TenantID", TenantId);
                 cmd1.Parameters.AddWithValue("@TikcketTitle", ticketingDetails.TicketTitle);
                 cmd1.Parameters.AddWithValue("@TicketDescription", ticketingDetails.Ticketdescription);
                 cmd1.Parameters.AddWithValue("@TicketSourceID", ticketingDetails.TicketSourceID);
@@ -79,6 +79,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@OrderMasterID", ticketingDetails.OrderMasterID);
                 cmd1.Parameters.AddWithValue("@IssueTypeID", ticketingDetails.IssueTypeID);
                 cmd1.Parameters.AddWithValue("@ChannelOfPurchaseID", ticketingDetails.ChannelOfPurchaseID);
+                //need to change as per TicketActionType ID[QB / ETA]
                 cmd1.Parameters.AddWithValue("@AssignedID", ticketingDetails.AssignedID);
                 cmd1.Parameters.AddWithValue("@TicketActionID", ticketingDetails.TicketActionID);
                 cmd1.Parameters.AddWithValue("@IsInstantEscalateToHighLevel", ticketingDetails.IsInstantEscalateToHighLevel);
@@ -87,11 +88,62 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@IsAlreadyVisitedStore", ticketingDetails.IsAlreadyVisitedStore);
                 cmd1.Parameters.AddWithValue("@IsWantToAttachOrder", ticketingDetails.IsWantToAttachOrder);
                 cmd1.Parameters.AddWithValue("@TicketTemplateID", ticketingDetails.TicketTemplateID);
+                cmd1.Parameters.AddWithValue("@OrderItemID", ticketingDetails.OrderItemID);
+                cmd1.Parameters.AddWithValue("@StoreID", ticketingDetails.StoreID);
                 cmd1.Parameters.AddWithValue("@IsActive", ticketingDetails.IsActive);
                 cmd1.Parameters.AddWithValue("@CreatedBy", ticketingDetails.CreatedBy);
+                cmd1.Parameters.AddWithValue("@Notes", ticketingDetails.Ticketnotes);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                i = Convert.ToInt32(cmd1.ExecuteScalar());
-                conn.Close();
+                ticketID = Convert.ToInt32(cmd1.ExecuteScalar());
+
+                if (ticketingDetails.taskMasters.Count > 0)
+                {
+                    for (int j = 0; j < ticketingDetails.taskMasters.Count; j++)
+                    {
+                        int taskId = 0;
+                        try
+                        {
+                            //conn.Open();
+                            //cmd.Connection = conn;
+                            MySqlCommand cmdtask = new MySqlCommand("SP_createTask", conn);
+                            cmdtask.Connection = conn;
+                            cmdtask.Parameters.AddWithValue("@TicketID", ticketID);
+                            cmdtask.Parameters.AddWithValue("@TaskTitle", ticketingDetails.taskMasters[j].TaskTitle);
+                            cmdtask.Parameters.AddWithValue("@TaskDescription", ticketingDetails.taskMasters[j].TaskDescription);
+                            cmdtask.Parameters.AddWithValue("@DepartmentId", ticketingDetails.taskMasters[j].DepartmentId);
+                            cmdtask.Parameters.AddWithValue("@FunctionID", ticketingDetails.taskMasters[j].FunctionID);
+                            cmdtask.Parameters.AddWithValue("@AssignToID", ticketingDetails.taskMasters[j].AssignToID);
+                            cmdtask.Parameters.AddWithValue("@PriorityID", ticketingDetails.taskMasters[j].PriorityID);
+                            cmdtask.CommandType = CommandType.StoredProcedure;
+                            taskId = Convert.ToInt32(cmdtask.ExecuteScalar());
+                            //conn.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+
+                    }
+                }
+
+                int a = 0;
+                //conn.Open();
+                //cmd.Connection = conn;
+                MySqlCommand cmdMail = new MySqlCommand("SP_SendTicketingEmail", conn);
+                cmdMail.Parameters.AddWithValue("@Tenant_ID", ticketingDetails.TenantID);
+                cmdMail.Parameters.AddWithValue("@Ticket_ID", ticketID);
+                cmdMail.Parameters.AddWithValue("@TikcketMail_Subject", ticketingDetails.ticketingMailerQues[0].TikcketMailSubject);
+                cmdMail.Parameters.AddWithValue("@TicketMail_Body", ticketingDetails.ticketingMailerQues[0].TicketMailBody);
+                cmdMail.Parameters.AddWithValue("@To_Email", ticketingDetails.ticketingMailerQues[0].ToEmail);
+                cmdMail.Parameters.AddWithValue("@User_CC", ticketingDetails.ticketingMailerQues[0].UserCC);
+                cmdMail.Parameters.AddWithValue("@User_BCC", ticketingDetails.ticketingMailerQues[0].UserBCC);
+                cmdMail.Parameters.AddWithValue("@Ticket_Source", ticketingDetails.ticketingMailerQues[0].TicketSource);
+                cmdMail.Parameters.AddWithValue("@Alert_ID", ticketingDetails.ticketingMailerQues[0].AlertID);
+                cmdMail.Parameters.AddWithValue("@Is_Sent", ticketingDetails.ticketingMailerQues[0].IsSent);
+                cmdMail.Parameters.AddWithValue("@Priority_ID", ticketingDetails.ticketingMailerQues[0].PriorityID);
+                cmdMail.Parameters.AddWithValue("@Created_By", ticketingDetails.ticketingMailerQues[0].CreatedBy);
+                cmdMail.CommandType = CommandType.StoredProcedure;
+                a = Convert.ToInt32(cmdMail.ExecuteScalar());
 
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
@@ -106,7 +158,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return i;
+            return ticketID;
         }
 
         /// <summary>

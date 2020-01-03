@@ -14,7 +14,8 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<TicketingDetails> GetTicketList(string TikcketTitle);
 
-        int addTicket(TicketingDetails ticketingDetails);
+
+        int addTicket(TicketingDetails ticketingDetails, int TenantId);
 
         List<CustomDraftDetails> GetDraft(int UserID);
 
