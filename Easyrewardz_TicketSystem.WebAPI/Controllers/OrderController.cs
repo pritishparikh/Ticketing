@@ -132,7 +132,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("getOrderListWithItemDetails")]
         [AllowAnonymous]
-        public ResponseModel getOrderListWithItemDetails(string OrderNumber,int TenantID)
+        public ResponseModel getOrderListWithItemDetails(string OrderNumber)
         {
             List <CustomOrderMaster> _objorderMaster = new List<CustomOrderMaster>();
             OrderCaller _ordercaller = new OrderCaller();
