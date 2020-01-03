@@ -108,6 +108,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 TicketingCaller _newTicket = new TicketingCaller();
 
+                ticketingDetails.CreatedBy = authenticate.UserMasterID; ///Created  By from the token
                 int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId);
                 StatusCode =
                 result == 0 ?
@@ -151,8 +152,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-
-
                 objDraftDetails = _TicketCaller.GetDraft(new TicketingService(_connectioSting), UserID, authenticate.TenantId);
                 StatusCode =
                 objDraftDetails.Count == 0 ?
@@ -195,7 +194,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 TicketingCaller _TicketCaller = new TicketingCaller();
 
-                objSearchagent = _TicketCaller.SearchAgent(new TicketingService(_connectioSting), FirstName, LastName, Email, DesignationID);
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                objSearchagent = _TicketCaller.SearchAgent(new TicketingService(_connectioSting), FirstName, LastName, Email, DesignationID, authenticate.TenantId);
                 StatusCode =
                 objSearchagent.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -224,7 +227,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("listSavedSearch")]
-        public ResponseModel listSavedSearch(int UserID)
+        public ResponseModel listSavedSearch()
         {
             List<UserTicketSearchMaster> objSavedSearch = new List<UserTicketSearchMaster>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -233,6 +236,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
                 TicketingCaller _TicketCaller = new TicketingCaller();
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                int UserID = authenticate.UserMasterID;
 
                 objSavedSearch = _TicketCaller.ListSavedSearch(new TicketingService(_connectioSting), UserID);
                 StatusCode =
@@ -273,6 +281,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 TicketingCaller _TicketCaller = new TicketingCaller();
 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
                 objSavedSearchbyID = _TicketCaller.SavedSearchByID(new TicketingService(_connectioSting), SearchParamID);
                 StatusCode =
                objSavedSearchbyID == null ?
@@ -304,8 +316,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("deletesavedsearch")]
-
-        public ResponseModel deletesavedsearch(int SearchParamID, int UserID)
+        public ResponseModel deletesavedsearch(int SearchParamID)
         {
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -314,6 +325,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 TicketingCaller _TicketCaller = new TicketingCaller();
 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                int UserID = authenticate.UserMasterID;
+                
                 int result = _TicketCaller.DeleteSavedSearch(new TicketingService(_connectioSting), SearchParamID, UserID);
                 StatusCode =
                 result == 0 ?
@@ -348,7 +364,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("savesearch")]
 
-        public ResponseModel savesearch(int UserID, string SearchSaveName, string parameter)
+        public ResponseModel savesearch(string SearchSaveName, string parameter)
         {
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -356,6 +372,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
                 TicketingCaller _TicketCaller = new TicketingCaller();
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                int UserID = authenticate.UserMasterID;
 
                 int result = _TicketCaller.SaveSearch(new TicketingService(_connectioSting), UserID, SearchSaveName, parameter);
                 StatusCode =

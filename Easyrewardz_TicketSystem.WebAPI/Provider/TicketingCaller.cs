@@ -63,10 +63,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="DesignationID"></param>
         /// <param name=""></param>
         /// <returns></returns>
-        public List<CustomSearchTicketAgent> SearchAgent(ITicketing _ticket, string FirstName, string LastName, string Email, int DesignationID)
+        public List<CustomSearchTicketAgent> SearchAgent(ITicketing _ticket, string FirstName, string LastName, string Email, int DesignationID,int TenantId)
         {
             _ticketList = _ticket;
-            return _ticketList.SearchAgent(FirstName, LastName, Email, DesignationID);
+            return _ticketList.SearchAgent(FirstName, LastName, Email, DesignationID, TenantId);
 
         }
         public List<UserTicketSearchMaster> ListSavedSearch(ITicketing _ticket, int UserID)
