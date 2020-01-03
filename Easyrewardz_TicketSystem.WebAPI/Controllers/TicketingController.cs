@@ -115,7 +115,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 TicketingCaller _newTicket = new TicketingCaller();
 
                 ticketingDetails.CreatedBy = authenticate.UserMasterID; ///Created  By from the token
-                int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId);
+                int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, _ticketAttachmentFolderName, fileName);
                 if (result > 0)
                 {
                     foreach (var file in files)
