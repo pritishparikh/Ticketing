@@ -44,7 +44,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getcustomerdetailsbyid")]
-        [AllowAnonymous]
         public ResponseModel getcustomerdetailsbyid(int CustomerID)
         {
 
@@ -104,7 +103,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("searchCustomer")]
-        [AllowAnonymous]
         public ResponseModel searchCustomer(string SearchText)
         {
 
@@ -145,7 +143,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("createCustomer")]
-        //[AllowAnonymous]
         public ResponseModel createCustomer([FromBody]CustomerMaster customerMaster)
         {
             List<CustomerMaster> _objcustomerMaster = new List<CustomerMaster>();
@@ -188,7 +185,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("updateCustomer")]
-        //[AllowAnonymous]
         public ResponseModel updateCustomer([FromBody]CustomerMaster customerMaster)
         {
             Customercaller _customercaller = new Customercaller();
@@ -232,7 +228,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns>Message</returns>
         [HttpPost]
         [Route("validateCustomerExist")]
-        //[AllowAnonymous]
         public ResponseModel validateCustomerExist(string Cust_EmailId, string Cust_PhoneNumber)
         {
             Customercaller _customercaller = new Customercaller();
