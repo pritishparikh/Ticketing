@@ -154,7 +154,9 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Store id foe Comma seperate
         /// </summary>
-        public int storeIds { get; set; }
+        public string StoreID { get; set; }
+
+        public string OrderItemID { get; set; }
 
         /// <summary>
         /// Customer Details(Not Neede for now)
@@ -165,13 +167,18 @@ namespace Easyrewardz_TicketSystem.Model
         /// Order Details
         /// </summary>
 
-        List<OrderMaster> orderMasters { get; set; }
+        public List<OrderMaster> orderMasters { get; set; }
 
 
         /// <summary>
         /// Task Details
         /// </summary>
-        List<TaskMaster> taskMasters { get; set; }
+        public List<TaskMaster> taskMasters { get; set; }
+
+        /// <summary>
+        /// Ticketing Mail 
+        /// </summary>
+        public List<TicketingMailerQue> ticketingMailerQues { get; set; }
 
     }
 }
