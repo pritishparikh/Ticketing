@@ -23,7 +23,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///  <param name="SubCategory"></param>
         ///   <param name="type"></param>
         /// <returns></returns>
-        public List<KnowlegeBaseMaster> SearchByCategory(int type_ID, int Category_ID, int SubCategory_ID)
+        public List<KnowlegeBaseMaster> SearchByCategory(int type_ID, int Category_ID, int SubCategory_ID,int TenantId)
         {
             DataSet ds = new DataSet();
             List<KnowlegeBaseMaster> listknowledge = new List<KnowlegeBaseMaster>();
@@ -35,6 +35,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@type_ID", type_ID);
                 cmd.Parameters.AddWithValue("@Category_ID", Category_ID);
                 cmd.Parameters.AddWithValue("@SubCategory_ID", SubCategory_ID);
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;

@@ -15,10 +15,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <summary>
         /// Get Customer Detail by id
         /// </summary>
-        public CustomerMaster getCustomerDetailsById(ICustomer customer, int CustomerID)
+        public CustomerMaster getCustomerDetailsById(ICustomer customer, int CustomerID,int TenantId)
         {
             _customerRepository = customer;
-            return _customerRepository.getCustomerbyId(CustomerID);
+            return _customerRepository.getCustomerbyId(CustomerID, TenantId);
         }
 
         /// <summary>
@@ -39,10 +39,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="customer"></param>
         /// <param name="customerMaster"></param>
         /// <returns></returns>
-        public int addCustomer(ICustomer customer, CustomerMaster customerMaster)
+        public int addCustomer(ICustomer customer, CustomerMaster customerMaster,int TenantId)
         {
             _customerRepository = customer;
-            return _customerRepository.addCustomerDetails(customerMaster);
+            return _customerRepository.addCustomerDetails(customerMaster, TenantId);
         }
 
         /// <summary>
@@ -51,10 +51,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="customer"></param>
         /// <param name="customerMaster"></param>
         /// <returns></returns>
-        public int updateCustomer(ICustomer customer, CustomerMaster customerMaster)
+        public int updateCustomer(ICustomer customer, CustomerMaster customerMaster,int  TenantId)
         {
             _customerRepository = customer;
-            return _customerRepository.updateCustomerDetails(customerMaster);
+            return _customerRepository.updateCustomerDetails(customerMaster, TenantId);
         }
 
         /// <summary>

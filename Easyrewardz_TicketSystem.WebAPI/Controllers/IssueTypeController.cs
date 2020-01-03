@@ -22,6 +22,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly string _radisCacheServerAddress;
         #endregion
 
         #region Cunstructor
@@ -29,6 +30,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
 
@@ -41,7 +43,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("GetIssueTypeList")]
         [AllowAnonymous]
-        public ResponseModel GetIssueTypeList(int TenantID,int SubCategoryID)
+        public ResponseModel GetIssueTypeList(int SubCategoryID)
         {
             List<IssueType> objIssueTypeList = new List<IssueType>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -49,9 +51,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+
                 MasterCaller _newMasterBrand = new MasterCaller();
 
-                objIssueTypeList = _newMasterBrand.GetIssueTypeList(new IssueTypeServices(_connectioSting), TenantID, SubCategoryID);
+                objIssueTypeList = _newMasterBrand.GetIssueTypeList(new IssueTypeServices(_connectioSting), authenticate.TenantId , SubCategoryID);
 
                 StatusCode =
                 objIssueTypeList.Count == 0 ?

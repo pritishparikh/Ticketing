@@ -20,10 +20,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name=""></param>
         /// <param name=""></param>
         /// <returns></returns>
-        public List<KnowlegeBaseMaster> SearchByCategory(IKnowledge Knowledge, int type_ID, int Category_ID, int SubCategory_ID)
+        public List<KnowlegeBaseMaster> SearchByCategory(IKnowledge Knowledge, int type_ID, int Category_ID, int SubCategory_ID,int TenantId)
         {
             _KnowledgeRepository = Knowledge;
-            return _KnowledgeRepository.SearchByCategory(type_ID, Category_ID, SubCategory_ID);
+            return _KnowledgeRepository.SearchByCategory(type_ID, Category_ID, SubCategory_ID, TenantId);
         }
     }
 }

@@ -20,6 +20,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Variable Declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly string _radisCacheServerAddress;
         #endregion
 
         #region Constructor
@@ -32,6 +33,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
 
         #endregion
@@ -46,7 +48,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("GetDesignationList")]
         [AllowAnonymous]
-        public ResponseModel GetDesignationList(int TenantID)
+        public ResponseModel GetDesignationList()
         {
             List<DesignationMaster> designationMasters = new List<DesignationMaster>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -54,9 +56,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
                 DesignationCaller designationCaller = new DesignationCaller();
-
-                designationMasters = designationCaller.GetDesignations(new DesignationService(_connectioSting), TenantID);
+                designationMasters = designationCaller.GetDesignations(new DesignationService(_connectioSting), authenticate.TenantId);
 
                 StatusCode =
                 designationMasters.Count == 0 ?

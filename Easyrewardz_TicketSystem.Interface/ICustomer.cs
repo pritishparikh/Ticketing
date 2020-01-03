@@ -11,13 +11,18 @@ namespace Easyrewardz_TicketSystem.Interface
     /// </summary>
     public interface ICustomer
     {
-        CustomerMaster getCustomerbyId(int CustomerID);
+        
+        CustomerMaster getCustomerbyId(int CustomerID, int TenantId);
 
         List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText);
 
-        int addCustomerDetails(CustomerMaster customerMaster);
+      
+        int addCustomerDetails(CustomerMaster customerMaster, int TenantId);
 
-        int updateCustomerDetails(CustomerMaster customerMaster);
+        int updateCustomerDetails(CustomerMaster customerMaster, int TenantId);
+
+       
+
 
         /// <summary>
         /// validate Customer Exist

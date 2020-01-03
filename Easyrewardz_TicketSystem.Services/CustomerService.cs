@@ -24,7 +24,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="CustomerID"></param>  
         /// <returns></returns>
-        public CustomerMaster getCustomerbyId(int CustomerID)
+        public CustomerMaster getCustomerbyId(int CustomerID,int TenantId)
         {
             DataSet ds = new DataSet();
             CustomerMaster customerMaster = new CustomerMaster();
@@ -35,6 +35,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getCustomerDetailsById", conn);
                 cmd1.Parameters.AddWithValue("@Customer_ID", CustomerID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
@@ -123,7 +124,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="customerMaster"></param>
         /// <returns></returns>
-        public int addCustomerDetails(CustomerMaster customerMaster)
+        public int addCustomerDetails(CustomerMaster customerMaster,int TenantId)
         {
 
             MySqlCommand cmd = new MySqlCommand();
@@ -133,7 +134,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createCustomer", conn);
-                cmd1.Parameters.AddWithValue("@TenantID", customerMaster.TenantID);
+                cmd1.Parameters.AddWithValue("@TenantID", TenantId);
                 cmd1.Parameters.AddWithValue("@CustomerName", customerMaster.CustomerName);
                 cmd1.Parameters.AddWithValue("@CreatedBy", customerMaster.CreatedBy);
                 cmd1.Parameters.AddWithValue("@CustomerPhoneNumber", customerMaster.CustomerPhoneNumber);
@@ -169,7 +170,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="customerMaster"></param>
         /// <returns></returns>
-        public int updateCustomerDetails(CustomerMaster customerMaster)
+        public int updateCustomerDetails(CustomerMaster customerMaster,int TenantId)
         {
 
             MySqlCommand cmd = new MySqlCommand();
@@ -180,7 +181,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_updateCustomer", conn);
                 cmd1.Parameters.AddWithValue("@objCustomerID", customerMaster.CustomerID);
-                cmd1.Parameters.AddWithValue("@TenantID", customerMaster.TenantID);
+                cmd1.Parameters.AddWithValue("@TenantID", TenantId);
                 cmd1.Parameters.AddWithValue("@CustomerName", customerMaster.CustomerName);
                 cmd1.Parameters.AddWithValue("@CustomerPhoneNumber", customerMaster.CustomerPhoneNumber);
                 cmd1.Parameters.AddWithValue("@CustomerEmailId", customerMaster.CustomerEmailId);

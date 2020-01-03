@@ -24,6 +24,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly string _radisCacheServerAddress;
         #endregion
 
         #region Cunstructor
@@ -31,6 +32,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
       
@@ -55,7 +57,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 if (CustomerID > 0)
                 {
-                    _objcustomerMaster = _customercaller.getCustomerDetailsById(new CustomerService(_connectioSting), CustomerID);
+
+                    string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                    Authenticate authenticate = new Authenticate();
+                    authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                    _objcustomerMaster = _customercaller.getCustomerDetailsById(new CustomerService(_connectioSting), CustomerID, authenticate.TenantId);
                     StatusCode =
                        _objcustomerMaster != null ?
                                (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
@@ -148,7 +155,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                int result = _customercaller.addCustomer(new CustomerService(_connectioSting), customerMaster);
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                int result = _customercaller.addCustomer(new CustomerService(_connectioSting), customerMaster, authenticate.TenantId);
                 StatusCode =
                 result == 0?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -186,7 +197,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                int result = _customercaller.updateCustomer(new CustomerService(_connectioSting), customerMaster);
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                int result = _customercaller.updateCustomer(new CustomerService(_connectioSting), customerMaster, authenticate.TenantId);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -218,7 +233,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("validateCustomerExist")]
         //[AllowAnonymous]
-        public ResponseModel validateCustomerExist(string Cust_EmailId, string Cust_PhoneNumber, int TenantId)
+        public ResponseModel validateCustomerExist(string Cust_EmailId, string Cust_PhoneNumber)
         {
             Customercaller _customercaller = new Customercaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -226,7 +241,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string result = _customercaller.validateCustomerExist(new CustomerService(_connectioSting), Cust_EmailId, Cust_PhoneNumber, TenantId);
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                string result = _customercaller.validateCustomerExist(new CustomerService(_connectioSting), Cust_EmailId, Cust_PhoneNumber, authenticate.TenantId);
                 StatusCode =
                 string.IsNullOrEmpty(result) ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
