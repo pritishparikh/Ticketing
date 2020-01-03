@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Easyrewardz_TicketSystem.CustomModel;
+using System.IO;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -59,7 +60,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-        public int addTicket(TicketingDetails ticketingDetails,int TenantId)
+        public int addTicket(TicketingDetails ticketingDetails, int TenantId, string FolderPath, string fileName)
         {
             MySqlCommand cmd = new MySqlCommand();
             int ticketID = 0;
@@ -127,6 +128,29 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
+                //Attchment 
+                try
+                {
+                    int i = 0;
+                    if (!Directory.Exists(FolderPath))
+                    {
+                        // Try to create the directory.
+                        DirectoryInfo di = Directory.CreateDirectory(FolderPath);
+                    }
+
+
+                    MySqlCommand cmdattachment = new MySqlCommand("SP_SaveAttachment", conn);
+                    cmdattachment.Parameters.AddWithValue("@fileName", fileName);
+                    cmdattachment.Parameters.AddWithValue("@Ticket_ID", ticketID);
+                    cmdattachment.CommandType = CommandType.StoredProcedure;
+                    i = cmdattachment.ExecuteNonQuery();
+
+
+                }
+                catch (IOException ioex)
+                {
+                    Console.WriteLine(ioex.Message);
+                }
                 int a = 0;
                 //conn.Open();
                 //cmd.Connection = conn;

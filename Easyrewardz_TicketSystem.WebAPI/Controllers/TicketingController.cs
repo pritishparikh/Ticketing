@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -25,6 +27,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         private IConfiguration configuration;
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
+        private readonly string _ticketAttachmentFolderName;
         #endregion
 
         #region Cunstructor
@@ -33,6 +36,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            _ticketAttachmentFolderName = configuration.GetValue<string>("TicketAttchment");
         }
         #endregion
 
@@ -92,6 +96,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             TicketingDetails ticketingDetails = new TicketingDetails();
             var files = Request.Form.Files;
+
+            string fileName = files[0].FileName.Replace(".", DateTime.Now.ToString("ddmmyyyyhhssfff") + ".");
             var Keys = Request.Form;
             ticketingDetails = JsonConvert.DeserializeObject<TicketingDetails>(Keys["ticketingDetails"]);
 
@@ -110,6 +116,28 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 ticketingDetails.CreatedBy = authenticate.UserMasterID; ///Created  By from the token
                 int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId);
+                if (result > 0)
+                {
+                    foreach (var file in files)
+                    {
+                        if (file.Length > 0)
+                        {
+                            using (var ms = new MemoryStream())
+                            {
+                                // file.CopyTo(ms);
+                                var fileBytes = ms.ToArray();
+                                FileStream docFile = new FileStream(_ticketAttachmentFolderName + "\\" + fileName ,FileMode.Create, FileAccess.Write);
+                                ms.WriteTo(docFile);
+                                docFile.Close();
+                                ms.Close();
+                                string s = Convert.ToBase64String(fileBytes);
+                                byte[] a = Convert.FromBase64String(s);
+
+                                // act on the Base64 data
+                            }
+                        }
+                    }
+                }
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
