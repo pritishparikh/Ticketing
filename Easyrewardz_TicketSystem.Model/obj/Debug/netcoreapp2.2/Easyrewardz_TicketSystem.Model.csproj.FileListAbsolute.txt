@@ -41,3 +41,12 @@ D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_Tic
 D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
 D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
 D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.csprojAssemblyReference.cache
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Model\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.deps.json
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Model\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Model\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.csproj.CoreCompileInputs.cache
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.AssemblyInfoInputs.cache
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.AssemblyInfo.cs
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.csprojAssemblyReference.cache

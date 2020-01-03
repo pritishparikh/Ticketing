@@ -55,21 +55,26 @@ namespace Easyrewardz_TicketSystem.Model
 
         public int itemID { get; set; }
         public int invoiceSubOrderNo { get; set; }
-        public string assignedTo { get; set; }
+        public int assignedTo { get; set; }
         public bool didVisitStore { get; set; }
-        public string purchaseStoreCodeAddress { get; set; }
+        public int purchaseStoreCodeAddress { get; set; }
         public string SLAstatus { get; set; }
         public bool wantToVisitStore { get; set; }
         public bool wantToVisitStoreCodeAddress { get; set; }
         public bool withClaim { get; set; } //boolean if claim exist or not
         public bool withTask { get; set; }//boolean if task exist or not
-        public string claimStatus { get; set; }
-        public string taskStatus { get; set; }
-        public string claimCategory { get; set; }
-        public string taskDept { get; set; }
-        public string claimSubcategory { get; set; }
+        public int claimStatus { get; set; }
+        public int taskStatus { get; set; }
+        public int claimCategory { get; set; }
+        public int taskDept { get; set; }
+        public int claimSubcategory { get; set; }
+        public int claimIssuetype { get; set; }
+        public int taskFunction { get; set; }
 
-
+        //public int _SLAstatusResponse { get; set; }
+        //public int _SLAstatusResponsetime { get; set; }
+        //public int _SLAstatusResolution { get; set; }
+        //public int _SLAstatusResoltiontime { get; set; }
 
 
     }

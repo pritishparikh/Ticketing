@@ -37,3 +37,15 @@ D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_Tic
 D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.CustomModel\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
 D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.CustomModel\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
 D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.csproj.CopyComplete
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.CustomModel\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.deps.json
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.CustomModel\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.CustomModel\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.CustomModel\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.CustomModel\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.csprojAssemblyReference.cache
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.csproj.CoreCompileInputs.cache
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.AssemblyInfoInputs.cache
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.AssemblyInfo.cs
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.csproj.CopyComplete
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
+D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.CustomModel\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb

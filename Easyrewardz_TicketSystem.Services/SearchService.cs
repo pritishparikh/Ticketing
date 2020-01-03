@@ -120,6 +120,36 @@ namespace Easyrewardz_TicketSystem.Services
             return objSearchResult;
         }
 
+        public string setCreationdetails(DataRow tkt )
+        {
+            string detail = string.Empty;
+            DateTime now = DateTime.Now;
+            List<string> creationddetailsLst = new List<string>();
+
+            string createdby = string.Empty; string createdago = string.Empty; string assignedto = string.Empty; string assignedago = string.Empty;
+            string updatedby = string.Empty; string updatedago = string.Empty;
+            string resptime = string.Empty; string responseoverdue = string.Empty; string resolnoverdue = string.Empty;
+
+            try
+            {
+                if(tkt!=null && tkt.ItemArray.Length > 0)
+                {
+                    for (int i = 0; i < tkt.ItemArray.Length; i++)
+                    {
+
+                    }
+                }
+              
+            }
+            catch (Exception)
+            {
+                detail = string.Empty;
+                throw;
+            }
+
+            return detail;
+
+        }
         
     }
 }
