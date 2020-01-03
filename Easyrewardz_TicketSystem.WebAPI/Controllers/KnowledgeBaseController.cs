@@ -16,6 +16,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class KnowledgeBaseController : ControllerBase
     {
         #region variable declaration
@@ -41,7 +42,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("searchbycategory")]
-        [AllowAnonymous]
         public ResponseModel searchbycategory(int Type_ID, int Category_ID, int SubCategor_ID)
         {
 

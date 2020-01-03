@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class IssueTypeController : ControllerBase
     {
         #region variable declaration
@@ -42,7 +42,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetIssueTypeList")]
-        [AllowAnonymous]
         public ResponseModel GetIssueTypeList(int SubCategoryID)
         {
             List<IssueType> objIssueTypeList = new List<IssueType>();
