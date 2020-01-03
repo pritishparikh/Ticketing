@@ -15,6 +15,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class DesignationController : ControllerBase
     {
         #region Variable Declaration
@@ -47,7 +48,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetDesignationList")]
-        [AllowAnonymous]
         public ResponseModel GetDesignationList()
         {
             List<DesignationMaster> designationMasters = new List<DesignationMaster>();
