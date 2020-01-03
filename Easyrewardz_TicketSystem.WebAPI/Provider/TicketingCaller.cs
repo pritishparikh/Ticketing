@@ -26,10 +26,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="_ticket">Interface</param>
         /// <param name="TikcketTitle">Title of the ticket</param>
         /// <returns></returns>
-        public List<TicketingDetails> GetAutoSuggestTicketList(ITicketing _ticket, string TikcketTitle)
+        public List<TicketingDetails> GetAutoSuggestTicketList(ITicketing _ticket, string TikcketTitle, int TenantId)
         {
             _ticketList = _ticket;
-            return _ticketList.GetTicketList(TikcketTitle);
+            return _ticketList.GetTicketList(TikcketTitle, TenantId);
         }
         /// <summary>
         /// 
@@ -48,10 +48,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="UserID"></param>
         /// <param name=""></param>
         /// <returns></returns>
-        public List<CustomDraftDetails> GetDraft(ITicketing _ticket, int UserID)
+        public List<CustomDraftDetails> GetDraft(ITicketing _ticket, int UserID, int TenantId)
         {
             _ticketList = _ticket;
-            return _ticketList.GetDraft(UserID);
+            return _ticketList.GetDraft(UserID, TenantId);
 
         }
         /// <summary>

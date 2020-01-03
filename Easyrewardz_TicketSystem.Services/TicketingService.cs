@@ -24,8 +24,9 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get Auto Suggest Ticket Title
         /// </summary>
         /// <param name="TikcketTitle"></param>
+        /// <param name="TenantId"></param>
         /// <returns></returns>
-        public List<TicketingDetails> GetTicketList(string TikcketTitle)
+        public List<TicketingDetails> GetTicketList(string TikcketTitle,int TenantId)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -36,7 +37,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getTitleSuggestions", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                //cmd1.Parameters.AddWithValue("@TikcketTitle", TikcketTitle);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -166,7 +167,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TikcketTitle"></param>
         /// <returns></returns>
-        public List<CustomDraftDetails> GetDraft(int UserID)
+        public List<CustomDraftDetails> GetDraft(int UserID,int TenantId)
         {
             DataSet ds = new DataSet();
             List<CustomDraftDetails> Draftlist = new List<CustomDraftDetails>();
@@ -178,6 +179,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
                 cmd.Parameters.AddWithValue("@TicketStatusID", (int)EnumMaster.TicketStatus.Draft);
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
