@@ -96,8 +96,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             TicketingDetails ticketingDetails = new TicketingDetails();
             var files = Request.Form.Files;
-
-            string fileName = files[0].FileName.Replace(".", DateTime.Now.ToString("ddmmyyyyhhssfff") + ".");
+            string fileName = "";
+            if (files.Count > 0)
+            {
+                for (int i = 0; i < files.Count; i++)
+                {
+                    fileName += files[i].FileName.Replace(".", DateTime.Now.ToString("ddmmyyyyhhssfff") + ".") + ",";
+                }
+            }
             var Keys = Request.Form;
             ticketingDetails = JsonConvert.DeserializeObject<TicketingDetails>(Keys["ticketingDetails"]);
 
@@ -118,22 +124,28 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, _ticketAttachmentFolderName, fileName);
                 if (result > 0)
                 {
-                    foreach (var file in files)
+                    if (files.Count > 0)
                     {
-                        if (file.Length > 0)
+                        for (int i = 0; i < files.Count; i++)
                         {
-                            using (var ms = new MemoryStream())
+                            foreach (var file in files)
                             {
-                                // file.CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                FileStream docFile = new FileStream(_ticketAttachmentFolderName + "\\" + fileName ,FileMode.Create, FileAccess.Write);
-                                ms.WriteTo(docFile);
-                                docFile.Close();
-                                ms.Close();
-                                string s = Convert.ToBase64String(fileBytes);
-                                byte[] a = Convert.FromBase64String(s);
+                                if (file.Length > 0)
+                                {
+                                    using (var ms = new MemoryStream())
+                                    {
+                                        // file.CopyTo(ms);
+                                        var fileBytes = ms.ToArray();
+                                        FileStream docFile = new FileStream(_ticketAttachmentFolderName + "\\" + fileName, FileMode.Create, FileAccess.Write);
+                                        ms.WriteTo(docFile);
+                                        docFile.Close();
+                                        ms.Close();
+                                        string s = Convert.ToBase64String(fileBytes);
+                                        byte[] a = Convert.FromBase64String(s);
 
-                                // act on the Base64 data
+                                        // act on the Base64 data
+                                    }
+                                }
                             }
                         }
                     }
