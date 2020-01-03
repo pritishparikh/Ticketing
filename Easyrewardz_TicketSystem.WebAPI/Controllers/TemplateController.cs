@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
+using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class TemplateController : ControllerBase
     {
         #region variable declaration
@@ -35,7 +37,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Custom Methods
         [HttpPost]
         [Route("getListOfTemplateForNote")]
-        [AllowAnonymous]
         public ResponseModel getListOfTemplateForNote(int IssueTypeID)
         {
 
@@ -80,7 +81,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("getTemplateContent")]
-        [AllowAnonymous]
         public ResponseModel getTemplateContent(int TemplateId)
         {
             Template _objTemplate = new Template();

@@ -11,11 +11,13 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Easyrewardz_TicketSystem.WebAPI.Filters;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class TaskController : ControllerBase
     {
         #region variable declaration
@@ -160,7 +162,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("deleteask")]
         public ResponseModel deletetask(int task_Id)
         {
-            //CustomTaskMasterDetails _objtaskMaster = new CustomTaskMasterDetails();
             TaskCaller _taskcaller = new TaskCaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;

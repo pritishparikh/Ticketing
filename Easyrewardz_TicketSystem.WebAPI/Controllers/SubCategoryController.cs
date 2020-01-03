@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class SubCategoryController : ControllerBase
     {
         #region variable declaration
@@ -42,8 +42,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetSubCategoryByCategoryID")]
-        [AllowAnonymous]
-
         public ResponseModel GetSubCategoryByCategoryID(int CategoryID)
         {
             List<SubCategory> objSubCategory = new List<SubCategory>();

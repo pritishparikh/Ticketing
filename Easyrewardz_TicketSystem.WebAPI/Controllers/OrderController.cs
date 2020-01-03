@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class OrderController : ControllerBase
     {
         #region variable declaration
@@ -42,7 +42,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getOrderByNumber")]
-        [AllowAnonymous]
         public ResponseModel getOrderByNumber(string OrderNumber)
         {
 
@@ -87,7 +86,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("createOrder")]
-        [AllowAnonymous]
         public ResponseModel createOrder([FromBody]OrderMaster orderMaster)
         {
             OrderCaller _ordercaller = new OrderCaller();
@@ -131,7 +129,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getOrderListWithItemDetails")]
-        [AllowAnonymous]
         public ResponseModel getOrderListWithItemDetails(string OrderNumber)
         {
             List <CustomOrderMaster> _objorderMaster = new List<CustomOrderMaster>();
