@@ -22,10 +22,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="order"></param>
         /// <param name="OrderNumber"></param>
         /// <returns></returns>
-        public OrderMaster getOrderDetailsByNumber(IOrder order, string OrderNumber)
+        public OrderMaster getOrderDetailsByNumber(IOrder order, string OrderNumber ,int TenantId)
         {
             _orderRepository = order;
-            return _orderRepository.getOrderbyNumber(OrderNumber);
+            return _orderRepository.getOrderbyNumber(OrderNumber, TenantId);
         }
 
         /// <summary>
@@ -34,10 +34,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="order"></param>
         /// <param name="orderMaster"></param>
         /// <returns></returns>
-        public int addOrder(IOrder order,OrderMaster orderMaster)
+        public int addOrder(IOrder order,OrderMaster orderMaster,int TenantId)
         {
             _orderRepository = order;
-            return _orderRepository.addOrderDetails(orderMaster);
+            return _orderRepository.addOrderDetails(orderMaster, TenantId);
         }
 
         /// <summary>

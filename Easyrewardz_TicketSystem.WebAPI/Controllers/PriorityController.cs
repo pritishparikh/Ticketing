@@ -22,6 +22,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly string _radisCacheServerAddress;
         #endregion
 
         #region Cunstructor
@@ -29,6 +30,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
 
@@ -41,7 +43,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("GetPriorityList")]
         [AllowAnonymous]
-        public ResponseModel GetPriorityList(int TenantID)
+        public ResponseModel GetPriorityList()
         {
             List<Priority> objPriority = new List<Priority>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -49,9 +51,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
                 MasterCaller _newMasterSubCat = new MasterCaller();
 
-                objPriority = _newMasterSubCat.GetPriorityList(new PriorityService(_connectioSting), TenantID);
+                objPriority = _newMasterSubCat.GetPriorityList(new PriorityService(_connectioSting), authenticate.TenantId);
 
                 StatusCode =
                 objPriority.Count == 0 ?

@@ -25,7 +25,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="OrderNumber"></param>
         /// <returns></returns>
-        public OrderMaster getOrderbyNumber(string OrderNumber)
+        public OrderMaster getOrderbyNumber(string OrderNumber,int TenantId)
         {
             OrderMaster orderMasters = new OrderMaster();
             MySqlCommand cmd = new MySqlCommand();
@@ -35,6 +35,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getOrderByNumber", conn);
                 cmd1.Parameters.AddWithValue("@objOrderNumber", OrderNumber);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter sd = new MySqlDataAdapter(cmd1);
                 DataTable dt = new DataTable();
@@ -65,7 +66,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="orderMaster"></param>
         /// <returns></returns>
-        public int addOrderDetails(OrderMaster orderMaster)
+        public int addOrderDetails(OrderMaster orderMaster,int TenantId)
         {
             MySqlCommand cmd = new MySqlCommand();
             int i = 0;
@@ -74,7 +75,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createOrder", conn);
-                cmd1.Parameters.AddWithValue("@TenantID", orderMaster.TenantID);
+                cmd1.Parameters.AddWithValue("@TenantID", TenantId);
                 cmd1.Parameters.AddWithValue("@ProductBarCode", orderMaster.ProductBarCode);
                 cmd1.Parameters.AddWithValue("@OrderNumber", orderMaster.OrderNumber);
                 cmd1.Parameters.AddWithValue("@BillID", orderMaster.BillID);

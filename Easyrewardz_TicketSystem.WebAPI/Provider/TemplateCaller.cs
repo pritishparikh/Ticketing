@@ -24,10 +24,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _templateRepository.getTemplateForNote(IssueTypeId, TenantID);
         }
 
-        public Template GetTemplateContent(ITemplate _template, int TemplateId)
+        public Template GetTemplateContent(ITemplate _template, int TemplateId, int TenantId)
         {
             _templateRepository = _template;
-            return _templateRepository.getTemplateContent(TemplateId);
+            return _templateRepository.getTemplateContent(TemplateId, TenantId);
         }
     }
 }

@@ -11,9 +11,11 @@ namespace Easyrewardz_TicketSystem.Interface
     /// </summary>
     public interface IOrder
     {
-        OrderMaster getOrderbyNumber(string OrderNumber);
 
-        int addOrderDetails(OrderMaster orderMaster);
+        OrderMaster getOrderbyNumber(string OrderNumber, int TenantId);
+
+        int addOrderDetails(OrderMaster orderMaster, int TenantId);
+      
 
         List<CustomOrderMaster> getOrderListwithItemDetail(string OrderNumber, int TenantID);
         

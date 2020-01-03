@@ -19,6 +19,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly string _radisCacheServerAddress;
         #endregion
 
         #region Cunstructor
@@ -26,6 +27,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
 
@@ -81,7 +83,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getStores")]
-        public ResponseModel getStores(string searchText, int tenantID)
+        public ResponseModel getStores(string searchText)
         {
             List<StoreMaster> storeMasters = new List<StoreMaster>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -89,9 +91,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
                 StoreCaller _newMasterBrand = new StoreCaller();
 
-                storeMasters = _newMasterBrand.getStores(new StoreService(_connectioSting), searchText, tenantID);
+                storeMasters = _newMasterBrand.getStores(new StoreService(_connectioSting), searchText, authenticate.TenantId );
 
                 StatusCode =
                 storeMasters.Count == 0 ?

@@ -63,7 +63,7 @@ namespace Easyrewardz_TicketSystem.Services
             return objtemplate;
         }
 
-        public Template getTemplateContent(int TemplateId)
+        public Template getTemplateContent(int TemplateId,int TenantId)
         {
 
             DataSet ds = new DataSet();
@@ -77,6 +77,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_getTemplateContent", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Template_ID", TemplateId);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);

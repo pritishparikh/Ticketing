@@ -22,6 +22,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly string _radisCacheServerAddress;
         #endregion 
 
         #region Custom Methods
@@ -29,6 +30,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion 
 

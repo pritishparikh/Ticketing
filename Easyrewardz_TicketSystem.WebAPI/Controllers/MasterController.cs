@@ -22,6 +22,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly string _radisCacheServerAddress;
         #endregion
 
         #region Cunstructor
@@ -29,6 +30,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
 
@@ -41,7 +43,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("GetChannelOfPurchaseList")]
         [AllowAnonymous]
-        public ResponseModel GetChannelOfPurchaseList(int TenantID)
+        public ResponseModel GetChannelOfPurchaseList()
         {
             List<ChannelOfPurchase> objChannelPuerchaseList = new List<ChannelOfPurchase>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -49,8 +51,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
                 MasterCaller _newMasterChannel = new MasterCaller();
-                objChannelPuerchaseList = _newMasterChannel.GetChannelOfPurchaseList(new MasterServices(_connectioSting), TenantID);
+                objChannelPuerchaseList = _newMasterChannel.GetChannelOfPurchaseList(new MasterServices(_connectioSting), authenticate.TenantId);
                 StatusCode =
                 objChannelPuerchaseList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -83,7 +89,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("getDepartmentList")]
         [AllowAnonymous]
-        public ResponseModel getDepartmentList(int TenantID)
+        public ResponseModel getDepartmentList()
         {
 
             List<DepartmentMaster> _objDepartmentList = new List<DepartmentMaster>();
@@ -92,9 +98,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
                 MasterCaller _newMasterBrand = new MasterCaller();
 
-                _objDepartmentList = _newMasterBrand.GetDepartmentListDetails(new MasterServices(_connectioSting), TenantID);
+                _objDepartmentList = _newMasterBrand.GetDepartmentListDetails(new MasterServices(_connectioSting), authenticate.TenantId);
 
                 StatusCode =
                 _objDepartmentList.Count == 0 ?
@@ -127,7 +137,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("getFunctionNameByDepartmentId")]
         [AllowAnonymous]
-        public ResponseModel getFunctionNameByDepartmentId(int DepartmentId, int TenantID)
+        public ResponseModel getFunctionNameByDepartmentId(int DepartmentId)
         {
             List<FuncationMaster> objFunctionList = new List<FuncationMaster>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -135,8 +145,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
                 MasterCaller _newMasterChannel = new MasterCaller();
-                objFunctionList = _newMasterChannel.GetFunctionbyDepartment(new MasterServices(_connectioSting), DepartmentId, TenantID);
+                objFunctionList = _newMasterChannel.GetFunctionbyDepartment(new MasterServices(_connectioSting), DepartmentId, authenticate.TenantId);
                 StatusCode =
                 objFunctionList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
