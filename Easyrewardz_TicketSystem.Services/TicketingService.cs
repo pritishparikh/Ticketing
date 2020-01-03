@@ -220,7 +220,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="Email"></param>
         /// <param name="DesignationID"></param>
         /// <returns></returns>
-        public List<CustomSearchTicketAgent> SearchAgent(string FirstName, string LastName, string Email, int DesignationID)
+        public List<CustomSearchTicketAgent> SearchAgent(string FirstName, string LastName, string Email, int DesignationID,int TenantId)
         {
             DataSet ds = new DataSet();
             List<CustomSearchTicketAgent> listSearchagent = new List<CustomSearchTicketAgent>();
@@ -233,6 +233,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Last_Name", LastName);
                 cmd.Parameters.AddWithValue("@Email_ID", Email);
                 cmd.Parameters.AddWithValue("@Designation_ID", DesignationID);
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
