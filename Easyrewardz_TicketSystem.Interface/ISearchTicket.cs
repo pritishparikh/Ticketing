@@ -10,7 +10,7 @@ namespace Easyrewardz_TicketSystem.Interface
     /// </summary>
     public interface ISearchTicket
     {
-         List<SearchResponse> SearchTickets(SearchRequest searchparams);
+        string[] SearchTickets(SearchRequest searchparams);
 
          
 
