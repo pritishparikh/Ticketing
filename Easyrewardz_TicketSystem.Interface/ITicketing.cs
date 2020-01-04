@@ -12,13 +12,13 @@ namespace Easyrewardz_TicketSystem.Interface
     {
         //IEnumerable<TicketingDetails> getTcikets();
 
-        List<TicketingDetails> GetTicketList(string TikcketTitle,int TenantId);
+        List<TicketingDetails> GetTicketList(string TikcketTitle, int TenantId);
 
-        int addTicket(TicketingDetails ticketingDetails, int TenantId, string FolderPath,string finalAttchment);
+        int addTicket(TicketingDetails ticketingDetails, int TenantId, string FolderPath, string finalAttchment);
 
         List<CustomDraftDetails> GetDraft(int UserID, int TenantId);
 
-        List<CustomSearchTicketAgent> SearchAgent(string FirstName, string LastName, string Email, int DesignationID,int TenantId);
+        List<CustomSearchTicketAgent> SearchAgent(string FirstName, string LastName, string Email, int DesignationID, int TenantId);
 
         List<UserTicketSearchMaster> ListSavedSearch(int UserID);
 
@@ -27,5 +27,9 @@ namespace Easyrewardz_TicketSystem.Interface
         int DeleteSavedSearch(int SearchParamID, int UserID);
 
         int AddSearch(int UserID, string SearchSaveName, string parameter);
+
+        int AssignTicket(string TicketID, int TenantID, int UserID, int AgentID, string Remark);
+
+        int Schedule(ScheduleMaster scheduleMaster, int TenantID, int UserID);
     }
 }

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Data;
 using Easyrewardz_TicketSystem.CustomModel;
 using System.IO;
+using System.Text;
+using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -27,7 +29,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TikcketTitle"></param>
         /// <param name="TenantId"></param>
         /// <returns></returns>
-        public List<TicketingDetails> GetTicketList(string TikcketTitle,int TenantId)
+        public List<TicketingDetails> GetTicketList(string TikcketTitle, int TenantId)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -138,7 +140,7 @@ namespace Easyrewardz_TicketSystem.Services
                         DirectoryInfo di = Directory.CreateDirectory(FolderPath);
                     }
 
-                    
+
                     MySqlCommand cmdattachment = new MySqlCommand("SP_SaveAttachment", conn);
                     cmdattachment.Parameters.AddWithValue("@fileName", finalAttchment);
                     cmdattachment.Parameters.AddWithValue("@Ticket_ID", ticketID);
@@ -244,7 +246,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="Email"></param>
         /// <param name="DesignationID"></param>
         /// <returns></returns>
-        public List<CustomSearchTicketAgent> SearchAgent(string FirstName, string LastName, string Email, int DesignationID,int TenantId)
+        public List<CustomSearchTicketAgent> SearchAgent(string FirstName, string LastName, string Email, int DesignationID, int TenantId)
         {
             DataSet ds = new DataSet();
             List<CustomSearchTicketAgent> listSearchagent = new List<CustomSearchTicketAgent>();
@@ -426,6 +428,102 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
                 cmd.Parameters.AddWithValue("@Search_Parameters", parameter);
                 cmd.Parameters.AddWithValue("@Search_Name", SearchSaveName);
+                cmd.CommandType = CommandType.StoredProcedure;
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
+
+        /// <summary>
+        /// AssignTicket
+        /// </summary>
+        /// <param name="TicketID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="AgentID"></param>
+        /// <param name="Remark"></param>
+        /// <returns></returns>
+        public int AssignTicket(string TicketID, int TenantID, int UserID, int AgentID, string Remark)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_BulkTicketAssign", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Ticket_ID", TicketID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Agent_ID", AgentID);
+                cmd.Parameters.AddWithValue("@Remarks", Remark);
+                cmd.CommandType = CommandType.StoredProcedure;
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
+
+        /// <summary>
+        /// Schedule
+        /// </summary>
+        /// <param name="ScheduleMaster"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public int Schedule(ScheduleMaster scheduleMaster, int TenantID, int UserID)
+        {
+
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_AddSchedule", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Schedule_For", scheduleMaster.ScheduleFor);
+                cmd.Parameters.AddWithValue("@Schedule_Type", scheduleMaster.ScheduleType);
+                cmd.Parameters.AddWithValue("@Schedule_Time", scheduleMaster.ScheduleTime);
+                cmd.Parameters.AddWithValue("@Is_Daily", scheduleMaster.IsDaily);
+                cmd.Parameters.AddWithValue("@NoOf_Day", scheduleMaster.NoOfDay);
+                cmd.Parameters.AddWithValue("@Is_Weekly", scheduleMaster.IsWeekly);
+                cmd.Parameters.AddWithValue("@NoOf_Week", scheduleMaster.NoOfWeek);
+                cmd.Parameters.AddWithValue("@Day_Ids", scheduleMaster.DayIds);
+                cmd.Parameters.AddWithValue("@IsDailyFor_Month", scheduleMaster.IsDailyForMonth);
+                cmd.Parameters.AddWithValue("@NoOfDaysFor_Month", scheduleMaster.NoOfDaysForMonth);
+                cmd.Parameters.AddWithValue("@NoOfMonthFor_Month", scheduleMaster.NoOfMonthForMonth);
+                cmd.Parameters.AddWithValue("@IsWeeklyFor_Month", scheduleMaster.IsWeeklyForMonth);
+                cmd.Parameters.AddWithValue("@NoOfMonthFor_Week", scheduleMaster.NoOfMonthForWeek);
+                cmd.Parameters.AddWithValue("@NoOfWeekFor_Week", scheduleMaster.NoOfWeekForWeek);
+                cmd.Parameters.AddWithValue("@NameOfDayFor_Week", scheduleMaster.NameOfDayForWeek);
+                cmd.Parameters.AddWithValue("@IsWeeklyFor_Year", scheduleMaster.IsWeeklyForYear);
+                cmd.Parameters.AddWithValue("@NoOfWeekFor_Year", scheduleMaster.NoOfWeekForYear);
+                cmd.Parameters.AddWithValue("@NameOfDayFor_Year", scheduleMaster.NameOfDayForYear);
+                cmd.Parameters.AddWithValue("@NameOfMonthFor_Year", scheduleMaster.NameOfMonthForYear);
+                cmd.Parameters.AddWithValue("@IsDailyFor_Year", scheduleMaster.IsDailyForYear);
+                cmd.Parameters.AddWithValue("@NameOfMonthForDaily_Year", scheduleMaster.NameOfMonthForDailyYear);
+                cmd.Parameters.AddWithValue("@NoOfDayForDaily_Year", scheduleMaster.NoOfDayForDailyYear);
+                cmd.Parameters.AddWithValue("@SearchInput_Params", scheduleMaster.SearchInputParams);
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }
