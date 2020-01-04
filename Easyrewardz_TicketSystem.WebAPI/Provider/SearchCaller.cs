@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region Methods for Search
 
-        public List<SearchResponse> GetSearchResults(ISearchTicket _search, SearchRequest searchparams)
+        public string[] GetSearchResults(ISearchTicket _search, SearchRequest searchparams)
         {
            
             _searchList = _search;

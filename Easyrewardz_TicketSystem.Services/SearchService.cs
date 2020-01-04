@@ -21,7 +21,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
         #endregion
 
-        public List<SearchResponse> SearchTickets(SearchRequest searchparams)
+        public string[] SearchTickets(SearchRequest searchparams)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -34,8 +34,6 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand sqlcmd = new MySqlCommand("SP_SearchTickets", conn);
                 sqlcmd.CommandType = CommandType.StoredProcedure;
                 
-            
-                //sqlcmd.Parameters.AddWithValue("@CategoryID", CategoryID);
 
                 sqlcmd.Parameters.AddWithValue("_isByStatus", Convert.ToInt32(searchparams.isByStatus));
                 sqlcmd.Parameters.AddWithValue("_isByFilter", Convert.ToInt32(searchparams.isByFilter));
@@ -79,10 +77,20 @@ namespace Easyrewardz_TicketSystem.Services
                 sqlcmd.Parameters.AddWithValue("_claimIssuetype", searchparams.claimIssuetype);
                 sqlcmd.Parameters.AddWithValue("_claimsubCategory", searchparams.claimSubcategory);
 
-                sqlcmd.Parameters.AddWithValue("_SLAstatusResponse", searchparams.SLAstatus.Split('|')[0].Split('-')[0]);
-                sqlcmd.Parameters.AddWithValue("_SLAstatusResponsetime", searchparams.SLAstatus.Split('|')[0].Split('-')[1]);
-                sqlcmd.Parameters.AddWithValue("_SLAstatusResolution", searchparams.SLAstatus.Split('|')[1].Split('-')[0]);
-                sqlcmd.Parameters.AddWithValue("_SLAstatusResoltiontime", searchparams.SLAstatus.Split('|')[1].Split('-')[1]);
+                if(!string.IsNullOrEmpty(searchparams.SLAstatus))
+                {
+                    sqlcmd.Parameters.AddWithValue("_SLAstatusResponse", Convert.ToInt32(searchparams.SLAstatus.Split('|')[0].Split('-')[0]));
+                    sqlcmd.Parameters.AddWithValue("_SLAstatusResponsetime", 1);
+                    sqlcmd.Parameters.AddWithValue("_SLAstatusResolution", Convert.ToInt32( searchparams.SLAstatus.Split('|')[1].Split('-')[0]));
+                    sqlcmd.Parameters.AddWithValue("_SLAstatusResoltiontime", 1);
+                }
+                else
+                {
+                    sqlcmd.Parameters.AddWithValue("_SLAstatusResponse", 0);
+                    sqlcmd.Parameters.AddWithValue("_SLAstatusResponsetime", 0);
+                    sqlcmd.Parameters.AddWithValue("_SLAstatusResolution", 0);
+                    sqlcmd.Parameters.AddWithValue("_SLAstatusResoltiontime", 0);
+                }
 
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -113,10 +121,14 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-                objSearchResult[0].ticketStatusCount = ds.Tables[1].AsEnumerable()
-                    .Select(x => Enum.GetName(typeof(EnumMaster.TicketStatus), Convert.ToInt32(x.Field<object>("StatusID")))
-                        + "|" + Convert.ToString(Convert.ToInt32(x.Field<object>("StatusID")))).ToList();
-            
+                //objSearchResult[0].ticketStatusCount = ds.Tables[1].AsEnumerable()
+                //    .Select(x => Enum.GetName(typeof(EnumMaster.TicketStatus), Convert.ToInt32(x.Field<object>("StatusID")))
+                //        + "|" + Convert.ToString(Convert.ToInt32(x.Field<object>("StatusID")))).ToList();
+
+                CountList= ds.Tables[1].AsEnumerable().Select(x => Enum.GetName(typeof(EnumMaster.TicketStatus), Convert.ToInt32(x.Field<object>("StatusID")))
+                        + "|" + Convert.ToString(Convert.ToInt32(x.Field<object>("TicketStatusCount")))).ToList();
+
+
             }
             catch (Exception ex)
             {
@@ -128,7 +140,7 @@ namespace Easyrewardz_TicketSystem.Services
                 
                 if (ds != null) ds.Dispose(); conn.Close();
             }
-            return objSearchResult;
+            return new string[] { JsonConvert.SerializeObject(objSearchResult),JsonConvert.SerializeObject(CountList) };
         }
 
         public TicketCreationDetails setCreationdetails(DataRow tkt )

@@ -72,12 +72,6 @@ namespace Easyrewardz_TicketSystem.Model
         public int claimIssuetype { get; set; }
         public int taskFunction { get; set; }
 
-        //public int _SLAstatusResponse { get; set; }
-        //public int _SLAstatusResponsetime { get; set; }
-        //public int _SLAstatusResolution { get; set; }
-        //public int _SLAstatusResoltiontime { get; set; }
-
-
     }
 
     public class SearchResponse
@@ -94,7 +88,7 @@ namespace Easyrewardz_TicketSystem.Model
 
         public TicketCreationDetails creationDetails { get; set; }
 
-        public List<string> ticketStatusCount { get; set; }
+        //public List<string> ticketStatusCount { get; set; }
 
     }
 

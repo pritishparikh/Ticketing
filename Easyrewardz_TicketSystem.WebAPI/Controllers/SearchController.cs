@@ -36,7 +36,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         public ResponseModel GetTicketSearchResult([FromBody]SearchRequest searchparams)
         {
-            List<SearchResponse> _searchResult = new List<SearchResponse>();
+            string[] _searchResult = null;
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -46,12 +46,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 
                 _searchResult = _newsearchMaster.GetSearchResults(new SearchService(_connectioSting), searchparams);
 
-                 StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                 StatusCode = _searchResult.Length > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _searchResult.Count > 0 ? _searchResult : null;
+                _objResponseModel.ResponseData = _searchResult.Length > 0 ? _searchResult : null;
             }
             catch (Exception ex)
             {
