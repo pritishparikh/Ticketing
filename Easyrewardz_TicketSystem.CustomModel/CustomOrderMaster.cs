@@ -10,7 +10,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public int OrderMasterID { get; set; }
         public string InvoiceNumber { get; set; }
         public DateTime InvoiceDate { get; set; }
-        /// <summary>
+        /// <summary> 
         /// InvoiceDate form (12 Jan 2019) By SHLOK 
         /// </summary>
         public string DateFormat { get; set; }
