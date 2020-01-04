@@ -60,7 +60,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-        public int addTicket(TicketingDetails ticketingDetails, int TenantId, string FolderPath, string fileName)
+        public int addTicket(TicketingDetails ticketingDetails, int TenantId, string FolderPath, string finalAttchment)
         {
             MySqlCommand cmd = new MySqlCommand();
             int ticketID = 0;
@@ -138,9 +138,9 @@ namespace Easyrewardz_TicketSystem.Services
                         DirectoryInfo di = Directory.CreateDirectory(FolderPath);
                     }
 
-
+                    
                     MySqlCommand cmdattachment = new MySqlCommand("SP_SaveAttachment", conn);
-                    cmdattachment.Parameters.AddWithValue("@fileName", fileName);
+                    cmdattachment.Parameters.AddWithValue("@fileName", finalAttchment);
                     cmdattachment.Parameters.AddWithValue("@Ticket_ID", ticketID);
                     cmdattachment.CommandType = CommandType.StoredProcedure;
                     i = cmdattachment.ExecuteNonQuery();

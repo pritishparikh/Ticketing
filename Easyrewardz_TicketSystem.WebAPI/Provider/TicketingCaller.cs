@@ -39,10 +39,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <returns></returns>
         
 
-        public int addTicketDetails(ITicketing _ticket, TicketingDetails ticketingDetails, int TenantId, string FolderPath, string fileName)
+        public int addTicketDetails(ITicketing _ticket, TicketingDetails ticketingDetails, int TenantId, string FolderPath, string finalAttchment)
         {
             _ticketList = _ticket;
-            return _ticketList.addTicket(ticketingDetails, TenantId, FolderPath, fileName);
+            return _ticketList.addTicket(ticketingDetails, TenantId, FolderPath, finalAttchment);
         }
         /// <summary>
         /// Get Draft

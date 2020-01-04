@@ -95,13 +95,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel createTicket()
         {
             TicketingDetails ticketingDetails = new TicketingDetails();
+           
             var files = Request.Form.Files;
             string fileName = "";
+            string finalAttchment = "";
             if (files.Count > 0)
             {
                 for (int i = 0; i < files.Count; i++)
                 {
                     fileName += files[i].FileName.Replace(".", DateTime.Now.ToString("ddmmyyyyhhssfff") + ".") + ",";
+                    finalAttchment = fileName.TrimEnd(',');
                 }
             }
             var Keys = Request.Form;
@@ -121,7 +124,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 TicketingCaller _newTicket = new TicketingCaller();
 
                 ticketingDetails.CreatedBy = authenticate.UserMasterID; ///Created  By from the token
-                int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, _ticketAttachmentFolderName, fileName);
+                int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, _ticketAttachmentFolderName, finalAttchment);
                 if (result > 0)
                 {
                     if (files.Count > 0)
