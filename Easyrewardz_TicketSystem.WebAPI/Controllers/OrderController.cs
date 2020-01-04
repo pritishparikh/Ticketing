@@ -97,7 +97,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
+                orderMaster.CreatedBy = authenticate.UserMasterID;
                 int result = _ordercaller.addOrder(new OrderService(_connectioSting), orderMaster, authenticate.TenantId);
                 //OrderMaster order = _ordercaller.getOrderDetailsByNumber(new OrderService(_connectioSting), orderMaster);
                 StatusCode =
