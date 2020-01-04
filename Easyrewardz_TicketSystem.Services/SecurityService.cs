@@ -336,7 +336,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception ex)
             {
-
+                throw (ex);
             }
             finally
             {
@@ -396,7 +396,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception ex)
             {
-                //throw;
+                throw (ex);
             }
             finally
             {
