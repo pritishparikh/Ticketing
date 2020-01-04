@@ -183,7 +183,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("GetDraftDetails")]
-        public ResponseModel GetDraftDetails(int UserID)
+        public ResponseModel GetDraftDetails()
         {
             List<CustomDraftDetails> objDraftDetails = new List<CustomDraftDetails>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -196,7 +196,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
+                int UserID = authenticate.UserMasterID;
                 objDraftDetails = _TicketCaller.GetDraft(new TicketingService(_connectioSting), UserID, authenticate.TenantId);
                 StatusCode =
                 objDraftDetails.Count == 0 ?
