@@ -200,5 +200,47 @@ namespace Easyrewardz_TicketSystem.CustomModel
             Resolved = 222
         }
 
+        /// <summary>
+        /// Schedule
+        /// </summary>
+        public enum Schedule
+        {
+            /// <summary>
+            ///Schedule - Daily
+            /// </summary>
+            [Description("Daily")]
+            Daily = 230,
+
+            /// <summary>
+            ///Schedule - Weekly
+            /// </summary>
+            [Description("Weekly")]
+            Weekly = 231,
+
+            /// <summary>
+            ///Schedule -  Same day each month 
+            /// </summary>
+            [Description("Samedayeachmonth")]
+            Samedayeachmonth = 232,
+
+            /// <summary>
+            ///Schedule - Same Week Each Month 
+            /// </summary>
+            [Description("SameWeekEachMonth")]
+            Sameweekeachmonth = 233,
+
+            /// <summary>
+            ///Schedule -  Same Day Each Year 
+            /// </summary>
+            [Description("SameDayEachYear")]
+            Samedayeachyear = 234,
+
+            /// <summary>
+            ///Schedule -  Same Week Each Year 
+            /// </summary>
+            [Description("SameWeekEachYear")]
+            Sameweekeachyear = 235,
+        }
+
     }
 }
