@@ -44,12 +44,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Custom Methods 
 
         /// <summary>
-        /// Get brand list for the Brand dropdown
+        /// Get SLA Status list for the SLA dropdown
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Route("GetBrandList")]
-        [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+        [Route("GetSLAStatusList")]
         public ResponseModel GetSLAStatusList()
         {
             List<SLAStatus> objSLAStatusList = new List<SLAStatus>();
