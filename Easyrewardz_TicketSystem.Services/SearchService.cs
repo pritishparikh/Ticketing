@@ -44,6 +44,7 @@ namespace Easyrewardz_TicketSystem.Services
                 sqlcmd.Parameters.AddWithValue("_isByticketType", Convert.ToInt32(searchparams.ByTicketType));
                 sqlcmd.Parameters.AddWithValue("_isByCategory", Convert.ToInt32(searchparams.ByCategory));
                 sqlcmd.Parameters.AddWithValue("_isByAll", Convert.ToInt32(searchparams.byAll));
+                sqlcmd.Parameters.AddWithValue("_tenantID", Convert.ToInt32(searchparams.tenantID));
                 sqlcmd.Parameters.AddWithValue("_createdDate", searchparams.creationDate);
                 sqlcmd.Parameters.AddWithValue("_lastUpdatedDate", searchparams.lastUpdatedDate);
                 sqlcmd.Parameters.AddWithValue("_SLADue", searchparams.SLADue);
@@ -63,6 +64,7 @@ namespace Easyrewardz_TicketSystem.Services
                 sqlcmd.Parameters.AddWithValue("_invoiceSubOrderNo", searchparams.invoiceSubOrderNo);
                 sqlcmd.Parameters.AddWithValue("_assignedTo", searchparams.assignedTo);
                 sqlcmd.Parameters.AddWithValue("_didVisitStore", Convert.ToInt32(searchparams.didVisitStore));
+                sqlcmd.Parameters.AddWithValue("_itemID", Convert.ToInt32(searchparams.itemID));
                 sqlcmd.Parameters.AddWithValue("_purchaseStorecoseAddr", searchparams.purchaseStoreCodeAddress);
                 sqlcmd.Parameters.AddWithValue("_SLAstatus", searchparams.SLAstatus);
                 sqlcmd.Parameters.AddWithValue("_wantToVisitStore", Convert.ToInt32(searchparams.wantToVisitStore));
@@ -73,7 +75,14 @@ namespace Easyrewardz_TicketSystem.Services
                 sqlcmd.Parameters.AddWithValue("_taskStatus", searchparams.taskStatus);
                 sqlcmd.Parameters.AddWithValue("_claimCategory", searchparams.claimCategory);
                 sqlcmd.Parameters.AddWithValue("_taskDept", searchparams.taskDept);
-                sqlcmd.Parameters.AddWithValue("_claimsubcCategory", searchparams.claimSubcategory);
+                sqlcmd.Parameters.AddWithValue("_taskFunction", searchparams.taskFunction);
+                sqlcmd.Parameters.AddWithValue("_claimIssuetype", searchparams.claimIssuetype);
+                sqlcmd.Parameters.AddWithValue("_claimsubCategory", searchparams.claimSubcategory);
+
+                sqlcmd.Parameters.AddWithValue("_SLAstatusResponse", 0);
+                sqlcmd.Parameters.AddWithValue("_SLAstatusResponsetime", 0);
+                sqlcmd.Parameters.AddWithValue("_SLAstatusResolution", 0);
+                sqlcmd.Parameters.AddWithValue("_SLAstatusResoltiontime", 0);
 
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -86,6 +95,7 @@ namespace Easyrewardz_TicketSystem.Services
                     var tmpdt = ds.Tables[0];
                     if (ds.Tables[0].Rows.Count > 0)
                     {
+
                         objSearchResult = ds.Tables[0].AsEnumerable().Select(r => new SearchResponse()
                         {
                             ticketID = Convert.ToInt32(r.Field<object>("TicketID")),
@@ -97,7 +107,8 @@ namespace Easyrewardz_TicketSystem.Services
                             Priority = Convert.ToString(r.Field<object>("PriortyName")),
                             Assignee = Convert.ToString(r.Field<object>("AssignedName")),
                             CreatedOn = Convert.ToDateTime(r.Field<object>("CreatedDate")),
-                           // creationDetails = Convert.ToString(r.Field<int>(""))
+                            creationDetails = setCreationdetails(r),
+                            //creationDetails = JsonConvert.SerializeObject(ds.Tables[0])
                         }).ToList();
                     }
                 }
@@ -120,34 +131,118 @@ namespace Easyrewardz_TicketSystem.Services
             return objSearchResult;
         }
 
-        public string setCreationdetails(DataRow tkt )
+        public TicketCreationDetails setCreationdetails(DataRow tkt )
         {
             string detail = string.Empty;
             DateTime now = DateTime.Now;
-            List<string> creationddetailsLst = new List<string>();
-
-            string createdby = string.Empty; string createdago = string.Empty; string assignedto = string.Empty; string assignedago = string.Empty;
-            string updatedby = string.Empty; string updatedago = string.Empty;
-            string resptime = string.Empty; string responseoverdue = string.Empty; string resolnoverdue = string.Empty;
-
+            TimeSpan diff = new TimeSpan();
+            TimeSpan RespondT = new TimeSpan();
+            TimeSpan ResolveT = new TimeSpan();
+            TicketCreationDetails tktDetails = new TicketCreationDetails() ;
+            
             try
             {
-                if(tkt!=null && tkt.ItemArray.Length > 0)
+
+               tktDetails.createdBy= string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("CreatedByName"))) ? string.Empty : Convert.ToString(tkt.Field<object>("CreatedByName"));
+               tktDetails.assignedTo= string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("AssignedName"))) ? null : Convert.ToString(tkt.Field<object>("AssignedName"));
+               tktDetails.updatedBy = string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("ModifyByName"))) ? null : Convert.ToString(tkt.Field<object>("ModifyByName"));
+
+                if(!string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("CreatedDate"))))
                 {
-                    for (int i = 0; i < tkt.ItemArray.Length; i++)
+                    diff = now - Convert.ToDateTime(tkt.Field<object>("CreatedDate"));
+                    tktDetails.createdago = new TimeDetails() { Days = diff.Days, Hours = diff.Hours, Minutes = diff.Minutes, Seconds = diff.Seconds };
+                    
+                }
+               
+
+                if (!string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("AssignedDate"))))
+                {
+                    diff = now - Convert.ToDateTime(tkt.Field<object>("AssignedDate"));
+                    tktDetails.assignedago = new TimeDetails() { Days = diff.Days, Hours = diff.Hours, Minutes = diff.Minutes, Seconds = diff.Seconds };
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("PriorityRespond"))))
                     {
+                        string[] respondtime = Convert.ToString(tkt.Field<object>("PriorityRespond")).Split(new char[] { '-'});
+
+                        switch(respondtime[1])
+                        {
+                            case "D":
+                                RespondT = (Convert.ToDateTime(tkt.Field<object>("AssignedDate")).AddDays(Convert.ToDouble(respondtime[0])))-now;
+                                
+                                break;
+
+                            case "H":
+                                RespondT = (Convert.ToDateTime(tkt.Field<object>("AssignedDate")).AddHours(Convert.ToDouble(respondtime[0])))-now;
+                               
+                                break;
+
+                            case "M":
+                                RespondT = (Convert.ToDateTime(tkt.Field<object>("AssignedDate")).AddMinutes(Convert.ToDouble(respondtime[0])))-now;
+                               
+                                break;
+
+                        }
+
+                        if (RespondT.Minutes > 0)
+                        {
+                            tktDetails.responseTimeRemainingBy = new TimeDetails() { Days = diff.Days, Hours = diff.Hours, Minutes = diff.Minutes, Seconds = diff.Seconds };
+                        }
+                        else
+                        {
+                            tktDetails.responseOverdueBy= new TimeDetails() { Days = diff.Days, Hours = diff.Hours, Minutes = diff.Minutes, Seconds = diff.Seconds };
+                        }
+                        
 
                     }
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("PriorityResolve"))))
+                    {
+                        string[] respondtime = Convert.ToString(tkt.Field<object>("PriorityResolve")).Split(new char[] { '-' });
+
+                        switch (respondtime[1])
+                        {
+                            case "D":
+                                ResolveT = now-(Convert.ToDateTime(tkt.Field<object>("AssignedDate")).AddDays(Convert.ToDouble(respondtime[0]))) ;
+
+                                break;
+
+                            case "H":
+                                ResolveT = now-(Convert.ToDateTime(tkt.Field<object>("AssignedDate")).AddHours(Convert.ToDouble(respondtime[0]))) ;
+
+                                break;
+
+                            case "M":
+                                ResolveT = now-(Convert.ToDateTime(tkt.Field<object>("AssignedDate")).AddMinutes(Convert.ToDouble(respondtime[0]))) ;
+
+                                break;
+
+                        }
+
+                        if (ResolveT.Minutes > 0)
+                        {
+                            tktDetails.resolutionOverdueBy = new TimeDetails() { Days = diff.Days, Hours = diff.Hours, Minutes = diff.Minutes, Seconds = diff.Seconds };
+                        }
+                        
+                    }
                 }
-              
+                
+                if (!string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("ModifiedDate"))))
+                {
+                    diff = now - Convert.ToDateTime(tkt.Field<object>("ModifiedDate"));
+                    tktDetails.updatedago = new TimeDetails() { Days = diff.Days, Hours = diff.Hours, Minutes = diff.Minutes, Seconds = diff.Seconds };
+                }
+               
+          
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                detail = string.Empty;
-                throw;
+                var test = ex.ToString() + "\n" + ex.StackTrace;
+                tktDetails = null;
+                
             }
 
-            return detail;
+            return tktDetails;
 
         }
         

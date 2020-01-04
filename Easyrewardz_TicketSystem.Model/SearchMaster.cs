@@ -12,6 +12,7 @@ namespace Easyrewardz_TicketSystem.Model
         public bool isByStatus { get; set; }
         public bool isByFilter { get; set; }
 
+        public int tenantID { get; set; }
         public bool ByDate { get; set; }
         public bool ByCustomerType { get; set; }
         public bool ByTicketType { get; set; }
@@ -91,24 +92,31 @@ namespace Easyrewardz_TicketSystem.Model
         public string Priority { get; set; }
         public DateTime CreatedOn { get; set; }
 
-        public string creationDetails { get; set; }
+        public TicketCreationDetails creationDetails { get; set; }
 
         public List<string> ticketStatusCount { get; set; }
 
-
-        //public string createdBy { get; set; }
-        //public string updatedBy { get; set; }
-        //public string assignedTo { get; set; }
-        //public double assignedOn { get; set; }
-        //public string updatedByAssigneeOn { get; set; }
-        //public string responseTimeRemainingBy { get; set; }
-        //public string responseOverdueBy { get; set; }
-        //public string resolutionOverdueBy { get; set; }
-
-
-
     }
 
+    public class TicketCreationDetails
+    {
+        public string createdBy { get; set; }
+        public TimeDetails createdago { get; set; }
+        public string assignedTo { get; set; }
+        public TimeDetails assignedago { get; set; }
+        public string updatedBy { get; set; }
+        public TimeDetails updatedago { get; set; }
+        public TimeDetails responseTimeRemainingBy { get; set; }
+        public TimeDetails responseOverdueBy { get; set; }
+        public TimeDetails resolutionOverdueBy { get; set; }
+    }
 
+    public class TimeDetails
+    {
+        public int Days { get; set; }
+        public int Hours { get; set; }
+        public int Minutes { get; set; }
+        public int Seconds { get; set; }
+    }
 }
 
