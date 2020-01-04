@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
@@ -9,16 +10,16 @@ using System.Text;
 namespace Easyrewardz_TicketSystem.Services
 {
     public class CommonService
-    { 
+    {
         /// <summary>
-      /// Send Email
-      /// </summary>
-      /// <param name="smtpDetails"></param>
-      /// <param name="emailToAddress"></param>
-      /// <param name="subject"></param>
-      /// <param name="body"></param>
-      /// <returns></returns>
-        public bool SendEmail(string emailToAddress, string subject, string body,string[] cc = null, string[] bcc = null)
+        /// Send Email
+        /// </summary>
+        /// <param name="smtpDetails"></param>
+        /// <param name="emailToAddress"></param>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public bool SendEmail(string emailToAddress, string subject, string body, string[] cc = null, string[] bcc = null)
         {
             bool isMailSent = false;
             try
@@ -48,8 +49,8 @@ namespace Easyrewardz_TicketSystem.Services
                         message.Body = body == null ? "" : body;
                         message.IsBodyHtml = smtpDetails.IsBodyHtml;
                         message.To.Add(emailToAddress);
-                        
-                            smtpClient.Send(message);
+
+                        smtpClient.Send(message);
                     }
                 }
 
@@ -141,6 +142,80 @@ namespace Easyrewardz_TicketSystem.Services
             tokenData.Add("AppId", _splitactualvalue[2]);
 
             return tokenData;
+        }
+        /// <summary>
+        /// Export List as CSV
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="ExcludeColumns">Pass comma separated column names</param>
+        /// <returns></returns>
+        public static string ListToCSV<T>(IEnumerable<T> list, string ExcludeColumns = "")
+        {
+
+            StringBuilder sList = new StringBuilder();
+
+            Type type = typeof(T);
+            var props = type.GetProperties();
+
+
+            if (string.IsNullOrEmpty(ExcludeColumns))
+            {
+                sList.Append(string.Join(",", props.Select(p => p.Name)));
+            }
+            else
+            {
+                foreach (var propertyInfo in props)
+                {
+                    if (!string.IsNullOrEmpty(ExcludeColumns))
+                    {
+                        if (!ExcludeColumns.ToLower().Contains(propertyInfo.Name.ToLower()))
+                        {
+                            if (sList.Length == 0)
+                            {
+                                sList.Append(propertyInfo.Name);
+                            }
+                            else
+                            {
+                                sList.Append("," + propertyInfo.Name);
+                            }
+                        }
+                    }
+                }
+            }
+            string customCOlumns = sList.ToString();
+
+            sList.Append(Environment.NewLine);
+
+
+            foreach (var element in list)
+            {
+                if (string.IsNullOrEmpty(ExcludeColumns))
+                {
+                    sList.Append(string.Join(",", props.Select(p => p.GetValue(element, null))));
+                }
+                else
+                {
+                    int j = 0;
+                    foreach (var propertyInfo in props)
+                    {
+                        if (!ExcludeColumns.ToLower().Contains(propertyInfo.Name.ToLower()))
+                        {
+                            if (j == 0)
+                            {
+                                sList.Append(propertyInfo.GetValue(element, null));
+                                j = j + 1;
+                            }
+                            else
+                            {
+                                sList.Append("," + propertyInfo.GetValue(element, null));
+                            }
+                        }
+                    }
+                }
+                sList.Append(Environment.NewLine);
+            }
+            return sList.ToString();
         }
     }
 }
