@@ -11,6 +11,6 @@ namespace Easyrewardz_TicketSystem.Interface
     /// </summary>
     public interface ISLA
     {
-        List<SLAStatus> GetSLAList(int TenantID);
+        List<SLAStatus> GetSLAStatusList(int TenantID);
     }
 }

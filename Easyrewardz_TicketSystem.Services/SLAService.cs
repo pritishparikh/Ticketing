@@ -21,7 +21,12 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
-        public List<SLAStatus> GetSLAList(int TenantID)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        public List<SLAStatus> GetSLAStatusList(int TenantID)
         {
 
             DataSet ds = new DataSet();
@@ -32,7 +37,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetBrandList", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetSLAStatusList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -43,10 +48,10 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         SLAStatus sla = new SLAStatus();
-                        sla.SLAId = Convert.ToInt32(ds.Tables[0].Rows[i]["SLAId"]);
+                        sla.SLAId = Convert.ToInt32(ds.Tables[0].Rows[i]["SlaId"]);
                         sla.SLATargetId = Convert.ToInt32(ds.Tables[0].Rows[i]["SLATargetId"]);
-                        sla.TenatID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenatID"]);
-                        sla.SLARequestResponse = Convert.ToString(ds.Tables[0].Rows[i]["SLARequestResponse"]);
+                        sla.TenatID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenantId"]);
+                        sla.SLARequestResponse = Convert.ToString(ds.Tables[0].Rows[i]["Respond"]) + "/" + Convert.ToString(ds.Tables[0].Rows[i]["Resolution"]);
 
                         slas.Add(sla);
                     }
