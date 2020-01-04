@@ -444,6 +444,97 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+        /// <summary>
+        /// Assign Tickets to Agent(User)
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// /// <param name="SearchSaveName"></param>
+        /// /// <param name="parameter"></param>
+        /// <returns></returns>
+
+        [HttpPost]
+        [Route("AssignTickets")]
+
+        public ResponseModel AssignTickets(string TicketID, int AgentID, string Remark)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                TicketingCaller _TicketCaller = new TicketingCaller();
+
+                int result = _TicketCaller.AssignTicket(new TicketingService(_connectioSting), TicketID, authenticate.TenantId, authenticate.UserMasterID, AgentID, Remark);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+
+            }
+            return _objResponseModel;
+        }
+
+        /// <summary>
+        /// Schedule
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// /// <param name="SearchSaveName"></param>
+        /// /// <param name="parameter"></param>
+        /// <returns></returns>
+
+        [HttpPost]
+        [Route("Schedule")]
+
+        public ResponseModel Schedule(ScheduleMaster scheduleMaster)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                TicketingCaller _TicketCaller = new TicketingCaller();
+
+                int result = _TicketCaller.Schedule(new TicketingService(_connectioSting), scheduleMaster, authenticate.TenantId, authenticate.UserMasterID);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+
+            }
+            return _objResponseModel;
+        }
         #endregion
     }
 }

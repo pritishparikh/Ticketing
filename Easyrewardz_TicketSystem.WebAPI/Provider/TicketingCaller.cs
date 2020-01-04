@@ -37,7 +37,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="_ticket"></param>
         /// <param name="TikcketTitle"></param>
         /// <returns></returns>
-        
+         
 
         public int addTicketDetails(ITicketing _ticket, TicketingDetails ticketingDetails, int TenantId, string FolderPath, string finalAttchment)
         {
@@ -93,6 +93,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _ticketList = _ticket;
             return _ticketList.AddSearch(UserID, SearchParamID, parameter);
+
+        }
+        public int AssignTicket(ITicketing _ticket, string TicketID, int TenantID, int UserID, int AgentID, string Remark)
+        {
+            _ticketList = _ticket;
+            return _ticketList.AssignTicket(TicketID, TenantID, UserID, AgentID, Remark);
+
+        }
+        public int Schedule(ITicketing _ticket, ScheduleMaster scheduleMaster, int TenantID, int UserID)
+        {
+            _ticketList = _ticket;
+            return _ticketList.Schedule(scheduleMaster, TenantID, UserID);
 
         }
         #endregion
