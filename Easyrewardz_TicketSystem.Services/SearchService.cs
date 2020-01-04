@@ -79,10 +79,10 @@ namespace Easyrewardz_TicketSystem.Services
                 sqlcmd.Parameters.AddWithValue("_claimIssuetype", searchparams.claimIssuetype);
                 sqlcmd.Parameters.AddWithValue("_claimsubCategory", searchparams.claimSubcategory);
 
-                sqlcmd.Parameters.AddWithValue("_SLAstatusResponse", 0);
-                sqlcmd.Parameters.AddWithValue("_SLAstatusResponsetime", 0);
-                sqlcmd.Parameters.AddWithValue("_SLAstatusResolution", 0);
-                sqlcmd.Parameters.AddWithValue("_SLAstatusResoltiontime", 0);
+                sqlcmd.Parameters.AddWithValue("_SLAstatusResponse", searchparams.SLAstatus.Split('|')[0].Split('-')[0]);
+                sqlcmd.Parameters.AddWithValue("_SLAstatusResponsetime", searchparams.SLAstatus.Split('|')[0].Split('-')[1]);
+                sqlcmd.Parameters.AddWithValue("_SLAstatusResolution", searchparams.SLAstatus.Split('|')[1].Split('-')[0]);
+                sqlcmd.Parameters.AddWithValue("_SLAstatusResoltiontime", searchparams.SLAstatus.Split('|')[1].Split('-')[1]);
 
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
