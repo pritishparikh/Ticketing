@@ -182,14 +182,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     resp.Status = false;
                     resp.ResponseData = account;
                     resp.Message = "Invalid Login";
-                    resp.ResponseData = "Message:" + Convert.ToString(_ex.Message) + "--- Inner Exception:" + Convert.ToString(_ex.InnerException)
-                    + "Other:" + "Authenticate controller, " + Convert.ToString(_ex.Data);
+                   
                 }
             }
             catch (Exception _ex)
             {
                 resp.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
                 resp.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                resp.ResponseData = "Message:" + Convert.ToString(_ex.Message) + "--- Inner Exception:" + Convert.ToString(_ex.InnerException)
+                   + "Other:" + "Authenticate controller, " + Convert.ToString(_ex.Data);
             }
             finally
             {
