@@ -162,14 +162,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
+                _objResponseModel.Message = "Ticket created successfully.";
                 _objResponseModel.ResponseData = result;
             }
             catch (Exception ex)
             {
-                _objResponseModel.Status = true;
+                _objResponseModel.Status = false;
                 _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
+                _objResponseModel.Message = "Ticket not created.";
                 _objResponseModel.ResponseData = null;
 
             }
