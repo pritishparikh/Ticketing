@@ -30,5 +30,8 @@ namespace Easyrewardz_TicketSystem.Model
         public bool IsValidUser { get; set; }
 
 
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
     }
 }

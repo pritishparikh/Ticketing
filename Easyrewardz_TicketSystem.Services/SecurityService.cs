@@ -325,6 +325,9 @@ namespace Easyrewardz_TicketSystem.Services
                     ////Double encryption: We are doing encryption of encrypted token 
                     accountModal.Token = Encrypt(_token);
                     accountModal.IsValidUser = true;
+                    accountModal.FirstName = authenticate.FirstName;
+                    accountModal.LastName = authenticate.LastName;
+
                 }
                 else
                 {
@@ -379,6 +382,8 @@ namespace Easyrewardz_TicketSystem.Services
                             authenticate.Domain_Name = Domain_Name;
                             authenticate.UserMasterID = Convert.ToInt32(ds.Tables[0].Rows[0]["UserID"]);
                             authenticate.TenantId = Convert.ToInt32(ds.Tables[0].Rows[0]["Tenant_Id"]);
+                            authenticate.FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]);
+                            authenticate.LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]);
                             authenticate.Message = "Valid user";
                         }
                         else

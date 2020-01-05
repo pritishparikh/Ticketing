@@ -54,5 +54,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// Tenant ID
         /// </summary>
         public int TenantId { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+
     }
 }
