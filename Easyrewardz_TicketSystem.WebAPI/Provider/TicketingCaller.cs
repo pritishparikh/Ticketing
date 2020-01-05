@@ -89,10 +89,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ticketList.DeleteSavedSearch(SearchParamID, UserID);
 
         }
-        public int SaveSearch(ITicketing _ticket, int UserID, string SearchParamID, string parameter)
+        public int SaveSearch(ITicketing _ticket, int UserID, string SearchParamID, string parameter, int TenantId)
         {
             _ticketList = _ticket;
-            return _ticketList.AddSearch(UserID, SearchParamID, parameter);
+            return _ticketList.AddSearch(UserID, SearchParamID, parameter, TenantId);
 
         }
         public int AssignTicket(ITicketing _ticket, string TicketID, int TenantID, int UserID, int AgentID, string Remark)

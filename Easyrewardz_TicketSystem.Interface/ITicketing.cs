@@ -26,7 +26,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int DeleteSavedSearch(int SearchParamID, int UserID);
 
-        int AddSearch(int UserID, string SearchSaveName, string parameter);
+        int AddSearch(int UserID, string SearchSaveName, string parameter, int TenantId);
 
         int AssignTicket(string TicketID, int TenantID, int UserID, int AgentID, string Remark);
 

@@ -417,7 +417,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="SearchSaveName"></param>
         /// <param name="parameter"></param>s
         /// <returns></returns>
-        public int AddSearch(int UserID, string SearchSaveName, string parameter)
+        public int AddSearch(int UserID, string SearchSaveName, string parameter, int TenantId)
         {
             int i = 0;
             try
@@ -428,6 +428,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
                 cmd.Parameters.AddWithValue("@Search_Parameters", parameter);
                 cmd.Parameters.AddWithValue("@Search_Name", SearchSaveName);
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }
