@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
@@ -15,7 +16,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using static System.Net.Mime.MediaTypeNames;
-
+using System.Net;
+using System.Web;
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -95,17 +97,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel createTicket()
         {
             TicketingDetails ticketingDetails = new TicketingDetails();
-           
             var files = Request.Form.Files;
+            string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
             string fileName = "";
             string finalAttchment = "";
             if (files.Count > 0)
             {
                 for (int i = 0; i < files.Count; i++)
                 {
-                    fileName += files[i].FileName.Replace(".", DateTime.Now.ToString("ddmmyyyyhhssfff") + ".") + ",";
-                    finalAttchment = fileName.TrimEnd(',');
+                    fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";                    
                 }
+                finalAttchment = fileName.TrimEnd(',');
             }
             var Keys = Request.Form;
             ticketingDetails = JsonConvert.DeserializeObject<TicketingDetails>(Keys["ticketingDetails"]);
@@ -126,31 +128,33 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ticketingDetails.CreatedBy = authenticate.UserMasterID; ///Created  By from the token
                 ticketingDetails.AssignedID = authenticate.UserMasterID;
 
-                int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, _ticketAttachmentFolderName, finalAttchment);
+                var exePath = Path.GetDirectoryName(System.Reflection
+                     .Assembly.GetExecutingAssembly().CodeBase);
+                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                var appRoot = appPathMatcher.Match(exePath).Value;
+                string Folderpath = appRoot + "\\" + _ticketAttachmentFolderName;
+
+                int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
                 if (result > 0)
                 {
                     if (files.Count > 0)
                     {
+                        string[] filesName = finalAttchment.Split(",");
                         for (int i = 0; i < files.Count; i++)
                         {
-                            foreach (var file in files)
-                            {
-                                if (file.Length > 0)
-                                {
-                                    using (var ms = new MemoryStream())
-                                    {
-                                        // file.CopyTo(ms);
-                                        var fileBytes = ms.ToArray();
-                                        FileStream docFile = new FileStream(_ticketAttachmentFolderName + "\\" + fileName, FileMode.Create, FileAccess.Write);
-                                        ms.WriteTo(docFile);
-                                        docFile.Close();
-                                        ms.Close();
-                                        string s = Convert.ToBase64String(fileBytes);
-                                        byte[] a = Convert.FromBase64String(s);
-
-                                        // act on the Base64 data
-                                    }
-                                }
+                            using (var ms = new MemoryStream())
+                            {                     
+                                files[i].CopyTo(ms);
+                                var fileBytes = ms.ToArray();
+                                MemoryStream msfile = new MemoryStream(fileBytes);
+                                FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                                msfile.WriteTo(docFile);
+                                docFile.Close();
+                                ms.Close();
+                                msfile.Close();
+                                string s = Convert.ToBase64String(fileBytes);
+                                byte[] a = Convert.FromBase64String(s);
+                                // act on the Base64 data
                             }
                         }
                     }
@@ -533,7 +537,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             }
             return _objResponseModel;
-        }
+        }   
         #endregion
     }
 }
