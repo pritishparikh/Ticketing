@@ -125,6 +125,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 TicketingCaller _newTicket = new TicketingCaller();
 
+                ticketingDetails.TenantID = authenticate.TenantId;
                 ticketingDetails.CreatedBy = authenticate.UserMasterID; ///Created  By from the token
                 ticketingDetails.AssignedID = authenticate.UserMasterID;
 
