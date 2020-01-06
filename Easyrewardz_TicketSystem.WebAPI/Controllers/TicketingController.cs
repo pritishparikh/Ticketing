@@ -61,7 +61,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                
+
                 TicketingCaller _newTicket = new TicketingCaller();
 
                 objTicketList = _newTicket.GetAutoSuggestTicketList(new TicketingService(_connectioSting), TikcketTitle, authenticate.TenantId);
@@ -105,7 +105,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 for (int i = 0; i < files.Count; i++)
                 {
-                    fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";                    
+                    fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
                 }
                 finalAttchment = fileName.TrimEnd(',');
             }
@@ -143,7 +143,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                         for (int i = 0; i < files.Count; i++)
                         {
                             using (var ms = new MemoryStream())
-                            {                     
+                            {
                                 files[i].CopyTo(ms);
                                 var fileBytes = ms.ToArray();
                                 MemoryStream msfile = new MemoryStream(fileBytes);
@@ -378,7 +378,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
                 int UserID = authenticate.UserMasterID;
-                
+
                 int result = _TicketCaller.DeleteSavedSearch(new TicketingService(_connectioSting), SearchParamID, UserID);
                 StatusCode =
                 result == 0 ?
@@ -537,7 +537,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             }
             return _objResponseModel;
-        }   
+        }
         #endregion
     }
 }
