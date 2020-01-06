@@ -19,7 +19,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [ApiController]
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class BrandController : ControllerBase
-    { 
+    {
         #region Variable Declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
@@ -67,9 +67,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objBrandList = _newMasterBrand.GetBrandList(new BrandServices(_connectioSting), authenticate.TenantId);
 
                 StatusCode =
-                objBrandList.Count == 0? 
+                objBrandList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                                 
+
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
                 _objResponseModel.Status = true;
@@ -92,6 +92,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+
+        [HttpPost]
+        [Route("AddBrand")]
+        public ResponseModel AddBrand([FromBody]Brand brand)
+        {
+
+            MasterCaller _newMasterBrand = new MasterCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                brand.CreatedBy = authenticate.UserMasterID;
+                int result = _newMasterBrand.AddBrand(new BrandServices(_connectioSting), brand, authenticate.TenantId);
+
+                StatusCode =
+                result == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
         #endregion
     }
 }

@@ -53,6 +53,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _brandList.GetBrandList(TenantID);
         }
 
+        public int AddBrand(IBrand _brand, Brand brand, int TenantId)
+        {
+            _brandList = _brand;
+            return _brandList.AddBrand(brand, TenantId);
+        }
+
         #endregion
 
         #region Methods for the Category

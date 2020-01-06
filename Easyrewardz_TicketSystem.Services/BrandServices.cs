@@ -68,5 +68,40 @@ namespace Easyrewardz_TicketSystem.Services
             return brands;
         }
 
+        public int AddBrand(Brand brand, int TenantId)
+        {
+
+            MySqlCommand cmd = new MySqlCommand();
+            int k = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_InsertBrand", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.Parameters.AddWithValue("@Brand_Name", brand.BrandName);
+                cmd1.Parameters.AddWithValue("@Brand_Code", brand.BrandCode);
+                cmd1.Parameters.AddWithValue("@Is_Active", brand.IsActive);
+                cmd1.Parameters.AddWithValue("@Created_By", brand.CreatedBy);
+
+                k = Convert.ToInt32(cmd1.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return k;
+
+        }
     }
 }

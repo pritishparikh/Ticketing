@@ -11,5 +11,8 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface IBrand
     {
         List<Brand> GetBrandList(int TenantID);
+
+        int AddBrand(Brand brand, int TenantId);
+
     }
 }
