@@ -155,6 +155,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                                 string s = Convert.ToBase64String(fileBytes);
                                 byte[] a = Convert.FromBase64String(s);
                                 // act on the Base64 data
+
                             }
                         }
                     }
