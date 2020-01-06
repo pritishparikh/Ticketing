@@ -113,8 +113,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                _objcustomerMaster = _customercaller.getCustomerDetailsByEmailIdandPhone(new CustomerService(_connectioSting), SearchText);
+
+                _objcustomerMaster = _customercaller.getCustomerDetailsByEmailIdandPhone(new CustomerService(_connectioSting), SearchText, authenticate.TenantId);
 
                 StatusCode =
                       _objcustomerMaster.Count == 0 ?
