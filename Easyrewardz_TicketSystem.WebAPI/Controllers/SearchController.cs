@@ -31,10 +31,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         #region custom Methods
         [HttpPost]
-        [Route("SearchTicket")]
-        [AllowAnonymous]
+        [Route("GetTicketSearchResult")]
+        //[AllowAnonymous]
 
-        public ResponseModel GetTicketSearchResult([FromBody]SearchRequest searchparams)
+        public ResponseModel GetTicketSearchResult([FromBody]SearchRequest searchparams )
         {
             string[] _searchResult = null;
             ResponseModel _objResponseModel = new ResponseModel();
