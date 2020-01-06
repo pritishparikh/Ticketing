@@ -505,8 +505,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("Schedule")]
-
-        public ResponseModel Schedule(ScheduleMaster scheduleMaster)
+        public ResponseModel Schedule([FromBody]ScheduleMaster scheduleMaster)
         {
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -539,6 +538,38 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             }
             return _objResponseModel;
+        }
+
+        /// <summary>
+        /// Export ToCSV
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// /// <param name="SearchSaveName"></param>
+        /// /// <param name="parameter"></param>
+        /// <returns></returns>
+        //[HttpPost]
+        [Route("c")]
+        public IActionResult ExportToCSV([FromBody] SearchRequest searchparams)
+        {
+            List<SearchResponse> _searchResult = null;
+            // string[] _searchResult = null;
+            ResponseModel _objResponseModel = new ResponseModel();
+            SearchCaller _newsearchMaster = new SearchCaller();
+            try
+            {
+                _searchResult = _newsearchMaster.GetSearchResults(new SearchService(_connectioSting), searchparams);
+                string csv = ExportSearch(_searchResult);
+                return File(new System.Text.UTF8Encoding().GetBytes(csv), "text/csv", "ABC.csv");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("", "");
+            }
+        }
+
+        public string ExportSearch(IEnumerable<SearchResponse> objData)
+        {
+            return CommonService.ListToCSV(objData, "");
         }
         #endregion
     }
