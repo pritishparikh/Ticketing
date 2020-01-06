@@ -46,10 +46,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
 
-                //string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                //Authenticate authenticate = new Authenticate();
-                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                //searchparams.tenantID = authenticate.TenantId; // add tenantID to request
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                searchparams.tenantID = authenticate.TenantId; // add tenantID to request
 
                 _searchResult = _newsearchMaster.GetSearchResults(new SearchService(_connectioSting), searchparams);
 
@@ -87,10 +87,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
 
-                //string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                //Authenticate authenticate = new Authenticate();
-                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                //searchparams.tenantID = authenticate.TenantId; // add tenantID to request
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                searchparams.tenantID = authenticate.TenantId; // add tenantID to request
 
                 _searchResult = _newsearchMaster.GetStatusCount(new SearchService(_connectioSting), searchparams);
 
