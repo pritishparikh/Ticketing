@@ -36,7 +36,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("SearchTicket")]
       //  [AllowAnonymous]
 
-        public ResponseModel GetTicketSearchResult([FromBody]SearchRequest searchparams)
+        public ResponseModel GetTicketSearchResult([FromBody]SearchRequest searchparams )
         {
             List<SearchResponse> _searchResult = null;
             ResponseModel _objResponseModel = new ResponseModel();

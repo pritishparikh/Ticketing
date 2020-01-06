@@ -76,7 +76,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="Email"></param>
         /// <param name="Phoneno"></param>
         /// <returns></returns>
-        public List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText)
+        public List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText, int TenantId)
         {
             List<CustomerMaster> customerMasters = new List<CustomerMaster>();
 
@@ -88,6 +88,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_searchCustomerByEmailAndPhone", conn);
                 cmd1.Parameters.AddWithValue("@searchText", searchText);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
                 DataTable dt = new DataTable();
