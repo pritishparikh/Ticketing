@@ -10,9 +10,9 @@ namespace Easyrewardz_TicketSystem.Interface
     /// </summary>
     public interface ISearchTicket
     {
-        string[] SearchTickets(SearchRequest searchparams);
+        List<SearchResponse> SearchTickets(SearchRequest searchparams);
 
-         
+        List<string> TicketStatusCount(SearchRequest searchparams);
 
     }
 }

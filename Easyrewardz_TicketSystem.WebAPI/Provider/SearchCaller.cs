@@ -16,12 +16,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region Methods for Search
 
-        public string[] GetSearchResults(ISearchTicket _search, SearchRequest searchparams)
+        public List<SearchResponse> GetSearchResults(ISearchTicket _search, SearchRequest searchparams)
         {
            
             _searchList = _search;
 
             return _searchList.SearchTickets(searchparams);
+
+        }
+
+        public List<string> GetStatusCount(ISearchTicket _search, SearchRequest searchparams)
+        {
+
+            _searchList = _search;
+
+            return _searchList.TicketStatusCount(searchparams);
 
         }
         #endregion 

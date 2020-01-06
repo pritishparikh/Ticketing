@@ -14,7 +14,7 @@ namespace Easyrewardz_TicketSystem.Interface
         
         CustomerMaster getCustomerbyId(int CustomerID, int TenantId);
 
-        List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText);
+        List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText, int TenantId);
 
       
         int addCustomerDetails(CustomerMaster customerMaster, int TenantId);
