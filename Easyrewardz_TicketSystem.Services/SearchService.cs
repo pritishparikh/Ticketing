@@ -21,12 +21,14 @@ namespace Easyrewardz_TicketSystem.Services
         }
         #endregion
 
-        public string[] SearchTickets(SearchRequest searchparams)
+        public List<SearchResponse> SearchTickets(SearchRequest searchparams)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
             List<string> CountList = new List<string>();
+
+            int rowStart = (searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
                 conn.Open(); 
@@ -46,7 +48,7 @@ namespace Easyrewardz_TicketSystem.Services
                 sqlcmd.Parameters.AddWithValue("_createdDate", searchparams.creationDate);
                 sqlcmd.Parameters.AddWithValue("_lastUpdatedDate", searchparams.lastUpdatedDate);
                 sqlcmd.Parameters.AddWithValue("_SLADue", searchparams.SLADue);
-                sqlcmd.Parameters.AddWithValue("_ticketStatus", (int)((EnumMaster.TicketStatus)Enum.Parse(typeof(EnumMaster.TicketStatus), searchparams.ticketStatus)));
+                sqlcmd.Parameters.AddWithValue("_ticketStatus", searchparams.ticketStatus);
                 sqlcmd.Parameters.AddWithValue("_customerMob", searchparams.customerMob);
                 sqlcmd.Parameters.AddWithValue("_customerMail", searchparams.customerEmail);
                 sqlcmd.Parameters.AddWithValue("_ticketID", searchparams.TicketID);
@@ -115,20 +117,41 @@ namespace Easyrewardz_TicketSystem.Services
                             Priority = Convert.ToString(r.Field<object>("PriortyName")),
                             Assignee = Convert.ToString(r.Field<object>("AssignedName")),
                             CreatedOn = Convert.ToDateTime(r.Field<object>("CreatedDate")),
-                            creationDetails = setCreationdetails(r),
+
+                            createdBy = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedByName"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedByName")),
+
+                            createdago= string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("CreatedDate")), "CreatedSpan"),
+                            assignedTo = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedName"))) ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
+
+                            assignedago=string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("AssignedDate")), "AssignedSpan"),
+
+                            updatedBy = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("ModifyByName"))) ? string.Empty : Convert.ToString(r.Field<object>("ModifyByName")),
+
+                            updatedago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("ModifiedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("ModifiedDate")), "ModifiedSpan"),
+
+                            responseTimeRemainingBy =(string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityRespond"))))?
+                            string.Empty: setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond"))+"|"+ Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
+
+                            responseOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityRespond")))) ?
+                            string.Empty: setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond"))+"|"+ Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
+
+                            resolutionOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityResolve")))) ?
+                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan")
+
+
                             //creationDetails = JsonConvert.SerializeObject(ds.Tables[0])
                         }).ToList();
                     }
                 }
 
-                //objSearchResult[0].ticketStatusCount = ds.Tables[1].AsEnumerable()
-                //    .Select(x => Enum.GetName(typeof(EnumMaster.TicketStatus), Convert.ToInt32(x.Field<object>("StatusID")))
-                //        + "|" + Convert.ToString(Convert.ToInt32(x.Field<object>("StatusID")))).ToList();
 
-                CountList= ds.Tables[1].AsEnumerable().Select(x => Enum.GetName(typeof(EnumMaster.TicketStatus), Convert.ToInt32(x.Field<object>("StatusID")))
-                        + "|" + Convert.ToString(Convert.ToInt32(x.Field<object>("TicketStatusCount")))).ToList();
+                //  CountList= ds.Tables[1].AsEnumerable().Select(x => Enum.GetName(typeof(EnumMaster.TicketStatus), Convert.ToInt32(x.Field<object>("StatusID")))
+                //    + "|" + Convert.ToString(Convert.ToInt32(x.Field<object>("TicketStatusCount")))).ToList();
 
+                //paging here
+                objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? objSearchResult.Count / objSearchResult.Count : 1;
 
+                objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList(); 
             }
             catch (Exception ex)
             {
@@ -140,123 +163,152 @@ namespace Easyrewardz_TicketSystem.Services
                 
                 if (ds != null) ds.Dispose(); conn.Close();
             }
-            return new string[] { JsonConvert.SerializeObject(objSearchResult),JsonConvert.SerializeObject(CountList) };
+            return objSearchResult;
         }
 
-        public TicketCreationDetails setCreationdetails(DataRow tkt )
+        public List<string> TicketStatusCount(SearchRequest searchparams)
         {
-            string detail = string.Empty;
-            DateTime now = DateTime.Now;
-            TimeSpan diff = new TimeSpan();
-            TimeSpan RespondT = new TimeSpan();
-            TimeSpan ResolveT = new TimeSpan();
-            TicketCreationDetails tktDetails = new TicketCreationDetails() ;
-            
+            List<string> lstCount = new List<string>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
             try
+
             {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand sqlcmd = new MySqlCommand("SP_TicketStatusCount", conn);
+                sqlcmd.CommandType = CommandType.StoredProcedure;
 
-               tktDetails.createdBy= string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("CreatedByName"))) ? string.Empty : Convert.ToString(tkt.Field<object>("CreatedByName"));
-               tktDetails.assignedTo= string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("AssignedName"))) ? null : Convert.ToString(tkt.Field<object>("AssignedName"));
-               tktDetails.updatedBy = string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("ModifyByName"))) ? null : Convert.ToString(tkt.Field<object>("ModifyByName"));
 
-                if(!string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("CreatedDate"))))
+                sqlcmd.Parameters.AddWithValue("_tenantID", Convert.ToInt32(searchparams.tenantID));
+                sqlcmd.Parameters.AddWithValue("_assignedID", Convert.ToInt32(searchparams.assignedTo));
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = sqlcmd;
+                da.Fill(ds);
+
+                if (ds.Tables.Count > 0  && ds.Tables[0].Rows.Count > 0)
                 {
-                    diff = now - Convert.ToDateTime(tkt.Field<object>("CreatedDate"));
-                    tktDetails.createdago = new TimeDetails() { Days = diff.Days, Hours = diff.Hours, Minutes = diff.Minutes, Seconds = diff.Seconds };
-                    
+                    lstCount = ds.Tables[0].AsEnumerable().Select(x => Enum.GetName(typeof(EnumMaster.TicketStatus), Convert.ToInt32(x.Field<object>("StatusID")))
+                    + "|" + Convert.ToString(Convert.ToInt32(x.Field<object>("TicketStatusCount")))).ToList();
                 }
-               
-
-                if (!string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("AssignedDate"))))
-                {
-                    diff = now - Convert.ToDateTime(tkt.Field<object>("AssignedDate"));
-                    tktDetails.assignedago = new TimeDetails() { Days = diff.Days, Hours = diff.Hours, Minutes = diff.Minutes, Seconds = diff.Seconds };
-
-                    if (!string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("PriorityRespond"))))
-                    {
-                        string[] respondtime = Convert.ToString(tkt.Field<object>("PriorityRespond")).Split(new char[] { '-'});
-
-                        switch(respondtime[1])
-                        {
-                            case "D":
-                                RespondT = (Convert.ToDateTime(tkt.Field<object>("AssignedDate")).AddDays(Convert.ToDouble(respondtime[0])))-now;
-                                
-                                break;
-
-                            case "H":
-                                RespondT = (Convert.ToDateTime(tkt.Field<object>("AssignedDate")).AddHours(Convert.ToDouble(respondtime[0])))-now;
-                               
-                                break;
-
-                            case "M":
-                                RespondT = (Convert.ToDateTime(tkt.Field<object>("AssignedDate")).AddMinutes(Convert.ToDouble(respondtime[0])))-now;
-                               
-                                break;
-
-                        }
-
-                        if (RespondT.Minutes > 0)
-                        {
-                            tktDetails.responseTimeRemainingBy = new TimeDetails() { Days = diff.Days, Hours = diff.Hours, Minutes = diff.Minutes, Seconds = diff.Seconds };
-                        }
-                        else
-                        {
-                            tktDetails.responseOverdueBy= new TimeDetails() { Days = diff.Days, Hours = diff.Hours, Minutes = diff.Minutes, Seconds = diff.Seconds };
-                        }
-                        
-
-                    }
-
-                    if (!string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("PriorityResolve"))))
-                    {
-                        string[] respondtime = Convert.ToString(tkt.Field<object>("PriorityResolve")).Split(new char[] { '-' });
-
-                        switch (respondtime[1])
-                        {
-                            case "D":
-                                ResolveT = now-(Convert.ToDateTime(tkt.Field<object>("AssignedDate")).AddDays(Convert.ToDouble(respondtime[0]))) ;
-
-                                break;
-
-                            case "H":
-                                ResolveT = now-(Convert.ToDateTime(tkt.Field<object>("AssignedDate")).AddHours(Convert.ToDouble(respondtime[0]))) ;
-
-                                break;
-
-                            case "M":
-                                ResolveT = now-(Convert.ToDateTime(tkt.Field<object>("AssignedDate")).AddMinutes(Convert.ToDouble(respondtime[0]))) ;
-
-                                break;
-
-                        }
-
-                        if (ResolveT.Minutes > 0)
-                        {
-                            tktDetails.resolutionOverdueBy = new TimeDetails() { Days = diff.Days, Hours = diff.Hours, Minutes = diff.Minutes, Seconds = diff.Seconds };
-                        }
-                        
-                    }
-                }
-                
-                if (!string.IsNullOrEmpty(Convert.ToString(tkt.Field<object>("ModifiedDate"))))
-                {
-                    diff = now - Convert.ToDateTime(tkt.Field<object>("ModifiedDate"));
-                    tktDetails.updatedago = new TimeDetails() { Days = diff.Days, Hours = diff.Hours, Minutes = diff.Minutes, Seconds = diff.Seconds };
-                }
-               
-          
-
             }
-            catch (Exception ex)
+          catch(Exception ex)
             {
                 var test = ex.ToString() + "\n" + ex.StackTrace;
-                tktDetails = null;
-                
+                throw;
+            }
+            finally
+            {
+
+                if (ds != null) ds.Dispose(); conn.Close();
             }
 
-            return tktDetails;
-
+            return lstCount;
         }
-        
+
+        #region Mapping
+        public string setCreationdetails(string time, string ColName)
+        {
+            string timespan = string.Empty;
+            DateTime now = DateTime.Now;
+            TimeSpan diff = new TimeSpan();
+            string[] PriorityArr = null;
+           
+            try
+            {
+                if(ColName== "CreatedSpan" || ColName=="ModifiedSpan" || ColName== "AssignedSpan")
+                {
+                    diff = now - Convert.ToDateTime(time);
+                    timespan=CalculateSpan(diff);
+
+                }
+                else if(ColName == "RespondTimeRemainingSpan")
+                {
+                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+
+                    switch (PriorityArr[1])
+                    {
+                        case "D":
+                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0]))) - now;
+
+                            break;
+
+                        case "H":
+                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0]))) - now;
+
+                            break;
+
+                        case "M":
+                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0]))) - now;
+
+                            break;
+
+                    }
+                    timespan = CalculateSpan(diff);
+                }
+                else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan" )
+                {
+                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+
+                    switch (PriorityArr[1])
+                    {
+                        case "D":
+                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0])));
+
+                            break;
+
+                        case "H":
+                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0])));
+
+                            break;
+
+                        case "M":
+                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0])));
+
+                            break;
+
+                    }
+
+                    timespan = CalculateSpan(diff);
+                }
+              
+            }
+            catch(Exception)
+            {
+
+            }
+            finally
+            {
+                if (PriorityArr != null && PriorityArr.Length > 0)
+                    Array.Clear(PriorityArr, 0, PriorityArr.Length);
+            }
+            return timespan;
+        }
+
+        public string CalculateSpan(TimeSpan ts)
+        {
+            string span = string.Empty;
+
+            if(Math.Abs(ts.Days) >0)
+            {
+                span = Convert.ToString(Math.Abs(ts.Days)) + " Days Ago";
+            }
+            else if (Math.Abs(ts.Hours) > 0)
+            {
+                span = Convert.ToString(Math.Abs(ts.Hours)) + " Days Ago";
+            }
+            else if (Math.Abs(ts.Minutes) > 0)
+            {
+                span = Convert.ToString(Math.Abs(ts.Minutes)) + " Days Ago";
+            }
+            else if (Math.Abs(ts.Seconds) > 0)
+            {
+                span = Convert.ToString(Math.Abs(ts.Seconds)) + " Days Ago";
+            }
+
+            return span;
+        }
+
+        #endregion
     }
 }

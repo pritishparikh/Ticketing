@@ -24,7 +24,7 @@ namespace Easyrewardz_TicketSystem.Model
         public DateTime creationDate { get; set; }
         public DateTime lastUpdatedDate { get; set; }
         public string SLADue { get; set; }
-        public string ticketStatus { get; set; }
+        public int ticketStatus { get; set; }
 
 
 
@@ -76,6 +76,7 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class SearchResponse
     {
+        public int totalpages { get; set; }
         public int ticketID { get; set; }
         public string ticketStatus { get; set; }
         public string Message { get; set; }
@@ -86,31 +87,36 @@ namespace Easyrewardz_TicketSystem.Model
         public string Priority { get; set; }
         public DateTime CreatedOn { get; set; }
 
-        public TicketCreationDetails creationDetails { get; set; }
+        public string ClaimStatus { get; set; }
+        public string TaskStatus { get; set; }
 
-        //public List<string> ticketStatusCount { get; set; }
-
-    }
-
-    public class TicketCreationDetails
-    {
         public string createdBy { get; set; }
-        public TimeDetails createdago { get; set; }
+        public string createdago { get; set; }
         public string assignedTo { get; set; }
-        public TimeDetails assignedago { get; set; }
+        public string assignedago { get; set; }
         public string updatedBy { get; set; }
-        public TimeDetails updatedago { get; set; }
-        public TimeDetails responseTimeRemainingBy { get; set; }
-        public TimeDetails responseOverdueBy { get; set; }
-        public TimeDetails resolutionOverdueBy { get; set; }
+        public string updatedago { get; set; }
+        public string responseTimeRemainingBy { get; set; }
+        public string responseOverdueBy { get; set; }
+        public string resolutionOverdueBy { get; set; }
+
+
     }
 
-    public class TimeDetails
-    {
-        public int Days { get; set; }
-        public int Hours { get; set; }
-        public int Minutes { get; set; }
-        public int Seconds { get; set; }
-    }
+    //public class TicketCreationDetails
+    //{
+    //    public string createdBy { get; set; }
+    //    public string createdago { get; set; }
+    //    public string assignedTo { get; set; }
+    //    public string assignedago { get; set; }
+    //    public string updatedBy { get; set; }
+    //    public string updatedago { get; set; }
+    //    public string responseTimeRemainingBy { get; set; }
+    //    public string responseOverdueBy { get; set; }
+    //    public string resolutionOverdueBy { get; set; }
+    //}
+
+
+    
 }
 
