@@ -19,32 +19,28 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="subject"></param>
         /// <param name="body"></param>
         /// <returns></returns>
-        public bool SendEmail(string emailToAddress, string subject, string body, string[] cc = null, string[] bcc = null)
+        public bool SendEmail(SMTPDetails smtpDetails,string emailToAddress, string subject, string body, string[] cc = null, string[] bcc = null, int tenantId= 0)
         {
             bool isMailSent = false;
             try
             {
-                SMTPDetails smtpDetails = new SMTPDetails();
-                smtpDetails.FromEmailId = "realtester2019@gmail.com";
-                smtpDetails.Password = "Brain@2019";
-                smtpDetails.SMTPServer = "smtp.gmail.com";
-                smtpDetails.SMTPPort = "587";
-                smtpDetails.IsBodyHtml = true;
+                //SMTPDetails smtpDetails = new SMTPDetails();
+                
+                //smtpDetails.FromEmailId = "realtester2019@gmail.com";
+                //smtpDetails.Password = "Brain@2019";
+                //smtpDetails.SMTPServer = "smtp.gmail.com";
+                //smtpDetails.SMTPPort = "587";
+                //smtpDetails.IsBodyHtml = true;
 
-                string gmailUserName = smtpDetails.FromEmailId;
-                string gmailUserPassword = smtpDetails.Password;
-                string SMTPSERVER = smtpDetails.SMTPServer;
-                int PORTNO = Convert.ToInt32(smtpDetails.SMTPPort);
-
-                SmtpClient smtpClient = new SmtpClient(SMTPSERVER, PORTNO);
-                smtpClient.EnableSsl = true;
+                SmtpClient smtpClient = new SmtpClient(smtpDetails.SMTPServer, Convert.ToInt32(smtpDetails.SMTPPort));
+                smtpClient.EnableSsl = smtpDetails.EnableSsl;
                 smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtpClient.UseDefaultCredentials = false;
-                smtpClient.Credentials = new NetworkCredential(gmailUserName, gmailUserPassword);
+                smtpClient.UseDefaultCredentials = true;
+                smtpClient.Credentials = new NetworkCredential(smtpDetails.FromEmailId, smtpDetails.Password);
                 {
                     using (MailMessage message = new MailMessage())
                     {
-                        message.From = new MailAddress(gmailUserName, "EasyRewardz");
+                        message.From = new MailAddress(smtpDetails.FromEmailId, "EasyRewardz");
                         message.Subject = subject == null ? "" : subject;
                         message.Body = body == null ? "" : body;
                         message.IsBodyHtml = smtpDetails.IsBodyHtml;

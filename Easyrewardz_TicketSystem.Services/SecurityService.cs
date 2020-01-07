@@ -258,13 +258,13 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
 
         #region Send mail for forget password
-        public bool sendMailForForgotPassword(string emailId, string content)
+        public bool sendMailForForgotPassword(SMTPDetails sMTPDetails,string emailId, string content,int TenantId)
         {
             bool isSent = false;
             try
             {
                 CommonService commonService = new CommonService();
-                isSent = commonService.SendEmail(emailId, "Forgot Password", content, null, null);
+                isSent = commonService.SendEmail(sMTPDetails, emailId, "Forgot Password", content, null, null,TenantId);
 
                 return isSent;
             }
@@ -552,7 +552,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="_radisCacheServerAddress"></param>
         /// <param name="_token"></param>
         /// <returns></returns>
-        public static Authenticate GetAuthenticateDataFromToken(string _radisCacheServerAddress,string _token)
+        public static Authenticate GetAuthenticateDataFromToken(string _radisCacheServerAddress, string _token)
         {
             Authenticate authenticate = new Authenticate();
 
@@ -571,6 +571,59 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return authenticate;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="EmailId"></param>
+        public Authenticate validateUserEmailId(string EmailId)
+        {
+            Authenticate authenticate = new Authenticate();
+
+            try
+            {
+                DataSet ds = new DataSet();
+                MySqlCommand cmd = new MySqlCommand();
+                try
+                {
+                    conn.Open();
+                    cmd.Connection = conn;
+                    MySqlCommand cmd1 = new MySqlCommand("SP_valiedateEmailId", conn);
+                    cmd1.CommandType = CommandType.StoredProcedure;
+                    cmd1.Parameters.AddWithValue("@Email_Id", EmailId);
+                    MySqlDataAdapter da = new MySqlDataAdapter();
+                    da.SelectCommand = cmd1;
+                    da.Fill(ds);
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            authenticate.FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]);
+                            authenticate.LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]);
+                            authenticate.TenantId = Convert.ToInt16(ds.Tables[0].Rows[0]["TenantId"]);
+                            authenticate.UserEmailID = Convert.ToString(ds.Tables[0].Rows[0]["EmailId"]);
+                            authenticate.UserMasterID = Convert.ToInt16(ds.Tables[0].Rows[0]["UserMasterID"]);
+                        }
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    throw (ex);
+                }
+                finally
+                {
+                    if (conn != null)
+                    {
+                        conn.Close();
+                    }
+                }
+                return authenticate;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
         #endregion

@@ -27,7 +27,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="emailId"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        bool sendMailForForgotPassword(string emailId,string content);
+        bool sendMailForForgotPassword(SMTPDetails sMTPDetails, string emailId,string content, int TenantId);
 
         /// <summary>
         /// Authenticate User 
@@ -44,5 +44,12 @@ namespace Easyrewardz_TicketSystem.Interface
         /// </summary>
         /// <param name="token"></param>
         void Logout(string token);
+
+        /// <summary>
+        /// Email id
+        /// </summary>
+        /// <param name="EmailId"></param>
+        /// <returns></returns>
+        Authenticate validateUserEmailId(string EmailId);
     }
 }
