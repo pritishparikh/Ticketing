@@ -560,7 +560,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_getTitleNotess", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_getTitleNotes", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Ticket_Id", TicketId);
                 MySqlDataAdapter da = new MySqlDataAdapter();
