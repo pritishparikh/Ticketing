@@ -54,13 +54,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="cipherEmailId">Encrypted email Id</param>
         /// <param name="Password">Plain text Password </param>
         /// <returns></returns>
-        public bool sendMail(ISecurity security, string EmailId, string content)
+        public bool sendMail(ISecurity security, SMTPDetails sMTPDetails, string EmailId, string content, int TenantId)
         {
             _SecurityRepository = security;
             CommonService commonService = new CommonService();
 
 
-            return _SecurityRepository.sendMailForForgotPassword(EmailId, content);
+            return _SecurityRepository.sendMailForForgotPassword(sMTPDetails, EmailId, content, TenantId);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="userId"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public AccountModal validateUser (ISecurity security, string ProgramCode, string Domainname, string userId, string password)
+        public AccountModal validateUser(ISecurity security, string ProgramCode, string Domainname, string userId, string password)
         {
             _SecurityRepository = security;
             return _SecurityRepository.AuthenticateUser(ProgramCode, Domainname, userId, password);
@@ -89,6 +89,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _SecurityRepository.Logout(token);
         }
 
+        public Authenticate validateUserEmailId(ISecurity security, string EmailId)
+        {
+            _SecurityRepository = security;
+            return _SecurityRepository.validateUserEmailId(EmailId);
+        }
         #endregion
     }
 }

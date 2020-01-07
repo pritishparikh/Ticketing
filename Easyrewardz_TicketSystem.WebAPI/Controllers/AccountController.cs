@@ -60,27 +60,41 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             try
             {
-                CommonService commonService = new CommonService();
-                string encryptedEmailId = commonService.Encrypt(EmailId);
-
+                /////Validate User
                 securityCaller _securityCaller = new securityCaller();
-                string url = configuration.GetValue<string>("websiteURL") + "/changePassword";
-                string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url + "?Id=" + encryptedEmailId;
-                bool isUpdate = _securityCaller.sendMail(new SecurityService(_connectioSting), EmailId, body);
-
-                if (isUpdate)
+                Authenticate authenticate = _securityCaller.validateUserEmailId(new SecurityService(_connectioSting, _radisCacheServerAddress), EmailId);
+                if (authenticate.UserMasterID > 0)
                 {
-                    _objResponseModel.Status = true;
-                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
-                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
-                    _objResponseModel.ResponseData = "Mail sent successfully";
+                    MasterCaller masterCaller = new MasterCaller();
+                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
+
+                    CommonService commonService = new CommonService();
+                    string encryptedEmailId = commonService.Encrypt(EmailId);
+                    string url = configuration.GetValue<string>("websiteURL") + "/changePassword";
+                    string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url + "?Id=" + encryptedEmailId;
+                    bool isUpdate = _securityCaller.sendMail(new SecurityService(_connectioSting), sMTPDetails, EmailId, body, authenticate.TenantId);
+
+                    if (isUpdate)
+                    {
+                        _objResponseModel.Status = true;
+                        _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                        _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                        _objResponseModel.ResponseData = "Mail sent successfully";
+                    }
+                    else
+                    {
+                        _objResponseModel.Status = false;
+                        _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                        _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                        _objResponseModel.ResponseData = "Mail sent failure";
+                    }
                 }
                 else
                 {
-                    _objResponseModel.Status = true;
-                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                    _objResponseModel.ResponseData = "Mail sent failure";
+                    _objResponseModel.Status = false;
+                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.RecordNotFound;
+                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.RecordNotFound);
+                    _objResponseModel.ResponseData = "Sorry User does not exist or active";
                 }
             }
             catch (Exception ex)
@@ -88,7 +102,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
                 _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                _objResponseModel.ResponseData = "Mail sent failure";
+                _objResponseModel.ResponseData = "We had an error! Sorry about that";
             }
             return _objResponseModel;
         }

@@ -184,6 +184,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #endregion
 
+        public SMTPDetails GetSMTPDetails(IMasterInterface _ImasterInterface,int TenantId)
+        {
+            _Imaster = _ImasterInterface;
+            return _Imaster.GetSMTPDetails(TenantId);
+        }
 
     }
 }

@@ -262,7 +262,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         #region SMTP Information 
 
-        public SMTPDetails GetMTPDetails(int TenantID)
+        public SMTPDetails GetSMTPDetails(int TenantID)
         {
             DataSet ds = new DataSet();
             SMTPDetails sMTPDetails = new SMTPDetails();
@@ -281,13 +281,13 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-                    sMTPDetails.EnableSsl = Convert.ToBoolean(ds.Tables[0].Rows[0]["EnableSsl"]);
+                    sMTPDetails.EnableSsl = Convert.ToBoolean(ds.Tables[0].Rows[0]["EnabledSSL"]);
                     sMTPDetails.SMTPPort = Convert.ToString(ds.Tables[0].Rows[0]["SMTPPort"]);
-                    sMTPDetails.FromEmailId = Convert.ToString(ds.Tables[0].Rows[0]["FromEmailId"]);
+                    sMTPDetails.FromEmailId = Convert.ToString(ds.Tables[0].Rows[0]["EmailUserID"]);
                     sMTPDetails.IsBodyHtml = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsBodyHtml"]);
-                    sMTPDetails.Password = Convert.ToString(ds.Tables[0].Rows[0]["Password"]);
+                    sMTPDetails.Password = Convert.ToString(ds.Tables[0].Rows[0]["EmailPassword"]);
                     sMTPDetails.SMTPHost = Convert.ToString(ds.Tables[0].Rows[0]["SMTPHost"]);
-                    sMTPDetails.SMTPServer = Convert.ToString(ds.Tables[0].Rows[0]["SMTPServer"]);
+                    sMTPDetails.SMTPServer = Convert.ToString(ds.Tables[0].Rows[0]["SMTPHost"]);
                 }
             }
             catch (Exception ex)
