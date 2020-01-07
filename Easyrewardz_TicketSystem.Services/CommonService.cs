@@ -28,7 +28,7 @@ namespace Easyrewardz_TicketSystem.Services
                 smtpDetails.FromEmailId = "realtester2019@gmail.com";
                 smtpDetails.Password = "Brain@2019";
                 smtpDetails.SMTPServer = "smtp.gmail.com";
-                smtpDetails.SMTPPort = 587;
+                smtpDetails.SMTPPort = "587";
                 smtpDetails.IsBodyHtml = true;
 
                 string gmailUserName = smtpDetails.FromEmailId;

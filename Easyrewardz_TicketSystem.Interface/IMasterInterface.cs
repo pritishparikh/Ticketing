@@ -43,5 +43,12 @@ namespace Easyrewardz_TicketSystem.Interface
         /// </summary>
         /// <returns></returns>
         List<TicketSourceMaster> GetTicketSources();
+
+        /// <summary>
+        /// Get SMTP details by Tenant Id
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        SMTPDetails GetMTPDetails(int TenantID);
     }
 }
