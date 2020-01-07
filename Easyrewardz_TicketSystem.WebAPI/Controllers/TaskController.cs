@@ -245,7 +245,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("AddComment")]
-        public ResponseModel AddComment(int Id, int TaskID, int ClaimID, int TicketID, string Comment)
+        //public ResponseModel AddComment(int Id, int TaskID, int ClaimID, int TicketID, string Comment)
+        public ResponseModel AddComment(int CommentForId, int ID,  string Comment)
         {
             TaskCaller _taskcaller = new TaskCaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -257,7 +258,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                int result = _taskcaller.AddComment(new TaskServices(_connectionSting), Id, TaskID, ClaimID, TicketID, Comment, authenticate.UserMasterID);
+                int result = _taskcaller.AddComment(new TaskServices(_connectionSting), CommentForId, ID, Comment, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

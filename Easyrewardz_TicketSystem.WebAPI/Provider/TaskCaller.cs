@@ -44,10 +44,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _TaskRepository = task;
             return _TaskRepository.GetAssignedTo(Function_ID);
         }
-        public int AddComment(ITask task, int Id, int TaskID, int ClaimID, int TicketID, string Comment, int UserID)
+        public int AddComment(ITask task, int CommentForId,int ID, string Comment, int UserID)
         {
             _TaskRepository = task;
-            return _TaskRepository.AddComment(Id, TaskID, ClaimID, TicketID, Comment, UserID);
+            return _TaskRepository.AddComment(CommentForId, ID, Comment, UserID);
         }
         public List<CustomClaimMaster> GetClaimList(ITask task,int TicketId)
         {

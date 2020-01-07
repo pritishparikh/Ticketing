@@ -245,7 +245,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="Id"></param> 1 for task comment, 2 for claim comment and 3 for ticket notes comment
         /// <returns></returns>
-        public int AddComment(int Id, int TaskID, int ClaimID, int TicketID, string Comment, int UserID)
+        public int AddComment(int CommentForId, int ID, string Comment, int UserID)
         {
 
             int success = 0;
@@ -254,10 +254,8 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd1 = new MySqlCommand("SP_AddComment", conn);
                 cmd1.Connection = conn;
-                cmd1.Parameters.AddWithValue("@ID", Id);
-                cmd1.Parameters.AddWithValue("@Task_ID", TaskID);
-                cmd1.Parameters.AddWithValue("@Claim_ID", ClaimID);
-                cmd1.Parameters.AddWithValue("@Ticket_ID", TicketID);
+                cmd1.Parameters.AddWithValue("@ID", CommentForId);
+                cmd1.Parameters.AddWithValue("@Task_ID", ID);
                 cmd1.Parameters.AddWithValue("@Comments", Comment);
                 cmd1.Parameters.AddWithValue("@User_ID", UserID);
                 cmd1.CommandType = CommandType.StoredProcedure;
