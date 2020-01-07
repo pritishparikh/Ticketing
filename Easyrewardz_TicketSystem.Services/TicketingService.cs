@@ -156,6 +156,9 @@ namespace Easyrewardz_TicketSystem.Services
                 int a = 0;
                 //conn.Open();
                 //cmd.Connection = conn;
+                ticketingDetails.ticketingMailerQues[0].CreatedBy = ticketingDetails.CreatedBy;
+
+
                 MySqlCommand cmdMail = new MySqlCommand("SP_SendTicketingEmail", conn);
                 cmdMail.Parameters.AddWithValue("@Tenant_ID", ticketingDetails.TenantID);
                 cmdMail.Parameters.AddWithValue("@Ticket_ID", ticketID);
