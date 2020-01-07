@@ -26,6 +26,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
+            List<SearchResponse> temp = new List<SearchResponse>(); //delete later
             List<string> CountList = new List<string>();
 
             int rowStart = (searchparams.pageNo - 1) * searchparams.pageSize;
@@ -146,11 +147,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-                //paging here
-                if (searchparams.pageSize > 0)
-                objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
+                //temporay filter for react binding
+                temp.Add(objSearchResult.AsEnumerable().Select(x => x).FirstOrDefault());
 
-                objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList(); 
+                if (searchparams.pageSize > 0)
+                    temp[0].totalpages = temp.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(temp.Count / searchparams.pageSize)) : 1;
+                //********
+
+
+                //paging here
+                //if (searchparams.pageSize > 0)
+                //objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
+
+                //objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList(); 
             }
             catch (Exception ex)
             {
@@ -162,7 +171,8 @@ namespace Easyrewardz_TicketSystem.Services
                 
                 if (ds != null) ds.Dispose(); conn.Close();
             }
-            return objSearchResult;
+            // return objSearchResult;
+            return temp;
         }
 
         public List<string> TicketStatusCount(SearchRequest searchparams)
