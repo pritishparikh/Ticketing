@@ -13,8 +13,10 @@ namespace Easyrewardz_TicketSystem.Interface
     {
         int AddTaskDetails(TaskMaster taskMaster);
         CustomTaskMasterDetails GetTaskbyId(int taskID);
-        List<CustomTaskMasterDetails> GetTaskList();
+        List<CustomTaskMasterDetails> GetTaskList(int TicketId);
         int DeleteTask(int task_Id);
         List<CustomUserAssigned> GetAssignedTo(int Function_ID);
+        int AddComment(int Id,int TaskID ,int ClaimID,int TicketID,string Comment ,int UserID);
+        List<CustomClaimMaster> GetClaimList(int TicketId);
     }
 }

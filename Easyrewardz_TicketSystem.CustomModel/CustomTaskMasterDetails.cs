@@ -19,6 +19,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// </summary>
         public string TaskTitle { get; set; }
         /// <summary>
+        /// Task Description
+        /// </summary>
+        public string TaskDescription { get; set; }
+        /// <summary>
         /// Department Name
         /// </summary>
         public string DepartmentName { get; set; }
@@ -38,5 +42,9 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// Assign Name
         /// </summary>
         public string AssignName { get; set; }
+        /// <summary>
+        ///Due date
+        /// </summary>
+        public DateTime Duedate { get; set; }
     }
 }

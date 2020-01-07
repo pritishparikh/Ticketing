@@ -82,10 +82,8 @@ namespace Easyrewardz_TicketSystem.Services
                         taskMaster.TicketingTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
                         taskMaster.TaskStatus = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
                         taskMaster.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        taskMaster.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
-                        taskMaster.StoreCode = Convert.ToInt32(ds.Tables[0].Rows[i]["Storecode"]);
-                        taskMaster.CreatedBy = Convert.ToInt32(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        taskMaster.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
+                        taskMaster.TaskDescription = Convert.ToString(ds.Tables[0].Rows[i]["TaskDescription"]);           
+                        taskMaster.Duedate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TaskEndTime"]);
                         taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
                     }
                 }
@@ -108,7 +106,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="customerMaster"></param>
         /// <returns></returns>
-        public List<CustomTaskMasterDetails> GetTaskList()
+        public List<CustomTaskMasterDetails> GetTaskList(int TicketId)
         {
 
             DataSet ds = new DataSet();
@@ -118,6 +116,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_GetTaskList", conn);
                 cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Ticket_ID", TicketId);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -225,6 +224,89 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return Assignedto;
+        }
+
+        /// <summary>
+        /// Add Comment 
+        /// </summary>
+        /// <param name="Id"></param> 1 for task comment, 2 for claim comment and 3 for ticket notes comment
+        /// <returns></returns>
+        public int AddComment(int Id, int TaskID, int ClaimID, int TicketID, string Comment, int UserID)
+        {
+
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd1 = new MySqlCommand("SP_AddComment", conn);
+                cmd1.Connection = conn;
+                cmd1.Parameters.AddWithValue("@ID", Id);
+                cmd1.Parameters.AddWithValue("@Task_ID", TaskID);
+                cmd1.Parameters.AddWithValue("@Claim_ID", ClaimID);
+                cmd1.Parameters.AddWithValue("@Ticket_ID", TicketID);
+                cmd1.Parameters.AddWithValue("@Comments", Comment);
+                cmd1.Parameters.AddWithValue("@User_ID", UserID);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd1.ExecuteNonQuery());
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+               
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return success;
+
+        }
+
+        public List<CustomClaimMaster> GetClaimList(int TicketId)
+        {
+            DataSet ds = new DataSet();
+            List<CustomClaimMaster> lsttask = new List<CustomClaimMaster>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetClaimList", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Ticket_ID", TicketId);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomClaimMaster taskMaster = new CustomClaimMaster();
+                        taskMaster.TicketClaimID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                        taskMaster.TaskStatus = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
+                        taskMaster.ClaimIssueType = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        taskMaster.Category = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        taskMaster.RaisedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                        taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);         
+                        lsttask.Add(taskMaster);
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return lsttask;
         }
     }
 }

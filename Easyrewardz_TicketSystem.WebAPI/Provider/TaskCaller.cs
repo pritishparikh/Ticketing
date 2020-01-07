@@ -29,10 +29,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _TaskRepository = task;
             return _TaskRepository.GetTaskbyId(taskID);
         }
-        public List<CustomTaskMasterDetails> gettaskList(ITask task)
+        public List<CustomTaskMasterDetails> gettaskList(ITask task, int TicketId)
         {
             _TaskRepository = task;
-            return _TaskRepository.GetTaskList();
+            return _TaskRepository.GetTaskList(TicketId);
         }
         public int DeleteTask(ITask task, int task_Id)
         {
@@ -43,6 +43,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _TaskRepository = task;
             return _TaskRepository.GetAssignedTo(Function_ID);
+        }
+        public int AddComment(ITask task, int Id, int TaskID, int ClaimID, int TicketID, string Comment, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.AddComment(Id, TaskID, ClaimID, TicketID, Comment, UserID);
+        }
+        public List<CustomClaimMaster> GetClaimList(ITask task,int TicketId)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetClaimList(TicketId);
         }
     }
 }
