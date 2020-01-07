@@ -259,5 +259,54 @@ namespace Easyrewardz_TicketSystem.Services
 
             return ticketSourceMasters;
         }
+
+        #region SMTP Information 
+
+        public SMTPDetails GetMTPDetails(int TenantID)
+        {
+            DataSet ds = new DataSet();
+            SMTPDetails sMTPDetails = new SMTPDetails();
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand();
+
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_getSMTPDetails", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    sMTPDetails.EnableSsl = Convert.ToBoolean(ds.Tables[0].Rows[0]["EnableSsl"]);
+                    sMTPDetails.SMTPPort = Convert.ToString(ds.Tables[0].Rows[0]["SMTPPort"]);
+                    sMTPDetails.FromEmailId = Convert.ToString(ds.Tables[0].Rows[0]["FromEmailId"]);
+                    sMTPDetails.IsBodyHtml = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsBodyHtml"]);
+                    sMTPDetails.Password = Convert.ToString(ds.Tables[0].Rows[0]["Password"]);
+                    sMTPDetails.SMTPHost = Convert.ToString(ds.Tables[0].Rows[0]["SMTPHost"]);
+                    sMTPDetails.SMTPServer = Convert.ToString(ds.Tables[0].Rows[0]["SMTPServer"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return sMTPDetails;
+        }
+
+
+        #endregion
+
     }
 }
