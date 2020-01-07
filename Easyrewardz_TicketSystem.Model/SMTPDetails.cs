@@ -27,7 +27,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// SMTP Port
         /// </summary>
-        public int SMTPPort { get; set; }
+        public string SMTPPort { get; set; }
 
         /// <summary>
         /// SMTP Server

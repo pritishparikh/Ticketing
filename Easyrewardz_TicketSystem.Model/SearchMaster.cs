@@ -36,16 +36,16 @@ namespace Easyrewardz_TicketSystem.Model
 
 
 
-        public string Priority { get; set; }
+        public int Priority { get; set; }
         public string chanelOfPurchase { get; set; }
         public string ticketActionType { get; set; }
 
 
 
 
-        public string Category { get; set; }
-        public string subCategory { get; set; }
-        public string issueType { get; set; }
+        public int Category { get; set; }
+        public int subCategory { get; set; }
+        public int issueType { get; set; }
 
 
 
@@ -76,7 +76,7 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class SearchResponse
     {
-        public int totalpages { get; set; }
+        public double totalpages { get; set; }
         public int ticketID { get; set; }
         public string ticketStatus { get; set; }
         public string Message { get; set; }
@@ -89,6 +89,7 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string ClaimStatus { get; set; }
         public string TaskStatus { get; set; }
+        public int TicketCommentCount { get; set; } 
 
         public string createdBy { get; set; }
         public string createdago { get; set; }

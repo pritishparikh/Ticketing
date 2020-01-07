@@ -36,7 +36,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("SearchTicket")]
       //  [AllowAnonymous]
 
-        public ResponseModel GetTicketSearchResult([FromBody]SearchRequest searchparams )
+        public ResponseModel SearchTicket([FromBody]SearchRequest searchparams )
         {
             List<SearchResponse> _searchResult = null;
             ResponseModel _objResponseModel = new ResponseModel();
@@ -77,7 +77,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("TicketStatusCount")]
         //  [AllowAnonymous]
 
-        public ResponseModel GetTicketStatusCount([FromBody]SearchRequest searchparams)
+        public ResponseModel TicketStatusCount([FromBody]SearchRequest searchparams)
         {
             List<string> _searchResult = null;
             ResponseModel _objResponseModel = new ResponseModel();
@@ -87,10 +87,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                searchparams.tenantID = authenticate.TenantId; // add tenantID to request
+                //string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //Authenticate authenticate = new Authenticate();
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                //searchparams.tenantID = authenticate.TenantId; // add tenantID to request
 
                 _searchResult = _newsearchMaster.GetStatusCount(new SearchService(_connectioSting), searchparams);
 

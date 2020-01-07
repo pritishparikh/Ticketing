@@ -26,6 +26,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
+            List<SearchResponse> temp = new List<SearchResponse>(); //delete later
             List<string> CountList = new List<string>();
 
             int rowStart = (searchparams.pageNo - 1) * searchparams.pageSize;
@@ -136,22 +137,29 @@ namespace Easyrewardz_TicketSystem.Services
                             string.Empty: setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond"))+"|"+ Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
 
                             resolutionOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityResolve")))) ?
-                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan")
+                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
 
+                            TaskStatus= Convert.ToString(r.Field<object>("TaskDetails")),
+                            ClaimStatus= Convert.ToString(r.Field<object>("ClaimDetails")),
+                            TicketCommentCount= Convert.ToInt32(r.Field<object>("TicketComments"))
 
-                            //creationDetails = JsonConvert.SerializeObject(ds.Tables[0])
                         }).ToList();
                     }
                 }
 
+                //temporay filter for react binding
+                temp.Add(objSearchResult.AsEnumerable().Select(x => x).FirstOrDefault());
 
-                //  CountList= ds.Tables[1].AsEnumerable().Select(x => Enum.GetName(typeof(EnumMaster.TicketStatus), Convert.ToInt32(x.Field<object>("StatusID")))
-                //    + "|" + Convert.ToString(Convert.ToInt32(x.Field<object>("TicketStatusCount")))).ToList();
+                if (searchparams.pageSize > 0)
+                    temp[0].totalpages = temp.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(temp.Count / searchparams.pageSize)) : 1;
+                //********
+
 
                 //paging here
-                objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? objSearchResult.Count / objSearchResult.Count : 1;
+                //if (searchparams.pageSize > 0)
+                //objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
 
-                objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList(); 
+                //objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList(); 
             }
             catch (Exception ex)
             {
@@ -163,7 +171,8 @@ namespace Easyrewardz_TicketSystem.Services
                 
                 if (ds != null) ds.Dispose(); conn.Close();
             }
-            return objSearchResult;
+            // return objSearchResult;
+            return temp;
         }
 
         public List<string> TicketStatusCount(SearchRequest searchparams)
@@ -219,7 +228,7 @@ namespace Easyrewardz_TicketSystem.Services
                 if(ColName== "CreatedSpan" || ColName=="ModifiedSpan" || ColName== "AssignedSpan")
                 {
                     diff = now - Convert.ToDateTime(time);
-                    timespan=CalculateSpan(diff);
+                    timespan=CalculateSpan(diff) +" ago";
 
                 }
                 else if(ColName == "RespondTimeRemainingSpan")
@@ -291,19 +300,19 @@ namespace Easyrewardz_TicketSystem.Services
 
             if(Math.Abs(ts.Days) >0)
             {
-                span = Convert.ToString(Math.Abs(ts.Days)) + " Days Ago";
+                span = Convert.ToString(Math.Abs(ts.Days)) + " Days";
             }
             else if (Math.Abs(ts.Hours) > 0)
             {
-                span = Convert.ToString(Math.Abs(ts.Hours)) + " Days Ago";
+                span = Convert.ToString(Math.Abs(ts.Hours)) + " Hours";
             }
             else if (Math.Abs(ts.Minutes) > 0)
             {
-                span = Convert.ToString(Math.Abs(ts.Minutes)) + " Days Ago";
+                span = Convert.ToString(Math.Abs(ts.Minutes)) + " Minutes";
             }
             else if (Math.Abs(ts.Seconds) > 0)
             {
-                span = Convert.ToString(Math.Abs(ts.Seconds)) + " Days Ago";
+                span = Convert.ToString(Math.Abs(ts.Seconds)) + " Seconds";
             }
 
             return span;
