@@ -31,5 +31,8 @@ namespace Easyrewardz_TicketSystem.Interface
         int AssignTicket(string TicketID, int TenantID, int UserID, int AgentID, string Remark);
 
         int Schedule(ScheduleMaster scheduleMaster, int TenantID, int UserID);
+
+        List<TicketNotes> getNotesByTicketId(int TicketId, int TenantId);
+
     }
 }

@@ -107,6 +107,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ticketList.Schedule(scheduleMaster, TenantID, UserID);
 
         }
+
+        /// <summary>
+        /// Get Ticket Notes
+        /// </summary>
+        /// <param name="_ticket">Interface</param>
+        /// <param name="TikcketTitle">Title of the ticket</param>
+        /// <returns></returns>
+        public List<TicketNotes> getNotesByTicketId(ITicketing _ticket, int TicketId, int TenantId)
+        {
+            _ticketList = _ticket;
+            return _ticketList.getNotesByTicketId(TicketId, TenantId);
+        }
         #endregion
     }
 }

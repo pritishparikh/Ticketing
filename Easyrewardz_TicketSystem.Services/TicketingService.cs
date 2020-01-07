@@ -544,6 +544,47 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return i;
         }
+
+        /// <summary>
+        /// Get Auto Suggest Ticket Title
+        /// </summary>
+        /// <param name="TikcketTitle"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
+        public List<TicketNotes> getNotesByTicketId(int TicketId, int TenantId)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<TicketNotes> ticketNotes = new List<TicketNotes>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_getTitleNotess", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Ticket_Id", TicketId);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantId);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        TicketNotes ticket = new TicketNotes();
+                        ticket.TicketNoteID = Convert.ToInt16(ds.Tables[0].Rows[i]["TicketNoteID"]);
+                        ticket.Note = Convert.ToString(ds.Tables[0].Rows[i]["Note"]);
+                        ticket.TicketID = Convert.ToInt16(ds.Tables[0].Rows[i]["TicketID"]);
+                        ticketNotes.Add(ticket);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ticketNotes;
+        }
     }
 }
 

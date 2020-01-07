@@ -572,6 +572,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             return CommonService.ListToCSV(objData, "");
         }
+
+        [HttpPost]
+        [Route("getNotesByTicketId")]
+        public ResponseModel getNotesByTicketId(int TicketId)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                TicketingCaller _TicketCaller = new TicketingCaller();
+
+                List<TicketNotes> result = _TicketCaller.getNotesByTicketId(new TicketingService(_connectioSting), TicketId, authenticate.TenantId);
+                StatusCode =
+                result.Count == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+
+            }
+            return _objResponseModel;
+        }
+
+
         #endregion
     }
 }
