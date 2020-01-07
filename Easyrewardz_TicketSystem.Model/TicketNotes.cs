@@ -14,6 +14,6 @@ namespace Easyrewardz_TicketSystem.Model
         public DateTime CreatedDate { get; set; }
         public int ModifyBy { get; set; }
         public DateTime ModifyDate { get; set; }
-
+        public string CreatedByName { get; set; }
     }
 }

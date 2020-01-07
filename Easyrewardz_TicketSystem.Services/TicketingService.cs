@@ -574,6 +574,7 @@ namespace Easyrewardz_TicketSystem.Services
                         ticket.TicketNoteID = Convert.ToInt16(ds.Tables[0].Rows[i]["TicketNoteID"]);
                         ticket.Note = Convert.ToString(ds.Tables[0].Rows[i]["Note"]);
                         ticket.TicketID = Convert.ToInt16(ds.Tables[0].Rows[i]["TicketID"]);
+                        ticket.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["CreatedByName"]);
                         ticketNotes.Add(ticket);
                     }
                 }
