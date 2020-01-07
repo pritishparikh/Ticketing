@@ -59,6 +59,24 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _brandList.AddBrand(brand, TenantId);
         }
 
+            public List<Brand> BrandList(IBrand _brand, int TenantId)
+        {
+            _brandList = _brand;
+            return _brandList.BrandList(TenantId);
+        }
+
+        public int DeleteBrand(IBrand _brand, int BrandID, int TenantId)
+        {
+            _brandList = _brand;
+            return _brandList.DeleteBrand(BrandID, TenantId);
+        }
+
+        public int UpdateBrand(IBrand _brand, Brand brand)
+        {
+            _brandList = _brand;
+            return _brandList.UpdateBrand(brand);
+        }
+
         #endregion
 
         #region Methods for the Category
@@ -67,6 +85,30 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _categoryList = _category;
             return _categoryList.GetCategoryList(TenantID);
+        }
+
+        public int AddCategory(ICategory _category, Category category)
+        {
+            _categoryList = _category;
+            return _categoryList.AddCategory(category);
+        }
+
+        public List<Category> CategoryList(ICategory _category, int TenantID)
+        {
+            _categoryList = _category;
+            return _categoryList.CategoryList(TenantID);
+        }
+
+        public int DeleteCategory(ICategory _category, int CategoryID, int TenantId)
+        {
+            _categoryList = _category;
+            return _categoryList.DeleteCategory(CategoryID, TenantId);
+        }
+
+        public int UpdateCategory(ICategory _category, Category category)
+        {
+            _categoryList = _category;
+            return _categoryList.UpdateCategory(category);
         }
 
         #endregion

@@ -547,8 +547,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// /// <param name="SearchSaveName"></param>
         /// /// <param name="parameter"></param>
         /// <returns></returns>
-        //[HttpPost]
-        [Route("c")]
+        [HttpPost]
+        [Route("ExportToCSV")]
         public IActionResult ExportToCSV([FromBody] SearchRequest searchparams)
         {
             List<SearchResponse> _searchResult = null;
@@ -567,7 +567,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
         }
 
-        public string ExportSearch(IEnumerable<SearchResponse> objData)
+        [NonAction]
+        private string ExportSearch(IEnumerable<SearchResponse> objData)
         {
             return CommonService.ListToCSV(objData, "");
         }

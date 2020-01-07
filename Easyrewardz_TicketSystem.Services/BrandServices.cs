@@ -68,6 +68,130 @@ namespace Easyrewardz_TicketSystem.Services
             return brands;
         }
 
+        public int UpdateBrand(Brand brand)
+        {
+
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_UpdateBrand", conn);
+                cmd1.Parameters.AddWithValue("@Brand_ID", brand.BrandID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", brand.TenantID);
+                cmd1.Parameters.AddWithValue("@Brand_Name", brand.BrandName);
+                cmd1.Parameters.AddWithValue("@Brand_Code", brand.BrandCode);
+                cmd1.Parameters.AddWithValue("@Is_Active", brand.IsActive);
+                cmd1.Parameters.AddWithValue("@Modified_By", brand.ModifyBy);
+
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                conn.Close();
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
+
+        public int DeleteBrand(int BrandID, int TenantId)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int k = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_DeleteBrand", conn);
+                cmd1.Parameters.AddWithValue("@Brand_ID", BrandID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                k = Convert.ToInt32(cmd1.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return k;
+        }
+
+        public List<Brand> BrandList(int TenantId)
+        {
+
+
+            List<Brand> brands = new List<Brand>();
+            MySqlCommand cmd = new MySqlCommand();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_BrandList", conn);
+
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
+                DataTable dt = new DataTable();
+
+                da.Fill(dt);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        Brand brand = new Brand();
+                        brand.BrandID = Convert.ToInt32(dt.Rows[i]["BrandID"]);
+                        brand.TenantID = Convert.ToInt32(dt.Rows[i]["TenantID"]);
+                        brand.BrandName = Convert.ToString(dt.Rows[i]["BrandName"]);
+                        brand.BrandCode = Convert.ToString(dt.Rows[i]["BrandCode"]);
+                        brand.CreatedBy = Convert.ToInt32(dt.Rows[i]["CreatedBy"]);
+                        brand.CreatedDate = Convert.ToDateTime(dt.Rows[i]["CreatedDate"]);
+                        brand.ModifyBy = Convert.ToInt32(dt.Rows[i]["ModifiedBy"]);
+                        brand.ModifyDate = Convert.ToDateTime(dt.Rows[i]["ModifiedDate"]);
+                        brand.Status = Convert.ToString(dt.Rows[i]["Status"]);
+
+
+                        brands.Add(brand);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return brands;
+        }
+
         public int AddBrand(Brand brand, int TenantId)
         {
 
@@ -103,5 +227,6 @@ namespace Easyrewardz_TicketSystem.Services
             return k;
 
         }
+
     }
 }

@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.Model
     /// <summary>
     /// Brand
     /// </summary>
-   public class Brand
+    public class Brand
     {
         /// <summary>
         /// Brand Id 
@@ -63,6 +63,8 @@ namespace Easyrewardz_TicketSystem.Model
         /// Modifeid By Name
         /// </summary>
         public string ModifiedByName { get; set; }
+
+        public string Status { get; set; }
 
     }
 }

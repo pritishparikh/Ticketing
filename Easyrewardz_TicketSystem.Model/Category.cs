@@ -32,7 +32,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Cateated By
         /// </summary>
-        public int CreatedBy { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
 
         /// <summary>
         /// Created On
@@ -58,6 +58,9 @@ namespace Easyrewardz_TicketSystem.Model
         /// Modified By Name
         /// </summary>
         public string ModifiedByName { get; set; }
+
+
+        public string Status { get; set; }
 
     }
 }

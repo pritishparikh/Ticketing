@@ -11,5 +11,13 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface ICategory
     {
         List<Category> GetCategoryList(int TenantID);
+
+        int AddCategory(Category category);
+
+        List<Category> CategoryList(int TenantId);
+
+        int DeleteCategory(int CategoryID, int TenantId);
+
+        int UpdateCategory(Category category);
     }
 }
