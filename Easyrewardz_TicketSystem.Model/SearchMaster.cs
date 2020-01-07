@@ -76,7 +76,7 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class SearchResponse
     {
-        public int totalpages { get; set; }
+        public double totalpages { get; set; }
         public int ticketID { get; set; }
         public string ticketStatus { get; set; }
         public string Message { get; set; }

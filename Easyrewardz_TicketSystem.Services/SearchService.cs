@@ -136,20 +136,18 @@ namespace Easyrewardz_TicketSystem.Services
                             string.Empty: setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond"))+"|"+ Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
 
                             resolutionOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityResolve")))) ?
-                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan")
+                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
 
+                            TaskStatus= Convert.ToString(r.Field<object>("TaskDetails")),
+                            ClaimStatus= Convert.ToString(r.Field<object>("ClaimDetails")),
 
-                            //creationDetails = JsonConvert.SerializeObject(ds.Tables[0])
                         }).ToList();
                     }
                 }
 
-
-                //  CountList= ds.Tables[1].AsEnumerable().Select(x => Enum.GetName(typeof(EnumMaster.TicketStatus), Convert.ToInt32(x.Field<object>("StatusID")))
-                //    + "|" + Convert.ToString(Convert.ToInt32(x.Field<object>("TicketStatusCount")))).ToList();
-
                 //paging here
-                objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? objSearchResult.Count / objSearchResult.Count : 1;
+                if (searchparams.pageSize > 0)
+                objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
 
                 objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList(); 
             }
@@ -219,7 +217,7 @@ namespace Easyrewardz_TicketSystem.Services
                 if(ColName== "CreatedSpan" || ColName=="ModifiedSpan" || ColName== "AssignedSpan")
                 {
                     diff = now - Convert.ToDateTime(time);
-                    timespan=CalculateSpan(diff);
+                    timespan=CalculateSpan(diff) +" ago";
 
                 }
                 else if(ColName == "RespondTimeRemainingSpan")
@@ -291,19 +289,19 @@ namespace Easyrewardz_TicketSystem.Services
 
             if(Math.Abs(ts.Days) >0)
             {
-                span = Convert.ToString(Math.Abs(ts.Days)) + " Days Ago";
+                span = Convert.ToString(Math.Abs(ts.Days)) + " Days";
             }
             else if (Math.Abs(ts.Hours) > 0)
             {
-                span = Convert.ToString(Math.Abs(ts.Hours)) + " Days Ago";
+                span = Convert.ToString(Math.Abs(ts.Hours)) + " Hours";
             }
             else if (Math.Abs(ts.Minutes) > 0)
             {
-                span = Convert.ToString(Math.Abs(ts.Minutes)) + " Days Ago";
+                span = Convert.ToString(Math.Abs(ts.Minutes)) + " Minutes";
             }
             else if (Math.Abs(ts.Seconds) > 0)
             {
-                span = Convert.ToString(Math.Abs(ts.Seconds)) + " Days Ago";
+                span = Convert.ToString(Math.Abs(ts.Seconds)) + " Seconds";
             }
 
             return span;
