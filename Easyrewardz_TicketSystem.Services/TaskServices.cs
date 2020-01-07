@@ -39,7 +39,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@AssignToID", taskMaster.AssignToID);
                 cmd1.Parameters.AddWithValue("@PriorityID", taskMaster.PriorityID);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                taskId = Convert.ToInt32(cmd1.ExecuteScalar());
+                taskId = Convert.ToInt32(cmd1.ExecuteNonQuery());
 
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
@@ -86,7 +86,8 @@ namespace Easyrewardz_TicketSystem.Services
                         taskMaster.Duedate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TaskEndTime"]);
                         taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
                     }
-                }
+                }       
+
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
