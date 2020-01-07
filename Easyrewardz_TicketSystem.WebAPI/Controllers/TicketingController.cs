@@ -38,7 +38,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
-            _ticketAttachmentFolderName = configuration.GetValue<string>("TicketAttchment");
+            _ticketAttachmentFolderName = configuration.GetValue<string>("TicketAttachment");
         }
         #endregion
 
