@@ -43,10 +43,11 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// </summary>
         public string AssignName { get; set; }
         /// <summary>
-        ///Due date
+        ///Duedate
         /// </summary>
         public DateTime Duedate { get; set; }
 
+       public List<UserComment> Comments { get; set; }
     }
 
 }

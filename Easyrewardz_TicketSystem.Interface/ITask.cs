@@ -11,6 +11,7 @@ namespace Easyrewardz_TicketSystem.Interface
     /// </summary>
     public interface ITask
     {
+    
         int AddTaskDetails(TaskMaster taskMaster);
         CustomTaskMasterDetails GetTaskbyId(int taskID);
         List<CustomTaskMasterDetails> GetTaskList(int TicketId);
@@ -18,6 +19,5 @@ namespace Easyrewardz_TicketSystem.Interface
         List<CustomUserAssigned> GetAssignedTo(int Function_ID);
         int AddComment(int Id,int TaskID ,int ClaimID,int TicketID,string Comment ,int UserID);
         List<CustomClaimMaster> GetClaimList(int TicketId);
-
     }
 }

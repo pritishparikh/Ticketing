@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 namespace Easyrewardz_TicketSystem.Services
 {
     public class TaskServices : ITask
@@ -65,6 +66,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
             DataSet ds = new DataSet();
             CustomTaskMasterDetails taskMaster = new CustomTaskMasterDetails();
+            //List<CustomTaskMasterDetails> listtaskMaster = new List<CustomTaskMasterDetails>();
             try
             {
                 conn.Open();
@@ -77,14 +79,24 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
+                    
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
+                        
                         taskMaster.TicketingTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
                         taskMaster.TaskStatus = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
                         taskMaster.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
                         taskMaster.TaskDescription = Convert.ToString(ds.Tables[0].Rows[i]["TaskDescription"]);           
                         taskMaster.Duedate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TaskEndTime"]);
                         taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
+                        int MasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                        taskMaster.Comments = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("TicketingTaskID")).
+                        Equals(MasterId)).Select(x => new UserComment()
+                        {
+                            Name = Convert.ToString(x.Field<string>("Name")),
+                            Comment= Convert.ToString(x.Field<string>("TaskComment")),
+                            datetime= Convert.ToString(x.Field<string>("CommentAt"))
+                        }).ToList();
                     }
                 }       
 
