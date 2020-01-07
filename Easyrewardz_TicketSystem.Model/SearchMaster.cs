@@ -36,16 +36,16 @@ namespace Easyrewardz_TicketSystem.Model
 
 
 
-        public string Priority { get; set; }
+        public int Priority { get; set; }
         public string chanelOfPurchase { get; set; }
         public string ticketActionType { get; set; }
 
 
 
 
-        public string Category { get; set; }
-        public string subCategory { get; set; }
-        public string issueType { get; set; }
+        public int Category { get; set; }
+        public int subCategory { get; set; }
+        public int issueType { get; set; }
 
 
 
