@@ -551,7 +551,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TikcketTitle"></param>
         /// <param name="TenantId"></param>
         /// <returns></returns>
-        public List<TicketNotes> getNotesByTicketId(int TicketId, int TenantId)
+        public List<TicketNotes> getNotesByTicketId(int TicketId)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -563,7 +563,6 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_getTitleNotess", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Ticket_Id", TicketId);
-                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);

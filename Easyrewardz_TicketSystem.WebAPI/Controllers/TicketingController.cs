@@ -588,7 +588,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 TicketingCaller _TicketCaller = new TicketingCaller();
 
-                List<TicketNotes> result = _TicketCaller.getNotesByTicketId(new TicketingService(_connectioSting), TicketId, authenticate.TenantId);
+                List<TicketNotes> result = _TicketCaller.getNotesByTicketId(new TicketingService(_connectioSting), TicketId);
                 StatusCode =
                 result.Count == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

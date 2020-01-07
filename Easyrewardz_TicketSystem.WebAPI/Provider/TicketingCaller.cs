@@ -114,10 +114,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="_ticket">Interface</param>
         /// <param name="TikcketTitle">Title of the ticket</param>
         /// <returns></returns>
-        public List<TicketNotes> getNotesByTicketId(ITicketing _ticket, int TicketId, int TenantId)
+        public List<TicketNotes> getNotesByTicketId(ITicketing _ticket, int TicketId)
         {
             _ticketList = _ticket;
-            return _ticketList.getNotesByTicketId(TicketId, TenantId);
+            return _ticketList.getNotesByTicketId(TicketId);
         }
         #endregion
     }
