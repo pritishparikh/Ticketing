@@ -134,11 +134,11 @@ namespace Easyrewardz_TicketSystem.Services
                 try
                 {
                     int i = 0;
-                    if (!Directory.Exists(FolderPath))
-                    {
-                        // Try to create the directory.
-                        DirectoryInfo di = Directory.CreateDirectory(FolderPath);
-                    }
+                    //if (!Directory.Exists(FolderPath))
+                    //{
+                    //    // Try to create the directory.
+                    //    DirectoryInfo di = Directory.CreateDirectory(FolderPath);
+                    //}
 
 
                     MySqlCommand cmdattachment = new MySqlCommand("SP_SaveAttachment", conn);

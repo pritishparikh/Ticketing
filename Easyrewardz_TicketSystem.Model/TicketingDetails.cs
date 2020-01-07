@@ -180,5 +180,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public List<TicketingMailerQue> ticketingMailerQues { get; set; }
 
+        /// <summary>
+        /// IsInforToStore
+        /// </summary>
+        public bool IsInforToStore { get; set; }
+
     }
 }
