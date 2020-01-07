@@ -36,7 +36,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("SearchTicket")]
       //  [AllowAnonymous]
 
-        public ResponseModel GetTicketSearchResult([FromBody]SearchRequest searchparams )
+        public ResponseModel SearchTicket([FromBody]SearchRequest searchparams )
         {
             List<SearchResponse> _searchResult = null;
             ResponseModel _objResponseModel = new ResponseModel();
@@ -77,7 +77,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("TicketStatusCount")]
         //  [AllowAnonymous]
 
-        public ResponseModel GetTicketStatusCount([FromBody]SearchRequest searchparams)
+        public ResponseModel TicketStatusCount([FromBody]SearchRequest searchparams)
         {
             List<string> _searchResult = null;
             ResponseModel _objResponseModel = new ResponseModel();
