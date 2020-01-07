@@ -89,7 +89,7 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string ClaimStatus { get; set; }
         public string TaskStatus { get; set; }
-        public int MessageCount { get; set; } 
+        public int TicketCommentCount { get; set; } 
 
         public string createdBy { get; set; }
         public string createdago { get; set; }

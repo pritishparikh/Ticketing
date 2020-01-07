@@ -140,6 +140,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                             TaskStatus= Convert.ToString(r.Field<object>("TaskDetails")),
                             ClaimStatus= Convert.ToString(r.Field<object>("ClaimDetails")),
+                            TicketCommentCount= Convert.ToInt32(r.Field<object>("TicketComments"))
 
                         }).ToList();
                     }
