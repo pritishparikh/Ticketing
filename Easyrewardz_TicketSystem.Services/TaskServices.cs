@@ -254,8 +254,8 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd1 = new MySqlCommand("SP_AddComment", conn);
                 cmd1.Connection = conn;
-                cmd1.Parameters.AddWithValue("@ID", CommentForId);
-                cmd1.Parameters.AddWithValue("@Task_ID", ID);
+                cmd1.Parameters.AddWithValue("@CommentForId", CommentForId);
+                cmd1.Parameters.AddWithValue("@ID", ID);
                 cmd1.Parameters.AddWithValue("@Comments", Comment);
                 cmd1.Parameters.AddWithValue("@User_ID", UserID);
                 cmd1.CommandType = CommandType.StoredProcedure;
