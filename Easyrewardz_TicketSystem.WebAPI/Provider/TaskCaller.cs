@@ -51,6 +51,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
         public List<CustomClaimMaster> GetClaimList(ITask task,int TicketId)
         {
+
             _TaskRepository = task;
             return _TaskRepository.GetClaimList(TicketId);
         }

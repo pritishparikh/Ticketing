@@ -46,5 +46,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         ///Due date
         /// </summary>
         public DateTime Duedate { get; set; }
+
     }
+
 }

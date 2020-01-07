@@ -6,6 +6,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
 {
    public class CustomClaimMaster
     {
+
         public int TicketClaimID { get; set; }
         public string TaskStatus { get; set; }
         public string ClaimIssueType { get; set; }
