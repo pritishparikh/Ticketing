@@ -146,7 +146,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
                 //paging here
-                if (searchparams.pageSize > 0)
+                if (searchparams.pageSize > 0)    
                 objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
 
                 objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList(); 
