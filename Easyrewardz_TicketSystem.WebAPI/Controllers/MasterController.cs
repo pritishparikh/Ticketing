@@ -121,7 +121,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
+                _objResponseModel.Message = "Message" + Convert.ToString(ex.Message) + "Inner Exception" + Convert.ToString(ex.InnerException);
                 _objResponseModel.ResponseData = null;
             }
             return _objResponseModel;
