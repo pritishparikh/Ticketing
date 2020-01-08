@@ -585,6 +585,35 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return ticketNotes;
         }
+
+        public int submitticket(int TicketID, int status, int UserID,int TenantId)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateStatus", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Ticket_ID", TicketID);
+                cmd.Parameters.AddWithValue("@Status_ID", status);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
+                cmd.CommandType = CommandType.StoredProcedure;
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
     }
 }
 

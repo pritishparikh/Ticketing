@@ -33,6 +33,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int Schedule(ScheduleMaster scheduleMaster, int TenantID, int UserID);
 
         List<TicketNotes> getNotesByTicketId(int TicketId);
+        int submitticket(int TicketID ,int status,int UserID, int TenantId);
 
     }
 }

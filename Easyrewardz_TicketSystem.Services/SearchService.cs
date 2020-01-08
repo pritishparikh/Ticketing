@@ -36,8 +36,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand sqlcmd = new MySqlCommand("SP_SearchTickets", conn);
                 sqlcmd.CommandType = CommandType.StoredProcedure;
-                
 
+                sqlcmd.Parameters.AddWithValue("_isEscalated", Convert.ToInt32(searchparams.isEscalation));
                 sqlcmd.Parameters.AddWithValue("_isByStatus", Convert.ToInt32(searchparams.isByStatus));
                 sqlcmd.Parameters.AddWithValue("_isByFilter", Convert.ToInt32(searchparams.isByFilter));
                 sqlcmd.Parameters.AddWithValue("_isByDate", Convert.ToInt32(searchparams.ByDate));
@@ -103,7 +103,7 @@ namespace Easyrewardz_TicketSystem.Services
                 if (ds.Tables.Count > 0)
                 {
                   
-                    var tmpdt = ds.Tables[0];
+                  
                     if (ds.Tables[0].Rows.Count > 0)
                     {
 
@@ -141,14 +141,15 @@ namespace Easyrewardz_TicketSystem.Services
 
                             TaskStatus= Convert.ToString(r.Field<object>("TaskDetails")),
                             ClaimStatus= Convert.ToString(r.Field<object>("ClaimDetails")),
-                            TicketCommentCount= Convert.ToInt32(r.Field<object>("TicketComments"))
+                            TicketCommentCount= Convert.ToInt32(r.Field<object>("TicketComments")),
+                            isEscalation= Convert.ToInt32(r.Field<object>("IsEscalated  "))
 
                         }).ToList();
                     }
                 }
 
                 //temporay filter for react binding
-                temp.Add(objSearchResult.AsEnumerable().Select(x => x).FirstOrDefault());
+                temp.Add(objSearchResult.Select(x => x).FirstOrDefault());
 
                 if (searchparams.pageSize > 0)
                     temp[0].totalpages = temp.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(temp.Count / searchparams.pageSize)) : 1;
@@ -164,11 +165,10 @@ namespace Easyrewardz_TicketSystem.Services
             catch (Exception ex)
             {
                 var test = ex.ToString() + "\n" + ex.StackTrace;
-                throw;
+                throw ex;
             }
             finally
             {
-                
                 if (ds != null) ds.Dispose(); conn.Close();
             }
             // return objSearchResult;

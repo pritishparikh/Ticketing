@@ -9,6 +9,7 @@ namespace Easyrewardz_TicketSystem.Model
         public int pageNo { get; set; }
         public int pageSize { get; set; }
 
+        public bool isEscalation { get; set; }
         public bool isByStatus { get; set; }
         public bool isByFilter { get; set; }
 
@@ -86,7 +87,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string Assignee { get; set; }
         public string Priority { get; set; }
         public DateTime CreatedOn { get; set; }
-
+        public int isEscalation { get; set; }
         public string ClaimStatus { get; set; }
         public string TaskStatus { get; set; }
         public int TicketCommentCount { get; set; } 
