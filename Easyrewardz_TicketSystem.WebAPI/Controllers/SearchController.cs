@@ -93,7 +93,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
                 searchparams.tenantID = authenticate.TenantId; // add tenantID to request
-
+                searchparams.assignedTo = authenticate.UserMasterID;// add assignedID to request
                 _searchResult = _newsearchMaster.GetStatusCount(new SearchService(_connectioSting), searchparams);
 
                 StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
