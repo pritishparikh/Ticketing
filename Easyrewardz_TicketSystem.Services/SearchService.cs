@@ -117,7 +117,8 @@ namespace Easyrewardz_TicketSystem.Services
                             IssueType = Convert.ToString(r.Field<object>("IssueTypeName")),
                             Priority = Convert.ToString(r.Field<object>("PriortyName")),
                             Assignee = Convert.ToString(r.Field<object>("AssignedName")),
-                            CreatedOn = Convert.ToDateTime(r.Field<object>("CreatedDate")),
+                            CreatedOn = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedOn"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedOn")),
+                           
 
                             createdBy = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedByName"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedByName")),
 
@@ -139,8 +140,8 @@ namespace Easyrewardz_TicketSystem.Services
                             resolutionOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityResolve")))) ?
                             string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
 
-                            TaskStatus= Convert.ToString(r.Field<object>("TaskDetails")),
-                            ClaimStatus= Convert.ToString(r.Field<object>("ClaimDetails")),
+                            TaskStatus= "2/4",//Convert.ToString(r.Field<object>("TaskDetails")),
+                            ClaimStatus= "2/4",//Convert.ToString(r.Field<object>("ClaimDetails")),
                             TicketCommentCount= Convert.ToInt32(r.Field<object>("TicketComments")),
                             isEscalation= Convert.ToInt32(r.Field<object>("IsEscalated"))
 
