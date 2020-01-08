@@ -142,36 +142,39 @@ namespace Easyrewardz_TicketSystem.Services
                             TaskStatus= Convert.ToString(r.Field<object>("TaskDetails")),
                             ClaimStatus= Convert.ToString(r.Field<object>("ClaimDetails")),
                             TicketCommentCount= Convert.ToInt32(r.Field<object>("TicketComments")),
-                            isEscalation= Convert.ToInt32(r.Field<object>("IsEscalated  "))
+                            isEscalation= Convert.ToInt32(r.Field<object>("IsEscalated"))
 
                         }).ToList();
                     }
                 }
 
-                //temporay filter for react binding
+                //temporary filter for react binding
+
+                if(objSearchResult.Count > 0)
                 temp.Add(objSearchResult.Select(x => x).FirstOrDefault());
 
-                if (searchparams.pageSize > 0)
+                if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
                     temp[0].totalpages = temp.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(temp.Count / searchparams.pageSize)) : 1;
+
                 //********
 
 
                 //paging here
-                //if (searchparams.pageSize > 0)
-                //objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
+                //if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
+                //    objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
 
-                //objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList(); 
+                //objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList();
             }
             catch (Exception ex)
             {
-                var test = ex.ToString() + "\n" + ex.StackTrace;
+               
                 throw ex;
             }
             finally
             {
                 if (ds != null) ds.Dispose(); conn.Close();
             }
-            // return objSearchResult;
+             //return objSearchResult;
             return temp;
         }
 
@@ -203,8 +206,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
           catch(Exception ex)
             {
-                var test = ex.ToString() + "\n" + ex.StackTrace;
-                throw;
+                throw ex;
             }
             finally
             {
