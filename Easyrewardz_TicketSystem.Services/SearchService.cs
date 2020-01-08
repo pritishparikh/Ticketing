@@ -151,20 +151,20 @@ namespace Easyrewardz_TicketSystem.Services
 
                 //temporary filter for react binding
 
-                if(objSearchResult.Count > 0)
-                temp.Add(objSearchResult.Select(x => x).FirstOrDefault());
+                //if(objSearchResult.Count > 0)
+                //temp.Add(objSearchResult.Select(x => x).FirstOrDefault());
 
-                if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
-                    temp[0].totalpages = temp.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(temp.Count / searchparams.pageSize)) : 1;
+                //if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
+                //    temp[0].totalpages = temp.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(temp.Count / searchparams.pageSize)) : 1;
 
                 //********
 
 
                 //paging here
-                //if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
-                //    objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
+                if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
+                    objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
 
-                //objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList();
+                objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList();
             }
             catch (Exception ex)
             {
@@ -175,8 +175,8 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (ds != null) ds.Dispose(); conn.Close();
             }
-             //return objSearchResult;
-            return temp;   
+            return objSearchResult;
+            //return temp;   
         }
 
         public List<string> TicketStatusCount(SearchRequest searchparams)
