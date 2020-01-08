@@ -129,7 +129,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public CustomTicketDetail getTicketDetailsByTicketId(ITicketing _ticket, int ticketID, int TenantID)
         {
             _ticketList = _ticket;
-            return _ticketList.getTicketDetailsByTicketId(ticketID, TenantID);
+            return _ticketList.getTicketDetailsByTicketId(ticketID, TenantID)
+
         }
         #endregion
     }

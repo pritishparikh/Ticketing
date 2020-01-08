@@ -641,6 +641,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = objTicketDetail;
+
             }
             catch (Exception ex)
             {

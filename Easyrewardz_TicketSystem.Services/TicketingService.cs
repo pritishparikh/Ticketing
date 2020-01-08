@@ -22,7 +22,6 @@ namespace Easyrewardz_TicketSystem.Services
         }
         #endregion
 
-
         /// <summary>
         /// Get Auto Suggest Ticket Title
         /// </summary>
@@ -60,7 +59,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return ticketing;
         }
-
 
         public int addTicket(TicketingDetails ticketingDetails, int TenantId, string FolderPath, string finalAttchment)
         {

@@ -34,6 +34,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<TicketNotes> getNotesByTicketId(int TicketId);
         int submitticket(int TicketID, int status, int UserID, int TenantId);
+
         CustomTicketDetail getTicketDetailsByTicketId(int TicketID, int TenantID);
 
     }
