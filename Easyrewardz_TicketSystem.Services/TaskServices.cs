@@ -89,6 +89,7 @@ namespace Easyrewardz_TicketSystem.Services
                         taskMaster.TaskDescription = Convert.ToString(ds.Tables[0].Rows[i]["TaskDescription"]);           
                         taskMaster.Duedate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TaskEndTime"]);
                         taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
+                        taskMaster.DateFormat = taskMaster.Duedate.ToString("dd/MMM/yyyy");
                         int MasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
                         taskMaster.Comments = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("TicketingTaskID")).
                         Equals(MasterId)).Select(x => new UserComment()
@@ -146,6 +147,7 @@ namespace Easyrewardz_TicketSystem.Services
                         taskMaster.StoreCode = Convert.ToInt32(ds.Tables[0].Rows[i]["Storecode"]);
                         taskMaster.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]);
                         taskMaster.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreationOn"]);
+                        taskMaster.DateFormat = taskMaster.CreatedDate.ToString("dd/MMM/yyyy");
                         taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
                         lsttask.Add(taskMaster);
                     }

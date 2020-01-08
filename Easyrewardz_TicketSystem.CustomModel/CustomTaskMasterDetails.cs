@@ -38,6 +38,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// Created Date
         /// </summary>
         public DateTime CreatedDate { get; set; }
+        
         /// <summary>
         /// Assign Name
         /// </summary>
@@ -46,6 +47,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
         ///Duedate
         /// </summary>
         public DateTime Duedate { get; set; }
+        /// <summary>
+        /// DueDateFormat by SHLOK (Format :- 12 March 2019)
+        /// </summary>
+        public string DateFormat { get; set; }
 
        public List<UserComment> Comments { get; set; }
     }
