@@ -43,6 +43,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         private IMasterInterface _Imaster;
 
+        private IUser _userlist;
+
+
         #endregion
 
         #region Methods for the Brand
@@ -149,6 +152,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
         #endregion
 
+        #region Methods for the User
+        public List<User> GetUserList(IUser _user, int TenantID,int UserID)
+        {
+            _userlist = _user;
+            return _userlist.GetUserList(TenantID, UserID);
+        }
+        #endregion
 
         private IMasterInterface _ImasterDepartment;
         public List<DepartmentMaster> GetDepartmentListDetails(IMasterInterface _department, int TenantID)
