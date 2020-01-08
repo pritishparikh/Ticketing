@@ -33,7 +33,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// <summary>
         ///Created By
         /// </summary>
-        public int? CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
         /// <summary>
         /// Created Date
         /// </summary>
