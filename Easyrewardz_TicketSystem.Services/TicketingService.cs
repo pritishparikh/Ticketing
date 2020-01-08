@@ -614,6 +614,59 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return i;
         }
+
+
+        public CustomTicketDetail getTicketDetailsByTicketId(int TicketID, int TenantID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                CustomTicketDetail ticketDetails = new CustomTicketDetail();
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetTicketDetailByID", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Ticket_Id", TicketID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+
+                        ticketDetails.TicketID = Convert.ToInt16(ds.Tables[0].Rows[i]["TicketID"]);
+                        ticketDetails.TicketTitle = Convert.ToString(ds.Tables[0].Rows[i]["TikcketTitle"]);
+                        ticketDetails.Ticketdescription = Convert.ToString(ds.Tables[0].Rows[i]["TicketDescription"]);
+                        ticketDetails.Category = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        ticketDetails.Brand = Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                        ticketDetails.SubCategory = Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        ticketDetails.PriortyName = Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);
+                        ticketDetails.ChannelOfPurchase = Convert.ToString(ds.Tables[0].Rows[i]["NameOfChannel"]);
+                        ticketDetails.IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        ticketDetails.TicketActionName = Convert.ToString(ds.Tables[0].Rows[i]["TicketActionName"]);
+                        ticketDetails.CustomerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
+                        ticketDetails.CustomerEmailId = Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
+                        ticketDetails.CustomerPhoneNumber = Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
+                        ticketDetails.AltNumber = Convert.ToString(ds.Tables[0].Rows[i]["AltNumber"]);
+                        ticketDetails.Username = Convert.ToString(ds.Tables[0].Rows[i]["Username"]);
+                        //ticketDetails.UpdateDate = Convert.ToString(ds.Tables[0].Rows[i]["UpdateDate"]);
+                        ticketDetails.Status = Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]);
+
+                    }
+
+                }
+                return ticketDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
     }
 }
 

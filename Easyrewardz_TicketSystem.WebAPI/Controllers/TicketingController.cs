@@ -619,7 +619,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("getTicketDetailsByTicketId")]
         public ResponseModel getTicketDetailsByTicketId(int ticketID)
         {
-            UserTicketSearchMaster objSavedSearchbyID = new UserTicketSearchMaster();
+            CustomTicketDetail objTicketDetail = new CustomTicketDetail();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -631,16 +631,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                objSavedSearchbyID = _TicketCaller.SavedSearchByID(new TicketingService(_connectioSting), ticketID);
+                objTicketDetail = _TicketCaller.getTicketDetailsByTicketId(new TicketingService(_connectioSting), ticketID, authenticate.TenantId);
                 StatusCode =
-               objSavedSearchbyID == null ?
+               objTicketDetail == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objSavedSearchbyID;
+                _objResponseModel.ResponseData = objTicketDetail;
             }
             catch (Exception ex)
             {
