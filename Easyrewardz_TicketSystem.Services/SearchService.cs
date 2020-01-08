@@ -175,7 +175,7 @@ namespace Easyrewardz_TicketSystem.Services
                 if (ds != null) ds.Dispose(); conn.Close();
             }
              //return objSearchResult;
-            return temp;
+            return temp;   
         }
 
         public List<string> TicketStatusCount(SearchRequest searchparams)
