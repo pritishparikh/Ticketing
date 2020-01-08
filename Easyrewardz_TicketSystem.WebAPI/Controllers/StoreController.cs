@@ -53,9 +53,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
                 StoreCaller _newStore = new StoreCaller();
 
-                objstoreList = _newStore.getStoreDetailbyNameAndPincode(new StoreService(_connectioSting), SearchText);
+                objstoreList = _newStore.getStoreDetailbyNameAndPincode(new StoreService(_connectioSting), SearchText, authenticate.TenantId);
                 StatusCode =
                 objstoreList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

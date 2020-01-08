@@ -13,10 +13,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #region Variable
         public IStore _storeRepository;
         #endregion
-        public List<StoreMaster> getStoreDetailbyNameAndPincode(IStore store, string SearchText)
+        public List<StoreMaster> getStoreDetailbyNameAndPincode(IStore store, string SearchText, int tenantID)
         {
             _storeRepository = store;
-            return _storeRepository.getStoreDetailByStorecodenPincode(SearchText);
+            return _storeRepository.getStoreDetailByStorecodenPincode(SearchText, tenantID);
         }
 
         public List<StoreMaster> getStores(IStore store, string searchText, int tenantID)

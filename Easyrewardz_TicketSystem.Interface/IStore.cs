@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public interface IStore
     {
-        List<StoreMaster> getStoreDetailByStorecodenPincode(string searchText);
+        List<StoreMaster> getStoreDetailByStorecodenPincode(string searchText, int tenantID);
 
         List<StoreMaster> getStores(string searchText, int tenantID);
     }
