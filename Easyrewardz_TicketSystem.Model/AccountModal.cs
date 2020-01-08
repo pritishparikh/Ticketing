@@ -33,5 +33,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public string UserEmailID { get; set; }
     }
 }

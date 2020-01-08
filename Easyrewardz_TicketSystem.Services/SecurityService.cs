@@ -327,7 +327,7 @@ namespace Easyrewardz_TicketSystem.Services
                     accountModal.IsValidUser = true;
                     accountModal.FirstName = authenticate.FirstName;
                     accountModal.LastName = authenticate.LastName;
-
+                    accountModal.UserEmailID = User_EmailID;
                 }
                 else
                 {
