@@ -6,6 +6,7 @@ namespace Easyrewardz_TicketSystem.Model
 {
    public class User
     {
+
         /// <summary>
         /// User Id 
         /// </summary>

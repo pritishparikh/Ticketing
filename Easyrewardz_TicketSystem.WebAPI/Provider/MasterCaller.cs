@@ -152,6 +152,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
         #endregion
 
+
         #region Methods for the User
         public List<User> GetUserList(IUser _user, int TenantID,int UserID)
         {
