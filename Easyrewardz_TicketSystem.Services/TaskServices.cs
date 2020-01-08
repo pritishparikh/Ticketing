@@ -144,7 +144,7 @@ namespace Easyrewardz_TicketSystem.Services
                         taskMaster.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
                         taskMaster.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["Departmentname"]);
                         taskMaster.StoreCode = Convert.ToInt32(ds.Tables[0].Rows[i]["Storecode"]);
-                        taskMaster.CreatedBy = Convert.ToInt32(ds.Tables[0].Rows[i]["Createdby"]);
+                        taskMaster.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]);
                         taskMaster.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreationOn"]);
                         taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
                         lsttask.Add(taskMaster);
