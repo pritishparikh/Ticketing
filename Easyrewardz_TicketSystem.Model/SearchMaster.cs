@@ -86,7 +86,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string IssueType { get; set; }
         public string Assignee { get; set; }
         public string Priority { get; set; }
-        public DateTime CreatedOn { get; set; }
+        public string CreatedOn { get; set; }
         public int isEscalation { get; set; }
         public string ClaimStatus { get; set; }
         public string TaskStatus { get; set; }
