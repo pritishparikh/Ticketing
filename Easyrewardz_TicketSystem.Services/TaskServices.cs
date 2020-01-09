@@ -303,6 +303,8 @@ namespace Easyrewardz_TicketSystem.Services
                         taskMaster.TaskStatus = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
                         taskMaster.ClaimIssueType = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
                         taskMaster.Category = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        taskMaster.Creation_on = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
+                        taskMaster.Dateformat = taskMaster.Creation_on.ToString("dd/MMM/yyyy");
                         taskMaster.RaisedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
                         taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);         
                         lsttask.Add(taskMaster);
