@@ -70,7 +70,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createTicket", conn);
                 cmd1.Parameters.AddWithValue("@TenantID", TenantId);
-                cmd1.Parameters.AddWithValue("@TikcketTitle", ticketingDetails.TicketTitle);
                 cmd1.Parameters.AddWithValue("@TicketDescription", ticketingDetails.Ticketdescription);
                 cmd1.Parameters.AddWithValue("@TicketSourceID", ticketingDetails.TicketSourceID);
                 cmd1.Parameters.AddWithValue("@BrandID", ticketingDetails.BrandID);
@@ -84,18 +83,28 @@ namespace Easyrewardz_TicketSystem.Services
                 //need to change as per TicketActionType ID[QB / ETA]
                 cmd1.Parameters.AddWithValue("@AssignedID", ticketingDetails.AssignedID);
                 cmd1.Parameters.AddWithValue("@TicketActionID", ticketingDetails.TicketActionID);
-                cmd1.Parameters.AddWithValue("@IsInstantEscalateToHighLevel", ticketingDetails.IsInstantEscalateToHighLevel);
+
                 cmd1.Parameters.AddWithValue("@StatusID", ticketingDetails.StatusID);
-                cmd1.Parameters.AddWithValue("@IsWantToVisitedStore", ticketingDetails.IsWantToVisitedStore);
-                cmd1.Parameters.AddWithValue("@IsAlreadyVisitedStore", ticketingDetails.IsAlreadyVisitedStore);
-                cmd1.Parameters.AddWithValue("@IsWantToAttachOrder", ticketingDetails.IsWantToAttachOrder);
+
                 cmd1.Parameters.AddWithValue("@TicketTemplateID", ticketingDetails.TicketTemplateID);
-                cmd1.Parameters.AddWithValue("@OrderItemID", ticketingDetails.OrderItemID);
-                cmd1.Parameters.AddWithValue("@StoreID", ticketingDetails.StoreID);
-                cmd1.Parameters.AddWithValue("@IsActive", ticketingDetails.IsActive);
+
                 cmd1.Parameters.AddWithValue("@CreatedBy", ticketingDetails.CreatedBy);
                 cmd1.Parameters.AddWithValue("@Notes", ticketingDetails.Ticketnotes);
+
+                cmd1.Parameters.AddWithValue("@IsInstantEscalateToHighLevel", Convert.ToInt16(ticketingDetails.IsInstantEscalateToHighLevel));
+                cmd1.Parameters.AddWithValue("@IsWantToVisitedStore", Convert.ToInt16(ticketingDetails.IsWantToVisitedStore));
+                cmd1.Parameters.AddWithValue("@IsAlreadyVisitedStore", Convert.ToInt16(ticketingDetails.IsAlreadyVisitedStore));
+                cmd1.Parameters.AddWithValue("@IsWantToAttachOrder", Convert.ToInt16(ticketingDetails.IsWantToAttachOrder));
+                cmd1.Parameters.AddWithValue("@IsActive", Convert.ToInt16(ticketingDetails.IsActive));
+                cmd1.Parameters.AddWithValue("@OrderItemID", string.IsNullOrEmpty(ticketingDetails.OrderItemID) ? "" : ticketingDetails.OrderItemID);
+                
+                cmd1.Parameters.AddWithValue("@TikcketTitle", string.IsNullOrEmpty(ticketingDetails.TicketTitle) ? "" : ticketingDetails.TicketTitle);
+                cmd1.Parameters.AddWithValue("@StoreID", string.IsNullOrEmpty(ticketingDetails.StoreID) ? "" : ticketingDetails.StoreID);
+                
+
                 cmd1.CommandType = CommandType.StoredProcedure;
+               
+                
                 ticketID = Convert.ToInt32(cmd1.ExecuteScalar());
 
                 if (ticketingDetails.taskMasters.Count > 0)
@@ -154,6 +163,46 @@ namespace Easyrewardz_TicketSystem.Services
                 int a = 0;
                 //conn.Open();
                 //cmd.Connection = conn;
+
+                #region Fetch email based on storeID
+
+                string storeIDlst = ticketingDetails.StoreID;
+                if(!string.IsNullOrEmpty(storeIDlst) && ticketingDetails.IsInforToStore)
+                {
+                    string emailID = string.Empty;
+                    List<string> emailLst = new List<string>();
+                    DataSet EmailDs = new DataSet();
+                    MySqlCommand cmdemail = new MySqlCommand("SP_GetEmailsOnStoreID", conn);
+                    cmdemail.Parameters.AddWithValue("StoreIds", storeIDlst);
+                    MySqlDataAdapter adapter = new MySqlDataAdapter();
+                    adapter.SelectCommand = cmdemail;
+                    adapter.Fill(EmailDs);
+
+                    if(EmailDs!=null && EmailDs.Tables.Count> 0)
+                    {
+                        if(EmailDs.Tables[0]!=null && EmailDs.Tables[0].Rows.Count > 0)
+                        {
+                            emailLst = EmailDs.Tables[0].AsEnumerable().Select(x => Convert.ToString((x.Field<object>("StoreEmailID")))).ToList();
+                            emailLst.RemoveAll(x => string.IsNullOrEmpty(x));
+
+                            if(emailLst.Count > 0)
+                            emailID = string.Join(",", emailLst);
+
+                        }
+                    }
+
+                    if(!string.IsNullOrEmpty(emailID))
+                    ticketingDetails.ticketingMailerQues[0].UserCC+= emailID;
+                }
+               
+
+
+
+                #endregion
+
+
+
+
                 ticketingDetails.ticketingMailerQues[0].CreatedBy = ticketingDetails.CreatedBy;
 
 
@@ -177,6 +226,7 @@ namespace Easyrewardz_TicketSystem.Services
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                var tessst = ex.ToString() + "\n" + ex.InnerException + "\n" + ex.StackTrace;
             }
             finally
             {
