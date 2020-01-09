@@ -181,7 +181,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         public List<string> TicketStatusCount(SearchRequest searchparams)
         {
-            List<string> lstCount = new List<string>();
+            List<string> ticketCount = new List<string>();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             try
@@ -191,18 +191,22 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand sqlcmd = new MySqlCommand("SP_TicketStatusCount", conn);
                 sqlcmd.CommandType = CommandType.StoredProcedure;
-
-
+                
                 sqlcmd.Parameters.AddWithValue("_tenantID", Convert.ToInt32(searchparams.tenantID));
                 sqlcmd.Parameters.AddWithValue("_assignedID", Convert.ToInt32(searchparams.assignedTo));
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = sqlcmd;
                 da.Fill(ds);
-
-                if (ds.Tables.Count > 0  && ds.Tables[0].Rows.Count > 0)
+                if (ds != null && ds.Tables.Count > 0)
                 {
-                    lstCount = ds.Tables[0].AsEnumerable().Select(x => Enum.GetName(typeof(EnumMaster.TicketStatus), Convert.ToInt32(x.Field<object>("StatusID")))
-                    + "|" + Convert.ToString(Convert.ToInt32(x.Field<object>("TicketStatusCount")))).ToList();
+                    if (ds.Tables[0] != null &&  ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            string ticketStatus = Convert.ToString(ds.Tables[0].Rows[i]["TicketStatus"]) + "|" + Convert.ToString(ds.Tables[0].Rows[i]["TicketStatusCount"]);
+                            ticketCount.Add(ticketStatus);
+                        }
+                    }
                 }
             }
           catch(Exception ex)
@@ -211,11 +215,12 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null)
+                    ds.Dispose();
+                conn.Close();
             }
 
-            return lstCount;
+            return ticketCount;
         }
 
         #region Mapping
