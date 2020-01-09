@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Model;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Easyrewardz_TicketSystem.Interface
     {
         List<SearchResponse> SearchTickets(SearchRequest searchparams);
 
-        List<string> TicketStatusCount(SearchRequest searchparams);
+        List<TicketStatusModel> TicketStatusCount(SearchRequest searchparams);
 
     }
 }

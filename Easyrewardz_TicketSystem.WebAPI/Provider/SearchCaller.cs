@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-        public List<string> GetStatusCount(ISearchTicket _search, SearchRequest searchparams)
+        public List<TicketStatusModel> GetStatusCount(ISearchTicket _search, SearchRequest searchparams)
         {
 
             _searchList = _search;

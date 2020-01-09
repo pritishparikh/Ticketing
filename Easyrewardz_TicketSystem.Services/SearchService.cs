@@ -179,11 +179,12 @@ namespace Easyrewardz_TicketSystem.Services
             //return temp;   
         }
 
-        public List<string> TicketStatusCount(SearchRequest searchparams)
+        public List<TicketStatusModel> TicketStatusCount(SearchRequest searchparams)
         {
-            List<string> ticketCount = new List<string>();
+            List<TicketStatusModel> ticketCount = new List<TicketStatusModel>();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
+           
             try
 
             {
@@ -201,11 +202,19 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null &&  ds.Tables[0].Rows.Count > 0)
                     {
-                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+
+                        ticketCount = ds.Tables[0].AsEnumerable().Select(r => new TicketStatusModel()
                         {
-                            string ticketStatus = Convert.ToString(ds.Tables[0].Rows[i]["TicketStatus"]) + "|" + Convert.ToString(ds.Tables[0].Rows[i]["TicketStatusCount"]);
-                            ticketCount.Add(ticketStatus);
-                        }
+                            ticketStatus = Convert.ToString(r.Field<object>("TicketStatus")),
+                            ticketCount = Convert.ToInt32(r.Field<object>("TicketStatusCount"))
+
+                        }).ToList();
+
+                        //for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        //{
+                        //    string ticketStatus = Convert.ToString(ds.Tables[0].Rows[i]["TicketStatus"]) + "|" + Convert.ToString(ds.Tables[0].Rows[i]["TicketStatusCount"]);
+                        //    ticketCount.Add(ticketStatus);
+                        //}
                     }
                 }
             }

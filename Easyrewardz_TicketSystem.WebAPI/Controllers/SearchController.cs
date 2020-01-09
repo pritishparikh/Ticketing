@@ -77,11 +77,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("TicketStatusCount")]
-        [AllowAnonymous]
+       // [AllowAnonymous]
 
         public ResponseModel TicketStatusCount()
         {
-            List<string> _searchResult = null;
+            List<TicketStatusModel> _searchResult = null;
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -94,6 +94,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
                 searchparams.tenantID = authenticate.TenantId; // add tenantID to request
                 searchparams.assignedTo = authenticate.UserMasterID;// add assignedID to request
+
                 _searchResult = _newsearchMaster.GetStatusCount(new SearchService(_connectioSting), searchparams);
 
                 StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
