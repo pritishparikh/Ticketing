@@ -756,6 +756,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("gettickethistory")]
         public ResponseModel gettickethistory(int ticketID)
         {
+
+
             List<CustomTicketHistory> objTicketHistory = new List<CustomTicketHistory>();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;

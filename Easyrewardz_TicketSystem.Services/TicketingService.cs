@@ -749,6 +749,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         public List<CustomTicketHistory> GetTicketHistory(int TicketID)
         {
+
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<CustomTicketHistory> ListTicketHistory = new List<CustomTicketHistory>();

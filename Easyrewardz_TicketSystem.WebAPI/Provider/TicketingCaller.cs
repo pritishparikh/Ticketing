@@ -140,14 +140,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
             return _ticketList.SendMail(sMTPDetails, mailTo, cc, bcc,subject, mailBody, informStore, storeIDs, TenantID);
 
+
         }
         public List<CustomTicketHistory> getTickethistory(ITicketing _ticket, int ticketID)
         {
             _ticketList = _ticket;
 
             return _ticketList.GetTicketHistory(ticketID);
-
-
         }
         #endregion
     }
