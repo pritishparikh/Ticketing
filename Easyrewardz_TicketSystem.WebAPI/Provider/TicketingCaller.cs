@@ -133,6 +133,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ticketList.getTicketDetailsByTicketId(ticketID, TenantID);
 
         }
+
+        public bool SendMail(ITicketing _ticket, SMTPDetails sMTPDetails, string mailTo, string cc, string bcc, string subject, string mailBody, bool informStore,string storeIDs,int TenantID)
+        {
+            _ticketList = _ticket;
+
+            return _ticketList.SendMail(sMTPDetails, mailTo, cc, bcc,subject, mailBody, informStore, storeIDs, TenantID);
+
+        }
         #endregion
     }
 }

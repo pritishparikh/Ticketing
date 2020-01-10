@@ -741,6 +741,68 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
         }
+
+
+       public bool SendMail(SMTPDetails sMTPDetails, string mailTo, string cc, string bcc, string subject, string mailBody,bool informStore, string storeIDs, int TenantID)
+        {
+            bool IsMailSent = false; 
+            DataSet EmailDs = new DataSet();
+            CommonService commonService = new CommonService();
+            List<string> ccMailList = new List<string>(); List<string> StoreEmailList = new List<string>();
+            string[] bccMailArray = null;
+            try
+            {
+
+                #region get email based on storeid
+
+                if(informStore && !string.IsNullOrEmpty(storeIDs))
+                {
+                    MySqlCommand cmdemail = new MySqlCommand("SP_GetEmailsOnStoreID", conn);
+                    cmdemail.Parameters.AddWithValue("StoreIds", storeIDs);
+                    MySqlDataAdapter adapter = new MySqlDataAdapter();
+                    adapter.SelectCommand = cmdemail;
+                    adapter.Fill(EmailDs);
+
+                    if (EmailDs != null && EmailDs.Tables.Count > 0)
+                    {
+                        if (EmailDs.Tables[0] != null && EmailDs.Tables[0].Rows.Count > 0)
+                        {
+                            StoreEmailList = EmailDs.Tables[0].AsEnumerable().Where(x => string.IsNullOrEmpty(Convert.ToString((x.Field<object>("StoreEmailID"))))).
+                            Select(x => Convert.ToString((x.Field<object>("StoreEmailID")))).ToList();
+
+                        }
+                    }
+
+                }
+
+                #endregion
+
+
+                if (!string.IsNullOrEmpty(cc))
+                    ccMailList = cc.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                if(ccMailList.Count > 0)
+                {
+                    ccMailList.AddRange(StoreEmailList);
+                }
+
+                if (!string.IsNullOrEmpty(bcc))
+                    bccMailArray = bcc.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+
+                IsMailSent = commonService.SendEmail(sMTPDetails, mailTo, subject, mailBody,
+                    ccMailList.Count > 0 ? ccMailList.ToArray(): null,  bccMailArray , TenantID);
+
+             
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return IsMailSent;
+        }
     }
 }
 
