@@ -52,7 +52,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("gettitlesuggestions")]
         public ResponseModel gettitlesuggestions(string TikcketTitle)
         {
-            List<TicketingDetails> objTicketList = new List<TicketingDetails>();
+            List<TicketTitleDetails> objTicketList = new List<TicketTitleDetails>();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -101,6 +101,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
             string fileName = "";
             string finalAttchment = "";
+          
             if (files.Count > 0)
             {
                 for (int i = 0; i < files.Count; i++)
@@ -135,7 +136,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 var appRoot = appPathMatcher.Match(exePath).Value;
                 string Folderpath = appRoot + "\\" + _ticketAttachmentFolderName;
 
-                int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
+                 int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
+               
                 if (result > 0)
                 {
                     if (files.Count > 0)

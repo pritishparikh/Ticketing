@@ -186,4 +186,11 @@ namespace Easyrewardz_TicketSystem.Model
         public bool IsInforToStore { get; set; }
 
     }
+
+    public class TicketTitleDetails
+    {
+        public string TicketTitle { get; set; }
+        public string TicketTitleToolTip { get; set; }
+    }
+
 }

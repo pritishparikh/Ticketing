@@ -28,18 +28,20 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TikcketTitle"></param>
         /// <param name="TenantId"></param>
         /// <returns></returns>
-        public List<TicketingDetails> GetTicketList(string TikcketTitle, int TenantId)
+        public List<TicketTitleDetails> GetTicketList(string TikcketTitle, int TenantId)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
-            List<TicketingDetails> ticketing = new List<TicketingDetails>();
+            List<TicketTitleDetails> ticketing = new List<TicketTitleDetails>();
+            string _ticketTitle = string.Empty;
             try
             {
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getTitleSuggestions", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantId);
+                cmd1.Parameters.AddWithValue("@_tenantID", TenantId);
+                cmd1.Parameters.AddWithValue("@_ticketTitle", string.IsNullOrEmpty(TikcketTitle)? "" : TikcketTitle);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -47,15 +49,38 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        TicketingDetails ticketingDetails = new TicketingDetails();
-                        ticketingDetails.TicketTitle = Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"]);
-                        ticketing.Add(ticketingDetails);
+                        TicketTitleDetails tktTitle = new TicketTitleDetails();
+                        _ticketTitle = string.IsNullOrEmpty(Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"])) ? string.Empty 
+                                        : Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"]);
+
+                        if(!string.IsNullOrEmpty(_ticketTitle))
+                        {
+                            tktTitle.TicketTitle = _ticketTitle.Length > 10 ? _ticketTitle.Substring(0, 10): _ticketTitle;
+                            tktTitle.TicketTitleToolTip= _ticketTitle.Length > 10 ?  _ticketTitle : string.Empty;
+                        }
+
+                        ticketing.Add(tktTitle);
+
+                        //TicketingDetails ticketingDetails = new TicketingDetails();
+                        //ticketingDetails.TicketTitle = string.IsNullOrEmpty(Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"]));
+                        //ticketingDetails.
+                        //ticketing.Add(ticketingDetails);
                     }
+
+                 
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                    conn.Close();
+
+                if (ds != null)
+                    ds.Dispose();
             }
             return ticketing;
         }
