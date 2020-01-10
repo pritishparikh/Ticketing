@@ -747,40 +747,8 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
-        public List<CustomTicketHistory> GetTicketHistory(int TicketID)
-        {
-            DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
-            List<CustomTicketHistory> ListTicketHistory = new List<CustomTicketHistory>();
-            try
-            {
-                conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetHistoryOfTicket", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Ticket_Id", TicketID);
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        CustomTicketHistory TicketHistory = new CustomTicketHistory();
-                        TicketHistory.Name = Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
-                        TicketHistory.Action = Convert.ToString(ds.Tables[0].Rows[i]["Action"]);
-                        TicketHistory.DateandTime = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
-                        ListTicketHistory.Add(TicketHistory);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return ListTicketHistory;
-        }
-        public bool SendMail(SMTPDetails sMTPDetails, string mailTo, string cc, string bcc, string subject, string mailBody,bool informStore, string storeIDs, int TenantID)
+
+       public bool SendMail(SMTPDetails sMTPDetails, string mailTo, string cc, string bcc, string subject, string mailBody,bool informStore, string storeIDs, int TenantID)
         {
             bool IsMailSent = false; 
             DataSet EmailDs = new DataSet();
@@ -840,6 +808,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             return IsMailSent;
         }
+
     }
 }
 
