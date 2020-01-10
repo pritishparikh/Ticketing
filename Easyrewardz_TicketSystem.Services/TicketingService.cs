@@ -841,6 +841,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             return IsMailSent;
         }
+
     }
 }
 
