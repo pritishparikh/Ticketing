@@ -53,6 +53,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _orderRepository.getOrderListwithItemDetail(OrderNumber, TenantID);
 
         }
+        public List<CustomOrderDetailsByCustomer> GetOrderDetailsByCustomerID(IOrder _orderMaster, int CustomerID, int TenantID)
+        {
+            _orderRepository = _orderMaster;
+            return _orderRepository.getOrderListByCustomerID(CustomerID, TenantID);
+
+        }
         #endregion
 
     }
