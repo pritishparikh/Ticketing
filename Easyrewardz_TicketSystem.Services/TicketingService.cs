@@ -32,7 +32,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
-            List<TicketTitleDetails> ticketing = new List<TicketTitleDetails>();
+            List<TicketTitleDetails> ticketing = new List<TicketTitleDetails>(); 
             string _ticketTitle = string.Empty;
             try
             {

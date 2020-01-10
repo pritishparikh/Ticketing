@@ -12,7 +12,7 @@ namespace Easyrewardz_TicketSystem.Interface
     {
         //IEnumerable<TicketingDetails> getTcikets();
 
-        List<TicketTitleDetails> GetTicketList(string TikcketTitle, int TenantId);
+        List<TicketTitleDetails> GetTicketList(string TikcketTitle, int TenantId); 
 
         int addTicket(TicketingDetails ticketingDetails, int TenantId, string FolderPath, string finalAttchment);
 

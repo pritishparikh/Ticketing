@@ -29,7 +29,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public List<TicketTitleDetails> GetAutoSuggestTicketList(ITicketing _ticket, string TikcketTitle, int TenantId)
         {
             _ticketList = _ticket;
-            return _ticketList.GetTicketList(TikcketTitle, TenantId);
+            return _ticketList.GetTicketList(TikcketTitle, TenantId); 
         }
         /// <summary>
         /// 
