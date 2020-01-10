@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.CustomModel
 {
-   public class CustomTicketDetail
+    public class CustomTicketDetail
     {
 
 
@@ -16,12 +16,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// TenantID
         /// </summary>
         public int TenantID { get; set; }
-
-        /// <summary>
-        /// Ticket Title
-        /// </summary>
-        //public string TikcketTitle { get; set; }
-
         /// <summary>
         /// Ticket Title
         /// </summary>
@@ -37,30 +31,27 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// Ticket Notes
         /// </summary>
         public string Ticketnotes { get; set; }
-        /// <summary>
-        /// Ticket Source Id
-        /// </summary>
-        public int TicketSourceID { get; set; }
+
         /// <summary>
         /// Brand Id
         /// </summary>
-        public string Brand { get; set; }
+        public int BrandID { get; set; }
         /// <summary>
         /// Category Id
         /// </summary>
-        public string Category { get; set; }
+        public int CategoryID { get; set; }
         /// <summary>
         /// Subcategory Id
         /// </summary>
-        public string SubCategory { get; set; }
+        public int SubCategoryID { get; set; }
         /// <summary>
         /// Issue Type Id
         /// </summary>
-        public string IssueTypeName { get; set; }
+        public int IssueTypeID { get; set; }
         /// <summary>
         /// Priority Id
         /// </summary>
-        public string PriortyName  { get; set; }
+        public int PriortyID { get; set; }
         /// <summary>
         /// Customer Id
         /// </summary>
@@ -69,16 +60,17 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string CustomerPhoneNumber { get; set; }
 
         public string AltNumber { get; set; }
-        public string CustomerEmailId  { get; set; }
+        public string CustomerEmailId { get; set; }
         public string UpdateDate { get; set; }
         public int? OpenTicket { get; set; }
         public int? Totalticket { get; set; }
+        public DateTime TargetClouredate { get; set; }
 
         public string Username { get; set; }
         /// <summary>
         /// ChannelOfPurchaseID
         /// </summary>
-        public string ChannelOfPurchase { get; set; }
+        public int ChannelOfPurchaseID { get; set; }
         /// <summary>
         /// AssignedID
         /// </summary>
@@ -87,12 +79,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// <summary>
         /// TicketActionID
         /// </summary>
-        public string TicketActionName { get; set; }
-
-        /// <summary>
-        /// IsInstantEscalateToHighLevel
-        /// </summary>
-        public bool IsInstantEscalateToHighLevel { get; set; }
+        public int TicketActionID { get; set; }
 
         /// <summary>
         /// Order Id
@@ -118,54 +105,11 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// <summary>
         /// Status
         /// </summary>
-        public string Status { get; set; }
+        public int Status { get; set; }
 
-        /// <summary>
-        /// IsWantToVisitedStore
-        /// </summary>
-        public bool IsWantToVisitedStore { get; set; }
-
-        /// <summary>
-        /// IsAlreadyVisitedStore
-        /// </summary>
-        public bool IsAlreadyVisitedStore { get; set; }
-
-        /// <summary>
-        /// IsWantToAttachOrder
-        /// </summary>
-        public bool IsWantToAttachOrder { get; set; }
-
-
-        /// <summary>
-        /// TicketTemplateID
-        /// </summary>
-        public int TicketTemplateID { get; set; }
-
-
-        /// <summary>
-        /// IsActive
-        /// </summary>
-        public bool IsActive { get; set; }
-
-        /// <summary>
-        /// ModifiedBy
-        /// </summary>
-        public int? ModifiedBy { get; set; }
-
-        /// <summary>
-        /// ModifiedDate
-        /// </summary>
-        public DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// Store id foe Comma seperate
         /// </summary>
         public string StoreID { get; set; }
 
         public string OrderItemID { get; set; }
-
-        /// <summary>
-        /// Customer Details(Not Neede for now)
-        /// </summary>
     }
 }
