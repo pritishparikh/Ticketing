@@ -146,7 +146,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public List<CustomTicketHistory> getTickethistory(ITicketing _ticket,int ticketID)
         {
             _ticketList = _ticket;
-            return _ticketList.GetTicketHistory(ticketID);
+            return _ticketList.GetTicketHistory(ticketID); 
         }
         #endregion
     }
