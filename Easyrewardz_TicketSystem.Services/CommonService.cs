@@ -41,6 +41,30 @@ namespace Easyrewardz_TicketSystem.Services
                     using (MailMessage message = new MailMessage())
                     {
                         message.From = new MailAddress(smtpDetails.FromEmailId, "EasyRewardz");
+
+                        if(cc!=null)
+                        {
+                            if(cc.Length >0)
+                            {
+                                for(int i=0; i< cc.Length;i++)
+                                {
+                                    message.CC.Add(cc[i]);
+                                }
+                            
+                            }
+                        }
+
+                        if (bcc != null)
+                        {
+                            if (bcc.Length > 0)
+                            {
+                                for (int k = 0; k < bcc.Length; k++)
+                                {
+                                    message.CC.Add(bcc[k]);
+                                }
+
+                            }
+                        }
                         message.Subject = subject == null ? "" : subject;
                         message.Body = body == null ? "" : body;
                         message.IsBodyHtml = smtpDetails.IsBodyHtml;

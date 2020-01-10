@@ -44,7 +44,9 @@ namespace Easyrewardz_TicketSystem.Services
                         User user = new User();
                         user.UserID= Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
                         user.FullName = Convert.ToString(ds.Tables[0].Rows[i]["FullName"]);
-                        //user.ReporteeID = Convert.ToInt32(ds.Tables[0].Rows[i]["ReporteeID"]);
+                        user.ReporteeID = Convert.ToInt32(ds.Tables[0].Rows[i]["ReporteeID"]);
+                        user.RoleID= Convert.ToInt32(ds.Tables[0].Rows[i]["RoleID"]);
+                        user.RoleName = Convert.ToString(ds.Tables[0].Rows[i]["RoleName"]);
 
 
 

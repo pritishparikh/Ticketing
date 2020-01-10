@@ -21,5 +21,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// Reportee Id 
         /// </summary>
         public int ReporteeID { get; set; }
+        public string RoleName { get; set; }
+        public int RoleID { get; set; }
     }
 }
