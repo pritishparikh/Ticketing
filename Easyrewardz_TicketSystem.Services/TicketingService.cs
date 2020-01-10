@@ -682,7 +682,6 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
 
@@ -708,7 +707,6 @@ namespace Easyrewardz_TicketSystem.Services
                         ticketDetails.Totalticket = Convert.ToInt32(ds.Tables[0].Rows[i]["Totaltickets"]);
 
                     }
-
                 }
                 return ticketDetails;
             }

@@ -6,8 +6,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
 {
     public class CustomTicketDetail
     {
-
-
         /// <summary>
         /// Ticket Id
         /// </summary>
