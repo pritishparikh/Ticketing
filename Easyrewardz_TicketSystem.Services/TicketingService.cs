@@ -720,6 +720,7 @@ namespace Easyrewardz_TicketSystem.Services
                         ticketDetails.ChannelOfPurchaseID = Convert.ToInt32(ds.Tables[0].Rows[i]["ChannelOfPurchaseID"]);
                         ticketDetails.IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
                         ticketDetails.TicketActionID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketActionID"]);
+                        ticketDetails.CustomerID = Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
                         ticketDetails.CustomerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
                         ticketDetails.CustomerEmailId = Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
                         ticketDetails.CustomerPhoneNumber = Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
@@ -730,6 +731,10 @@ namespace Easyrewardz_TicketSystem.Services
                         ticketDetails.TargetClouredate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TargetClouredate"]);
                         ticketDetails.OpenTicket = Convert.ToInt32(ds.Tables[0].Rows[i]["OpenTickets"]);
                         ticketDetails.Totalticket = Convert.ToInt32(ds.Tables[0].Rows[i]["Totaltickets"]);
+                        ticketDetails.StoreID = Convert.ToString(ds.Tables[0].Rows[i]["StoreID"]);
+                        ticketDetails.StoreNames = Convert.ToString(ds.Tables[0].Rows[i]["StoreNames"]);
+                        ticketDetails.ProductID = Convert.ToString(ds.Tables[0].Rows[i]["ProductID"]);
+                        ticketDetails.ProductNames = Convert.ToString(ds.Tables[0].Rows[i]["ProductNames"]);
 
                     }
                 }

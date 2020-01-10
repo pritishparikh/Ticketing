@@ -23,13 +23,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// Ticket Description
         /// </summary>
         public string Ticketdescription { get; set; }
-
-
         /// <summary>
         /// Ticket Notes
         /// </summary>
         public string Ticketnotes { get; set; }
-
         /// <summary>
         /// Brand Id
         /// </summary>
@@ -53,17 +50,43 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// <summary>
         /// Customer Id
         /// </summary>
+        public int  CustomerID { get; set; }
+        /// <summary>
+        /// CustomerName
+        /// </summary>
         public string CustomerName { get; set; }
-
+        /// <summary>
+        /// CustomerPhoneNumber
+        /// </summary>
         public string CustomerPhoneNumber { get; set; }
-
+        /// <summary>
+        /// AltNumber
+        /// </summary>
         public string AltNumber { get; set; }
+        /// <summary>
+        /// CustomerEmailId
+        /// </summary>
         public string CustomerEmailId { get; set; }
+        /// <summary>
+        /// UpdateDate
+        /// </summary>
         public string UpdateDate { get; set; }
+        /// <summary>
+        /// OpenTicket
+        /// </summary>
         public int? OpenTicket { get; set; }
+        /// <summary>
+        /// Totalticket
+        /// </summary>
         public int? Totalticket { get; set; }
+        /// <summary>
+        /// TargetClouredate
+        /// </summary>
         public DateTime TargetClouredate { get; set; }
 
+        /// <summary>
+        /// Username
+        /// </summary>
         public string Username { get; set; }
         /// <summary>
         /// ChannelOfPurchaseID
@@ -80,7 +103,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public int TicketActionID { get; set; }
 
         /// <summary>
-        /// Order Id
+        /// OrderMasterID
         /// </summary>
         public int OrderMasterID { get; set; }
         /// <summary>
@@ -99,14 +122,27 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// Updated Date
         /// </summary>
         public DateTime UpdatedDate { get; set; }
-
         /// <summary>
         /// Status
         /// </summary>
         public int Status { get; set; }
 
+        /// <summary>
+        /// StoreID
         /// </summary>
         public string StoreID { get; set; }
+        /// <summary>
+        /// StoreNames
+        /// </summary>
+        public string StoreNames { get; set; }
+        /// <summary>
+        /// ProductID
+        /// </summary>
+        public string ProductID { get; set; }
+        /// <summary>
+        /// ProductNames
+        /// </summary>
+        public string ProductNames { get; set; }
 
         public string OrderItemID { get; set; }
     }
