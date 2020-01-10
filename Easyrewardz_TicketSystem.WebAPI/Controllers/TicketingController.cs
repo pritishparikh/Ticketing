@@ -725,14 +725,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                         _objResponseModel.Status = true;
                         _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
                         _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
-                        _objResponseModel.ResponseData = "Mail sent successfully";
+                        _objResponseModel.ResponseData = "Mail sent successfully.";
                     }
                     else
                     {
                         _objResponseModel.Status = false;
                         _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
                         _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                        _objResponseModel.ResponseData = "Mail sent failure";
+                        _objResponseModel.ResponseData = "Mail sent failure.";
                     }
                 
             
@@ -742,7 +742,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
                 _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                _objResponseModel.ResponseData = "We had an error! Sorry about that";
+                _objResponseModel.ResponseData = "We had an error! Sorry about that.";
             }
             return _objResponseModel;
         }
