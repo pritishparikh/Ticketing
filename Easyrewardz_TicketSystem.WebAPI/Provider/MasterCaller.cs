@@ -201,5 +201,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Imaster.GetSMTPDetails(TenantId);
         }
 
+        public List <StateMaster> GetStatelist(IMasterInterface _ImasterInterface)
+        {
+            _Imaster = _ImasterInterface;
+            return _Imaster.GetStateList();
+        }
     }
 }

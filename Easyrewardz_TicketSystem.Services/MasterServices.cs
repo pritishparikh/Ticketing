@@ -260,6 +260,55 @@ namespace Easyrewardz_TicketSystem.Services
             return ticketSourceMasters;
         }
 
+        /// <summary>
+        /// Get State List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        public List<StateMaster> GetStateList()
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<StateMaster> stateMaster  = new List<StateMaster>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStateList", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StateMaster state = new StateMaster();
+                        state.StateID = Convert.ToInt32(ds.Tables[0].Rows[i]["StateID"]);
+                        state.CountryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CountryID"]);
+                        state.StateName = Convert.ToString(ds.Tables[0].Rows[i]["StateName"]);
+                        state.StateCode = Convert.ToInt32(ds.Tables[0].Rows[i]["StateCode"]);
+                        stateMaster.Add(state);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return stateMaster;
+        }
+
         #region SMTP Information 
 
         public SMTPDetails GetSMTPDetails(int TenantID)

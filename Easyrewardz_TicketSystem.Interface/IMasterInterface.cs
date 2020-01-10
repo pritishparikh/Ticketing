@@ -50,5 +50,12 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="TenantID"></param>
         /// <returns></returns>
         SMTPDetails GetSMTPDetails(int TenantID);
+
+        /// <summary>
+        ///Get State List
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        List<StateMaster> GetStateList();
     }
 }
