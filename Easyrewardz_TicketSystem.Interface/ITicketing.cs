@@ -38,6 +38,7 @@ namespace Easyrewardz_TicketSystem.Interface
         CustomTicketDetail getTicketDetailsByTicketId(int TicketID, int TenantID);
 
         bool SendMail(SMTPDetails sMTPDetails, string mailTo, string cc, string bcc,string subject, string mailBody,bool informStore, string storeIDs, int TenantID);
+        List<CustomTicketHistory> GetTicketHistory(int TicketID);
 
     }
 }
