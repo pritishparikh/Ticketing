@@ -707,30 +707,31 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
 
-                        ticketDetails.TicketID = Convert.ToInt16(ds.Tables[0].Rows[i]["TicketID"]);
+                        ticketDetails.TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
                         ticketDetails.TicketTitle = Convert.ToString(ds.Tables[0].Rows[i]["TikcketTitle"]);
                         ticketDetails.Ticketdescription = Convert.ToString(ds.Tables[0].Rows[i]["TicketDescription"]);
-                        ticketDetails.Category = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
-                        ticketDetails.Brand = Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
-                        ticketDetails.SubCategory = Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
-                        ticketDetails.PriortyName = Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);
-                        ticketDetails.ChannelOfPurchase = Convert.ToString(ds.Tables[0].Rows[i]["NameOfChannel"]);
-                        ticketDetails.IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
-                        ticketDetails.TicketActionName = Convert.ToString(ds.Tables[0].Rows[i]["TicketActionName"]);
+                        ticketDetails.CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
+                        ticketDetails.BrandID = Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
+                        ticketDetails.SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        ticketDetails.PriortyID = Convert.ToInt32(ds.Tables[0].Rows[i]["PriorityID"]);
+                        ticketDetails.ChannelOfPurchaseID = Convert.ToInt32(ds.Tables[0].Rows[i]["ChannelOfPurchaseID"]);
+                        ticketDetails.IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
+                        ticketDetails.TicketActionID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketActionID"]);
                         ticketDetails.CustomerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
                         ticketDetails.CustomerEmailId = Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
                         ticketDetails.CustomerPhoneNumber = Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
                         ticketDetails.AltNumber = Convert.ToString(ds.Tables[0].Rows[i]["AltNumber"]);
                         ticketDetails.Username = Convert.ToString(ds.Tables[0].Rows[i]["Username"]);
-                        //ticketDetails.UpdateDate = Convert.ToString(ds.Tables[0].Rows[i]["UpdateDate"]);
-                        ticketDetails.Status = Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]);
+                        ticketDetails.UpdateDate = Convert.ToString(ds.Tables[0].Rows[i]["UpdatedAt"]);
+                        ticketDetails.Status = Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]);
+                        ticketDetails.TargetClouredate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TargetClouredate"]);
+                        ticketDetails.OpenTicket = Convert.ToInt32(ds.Tables[0].Rows[i]["OpenTickets"]);
+                        ticketDetails.Totalticket = Convert.ToInt32(ds.Tables[0].Rows[i]["Totaltickets"]);
 
                     }
-
                 }
                 return ticketDetails;
             }
