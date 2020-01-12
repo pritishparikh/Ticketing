@@ -15,5 +15,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<TicketStatusModel> TicketStatusCount(SearchRequest searchparams);
 
+        List<SearchResponse> GetTicketsOnLoad(int HeaderStatus_ID,int Tenant_ID,int AssignTo_ID);
+
     }
 }

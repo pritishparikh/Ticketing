@@ -34,6 +34,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _searchList.TicketStatusCount(searchparams);
 
         }
-        #endregion 
+
+        public List<SearchResponse> GetTicketsOnLoad(ISearchTicket _search, int HeaderStatus_Id,int Tenant_ID, int AssignTo_ID)
+        {
+            _searchList = _search;
+            return _searchList.GetTicketsOnLoad(HeaderStatus_Id,Tenant_ID,AssignTo_ID);
+        }
+         
+
+        #endregion
+
+
     }
 }

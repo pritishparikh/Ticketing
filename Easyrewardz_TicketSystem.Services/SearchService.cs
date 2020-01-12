@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-    public class SearchService: ISearchTicket
+    public class SearchService : ISearchTicket
     {
         #region DB connection
         MySqlConnection conn = new MySqlConnection();
@@ -32,7 +32,7 @@ namespace Easyrewardz_TicketSystem.Services
             int rowStart = (searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
-                conn.Open(); 
+                conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand sqlcmd = new MySqlCommand("SP_SearchTickets", conn);
                 sqlcmd.CommandType = CommandType.StoredProcedure;
@@ -80,11 +80,11 @@ namespace Easyrewardz_TicketSystem.Services
                 sqlcmd.Parameters.AddWithValue("_claimIssuetype", searchparams.claimIssuetype);
                 sqlcmd.Parameters.AddWithValue("_claimsubCategory", searchparams.claimSubcategory);
 
-                if(!string.IsNullOrEmpty(searchparams.SLAstatus))
+                if (!string.IsNullOrEmpty(searchparams.SLAstatus))
                 {
                     sqlcmd.Parameters.AddWithValue("_SLAstatusResponse", Convert.ToInt32(searchparams.SLAstatus.Split('|')[0].Split('-')[0]));
                     sqlcmd.Parameters.AddWithValue("_SLAstatusResponsetime", 1);
-                    sqlcmd.Parameters.AddWithValue("_SLAstatusResolution", Convert.ToInt32( searchparams.SLAstatus.Split('|')[1].Split('-')[0]));
+                    sqlcmd.Parameters.AddWithValue("_SLAstatusResolution", Convert.ToInt32(searchparams.SLAstatus.Split('|')[1].Split('-')[0]));
                     sqlcmd.Parameters.AddWithValue("_SLAstatusResoltiontime", 1);
                 }
                 else
@@ -102,8 +102,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                 if (ds.Tables.Count > 0)
                 {
-                  
-                  
+
+
                     if (ds.Tables[0].Rows.Count > 0)
                     {
 
@@ -118,32 +118,32 @@ namespace Easyrewardz_TicketSystem.Services
                             Priority = Convert.ToString(r.Field<object>("PriortyName")),
                             Assignee = Convert.ToString(r.Field<object>("AssignedName")),
                             CreatedOn = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedOn"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedOn")),
-                           
+
 
                             createdBy = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedByName"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedByName")),
 
-                            createdago= string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("CreatedDate")), "CreatedSpan"),
+                            createdago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("CreatedDate")), "CreatedSpan"),
                             assignedTo = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedName"))) ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
 
-                            assignedago=string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("AssignedDate")), "AssignedSpan"),
+                            assignedago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("AssignedDate")), "AssignedSpan"),
 
                             updatedBy = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("ModifyByName"))) ? string.Empty : Convert.ToString(r.Field<object>("ModifyByName")),
 
                             updatedago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("ModifiedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("ModifiedDate")), "ModifiedSpan"),
 
-                            responseTimeRemainingBy =(string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityRespond"))))?
-                            string.Empty: setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond"))+"|"+ Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
+                            responseTimeRemainingBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityRespond")))) ?
+                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
 
                             responseOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityRespond")))) ?
-                            string.Empty: setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond"))+"|"+ Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
+                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
 
                             resolutionOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityResolve")))) ?
                             string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
 
-                            TaskStatus= Convert.ToString(r.Field<object>("TaskDetails")),
-                            ClaimStatus= Convert.ToString(r.Field<object>("ClaimDetails")),
-                            TicketCommentCount= Convert.ToInt32(r.Field<object>("TicketComments")),
-                            isEscalation= Convert.ToInt32(r.Field<object>("IsEscalated"))
+                            TaskStatus = Convert.ToString(r.Field<object>("TaskDetails")),
+                            ClaimStatus = Convert.ToString(r.Field<object>("ClaimDetails")),
+                            TicketCommentCount = Convert.ToInt32(r.Field<object>("TicketComments")),
+                            isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated"))
 
                         }).ToList();
                     }
@@ -168,7 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception ex)
             {
-               
+
                 throw ex;
             }
             finally
@@ -184,7 +184,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<TicketStatusModel> ticketCount = new List<TicketStatusModel>();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
-           
+
             try
 
             {
@@ -192,7 +192,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand sqlcmd = new MySqlCommand("SP_TicketStatusCount", conn);
                 sqlcmd.CommandType = CommandType.StoredProcedure;
-                
+
                 sqlcmd.Parameters.AddWithValue("_tenantID", Convert.ToInt32(searchparams.tenantID));
                 sqlcmd.Parameters.AddWithValue("_assignedID", Convert.ToInt32(searchparams.assignedTo));
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -200,7 +200,7 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables.Count > 0)
                 {
-                    if (ds.Tables[0] != null &&  ds.Tables[0].Rows.Count > 0)
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
 
                         ticketCount = ds.Tables[0].AsEnumerable().Select(r => new TicketStatusModel()
@@ -218,7 +218,7 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-          catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -232,6 +232,94 @@ namespace Easyrewardz_TicketSystem.Services
             return ticketCount;
         }
 
+        /// <summary>
+        /// Get tickets on the page load
+        /// </summary>
+        /// <param name="HeaderStatus_ID"></param>
+        /// <param name="Tenant_ID"></param>
+        /// <param name="AssignTo_ID"></param>
+        /// <returns></returns>
+        public List<SearchResponse> GetTicketsOnLoad(int HeaderStatus_ID, int Tenant_ID, int AssignTo_ID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<SearchResponse> objSearchResult = new List<SearchResponse>();
+            List<SearchResponse> temp = new List<SearchResponse>(); //delete later
+            List<string> CountList = new List<string>();
+
+            int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand sqlcmd = new MySqlCommand("SP_getTicketSearchOnLoad", conn);
+                sqlcmd.CommandType = CommandType.StoredProcedure;
+
+                sqlcmd.Parameters.AddWithValue("HeaderStatus_ID", HeaderStatus_ID);
+                sqlcmd.Parameters.AddWithValue("Tenant_ID", Tenant_ID);
+                sqlcmd.Parameters.AddWithValue("AssignTo_ID", AssignTo_ID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = sqlcmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objSearchResult = ds.Tables[0].AsEnumerable().Select(r => new SearchResponse()
+                        {
+                            ticketID = Convert.ToInt32(r.Field<object>("TicketID")),
+                            ticketStatus = Convert.ToString((EnumMaster.TicketStatus)Convert.ToInt32(r.Field<object>("StatusID"))),
+                            Message = Convert.ToString(r.Field<object>("TicketDescription")),
+                            Category = Convert.ToString(r.Field<object>("CategoryName")),
+                            subCategory = Convert.ToString(r.Field<object>("SubCategoryName")),
+                            IssueType = Convert.ToString(r.Field<object>("IssueTypeName")),
+                            Priority = Convert.ToString(r.Field<object>("PriortyName")),
+                            Assignee = Convert.ToString(r.Field<object>("AssignedName")),
+                            CreatedOn = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedOn"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedOn")),
+                            createdBy = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedByName"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedByName")),
+                            createdago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("CreatedDate")), "CreatedSpan"),
+                            assignedTo = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedName"))) ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
+                            assignedago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("AssignedDate")), "AssignedSpan"),
+                            updatedBy = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("ModifyByName"))) ? string.Empty : Convert.ToString(r.Field<object>("ModifyByName")),
+                            updatedago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("ModifiedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("ModifiedDate")), "ModifiedSpan"),
+
+                            responseTimeRemainingBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityRespond")))) ?
+                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
+                            responseOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityRespond")))) ?
+                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
+
+                            resolutionOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityResolve")))) ?
+                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
+
+                            TaskStatus = Convert.ToString(r.Field<object>("TaskDetails")),
+                            ClaimStatus = Convert.ToString(r.Field<object>("ClaimDetails")),
+                            TicketCommentCount = Convert.ToInt32(r.Field<object>("TicketComments")),
+                            isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated"))
+
+                        }).ToList();
+                    }
+                }
+
+                //paging here
+                //if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
+                //    objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
+
+                //objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList();
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                //throw ex;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
+            return objSearchResult;
+        }
+
         #region Mapping
         public string setCreationdetails(string time, string ColName)
         {
@@ -239,16 +327,16 @@ namespace Easyrewardz_TicketSystem.Services
             DateTime now = DateTime.Now;
             TimeSpan diff = new TimeSpan();
             string[] PriorityArr = null;
-           
+
             try
             {
-                if(ColName== "CreatedSpan" || ColName=="ModifiedSpan" || ColName== "AssignedSpan")
+                if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
                 {
                     diff = now - Convert.ToDateTime(time);
-                    timespan=CalculateSpan(diff) +" ago";
+                    timespan = CalculateSpan(diff) + " ago";
 
                 }
-                else if(ColName == "RespondTimeRemainingSpan")
+                else if (ColName == "RespondTimeRemainingSpan")
                 {
                     PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
 
@@ -272,7 +360,7 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                     timespan = CalculateSpan(diff);
                 }
-                else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan" )
+                else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
                 {
                     PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
 
@@ -297,9 +385,9 @@ namespace Easyrewardz_TicketSystem.Services
 
                     timespan = CalculateSpan(diff);
                 }
-              
+
             }
-            catch(Exception)
+            catch (Exception)
             {
 
             }
@@ -315,7 +403,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
             string span = string.Empty;
 
-            if(Math.Abs(ts.Days) >0)
+            if (Math.Abs(ts.Days) > 0)
             {
                 span = Convert.ToString(Math.Abs(ts.Days)) + " Days";
             }
