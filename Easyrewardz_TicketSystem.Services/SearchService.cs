@@ -350,6 +350,8 @@ namespace Easyrewardz_TicketSystem.Services
                  */
                 MySqlCommand sqlcmd = new MySqlCommand("", conn);
 
+                sqlcmd.Parameters.AddWithValue("HeaderStatus_Id", searchModel.HeaderStatusId);
+
                 if (searchModel.ActiveTabId == 1)
                 {
                     sqlcmd.CommandText = "SP_SearchTicketData_ByDate";
@@ -359,9 +361,14 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.Parameters.AddWithValue("SLA_DueON", searchModel.searchDataByDate.SLA_DueON);
                     sqlcmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByDate.Ticket_StatusID);
                 }
-                else
+                else if (searchModel.ActiveTabId == 2)
                 {
-                    sqlcmd.CommandText = "SP_SearchTicketData_ByDate";
+                    sqlcmd.CommandText = "SP_SearchTicketData_ByCustomerType";
+
+                    sqlcmd.Parameters.AddWithValue("Ticket_CreatedOn", string.IsNullOrEmpty(searchModel.searchDataByDate.Ticket_CreatedOn) ? "" : searchModel.searchDataByDate.Ticket_CreatedOn);
+                    sqlcmd.Parameters.AddWithValue("Ticket_ModifiedOn", string.IsNullOrEmpty(searchModel.searchDataByDate.Ticket_ModifiedOn) ? "" : searchModel.searchDataByDate.Ticket_ModifiedOn);
+                    sqlcmd.Parameters.AddWithValue("SLA_DueON", searchModel.searchDataByDate.SLA_DueON);
+                    sqlcmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByDate.Ticket_StatusID);
                 }
                                              
                 sqlcmd.CommandType = CommandType.StoredProcedure;
