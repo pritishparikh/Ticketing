@@ -327,7 +327,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="Tenant_ID"></param>
         /// <param name="AssignTo_ID"></param>
         /// <returns></returns>
-        public List<SearchResponse> GetTicketsOnSearch(int Tenant_ID, int AssignTo_ID)
+        public List<SearchResponse> GetTicketsOnSearch(SearchModel searchModel)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -348,16 +348,26 @@ namespace Easyrewardz_TicketSystem.Services
                     4. SP_SearchTicketData_ByCategoryType
                     5. SP_SearchTicketData_ByAll                 
                  */
-                if (true)
+                MySqlCommand sqlcmd = new MySqlCommand("", conn);
+
+                if (searchModel.ActiveTabId == 1)
                 {
+                    sqlcmd.CommandText = "SP_SearchTicketData_ByDate";
 
+                    sqlcmd.Parameters.AddWithValue("Ticket_CreatedOn", searchModel.searchDataByDate.Ticket_CreatedOn);
+                    sqlcmd.Parameters.AddWithValue("Ticket_ModifiedOn", searchModel.searchDataByDate.Ticket_ModifiedOn);
+                    sqlcmd.Parameters.AddWithValue("SLA_DueON", searchModel.searchDataByDate.SLA_DueON);
+                    sqlcmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByDate.Ticket_StatusID);
                 }
-
-                MySqlCommand sqlcmd = new MySqlCommand("SP_SearchTicketData_ByDate", conn);
+                else
+                {
+                    sqlcmd.CommandText = "SP_SearchTicketData_ByDate";
+                }
+                                             
                 sqlcmd.CommandType = CommandType.StoredProcedure;
 
-                sqlcmd.Parameters.AddWithValue("Tenant_ID", Tenant_ID);
-                sqlcmd.Parameters.AddWithValue("AssignTo_ID", AssignTo_ID);
+                sqlcmd.Parameters.AddWithValue("Tenant_ID", searchModel.TenantID);
+                sqlcmd.Parameters.AddWithValue("Assignto_Id", searchModel.AssigntoId);
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = sqlcmd;

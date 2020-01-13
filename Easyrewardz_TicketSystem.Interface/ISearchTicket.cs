@@ -17,6 +17,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<SearchResponse> GetTicketsOnLoad(int HeaderStatus_ID,int Tenant_ID,int AssignTo_ID);
 
-        List<SearchResponse> GetTicketsOnSearch(int Tenant_ID, int AssignTo_ID); 
+        List<SearchResponse> GetTicketsOnSearch(SearchModel searchModel); 
     }
 }
