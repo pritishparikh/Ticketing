@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-    public class OrderService : IOrder 
+    public class OrderService : IOrder
     {
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
@@ -25,7 +25,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="OrderNumber"></param>
         /// <returns></returns>
-        public OrderMaster getOrderbyNumber(string OrderNumber,int TenantId)
+        public OrderMaster getOrderbyNumber(string OrderNumber, int TenantId)
         {
             OrderMaster orderMasters = new OrderMaster();
             MySqlCommand cmd = new MySqlCommand();
@@ -59,14 +59,14 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return orderMasters;
-        } 
+        }
 
         /// <summary>
         /// Add Order Detail
         /// </summary>
         /// <param name="orderMaster"></param>
         /// <returns></returns>
-        public int addOrderDetails(OrderMaster orderMaster,int TenantId)
+        public int addOrderDetails(OrderMaster orderMaster, int TenantId)
         {
             MySqlCommand cmd = new MySqlCommand();
             int i = 0;
@@ -123,8 +123,8 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd  = new MySqlCommand("SP_OrderDetails", conn);
-                cmd.Connection = conn;        
+                MySqlCommand cmd = new MySqlCommand("SP_OrderDetails", conn);
+                cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Order_ID", OrderNumber);
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
@@ -132,9 +132,9 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
-            
+
                 if (ds != null && ds.Tables[0] != null)
-                {               
+                {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CustomOrderMaster customOrderMaster = new CustomOrderMaster();
@@ -149,21 +149,21 @@ namespace Easyrewardz_TicketSystem.Services
                         customOrderMaster.OrderItems = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("OrderMasterID")).
                         Equals(orderMasterId)).Select(x => new OrderItem()
                         {
-                            OrderItemID= Convert.ToInt32(x.Field<int>("OrderItemID")),
+                            OrderItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
                             OrderMasterID = Convert.ToInt32(x.Field<int>("OrderMasterID")),
                             InvoiceNo = Convert.ToString(x.Field<string>("InvoiceNo")),
                             Size = Convert.ToInt32(x.Field<int>("Size")),
                             ItemPrice = Convert.ToInt32(x.Field<decimal>("ItemPrice")),
                             PricePaid = Convert.ToInt32(x.Field<decimal>("PricePaid")),
                             Discount = Convert.ToInt32(x.Field<decimal>("Discount")),
-                            RequireSize = Convert.ToInt32(x.Field<int>("RequireSize"))                       
+                            RequireSize = Convert.ToInt32(x.Field<int>("RequireSize"))
                         }).ToList();
                         customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                         customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
-                        customOrderMaster.PricePaid= customOrderMaster.OrderItems.Sum(item => item.PricePaid);
+                        customOrderMaster.PricePaid = customOrderMaster.OrderItems.Sum(item => item.PricePaid);
                         objorderMaster.Add(customOrderMaster);
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -212,7 +212,7 @@ namespace Easyrewardz_TicketSystem.Services
                         customOrderMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
                         customOrderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
                         customOrderMaster.DateFormat = customOrderMaster.InvoiceDate.ToString("dd/MMM/yyyy");
-                        customOrderMaster.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]); 
+                        customOrderMaster.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
                         customOrderMaster.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
                         customOrderMaster.PaymentModename = Convert.ToString(ds.Tables[0].Rows[i]["PaymentModename"]);
                         int orderMasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
@@ -221,7 +221,7 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             OrderItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
                             OrderMasterID = Convert.ToInt32(x.Field<int>("OrderMasterID")),
-                            ItemName= Convert.ToString(x.Field<string>("ItemName")),
+                            ItemName = Convert.ToString(x.Field<string>("ItemName")),
                             InvoiceNo = Convert.ToString(x.Field<string>("InvoiceNo")),
                             ItemPrice = Convert.ToInt32(x.Field<decimal>("ItemPrice")),
                             PricePaid = Convert.ToInt32(x.Field<decimal>("PricePaid")),
@@ -247,6 +247,95 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return objorderMaster;
+        }
+
+        public CustomOrderDetailsByClaim getOrderListByClaimID(int CustomerID, int ClaimID, int TenantID)
+        {
+            DataSet ds = new DataSet();
+            CustomOrderDetailsByClaim customClaimMaster  = new CustomOrderDetailsByClaim();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetOrderDetailByClaimID", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Claim_ID", ClaimID);
+                cmd.Parameters.AddWithValue("@Customer_ID", CustomerID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+               // CustomOrderDetailsByClaim customClaimMaster = new CustomOrderDetailsByClaim();
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        //CustomOrderDetailsByClaim customClaimMaster = new CustomOrderDetailsByClaim();
+                        customClaimMaster.TicketClaimID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketClaimID"]);
+                        customClaimMaster.ClaimCategory = Convert.ToString(ds.Tables[0].Rows[i]["ClaimCategory"]);
+                        customClaimMaster.ClaimSubCategory = Convert.ToString(ds.Tables[0].Rows[i]["ClaimSubCategory"]);
+                        customClaimMaster.ClaimType = Convert.ToString(ds.Tables[0].Rows[i]["ClaimType"]);
+                        customClaimMaster.ClaimAskedFor = Convert.ToString(ds.Tables[0].Rows[i]["ClaimAskedFor"]);
+                        customClaimMaster.StatusID = Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]);
+
+                        customClaimMaster.CusotmerID = Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
+                        customClaimMaster.CusotmerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
+                        customClaimMaster.MobileNumber = Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
+                        customClaimMaster.EmailID = Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
+                        customClaimMaster.Gender = Convert.ToInt32(ds.Tables[0].Rows[i]["GenderID"]);
+
+
+                        customClaimMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
+                        customClaimMaster.OrderNumber = Convert.ToString(ds.Tables[0].Rows[i]["OrderNumber"]);
+                        customClaimMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
+                        customClaimMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
+                        customClaimMaster.DateFormat = customClaimMaster.InvoiceDate.ToString("dd/MMM/yyyy");
+                        customClaimMaster.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        customClaimMaster.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        customClaimMaster.PaymentModename = Convert.ToString(ds.Tables[0].Rows[i]["PaymentModename"]);
+                        int orderMasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
+                        customClaimMaster.OrderItems = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("OrderMasterID")).
+                        Equals(orderMasterId)).Select(x => new OrderItem()
+                        {
+                            OrderItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
+                            OrderMasterID = Convert.ToInt32(x.Field<int>("OrderMasterID")),
+                            ItemName = Convert.ToString(x.Field<string>("ItemName")),
+                            InvoiceNo = Convert.ToString(x.Field<string>("InvoiceNo")),
+                            ItemPrice = Convert.ToInt32(x.Field<decimal>("ItemPrice")),
+                            PricePaid = Convert.ToInt32(x.Field<decimal>("PricePaid")),
+                            Discount = Convert.ToInt32(x.Field<decimal>("Discount")),
+                        }).ToList();
+                        customClaimMaster.ItemCount = customClaimMaster.OrderItems.Count();
+                        customClaimMaster.ItemPrice = customClaimMaster.OrderItems.Sum(item => item.ItemPrice);
+                        customClaimMaster.PricePaid = customClaimMaster.OrderItems.Sum(item => item.PricePaid);
+
+                        int MasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketClaimID"]);
+                        customClaimMaster.Comments = ds.Tables[2].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("TicketClaimID")).
+                        Equals(MasterId)).Select(x => new UserComment()
+                        {
+                            Name = Convert.ToString(x.Field<string>("Name")),
+                            Comment = Convert.ToString(x.Field<string>("ClaimComment")),
+                            datetime = Convert.ToString(x.Field<string>("CommentAt"))
+                        }).ToList();
+                        //objorderMaster.Add(customClaimMaster);
+                    }
+
+                }            
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return customClaimMaster;
         }
     }
 }

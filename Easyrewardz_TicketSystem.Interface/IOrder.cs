@@ -21,5 +21,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
          List<CustomOrderDetailsByCustomer> getOrderListByCustomerID(int CustomerID, int TenantID);
 
+        CustomOrderDetailsByClaim getOrderListByClaimID(int CustomerID, int ClaimID, int TenantID);
+
     }
 }
