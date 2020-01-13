@@ -40,7 +40,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _searchList = _search;
             return _searchList.GetTicketsOnLoad(HeaderStatus_Id,Tenant_ID,AssignTo_ID);
         }
-         
+
+        public List<SearchResponse> GetTicketsOnSearch(ISearchTicket _search, int Tenant_ID, int AssignTo_ID)
+        {
+            _searchList = _search;
+            return _searchList.GetTicketsOnSearch(Tenant_ID, AssignTo_ID);
+        }
+        
+
 
         #endregion
 
