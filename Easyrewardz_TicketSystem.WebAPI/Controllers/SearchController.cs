@@ -124,7 +124,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("GetTicketsOnPageLoad")]
         [AllowAnonymous]
-        public ResponseModel GetTicketsOnPageLoad(int HeaderStatus_ID)
+        public ResponseModel GetTicketsOnPageLoad(int HeaderStatusID)
         {
             List<SearchResponse> _searchResult = null;
             ResponseModel _objResponseModel = new ResponseModel();
@@ -140,7 +140,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 var temp = SecurityService.DecryptStringAES(_token);
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                _searchResult = _newsearchMaster.GetTicketsOnLoad(new SearchService(_connectioSting), HeaderStatus_ID,authenticate.TenantId,authenticate.UserMasterID);
+                _searchResult = _newsearchMaster.GetTicketsOnLoad(new SearchService(_connectioSting), HeaderStatusID,authenticate.TenantId,authenticate.UserMasterID);
 
                 StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
