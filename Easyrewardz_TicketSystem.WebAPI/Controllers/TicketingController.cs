@@ -794,7 +794,82 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
-        
+        [HttpPost]
+        [Route("DashBoardCountData")]
+        public ResponseModel DashBoardCountData(string UserIds,string fromdate,string todate)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            DashBoardDataModel db = new DashBoardDataModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                TicketingCaller tcaller = new TicketingCaller();
+                var temp = SecurityService.DecryptStringAES(_token);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                db = tcaller.GetDashBoardCountData(new TicketingService(_connectioSting), UserIds,fromdate,todate, authenticate.TenantId);
+
+                StatusCode = db == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = db;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+
+        [HttpPost]
+        [Route("DashBoardGraphData")]
+        public ResponseModel DashBoardGraphData(string UserIds, string fromdate, string todate)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            DashBoardGraphModel db = new DashBoardGraphModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                TicketingCaller tcaller = new TicketingCaller();
+                var temp = SecurityService.DecryptStringAES(_token);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                db = tcaller.GetDashBoardGraphdata(new TicketingService(_connectioSting), UserIds, fromdate, todate, authenticate.TenantId);
+
+                StatusCode = db == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = db;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
 
         #endregion
     }

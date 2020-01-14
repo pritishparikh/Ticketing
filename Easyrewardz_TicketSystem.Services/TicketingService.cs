@@ -842,6 +842,138 @@ namespace Easyrewardz_TicketSystem.Services
             return IsMailSent;
         }
 
+        public DashBoardDataModel GetDashBoardCountData(string UserID, string fromdate, string todate, int TenantID)
+        {
+            DataSet ds = new DataSet();
+            DataSet Graphds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            DashBoardDataModel dashBoarddata = new DashBoardDataModel();
+            DashBoardGraphModel dashBoardGraphdata = new DashBoardGraphModel();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                #region DashBoard Data
+                MySqlCommand cmd1 = new MySqlCommand("SP_DashBoardList", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@User_ID", UserID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", 1);
+                //cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if(ds != null && ds.Tables.Count > 0)
+                {
+                    if (ds.Tables[0].Rows.Count > 0) //Resolution %
+                    {
+                        dashBoarddata.ResolutionPercentage = Convert.ToDouble(ds.Tables[0].Rows[0]["Resolution%"]);
+                    }
+
+                    if (ds.Tables[1].Rows.Count > 0) //AllTicket 
+                    {
+                        dashBoarddata.All = Convert.ToInt32(ds.Tables[1].Rows[0]["AllTicket"]);
+                    }
+
+                    if (ds.Tables[2].Rows.Count > 0) //OpenTicket 
+                    {
+                        dashBoarddata.Open = Convert.ToInt32(ds.Tables[2].Rows[0]["OpenTicket"]);
+                    }
+
+                    if (ds.Tables[3].Rows.Count > 0) //TaskOpen 
+                    {
+                        dashBoarddata.TaskOpen = Convert.ToInt32(ds.Tables[3].Rows[0]["TaskOpen"]);
+                    }
+
+                    if (ds.Tables[4].Rows.Count > 0) //TaskClose 
+                    {
+                        dashBoarddata.TaskClose = Convert.ToInt32(ds.Tables[4].Rows[0]["TaskClose"]);
+                    }
+
+                    if (ds.Tables[5].Rows.Count > 0) //ClaimOpen 
+                    {
+                        dashBoarddata.ClaimOpen = Convert.ToInt32(ds.Tables[5].Rows[0]["ClaimOpen"]);
+                    }
+
+                    if (ds.Tables[6].Rows.Count > 0) //ClaimClose 
+                    {
+                        dashBoarddata.ClaimClose = Convert.ToInt32(ds.Tables[6].Rows[0]["ClaimClose"]);
+                    }
+                }
+
+                #endregion
+
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return dashBoarddata;
+        }
+
+        public DashBoardGraphModel GetDashBoardGraphdata(string UserID, string fromdate, string todate, int TenantID)
+        {
+           
+            DataSet Graphds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            MySqlDataAdapter da = new MySqlDataAdapter();
+            DashBoardGraphModel dashBoardGraphdata = new DashBoardGraphModel();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                #region DashBoardGraph Data
+                MySqlCommand cmd1 = new MySqlCommand("SP_DashBoardList", conn);
+                cmd1 = new MySqlCommand("Sp_DashBoardGraphData", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("_userid", UserID);
+                cmd1.Parameters.AddWithValue("_tenantID", 1);
+                cmd1.Parameters.AddWithValue("_fromdate", fromdate);
+                cmd1.Parameters.AddWithValue("_todate", todate);
+                da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(Graphds);
+                if (Graphds != null && Graphds.Tables.Count > 0)
+                {
+                    if (Graphds.Tables[0].Rows.Count > 0) //PriorityGraph 
+                    {
+                        dashBoardGraphdata.PriorityChart = Graphds.Tables[0].AsEnumerable().Select(r => new PriorityGraphModel()
+                        {
+
+                            priorityID = Convert.ToInt32(r.Field<object>("PriorityID")),
+                            priorityName = Convert.ToString(r.Field<object>("PriortyName")),
+                            priorityCount = Convert.ToInt32(r.Field<object>("PriorityCount"))
+
+
+                        }).ToList();
+                    }
+                    if (Graphds.Tables[1].Rows.Count > 0) //Ticket Generation Source  
+                    {
+                        dashBoardGraphdata.ticketSourceGraph = Graphds.Tables[1].AsEnumerable().Select(r => new TicketSourceModel()
+                        {
+                            ticketSourceID = Convert.ToInt32(r.Field<object>("TicketSourceID")),
+                            ticketSourceName = Convert.ToString(r.Field<object>("TicketSourceName")),
+                            ticketSourceCount = Convert.ToInt32(r.Field<object>("TicketSourceCount"))
+
+                        }).ToList();
+                    }
+
+
+                }
+
+                #endregion
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return dashBoardGraphdata;
+        }
     }
 }
 
