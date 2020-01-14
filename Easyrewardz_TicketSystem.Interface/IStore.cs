@@ -10,5 +10,8 @@ namespace Easyrewardz_TicketSystem.Interface
         List<StoreMaster> getStoreDetailByStorecodenPincode(string searchText, int tenantID);
 
         List<StoreMaster> getStores(string searchText, int tenantID);
+        int CreateStore(StoreMaster storeMaster,int TenantID,int UserID);
+        int EditStore(StoreMaster storeMaster, int StoreID, int TenantID,int UserID);
+        int DeleteStore(int StoreID, int TenantID, int UserID);
     }
 }
