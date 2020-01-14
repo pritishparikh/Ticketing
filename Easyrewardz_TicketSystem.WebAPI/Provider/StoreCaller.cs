@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _storeRepository = store;
             return _storeRepository.DeleteStore(StoreID, TenantID, UserID);
+        }
+        public List<CustomStoreList> StoreList(IStore store,int TenantID)
+        {
+            _storeRepository = store;
+            return _storeRepository.StoreList(TenantID);
         }
     }
 }

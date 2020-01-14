@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
@@ -222,6 +223,50 @@ namespace Easyrewardz_TicketSystem.Services
                         store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
                         store.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
 
+                        storeMaster.Add(store);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return storeMaster;
+        }
+
+        public List<CustomStoreList> StoreList(int TenantID)
+        {
+            List<CustomStoreList> storeMaster = new List<CustomStoreList>();
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreList", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomStoreList store = new CustomStoreList();
+                        store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
+                        store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        store.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        store.BranName = Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                        store.CityName = Convert.ToString(ds.Tables[0].Rows[i]["CityName"]);
+                        store.StateName = Convert.ToString(ds.Tables[0].Rows[i]["StateName"]);
+                        store.PinCode = Convert.ToInt32(ds.Tables[0].Rows[i]["PincodeID"]);
                         storeMaster.Add(store);
                     }
                 }
