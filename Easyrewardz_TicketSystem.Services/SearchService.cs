@@ -370,11 +370,20 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.Parameters.AddWithValue("TicketID", searchModel.searchDataByCustomerType.TicketID);
                     sqlcmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByCustomerType.TicketStatusID);
                 }
-                                             
-                sqlcmd.CommandType = CommandType.StoredProcedure;
+                else if (searchModel.ActiveTabId == 4)
+                {
+                    sqlcmd.CommandText = "SP_SearchTicketData_ByCategory";
 
+                    sqlcmd.Parameters.AddWithValue("Cateogry_Id", searchModel.searchDataByCategoryType.CategoryId);
+                    sqlcmd.Parameters.AddWithValue("SubCategory_Id",searchModel.searchDataByCategoryType.SubCategoryId);
+                    sqlcmd.Parameters.AddWithValue("IssueType_Id", searchModel.searchDataByCategoryType.IssueTypeId);
+                    sqlcmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByCategoryType.TicketStatusID);
+                }
+                
                 sqlcmd.Parameters.AddWithValue("Tenant_ID", searchModel.TenantID);
                 sqlcmd.Parameters.AddWithValue("Assignto_Id", searchModel.AssigntoId);
+
+                sqlcmd.CommandType = CommandType.StoredProcedure;
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = sqlcmd;
