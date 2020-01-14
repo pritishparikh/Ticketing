@@ -133,7 +133,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _priorityList = _priority;
             return _priorityList.GetPriorityList(TenantID);
         }
-
+        public int  Addpriority(IPriority _priority, string PriorityName, int status, int tenantID, int UserID)
+        {
+            _priorityList = _priority;
+            return _priorityList.AddPriority(PriorityName, status, tenantID, UserID);
+        }
+        public int Updatepriority(IPriority _priority, int PriorityID, string PriorityName, int status, int tenantID, int UserID)
+        {
+            _priorityList = _priority;
+            return _priorityList.UpdatePriority(PriorityID,PriorityName, status, tenantID, UserID);
+        }
+        public int Deletepriority(IPriority _priority, int PriorityID, int tenantID, int UserID)
+        {
+            _priorityList = _priority;
+            return _priorityList.DeletePriority(PriorityID,tenantID, UserID);
+        }
         #endregion
 
         #region Methods for the Channel of the Purchase
