@@ -23,5 +23,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         CustomOrderDetailsByClaim getOrderListByClaimID(int CustomerID, int ClaimID, int TenantID);
 
+        List<CustomSearchProduct> SearchProduct(int CustomerID, string  productName);
     }
 }

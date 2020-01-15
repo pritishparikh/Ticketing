@@ -14,5 +14,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int EditStore(StoreMaster storeMaster, int StoreID, int TenantID,int UserID);
         int DeleteStore(int StoreID, int TenantID, int UserID);
         List<CustomStoreList> StoreList(int TenantID);
+        List<StoreMaster> SearchStore(int StateID, int PinCode ,string Area,bool IsCountry );
     }
 }

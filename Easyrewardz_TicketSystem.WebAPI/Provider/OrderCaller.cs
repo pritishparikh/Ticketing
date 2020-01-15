@@ -66,6 +66,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _orderRepository.getOrderListByClaimID(CustomerID, ClaimID, TenantID);
 
         }
+
+        public List<CustomSearchProduct> SearchProduct(IOrder _orderMaster, int CustomerID, string productName)
+        {
+            _orderRepository = _orderMaster;
+            return _orderRepository.SearchProduct(CustomerID, productName);
+
+        }
         #endregion
 
     }

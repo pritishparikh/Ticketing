@@ -334,5 +334,47 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return customClaimMaster;
         }
+
+        public List<CustomSearchProduct> SearchProduct(int CustomerID, string productName)
+        {
+            List<CustomSearchProduct> productlist = new List<CustomSearchProduct>();
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_SearchProduct", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Customer_ID", CustomerID);
+                cmd.Parameters.AddWithValue("@product_Name", productName);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomSearchProduct product = new CustomSearchProduct();
+                        product.ItemID = Convert.ToString(ds.Tables[0].Rows[i]["OrderItemID"]);
+                        product.ItemName = Convert.ToString(ds.Tables[0].Rows[i]["ItemName"]);
+                        product.Department = Convert.ToString(ds.Tables[0].Rows[i]["Department"]);
+                        product.Description = Convert.ToString(ds.Tables[0].Rows[i]["Description"]);
+                        productlist.Add(product);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return productlist;
+        }
     }
 }

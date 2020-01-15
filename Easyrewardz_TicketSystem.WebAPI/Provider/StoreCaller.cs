@@ -45,5 +45,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _storeRepository = store;
             return _storeRepository.StoreList(TenantID);
         }
+        public List<StoreMaster> SearchStore(IStore store, int StateID, int PinCode, string Area, bool IsCountry)
+        {
+            _storeRepository = store;
+            return _storeRepository.SearchStore(StateID, PinCode, Area, IsCountry);
+        }
     }
 }

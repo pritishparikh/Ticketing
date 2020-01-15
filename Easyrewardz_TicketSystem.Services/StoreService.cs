@@ -241,6 +241,51 @@ namespace Easyrewardz_TicketSystem.Services
             return storeMaster;
         }
 
+        public List<StoreMaster> SearchStore(int StateID, int PinCode, string Area,bool IsCountry)
+        {
+            List<StoreMaster> storeMaster = new List<StoreMaster>();
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_SearchStore", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@State_ID", StateID);
+                cmd.Parameters.AddWithValue("@Pin_Code", PinCode);
+                cmd.Parameters.AddWithValue("@Store_Area", Area);
+                cmd.Parameters.AddWithValue("@Is_Country", IsCountry);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreMaster store = new StoreMaster();
+                        store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
+                        store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        store.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        store.StorePhoneNo = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        //store.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i][""]);
+                        storeMaster.Add(store);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return storeMaster;
+        }
+
         public List<CustomStoreList> StoreList(int TenantID)
         {
             List<CustomStoreList> storeMaster = new List<CustomStoreList>();
