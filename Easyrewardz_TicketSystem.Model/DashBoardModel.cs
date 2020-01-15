@@ -15,9 +15,12 @@ namespace Easyrewardz_TicketSystem.Model
 
         public int OverDue { get; set; }
 
-        public string ResolutionSuccess { get; set; }
+        public bool isResolutionSuccess { get; set; }
+        public string ResolutionRate { get; set; }
 
-        public string ResponseSuccess { get; set; }
+        public bool isResponseSuccess { get; set; }
+        public string ResponseRate { get; set; }
+       
 
         public int TaskClose { get; set; }
 

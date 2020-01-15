@@ -842,13 +842,14 @@ namespace Easyrewardz_TicketSystem.Services
             return IsMailSent;
         }
 
-        public DashBoardDataModel GetDashBoardCountData(string UserID, string fromdate, string todate, int TenantID)
+        public DashBoardDataModel GetDashBoardCountData(string BrandID,string UserID, string fromdate, string todate, int TenantID)
         {
             DataSet ds = new DataSet();
             DataSet Graphds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             DashBoardDataModel dashBoarddata = new DashBoardDataModel();
             DashBoardGraphModel dashBoardGraphdata = new DashBoardGraphModel();
+            int TotalTickets = 0; int resolvedTickets = 0; int UnresolvedTickets = 0;
             try
             {
                 conn.Open();
@@ -857,8 +858,9 @@ namespace Easyrewardz_TicketSystem.Services
                 #region DashBoard Data
                 MySqlCommand cmd1 = new MySqlCommand("SP_DashBoardList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_BrandID", string.IsNullOrEmpty(BrandID)? "":BrandID);
                 cmd1.Parameters.AddWithValue("@User_ID", UserID);
-                cmd1.Parameters.AddWithValue("@Tenant_ID",  TenantID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd1.Parameters.AddWithValue("@_FromDate", fromdate);
                 cmd1.Parameters.AddWithValue("@_ToDate", todate);
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -911,6 +913,34 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         dashBoarddata.ClaimClose = ds.Tables[8].Rows[0]["ClaimClose"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[8].Rows[0]["ClaimClose"]) : 0;
                     }
+
+                    if((ds.Tables[9].Rows.Count > 0))
+                    {
+                        TotalTickets= ds.Tables[9].Rows[0]["TotalTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["TotalTickets"]) : 0;
+                        resolvedTickets = ds.Tables[9].Rows[0]["ResolvedTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["ResolvedTickets"]) : 0;
+                        UnresolvedTickets = ds.Tables[9].Rows[0]["UnresolvedTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["UnresolvedTickets"]) : 0;
+
+                        if(TotalTickets > 0)
+                        {
+                            if(resolvedTickets > 0)
+                            {
+                                dashBoarddata.ResolutionRate = Convert.ToString(Math.Round(Convert.ToDouble((resolvedTickets / TotalTickets) * 100),2))+" %";
+                                dashBoarddata.isResolutionSuccess = true;
+                            }
+                            else
+                            {
+                                int test= UnresolvedTickets / TotalTickets *100;
+                                dashBoarddata.ResolutionRate = Convert.ToString(Math.Round(Convert.ToDouble((UnresolvedTickets / TotalTickets) * 100), 2))+" %";
+                                dashBoarddata.isResolutionSuccess = false;
+                            }
+
+                        }
+                        else
+                        {
+                            dashBoarddata.isResolutionSuccess = false;
+                            dashBoarddata.ResolutionRate ="0 %";
+                        }
+                    }
                 }
 
                 #endregion
@@ -925,7 +955,7 @@ namespace Easyrewardz_TicketSystem.Services
             return dashBoarddata;
         }
 
-        public DashBoardGraphModel GetDashBoardGraphdata(string UserID, string fromdate, string todate, int TenantID)
+        public DashBoardGraphModel GetDashBoardGraphdata(string BrandID,string UserID, string fromdate, string todate, int TenantID)
         {
            
             DataSet Graphds = new DataSet();
@@ -941,6 +971,7 @@ namespace Easyrewardz_TicketSystem.Services
                  
                 MySqlCommand cmd1 = new MySqlCommand("Sp_DashBoardGraphData", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_BrandID", string.IsNullOrEmpty(BrandID) ? "" : BrandID);
                 cmd1.Parameters.AddWithValue("_userid", UserID);
                 cmd1.Parameters.AddWithValue("_tenantID",  TenantID);
                 cmd1.Parameters.AddWithValue("_fromdate", fromdate);

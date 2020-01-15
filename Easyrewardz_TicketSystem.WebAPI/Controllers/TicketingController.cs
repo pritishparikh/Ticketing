@@ -796,7 +796,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("DashBoardCountData")]
-        public ResponseModel DashBoardCountData(string UserIds,string fromdate,string todate)
+        public ResponseModel DashBoardCountData(string BrandID,string UserIds,string fromdate,string todate)
         {
             ResponseModel _objResponseModel = new ResponseModel();
             DashBoardDataModel db = new DashBoardDataModel();
@@ -810,7 +810,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 var temp = SecurityService.DecryptStringAES(_token);
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                db = tcaller.GetDashBoardCountData(new TicketingService(_connectioSting), UserIds,fromdate,todate, authenticate.TenantId);
+                db = tcaller.GetDashBoardCountData(new TicketingService(_connectioSting), BrandID,UserIds, fromdate,todate, authenticate.TenantId);
 
                 StatusCode = db == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -835,7 +835,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("DashBoardGraphData")]
-        public ResponseModel DashBoardGraphData(string UserIds, string fromdate, string todate)
+        public ResponseModel DashBoardGraphData(string BrandID, string UserIds, string fromdate, string todate)
         {
             ResponseModel _objResponseModel = new ResponseModel();
             DashBoardGraphModel db = new DashBoardGraphModel();
@@ -849,7 +849,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 var temp = SecurityService.DecryptStringAES(_token);
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                db = tcaller.GetDashBoardGraphdata(new TicketingService(_connectioSting), UserIds, fromdate, todate, authenticate.TenantId);
+                db = tcaller.GetDashBoardGraphdata(new TicketingService(_connectioSting), BrandID, UserIds, fromdate, todate, authenticate.TenantId);
 
                 StatusCode = db == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
