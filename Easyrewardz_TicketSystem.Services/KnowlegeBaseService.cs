@@ -65,5 +65,181 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return listknowledge;
         }
+
+        public int AddKB(KnowlegeBaseMaster knowlegeBaseMaster)
+        {
+
+            MySqlCommand cmd = new MySqlCommand();
+            int k = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_InsertKnowlegeBase", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@KB_CODE", knowlegeBaseMaster.KBCODE);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", knowlegeBaseMaster.TenantID);
+                cmd1.Parameters.AddWithValue("@Category_ID", knowlegeBaseMaster.CategoryID);
+                cmd1.Parameters.AddWithValue("@SubCategory_ID", knowlegeBaseMaster.SubCategoryID);
+                cmd1.Parameters.AddWithValue("@Is_Approved", knowlegeBaseMaster.IsApproved);
+                cmd1.Parameters.AddWithValue("@Subject_", knowlegeBaseMaster.Subject);
+                cmd1.Parameters.AddWithValue("@Description_", knowlegeBaseMaster.Description);
+                cmd1.Parameters.AddWithValue("@Is_Active", knowlegeBaseMaster.IsActive);
+                cmd1.Parameters.AddWithValue("@IssueType_ID", knowlegeBaseMaster.IssueTypeID);
+                cmd1.Parameters.AddWithValue("@Created_By", knowlegeBaseMaster.CreatedBy);
+
+                k = Convert.ToInt32(cmd1.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return k;
+
+        }
+
+
+        public int UpdateKB(KnowlegeBaseMaster knowlegeBaseMaster)
+        {
+
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_UpdateKnowlegeBase", conn);
+                cmd1.Parameters.AddWithValue("@KB_ID", knowlegeBaseMaster.KBID);
+                cmd1.Parameters.AddWithValue("@KB_CODE", knowlegeBaseMaster.KBCODE);
+                cmd1.Parameters.AddWithValue("@Category_ID", knowlegeBaseMaster.CategoryID);
+                cmd1.Parameters.AddWithValue("@SubCategory_ID", knowlegeBaseMaster.SubCategoryID);
+                cmd1.Parameters.AddWithValue("@IssueType_ID",knowlegeBaseMaster.IssueTypeID);
+                cmd1.Parameters.AddWithValue("@Is_Approved", knowlegeBaseMaster.IsApproved);
+                cmd1.Parameters.AddWithValue("@Subject_", knowlegeBaseMaster.Subject);
+                cmd1.Parameters.AddWithValue("@Description_", knowlegeBaseMaster.Description);
+                cmd1.Parameters.AddWithValue("@Is_Active", knowlegeBaseMaster.IsActive);
+                cmd1.Parameters.AddWithValue("@Modify_By", knowlegeBaseMaster.ModifyBy);
+
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                conn.Close();
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
+
+
+        public int DeleteKB(int KBID, int TenantId)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int k = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_DeleteKnowlegeBase", conn);
+                cmd1.Parameters.AddWithValue("@KB_ID", KBID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                k = Convert.ToInt32(cmd1.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return k;
+        }
+
+
+        public List<KnowlegeBaseMaster> KBList(int TenantId)
+        {
+
+
+            List<KnowlegeBaseMaster> knowlegeBaseMasters = new List<KnowlegeBaseMaster>();
+            MySqlCommand cmd = new MySqlCommand();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_KBList", conn);
+
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
+                DataTable dt = new DataTable();
+
+                da.Fill(dt);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        KnowlegeBaseMaster knowlegeBaseMaster = new KnowlegeBaseMaster();
+                        knowlegeBaseMaster.KBID = Convert.ToInt32(dt.Rows[i]["KBID"]);
+                        knowlegeBaseMaster.KBCODE = Convert.ToString(dt.Rows[i]["KBCODE"]);
+                        knowlegeBaseMaster.CategoryName = Convert.ToString(dt.Rows[i]["CategoryName"]);
+                        knowlegeBaseMaster.SubCategoryName = Convert.ToString(dt.Rows[i]["SubCategoryName"]);
+                        knowlegeBaseMaster.IssueTypeName = Convert.ToString(dt.Rows[i]["IssueTypeName"]);
+                        knowlegeBaseMaster.Subject = Convert.ToString(dt.Rows[i]["Subject"]);
+                        knowlegeBaseMaster.Description = Convert.ToString(dt.Rows[i]["Description"]);
+                        knowlegeBaseMaster.IsApproveStatus= Convert.ToString(dt.Rows[i]["IsApprove"]);
+                        knowlegeBaseMaster.Status = Convert.ToString(dt.Rows[i]["Status"]);
+                        knowlegeBaseMaster.CreatedName = Convert.ToString(dt.Rows[i]["createdby"]);
+                        knowlegeBaseMaster.CreatedDate = Convert.ToDateTime(dt.Rows[i]["CreatedDate"]);
+                        knowlegeBaseMaster.ModifyName = Convert.ToString(dt.Rows[i]["modifyby"]);
+                        knowlegeBaseMaster.ModifyDate = Convert.ToDateTime(dt.Rows[i]["ModifyDate"]);
+
+
+                        knowlegeBaseMasters.Add(knowlegeBaseMaster);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return knowlegeBaseMasters;
+        }
     }
 }

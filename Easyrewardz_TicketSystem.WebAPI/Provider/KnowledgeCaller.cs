@@ -25,5 +25,29 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _KnowledgeRepository = Knowledge;
             return _KnowledgeRepository.SearchByCategory(type_ID, Category_ID, SubCategory_ID, TenantId);
         }
+
+        public int AddKB(IKnowledge Knowledge, KnowlegeBaseMaster knowlegeBaseMaster)
+        {
+            _KnowledgeRepository = Knowledge;
+            return _KnowledgeRepository.AddKB(knowlegeBaseMaster);
+        }
+
+        public int UpdateKB(IKnowledge Knowledge, KnowlegeBaseMaster knowlegeBaseMaster)
+        {
+            _KnowledgeRepository = Knowledge;
+            return _KnowledgeRepository.UpdateKB(knowlegeBaseMaster);
+        }
+
+        public int DeleteKB(IKnowledge Knowledge, int KBID, int TenantId)
+        {
+            _KnowledgeRepository = Knowledge;
+            return _KnowledgeRepository.DeleteKB(KBID, TenantId);
+        }
+
+        public List<KnowlegeBaseMaster> KBList(IKnowledge Knowledge, int TenantId)
+        {
+            _KnowledgeRepository = Knowledge;
+            return _KnowledgeRepository.KBList( TenantId);
+        }
     }
 }

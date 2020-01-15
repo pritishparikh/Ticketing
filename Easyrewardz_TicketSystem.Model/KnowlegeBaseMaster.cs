@@ -61,5 +61,30 @@ namespace Easyrewardz_TicketSystem.Model
         /// ModifyDate
         /// </summary>
         public DateTime ModifyDate { get; set; }
+        /// <summary>
+        /// IssueType ID
+        /// </summary>
+        public int IssueTypeID { get; set; }
+        /// <summary>
+        /// Category Name
+        /// </summary>
+        public string CategoryName { get; set; }
+        /// <summary>
+        /// Sub Category Name
+        /// </summary>
+        public string SubCategoryName { get; set; }
+        /// <summary>
+        /// IssueType Name
+        /// </summary>
+        public string IssueTypeName { get; set; }
+
+        public string IsApproveStatus { get; set; }
+
+
+        public string Status { get; set; }
+
+        public string CreatedName { get; set; }
+
+        public string ModifyName { get; set; }
     }
 }
