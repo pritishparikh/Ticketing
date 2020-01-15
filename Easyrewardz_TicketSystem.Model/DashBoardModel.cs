@@ -11,9 +11,13 @@ namespace Easyrewardz_TicketSystem.Model
 
         public int Open { get; set; }
 
-        public int DueTody { get; set; }
+        public int DueToday { get; set; }
 
         public int OverDue { get; set; }
+
+        public string ResolutionSuccess { get; set; }
+
+        public string ResponseSuccess { get; set; }
 
         public int TaskClose { get; set; }
 

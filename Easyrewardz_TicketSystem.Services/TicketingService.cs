@@ -858,8 +858,9 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_DashBoardList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@User_ID", UserID);
-                cmd1.Parameters.AddWithValue("@Tenant_ID", 1);
-                //cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID",  TenantID);
+                cmd1.Parameters.AddWithValue("@_FromDate", fromdate);
+                cmd1.Parameters.AddWithValue("@_ToDate", todate);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -868,37 +869,47 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0].Rows.Count > 0) //Resolution %
                     {
-                        dashBoarddata.ResolutionPercentage = Convert.ToDouble(ds.Tables[0].Rows[0]["Resolution%"]);
+                        dashBoarddata.ResolutionPercentage = ds.Tables[0].Rows[0]["Resolution%"]!= System.DBNull.Value ? Convert.ToDouble(ds.Tables[0].Rows[0]["Resolution%"]) : 0;
                     }
 
                     if (ds.Tables[1].Rows.Count > 0) //AllTicket 
                     {
-                        dashBoarddata.All = Convert.ToInt32(ds.Tables[1].Rows[0]["AllTicket"]);
+                        dashBoarddata.All = ds.Tables[1].Rows[0]["AllTicket"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[1].Rows[0]["AllTicket"]): 0;
                     }
 
                     if (ds.Tables[2].Rows.Count > 0) //OpenTicket 
                     {
-                        dashBoarddata.Open = Convert.ToInt32(ds.Tables[2].Rows[0]["OpenTicket"]);
+                        dashBoarddata.Open = ds.Tables[2].Rows[0]["OpenTicket"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[2].Rows[0]["OpenTicket"]):0;
                     }
 
-                    if (ds.Tables[3].Rows.Count > 0) //TaskOpen 
+                    if (ds.Tables[3].Rows.Count > 0) //SLADue 
                     {
-                        dashBoarddata.TaskOpen = Convert.ToInt32(ds.Tables[3].Rows[0]["TaskOpen"]);
+                        dashBoarddata.DueToday = ds.Tables[3].Rows[0]["SLADueCount"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[3].Rows[0]["SLADueCount"]) : 0;
                     }
 
-                    if (ds.Tables[4].Rows.Count > 0) //TaskClose 
+                    if (ds.Tables[4].Rows.Count > 0) //SLAOverDue 
                     {
-                        dashBoarddata.TaskClose = Convert.ToInt32(ds.Tables[4].Rows[0]["TaskClose"]);
+                        dashBoarddata.OverDue = ds.Tables[4].Rows[0]["SLAOverDueCount"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[4].Rows[0]["SLAOverDueCount"]) : 0;
                     }
 
-                    if (ds.Tables[5].Rows.Count > 0) //ClaimOpen 
+                    if (ds.Tables[5].Rows.Count > 0) //TaskOpen 
                     {
-                        dashBoarddata.ClaimOpen = Convert.ToInt32(ds.Tables[5].Rows[0]["ClaimOpen"]);
+                        dashBoarddata.TaskOpen = ds.Tables[5].Rows[0]["TaskOpen"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[5].Rows[0]["TaskOpen"]):0;
                     }
 
-                    if (ds.Tables[6].Rows.Count > 0) //ClaimClose 
+                    if (ds.Tables[6].Rows.Count > 0) //TaskClose 
                     {
-                        dashBoarddata.ClaimClose = Convert.ToInt32(ds.Tables[6].Rows[0]["ClaimClose"]);
+                        dashBoarddata.TaskClose = ds.Tables[6].Rows[0]["TaskClose"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[6].Rows[0]["TaskClose"]) : 0;
+                    }
+
+                    if (ds.Tables[7].Rows.Count > 0) //ClaimOpen 
+                    {
+                        dashBoarddata.ClaimOpen = ds.Tables[7].Rows[0]["ClaimOpen"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[7].Rows[0]["ClaimOpen"]) : 0;
+                    }
+
+                    if (ds.Tables[8].Rows.Count > 0) //ClaimClose 
+                    {
+                        dashBoarddata.ClaimClose = ds.Tables[8].Rows[0]["ClaimClose"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[8].Rows[0]["ClaimClose"]) : 0;
                     }
                 }
 
@@ -927,11 +938,11 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
 
                 #region DashBoardGraph Data
-                MySqlCommand cmd1 = new MySqlCommand("SP_DashBoardList", conn);
-                cmd1 = new MySqlCommand("Sp_DashBoardGraphData", conn);
+                 
+                MySqlCommand cmd1 = new MySqlCommand("Sp_DashBoardGraphData", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("_userid", UserID);
-                cmd1.Parameters.AddWithValue("_tenantID", 1);
+                cmd1.Parameters.AddWithValue("_tenantID",  TenantID);
                 cmd1.Parameters.AddWithValue("_fromdate", fromdate);
                 cmd1.Parameters.AddWithValue("_todate", todate);
                 da = new MySqlDataAdapter();
@@ -951,9 +962,24 @@ namespace Easyrewardz_TicketSystem.Services
 
                         }).ToList();
                     }
-                    if (Graphds.Tables[1].Rows.Count > 0) //Ticket Generation Source  
+
+                    if (Graphds.Tables[1].Rows.Count > 0) //Ticket To Bill   
                     {
-                        dashBoardGraphdata.ticketSourceGraph = Graphds.Tables[1].AsEnumerable().Select(r => new TicketSourceModel()
+                        dashBoardGraphdata.tickettoBillGraph = Graphds.Tables[1].AsEnumerable().Select(r => new TicketToBillGraphModel()
+                        {
+                            ticketSourceID = Convert.ToInt32(r.Field<object>("TicketSourceID")),
+                            ticketSourceName = Convert.ToString(r.Field<object>("TicketSourceName")),
+                            totalBills = Convert.ToInt32(r.Field<object>("TotalBills")),
+                            ticketedBills = Convert.ToInt32(r.Field<object>("TicketedBills"))
+
+                        }).ToList();
+                    }
+
+                  
+
+                    if (Graphds.Tables[2].Rows.Count > 0) //Ticket Generation Source
+                    {
+                        dashBoardGraphdata.ticketSourceGraph = Graphds.Tables[2].AsEnumerable().Select(r => new TicketSourceModel()
                         {
                             ticketSourceID = Convert.ToInt32(r.Field<object>("TicketSourceID")),
                             ticketSourceName = Convert.ToString(r.Field<object>("TicketSourceName")),
@@ -962,6 +988,28 @@ namespace Easyrewardz_TicketSystem.Services
                         }).ToList();
                     }
 
+
+                    if (Graphds.Tables[3].Rows.Count > 0) //Ticket TO Task
+                    {
+                        dashBoardGraphdata.tickettoTaskGraph = Graphds.Tables[3].AsEnumerable().Select(r => new TicketToTask()
+                        {
+                            totalTickets = Convert.ToInt32(r.Field<object>("AllTicket")),
+                            taskTickets = Convert.ToInt32(r.Field<object>("Task")),
+                            Day = Convert.ToString(r.Field<object>("AllDay"))
+
+                        }).ToList();
+                    }
+
+                    if (Graphds.Tables[4].Rows.Count > 0) //Ticket TO Claim
+                    {
+                        dashBoardGraphdata.tickettoClaimGraph = Graphds.Tables[4].AsEnumerable().Select(r => new TicketToClaim()
+                        {
+                            totalTickets = Convert.ToInt32(r.Field<object>("AllTicket")),
+                            ClaimTickets = Convert.ToInt32(r.Field<object>("Claim")),
+                            Day = Convert.ToString(r.Field<object>("AllDay"))
+
+                        }).ToList();
+                    }
 
                 }
 
