@@ -184,7 +184,6 @@ namespace Easyrewardz_TicketSystem.Services
         public List<KnowlegeBaseMaster> KBList(int TenantId)
         {
 
-
             List<KnowlegeBaseMaster> knowlegeBaseMasters = new List<KnowlegeBaseMaster>();
             MySqlCommand cmd = new MySqlCommand();
 

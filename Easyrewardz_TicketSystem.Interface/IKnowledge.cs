@@ -16,6 +16,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int DeleteKB(int KBID, int TenantId);
 
+
         List<KnowlegeBaseMaster> KBList(int TenantId);
     }
 }

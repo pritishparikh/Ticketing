@@ -81,6 +81,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string IsApproveStatus { get; set; }
 
 
+
         public string Status { get; set; }
 
         public string CreatedName { get; set; }
