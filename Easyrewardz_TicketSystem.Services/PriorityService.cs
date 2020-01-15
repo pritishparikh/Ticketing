@@ -16,8 +16,77 @@ namespace Easyrewardz_TicketSystem.Services
         {
             conn.ConnectionString = _connectionString;
         }
-        #endregion
+        /// <summary>
+        ///  Add Priority
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        public int AddPriority(string PriorityName, int status,int tenantID,int UserID)
+        {
 
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd  = new MySqlCommand("SP_InsertPriority", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Priority_Name", PriorityName);
+                cmd.Parameters.AddWithValue("@Is_status", status);
+                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return success;
+        }
+        /// <summary>
+        ///  Delete Priority
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        public int DeletePriority(int PriorityID, int tenantID, int UserID)
+        {
+
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_DeletePriority", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Priority_ID", PriorityID);
+                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return success;
+        }
         /// <summary>
         /// Get Priority List
         /// </summary>
@@ -46,10 +115,15 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         Priority priority = new Priority();
                         priority.PriorityID = Convert.ToInt32(ds.Tables[0].Rows[i]["PriorityID"]);
-                        priority.TenantID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
                         priority.PriortyName = Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);
                         priority.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
 
+                        priority.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                        priority.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
+                        priority.CreatedDateFormated = priority.CreatedDate.ToString("dd/MMM/yyyy");
+                        priority.ModifiedByName= Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        priority.ModifiedDate= Convert.ToDateTime(ds.Tables[0].Rows[i]["ModifiedDate"]);
+                        priority.ModifiedDateFormated = priority.ModifiedDate.ToString("dd/MMM/yyyy");         
                         objPriority.Add(priority);
                     }
                 }
@@ -68,5 +142,43 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objPriority;
         }
+        /// <summary>
+        ///  Update Priority
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        public int UpdatePriority(int PriorityID, string PriorityName, int status, int tenantID, int UserID)
+        {
+
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdatePriority", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Priority_ID", PriorityID);
+                cmd.Parameters.AddWithValue("@Priority_Name", PriorityName);
+                cmd.Parameters.AddWithValue("@Is_status", status);
+                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return success;
+        }
+        #endregion
     }
 }
