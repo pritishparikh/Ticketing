@@ -60,7 +60,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
 
         public int TicketStatusID { get; set; }
 
-        public string ChanngelOfPurchaseIds { get; set; }
+        public string ChannelOfPurchaseIds { get; set; }
 
         public string ActionTypes { get; set; }
         

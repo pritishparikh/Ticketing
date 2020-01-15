@@ -370,6 +370,15 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.Parameters.AddWithValue("TicketID", searchModel.searchDataByCustomerType.TicketID);
                     sqlcmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByCustomerType.TicketStatusID);
                 }
+                else if (searchModel.ActiveTabId == 3)
+                {
+                    sqlcmd.CommandText = "SP_SearchTicketData_ByTicketType";
+
+                    sqlcmd.Parameters.AddWithValue("Priority_Id", searchModel.searchDataByTicketType.TicketPriorityID);
+                    sqlcmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByTicketType.TicketStatusID);
+                    sqlcmd.Parameters.AddWithValue("ChannelOfPurchaseIDs ", string.IsNullOrEmpty(searchModel.searchDataByTicketType.ChannelOfPurchaseIds) ? "" : searchModel.searchDataByTicketType.ChannelOfPurchaseIds);
+                    sqlcmd.Parameters.AddWithValue("ActionTypeIds", searchModel.searchDataByTicketType.ActionTypes);
+                }
                 else if (searchModel.ActiveTabId == 4)
                 {
                     sqlcmd.CommandText = "SP_SearchTicketData_ByCategory";
