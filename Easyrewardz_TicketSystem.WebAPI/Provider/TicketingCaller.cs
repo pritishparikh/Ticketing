@@ -148,6 +148,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ticketList = _ticket;
             return _ticketList.GetTicketHistory(ticketID); 
         }
+
+        public DashBoardDataModel GetDashBoardCountData(ITicketing _ticket, string UserID,string fromdate,string todate, int TenantID)
+        {
+            _ticketList = _ticket;
+
+            return _ticketList.GetDashBoardCountData(UserID, fromdate, todate, TenantID);
+        }
+
+        public DashBoardGraphModel GetDashBoardGraphdata(ITicketing _ticket, string UserID, string fromdate, string todate, int TenantID)
+        {
+            _ticketList = _ticket;
+
+            return _ticketList.GetDashBoardGraphdata(UserID, fromdate, todate, TenantID);
+        }
+
         #endregion
     }
 }

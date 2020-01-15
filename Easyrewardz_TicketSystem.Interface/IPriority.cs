@@ -10,6 +10,9 @@ namespace Easyrewardz_TicketSystem.Interface
     /// </summary>
    public interface IPriority
     {
-        List<Priority> GetPriorityList(int CategoryID);
+        List<Priority> GetPriorityList(int tenantID);
+        int AddPriority(string PriorityName, int status, int tenantID, int UserID);
+        int UpdatePriority(int PriorityID, string PriorityName, int status, int tenantID, int UserID);
+        int DeletePriority(int PriorityID,int tenantID, int UserID);
     }
 }

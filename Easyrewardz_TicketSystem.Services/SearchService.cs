@@ -370,11 +370,29 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.Parameters.AddWithValue("TicketID", searchModel.searchDataByCustomerType.TicketID);
                     sqlcmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByCustomerType.TicketStatusID);
                 }
-                                             
-                sqlcmd.CommandType = CommandType.StoredProcedure;
+                else if (searchModel.ActiveTabId == 3)
+                {
+                    sqlcmd.CommandText = "SP_SearchTicketData_ByTicketType";
 
+                    sqlcmd.Parameters.AddWithValue("Priority_Id", searchModel.searchDataByTicketType.TicketPriorityID);
+                    sqlcmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByTicketType.TicketStatusID);
+                    sqlcmd.Parameters.AddWithValue("ChannelOfPurchaseIDs ", string.IsNullOrEmpty(searchModel.searchDataByTicketType.ChannelOfPurchaseIds) ? "" : searchModel.searchDataByTicketType.ChannelOfPurchaseIds);
+                    sqlcmd.Parameters.AddWithValue("ActionTypeIds", searchModel.searchDataByTicketType.ActionTypes);
+                }
+                else if (searchModel.ActiveTabId == 4)
+                {
+                    sqlcmd.CommandText = "SP_SearchTicketData_ByCategory";
+
+                    sqlcmd.Parameters.AddWithValue("Cateogry_Id", searchModel.searchDataByCategoryType.CategoryId);
+                    sqlcmd.Parameters.AddWithValue("SubCategory_Id",searchModel.searchDataByCategoryType.SubCategoryId);
+                    sqlcmd.Parameters.AddWithValue("IssueType_Id", searchModel.searchDataByCategoryType.IssueTypeId);
+                    sqlcmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByCategoryType.TicketStatusID);
+                }
+                
                 sqlcmd.Parameters.AddWithValue("Tenant_ID", searchModel.TenantID);
                 sqlcmd.Parameters.AddWithValue("Assignto_Id", searchModel.AssigntoId);
+
+                sqlcmd.CommandType = CommandType.StoredProcedure;
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = sqlcmd;

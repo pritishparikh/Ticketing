@@ -40,6 +40,9 @@ namespace Easyrewardz_TicketSystem.Interface
         bool SendMail(SMTPDetails sMTPDetails, string mailTo, string cc, string bcc,string subject, string mailBody,bool informStore, string storeIDs, int TenantID);
         List<CustomTicketHistory> GetTicketHistory(int TicketID);
 
-        
+        DashBoardDataModel GetDashBoardCountData(string UserID,string fromdate,string todate, int TenantID);
+
+        DashBoardGraphModel GetDashBoardGraphdata(string UserID, string fromdate, string todate, int TenantID);
+
     }
 }

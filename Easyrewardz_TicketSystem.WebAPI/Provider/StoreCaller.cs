@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _storeRepository = store;
             return _storeRepository.getStores(searchText, tenantID);
         }
-        
-
+        public int AddStore(IStore store, StoreMaster storeMaster, int TenantID, int UserID)
+        {
+            _storeRepository = store;
+            return _storeRepository.CreateStore(storeMaster, TenantID, UserID);
+        }
+        public int EditStore(IStore store, StoreMaster storeMaster, int StoreID, int TenantID, int UserID)
+        {
+            _storeRepository = store;
+            return _storeRepository.EditStore(storeMaster, StoreID, TenantID, UserID);
+        }
+        public int DeleteStore(IStore store, int StoreID, int TenantID, int UserID)
+        {
+            _storeRepository = store;
+            return _storeRepository.DeleteStore(StoreID, TenantID, UserID);
+        }
+        public List<CustomStoreList> StoreList(IStore store,int TenantID)
+        {
+            _storeRepository = store;
+            return _storeRepository.StoreList(TenantID);
+        }
     }
 }
