@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class StoreController : ControllerBase
     {
         #region variable declaration
@@ -103,7 +103,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StoreCaller _newMasterBrand = new StoreCaller();
 
-                storeMasters = _newMasterBrand.getStores(new StoreService(_connectionString), searchText, authenticate.TenantId );
+                storeMasters = _newMasterBrand.getStores(new StoreService(_connectionString), searchText, authenticate.TenantId);
 
                 StatusCode =
                 storeMasters.Count == 0 ?
@@ -138,7 +138,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("createstore")]
-        public ResponseModel createstore([FromBody]StoreMaster storeMaster )
+        public ResponseModel createstore([FromBody]StoreMaster storeMaster)
         {
             StoreCaller _newStore = new StoreCaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -254,7 +254,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Store List
         /// </summary>
-       /// <param name=""></param>
+        /// <param name=""></param>
         /// <returns></returns>
         [HttpPost]
         [Route("StoreList")]
@@ -337,6 +337,47 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// attach store
+        /// </summary>
+        /// <param name="OrderitemID"></param>
+        /// <param name="TicketId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("attachstore")]
+        public ResponseModel attachstore(string StoreId, int TicketId)
+        {
+            StoreCaller _newStore = new StoreCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                int result = _newStore.AttachStore(new StoreService(_connectionString), StoreId, TicketId, authenticate.UserMasterID);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
         #endregion  
 
     }

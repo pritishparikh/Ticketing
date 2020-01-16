@@ -17,6 +17,37 @@ namespace Easyrewardz_TicketSystem.Services
         {
             conn.ConnectionString = _connectionString;
         }
+
+        public int AttachStore(string StoreId, int TicketId, int CreatedBy)
+        {
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_BulkTicketStoreMapping", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Ticket_Id", TicketId);
+                cmd.Parameters.AddWithValue("@StoreIds", StoreId);
+                cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return success;
+        }
+
         /// <summary>
         /// Create Store
         /// </summary>
@@ -29,7 +60,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd  = new MySqlCommand("SP_InsertStore", conn);
+                MySqlCommand cmd = new MySqlCommand("SP_InsertStore", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Brand_ID", storeMaster.BrandID);
                 cmd.Parameters.AddWithValue("@Store_Code", storeMaster.StoreCode);
@@ -52,7 +83,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
-                
+
             }
             finally
             {
@@ -241,7 +272,7 @@ namespace Easyrewardz_TicketSystem.Services
             return storeMaster;
         }
 
-        public List<StoreMaster> SearchStore(int StateID, int PinCode, string Area,bool IsCountry)
+        public List<StoreMaster> SearchStore(int StateID, int PinCode, string Area, bool IsCountry)
         {
             List<StoreMaster> storeMaster = new List<StoreMaster>();
             DataSet ds = new DataSet();

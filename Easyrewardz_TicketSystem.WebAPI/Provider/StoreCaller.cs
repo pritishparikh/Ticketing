@@ -40,7 +40,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _storeRepository = store;
             return _storeRepository.DeleteStore(StoreID, TenantID, UserID);
         }
-        public List<CustomStoreList> StoreList(IStore store,int TenantID)
+        public List<CustomStoreList> StoreList(IStore store, int TenantID)
         {
             _storeRepository = store;
             return _storeRepository.StoreList(TenantID);
@@ -49,6 +49,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _storeRepository = store;
             return _storeRepository.SearchStore(StateID, PinCode, Area, IsCountry);
+        }
+        public int AttachStore(IStore store, string StoreId, int TicketId, int CreatedBy)
+        {
+            _storeRepository = store;
+            return _storeRepository.AttachStore(StoreId, TicketId, CreatedBy);
         }
     }
 }

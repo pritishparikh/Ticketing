@@ -10,10 +10,11 @@ namespace Easyrewardz_TicketSystem.Interface
     {
         List<StoreMaster> getStoreDetailByStorecodenPincode(string searchText, int tenantID);
         List<StoreMaster> getStores(string searchText, int tenantID);
-        int CreateStore(StoreMaster storeMaster,int TenantID,int UserID);
-        int EditStore(StoreMaster storeMaster, int StoreID, int TenantID,int UserID);
+        int CreateStore(StoreMaster storeMaster, int TenantID, int UserID);
+        int EditStore(StoreMaster storeMaster, int StoreID, int TenantID, int UserID);
         int DeleteStore(int StoreID, int TenantID, int UserID);
         List<CustomStoreList> StoreList(int TenantID);
-        List<StoreMaster> SearchStore(int StateID, int PinCode ,string Area,bool IsCountry );
+        List<StoreMaster> SearchStore(int StateID, int PinCode, string Area, bool IsCountry);
+        int AttachStore(string StoreId, int TicketId, int CreatedBy);
     }
 }
