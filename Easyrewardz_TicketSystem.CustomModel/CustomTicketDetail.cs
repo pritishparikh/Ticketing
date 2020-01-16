@@ -50,7 +50,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// <summary>
         /// Customer Id
         /// </summary>
-        public int  CustomerID { get; set; }
+        public int CustomerID { get; set; }
         /// <summary>
         /// CustomerName
         /// </summary>
@@ -145,5 +145,18 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string ProductNames { get; set; }
 
         public string OrderItemID { get; set; }
+        public List<Store> stores { get; set; }
+        public List<Product> products { get; set; }
+
+    }
+    public class Store
+    {
+        public int StoreID { get; set; }
+        public string Storename { get; set; }
+    }
+    public class Product
+    {
+        public int ItemID { get; set; }
+        public string ItemName { get; set; }
     }
 }

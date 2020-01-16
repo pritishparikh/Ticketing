@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.CustomModel
 {
-   public class CustomTicketSolvedModel
+    public class CustomTicketSolvedModel
     {
         /// <summary>
         /// TicketID
@@ -17,7 +17,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// <summary>
         /// BrandID
         /// </summary>
-        public int BrandID  { get; set; }
+        public int BrandID { get; set; }
         /// <summary>
         /// CategoryID
         /// </summary>
@@ -34,9 +34,9 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// PriortyID
         /// </summary>
         public int PriortyID { get; set; }
-         /// <summary>
-         /// ChannelOfPurchaseID
-         /// </summary>
+        /// <summary>
+        /// ChannelOfPurchaseID
+        /// </summary>
         public int ChannelOfPurchaseID { get; set; }
         /// <summary>
         /// TicketActionID
@@ -46,9 +46,5 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// Modifiedby
         /// </summary>
         public int Modifiedby { get; set; }
-        /// <summary>
-        /// AgentID
-        /// </summary>
-        public int? AgentID { get; set; }
     }
 }

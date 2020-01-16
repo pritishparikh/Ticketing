@@ -29,7 +29,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public List<TicketTitleDetails> GetAutoSuggestTicketList(ITicketing _ticket, string TikcketTitle, int TenantId)
         {
             _ticketList = _ticket;
-            return _ticketList.GetTicketList(TikcketTitle, TenantId); 
+            return _ticketList.GetTicketList(TikcketTitle, TenantId);
         }
         /// <summary>
         /// 
@@ -37,7 +37,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="_ticket"></param>
         /// <param name="TikcketTitle"></param>
         /// <returns></returns>
-         
+
 
         public int addTicketDetails(ITicketing _ticket, TicketingDetails ticketingDetails, int TenantId, string FolderPath, string finalAttchment)
         {
@@ -65,7 +65,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="DesignationID"></param>
         /// <param name=""></param>
         /// <returns></returns>
-        public List<CustomSearchTicketAgent> SearchAgent(ITicketing _ticket, string FirstName, string LastName, string Email, int DesignationID,int TenantId)
+        public List<CustomSearchTicketAgent> SearchAgent(ITicketing _ticket, string FirstName, string LastName, string Email, int DesignationID, int TenantId)
         {
             _ticketList = _ticket;
             return _ticketList.SearchAgent(FirstName, LastName, Email, DesignationID, TenantId);
@@ -120,10 +120,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ticketList.getNotesByTicketId(TicketId);
         }
 
-        public int submitticket(ITicketing _ticket, int TicketID, int status, int UserID, int TenantId)
+        public int submitticket(ITicketing _ticket, CustomTicketSolvedModel customTicketSolvedModel, int UserID, int TenantId)
         {
             _ticketList = _ticket;
-            return _ticketList.submitticket(TicketID, status, UserID, TenantId);
+            return _ticketList.submitticket(customTicketSolvedModel, UserID, TenantId);
         }
 
         public CustomTicketDetail getTicketDetailsByTicketId(ITicketing _ticket, int ticketID, int TenantID)
@@ -134,22 +134,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-        public bool SendMail(ITicketing _ticket, SMTPDetails sMTPDetails, string mailTo, string cc, string bcc, string subject, string mailBody, bool informStore,string storeIDs,int TenantID)
+        public bool SendMail(ITicketing _ticket, SMTPDetails sMTPDetails, string mailTo, string cc, string bcc, string subject, string mailBody, bool informStore, string storeIDs, int TenantID)
         {
             _ticketList = _ticket;
 
-            return _ticketList.SendMail(sMTPDetails, mailTo, cc, bcc,subject, mailBody, informStore, storeIDs, TenantID);
+            return _ticketList.SendMail(sMTPDetails, mailTo, cc, bcc, subject, mailBody, informStore, storeIDs, TenantID);
 
 
         }
-        
-        public List<CustomTicketHistory> getTickethistory(ITicketing _ticket,int ticketID)
+
+        public List<CustomTicketHistory> getTickethistory(ITicketing _ticket, int ticketID)
         {
             _ticketList = _ticket;
-            return _ticketList.GetTicketHistory(ticketID); 
+            return _ticketList.GetTicketHistory(ticketID);
         }
-
-       
 
         #endregion
     }

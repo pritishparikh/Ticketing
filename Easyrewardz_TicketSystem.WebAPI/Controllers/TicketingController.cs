@@ -72,7 +72,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objTicketList; 
+                _objResponseModel.ResponseData = objTicketList;
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
             string fileName = "";
             string finalAttchment = "";
-          
+
             if (files.Count > 0)
             {
                 for (int i = 0; i < files.Count; i++)
@@ -136,8 +136,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 var appRoot = appPathMatcher.Match(exePath).Value;
                 string Folderpath = appRoot + "\\" + _ticketAttachmentFolderName;
 
-                 int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
-               
+                int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
+
                 if (result > 0)
                 {
                     if (files.Count > 0)
@@ -665,8 +665,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("Updateticketstatus")]
-        public ResponseModel Updateticketstatus(int TicketID,int status)
-        { 
+        public ResponseModel Updateticketstatus([FromBody]CustomTicketSolvedModel customTicketSolvedModel)
+        {
             TicketingCaller _TicketCaller = new TicketingCaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -677,7 +677,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                int result = _TicketCaller.submitticket(new TicketingService(_connectioSting), TicketID, status, authenticate.UserMasterID,authenticate.TenantId);
+                int result = _TicketCaller.submitticket(new TicketingService(_connectioSting), customTicketSolvedModel, authenticate.UserMasterID, authenticate.TenantId);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -701,7 +701,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("SendMail")]
-        public ResponseModel SendMail(string EmailID,string Mailcc, string Mailbcc, string Mailsubject, string MailBody,bool informStore, string storeID)
+        public ResponseModel SendMail(string EmailID, string Mailcc, string Mailbcc, string Mailsubject, string MailBody, bool informStore, string storeID)
         {
             ResponseModel _objResponseModel = new ResponseModel();
             TicketingCaller _ticketingCaller = new TicketingCaller();
@@ -710,32 +710,32 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
 
-                    string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                    Authenticate authenticate = new Authenticate();
-                    authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
+                SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
 
-                    CommonService commonService = new CommonService();
-                    
-                    bool isUpdate = _ticketingCaller.SendMail(new TicketingService(_connectioSting), sMTPDetails, EmailID, Mailcc, Mailbcc, Mailsubject, MailBody, informStore,storeID, authenticate.TenantId);
+                CommonService commonService = new CommonService();
 
-                    if (isUpdate)
-                    {
-                        _objResponseModel.Status = true;
-                        _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
-                        _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
-                        _objResponseModel.ResponseData = "Mail sent successfully.";
-                    }
-                    else
-                    {
-                        _objResponseModel.Status = false;
-                        _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                        _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                        _objResponseModel.ResponseData = "Mail sent failure.";
-                    }
-                
-            
+                bool isUpdate = _ticketingCaller.SendMail(new TicketingService(_connectioSting), sMTPDetails, EmailID, Mailcc, Mailbcc, Mailsubject, MailBody, informStore, storeID, authenticate.TenantId);
+
+                if (isUpdate)
+                {
+                    _objResponseModel.Status = true;
+                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                    _objResponseModel.ResponseData = "Mail sent successfully.";
+                }
+                else
+                {
+                    _objResponseModel.Status = false;
+                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                    _objResponseModel.ResponseData = "Mail sent failure.";
+                }
+
+
             }
             catch (Exception ex)
             {

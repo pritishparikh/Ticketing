@@ -11,8 +11,7 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface ITicketing
     {
         //IEnumerable<TicketingDetails> getTcikets();
-
-        List<TicketTitleDetails> GetTicketList(string TikcketTitle, int TenantId); 
+        List<TicketTitleDetails> GetTicketList(string TikcketTitle, int TenantId);
 
         int addTicket(TicketingDetails ticketingDetails, int TenantId, string FolderPath, string finalAttchment);
 
@@ -33,14 +32,14 @@ namespace Easyrewardz_TicketSystem.Interface
         int Schedule(ScheduleMaster scheduleMaster, int TenantID, int UserID);
 
         List<TicketNotes> getNotesByTicketId(int TicketId);
-        int submitticket(int TicketID, int status, int UserID, int TenantId);
+        int submitticket(CustomTicketSolvedModel customTicketSolvedModel, int UserID, int TenantId);
 
         CustomTicketDetail getTicketDetailsByTicketId(int TicketID, int TenantID);
 
-        bool SendMail(SMTPDetails sMTPDetails, string mailTo, string cc, string bcc,string subject, string mailBody,bool informStore, string storeIDs, int TenantID);
+        bool SendMail(SMTPDetails sMTPDetails, string mailTo, string cc, string bcc, string subject, string mailBody, bool informStore, string storeIDs, int TenantID);
         List<CustomTicketHistory> GetTicketHistory(int TicketID);
 
-        
+
 
     }
 }

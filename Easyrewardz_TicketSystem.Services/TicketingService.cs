@@ -14,6 +14,7 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class TicketingService : ITicketing
     {
+
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
         public TicketingService(string _connectionString)
@@ -32,7 +33,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
-            List<TicketTitleDetails> ticketing = new List<TicketTitleDetails>(); 
+            List<TicketTitleDetails> ticketing = new List<TicketTitleDetails>();
             string _ticketTitle = string.Empty;
             try
             {
@@ -41,7 +42,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_getTitleSuggestions", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_tenantID", TenantId);
-                cmd1.Parameters.AddWithValue("@_ticketTitle", string.IsNullOrEmpty(TikcketTitle)? "" : TikcketTitle);
+                cmd1.Parameters.AddWithValue("@_ticketTitle", string.IsNullOrEmpty(TikcketTitle) ? "" : TikcketTitle);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -50,13 +51,13 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         TicketTitleDetails tktTitle = new TicketTitleDetails();
-                        _ticketTitle = string.IsNullOrEmpty(Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"])) ? string.Empty 
+                        _ticketTitle = string.IsNullOrEmpty(Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"])) ? string.Empty
                                         : Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"]);
 
-                        if(!string.IsNullOrEmpty(_ticketTitle))
+                        if (!string.IsNullOrEmpty(_ticketTitle))
                         {
-                            tktTitle.TicketTitle = _ticketTitle.Length > 10 ? _ticketTitle.Substring(0, 10): _ticketTitle;
-                            tktTitle.TicketTitleToolTip= _ticketTitle.Length > 10 ?  _ticketTitle : string.Empty;
+                            tktTitle.TicketTitle = _ticketTitle.Length > 10 ? _ticketTitle.Substring(0, 10) : _ticketTitle;
+                            tktTitle.TicketTitleToolTip = _ticketTitle.Length > 10 ? _ticketTitle : string.Empty;
                         }
 
                         ticketing.Add(tktTitle);
@@ -67,7 +68,7 @@ namespace Easyrewardz_TicketSystem.Services
                         //ticketing.Add(ticketingDetails);
                     }
 
-                 
+
                 }
             }
             catch (Exception ex)
@@ -122,14 +123,14 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@IsWantToAttachOrder", Convert.ToInt16(ticketingDetails.IsWantToAttachOrder));
                 cmd1.Parameters.AddWithValue("@IsActive", Convert.ToInt16(ticketingDetails.IsActive));
                 cmd1.Parameters.AddWithValue("@OrderItemID", string.IsNullOrEmpty(ticketingDetails.OrderItemID) ? "" : ticketingDetails.OrderItemID);
-                
+
                 cmd1.Parameters.AddWithValue("@TikcketTitle", string.IsNullOrEmpty(ticketingDetails.TicketTitle) ? "" : ticketingDetails.TicketTitle);
                 cmd1.Parameters.AddWithValue("@StoreID", string.IsNullOrEmpty(ticketingDetails.StoreID) ? "" : ticketingDetails.StoreID);
-                
+
 
                 cmd1.CommandType = CommandType.StoredProcedure;
-               
-                
+
+
                 ticketID = Convert.ToInt32(cmd1.ExecuteScalar());
 
                 if (ticketingDetails.taskMasters.Count > 0)
@@ -192,7 +193,7 @@ namespace Easyrewardz_TicketSystem.Services
                 #region Fetch email based on storeID
 
                 string storeIDlst = ticketingDetails.StoreID;
-                if(!string.IsNullOrEmpty(storeIDlst) && ticketingDetails.IsInforToStore)
+                if (!string.IsNullOrEmpty(storeIDlst) && ticketingDetails.IsInforToStore)
                 {
                     string emailID = string.Empty;
                     List<string> emailLst = new List<string>();
@@ -203,23 +204,23 @@ namespace Easyrewardz_TicketSystem.Services
                     adapter.SelectCommand = cmdemail;
                     adapter.Fill(EmailDs);
 
-                    if(EmailDs!=null && EmailDs.Tables.Count> 0)
+                    if (EmailDs != null && EmailDs.Tables.Count > 0)
                     {
-                        if(EmailDs.Tables[0]!=null && EmailDs.Tables[0].Rows.Count > 0)
+                        if (EmailDs.Tables[0] != null && EmailDs.Tables[0].Rows.Count > 0)
                         {
                             emailLst = EmailDs.Tables[0].AsEnumerable().Select(x => Convert.ToString((x.Field<object>("StoreEmailID")))).ToList();
                             emailLst.RemoveAll(x => string.IsNullOrEmpty(x));
 
-                            if(emailLst.Count > 0)
-                            emailID = string.Join(",", emailLst);
+                            if (emailLst.Count > 0)
+                                emailID = string.Join(",", emailLst);
 
                         }
                     }
 
-                    if(!string.IsNullOrEmpty(emailID))
-                    ticketingDetails.ticketingMailerQues[0].UserCC+= emailID;
+                    if (!string.IsNullOrEmpty(emailID))
+                        ticketingDetails.ticketingMailerQues[0].UserCC += emailID;
                 }
-               
+
 
 
 
@@ -269,7 +270,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TikcketTitle"></param>
         /// <returns></returns>
-        public List<CustomDraftDetails> GetDraft(int UserID,int TenantId)
+        public List<CustomDraftDetails> GetDraft(int UserID, int TenantId)
         {
             DataSet ds = new DataSet();
             List<CustomDraftDetails> Draftlist = new List<CustomDraftDetails>();
@@ -409,12 +410,10 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return listSavedSearch;
         }
-
         /// <summary>
         /// Get Saved Search By ID
         /// </summary>
         /// <param name="SearchParamID"></param>
-
         /// <returns></returns>
         public UserTicketSearchMaster GetSavedSearchByID(int SearchParamID)
         {
@@ -546,9 +545,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }
-            catch (MySqlException ex)
+            catch (MySql.Data.MySqlClient.MySqlException ex)
             {
-                throw ex;
+
             }
             finally
             {
@@ -658,8 +657,14 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return ticketNotes;
         }
-
-        public int submitticket(int TicketID, int status, int UserID,int TenantId)
+        /// <summary>
+        /// update ticket status
+        /// </summary>
+        /// <param name="CustomTicketSolvedModel"></param>
+        /// <param name="UserID"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
+        public int submitticket(CustomTicketSolvedModel customTicketSolvedModel, int UserID, int TenantId)
         {
             int i = 0;
             try
@@ -667,8 +672,15 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateStatus", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Ticket_ID", TicketID);
-                cmd.Parameters.AddWithValue("@Status_ID", status);
+                cmd.Parameters.AddWithValue("@Ticket_ID", customTicketSolvedModel.TicketID);
+                cmd.Parameters.AddWithValue("@Priorty_ID", customTicketSolvedModel.PriortyID);
+                cmd.Parameters.AddWithValue("@Status_ID", customTicketSolvedModel.StatusID);
+                cmd.Parameters.AddWithValue("@Category_ID", customTicketSolvedModel.CategoryID);
+                cmd.Parameters.AddWithValue("@SubCategoryID", customTicketSolvedModel.SubCategoryID);
+                cmd.Parameters.AddWithValue("@Brand_ID", customTicketSolvedModel.BrandID);
+                cmd.Parameters.AddWithValue("@ChannelOfPurchase_ID", customTicketSolvedModel.ChannelOfPurchaseID);
+                cmd.Parameters.AddWithValue("@IssueType_ID", customTicketSolvedModel.IssueTypeID);
+                cmd.Parameters.AddWithValue("@TicketAction_ID", customTicketSolvedModel.TicketActionID);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -687,8 +699,12 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return i;
         }
-
-
+        /// <summary>
+        /// Get Ticket Details By TicketId
+        /// </summary>
+        /// <param name="TicketID"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
         public CustomTicketDetail getTicketDetailsByTicketId(int TicketID, int TenantID)
         {
             DataSet ds = new DataSet();
@@ -731,11 +747,19 @@ namespace Easyrewardz_TicketSystem.Services
                         ticketDetails.TargetClouredate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TargetClouredate"]);
                         ticketDetails.OpenTicket = Convert.ToInt32(ds.Tables[0].Rows[i]["OpenTickets"]);
                         ticketDetails.Totalticket = Convert.ToInt32(ds.Tables[0].Rows[i]["Totaltickets"]);
-                        ticketDetails.StoreID = Convert.ToString(ds.Tables[0].Rows[i]["StoreID"]);
-                        ticketDetails.StoreNames = Convert.ToString(ds.Tables[0].Rows[i]["StoreNames"]);
-                        ticketDetails.ProductID = Convert.ToString(ds.Tables[0].Rows[i]["ProductID"]);
-                        ticketDetails.ProductNames = Convert.ToString(ds.Tables[0].Rows[i]["ProductNames"]);
+                        ticketDetails.stores = ds.Tables[1].AsEnumerable().Select(x => new Store()
+                        {
+                            StoreID = Convert.ToInt32(x.Field<int>("StoreID")),
+                            Storename = Convert.ToString(x.Field<string>("StoreName"))
 
+                        }).ToList();
+
+                        ticketDetails.products = ds.Tables[2].AsEnumerable().Select(x => new Product()
+                        {
+                            ItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
+                            ItemName = Convert.ToString(x.Field<string>("ItemName"))
+
+                        }).ToList();
                     }
                 }
                 return ticketDetails;
@@ -746,7 +770,12 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
         }
-
+        /// <summary>
+        /// Get Ticket History
+        /// </summary>
+        /// <param name="TicketID"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
         public List<CustomTicketHistory> GetTicketHistory(int TicketID)
         {
 
@@ -781,9 +810,10 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return ListTicketHistory;
         }
-        public bool SendMail(SMTPDetails sMTPDetails, string mailTo, string cc, string bcc, string subject, string mailBody,bool informStore, string storeIDs, int TenantID)
+
+        public bool SendMail(SMTPDetails sMTPDetails, string mailTo, string cc, string bcc, string subject, string mailBody, bool informStore, string storeIDs, int TenantID)
         {
-            bool IsMailSent = false; 
+            bool IsMailSent = false;
             DataSet EmailDs = new DataSet();
             CommonService commonService = new CommonService();
             List<string> ccMailList = new List<string>(); List<string> StoreEmailList = new List<string>();
@@ -793,7 +823,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 #region get email based on storeid
 
-                if(informStore && !string.IsNullOrEmpty(storeIDs))
+                if (informStore && !string.IsNullOrEmpty(storeIDs))
                 {
                     MySqlCommand cmdemail = new MySqlCommand("SP_GetEmailsOnStoreID", conn);
                     cmdemail.Parameters.AddWithValue("StoreIds", storeIDs);
@@ -819,7 +849,7 @@ namespace Easyrewardz_TicketSystem.Services
                 if (!string.IsNullOrEmpty(cc))
                     ccMailList = cc.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-                if(ccMailList.Count > 0)
+                if (ccMailList.Count > 0)
                 {
                     ccMailList.AddRange(StoreEmailList);
                 }
@@ -829,9 +859,9 @@ namespace Easyrewardz_TicketSystem.Services
 
 
                 IsMailSent = commonService.SendEmail(sMTPDetails, mailTo, subject, mailBody,
-                    ccMailList.Count > 0 ? ccMailList.ToArray(): null,  bccMailArray , TenantID);
+                    ccMailList.Count > 0 ? ccMailList.ToArray() : null, bccMailArray, TenantID);
 
-             
+
 
             }
             catch (Exception ex)
@@ -842,7 +872,6 @@ namespace Easyrewardz_TicketSystem.Services
             return IsMailSent;
         }
 
-       
     }
 }
 
