@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="order"></param>
         /// <param name="OrderNumber"></param>
         /// <returns></returns>
-        public OrderMaster getOrderDetailsByNumber(IOrder order, string OrderNumber ,int TenantId)
+        public OrderMaster getOrderDetailsByNumber(IOrder order, string OrderNumber, int TenantId)
         {
             _orderRepository = order;
             return _orderRepository.getOrderbyNumber(OrderNumber, TenantId);
@@ -34,7 +34,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="order"></param>
         /// <param name="orderMaster"></param>
         /// <returns></returns>
-        public int addOrder(IOrder order,OrderMaster orderMaster,int TenantId)
+        public int addOrder(IOrder order, OrderMaster orderMaster, int TenantId)
         {
             _orderRepository = order;
             return _orderRepository.addOrderDetails(orderMaster, TenantId);
@@ -47,10 +47,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="OrderNumber"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<CustomOrderMaster> GetOrderItemList(IOrder _orderMaster, string OrderNumber, int TenantID)
+        public List<CustomOrderMaster> GetOrderItemList(IOrder _orderMaster, string OrderNumber, int CustomerID, int TenantID)
         {
             _orderRepository = _orderMaster;
-            return _orderRepository.getOrderListwithItemDetail(OrderNumber, TenantID);
+            return _orderRepository.getOrderListwithItemDetail(OrderNumber, CustomerID, TenantID);
 
         }
         public List<CustomOrderDetailsByCustomer> GetOrderDetailsByCustomerID(IOrder _orderMaster, int CustomerID, int TenantID)
@@ -72,6 +72,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _orderRepository = _orderMaster;
             return _orderRepository.SearchProduct(CustomerID, productName);
 
+        }
+
+        public int AttachOrder(IOrder order, string OrderID, int TicketId, int CreatedBy)
+        {
+            _orderRepository = order;
+            return _orderRepository.AttachOrder(OrderID, TicketId, CreatedBy);
         }
         #endregion
 

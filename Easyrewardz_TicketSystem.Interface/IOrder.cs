@@ -16,13 +16,14 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int addOrderDetails(OrderMaster orderMaster, int TenantId);
 
+        List<CustomOrderMaster> getOrderListwithItemDetail(string OrderNumber, int Customer_ID, int TenantID);
 
-        List<CustomOrderMaster> getOrderListwithItemDetail(string OrderNumber, int TenantID);
-
-         List<CustomOrderDetailsByCustomer> getOrderListByCustomerID(int CustomerID, int TenantID);
+        List<CustomOrderDetailsByCustomer> getOrderListByCustomerID(int CustomerID, int TenantID);
 
         CustomOrderDetailsByClaim getOrderListByClaimID(int CustomerID, int ClaimID, int TenantID);
 
-        List<CustomSearchProduct> SearchProduct(int CustomerID, string  productName);
+        List<CustomSearchProduct> SearchProduct(int CustomerID, string productName);
+
+        int AttachOrder(string OrderID, int TicketId, int CreatedBy);
     }
 }

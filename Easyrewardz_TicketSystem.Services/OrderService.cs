@@ -19,7 +19,6 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
         #endregion
-
         /// <summary>
         /// Get OrderBy Number
         /// </summary>
@@ -60,7 +59,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return orderMasters;
         }
-
         /// <summary>
         /// Add Order Detail
         /// </summary>
@@ -115,7 +113,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="OrderNumber"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<CustomOrderMaster> getOrderListwithItemDetail(string OrderNumber, int TenantID)
+        public List<CustomOrderMaster> getOrderListwithItemDetail(string OrderNumber, int CustomerID, int TenantID)
         {
 
             DataSet ds = new DataSet();
@@ -128,6 +126,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Order_ID", OrderNumber);
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Customer_ID", CustomerID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
@@ -150,8 +149,8 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             OrderItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
                             OrderMasterID = Convert.ToInt32(x.Field<int>("OrderMasterID")),
-                            InvoiceNo = Convert.ToString(x.Field<string>("InvoiceNo")),
-                            Size = Convert.ToInt32(x.Field<int>("Size")),
+                            ArticleNumber = Convert.ToString(x.Field<string>("SKUNumber")),
+                            ArticleSize = Convert.ToString(x.Field<string>("SKUName")),
                             ItemPrice = Convert.ToInt32(x.Field<decimal>("ItemPrice")),
                             PricePaid = Convert.ToInt32(x.Field<decimal>("PricePaid")),
                             Discount = Convert.ToInt32(x.Field<decimal>("Discount")),
@@ -179,7 +178,12 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objorderMaster;
         }
-
+        /// <summary>
+        /// Get OrderList By CustomerID
+        /// </summary>
+        /// <param name="CustomerID"></param>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         public List<CustomOrderDetailsByCustomer> getOrderListByCustomerID(int CustomerID, int TenantID)
         {
             DataSet ds = new DataSet();
@@ -246,11 +250,17 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objorderMaster;
         }
-
+        /// <summary>
+        /// Get Order List By ClaimID
+        /// </summary>
+        /// <param name="CustomerID"></param>
+        /// <param name="ClaimID"></param>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         public CustomOrderDetailsByClaim getOrderListByClaimID(int CustomerID, int ClaimID, int TenantID)
         {
             DataSet ds = new DataSet();
-            CustomOrderDetailsByClaim customClaimMaster  = new CustomOrderDetailsByClaim();
+            CustomOrderDetailsByClaim customClaimMaster = new CustomOrderDetailsByClaim();
             try
             {
                 conn.Open();
@@ -263,7 +273,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
-               // CustomOrderDetailsByClaim customClaimMaster = new CustomOrderDetailsByClaim();
+                // CustomOrderDetailsByClaim customClaimMaster = new CustomOrderDetailsByClaim();
                 if (ds != null && ds.Tables[0] != null)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -318,7 +328,7 @@ namespace Easyrewardz_TicketSystem.Services
                         //objorderMaster.Add(customClaimMaster);
                     }
 
-                }            
+                }
             }
             catch (Exception ex)
             {
@@ -334,7 +344,12 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return customClaimMaster;
         }
-
+        /// <summary>
+        /// Search Product
+        /// </summary>
+        /// <param name="CustomerID"></param>
+        /// <param name="productName"></param>
+        /// <returns></returns>
         public List<CustomSearchProduct> SearchProduct(int CustomerID, string productName)
         {
             List<CustomSearchProduct> productlist = new List<CustomSearchProduct>();
@@ -375,6 +390,42 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return productlist;
+        }
+        /// <summary>
+        /// Attach Order of ticket
+        /// </summary>
+        /// <param name="OrderID"></param>
+        /// <param name="TicketId"></param>
+        /// <param name="CreatedBy"></param>
+        /// <returns></returns>
+        public int AttachOrder(string OrderID, int TicketId, int CreatedBy)
+        {
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_BulkTicketOrderMapping", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Ticket_Id", TicketId);
+                cmd.Parameters.AddWithValue("@OrderIDs", OrderID);
+                cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return success;
         }
     }
 }

@@ -21,6 +21,8 @@ namespace Easyrewardz_TicketSystem.Model
         public int? Size { get; set; }
         public int? RequireSize { get; set; }
         public decimal Discount { get; set; }
+        public string ArticleNumber { get; set; }
+        public string ArticleSize { get; set; }
 
     }
 }
