@@ -34,7 +34,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
+
         #region Custom Methods
+
         /// <summary>
         /// Add Task
         /// </summary>
@@ -79,7 +81,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("gettaskdetailsbyid")]
-        [AllowAnonymous]
         public ResponseModel gettaskdetailsbyid(int taskId)
         {
 
@@ -113,8 +114,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
-
-
+        
         /// <summary>
         /// Get Task List
         /// </summary>
@@ -155,7 +155,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
-        #endregion
+
+
         /// <summary>
         ///Soft Delete Task
         /// </summary>
@@ -209,7 +210,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                _objuserassign = _taskcaller.GetAssignedTo(new TaskServices(_connectionSting),Function_ID);
+                _objuserassign = _taskcaller.GetAssignedTo(new TaskServices(_connectionSting), Function_ID);
                 StatusCode =
                    _objuserassign.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -246,7 +247,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("AddComment")]
         //public ResponseModel AddComment(int Id, int TaskID, int ClaimID, int TicketID, string Comment)
-        public ResponseModel AddComment(int CommentForId, int ID,  string Comment)
+        public ResponseModel AddComment(int CommentForId, int ID, string Comment)
         {
             TaskCaller _taskcaller = new TaskCaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -319,6 +320,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+        #endregion
+
 
     }
 }
