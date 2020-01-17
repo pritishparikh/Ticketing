@@ -37,6 +37,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _dashboardlist.GetDashboardTicketsOnSearch(searchModel);
         }
 
+       public string DashBoardSearchDataToCSV(IDashBoard _dashboard, SearchModelDashBoard searchModel)
+        {
+            _dashboardlist = _dashboard;
+            return _dashboardlist.DashBoardSearchDataToCSV(searchModel);
+        }
+
+
+        public LoggedInAgentModel GetDashboardTicketsOnSearch(IDashBoard _dashboard, int tenantID, int UserId, string emailID,string AccountName)
+        {
+            _dashboardlist = _dashboard;
+            return _dashboardlist.GetLogginAccountInfo(tenantID,UserId,emailID, AccountName);
+        }
         #endregion
     }
 }

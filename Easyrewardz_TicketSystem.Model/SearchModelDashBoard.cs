@@ -122,27 +122,26 @@ namespace Easyrewardz_TicketSystem.Model
         public int IssueTypeId { get; set; }
 
         //Column -2 
-        public int SourceTypeID { get; set; }
+        public int TicketSourceTypeID { get; set; }
 
         public string TicketIdORTitle { get; set; }
 
         public int PriorityId { get; set; }
 
-        public int SatutsID { get; set; }
+        public int TicketSatutsID { get; set; }
 
         public string SLAStatus { get; set; }
-
 
         //Column - 3  
         public string ClaimId { get; set; }
 
         public string InvoiceNumberORSubOrderNo { get; set; }
 
-        public string ItemId { get; set; }
+        public string OrderItemId { get; set; }
 
         public string IsVisitStore { get; set; }
 
-        public string IsWantVistiStore { get; set; }
+        public string IsWantVistingStore { get; set; }
 
         //Column - 4  
         public string CustomerEmailID { get; set; }
@@ -158,22 +157,22 @@ namespace Easyrewardz_TicketSystem.Model
         //Row - 2 and Column - 1  
         public bool HaveClaim { get; set; }
 
-        public bool ClaimStatus { get; set; }
+        public int ClaimStatusId { get; set; }
 
-        public bool ClaimCategory { get; set; }
+        public int ClaimCategoryId { get; set; }
 
-        public bool ClaimSubCategory { get; set; }
+        public int ClaimSubCategoryId { get; set; }
 
-        public bool ClaimIssueType { get; set; }
+        public int ClaimIssueTypeId { get; set; }
 
         //Row - 2 and Column - 2  
         public bool HaveTask { get; set; }
 
-        public int TaskStatus { get; set; }
+        public int TaskStatusId { get; set; }
 
-        public int TaskDepartment { get; set; }
+        public int TaskDepartment_Id { get; set; }
 
-        public int TaskFunction { get; set; }
+        public int TaskFunction_Id { get; set; }
 
     }
 }
