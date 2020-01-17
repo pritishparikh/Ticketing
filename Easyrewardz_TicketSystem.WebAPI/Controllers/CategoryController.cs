@@ -45,7 +45,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("GetCategoryList")]
         [AllowAnonymous]
-        public List<Category> GetCategoryList()
+        public List<Category> GetCategoryList(int BrandID)
         {
             List<Category> objCategoryList = new List<Category>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -58,7 +58,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 MasterCaller _newMasterCategory = new MasterCaller();
-                objCategoryList = _newMasterCategory.GetCategoryList(new CategoryServices(_connectioSting), authenticate.TenantId);
+                objCategoryList = _newMasterCategory.GetCategoryList(new CategoryServices(_connectioSting), authenticate.TenantId, BrandID);
             }
             catch (Exception ex)
             {

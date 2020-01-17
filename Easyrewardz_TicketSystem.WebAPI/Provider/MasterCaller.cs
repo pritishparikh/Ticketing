@@ -84,10 +84,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region Methods for the Category
 
-        public List<Category> GetCategoryList(ICategory _category, int TenantID)
+        public List<Category> GetCategoryList(ICategory _category, int TenantID,int BrandID)
         {
             _categoryList = _category;
-            return _categoryList.GetCategoryList(TenantID);
+            return _categoryList.GetCategoryList(TenantID, BrandID);
         }
 
         public int AddCategory(ICategory _category, Category category)

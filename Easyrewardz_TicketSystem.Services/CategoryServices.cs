@@ -26,7 +26,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
             conn.ConnectionString = _connectionString;
         }
-        public List<Category> GetCategoryList(int TenantID)
+        public List<Category> GetCategoryList(int TenantID,int BrandID)
         {
 
             DataSet ds = new DataSet();
@@ -40,6 +40,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetCategoryList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.Parameters.AddWithValue("@Brand_ID", BrandID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
