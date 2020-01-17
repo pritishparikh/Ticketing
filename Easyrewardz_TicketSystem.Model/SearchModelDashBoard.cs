@@ -137,11 +137,11 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string InvoiceNumberORSubOrderNo { get; set; }
 
-        public string OrderItemId { get; set; }
+        public int OrderItemId { get; set; }
 
-        public string IsVisitStore { get; set; }
+        public int IsVisitStore { get; set; }
 
-        public string IsWantVistingStore { get; set; }
+        public int IsWantVistingStore { get; set; }
 
         //Column - 4  
         public string CustomerEmailID { get; set; }
@@ -152,10 +152,10 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string StoreCodeORAddress { get; set; }
 
-        public string WantToStoreCodeORAddress { get; set; }
+        public int WantToStoreCodeORAddress { get; set; }
 
         //Row - 2 and Column - 1  
-        public bool HaveClaim { get; set; }
+        public int HaveClaim { get; set; }
 
         public int ClaimStatusId { get; set; }
 
@@ -166,7 +166,7 @@ namespace Easyrewardz_TicketSystem.Model
         public int ClaimIssueTypeId { get; set; }
 
         //Row - 2 and Column - 2  
-        public bool HaveTask { get; set; }
+        public int HaveTask { get; set; }
 
         public int TaskStatusId { get; set; }
 
