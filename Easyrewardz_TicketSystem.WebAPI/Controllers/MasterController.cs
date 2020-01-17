@@ -35,6 +35,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region Custom Methods
+
+        #region Channel of Purchase
+
         /// <summary>
         /// Get Channel Of PurchaseList
         /// </summary>
@@ -77,8 +80,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+
         #endregion
 
+        #region Department
 
         /// <summary>
         /// Get Department List 
@@ -170,6 +175,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        #endregion
+
+        #region Payment Mode
+
         /// <summary>
         /// Get Payment mode
         /// </summary>
@@ -209,6 +218,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         }
 
+        #endregion
+
+        #region Ticket Sources 
+
         /// <summary>
         /// Get Ticket Sources
         /// </summary>
@@ -245,6 +258,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        #endregion
+
+        #region State List 
 
         /// <summary>
         /// get state list 
@@ -291,5 +308,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        #endregion
+                          
+        #endregion
+
     }
 }

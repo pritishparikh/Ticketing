@@ -322,6 +322,5 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
         #endregion
 
-
     }
 }
