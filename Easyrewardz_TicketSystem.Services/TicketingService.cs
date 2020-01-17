@@ -676,7 +676,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Priorty_ID", customTicketSolvedModel.PriortyID);
                 cmd.Parameters.AddWithValue("@Status_ID", customTicketSolvedModel.StatusID);
                 cmd.Parameters.AddWithValue("@Category_ID", customTicketSolvedModel.CategoryID);
-                cmd.Parameters.AddWithValue("@SubCategoryID", customTicketSolvedModel.SubCategoryID);
+                cmd.Parameters.AddWithValue("@SubCategory_ID", customTicketSolvedModel.SubCategoryID);
                 cmd.Parameters.AddWithValue("@Brand_ID", customTicketSolvedModel.BrandID);
                 cmd.Parameters.AddWithValue("@ChannelOfPurchase_ID", customTicketSolvedModel.ChannelOfPurchaseID);
                 cmd.Parameters.AddWithValue("@IssueType_ID", customTicketSolvedModel.IssueTypeID);
