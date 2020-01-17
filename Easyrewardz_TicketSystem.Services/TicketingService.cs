@@ -872,6 +872,35 @@ namespace Easyrewardz_TicketSystem.Services
             return IsMailSent;
         }
 
+        public CustomCountByTicket GetCountByTicket(int ticketID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            CustomCountByTicket CountByTicket = new CustomCountByTicket();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_getCountDataByTicketID", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Ticket_ID", ticketID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {              
+                        CountByTicket.Messages = Convert.ToInt32(ds.Tables[0].Rows[0]["counts"]);
+                        CountByTicket.Notes = Convert.ToInt32(ds.Tables[0].Rows[1]["counts"]);
+                        CountByTicket.Task = Convert.ToInt32(ds.Tables[0].Rows[2]["counts"]);
+                        CountByTicket.Claim = Convert.ToInt32(ds.Tables[0].Rows[3]["counts"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return CountByTicket;
+        }
     }
 }
 

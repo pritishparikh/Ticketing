@@ -148,7 +148,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ticketList = _ticket;
             return _ticketList.GetTicketHistory(ticketID);
         }
-
+        public CustomCountByTicket GetCounts(ITicketing _ticket, int ticketID)
+        {
+            _ticketList = _ticket;
+            return _ticketList.GetCountByTicket(ticketID);
+        }
         #endregion
     }
 }
