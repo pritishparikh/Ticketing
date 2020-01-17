@@ -165,8 +165,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _issueList.GetIssueTypeList(TenantID, SubCategoryID);
         }
         #endregion
-
-
+        
         #region Methods for the User
         public List<User> GetUserList(IUser _user, int TenantID,int UserID)
         {
@@ -174,6 +173,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _userlist.GetUserList(TenantID, UserID);
         }
         #endregion
+
+        #region Department
 
         private IMasterInterface _ImasterDepartment;
         public List<DepartmentMaster> GetDepartmentListDetails(IMasterInterface _department, int TenantID)
@@ -189,6 +190,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ImasterFunctionbyDepartment.GetFunctionByDepartment(DepartmentID, TenantID);
         }
 
+        #endregion
+
         #region PaymentMode
 
         public List<PaymentMode> GetPaymentMode(IMasterInterface _ImasterInterface)
@@ -199,7 +202,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #endregion
 
-        #region PaymentMode
+        #region Ticket Sources
 
         public List<TicketSourceMaster> GetTicketSource(IMasterInterface _ImasterInterface)
         {
@@ -209,16 +212,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #endregion
 
-        public SMTPDetails GetSMTPDetails(IMasterInterface _ImasterInterface,int TenantId)
+        #region SMTP Details 
+
+        public SMTPDetails GetSMTPDetails(IMasterInterface _ImasterInterface, int TenantId)
         {
             _Imaster = _ImasterInterface;
             return _Imaster.GetSMTPDetails(TenantId);
         }
+
+
+        #endregion
+
+        #region State
 
         public List <StateMaster> GetStatelist(IMasterInterface _ImasterInterface)
         {
             _Imaster = _ImasterInterface;
             return _Imaster.GetStateList();
         }
+
+        #endregion
     }
 }
