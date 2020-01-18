@@ -901,6 +901,85 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return CountByTicket;
         }
+
+        public List<CustomTicketMessage> TicketMessagelisting(int ticketID)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+           List<CustomTicketMessage> TicketMessagelist = new List <CustomTicketMessage>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetTicketMessage", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Ticket_Id", ticketID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                         CustomTicketMessage TicketMessage = new CustomTicketMessage();
+                        TicketMessage.MailID = Convert.ToInt32(ds.Tables[0].Rows[i]["MailID"]);
+                        TicketMessage.TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
+                        TicketMessage.TicketMailSubject = Convert.ToString(ds.Tables[0].Rows[i]["TikcketMailSubject"]);
+                        TicketMessage.TicketMailBody = Convert.ToString(ds.Tables[0].Rows[i]["TicketMailBody"]);
+                        TicketMessage.IsCustomerComment = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsCustomerComment"]);
+                        TicketMessage.HasAttachment = Convert.ToBoolean(ds.Tables[0].Rows[i]["HasAttachment"]);
+                        TicketMessage.CommentBy = Convert.ToString(ds.Tables[0].Rows[i]["Commentsby"]);
+                        TicketMessagelist.Add(TicketMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return TicketMessagelist;
+        }
+
+        public List< CustomSearchTicketAgent> GetAgentList()
+        {
+
+            DataSet ds = new DataSet();
+            List<CustomSearchTicketAgent> listSearchagent = new List<CustomSearchTicketAgent>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("GetAgentList", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomSearchTicketAgent Searchagent = new CustomSearchTicketAgent();
+                        Searchagent.User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        Searchagent.AgentName = Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
+                        Searchagent.Designation = Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
+                        listSearchagent.Add(Searchagent);
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return listSearchagent;
+        }
     }
 }
 
