@@ -927,9 +927,9 @@ namespace Easyrewardz_TicketSystem.Services
                         TicketMessage.TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
                         TicketMessage.TicketMailSubject = Convert.ToString(ds.Tables[0].Rows[i]["TikcketMailSubject"]);
                         TicketMessage.TicketMailBody = Convert.ToString(ds.Tables[0].Rows[i]["TicketMailBody"]);
-                        TicketMessage.IsCustomerComment = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsCustomerComment"]);
-                        TicketMessage.HasAttachment = Convert.ToBoolean(ds.Tables[0].Rows[i]["HasAttachment"]);
-                        TicketMessage.CommentBy = Convert.ToString(ds.Tables[0].Rows[i]["Commentsby"]);
+                        TicketMessage.IsCustomerComment = Convert.ToInt32(ds.Tables[0].Rows[i]["IsCustomerComment"]);
+                        TicketMessage.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]);
+                        TicketMessage.CommentBy = Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
                         TicketMessagelist.Add(TicketMessage);
                     }
                 }
