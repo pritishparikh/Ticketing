@@ -100,7 +100,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// <summary>
         /// TicketActionID
         /// </summary>
-        public int TicketActionID { get; set; }
+        public int TicketActionTypeID { get; set; }
 
         /// <summary>
         /// OrderMasterID

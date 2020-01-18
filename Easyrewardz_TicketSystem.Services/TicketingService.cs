@@ -735,7 +735,7 @@ namespace Easyrewardz_TicketSystem.Services
                         ticketDetails.PriortyID = Convert.ToInt32(ds.Tables[0].Rows[i]["PriorityID"]);
                         ticketDetails.ChannelOfPurchaseID = Convert.ToInt32(ds.Tables[0].Rows[i]["ChannelOfPurchaseID"]);
                         ticketDetails.IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
-                        ticketDetails.TicketActionID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketActionID"]);
+                        ticketDetails.TicketActionTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketActionID"]);
                         ticketDetails.CustomerID = Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
                         ticketDetails.CustomerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
                         ticketDetails.CustomerEmailId = Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
