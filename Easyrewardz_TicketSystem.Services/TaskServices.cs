@@ -81,10 +81,9 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        
+                    {                      
                         taskMaster.TicketingTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        taskMaster.TaskStatus = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
+                        taskMaster.TaskStatus = Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
                         taskMaster.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
                         taskMaster.TaskDescription = Convert.ToString(ds.Tables[0].Rows[i]["TaskDescription"]);           
                         taskMaster.Duedate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TaskEndTime"]);
@@ -141,7 +140,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         CustomTaskMasterDetails taskMaster = new CustomTaskMasterDetails();
                         taskMaster.TicketingTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        taskMaster.TaskStatus = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
+                        taskMaster.TaskStatus = Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
                         taskMaster.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
                         taskMaster.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["Departmentname"]);
                         taskMaster.StoreCode = Convert.ToInt32(ds.Tables[0].Rows[i]["Storecode"]);
@@ -240,7 +239,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return Assignedto;
         }
-
 
         /// <summary>
         /// Add Comment 

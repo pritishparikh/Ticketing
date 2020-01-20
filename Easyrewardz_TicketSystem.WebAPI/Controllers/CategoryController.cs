@@ -181,7 +181,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return result;
         }
 
-
         [HttpPost]
         [Route("CategoryList")]
         [AllowAnonymous]
