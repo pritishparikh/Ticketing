@@ -171,8 +171,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _issueList = _issue;
             return _issueList.GetIssueTypeList(TenantID, SubCategoryID);
         }
+        public int AddIssueType(IIssueType _issue, int SubcategoryID, string IssuetypeName, int TenantID, int UserID)
+        {
+            _issueList = _issue;
+            return _issueList.AddIssueType(SubcategoryID, IssuetypeName, TenantID, UserID);
+        }
         #endregion
-        
+
         #region Methods for the User
         public List<User> GetUserList(IUser _user, int TenantID,int UserID)
         {

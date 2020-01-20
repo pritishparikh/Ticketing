@@ -14,5 +14,12 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="SubCategoryID"></param>
         /// <returns></returns>
         List<IssueType> GetIssueTypeList(int TenantID,int SubCategoryID);
+        /// <summary>
+        /// Add Issue Type
+        /// </summary>
+        /// <param name="SubcategoryID"></param>
+        /// <param name="IssuetypeName"></param>
+        /// <returns></returns>
+        int AddIssueType(int SubcategoryID, string IssuetypeName ,int TenantID, int UserID);
     }
 }

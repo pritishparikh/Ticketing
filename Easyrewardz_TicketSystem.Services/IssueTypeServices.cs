@@ -16,8 +16,6 @@ namespace Easyrewardz_TicketSystem.Services
         {
             conn.ConnectionString = _connectionString;
         }
-        #endregion 
-
         /// <summary>
         /// Get Issue Type List
         /// </summary>
@@ -72,5 +70,42 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objIssueType;
         }
+        /// <summary>
+        /// Add Issue Type
+        /// </summary>
+        /// <param name="TenantID">SubcategoryIDparam>
+        /// <param name="SubCategoryID">IssuetypeName</param>
+        /// <returns></returns>
+        public int AddIssueType(int SubcategoryID, string IssuetypeName, int TenantID, int UserID)
+        {
+            int Success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_InsertIssueType", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SubCategory_ID", SubcategoryID);
+                cmd.Parameters.AddWithValue("@Issuetype_Name", IssuetypeName);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Created_By", UserID);
+                Success = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return Success;
+        }
+        #endregion
     }
 }
