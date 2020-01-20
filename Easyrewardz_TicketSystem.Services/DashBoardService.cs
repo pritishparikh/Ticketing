@@ -44,8 +44,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_BrandID", string.IsNullOrEmpty(BrandID) ? "" : BrandID);
                 cmd1.Parameters.AddWithValue("@User_ID", UserID);
-                cmd1.Parameters.AddWithValue("@Tenant_ID", 1);
-                //cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                //cmd1.Parameters.AddWithValue("@Tenant_ID", 1);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd1.Parameters.AddWithValue("@_FromDate", fromdate);
                 cmd1.Parameters.AddWithValue("@_ToDate", todate);
                 MySqlDataAdapter da = new MySqlDataAdapter();
