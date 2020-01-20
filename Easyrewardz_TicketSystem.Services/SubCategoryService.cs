@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
             conn.ConnectionString = _connectionString;
         }
-        #endregion
+      
 
         /// <summary>
         /// Get Sub Category By Category ID
@@ -68,5 +68,43 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objSubCategory;
         }
+
+        /// <summary>
+        /// Add Sub Category
+        /// </summary>
+        /// <param name="CategoryID"></param>
+        /// <returns></returns>
+        public int AddSubCategory(int CategoryID, string SubCategoryName, int TenantID, int UserID)
+        {
+
+            int Success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_InsertSubCategory", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Category_ID", CategoryID);
+                cmd.Parameters.AddWithValue("@SubCategory_Name", SubCategoryName);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Created_By", UserID);
+                Success = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return Success;
+        }
+        #endregion
     }
 }

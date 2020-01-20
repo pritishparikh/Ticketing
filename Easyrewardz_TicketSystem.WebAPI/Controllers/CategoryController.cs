@@ -75,8 +75,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("AddCategory")]
-        [AllowAnonymous]
-        public int AddCategory([FromBody] Category category)
+        public ResponseModel AddCategory(string category)
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
@@ -88,11 +87,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
                 MasterCaller _newMasterCategory = new MasterCaller();
-                category.TenantID = authenticate.TenantId;
-                category.CreatedBy = authenticate.UserMasterID;
-                result = _newMasterCategory.AddCategory(new CategoryServices(_connectioSting), category);
+                result = _newMasterCategory.AddCategory(new CategoryServices(_connectioSting), category, authenticate.TenantId, authenticate.UserMasterID);
+                StatusCode =
+               result == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+
             }
             catch (Exception ex)
             {
@@ -104,7 +110,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Message = ex.Message;
                 _objResponseModel.ResponseData = null;
             }
-            return result;
+            return _objResponseModel;
         }
 
 

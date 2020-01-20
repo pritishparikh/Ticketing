@@ -12,7 +12,7 @@ namespace Easyrewardz_TicketSystem.Interface
     {
         List<Category> GetCategoryList(int TenantID,int BrandID);
 
-        int AddCategory(Category category);
+        int AddCategory(string category,int TenantID,int UserID);
 
         List<Category> CategoryList(int TenantId);
 

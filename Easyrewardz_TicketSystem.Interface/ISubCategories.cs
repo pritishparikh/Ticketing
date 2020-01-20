@@ -11,5 +11,6 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface ISubCategories
     {
         List<SubCategory> GetSubCategoryByCategoryID(int CategoryID);
+        int AddSubCategory(int CategoryID,string category, int TenantID, int UserID);
     }
 }

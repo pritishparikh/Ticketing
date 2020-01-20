@@ -90,10 +90,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _categoryList.GetCategoryList(TenantID, BrandID);
         }
 
-        public int AddCategory(ICategory _category, Category category)
+        public int AddCategory(ICategory _category, string category, int TenantID, int UserID)
         {
             _categoryList = _category;
-            return _categoryList.AddCategory(category);
+            return _categoryList.AddCategory(category, TenantID, UserID);
         }
 
         public List<Category> CategoryList(ICategory _category, int TenantID)
@@ -123,6 +123,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _subCategoryList = _SubCategory;
             return _subCategoryList.GetSubCategoryByCategoryID(CategoryID);
         }
+
+        public int AddSubCategory(ISubCategories _SubCategory, int CategoryID, string category, int TenantID, int UserID)
+        {
+            _subCategoryList = _SubCategory;
+            return _subCategoryList.AddSubCategory(CategoryID,category, TenantID, UserID);
+        }
+
 
         #endregion
 

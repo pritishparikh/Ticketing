@@ -73,25 +73,21 @@ namespace Easyrewardz_TicketSystem.Services
             return categoryList;
         }
 
-
-        public int AddCategory(Category category)
+        public int AddCategory(string categoryName, int TenantID, int UserID)
         {
 
             MySqlCommand cmd = new MySqlCommand();
-            int k = 0;
+            int Success = 0;
             try
             {
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_InsertCategory", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Tenant_ID", category.TenantID);
-                cmd1.Parameters.AddWithValue("@Category_Name", category.CategoryName);
-                cmd1.Parameters.AddWithValue("@Is_Active", category.IsActive);
-                cmd1.Parameters.AddWithValue("@Created_By", category.CreatedBy);
-
-
-                k = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@Category_Name", categoryName);
+                cmd1.Parameters.AddWithValue("@Created_By", UserID);
+                Success = Convert.ToInt32(cmd1.ExecuteNonQuery());
             }
             catch (Exception ex)
             {
@@ -106,7 +102,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return k;
+            return Success;
 
         }
 
