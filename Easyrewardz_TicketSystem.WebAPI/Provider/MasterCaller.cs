@@ -1,5 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.CustomModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,7 +114,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _categoryList = _category;
             return _categoryList.UpdateCategory(category);
         }
-
+        public int CreateCategoryBrandMapping(ICategory _category, CustomCreateCategory customCreateCategory)
+        {
+            _categoryList = _category;
+            return _categoryList.CreateCategoryBrandMapping(customCreateCategory);
+        }
+        public List<CustomCreateCategory> ListCategoryBrandMapping(ICategory _category)
+        {
+            _categoryList = _category;
+            return _categoryList.ListCategoryBrandMapping();
+        }
         #endregion
 
         #region Methods for the Subcategories

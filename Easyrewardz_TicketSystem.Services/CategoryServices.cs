@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Linq;
 using Easyrewardz_TicketSystem.DBContext;
+using Easyrewardz_TicketSystem.CustomModel;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -72,7 +73,13 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return categoryList;
         }
-
+        /// <summary>
+        /// AddCategory
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public int AddCategory(string categoryName, int TenantID, int UserID)
         {
 
@@ -228,6 +235,84 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return categories;
+        }
+        /// <summary>
+        /// Create Category BrandMapping
+        /// </summary>
+        /// <param name="CustomCreateCategory"></param>
+        /// <returns></returns>
+        public int CreateCategoryBrandMapping(CustomCreateCategory customCreateCategory)
+        {
+            int Success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd  = new MySqlCommand("SP_CreateCategoryBrandMapping", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Braind_ID", customCreateCategory.BraindID);
+                cmd.Parameters.AddWithValue("@Category_ID", customCreateCategory.CategoryID);
+                cmd.Parameters.AddWithValue("@SubCategory_ID", customCreateCategory.SubCategoryID);
+                cmd.Parameters.AddWithValue("@IssueType_ID", customCreateCategory.IssueTypeID);
+                cmd.Parameters.AddWithValue("@Is_Active", customCreateCategory.Status);
+                cmd.Parameters.AddWithValue("@Created_By", customCreateCategory.CreatedBy);
+                Success = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return Success;
+        }
+
+        public List<CustomCreateCategory> ListCategoryBrandMapping()
+        {
+            DataSet ds = new DataSet();
+            List<CustomCreateCategory> listCategoryMapping = new List<CustomCreateCategory>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_ListCategoryBrandMapping", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomCreateCategory CreateCategory = new CustomCreateCategory();
+                        CreateCategory.BrandName = Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                        CreateCategory.CategoryName= Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        CreateCategory.SubCategoryName = Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        CreateCategory.IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        CreateCategory.StatusName = Convert.ToString(ds.Tables[0].Rows[i]["IsActive"]);
+                        listCategoryMapping.Add(CreateCategory);
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return listCategoryMapping;
         }
     }
 }

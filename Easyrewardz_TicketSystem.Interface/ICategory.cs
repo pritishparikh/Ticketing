@@ -1,4 +1,5 @@
 ﻿using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.CustomModel;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,5 +20,9 @@ namespace Easyrewardz_TicketSystem.Interface
         int DeleteCategory(int CategoryID, int TenantId);
 
         int UpdateCategory(Category category);
+
+        int CreateCategoryBrandMapping(CustomCreateCategory customCreateCategory);
+
+        List<CustomCreateCategory> ListCategoryBrandMapping();
     }
 }
