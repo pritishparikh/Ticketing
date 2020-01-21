@@ -43,6 +43,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<CustomTicketMessage> TicketMessagelisting(int ticketID);
 
-       List< CustomSearchTicketAgent> GetAgentList();
+       List< CustomSearchTicketAgent> GetAgentList( int TenantID);
     }
 }

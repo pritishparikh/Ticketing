@@ -941,7 +941,7 @@ namespace Easyrewardz_TicketSystem.Services
             return TicketMessagelist;
         }
 
-        public List< CustomSearchTicketAgent> GetAgentList()
+        public List< CustomSearchTicketAgent> GetAgentList(int TenantID)
         {
 
             DataSet ds = new DataSet();
@@ -949,9 +949,10 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("GetAgentList", conn);
-                cmd.Connection = conn;
+                MySqlCommand cmd = new MySqlCommand("SP_GetAgentList", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Connection = conn;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
