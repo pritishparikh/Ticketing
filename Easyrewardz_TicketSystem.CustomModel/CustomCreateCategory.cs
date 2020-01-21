@@ -18,5 +18,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public bool Status { get; set; }
         public string StatusName { get; set; }
         public int CreatedBy { get; set; }
+        public int Deleteflag { get; set; }
     }
 }

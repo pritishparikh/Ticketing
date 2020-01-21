@@ -237,40 +237,76 @@ namespace Easyrewardz_TicketSystem.Services
             return categories;
         }
         /// <summary>
-        /// Create Category BrandMapping
+        /// Create Category BrandMapping/update /soft delete 
         /// </summary>
         /// <param name="CustomCreateCategory"></param>
         /// <returns></returns>
         public int CreateCategoryBrandMapping(CustomCreateCategory customCreateCategory)
         {
             int Success = 0;
-            try
-            {
-                conn.Open();
-                MySqlCommand cmd  = new MySqlCommand("SP_CreateCategoryBrandMapping", conn);
-                cmd.Connection = conn;
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Braind_ID", customCreateCategory.BraindID);
-                cmd.Parameters.AddWithValue("@Category_ID", customCreateCategory.CategoryID);
-                cmd.Parameters.AddWithValue("@SubCategory_ID", customCreateCategory.SubCategoryID);
-                cmd.Parameters.AddWithValue("@IssueType_ID", customCreateCategory.IssueTypeID);
-                cmd.Parameters.AddWithValue("@Is_Active", customCreateCategory.Status);
-                cmd.Parameters.AddWithValue("@Created_By", customCreateCategory.CreatedBy);
-                Success = Convert.ToInt32(cmd.ExecuteNonQuery());
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            finally
-            {
-                if (conn != null)
+            if (customCreateCategory.BrandCategoryMappingID==0)
+            {             
+                try
                 {
-                    conn.Close();
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SP_CreateCategoryBrandMapping", conn);
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Braind_ID", customCreateCategory.BraindID);
+                    cmd.Parameters.AddWithValue("@Category_ID", customCreateCategory.CategoryID);
+                    cmd.Parameters.AddWithValue("@SubCategory_ID", customCreateCategory.SubCategoryID);
+                    cmd.Parameters.AddWithValue("@IssueType_ID", customCreateCategory.IssueTypeID);
+                    cmd.Parameters.AddWithValue("@Is_Active", customCreateCategory.Status);
+                    cmd.Parameters.AddWithValue("@Created_By", customCreateCategory.CreatedBy);
+                    Success = Convert.ToInt32(cmd.ExecuteNonQuery());
                 }
-            }
+                catch (Exception ex)
+                {
 
+                    throw ex;
+                }
+                finally
+                {
+                    if (conn != null)
+                    {
+                        conn.Close();
+                    }
+                }
+
+                
+            }
+            if(customCreateCategory.BrandCategoryMappingID >0)
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("UpdateCategoryBrandMapping", conn);
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@BrandCategoryMapping_ID", customCreateCategory.BrandCategoryMappingID);
+                    cmd.Parameters.AddWithValue("@Braind_ID", customCreateCategory.BraindID);
+                    cmd.Parameters.AddWithValue("@Category_ID", customCreateCategory.CategoryID);
+                    cmd.Parameters.AddWithValue("@SubCategory_ID", customCreateCategory.SubCategoryID);
+                    cmd.Parameters.AddWithValue("@IssueType_ID", customCreateCategory.IssueTypeID);
+                    cmd.Parameters.AddWithValue("@Is_Active", customCreateCategory.Status);
+                    cmd.Parameters.AddWithValue("@Created_By", customCreateCategory.CreatedBy);
+                    cmd.Parameters.AddWithValue("@Delete_flag", customCreateCategory.Deleteflag);
+                    Success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
+                finally
+                {
+                    if (conn != null)
+                    {
+                        conn.Close();
+                    }
+                }
+
+            }
             return Success;
         }
 
