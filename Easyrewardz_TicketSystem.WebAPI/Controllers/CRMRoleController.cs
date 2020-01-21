@@ -61,14 +61,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 SettingsCaller _newCRM = new SettingsCaller();
 
+                   count = _newCRM.InsertUpdateCRMRole(new CRMRoleService(_connectioSting), CRMRoleID, authenticate.TenantId, RoleName, RoleisActive, authenticate.UserMasterID, ModulesEnabled, ModulesDisabled);
 
-                //count = CRMRoleID > 0 ? _newCRM.UpdateCRMRole(new CRMRoleService(_connectioSting), authenticate.TenantId, CRMRoleID, RoleName, Modules, RoleisActive, authenticate.UserMasterID) :
-                //    _newCRM.InsertCRMRole(new CRMRoleService(_connectioSting), authenticate.TenantId, RoleName, RoleisActive, authenticate.UserMasterID, ModulesEnabled,ModulesDisabled);
-
-                   count = _newCRM.InsertCRMRole(new CRMRoleService(_connectioSting), authenticate.TenantId, RoleName, RoleisActive, authenticate.UserMasterID, ModulesEnabled, ModulesDisabled);
-
-
-                StatusCode = count == 0 ?(int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                StatusCode = count == 0 ?(int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
@@ -115,8 +110,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Deletecount = _newCRM.DeleteCRMRole(new CRMRoleService(_connectioSting), authenticate.TenantId, CRMRoleID);
 
                 StatusCode =
-                Deletecount == 0 ?
-                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                Deletecount == 0 ? (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
