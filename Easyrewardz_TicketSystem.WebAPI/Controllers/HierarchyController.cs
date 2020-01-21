@@ -1,96 +1,94 @@
 ﻿using System;
 using System.Collections.Generic;
-using Easyrewardz_TicketSystem.CustomModel;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
-using Easyrewardz_TicketSystem.WebAPI.Filters;
+using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
+using Easyrewardz_TicketSystem.Interface;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Easyrewardz_TicketSystem.WebAPI.Filters;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
-    /// <summary>
-    /// User controller to manage User
-    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
-    public class UserController : ControllerBase
+   [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    public class HierarchyController : ControllerBase
     {
-        #region  Variable Declaration
+        #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
+        private readonly string _connectionSting;
         #endregion
-
-        #region Constructor
-        /// <summary>
-        /// User Controller
-        /// </summary>
-        /// <param name="_iConfig"></param>
-        public UserController(IConfiguration _iConfig)
+        #region Cunstructor
+        public HierarchyController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            _connectionSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
-
-        #region Custom Methods 
+        #region Custom Methods
+        /// <summary>
+        /// CreateHierarchy
+        /// </summary>
+        /// <param name="TaskMaster"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Route("GetUserList")]
-        public ResponseModel GetUserList( )
+        [Route("CreateHierarchy")]
+        public ResponseModel CreateHierarchy([FromBody] CustomHierarchymodel customHierarchymodel)
         {
-            List<User> objUserList = new List<User>();
-           
+            HierarchyCaller _Hierarchy = new HierarchyCaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
-                MasterCaller _newMasterBrand = new MasterCaller();
-
-                objUserList = _newMasterBrand.GetUserList(new UserServices(_connectioSting), authenticate.TenantId,authenticate.UserMasterID);
-
+                customHierarchymodel.TenantID = authenticate.TenantId;
+                customHierarchymodel.CreatedBy = authenticate.UserMasterID;
+                int result = _Hierarchy.CreateHierarchy(new HierarchyService(_connectionSting), customHierarchymodel);
                 StatusCode =
-                objUserList.Count == 0 ?
-                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objUserList;
-
+                _objResponseModel.ResponseData = result;
 
             }
             catch (Exception ex)
             {
                 StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = null;
             }
-
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// CreateHierarchy
+        /// </summary>
+        /// <param name="TaskMaster"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Route("GetUserList")]
-        public ResponseModel AddUserPersonalDetail([FromBody] UserModel userModel )
-        {         
+        [Route("ListHierarchy")]
+        public ResponseModel ListHierarchy()
+        {
+            List<CustomHierarchymodel> customHierarchymodels = new List<CustomHierarchymodel>();
+            HierarchyCaller _Hierarchy = new HierarchyCaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -99,34 +97,29 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
-                UserCaller userCaller = new UserCaller();
-                userModel.CreatedBy = authenticate.UserMasterID;
-                 int Result = userCaller.AddUserPersonaldetail(new UserServices(_connectioSting), userModel, authenticate.TenantId);
-
+                customHierarchymodels = _Hierarchy.ListofHierarchy(new HierarchyService(_connectionSting), authenticate.TenantId);
                 StatusCode =
-               Result == 0 ?
-                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                   customHierarchymodels.Count == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
 
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = Result;
-
+                _objResponseModel.ResponseData = customHierarchymodels;
 
             }
             catch (Exception ex)
             {
                 StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = null;
             }
-
             return _objResponseModel;
         }
         #endregion

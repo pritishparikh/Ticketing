@@ -280,7 +280,7 @@ namespace Easyrewardz_TicketSystem.Services
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("UpdateCategoryBrandMapping", conn);
+                    MySqlCommand cmd = new MySqlCommand("SP_UpdateCategoryBrandMapping", conn);
                     cmd.Connection = conn;
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@BrandCategoryMapping_ID", customCreateCategory.BrandCategoryMappingID);

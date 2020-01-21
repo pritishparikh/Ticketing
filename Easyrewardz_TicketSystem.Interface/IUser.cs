@@ -7,8 +7,8 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public interface IUser
     {
-
-
         List<User> GetUserList(int TenantId ,int UserID);
+
+        int AddUserPersonaldetail(UserModel userModel,int TenantID);
     }
 }
