@@ -43,17 +43,17 @@ namespace Easyrewardz_TicketSystem.Services
 
                 if(CRMRoleID> 0)
                 {
-                    cmd.Parameters.AddWithValue("@_Modify_By", 6);
-                    //cmd.Parameters.AddWithValue("@_Modify_By", UserID);
+                    //cmd.Parameters.AddWithValue("@_Modify_By", 6);
+                    cmd.Parameters.AddWithValue("@_Modify_By", UserID);
                     cmd.Parameters.AddWithValue("@_CRMRoles_ID", CRMRoleID); 
                 }
                 else
                 {
-                    cmd.Parameters.AddWithValue("@_createdBy", 6);
-                    //cmd.Parameters.AddWithValue("@_createdBy", UserIDs);    
+                    //cmd.Parameters.AddWithValue("@_createdBy", 6);
+                    cmd.Parameters.AddWithValue("@_createdBy", UserID);
                 }
-                cmd.Parameters.AddWithValue("@_tenantID", 1);
-                //cmd.Parameters.AddWithValue("@_tenantID", tenantID);
+                //cmd.Parameters.AddWithValue("@_tenantID", 1);
+                cmd.Parameters.AddWithValue("@_tenantID", tenantID);
                 cmd.Parameters.AddWithValue("@_RoleName", RoleName);
                 cmd.Parameters.AddWithValue("@_isRoleActive", Convert.ToInt16(RoleisActive));
                
@@ -92,8 +92,8 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteCRMRole", conn);
                 cmd.Connection = conn;
-                //cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
-                cmd.Parameters.AddWithValue("@Tenant_ID", 1);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                //cmd.Parameters.AddWithValue("@Tenant_ID", 1);
                 cmd.Parameters.AddWithValue("@CRMRoles_ID", CRMRoleID);
               
 
@@ -117,6 +117,9 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        /// <summary>
+        /// Get CRM Role List
+        /// </summary>
         public List<CRMRoleModel> GetCRMRoleList(int tenantID)
         {
             List<CRMRoleModel> objCRMLst = new List<CRMRoleModel>();
@@ -129,6 +132,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetCRMRolesDetails", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
+                //cmd1.Parameters.AddWithValue("@_tenantID", 1);
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
@@ -143,12 +147,32 @@ namespace Easyrewardz_TicketSystem.Services
                             CRMRoleID = Convert.ToInt32(r.Field<object>("CRMRolesID")),
 
                             RoleName = r.Field<object>("RoleName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("RoleName")),
-                            isRoleActive = r.Field<object>("ModuleIsActive") == System.DBNull.Value ? false:Convert.ToBoolean(Convert.ToInt32(r.Field<object>("ModuleIsActive"))),
+                            isRoleActive = r.Field<object>("RoleStatus") == System.DBNull.Value ? string.Empty: Convert.ToString(r.Field<object>("RoleStatus")),
                             CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
-                            ModifiedBy = r.Field<object>("ModifiedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModifiedBy")),
-                            ModifiedDate = r.Field<object>("ModifiedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModifiedDate")),
+                            ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
+                            ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
                               }).ToList();
+                    }
+
+                    if(objCRMLst.Count> 0)
+                    {
+                        if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < objCRMLst.Count; i++)
+                            {
+                                objCRMLst[i].Modules = ds.Tables[1].AsEnumerable().Where(r => r.Field<object>("CRMRolesID") != System.DBNull.Value &&
+                                    objCRMLst[i].CRMRoleID == Convert.ToInt32(r.Field<object>("CRMRolesID"))).Select(r => new ModuleDetails()
+                                    {
+                                        CRMRoleID = Convert.ToInt32(r.Field<object>("CRMRolesID")),
+                                        ModuleID= Convert.ToInt32(r.Field<object>("ModuleID")),
+                                        ModuleName = r.Field<object>("ModuleName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModuleName")),
+                                        Modulestatus = r.Field<object>("ModuleStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModuleStatus")),
+
+                                     }).ToList();
+                        }
+
+                        }
                     }
                 }
             }

@@ -216,7 +216,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                _loggedinAccInfo = _dbsearchMaster.GetDashboardTicketsOnSearch(new DashBoardService(_connectioSting),
+                _loggedinAccInfo = _dbsearchMaster.GetLogginAccountInfo(new DashBoardService(_connectioSting),
                     authenticate.TenantId, authenticate.UserMasterID, authenticate.UserEmailID, authenticate.FirstName + " " + authenticate.LastName);
 
                 //_loggedinAccInfo = _dbsearchMaster.GetDashboardTicketsOnSearch(new DashBoardService(_connectioSting),

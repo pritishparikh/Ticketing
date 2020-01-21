@@ -12,15 +12,17 @@ namespace Easyrewardz_TicketSystem.Model
         public string  CreatedDate { get; set; }
         public string ModifiedBy { get; set; }
         public string ModifiedDate { get; set; }
-        public bool isRoleActive { get; set; }
+        public string isRoleActive { get; set; }
       
-        List<ModuleDetails> Modules { get; set; }
+        public List<ModuleDetails> Modules { get; set; }
     }
 
     public class ModuleDetails
      {
+        public int CRMRoleID { get; set; }
+        public int ModuleID { get; set; }
         public string ModuleName { get; set; }
-        public bool isEnabled { get; set; }
+        public string Modulestatus { get; set; }
 
     }
 }
