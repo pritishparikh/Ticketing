@@ -137,8 +137,6 @@ namespace Easyrewardz_TicketSystem.Services
 
         public List<Brand> BrandList(int TenantId)
         {
-
-
             List<Brand> brands = new List<Brand>();
             MySqlCommand cmd = new MySqlCommand();
 
@@ -164,16 +162,17 @@ namespace Easyrewardz_TicketSystem.Services
                         brand.TenantID = Convert.ToInt32(dt.Rows[i]["TenantID"]);
                         brand.BrandName = Convert.ToString(dt.Rows[i]["BrandName"]);
                         brand.BrandCode = Convert.ToString(dt.Rows[i]["BrandCode"]);
-                        brand.CreatedBy = Convert.ToInt32(dt.Rows[i]["CreatedBy"]);
+                        brand.Created_By = Convert.ToString(dt.Rows[i]["Created_By"]);
                         brand.CreatedDate = Convert.ToDateTime(dt.Rows[i]["CreatedDate"]);
-                        brand.ModifyBy = Convert.ToInt32(dt.Rows[i]["ModifiedBy"]);
+                        brand.CreatedDateFormat = brand.CreatedDate.ToString("dd/MMM/yyyy");
+                        brand.Modify_By = Convert.ToString(dt.Rows[i]["Modified_By"]);
                         brand.ModifyDate = Convert.ToDateTime(dt.Rows[i]["ModifiedDate"]);
+                        brand.ModifyDateFormat = brand.ModifyDate.ToString("dd/MMM/yyyy");
                         brand.Status = Convert.ToString(dt.Rows[i]["Status"]);
 
 
                         brands.Add(brand);
                     }
-
                 }
             }
             catch (Exception ex)

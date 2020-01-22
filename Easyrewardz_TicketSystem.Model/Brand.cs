@@ -45,6 +45,11 @@ namespace Easyrewardz_TicketSystem.Model
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
+        /// CreatedOn Format
+        /// </summary>
+        public string CreatedDateFormat { get; set; }
+
+        /// <summary>
         /// Modified By
         /// </summary>
         public int ModifyBy { get; set; }
@@ -53,6 +58,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// Modified On
         /// </summary>
         public DateTime ModifyDate { get; set; }
+        /// <summary>
+        /// ModifyDate Format
+        /// </summary>
+        public string ModifyDateFormat { get; set; }
 
         /// <summary>
         /// Created By Name
