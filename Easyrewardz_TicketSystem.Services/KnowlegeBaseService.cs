@@ -213,11 +213,11 @@ namespace Easyrewardz_TicketSystem.Services
                         knowlegeBaseMaster.Subject = Convert.ToString(dt.Rows[i]["Subject"]);
                         knowlegeBaseMaster.Description = Convert.ToString(dt.Rows[i]["Description"]);
                         knowlegeBaseMaster.IsApproveStatus= Convert.ToString(dt.Rows[i]["IsApprove"]);
-                        knowlegeBaseMaster.Status = Convert.ToString(dt.Rows[i]["Status"]);
-                        knowlegeBaseMaster.CreatedName = Convert.ToString(dt.Rows[i]["createdby"]);
-                        knowlegeBaseMaster.CreatedDate = Convert.ToDateTime(dt.Rows[i]["CreatedDate"]);
-                        knowlegeBaseMaster.ModifyName = Convert.ToString(dt.Rows[i]["modifyby"]);
-                        knowlegeBaseMaster.ModifyDate = Convert.ToDateTime(dt.Rows[i]["ModifyDate"]);
+                        //knowlegeBaseMaster.Status = Convert.ToString(dt.Rows[i]["Status"]);
+                        //knowlegeBaseMaster.CreatedName = Convert.ToString(dt.Rows[i]["createdby"]);
+                       // knowlegeBaseMaster.CreatedDate = Convert.ToDateTime(dt.Rows[i]["CreatedDate"]);
+                        //knowlegeBaseMaster.ModifyName = Convert.ToString(dt.Rows[i]["modifyby"]);
+                        //knowlegeBaseMaster.ModifyDate = Convert.ToDateTime(dt.Rows[i]["ModifyDate"]);
 
 
                         knowlegeBaseMasters.Add(knowlegeBaseMaster);
