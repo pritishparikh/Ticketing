@@ -240,5 +240,41 @@ namespace Easyrewardz_TicketSystem.Services
 
             return knowlegeBaseMasters;
         }
+
+        public int RejectApproveKB(int KBID, int IsApprove, int TenantId)
+        {
+
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_ApproveRejectKB", conn);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.Parameters.AddWithValue("@KB_ID", KBID);
+                cmd1.Parameters.AddWithValue("@Is_Approved", IsApprove);
+
+
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                conn.Close();
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
+
     }
 }
