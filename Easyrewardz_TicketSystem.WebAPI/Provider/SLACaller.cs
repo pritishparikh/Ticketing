@@ -25,5 +25,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _SLARepository = SLA;
             return _SLARepository.GetSLAStatusList(TenantId);
         }
+
+        
     }
 }

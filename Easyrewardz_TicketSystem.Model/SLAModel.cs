@@ -1,0 +1,53 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Easyrewardz_TicketSystem.Model
+{
+    public class SLAModel
+    {
+        public int TenantID { get; set; }
+        public int IssueTypeID { get; set; }
+        public int CreatedBy { get; set; }
+        public bool isSLAActive { get; set; }
+        public List<SLATargetModel> SLATarget { get; set; }
+
+    }
+
+    public class SLATargetModel
+    {
+        public int PriorityID { get; set; }
+        public int SLABreachPercent { get; set; }
+        public int PriorityRespondValue { get; set; }
+        public string PriorityRespondDuration { get; set; }
+        public int PriorityResolutionValue { get; set; }
+        public string PriorityResolutionDuration { get; set; }
+    }
+
+    public class SLAResponseModel
+    {
+        public int SLAID { get; set; }
+        public int IssueTpeID { get; set; }
+        public string  IssueTpeName { get; set; }
+       
+        public bool isSLAActive { get; set; }
+        public string CreatedBy { get; set; }
+        public string CreatedDate { get; set; }
+        public string ModifiedBy { get; set; }
+        public string ModifiedDate { get; set; }
+
+
+        public List<SLATargetResponseModel> SLATarget { get; set; }
+    }
+
+    public class SLATargetResponseModel
+    {
+        public int PriorityID { get; set; }
+        public int PriorityName { get; set; }
+        public string SLABreachPercent { get; set; }
+        public int PriorityRespond { get; set; }
+        public int PriorityResolution { get; set; }
+
+    }
+
+}

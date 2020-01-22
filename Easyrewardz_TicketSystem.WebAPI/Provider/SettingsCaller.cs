@@ -12,6 +12,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #region Variable declaration
 
         private ICRMRole _dCRMrole;
+        private ISLA _SLA;
 
         #endregion
 
@@ -45,6 +46,34 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
+        #endregion
+
+        #region SLA
+        public int InsertSLA(ISLA SLA, SLAModel SLAm)
+        {
+            _SLA = SLA;
+
+            return _SLA.InsertSLA( SLAm);
+        }
+
+        public int UpdateSLA(ISLA SLA, int tenantID, int SLAID, int IssuetypeID, bool isActive, int modifiedBy)
+        {
+            _SLA = SLA;
+            return _SLA.UpdateSLA(SLAID, tenantID, IssuetypeID, isActive, modifiedBy);
+        }
+
+        public int DeleteSLA(ISLA SLA, int tenantID, int SLAID)
+        {
+            _SLA = SLA;
+            return _SLA.DeleteSLA(tenantID, SLAID);
+
+        }
+
+        public List<SLAResponseModel> SLAList(ISLA SLA,int TenantID)
+        {
+            _SLA = SLA;
+            return _SLA.SLAList(TenantID);
+        }
         #endregion
 
 
