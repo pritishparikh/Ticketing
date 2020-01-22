@@ -72,8 +72,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public List<SLAResponseModel> SLAList(ISLA SLA,int TenantID)
         {
             _SLA = SLA;
-            return _SLA.SLAList(TenantID);
+            return _SLA.SLAList(TenantID );
         }
+
+        //public List<SLAResponseModel> SLAList(ISLA SLA, int TenantID, int pageNo, int PageSize)
+        //{
+        //    _SLA = SLA;
+        //    return _SLA.SLAList(TenantID, pageNo, PageSize);
+        //}
         #endregion
 
 

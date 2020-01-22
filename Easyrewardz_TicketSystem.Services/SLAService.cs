@@ -221,13 +221,16 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// GET SLA
         /// </summary>
-        public List<SLAResponseModel> SLAList(int tenantID)
+        //public List<SLAResponseModel> SLAList(int tenantID,int pageNo, int PageSize)
+            public List<SLAResponseModel> SLAList(int tenantID)
         {
             List<SLAResponseModel> objSLALst = new List<SLAResponseModel>();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             try
             {
+
+                //int rowStart = (pageNo - 1) * PageSize;
                 conn.Open();
                 cmd.Connection = conn;
 
@@ -249,7 +252,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                             IssueTpeID = r.Field<object>("IssueTypeID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IssueTypeID")),
                             IssueTpeName = r.Field<object>("IssueTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueTypeName")),
-                            isSLAActive = r.Field<object>("SLAStatus") == System.DBNull.Value ?false : Convert.ToBoolean(Convert.ToInt32(r.Field<object>("SLAStatus"))),
+                            isSLAActive = r.Field<object>("SLAStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SLAStatus")),
                             CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
                             ModifiedBy= r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
@@ -279,6 +282,13 @@ namespace Easyrewardz_TicketSystem.Services
                         }
                     }
                 }
+
+                //paging here
+                //if (PageSize > 0 && objSLALst.Count > 0)
+                //    objSLALst[0].totalpages = objSLALst.Count > PageSize ? Math.Round(Convert.ToDouble(objSLALst.Count / PageSize)) : 1;
+
+                //objSLALst = objSLALst.Skip(rowStart).Take(PageSize).ToList();
+
 
             }
             catch (Exception ex)

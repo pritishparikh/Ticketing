@@ -251,6 +251,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetSLA")]
+       // public ResponseModel GetSLA(int pageNo, int PageSize)
         public ResponseModel GetSLA()
         {
 
@@ -266,8 +267,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newCRM = new SettingsCaller();
+                //_objresponseModel = _newCRM.SLAList(new SLAServices(_connectioSting), authenticate.TenantId,  pageNo,  PageSize);
                 _objresponseModel = _newCRM.SLAList(new SLAServices(_connectioSting), authenticate.TenantId);
-
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

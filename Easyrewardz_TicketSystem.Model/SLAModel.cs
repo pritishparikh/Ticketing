@@ -30,12 +30,12 @@ namespace Easyrewardz_TicketSystem.Model
         public int IssueTpeID { get; set; }
         public string  IssueTpeName { get; set; }
        
-        public bool isSLAActive { get; set; }
+        public string isSLAActive { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedDate { get; set; }
         public string ModifiedBy { get; set; }
         public string ModifiedDate { get; set; }
-
+        public double totalpages { get; set; }
 
         public List<SLATargetResponseModel> SLATarget { get; set; }
     }
