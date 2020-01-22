@@ -17,7 +17,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class UserController : ControllerBase
     {
         #region  Variable Declaration
@@ -88,7 +88,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("GetUserList")]
+        [Route("AddUserPersonalDetail")]
         public ResponseModel AddUserPersonalDetail([FromBody] UserModel userModel )
         {         
             ResponseModel _objResponseModel = new ResponseModel();
