@@ -223,7 +223,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         public List<SLAResponseModel> SLAList(int tenantID)
         {
-            List<SLAResponseModel> objCRMLst = new List<SLAResponseModel>();
+            List<SLAResponseModel> objSLALst = new List<SLAResponseModel>();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             try
@@ -231,7 +231,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
 
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetCRMRolesDetails", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetSLAList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 //cmd1.Parameters.AddWithValue("@_tenantID", 1);
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
@@ -243,10 +243,41 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
+                        objSLALst = ds.Tables[0].AsEnumerable().Select(r => new SLAResponseModel()
+                        {
+                            SLAID = Convert.ToInt32(r.Field<object>("SlaId")),
 
+                            IssueTpeID = r.Field<object>("IssueTypeID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IssueTypeID")),
+                            IssueTpeName = r.Field<object>("IssueTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueTypeName")),
+                            isSLAActive = r.Field<object>("SLAStatus") == System.DBNull.Value ?false : Convert.ToBoolean(Convert.ToInt32(r.Field<object>("SLAStatus"))),
+                            CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
+                            CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
+                            ModifiedBy= r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
+                            ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
+                        }).ToList();
                     }
 
+                    if (objSLALst.Count > 0)
+                    {
+                        if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < objSLALst.Count; i++)
+                            {
+                                objSLALst[i].SLATarget = ds.Tables[1].AsEnumerable().Where(r => r.Field<object>("SlaID") != System.DBNull.Value &&
+                                    objSLALst[i].SLAID == Convert.ToInt32(r.Field<object>("SlaID"))).Select(r => new SLATargetResponseModel()
+                                    {
+                                        SLATargetID = Convert.ToInt32(r.Field<object>("SLATargetID")),
+                                        PriorityID = Convert.ToInt32(r.Field<object>("PriorityID")),
+                                        PriorityName = r.Field<object>("PriortyName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriortyName")),
+                                        SLABreachPercent = r.Field<object>("PriorityBreach") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriorityBreach")),
+                                        PriorityRespond = r.Field<object>("PriorityRespond") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriorityRespond")),
+                                        PriorityResolution = r.Field<object>("PriorityResolve") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriorityResolve")),
 
+                                    }).ToList();
+                            }
+
+                        }
+                    }
                 }
 
             }
@@ -259,7 +290,9 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (ds != null) ds.Dispose(); conn.Close();
             }
-            return objCRMLst;
+
+           
+            return objSLALst;
 
         }
 

@@ -42,11 +42,12 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class SLATargetResponseModel
     {
+        public int SLATargetID { get; set; }
         public int PriorityID { get; set; }
-        public int PriorityName { get; set; }
+        public string PriorityName { get; set; }
         public string SLABreachPercent { get; set; }
-        public int PriorityRespond { get; set; }
-        public int PriorityResolution { get; set; }
+        public string PriorityRespond { get; set; }
+        public string PriorityResolution { get; set; }
 
     }
 
