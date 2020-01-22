@@ -39,6 +39,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public int CreatedBy { get; set; }
 
+        
         /// <summary>
         /// Created On
         /// </summary>
@@ -53,6 +54,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// Modified By
         /// </summary>
         public int ModifyBy { get; set; }
+       
 
         /// <summary>
         /// Modified On
@@ -74,6 +76,14 @@ namespace Easyrewardz_TicketSystem.Model
         public string ModifiedByName { get; set; }
 
         public string Status { get; set; }
+        /// <summary>
+        /// Modified By
+        /// </summary>
+        public string Modify_By { get; set; }
+        /// <summary>
+        /// Created_By
+        /// </summary>
+        public string Created_By { get; set; }
 
     }
 }
