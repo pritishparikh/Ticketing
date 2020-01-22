@@ -40,7 +40,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("GetPriorityList")]
         public ResponseModel GetPriorityList()
         {
