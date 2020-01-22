@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.Model
         public int CRMRoleID { get; set; }
         public int ModuleID { get; set; }
         public string ModuleName { get; set; }
-        public string Modulestatus { get; set; }
+        public bool Modulestatus { get; set; }
 
     }
 }

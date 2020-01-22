@@ -83,8 +83,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+      
         [HttpPost]
         [Route("AddKB")]
+        
         public ResponseModel AddKB([FromBody]KnowlegeBaseMaster knowlegeBaseMaster)
         {
 
