@@ -44,7 +44,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _KnowledgeRepository.DeleteKB(KBID, TenantId);
         }
 
-
+        public int RejectApproveKB(IKnowledge Knowledge, int KBID, int TenantId, int IsApprove)
+        {
+            _KnowledgeRepository = Knowledge;
+            return _KnowledgeRepository.RejectApproveKB(KBID, TenantId, IsApprove);
+        }
         public List<KnowlegeBaseMaster> KBList(IKnowledge Knowledge, int TenantId)
         {
             _KnowledgeRepository = Knowledge;
