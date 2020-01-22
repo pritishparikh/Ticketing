@@ -123,7 +123,9 @@ namespace Easyrewardz_TicketSystem.Services
                         priority.CreatedDateFormated = priority.CreatedDate.ToString("dd/MMM/yyyy");
                         priority.ModifiedByName= Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
                         priority.ModifiedDate= Convert.ToDateTime(ds.Tables[0].Rows[i]["ModifiedDate"]);
-                        priority.ModifiedDateFormated = priority.ModifiedDate.ToString("dd/MMM/yyyy");         
+                        priority.ModifiedDateFormated = priority.ModifiedDate.ToString("dd/MMM/yyyy");
+                        priority.PriortyStatus = Convert.ToString(ds.Tables[0].Rows[i]["PriortyStatus"]);  
+                        
                         objPriority.Add(priority);
                     }
                 }

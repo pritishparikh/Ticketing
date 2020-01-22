@@ -69,5 +69,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string ModifiedByName { get; set; }
 
+        public string PriortyStatus { get; set; }
+
     }
 }
