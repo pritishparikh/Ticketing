@@ -33,14 +33,8 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand(CRMRoleID > 0 ? "SP_UpdateCRMRole" : "SP_InsertCRMRole", conn);
-
-               
-                
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
-               
-
-
                 if(CRMRoleID> 0)
                 {
                     //cmd.Parameters.AddWithValue("@_Modify_By", 6);
@@ -167,7 +161,7 @@ namespace Easyrewardz_TicketSystem.Services
                                         CRMRoleID = Convert.ToInt32(r.Field<object>("CRMRolesID")),
                                         ModuleID= Convert.ToInt32(r.Field<object>("ModuleID")),
                                         ModuleName = r.Field<object>("ModuleName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModuleName")),
-                                        Modulestatus = r.Field<object>("ModuleStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModuleStatus")),
+                                        Modulestatus = r.Field<object>("ModuleStatus") == System.DBNull.Value ? false : Convert.ToBoolean(Convert.ToInt16(r.Field<object>("ModuleStatus"))),
 
                                      }).ToList();
                         }
