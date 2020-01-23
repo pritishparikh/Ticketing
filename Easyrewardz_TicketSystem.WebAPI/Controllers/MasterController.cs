@@ -361,14 +361,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         #endregion
 
-        #region State List 
+        #region Region List 
 
         /// <summary>
         /// get region list 
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        [HttpPost]
         [Route("getregionlist")]
         public ResponseModel getregionlist()
         {
