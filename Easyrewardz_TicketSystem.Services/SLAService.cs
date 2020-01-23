@@ -160,7 +160,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_slaID", SLAID);
                 cmd.Parameters.AddWithValue("@_issueType", IssuetypeID);
                
-                cmd.Parameters.AddWithValue("@isSLAActive", Convert.ToInt16(isActive));
+                cmd.Parameters.AddWithValue("@_isSLAActive", Convert.ToInt16(isActive));
                 cmd.Parameters.AddWithValue("@_modifiedBy", modifiedBy);
                 cmd.CommandType = CommandType.StoredProcedure;
                 updatecount = cmd.ExecuteNonQuery();
