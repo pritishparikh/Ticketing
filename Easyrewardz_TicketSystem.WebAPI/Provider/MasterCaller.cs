@@ -255,7 +255,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #endregion
 
-        #region State
+        #region City
 
         public List<CityMaster> GetCitylist(IMasterInterface _ImasterInterface,int StateId)
         {
@@ -265,6 +265,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #endregion
 
-        
+        #region Region
+
+        public List<RegionMaster> GetRegionlist(IMasterInterface _ImasterInterface)
+        {
+            _Imaster = _ImasterInterface;
+            return _Imaster.GetRegionList();
+        }
+
+        #endregion
+
     }
 }

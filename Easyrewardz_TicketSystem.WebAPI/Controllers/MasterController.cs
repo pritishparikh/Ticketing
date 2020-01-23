@@ -322,7 +322,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("getcitylist")]
         public ResponseModel getcitylist(int StateId)
         {
-            List<CityMaster> _objStateList = new List<CityMaster>();
+            List<CityMaster> _objCityList = new List<CityMaster>();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -334,10 +334,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 MasterCaller _newMasterCity = new MasterCaller();
 
-                _objStateList = _newMasterCity.GetCitylist(new MasterServices(_connectioSting), StateId);
+                _objCityList = _newMasterCity.GetCitylist(new MasterServices(_connectioSting), StateId);
 
                 StatusCode =
-                _objStateList.Count == 0 ?
+                _objCityList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -345,7 +345,57 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objStateList;
+                _objResponseModel.ResponseData = _objCityList;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = "Message" + Convert.ToString(ex.Message) + "Inner Exception" + Convert.ToString(ex.InnerException);
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+        #endregion
+
+        #region State List 
+
+        /// <summary>
+        /// get region list 
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("getregionlist")]
+        public ResponseModel getregionlist()
+        {
+            List<RegionMaster> _objRegionList = new List<RegionMaster>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                MasterCaller _newMasterRegion = new MasterCaller();
+
+                _objRegionList = _newMasterRegion.GetRegionlist(new MasterServices(_connectioSting));
+
+                StatusCode =
+                _objRegionList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _objRegionList;
             }
             catch (Exception ex)
             {

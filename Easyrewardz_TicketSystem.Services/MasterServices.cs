@@ -406,5 +406,53 @@ namespace Easyrewardz_TicketSystem.Services
             return cityMaster;
         }
 
+        /// <summary>
+        /// Get Region List
+        /// </summary>
+        /// <returns></returns>
+        public List<RegionMaster> GetRegionList()
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<RegionMaster> regionMaster = new List<RegionMaster>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetRegionList", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        RegionMaster region = new RegionMaster();
+                        region.RegionID = Convert.ToInt32(ds.Tables[0].Rows[i]["RegionID"]);
+                        region.PinCodeID = Convert.ToInt32(ds.Tables[0].Rows[i]["PinCodeID"]);
+                        region.RegionName = Convert.ToString(ds.Tables[0].Rows[i]["RegionName"]);
+                        regionMaster.Add(region);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return regionMaster;
+        }
+
+
     }
 }
