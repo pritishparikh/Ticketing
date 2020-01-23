@@ -26,6 +26,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         private readonly string _radisCacheServerAddress;
         private readonly string _connectionSting;
         #endregion
+        
         #region Cunstructor
         public HierarchyController(IConfiguration _iConfig)
         {
@@ -34,6 +35,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
+
         #region Custom Methods
         /// <summary>
         /// CreateHierarchy
@@ -79,11 +81,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// CreateHierarchy
+        /// List Hierarchy
         /// </summary>
-        /// <param name="TaskMaster"></param>
         /// <returns></returns>
-        [HttpPost]
         [Route("ListHierarchy")]
         public ResponseModel ListHierarchy()
         {
