@@ -242,5 +242,53 @@ namespace Easyrewardz_TicketSystem.CustomModel
             Sameweekeachyear = 235,
         }
 
+
+        /// <summary>
+        /// CommunicationMode
+        /// </summary>
+        public enum CommunicationMode
+        {
+            /// <summary>
+            ///CommunicationMode - Email
+            /// </summary>
+            [Description("Email")]
+            New = 240,
+
+            /// <summary>
+            ///CommunicationMode - SMS
+            /// </summary>
+            [Description("SMS")]
+            Open = 241,
+
+            /// <summary>
+            ///CommunicationMode - Notification 
+            /// </summary>
+            [Description("Notification")]
+            Resolved = 242
+        }
+
+        /// <summary>
+        /// CommunicationFor
+        /// </summary>
+        public enum CommunicationFor
+        {
+            /// <summary>
+            ///CommunicationFor - Customer
+            /// </summary>
+            [Description("Customer")]
+            New = 250,
+
+            /// <summary>
+            ///CommunicationFor - Internal
+            /// </summary>
+            [Description("Internal")]
+            Open = 251,
+
+            /// <summary>
+            ///CommunicationFor - Store 
+            /// </summary>
+            [Description("Store")]
+            Resolved = 252
+        }
     }
 }
