@@ -19,5 +19,30 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _UserRepository = User;
             return _UserRepository.AddUserPersonaldetail(userModel, TenantID);
         }
+        public int AddUserProfiledetail(IUser User, int DesignationID, int ReportTo, int CreatedBy, int TenantID, int UserID)
+        {
+            _UserRepository = User;
+            return _UserRepository.AddUserProfiledetail(DesignationID, ReportTo, CreatedBy, TenantID, UserID);
+        }
+        public int Mappedcategory(IUser User, CustomUserModel customUserModel)
+        {
+            _UserRepository = User;
+            return _UserRepository.Mappedcategory(customUserModel);
+        }
+        public int EditUserDetail(IUser User, int userID, string DesignationName, int ReportTo, bool status, int TenantID, int Modifyby)
+        {
+            _UserRepository = User;
+            return _UserRepository.EditUser(userID, DesignationName, ReportTo, status, TenantID, Modifyby);
+        }
+        public int DeleteUser(IUser User, int userID, int TenantID, int Modifyby)
+        {
+            _UserRepository = User;
+            return _UserRepository.DeleteUser(userID,TenantID, Modifyby);
+        }
+        public List<CustomUserList> UserList(IUser User,int TenantID)
+        {
+            _UserRepository = User;
+            return _UserRepository.UserList(TenantID);
+        }
     }
 }
