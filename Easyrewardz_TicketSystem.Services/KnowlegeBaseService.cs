@@ -117,16 +117,16 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
+
                 MySqlCommand cmd1 = new MySqlCommand("SP_UpdateKnowlegeBase", conn);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", knowlegeBaseMaster.TenantID);
                 cmd1.Parameters.AddWithValue("@KB_ID", knowlegeBaseMaster.KBID);
                 cmd1.Parameters.AddWithValue("@KB_CODE", knowlegeBaseMaster.KBCODE);
                 cmd1.Parameters.AddWithValue("@Category_ID", knowlegeBaseMaster.CategoryID);
                 cmd1.Parameters.AddWithValue("@SubCategory_ID", knowlegeBaseMaster.SubCategoryID);
                 cmd1.Parameters.AddWithValue("@IssueType_ID",knowlegeBaseMaster.IssueTypeID);
-                cmd1.Parameters.AddWithValue("@Is_Approved", knowlegeBaseMaster.IsApproved);
                 cmd1.Parameters.AddWithValue("@Subject_", knowlegeBaseMaster.Subject);
                 cmd1.Parameters.AddWithValue("@Description_", knowlegeBaseMaster.Description);
-                cmd1.Parameters.AddWithValue("@Is_Active", knowlegeBaseMaster.IsActive);
                 cmd1.Parameters.AddWithValue("@Modify_By", knowlegeBaseMaster.ModifyBy);
 
                 cmd1.CommandType = CommandType.StoredProcedure;
