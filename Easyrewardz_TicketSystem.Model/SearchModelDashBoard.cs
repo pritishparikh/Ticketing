@@ -76,18 +76,18 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string CustomerEmailID { get; set; }
 
-        public int TicketID { get; set; }
+        public int? TicketID { get; set; }
 
-        public int TicketStatusID { get; set; }
+        public int? TicketStatusID { get; set; }
 
     }
 
     public class SearchDataByTicketType
     {
 
-        public int TicketPriorityID { get; set; }
+        public int? TicketPriorityID { get; set; }
 
-        public int TicketStatusID { get; set; }
+        public int? TicketStatusID { get; set; }
 
         public string ChannelOfPurchaseIds { get; set; }
 
@@ -102,9 +102,9 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string SubCategoryId { get; set; }
 
-        public int IssueTypeId { get; set; }
+        public int? IssueTypeId { get; set; }
 
-        public int TicketStatusID { get; set; }
+        public int? TicketStatusID { get; set; }
 
     }
 
@@ -115,20 +115,20 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string ModifiedDate { get; set; }
 
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
-        public int SubCategoryId { get; set; }
+        public int? SubCategoryId { get; set; }
 
-        public int IssueTypeId { get; set; }
+        public int? IssueTypeId { get; set; }
 
         //Column -2 
-        public int TicketSourceTypeID { get; set; }
+        public int? TicketSourceTypeID { get; set; }
 
         public string TicketIdORTitle { get; set; }
 
-        public int PriorityId { get; set; }
+        public int? PriorityId { get; set; }
 
-        public int TicketSatutsID { get; set; }
+        public int? TicketSatutsID { get; set; }
 
         public string SLAStatus { get; set; }
 
@@ -137,7 +137,7 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string InvoiceNumberORSubOrderNo { get; set; }
 
-        public int OrderItemId { get; set; }
+        public int? OrderItemId { get; set; }
 
         public int IsVisitStore { get; set; }
 
@@ -152,27 +152,27 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string StoreCodeORAddress { get; set; }
 
-        public int WantToStoreCodeORAddress { get; set; }
+        public int? WantToStoreCodeORAddress { get; set; }
 
         //Row - 2 and Column - 1  
-        public int HaveClaim { get; set; }
+        public int? HaveClaim { get; set; }
 
-        public int ClaimStatusId { get; set; }
+        public int? ClaimStatusId { get; set; }
 
-        public int ClaimCategoryId { get; set; }
+        public int? ClaimCategoryId { get; set; }
 
-        public int ClaimSubCategoryId { get; set; }
+        public int? ClaimSubCategoryId { get; set; }
 
-        public int ClaimIssueTypeId { get; set; }
+        public int? ClaimIssueTypeId { get; set; }
 
         //Row - 2 and Column - 2  
-        public int HaveTask { get; set; }
+        public int? HaveTask { get; set; }
 
-        public int TaskStatusId { get; set; }
+        public int? TaskStatusId { get; set; }
 
-        public int TaskDepartment_Id { get; set; }
+        public int? TaskDepartment_Id { get; set; }
 
-        public int TaskFunction_Id { get; set; }
+        public int? TaskFunction_Id { get; set; }
 
     }
 }
