@@ -59,8 +59,8 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd.Connection = conn;
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Designation_ID", customHierarchymodel.DesignationID);
-                    cmd.Parameters.AddWithValue("@Designation_Name", customHierarchymodel.DesignationName);
-                    cmd.Parameters.AddWithValue("@Reportto_ID", customHierarchymodel.ReportToDesignation);
+                    cmd.Parameters.AddWithValue("@Designation_Name", string.IsNullOrEmpty(customHierarchymodel.DesignationName) ? "" : customHierarchymodel.DesignationName);
+                    cmd.Parameters.AddWithValue("@Reportto_ID", string.IsNullOrEmpty(Convert.ToString(customHierarchymodel.ReportToDesignation)) ? 0 : customHierarchymodel.ReportToDesignation);
                     cmd.Parameters.AddWithValue("@Is_Active", customHierarchymodel.IsActive);
                     cmd.Parameters.AddWithValue("@Tenant_ID", customHierarchymodel.TenantID);
                     cmd.Parameters.AddWithValue("@User_ID", customHierarchymodel.CreatedBy);

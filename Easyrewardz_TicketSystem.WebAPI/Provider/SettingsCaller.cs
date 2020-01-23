@@ -14,6 +14,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         private ICRMRole _dCRMrole;
         private ISLA _SLA;
 
+        private ITemplate _Temp;
+
         #endregion
 
 
@@ -75,6 +77,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _SLA.SLAList(TenantID );
         }
 
+        public List<IssueTypeList> BindIssueTypeList(ISLA SLA,int tenantID)
+        {
+            _SLA = SLA;
+            return _SLA.BindIssueTypeList(tenantID);
+        }
+
         //public List<SLAResponseModel> SLAList(ISLA SLA, int TenantID, int pageNo, int PageSize)
         //{
         //    _SLA = SLA;
@@ -82,6 +90,35 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         //}
         #endregion
 
+
+        #region Templates
+
+        public int InsertTemplate(ITemplate Temp, int tenantId, string TemplateName, string TemplatSubject, string TemplatBody, string issueTypes, bool isTemplateActive, int createdBy)
+        {
+            _Temp = Temp;
+
+            return _Temp.InsertTemplate( tenantId,  TemplateName,  TemplatSubject,  TemplatBody,  issueTypes,  isTemplateActive,  createdBy);
+        }
+
+        public int UpdateTemplate(ITemplate Temp, int tenantId, int TemplateID, string TemplateName, int issueType, bool isTemplateActive, int ModifiedBy)
+        {
+            _Temp = Temp;
+            return _Temp.UpdateTemplate( tenantId,  TemplateID,  TemplateName,  issueType,  isTemplateActive,  ModifiedBy);
+        }
+
+        public int DeleteTemplate(ITemplate Temp, int tenantID, int TemplateID)
+        {
+            _Temp = Temp;
+            return _Temp.DeleteTemplate(tenantID, TemplateID);
+
+        }
+
+        public List<TemplateModel> GetTemplates(ITemplate Temp, int TenantID)
+        {
+            _Temp = Temp;
+            return _Temp.GetTemplates(TenantID);
+        }
+        #endregion
 
 
     }

@@ -51,4 +51,14 @@ namespace Easyrewardz_TicketSystem.Model
 
     }
 
+    public class IssueTypeList
+    {
+        public int IssueTypeID { get; set; }
+        public string IssueTypeName { get; set; }
+        public int CategoryID { get; set; }
+        public string CategoryName { get; set; }
+        public int SubCategoryID { get; set; }
+        public string SubCategoryName { get; set; }
+    }
+
 }

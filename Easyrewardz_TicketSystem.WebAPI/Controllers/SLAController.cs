@@ -94,6 +94,53 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         /// <summary>
+        ///Bind Issuetype for SLA Creation DropDown
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetIssueType")]
+        public ResponseModel GetIssueType()
+        {
+
+            ResponseModel _objResponseModel = new ResponseModel();
+            List<IssueTypeList> _objresponseModel = new List<IssueTypeList>();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                SettingsCaller _newCRM = new SettingsCaller();
+         
+                _objresponseModel = _newCRM.BindIssueTypeList(new SLAServices(_connectioSting), authenticate.TenantId);
+                StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _objresponseModel;
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
+
+        /// <summary>
         /// Create SLA
         /// </summary>
         /// <returns></returns>

@@ -22,5 +22,9 @@ namespace Easyrewardz_TicketSystem.Interface
         //List<SLAResponseModel> SLAList(int tenantID, int pageNo, int PageSize);
         List<SLAResponseModel> SLAList(int tenantID);
 
+        List<IssueTypeList> BindIssueTypeList(int tenantID);
+        
+
+
     }
 }

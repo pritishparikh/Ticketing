@@ -307,5 +307,63 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
+        /// <summary>
+        /// Bind issuetype 
+        /// </summary>
+        /// 
+       public List<IssueTypeList> BindIssueTypeList(int tenantID)
+        {
+            List<IssueTypeList> objIssueTypeLst = new List<IssueTypeList>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+
+                conn.Open();
+            cmd.Connection = conn;
+
+            MySqlCommand cmd1 = new MySqlCommand("SP_GetIssueTypeForSLACreation", conn);
+            cmd1.CommandType = CommandType.StoredProcedure;
+            //cmd1.Parameters.AddWithValue("@_tenantID", 1);
+            cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
+            MySqlDataAdapter da = new MySqlDataAdapter();
+            da.SelectCommand = cmd1;
+            da.Fill(ds);
+
+            if (ds != null && ds.Tables != null)
+            {
+                if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                {
+                        objIssueTypeLst = ds.Tables[0].AsEnumerable().Select(r => new IssueTypeList()
+                    {
+                            IssueTypeID = Convert.ToInt32(r.Field<object>("IssueTypeID")),
+
+                            IssueTypeName = r.Field<object>("IssueTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueTypeName")),
+                            CategoryID = r.Field<object>("CategoryID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("CategoryID")),
+                            CategoryName = r.Field<object>("CategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CategoryName")),
+                            SubCategoryID = r.Field<object>("SubCategoryID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("SubCategoryID")),
+                            SubCategoryName = r.Field<object>("SubCategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SubCategoryName")),
+                       
+                    }).ToList();
+                }
+
+                
+              }
+
+        }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
+
+           
+            return objIssueTypeLst;
+        }
+
     }
 }
