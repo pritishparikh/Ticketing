@@ -183,10 +183,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                //var temp = SecurityService.DecryptStringAES(_token);
-                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                authenticate.UserMasterID = 6;
-                authenticate.TenantId = 1;
+                var temp = SecurityService.DecryptStringAES(_token);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                //authenticate.UserMasterID = 6;
+                //authenticate.TenantId = 1;
 
                 /*
                  SearchModel 

@@ -47,8 +47,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
 
         public string CustomerEmailID { get; set; }
 
-        public int TicketID { get; set; }
-
+        public int? TicketID { get; set; }
+      
         public int TicketStatusID { get; set; }
 
     }

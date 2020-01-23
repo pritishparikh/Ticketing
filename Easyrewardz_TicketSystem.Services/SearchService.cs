@@ -366,7 +366,7 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.CommandText = "SP_SearchTicketData_ByCustomerType";
 
                     sqlcmd.Parameters.AddWithValue("CustomerMobileNo", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerMobileNo) ? "" : searchModel.searchDataByCustomerType.CustomerMobileNo);
-                    sqlcmd.Parameters.AddWithValue("CustomerEmailID ", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerEmailID) ? "" : searchModel.searchDataByCustomerType.CustomerEmailID);
+                    sqlcmd.Parameters.AddWithValue("CustomerEmailID", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerEmailID) ? "" : searchModel.searchDataByCustomerType.CustomerEmailID);
                     sqlcmd.Parameters.AddWithValue("TicketID", searchModel.searchDataByCustomerType.TicketID);
                     sqlcmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByCustomerType.TicketStatusID);
                 }
