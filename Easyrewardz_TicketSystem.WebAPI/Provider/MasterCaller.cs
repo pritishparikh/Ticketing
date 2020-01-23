@@ -275,5 +275,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #endregion
 
+        #region Store
+
+        public List<StoreTypeMaster> GetStoreTypelist(IMasterInterface _ImasterInterface)
+        {
+            _Imaster = _ImasterInterface;
+            return _Imaster.GetStoreTypeList();
+        }
+
+        #endregion
+
     }
 }

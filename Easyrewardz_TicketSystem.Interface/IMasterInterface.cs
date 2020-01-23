@@ -72,5 +72,12 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name=""></param>
         /// <returns></returns>
         List<RegionMaster> GetRegionList();
+
+        /// <summary>
+        ///Get StoreType List
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        List<StoreTypeMaster> GetStoreTypeList();
     }
 }

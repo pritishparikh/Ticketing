@@ -453,6 +453,50 @@ namespace Easyrewardz_TicketSystem.Services
             return regionMaster;
         }
 
+        /// <summary>
+        /// Get StoreType List
+        /// </summary>
+        /// <returns></returns>
+        public List<StoreTypeMaster> GetStoreTypeList()
+        {
 
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<StoreTypeMaster> storeTypeMaster = new List<StoreTypeMaster>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreTypeList", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreTypeMaster storeType = new StoreTypeMaster();
+                        storeType.StoreTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreTypeID"]);
+                        storeType.StoreTypeName = Convert.ToString(ds.Tables[0].Rows[i]["StoreTypeName"]);
+                        storeTypeMaster.Add(storeType);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return storeTypeMaster;
+        }
     }
 }
