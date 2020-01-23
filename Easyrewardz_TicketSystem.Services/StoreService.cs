@@ -343,6 +343,8 @@ namespace Easyrewardz_TicketSystem.Services
                         store.CityName = Convert.ToString(ds.Tables[0].Rows[i]["CityName"]);
                         store.StateName = Convert.ToString(ds.Tables[0].Rows[i]["StateName"]);
                         store.PinCode = Convert.ToInt32(ds.Tables[0].Rows[i]["PincodeID"]);
+                        store.Status = Convert.ToString(ds.Tables[0].Rows[i]["StoreStatus"]);
+                        
                         storeMaster.Add(store);
                     }
                 }
