@@ -40,7 +40,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CreateAlert")]
-        public ResponseModel CreateAlert(string TemplateName, string TemplateSubject, string TemplateBody, string issueTypes, bool isTemplateActive)
+        public ResponseModel CreateAlert([FromBody] AlertInsertModel alertModel)
         {
             int insertcount = 0;
             ResponseModel _objResponseModel = new ResponseModel();
@@ -55,9 +55,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 SettingsCaller _newAlert = new SettingsCaller();
 
-
-                insertcount = _newAlert.InsertTemplate(new TemplateService(_connectioSting), authenticate.TenantId, TemplateName, TemplateSubject,
-                    TemplateBody, issueTypes, isTemplateActive, authenticate.UserMasterID);
+                alertModel.TenantId = authenticate.TenantId;
+                alertModel.CreatedBy = authenticate.UserMasterID;
+                insertcount = _newAlert.CreateAlert(new AlertService(_connectioSting), alertModel);
 
                 StatusCode =
                 insertcount == 0 ?
@@ -189,48 +189,48 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// View SLA 
         /// </summary>
         /// <returns></returns>
-        //[HttpPost]
-        //[Route("GetAlertList")]
-        //public ResponseModel GetAlertList()
-        //{
+        [HttpPost]
+        [Route("GetAlertList")]
+        public ResponseModel GetAlertList()
+        {
 
-        //    ResponseModel _objResponseModel = new ResponseModel();
-        //    List<AlertModel> _objresponseModel = new List<AlertModel>();
-        //    int StatusCode = 0;
-        //    string statusMessage = "";
-        //    try
-        //    {
-        //        //Get token (Double encrypted) and get the tenant id 
-        //        string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-        //        Authenticate authenticate = new Authenticate();
-        //        authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+            ResponseModel _objResponseModel = new ResponseModel();
+            List<AlertModel> _objresponseModel = new List<AlertModel>();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                //Get token (Double encrypted) and get the tenant id 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-        //        SettingsCaller _newAlert = new SettingsCaller();
+                SettingsCaller _newAlert = new SettingsCaller();
 
-        //        _objresponseModel = _newAlert.GetAlertList(new AlertService(_connectioSting), authenticate.TenantId);
-        //        StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                _objresponseModel = _newAlert.GetAlertList(new AlertService(_connectioSting), authenticate.TenantId);
+                StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-        //        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-        //        _objResponseModel.Status = true;
-        //        _objResponseModel.StatusCode = StatusCode;
-        //        _objResponseModel.Message = statusMessage;
-        //        _objResponseModel.ResponseData = _objresponseModel;
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _objresponseModel;
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-        //        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-        //        _objResponseModel.Status = true;
-        //        _objResponseModel.StatusCode = StatusCode;
-        //        _objResponseModel.Message = statusMessage;
-        //        _objResponseModel.ResponseData = null;
-        //    }
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
 
-        //    return _objResponseModel;
-        //}
+            return _objResponseModel;
+        }
 
         #endregion
 

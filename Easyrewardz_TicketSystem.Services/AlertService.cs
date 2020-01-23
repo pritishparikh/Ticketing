@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -18,6 +19,78 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
+        /// <summary>
+        /// Create Alert 
+        /// </summary>
+        public int InsertAlert(AlertInsertModel alertModel)
+        {
+            int InsertAlertID = 0; int AlertConfigInsertCount = 0;
+            DataSet ds = new DataSet();
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_InsertAlert", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@_tenantID", alertModel.TenantId);
+                cmd.Parameters.AddWithValue("@_alertTypeName", alertModel.AlertTypeName);
+                cmd.Parameters.AddWithValue("@_isAlertActive", Convert.ToInt16(alertModel.isAlertActive));
+                cmd.Parameters.AddWithValue("@_createdBy", alertModel.CreatedBy);
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        InsertAlertID = ds.Tables[0].Rows[0]["AlertId"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["AlertId"]);
+
+                    }
+
+                    if (InsertAlertID > 0)
+                    {
+                        if (alertModel.CommunicationModeDetails.Count > 0)
+                        {
+                            for (int i = 0; i < alertModel.CommunicationModeDetails.Count; i++)
+                            {
+                                MySqlCommand Targetcmd = new MySqlCommand("SP_InsertAlerMasterConfig", conn);
+                                Targetcmd.Connection = conn;
+                                Targetcmd.Parameters.AddWithValue("@_alertID", InsertAlertID);
+                                Targetcmd.Parameters.AddWithValue("@_commMode", alertModel.CommunicationModeDetails[i].Communication_Mode);
+                                Targetcmd.Parameters.AddWithValue("@_commFor", alertModel.CommunicationModeDetails[i].CommunicationFor);
+                                Targetcmd.Parameters.AddWithValue("@_content", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].Content) ? string.Empty : alertModel.CommunicationModeDetails[i].Content);
+                                Targetcmd.Parameters.AddWithValue("@_toemail", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].ToEmailID) ? string.Empty : alertModel.CommunicationModeDetails[i].ToEmailID);
+                                Targetcmd.Parameters.AddWithValue("@_ccemail", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].CCEmailID) ? string.Empty : alertModel.CommunicationModeDetails[i].CCEmailID);
+                                Targetcmd.Parameters.AddWithValue("@_bccemail", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].BCCEmailID) ? string.Empty : alertModel.CommunicationModeDetails[i].BCCEmailID);
+                                Targetcmd.Parameters.AddWithValue("@_emailSubject", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].Subject) ? string.Empty : alertModel.CommunicationModeDetails[i].Subject);
+                                Targetcmd.Parameters.AddWithValue("@_createdBy", alertModel.CreatedBy);
+                                Targetcmd.Parameters.AddWithValue("@_isactive", Convert.ToInt16(alertModel.isAlertActive));
+                                Targetcmd.CommandType = CommandType.StoredProcedure;
+                                AlertConfigInsertCount += Targetcmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return AlertConfigInsertCount;
+        }
 
         /// <summary>
         /// Update Alert
@@ -94,80 +167,72 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Alert List
         /// </summary>
-        //public List<AlertModel> AlertList(int tenantID)
-        //{
-        //    List<AlertModel> objAlertLst = new List<AlertModel>();
-        //    DataSet ds = new DataSet();
-        //    MySqlCommand cmd = new MySqlCommand();
-        //    try
-        //    {
+        public List<AlertModel> GetAlertList(int tenantID)
+        {
+            List<AlertModel> objAlertLst = new List<AlertModel>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
 
-        //        //int rowStart = (pageNo - 1) * PageSize;
-        //        conn.Open();
-        //        cmd.Connection = conn;
+                conn.Open();
+                cmd.Connection = conn;
 
-        //        MySqlCommand cmd1 = new MySqlCommand("SP_GetSLAList", conn);
-        //        cmd1.CommandType = CommandType.StoredProcedure;
-        //        cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
-        //        MySqlDataAdapter da = new MySqlDataAdapter();
-        //        da.SelectCommand = cmd1;
-        //        da.Fill(ds);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetAlertList", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
 
-        //        if (ds != null && ds.Tables != null)
-        //        {
-        //            if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
-        //            {
-        //                objAlertLst = ds.Tables[0].AsEnumerable().Select(r => new AlertModel()
-        //                {
-        //                    SLAID = Convert.ToInt32(r.Field<object>("SlaId")),
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objAlertLst = ds.Tables[0].AsEnumerable().Select(r => new AlertModel()
+                        {
+                            AlertID = Convert.ToInt32(r.Field<object>("AlertID")),
+                            AlertTypeName = r.Field<object>("AlertTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AlertTypeName")),
+                            ModeOfCommunication=new CommunicationModeBy {
 
-        //                    IssueTpeID = r.Field<object>("IssueTypeID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IssueTypeID")),
-        //                    IssueTpeName = r.Field<object>("IssueTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueTypeName")),
-        //                    isSLAActive = r.Field<object>("SLAStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SLAStatus")),
-        //                    CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
-        //                    CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
-        //                    ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
-        //                    ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
-        //                }).ToList();
-        //            }
+                                isByEmail= r.Field<object>("EmailMode") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("EmailMode")) ==0 ? false : true,
+                                isBySMS = r.Field<object>("SMSMode") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("SMSMode")) == 0 ? false : true,
+                                isByNotification = r.Field<object>("NotificationMode") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("NotificationMode")) == 0 ? false : true,
+                            },
+                            CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
+                            CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
+                            ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
+                            ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
 
-        //            if (objAlertLst.Count > 0)
-        //            {
-        //                if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
-        //                {
-        //                    for (int i = 0; i < objSLALst.Count; i++)
-        //                    {
-        //                        objSLALst[i].SLATarget = ds.Tables[1].AsEnumerable().Where(r => r.Field<object>("SlaID") != System.DBNull.Value &&
-        //                            objSLALst[i].SLAID == Convert.ToInt32(r.Field<object>("SlaID"))).Select(r => new SLATargetResponseModel()
-        //                            {
-        //                                SLATargetID = Convert.ToInt32(r.Field<object>("SLATargetID")),
-        //                                PriorityID = Convert.ToInt32(r.Field<object>("PriorityID")),
-        //                                PriorityName = r.Field<object>("PriortyName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriortyName")),
-        //                                SLABreachPercent = r.Field<object>("PriorityBreach") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriorityBreach")),
-        //                                PriorityRespond = r.Field<object>("PriorityRespond") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriorityRespond")),
-        //                                PriorityResolution = r.Field<object>("PriorityResolve") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriorityResolve")),
+                        }).ToList();
+                    }
 
-        //                            }).ToList();
-        //                    }
-
-        //                }
-        //            }
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string message = Convert.ToString(ex.InnerException);
-        //        throw ex;
-        //    }
-        //    finally
-        //    {
-        //        if (ds != null) ds.Dispose(); conn.Close();
-        //    }
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
 
 
-        //    return objSLALst;
+            return objAlertLst;
 
-        //}
+        }
+
+
+
+
+        #region Communication Mode Mapping
+
+
+
+        #endregion
+
     }
 }

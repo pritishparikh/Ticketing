@@ -19,20 +19,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class TemplateController : ControllerBase
     {
-        #region variable declaration
-        private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
-        #endregion
+            #region variable declaration
+            private IConfiguration configuration;
+            private readonly string _connectioSting;
+            private readonly string _radisCacheServerAddress;
+            #endregion
 
-        #region Cunstructor
-        public TemplateController(IConfiguration _iConfig)
-        {
-            configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
-        }
-        #endregion
+            #region Cunstructor
+            public TemplateController(IConfiguration _iConfig)
+            {
+                configuration = _iConfig;
+                _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+                _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            }
+            #endregion
 
         #region Custom Methods
         [HttpPost]
