@@ -357,5 +357,54 @@ namespace Easyrewardz_TicketSystem.Services
 
         #endregion
 
+        /// <summary>
+        /// Get City List
+        /// </summary>
+        /// <returns></returns>
+        public List<CityMaster> GetCitylist(int StateId)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<CityMaster> cityMaster = new List<CityMaster>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetCityList", conn);
+                cmd1.Parameters.AddWithValue("@State_Id", StateId);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CityMaster city = new CityMaster();
+                        city.StateID = Convert.ToInt32(ds.Tables[0].Rows[i]["StateID"]);
+                        city.CityID = Convert.ToInt32(ds.Tables[0].Rows[i]["CityID"]);
+                        city.CityName = Convert.ToString(ds.Tables[0].Rows[i]["CityName"]);
+                        city.CityCode = Convert.ToInt32(ds.Tables[0].Rows[i]["CityCode"]);
+                        cityMaster.Add(city);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return cityMaster;
+        }
+
     }
 }

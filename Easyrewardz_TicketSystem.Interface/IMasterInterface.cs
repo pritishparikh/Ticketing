@@ -57,5 +57,13 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name=""></param>
         /// <returns></returns>
         List<StateMaster> GetStateList();
+
+
+        /// <summary>
+        ///Get State List
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        List<CityMaster> GetCitylist(int StateId);
     }
 }

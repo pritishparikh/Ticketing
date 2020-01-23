@@ -310,7 +310,57 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         #endregion
-                          
+
+        #region City List 
+
+        /// <summary>
+        /// get state list 
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("getcitylist")]
+        public ResponseModel getcitylist(int StateId)
+        {
+            List<CityMaster> _objStateList = new List<CityMaster>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                MasterCaller _newMasterCity = new MasterCaller();
+
+                _objStateList = _newMasterCity.GetCitylist(new MasterServices(_connectioSting), StateId);
+
+                StatusCode =
+                _objStateList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _objStateList;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = "Message" + Convert.ToString(ex.Message) + "Inner Exception" + Convert.ToString(ex.InnerException);
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+        #endregion
+
         #endregion
 
     }
