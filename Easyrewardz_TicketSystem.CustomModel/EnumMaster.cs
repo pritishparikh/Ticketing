@@ -290,5 +290,35 @@ namespace Easyrewardz_TicketSystem.CustomModel
             [Description("Store")]
             Resolved = 252
         }
+
+        /// <summary>
+        /// Zones
+        /// </summary>
+        public enum Zones
+        {
+            /// <summary>
+            ///Zones - East
+            /// </summary>
+            [Description("East")]
+            East = 260,
+
+            /// <summary>
+            ///Zones - Internal
+            /// </summary>
+            [Description("West")]
+            West = 261,
+
+            /// <summary>
+            ///Zones - North 
+            /// </summary>
+            [Description("North")]
+            North = 262,
+
+            /// <summary>
+            ///Zones - South 
+            /// </summary>
+            [Description("South")]
+            South = 263
+        }
     }
 }
