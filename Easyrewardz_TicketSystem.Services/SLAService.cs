@@ -149,7 +149,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         public int UpdateSLA(int SLAID, int tenantID, int IssuetypeID,  bool isActive, int modifiedBy)
         {
-            int updatecount = 0;
+            int updatecount = 0; 
 
             try
             {

@@ -16,6 +16,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         private ITemplate _Temp;
 
+        private IAlerts _Alerts;
+
         #endregion
 
 
@@ -120,6 +122,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
         #endregion
 
+
+        #region Alerts
+
+        /// <summary>
+        /// UpdateAlert
+        /// </summary>
+        //public int CreateAlert(IAlerts Alert, int tenantId, int AlertID, string AlertTypeName, bool isAlertActive, int ModifiedBy)
+        //{
+        //    _Alerts = Alert;
+        //    return _Alerts.UpdateAlert(tenantId, AlertID, AlertTypeName, isAlertActive, ModifiedBy);
+
+        //}
+
+
+        /// <summary>
+        /// UpdateAlert
+        /// </summary>
+        public int UpdateAlert(IAlerts Alert, int tenantId, int AlertID, string AlertTypeName, bool isAlertActive, int ModifiedBy)
+        {
+            _Alerts = Alert;
+            return _Alerts.UpdateAlert( tenantId,  AlertID,  AlertTypeName,  isAlertActive,  ModifiedBy);
+
+        }
+
+        /// <summary>
+        /// DeleteAlert
+        /// </summary>
+        public int DeleteAlert(IAlerts Alert, int tenantID, int AlertID)
+        {
+            _Alerts = Alert;
+            return _Alerts.DeleteAlert( tenantID,  AlertID);
+
+        }
+
+        /// <summary>
+        /// Get AlertList
+        /// </summary>
+        //public List<AlertModel> GetAlertList(IAlerts Alert, int tenantID)
+        //{
+        //    _Alerts = Alert;
+        //    return _Alerts.GetAlertList(tenantID);
+
+        //}
+
+        #endregion
 
     }
 }
