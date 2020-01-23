@@ -164,7 +164,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_DeleteSLA", conn);
+                MySqlCommand cmd = new MySqlCommand("SP_DeleteTemplate", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantId", tenantID);
                 cmd.Parameters.AddWithValue("@_templateId", TemplateID);
