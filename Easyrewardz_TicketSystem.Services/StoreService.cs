@@ -346,7 +346,7 @@ namespace Easyrewardz_TicketSystem.Services
                         store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
                         store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
                         store.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        store.BranName = Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                        //store.BranName = Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
                         store.CityName = Convert.ToString(ds.Tables[0].Rows[i]["CityName"]);
                         store.StateName = Convert.ToString(ds.Tables[0].Rows[i]["StateName"]);
                         store.strPinCode = Convert.ToString(ds.Tables[0].Rows[i]["PincodeID"]);
