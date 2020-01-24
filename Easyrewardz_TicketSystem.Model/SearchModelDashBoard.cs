@@ -139,9 +139,9 @@ namespace Easyrewardz_TicketSystem.Model
 
         public int? OrderItemId { get; set; }
 
-        public int IsVisitStore { get; set; }
+        public string IsVisitStore { get; set; }
 
-        public int IsWantVistingStore { get; set; }
+        public string IsWantVistingStore { get; set; }
 
         //Column - 4  
         public string CustomerEmailID { get; set; }

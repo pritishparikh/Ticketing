@@ -89,7 +89,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (conn != null)
+                if (conn != null)  
                 {
                     conn.Close();
                 }
