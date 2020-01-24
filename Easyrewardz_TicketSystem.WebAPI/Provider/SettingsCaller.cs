@@ -185,6 +185,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #region Reports
 
         /// <summary>
+        /// insertReports
+        /// </summary>
+        public int InsertReport(IReports Report, int tenantId, string ReportName, bool isReportActive, string TicketReportParams,
+            bool IsDaily, bool IsDailyForMonth, bool IsWeekly, bool IsWeeklyForMonth, bool IsDailyForYear, bool IsWeeklyForYear, int createdBy)
+        {
+            _Reports = Report;
+            return _Reports.InsertReport( tenantId,  ReportName,  isReportActive,  TicketReportParams, IsDaily,  IsDailyForMonth, 
+                IsWeekly,  IsWeeklyForMonth,  IsDailyForYear,  IsWeeklyForYear,  createdBy);
+
+        }
+
+        /// <summary>
         /// DeleteReports
         /// </summary>
         public int DeleteReport(IReports Report, int tenantID, int ReportID)
@@ -193,6 +205,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Reports.DeleteReport( tenantID,  ReportID); 
 
         }
+
+
+
 
         #endregion
 
