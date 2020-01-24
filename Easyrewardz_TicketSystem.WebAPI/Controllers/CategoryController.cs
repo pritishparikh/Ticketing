@@ -153,7 +153,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("UpdateCategory")]
-        public int UpdateCategory([FromBody]Category category)
+        public ResponseModel UpdateCategory([FromBody]Category category)
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
@@ -170,18 +170,28 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 category.TenantID = authenticate.TenantId;
                 category.ModifyBy = authenticate.UserMasterID;
                 result = _newMasterCategory.UpdateCategory(new CategoryServices(_connectioSting), category);
+
+                StatusCode =
+                result == 0 ?
+                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
             }
             catch (Exception ex)
             {
                 StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
+                _objResponseModel.Status = false;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = ex.Message;
                 _objResponseModel.ResponseData = null;
             }
-            return result;
+            return _objResponseModel;
         }
 
         [HttpPost]
