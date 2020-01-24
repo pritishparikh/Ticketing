@@ -19,6 +19,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         private IAlerts _Alerts;
 
         private IFileUpload _FileUpload;
+
+        private IReports _Reports;
+
+        private IModules _Modules;
         #endregion
 
 
@@ -177,6 +181,52 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
         #endregion
+
+        #region Reports
+
+        /// <summary>
+        /// DeleteReports
+        /// </summary>
+        public int DeleteReport(IReports Report, int tenantID, int ReportID)
+        {
+            _Reports = Report;
+            return _Reports.DeleteReport( tenantID,  ReportID); 
+
+        }
+
+        #endregion
+
+        #region Modules
+
+        /// <summary>
+        /// Update Moudule Items
+        /// </summary>
+        public int UpdateModules(IModules Modules, int tenantID, int ModuleID, string ModulesActive, string ModuleInactive,int ModifiedBy)
+        {
+            _Modules = Modules;
+            return _Modules.UpdateModules( tenantID,  ModuleID,  ModulesActive,  ModuleInactive, ModifiedBy);
+
+        }
+
+        public List<ModulesModel> GetModulesList(IModules Modules, int tenantID)
+        {
+            _Modules = Modules;
+            return _Modules.GetModulesList(tenantID);
+
+                
+        }
+
+        public List<ModuleItems> GetModulesItemList(IModules Modules, int tenantID, int ModuleID)
+        {
+            _Modules = Modules;
+            return _Modules.GetModulesItemList(tenantID, ModuleID);
+
+
+        }
+
+        #endregion
+
+
 
     }
 }
