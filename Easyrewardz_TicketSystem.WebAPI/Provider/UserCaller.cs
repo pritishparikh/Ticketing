@@ -29,10 +29,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _UserRepository = User;
             return _UserRepository.Mappedcategory(customUserModel);
         }
-        public int EditUserDetail(IUser User, int userID, string DesignationName, int ReportTo, bool status, int TenantID, int Modifyby)
+        public int EditUserDetail(IUser User, CustomEditUserModel customEditUserModel)
         {
             _UserRepository = User;
-            return _UserRepository.EditUser(userID, DesignationName, ReportTo, status, TenantID, Modifyby);
+            return _UserRepository.EditUser(customEditUserModel);
         }
         public int DeleteUser(IUser User, int userID, int TenantID, int Modifyby)
         {
@@ -43,6 +43,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _UserRepository = User;
             return _UserRepository.UserList(TenantID);
+        }
+        public CustomEditUserModel GetuserDetailsById(IUser User, int UserID, int TenantID)
+        {
+            _UserRepository = User;
+            return _UserRepository.GetuserDetailsById(UserID, TenantID);
         }
     }
 }

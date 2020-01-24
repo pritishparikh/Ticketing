@@ -232,7 +232,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name=""></param>
         [HttpPost]
         [Route("EditUserDetails")]
-        public ResponseModel EditUserDetails(int userID, string DesignationName, int ReportTo, bool status)
+        public ResponseModel EditUserDetails([FromBody]CustomEditUserModel customEditUserModel)
         {
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -244,8 +244,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 UserCaller userCaller = new UserCaller();
-              
-                int Result = userCaller.EditUserDetail(new UserServices(_connectioSting), userID, DesignationName, ReportTo, status, authenticate.TenantId, authenticate.UserMasterID);
+                customEditUserModel.TenantID = authenticate.TenantId;
+                customEditUserModel.CreatedBy = authenticate.UserMasterID;
+                int Result = userCaller.EditUserDetail(new UserServices(_connectioSting), customEditUserModel);
 
                 StatusCode =
                Result == 0 ?
@@ -353,6 +354,57 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = objUserList;
+
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
+
+        /// <summary>
+        /// Get User Details By Id
+        /// </summary>
+        /// <param name=""></param>
+        [HttpPost]
+        [Route("GetUserDetailsById")]
+        public ResponseModel GetUserDetailsById(int UserID)
+        {
+            CustomEditUserModel objUser  = new CustomEditUserModel();
+
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                UserCaller userCaller = new UserCaller();
+
+                objUser = userCaller.GetuserDetailsById(new UserServices(_connectioSting), UserID,authenticate.TenantId);
+
+                StatusCode =
+                objUser == null ? 
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objUser;
 
 
             }

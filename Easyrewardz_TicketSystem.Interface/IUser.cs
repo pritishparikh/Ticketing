@@ -16,8 +16,9 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int Mappedcategory(CustomUserModel customUserModel);
 
-        int EditUser(int userID, string DesignationName , int ReportTo, bool status,int TenantID,int Modifyby);
+        int EditUser(CustomEditUserModel customEditUserModel);
         int DeleteUser(int userID,int TenantID, int Modifyby);
         List<CustomUserList> UserList(int TenantID);
+        CustomEditUserModel GetuserDetailsById(int UserID,int TenantID);
     }
 }

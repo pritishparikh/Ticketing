@@ -117,20 +117,34 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
-        public int EditUser(int userID, string DesignationName, int ReportTo, bool status, int TenantID, int Modifyby)
+        public int EditUser(CustomEditUserModel customEditUserModel)
         {
             int success = 0;
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("", conn);
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateUser", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@user_ID", userID);
-                cmd.Parameters.AddWithValue("@Designation_Name", DesignationName);
-                cmd.Parameters.AddWithValue("@Report_To", ReportTo);
-                cmd.Parameters.AddWithValue("@User_status", status);
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
-                cmd.Parameters.AddWithValue("@Modify_by", Modifyby);
+                cmd.Parameters.AddWithValue("@user_ID", customEditUserModel.UserID);
+                cmd.Parameters.AddWithValue("@Designation_ID", customEditUserModel.DesignationID);
+                cmd.Parameters.AddWithValue("@Reportee_ID", customEditUserModel.ReporteeID);
+                cmd.Parameters.AddWithValue("@User_Name", customEditUserModel.UserName);
+                cmd.Parameters.AddWithValue("@Email_ID", customEditUserModel.EmailID);
+                cmd.Parameters.AddWithValue("@Mobile_No", customEditUserModel.MobileNo);
+                cmd.Parameters.AddWithValue("@First_Name", customEditUserModel.FirstName);
+                cmd.Parameters.AddWithValue("@Last_Name", customEditUserModel.LastName);
+                cmd.Parameters.AddWithValue("@Brand_Ids", customEditUserModel.BrandIds);
+                cmd.Parameters.AddWithValue("@category_Ids", customEditUserModel.categoryIds);
+                cmd.Parameters.AddWithValue("@subCategory_Ids", customEditUserModel.subCategoryIds);
+                cmd.Parameters.AddWithValue("@Issuetype_Ids", customEditUserModel.IssuetypeIds);
+                cmd.Parameters.AddWithValue("@Role_ID", customEditUserModel.RoleID);
+                cmd.Parameters.AddWithValue("@Is_CopyEscalation", customEditUserModel.IsCopyEscalation);
+                cmd.Parameters.AddWithValue("@Is_AssignEscalation", customEditUserModel.IsAssignEscalation);
+                cmd.Parameters.AddWithValue("@Is_Agent", customEditUserModel.IsAgent);
+                cmd.Parameters.AddWithValue("@EscalateAssignTo_Id", customEditUserModel.EscalateAssignToId);
+                cmd.Parameters.AddWithValue("@Is_Active", customEditUserModel.IsActive);
+                cmd.Parameters.AddWithValue("@Created_By", customEditUserModel.CreatedBy);
+                cmd.Parameters.AddWithValue("@Tenant_ID", customEditUserModel.TenantID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -148,6 +162,58 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return success;
+        }
+
+        public CustomEditUserModel GetuserDetailsById(int UserID, int TenantID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            CustomEditUserModel user = new CustomEditUserModel();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetUserDetailById", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@User_ID", UserID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                       
+                        user.UserID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]); 
+                        user.RoleID= Convert.ToInt32(ds.Tables[0].Rows[i]["RoleID"]);
+                        user.DesignationID= Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
+                        user.ReporteeID= Convert.ToInt32(ds.Tables[0].Rows[i]["ReporteeID"]);
+                        user.UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
+                        user.MobileNo = ds.Tables[0].Rows[i]["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                        user.EmailID = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                        user.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        user.IsCopyEscalation= Convert.ToBoolean(ds.Tables[0].Rows[i]["IsCopyEscalation"]);
+                        user.IsAssignEscalation = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsAssignEscalation"]);
+                        user.FirstName = ds.Tables[0].Rows[i]["FirstName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
+                        user.LastName = ds.Tables[0].Rows[i]["LastName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["LastName"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return user;
         }
 
         public List<User> GetUserList(int TenantID, int UserID)
@@ -215,7 +281,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Role_ID", customUserModel.RoleID);
                 cmd.Parameters.AddWithValue("@Is_CopyEscalation", customUserModel.IsCopyEscalation);
                 cmd.Parameters.AddWithValue("@Is_AssignEscalation", customUserModel.IsAssignEscalation);
-                cmd.Parameters.AddWithValue("@IsAgent", customUserModel.IsAgent);
+                cmd.Parameters.AddWithValue("@Is_Agent", customUserModel.IsAgent);
                 cmd.Parameters.AddWithValue("@Is_Active", customUserModel.IsActive);
                 cmd.Parameters.AddWithValue("@Created_By", customUserModel.CreatedBy);
                 cmd.Parameters.AddWithValue("@User_ID", customUserModel.UserId);
@@ -270,6 +336,21 @@ namespace Easyrewardz_TicketSystem.Services
                         user.CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
                         user.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
                         user.UpdatedDate = ds.Tables[0].Rows[i]["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]);
+                        user.IsCopyEscalation= ds.Tables[0].Rows[i]["IsCopyEscalation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsCopyEscalation"]);
+                        user.BrandIDs = ds.Tables[0].Rows[i]["BrandIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandIDs"]);
+                        user.BrandNames= ds.Tables[0].Rows[i]["BrandNames"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandNames"]);
+                        user.Brand_Names= ds.Tables[0].Rows[i]["Brand_Names"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Brand_Names"]);
+                        user.CategoryIDs = ds.Tables[0].Rows[i]["CategoryIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryIDs"]);
+                        user.CategoryNames = ds.Tables[0].Rows[i]["CategoryNames"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryNames"]);
+                        user.Category_Name = ds.Tables[0].Rows[i]["Category_Name"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Category_Name"]);
+                        user.SubCategoryIDs = ds.Tables[0].Rows[i]["SubCategoryIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryIDs"]);
+                        user.SubCategoryNames = ds.Tables[0].Rows[i]["SubCategoryNames"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryNames"]);
+                        user.SubCategory_Name = ds.Tables[0].Rows[i]["SubCategory_Name"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategory_Name"]);
+                        user.IssueTypeIDs = ds.Tables[0].Rows[i]["IssueTypeIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeIDs"]);
+                        user.IssueTypeNames = ds.Tables[0].Rows[i]["IssueTypeNames"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeNames"]);
+                        user.IssueType_Name = ds.Tables[0].Rows[i]["IssueType_Name"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueType_Name"]);
+                        user.CrmRoleName= ds.Tables[0].Rows[i]["RoleName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RoleName"]);
+                        user.ReportTo= ds.Tables[0].Rows[i]["ReportTo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReportTo"]);
                         users.Add(user);
                     }
                 }
