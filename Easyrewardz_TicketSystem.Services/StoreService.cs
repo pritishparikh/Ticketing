@@ -319,6 +319,11 @@ namespace Easyrewardz_TicketSystem.Services
             return storeMaster;
         }
 
+        /// <summary>
+        /// Get list of Stores
+        /// </summary>
+        /// <param name="TenantID">Id of the Tenant</param>
+        /// <returns></returns>
         public List<CustomStoreList> StoreList(int TenantID)
         {
             List<CustomStoreList> storeMaster = new List<CustomStoreList>();
@@ -346,7 +351,17 @@ namespace Easyrewardz_TicketSystem.Services
                         store.StateName = Convert.ToString(ds.Tables[0].Rows[i]["StateName"]);
                         store.strPinCode = Convert.ToString(ds.Tables[0].Rows[i]["PincodeID"]);
                         store.Status = Convert.ToString(ds.Tables[0].Rows[i]["StoreStatus"]);
-                        
+
+                        store.CityID = Convert.ToInt32(ds.Tables[0].Rows[i]["CityID"]);
+                        store.StateID = Convert.ToInt32(ds.Tables[0].Rows[i]["StateID"]);
+                        store.RegionID = Convert.ToInt32(ds.Tables[0].Rows[i]["RegionID"]);
+                        store.ZoneID = Convert.ToInt32(ds.Tables[0].Rows[i]["ZoneID"]);
+                        store.StoreTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreTypeID"]);
+                        store.StatusID = Convert.ToBoolean(ds.Tables[0].Rows[i]["StatusID"]);
+                        store.BrandIDs = Convert.ToString(ds.Tables[0].Rows[i]["BrandIDs"]);
+                        store.BrandNames = Convert.ToString(ds.Tables[0].Rows[i]["BrandNames"]);
+                        store.Brand_Names = Convert.ToString(ds.Tables[0].Rows[i]["Brand_Names"]);
+
                         storeMaster.Add(store);
                     }
                 }
