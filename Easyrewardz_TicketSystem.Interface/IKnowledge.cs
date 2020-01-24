@@ -8,6 +8,7 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public interface IKnowledge
     {
+
         List<KnowlegeBaseMaster> SearchByCategory(int type_ID, int Category_ID, int SubCategory_ID, int TenantId);
 
         int AddKB(KnowlegeBaseMaster knowlegeBaseMaster);

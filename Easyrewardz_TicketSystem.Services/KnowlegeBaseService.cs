@@ -248,6 +248,7 @@ namespace Easyrewardz_TicketSystem.Services
             int i = 0;
             try
             {
+
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_ApproveRejectKB", conn);

@@ -249,6 +249,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel RejectApproveKB([FromBody]KnowlegeBaseMaster knowlegeBaseMaster)
         {
 
+
             KnowledgeCaller _KnowledgeCaller = new KnowledgeCaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;

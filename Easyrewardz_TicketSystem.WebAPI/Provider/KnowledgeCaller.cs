@@ -28,6 +28,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         public int AddKB(IKnowledge Knowledge, KnowlegeBaseMaster knowlegeBaseMaster)
         {
+
             _KnowledgeRepository = Knowledge;
             return _KnowledgeRepository.AddKB(knowlegeBaseMaster);
         }
