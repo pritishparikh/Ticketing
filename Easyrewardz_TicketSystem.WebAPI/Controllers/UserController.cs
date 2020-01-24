@@ -323,7 +323,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// Get User List Data
         /// </summary>
         /// <param name=""></param>
-        [HttpPost]
+        [HttpGet]
         [Route("GetUserListData")]
         public ResponseModel GetUserListData()
         {
