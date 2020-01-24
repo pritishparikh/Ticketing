@@ -10,12 +10,15 @@ namespace Easyrewardz_TicketSystem.Services
 {
    public class IssueTypeServices : IIssueType
     {
-        #region Cunstructor
+        #region Constructor 
         MySqlConnection conn = new MySqlConnection();
         public IssueTypeServices(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
+
+        #region Method
         /// <summary>
         /// Get Issue Type List
         /// </summary>
@@ -24,7 +27,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public List<IssueType> GetIssueTypeList(int TenantID,int SubCategoryID)
         {
-
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<IssueType> objIssueType = new List<IssueType>();
@@ -70,11 +72,14 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objIssueType;
         }
+
         /// <summary>
         /// Add Issue Type
         /// </summary>
-        /// <param name="TenantID">SubcategoryIDparam>
-        /// <param name="SubCategoryID">IssuetypeName</param>
+        /// <param name="SubcategoryID"></param>
+        /// <param name="IssuetypeName"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
         public int AddIssueType(int SubcategoryID, string IssuetypeName, int TenantID, int UserID)
         {
@@ -89,7 +94,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Issuetype_Name", IssuetypeName);
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@Created_By", UserID);
-                Success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                Success = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception ex)
             {
