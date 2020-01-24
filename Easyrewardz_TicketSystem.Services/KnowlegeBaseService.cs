@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
+
 namespace Easyrewardz_TicketSystem.Services
 {
     public class KnowlegeBaseService : IKnowledge
@@ -181,10 +182,13 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-        public List<KnowlegeBaseMaster> KBList(int TenantId)
+        public CustomKBList KBList(int TenantId)
         {
+            DataSet ds = new DataSet();
+            CustomKBList customKBLists = new CustomKBList();
+            List<KBisApproved> kBisApproveds = new List<KBisApproved>();
+            List<KBisNotApproved> kBisNotApproveds = new List<KBisNotApproved>();
 
-            List<KnowlegeBaseMaster> knowlegeBaseMasters = new List<KnowlegeBaseMaster>();
             MySqlCommand cmd = new MySqlCommand();
 
             try
@@ -196,33 +200,54 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
                 cmd1.CommandType = CommandType.StoredProcedure;
 
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
-                DataTable dt = new DataTable();
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
 
-                da.Fill(dt);
-                if (dt != null && dt.Rows.Count > 0)
+                if (ds != null && ds.Tables[0] != null)
                 {
-                    for (int i = 0; i < dt.Rows.Count; i++)
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        KnowlegeBaseMaster knowlegeBaseMaster = new KnowlegeBaseMaster();
-                        knowlegeBaseMaster.KBID = Convert.ToInt32(dt.Rows[i]["KBID"]);
-                        knowlegeBaseMaster.KBCODE = Convert.ToString(dt.Rows[i]["KBCODE"]);
-                        knowlegeBaseMaster.CategoryName = Convert.ToString(dt.Rows[i]["CategoryName"]);
-                        knowlegeBaseMaster.SubCategoryName = Convert.ToString(dt.Rows[i]["SubCategoryName"]);
-                        knowlegeBaseMaster.IssueTypeName = Convert.ToString(dt.Rows[i]["IssueTypeName"]);
-                        knowlegeBaseMaster.Subject = Convert.ToString(dt.Rows[i]["Subject"]);
-                        knowlegeBaseMaster.Description = Convert.ToString(dt.Rows[i]["Description"]);
-                        knowlegeBaseMaster.IsApproveStatus= Convert.ToString(dt.Rows[i]["IsApprove"]);
-                        //knowlegeBaseMaster.Status = Convert.ToString(dt.Rows[i]["Status"]);
-                        //knowlegeBaseMaster.CreatedName = Convert.ToString(dt.Rows[i]["createdby"]);
-                       // knowlegeBaseMaster.CreatedDate = Convert.ToDateTime(dt.Rows[i]["CreatedDate"]);
-                        //knowlegeBaseMaster.ModifyName = Convert.ToString(dt.Rows[i]["modifyby"]);
-                        //knowlegeBaseMaster.ModifyDate = Convert.ToDateTime(dt.Rows[i]["ModifyDate"]);
+                       
+                        KBisApproved approved = new KBisApproved();
+                        approved.KBID = Convert.ToInt32(ds.Tables[0].Rows[i]["KBID"]);
+                        approved.KBCODE = ds.Tables[0].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["KBCODE"]);
+                        approved.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        approved.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        approved.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        approved.Subject = ds.Tables[0].Rows[i]["Subject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Subject"]);
+                        approved.Description = ds.Tables[0].Rows[i]["Description"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Description"]);
+                        approved.IsApproveStatus = ds.Tables[0].Rows[i]["IsApprove"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsApprove"]);
 
 
-                        knowlegeBaseMasters.Add(knowlegeBaseMaster);
+
+
+                        kBisApproveds.Add(approved);
+
                     }
 
+                    customKBLists.Approved=kBisApproveds;
+                }
+
+
+                if (ds != null && ds.Tables[1] != null)
+                {
+                    for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                        {
+                            KBisNotApproved notApproved = new KBisNotApproved();
+                            notApproved.KBID = Convert.ToInt32(ds.Tables[1].Rows[i]["KBID"]);
+                        notApproved.KBCODE = ds.Tables[0].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["KBCODE"]);
+                        notApproved.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        notApproved.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        notApproved.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        notApproved.Subject = ds.Tables[0].Rows[i]["Subject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Subject"]);
+                        notApproved.Description = ds.Tables[0].Rows[i]["Description"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Description"]);
+                        notApproved.IsApproveStatus = ds.Tables[0].Rows[i]["IsApprove"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsApprove"]);
+
+                        kBisNotApproveds.Add(notApproved);
+                        }
+
+                    customKBLists.NotApproved = kBisNotApproveds;
                 }
             }
             catch (Exception ex)
@@ -238,7 +263,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return knowlegeBaseMasters;
+            return customKBLists;
         }
 
         public int RejectApproveKB(KnowlegeBaseMaster knowlegeBaseMaster)
