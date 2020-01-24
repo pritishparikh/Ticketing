@@ -18,6 +18,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         private IAlerts _Alerts;
 
+        private IFileUpload _FileUpload;
         #endregion
 
 
@@ -164,6 +165,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _Alerts = Alert;
             return _Alerts.GetAlertList(tenantID);
 
+        }
+
+        #endregion
+
+        #region FileUploadLogs
+        public List<FileUploadLogs> GetFileUploadLogs(IFileUpload FileU,int tenantId)
+        {
+            _FileUpload = FileU;
+            return _FileUpload.GetFileUploadLogs(tenantId);
         }
 
         #endregion

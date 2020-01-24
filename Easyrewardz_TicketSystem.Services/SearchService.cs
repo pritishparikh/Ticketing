@@ -383,7 +383,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     sqlcmd.CommandText = "SP_SearchTicketData_ByCategory";
 
-                    sqlcmd.Parameters.AddWithValue("Cateogry_Id", searchModel.searchDataByCategoryType.CategoryId);
+                    sqlcmd.Parameters.AddWithValue("Category_Id", searchModel.searchDataByCategoryType.CategoryId);
                     sqlcmd.Parameters.AddWithValue("SubCategory_Id",searchModel.searchDataByCategoryType.SubCategoryId);
                     sqlcmd.Parameters.AddWithValue("IssueType_Id", searchModel.searchDataByCategoryType.IssueTypeId);
                     sqlcmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByCategoryType.TicketStatusID);
