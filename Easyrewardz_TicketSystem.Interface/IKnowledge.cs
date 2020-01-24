@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int DeleteKB(int KBID, int TenantId);
 
-        int RejectApproveKB(int KBID, int TenantId, int IsApprove);
+        int RejectApproveKB(KnowlegeBaseMaster knowlegeBaseMaster);
 
 
         List<KnowlegeBaseMaster> KBList(int TenantId);
