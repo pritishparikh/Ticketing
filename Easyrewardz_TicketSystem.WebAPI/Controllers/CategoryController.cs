@@ -183,7 +183,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("CategoryList")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public List<Category> CategoryList()
         {
             List<Category> objcategory = new List<Category>();
