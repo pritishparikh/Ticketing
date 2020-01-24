@@ -10,13 +10,15 @@ namespace Easyrewardz_TicketSystem.Services
 {
    public class SubCategoryService : ISubCategories
     {
-        #region
+        #region Constructor
         MySqlConnection conn = new MySqlConnection();
         public SubCategoryService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
-      
+        #endregion
+
+        #region Custom Methods
 
         /// <summary>
         /// Get Sub Category By Category ID
@@ -72,12 +74,14 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Add Sub Category
         /// </summary>
-        /// <param name="CategoryID"></param>
+        /// <param name="CategoryID">ID of the category </param>
+        /// <param name="SubCategoryName">Name of the Sub-category</param>
+        /// <param name="TenantID">Id of the Tenant</param>
+        /// <param name="UserID">Id of the User</param>
         /// <returns></returns>
         public int AddSubCategory(int CategoryID, string SubCategoryName, int TenantID, int UserID)
         {
-
-            int Success = 0;
+            int subCategoryId = 0;
             try
             {
                 conn.Open();
@@ -88,7 +92,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@SubCategory_Name", SubCategoryName);
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@Created_By", UserID);
-                Success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                subCategoryId = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception ex)
             {
@@ -103,7 +107,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return Success;
+            return subCategoryId;
         }
         #endregion
     }
