@@ -44,7 +44,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetCategoryList")]
-        [AllowAnonymous]
         public List<Category> GetCategoryList(int BrandID)
         {
             List<Category> objCategoryList = new List<Category>();
@@ -154,7 +153,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("UpdateCategory")]
-        [AllowAnonymous]
         public int UpdateCategory([FromBody]Category category)
         {
 
@@ -188,7 +186,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("CategoryList")]
-        //[AllowAnonymous]
         public List<Category> CategoryList()
         {
             List<Category> objcategory = new List<Category>();
