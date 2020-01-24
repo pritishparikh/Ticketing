@@ -128,12 +128,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <summary>
         /// UpdateAlert
         /// </summary>
-        //public int CreateAlert(IAlerts Alert, int tenantId, int AlertID, string AlertTypeName, bool isAlertActive, int ModifiedBy)
-        //{
-        //    _Alerts = Alert;
-        //    return _Alerts.UpdateAlert(tenantId, AlertID, AlertTypeName, isAlertActive, ModifiedBy);
+        public int CreateAlert(IAlerts Alert, AlertInsertModel alertModel)
+        {
+            _Alerts = Alert;
+            return _Alerts.InsertAlert( alertModel);
 
-        //}
+        }
 
 
         /// <summary>
@@ -158,13 +158,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         /// <summary>
         /// Get AlertList
-        /// </summary>
-        //public List<AlertModel> GetAlertList(IAlerts Alert, int tenantID)
-        //{
-        //    _Alerts = Alert;
-        //    return _Alerts.GetAlertList(tenantID);
+       // / </summary>
+        public List<AlertModel> GetAlertList(IAlerts Alert, int tenantID)
+        {
+            _Alerts = Alert;
+            return _Alerts.GetAlertList(tenantID);
 
-        //}
+        }
 
         #endregion
 
