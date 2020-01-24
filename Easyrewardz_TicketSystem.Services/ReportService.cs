@@ -66,12 +66,12 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_UpdateAlert", conn);
+                MySqlCommand cmd = new MySqlCommand("SP_InsertReport", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantId ", tenantId);
                 cmd.Parameters.AddWithValue("@_ReportName ", ReportName);
                 cmd.Parameters.AddWithValue("@_isReportActive ", Convert.ToInt16(isReportActive));
-                cmd.Parameters.AddWithValue("@_ TicketReportParams", TicketReportParams);
+                cmd.Parameters.AddWithValue("@_TicketReportParams", TicketReportParams);
                 cmd.Parameters.AddWithValue("@_IsDaily", Convert.ToInt16(IsDaily));
                 cmd.Parameters.AddWithValue("@_IsDailyForMonth", Convert.ToInt16(IsDailyForMonth));
                 cmd.Parameters.AddWithValue("@_IsWeekly", Convert.ToInt16(IsWeekly));
