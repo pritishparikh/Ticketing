@@ -327,6 +327,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
+
                         CustomCreateCategory CreateCategory = new CustomCreateCategory();
                         CreateCategory.BrandCategoryMappingID = Convert.ToInt32(ds.Tables[0].Rows[i]["BrandCategoryMappingID"]);
                         CreateCategory.BraindID = Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
