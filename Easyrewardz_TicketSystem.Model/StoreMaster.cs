@@ -27,5 +27,7 @@ namespace Easyrewardz_TicketSystem.Model
         public DateTime? ModifiedDate { get; set; }
 
         public string Pincode { get; set; }
+
+        public string BrandIDs { get; set; }
     }
 }

@@ -56,13 +56,13 @@ namespace Easyrewardz_TicketSystem.Services
         public int CreateStore(StoreMaster storeMaster, int TenantID, int UserID)
         {
             // MySqlCommand cmd = new MySqlCommand();
-            int Success = 0;
+            int storeId = 0;
             try
             {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_InsertStore", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Brand_ID", storeMaster.BrandID);
+                //cmd.Parameters.AddWithValue("@Brand_ID", storeMaster.BrandID);
                 cmd.Parameters.AddWithValue("@Store_Code", storeMaster.StoreCode);
                 cmd.Parameters.AddWithValue("@Store_Name", storeMaster.StoreName);
                 cmd.Parameters.AddWithValue("@State_ID", storeMaster.StateID);
@@ -77,8 +77,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Is_Active", storeMaster.IsActive);
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@BrandIDs", storeMaster.BrandIDs);
                 cmd.CommandType = CommandType.StoredProcedure;
-                Success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                storeId = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
@@ -93,7 +94,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return Success;
+            return storeId;
         }
         /// <summary>
         /// Delete Store 
@@ -144,7 +145,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateStore", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Brand_ID", storeMaster.BrandID);
+                //cmd.Parameters.AddWithValue("@Brand_ID", storeMaster.BrandID);
                 cmd.Parameters.AddWithValue("@Store_Code", storeMaster.StoreCode);
                 cmd.Parameters.AddWithValue("@Store_Name", storeMaster.StoreName);
                 cmd.Parameters.AddWithValue("@State_ID", storeMaster.StateID);
@@ -160,6 +161,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
                 cmd.Parameters.AddWithValue("@Store_ID", StoreID);
+                cmd.Parameters.AddWithValue("@BrandIDs", storeMaster.BrandIDs);
                 cmd.CommandType = CommandType.StoredProcedure;
                 Success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
