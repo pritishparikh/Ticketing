@@ -20,6 +20,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int RejectApproveKB(KnowlegeBaseMaster knowlegeBaseMaster);
 
 
-        List<KnowlegeBaseMaster> KBList(int TenantId);
+        CustomKBList KBList(int TenantId);
     }
 }

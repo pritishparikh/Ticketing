@@ -17,7 +17,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class KnowledgeBaseController : ControllerBase
     {
         #region variable declaration
@@ -209,7 +209,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel KBList()
         {
 
-            List<KnowlegeBaseMaster> _objKnowlegeBaseMaster = new List<KnowlegeBaseMaster>();
+            CustomKBList _objKnowlegeBaseMaster = new CustomKBList();
+           
             KnowledgeCaller _KnowledgeCaller = new KnowledgeCaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -221,6 +222,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 _objKnowlegeBaseMaster = _KnowledgeCaller.KBList(new KnowlegeBaseService(_connectionSting), authenticate.TenantId);
+                
                 StatusCode =
                _objKnowlegeBaseMaster == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

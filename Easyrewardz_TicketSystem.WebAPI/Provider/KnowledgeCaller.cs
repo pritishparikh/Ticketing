@@ -50,7 +50,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _KnowledgeRepository = Knowledge;
             return _KnowledgeRepository.RejectApproveKB(knowlegeBaseMaster);
         }
-        public List<KnowlegeBaseMaster> KBList(IKnowledge Knowledge, int TenantId)
+        public CustomKBList KBList(IKnowledge Knowledge, int TenantId)
         {
             _KnowledgeRepository = Knowledge;
             return _KnowledgeRepository.KBList( TenantId);
