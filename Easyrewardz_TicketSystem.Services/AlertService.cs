@@ -203,6 +203,7 @@ namespace Easyrewardz_TicketSystem.Services
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
                             ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
                             ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
+                            isAlertActive= r.Field<object>("AlertStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AlertStatus"))
 
                         }).ToList();
                     }
