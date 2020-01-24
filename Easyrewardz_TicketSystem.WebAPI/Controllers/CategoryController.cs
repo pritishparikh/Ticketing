@@ -270,7 +270,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <param name="CustomCreateCategory"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("ListCategorybrandmapping")]
         public ResponseModel ListCategorybrandmapping()
         {
