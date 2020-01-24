@@ -28,6 +28,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         public int AddKB(IKnowledge Knowledge, KnowlegeBaseMaster knowlegeBaseMaster)
         {
+
             _KnowledgeRepository = Knowledge;
             return _KnowledgeRepository.AddKB(knowlegeBaseMaster);
         }
@@ -44,10 +45,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _KnowledgeRepository.DeleteKB(KBID, TenantId);
         }
 
-        public int RejectApproveKB(IKnowledge Knowledge, int KBID, int TenantId, int IsApprove)
+        public int RejectApproveKB(IKnowledge Knowledge, KnowlegeBaseMaster knowlegeBaseMaster)
         {
             _KnowledgeRepository = Knowledge;
-            return _KnowledgeRepository.RejectApproveKB(KBID, TenantId, IsApprove);
+            return _KnowledgeRepository.RejectApproveKB(knowlegeBaseMaster);
         }
         public List<KnowlegeBaseMaster> KBList(IKnowledge Knowledge, int TenantId)
         {

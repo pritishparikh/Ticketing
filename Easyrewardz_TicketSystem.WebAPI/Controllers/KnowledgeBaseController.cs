@@ -246,8 +246,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("RejectApproveKB")]
-        public ResponseModel RejectApproveKB(int KBID, int IsApprove)
+        public ResponseModel RejectApproveKB([FromBody]KnowlegeBaseMaster knowlegeBaseMaster)
         {
+
 
             KnowledgeCaller _KnowledgeCaller = new KnowledgeCaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -258,8 +259,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
-                int result = _KnowledgeCaller.RejectApproveKB(new KnowlegeBaseService(_connectionSting), KBID, IsApprove, authenticate.TenantId);
+                knowlegeBaseMaster.TenantID = authenticate.TenantId;
+                int result = _KnowledgeCaller.RejectApproveKB(new KnowlegeBaseService(_connectionSting), knowlegeBaseMaster);
                 StatusCode =
                result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

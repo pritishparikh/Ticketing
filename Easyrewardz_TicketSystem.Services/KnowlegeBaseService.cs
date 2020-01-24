@@ -241,20 +241,26 @@ namespace Easyrewardz_TicketSystem.Services
             return knowlegeBaseMasters;
         }
 
-        public int RejectApproveKB(int KBID, int IsApprove, int TenantId)
+        public int RejectApproveKB(KnowlegeBaseMaster knowlegeBaseMaster)
         {
 
             MySqlCommand cmd = new MySqlCommand();
             int i = 0;
             try
             {
+
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_ApproveRejectKB", conn);
-                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
-                cmd1.Parameters.AddWithValue("@KB_ID", KBID);
-                cmd1.Parameters.AddWithValue("@Is_Approved", IsApprove);
-
+                cmd1.Parameters.AddWithValue("@Tenant_ID", knowlegeBaseMaster.TenantID);
+                cmd1.Parameters.AddWithValue("@KB_ID", knowlegeBaseMaster.KBID);
+                cmd1.Parameters.AddWithValue("@Is_Approved", knowlegeBaseMaster.IsApproved);
+                cmd1.Parameters.AddWithValue("@Category_ID", knowlegeBaseMaster.CategoryID);
+                cmd1.Parameters.AddWithValue("@SubCategory_ID", knowlegeBaseMaster.SubCategoryID);
+                cmd1.Parameters.AddWithValue("@IssueType_ID", knowlegeBaseMaster.IssueTypeID);
+                cmd1.Parameters.AddWithValue("@Subject_", knowlegeBaseMaster.Subject);
+                cmd1.Parameters.AddWithValue("@Description_", knowlegeBaseMaster.Description);
+                
 
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmd1.ExecuteNonQuery());
