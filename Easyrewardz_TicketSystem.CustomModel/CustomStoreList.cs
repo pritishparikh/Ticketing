@@ -14,5 +14,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string StateName { get; set; }
         public int PinCode { get; set; }
         public string Status { get; set; }
+        public string strPinCode { get; set; }
     }
 }
