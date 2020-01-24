@@ -116,8 +116,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("DeleteCategory")]
-        [AllowAnonymous]
-        public int DeleteCategory(int CategoryID, int TeanatId)
+        public int DeleteCategory(int CategoryID)
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
