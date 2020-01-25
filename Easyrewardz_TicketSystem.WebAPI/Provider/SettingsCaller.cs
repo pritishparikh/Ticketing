@@ -207,7 +207,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
 
-
+        public List<ReportModel > GetReportList(IReports Report, int tenantID)
+        {
+            _Reports = Report;
+            return _Reports.GetReportList(tenantID);
+        }
 
         #endregion
 
