@@ -69,6 +69,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         public CustomKBList SearchKB(int Category_ID, int SubCategory_ID, int type_ID, int TenantId)
         {
+
             DataSet ds = new DataSet();
             CustomKBList customKBLists = new CustomKBList();
             List<KBisApproved> kBisApproveds = new List<KBisApproved>();

@@ -21,6 +21,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class KnowledgeBaseController : ControllerBase
     {
+
         #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectionSting;
