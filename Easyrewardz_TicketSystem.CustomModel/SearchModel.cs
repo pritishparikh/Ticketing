@@ -119,7 +119,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
 
         public string CustomerMobileNo { get; set; }
 
-        public string AssignTo { get; set; }
+        //public string AssignTo { get; set; }
+        public int AssignTo { get; set; }
 
         public string StoreCodeORAddress { get; set; }
 

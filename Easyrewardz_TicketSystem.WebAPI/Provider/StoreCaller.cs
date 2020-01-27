@@ -55,5 +55,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _storeRepository = store;
             return _storeRepository.AttachStore(StoreId, TicketId, CreatedBy);
         }
+        public List<StoreMaster> getSelectedStores(IStore store, int TicketId)
+        {
+            _storeRepository = store;
+            return _storeRepository.getSelectedStoreByTicketId(TicketId);
+        }
     }
 }

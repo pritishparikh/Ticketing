@@ -16,5 +16,13 @@ namespace Easyrewardz_TicketSystem.Interface
         List<CustomStoreList> StoreList(int TenantID);
         List<StoreMaster> SearchStore(int StateID, int PinCode, string Area, bool IsCountry);
         int AttachStore(string StoreId, int TicketId, int CreatedBy);
+
+        /// <summary>
+        /// Get list of the store for the selected ticket Id
+        /// </summary>
+        /// <param name="TicketId"></param>
+        /// <returns></returns>
+        List<StoreMaster> getSelectedStoreByTicketId(int TicketId);
+        
     }
 }

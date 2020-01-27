@@ -379,6 +379,56 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return storeMaster;
         }
+
+        /// <summary>
+        /// Get list of Stores
+        /// </summary>
+        /// <param name="TicketId">Id of the Ticket</param>
+        /// <returns></returns>
+        public List<StoreMaster> getSelectedStoreByTicketId(int TicketId)
+        {
+            List<StoreMaster> storeMaster = new List<StoreMaster>();
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetSelectedStoresByTicketID", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Ticket_ID", TicketId);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreMaster store = new StoreMaster();
+                        store.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        store.Pincode = Convert.ToString(ds.Tables[0].Rows[i]["Pincode"]);
+                        store.StoreEmailID = Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
+                        store.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
+
+                        storeMaster.Add(store);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return storeMaster;
+        }
+
         #endregion
     }
 }
