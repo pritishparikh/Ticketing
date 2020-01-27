@@ -67,6 +67,93 @@ namespace Easyrewardz_TicketSystem.Services
             return listknowledge;
         }
 
+        public CustomKBList SearchKB(int Category_ID, int SubCategory_ID, int type_ID, int TenantId)
+        {
+            DataSet ds = new DataSet();
+            CustomKBList customKBLists = new CustomKBList();
+            List<KBisApproved> kBisApproveds = new List<KBisApproved>();
+            List<KBisNotApproved> kBisNotApproveds = new List<KBisNotApproved>();
+
+            MySqlCommand cmd = new MySqlCommand();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_SearchKB", conn);
+
+                cmd1.Parameters.AddWithValue("@type_ID", type_ID);
+                cmd1.Parameters.AddWithValue("@Category_ID", Category_ID);
+                cmd1.Parameters.AddWithValue("@SubCategory_ID", SubCategory_ID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+
+                        KBisApproved approved = new KBisApproved();
+                        approved.KBID = Convert.ToInt32(ds.Tables[0].Rows[i]["KBID"]);
+                        approved.KBCODE = ds.Tables[0].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["KBCODE"]);
+                        approved.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        approved.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        approved.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        approved.Subject = ds.Tables[0].Rows[i]["Subject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Subject"]);
+                        approved.Description = ds.Tables[0].Rows[i]["Description"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Description"]);
+                        approved.IsApproveStatus = ds.Tables[0].Rows[i]["IsApprove"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsApprove"]);
+
+
+
+
+                        kBisApproveds.Add(approved);
+
+                    }
+
+                    customKBLists.Approved = kBisApproveds;
+                }
+
+
+                if (ds != null && ds.Tables[1] != null)
+                {
+                    for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                    {
+                        KBisNotApproved notApproved = new KBisNotApproved();
+                        notApproved.KBID = Convert.ToInt32(ds.Tables[1].Rows[i]["KBID"]);
+                        notApproved.KBCODE = ds.Tables[0].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["KBCODE"]);
+                        notApproved.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        notApproved.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        notApproved.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        notApproved.Subject = ds.Tables[0].Rows[i]["Subject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Subject"]);
+                        notApproved.Description = ds.Tables[0].Rows[i]["Description"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Description"]);
+                        notApproved.IsApproveStatus = ds.Tables[0].Rows[i]["IsApprove"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsApprove"]);
+
+                        kBisNotApproveds.Add(notApproved);
+                    }
+
+                    customKBLists.NotApproved = kBisNotApproveds;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return customKBLists;
+        }
+
         public int AddKB(KnowlegeBaseMaster knowlegeBaseMaster)
         {
 

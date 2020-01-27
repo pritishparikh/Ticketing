@@ -248,6 +248,48 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Route("SearchKB")]
+        public ResponseModel SearchKB(int Category_ID, int SubCategory_ID, int type_ID)
+        {
+
+            CustomKBList _objKnowlegeBaseMaster = new CustomKBList();
+
+            KnowledgeCaller _KnowledgeCaller = new KnowledgeCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                _objKnowlegeBaseMaster = _KnowledgeCaller.SearchKB(new KnowlegeBaseService(_connectionSting), Category_ID, SubCategory_ID, type_ID, authenticate.TenantId);
+
+                StatusCode =
+               _objKnowlegeBaseMaster == null ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _objKnowlegeBaseMaster;
+            }
+            catch (Exception _ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+        [HttpPost]
         [Route("RejectApproveKB")]
         public ResponseModel RejectApproveKB([FromBody]KnowlegeBaseMaster knowlegeBaseMaster)
         {
