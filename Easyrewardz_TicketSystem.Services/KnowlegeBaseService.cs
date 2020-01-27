@@ -125,13 +125,13 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         KBisNotApproved notApproved = new KBisNotApproved();
                         notApproved.KBID = Convert.ToInt32(ds.Tables[1].Rows[i]["KBID"]);
-                        notApproved.KBCODE = ds.Tables[0].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["KBCODE"]);
-                        notApproved.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
-                        notApproved.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
-                        notApproved.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
-                        notApproved.Subject = ds.Tables[0].Rows[i]["Subject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Subject"]);
-                        notApproved.Description = ds.Tables[0].Rows[i]["Description"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Description"]);
-                        notApproved.IsApproveStatus = ds.Tables[0].Rows[i]["IsApprove"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsApprove"]);
+                        notApproved.KBCODE = ds.Tables[1].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["KBCODE"]);
+                        notApproved.CategoryName = ds.Tables[1].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CategoryName"]);
+                        notApproved.SubCategoryName = ds.Tables[1].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["SubCategoryName"]);
+                        notApproved.IssueTypeName = ds.Tables[1].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["IssueTypeName"]);
+                        notApproved.Subject = ds.Tables[1].Rows[i]["Subject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["Subject"]);
+                        notApproved.Description = ds.Tables[1].Rows[i]["Description"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["Description"]);
+                        notApproved.IsApproveStatus = ds.Tables[1].Rows[i]["IsApprove"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["IsApprove"]);
 
                         kBisNotApproveds.Add(notApproved);
                     }
@@ -324,13 +324,13 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             KBisNotApproved notApproved = new KBisNotApproved();
                             notApproved.KBID = Convert.ToInt32(ds.Tables[1].Rows[i]["KBID"]);
-                        notApproved.KBCODE = ds.Tables[0].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["KBCODE"]);
-                        notApproved.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
-                        notApproved.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
-                        notApproved.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
-                        notApproved.Subject = ds.Tables[0].Rows[i]["Subject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Subject"]);
-                        notApproved.Description = ds.Tables[0].Rows[i]["Description"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Description"]);
-                        notApproved.IsApproveStatus = ds.Tables[0].Rows[i]["IsApprove"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsApprove"]);
+                        notApproved.KBCODE = ds.Tables[1].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["KBCODE"]);
+                        notApproved.CategoryName = ds.Tables[1].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CategoryName"]);
+                        notApproved.SubCategoryName = ds.Tables[1].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["SubCategoryName"]);
+                        notApproved.IssueTypeName = ds.Tables[1].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["IssueTypeName"]);
+                        notApproved.Subject = ds.Tables[1].Rows[i]["Subject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["Subject"]);
+                        notApproved.Description = ds.Tables[1].Rows[i]["Description"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["Description"]);
+                        notApproved.IsApproveStatus = ds.Tables[1].Rows[i]["IsApprove"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["IsApprove"]);
 
                         kBisNotApproveds.Add(notApproved);
                         }
