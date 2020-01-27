@@ -28,7 +28,12 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// Description
         /// </summary>
         public string Description { get; set; }
-       
+
+        public int CategoryID { get; set; }
+
+        public int SubCategoryID { get; set; }
+
+        public int IssueTypeID { get; set; }
         /// <summary>
         /// Category Name
         /// </summary>
@@ -63,6 +68,14 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// </summary>
         public string Description { get; set; }
 
+
+        
+
+        public int CategoryID { get; set; }
+
+        public int SubCategoryID { get; set; }
+
+        public int IssueTypeID { get; set; }
         /// <summary>
         /// Category Name
         /// </summary>
