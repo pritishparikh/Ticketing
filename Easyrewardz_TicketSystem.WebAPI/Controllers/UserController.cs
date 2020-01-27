@@ -379,7 +379,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("GetUserDetailsById")]
         public ResponseModel GetUserDetailsById(int UserID)
         {
-            CustomEditUserModel objUser  = new CustomEditUserModel();
+            CustomUserList objUser  = new CustomUserList();
 
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;

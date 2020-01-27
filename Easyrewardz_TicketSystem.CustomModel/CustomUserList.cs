@@ -30,6 +30,13 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public string UpdatedDate { get; set; }
-
+        public int RoleID  { get; set; }
+        public int DesignationID { get; set; }
+        public int ReporteeID { get; set; }
+        public bool IsActive { get; set; }
+        public bool Is_CopyEscalation { get; set; }
+        public bool Is_AssignEscalation { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

@@ -44,7 +44,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _UserRepository = User;
             return _UserRepository.UserList(TenantID);
         }
-        public CustomEditUserModel GetuserDetailsById(IUser User, int UserID, int TenantID)
+        public CustomUserList GetuserDetailsById(IUser User, int UserID, int TenantID)
         {
             _UserRepository = User;
             return _UserRepository.GetuserDetailsById(UserID, TenantID);

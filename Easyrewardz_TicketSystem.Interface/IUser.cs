@@ -19,6 +19,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int EditUser(CustomEditUserModel customEditUserModel);
         int DeleteUser(int userID,int TenantID, int Modifyby);
         List<CustomUserList> UserList(int TenantID);
-        CustomEditUserModel GetuserDetailsById(int UserID,int TenantID);
+        CustomUserList GetuserDetailsById(int UserID,int TenantID);
     }
 }
