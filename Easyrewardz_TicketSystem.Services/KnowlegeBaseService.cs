@@ -101,6 +101,9 @@ namespace Easyrewardz_TicketSystem.Services
                         KBisApproved approved = new KBisApproved();
                         approved.KBID = Convert.ToInt32(ds.Tables[0].Rows[i]["KBID"]);
                         approved.KBCODE = ds.Tables[0].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["KBCODE"]);
+                        approved.CategoryID = ds.Tables[0].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
+                        approved.SubCategoryID = ds.Tables[0].Rows[i]["SubCategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        approved.IssueTypeID = ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
                         approved.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
                         approved.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
                         approved.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
@@ -126,6 +129,9 @@ namespace Easyrewardz_TicketSystem.Services
                         KBisNotApproved notApproved = new KBisNotApproved();
                         notApproved.KBID = Convert.ToInt32(ds.Tables[1].Rows[i]["KBID"]);
                         notApproved.KBCODE = ds.Tables[1].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["KBCODE"]);
+                        notApproved.CategoryID = ds.Tables[1].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["CategoryID"]);
+                        notApproved.SubCategoryID = ds.Tables[1].Rows[i]["SubCategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["SubCategoryID"]);
+                        notApproved.IssueTypeID = ds.Tables[1].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["IssueTypeID"]);
                         notApproved.CategoryName = ds.Tables[1].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CategoryName"]);
                         notApproved.SubCategoryName = ds.Tables[1].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["SubCategoryName"]);
                         notApproved.IssueTypeName = ds.Tables[1].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["IssueTypeName"]);
@@ -300,6 +306,9 @@ namespace Easyrewardz_TicketSystem.Services
                         KBisApproved approved = new KBisApproved();
                         approved.KBID = Convert.ToInt32(ds.Tables[0].Rows[i]["KBID"]);
                         approved.KBCODE = ds.Tables[0].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["KBCODE"]);
+                        approved.CategoryID = ds.Tables[0].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
+                        approved.SubCategoryID = ds.Tables[0].Rows[i]["SubCategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        approved.IssueTypeID = ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
                         approved.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
                         approved.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
                         approved.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
@@ -325,6 +334,9 @@ namespace Easyrewardz_TicketSystem.Services
                             KBisNotApproved notApproved = new KBisNotApproved();
                             notApproved.KBID = Convert.ToInt32(ds.Tables[1].Rows[i]["KBID"]);
                         notApproved.KBCODE = ds.Tables[1].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["KBCODE"]);
+                        notApproved.CategoryID = ds.Tables[1].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["CategoryID"]);
+                        notApproved.SubCategoryID = ds.Tables[1].Rows[i]["SubCategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["SubCategoryID"]);
+                        notApproved.IssueTypeID = ds.Tables[1].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["IssueTypeID"]);
                         notApproved.CategoryName = ds.Tables[1].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CategoryName"]);
                         notApproved.SubCategoryName = ds.Tables[1].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["SubCategoryName"]);
                         notApproved.IssueTypeName = ds.Tables[1].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["IssueTypeName"]);

@@ -194,7 +194,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// UpdateTemplate
         /// </summary>
-        public int UpdateTemplate(int tenantId,int TemplateID ,string TemplateName, int issueType, bool isTemplateActive,int ModifiedBy)
+        public int UpdateTemplate(int tenantId,int TemplateID ,string TemplateName, string issueType, bool isTemplateActive,int ModifiedBy)
         {
             int updatecount = 0;
 

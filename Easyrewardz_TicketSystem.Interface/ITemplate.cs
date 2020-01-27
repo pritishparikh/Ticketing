@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int DeleteTemplate(int tenantID, int TemplateID);
 
-        int UpdateTemplate(int tenantId, int TemplateID, string TemplateName, int issueType, bool isTemplateActive, int ModifiedBy);
+        int UpdateTemplate(int tenantId, int TemplateID, string TemplateName, string issueType, bool isTemplateActive, int ModifiedBy);
 
         List<TemplateModel> GetTemplates(int tenantId );
 
