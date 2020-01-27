@@ -320,6 +320,47 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// getclaimlist
+        /// </summary>
+        /// <param name="TaskId"></param>
+        [HttpPost]
+        [Route("getTaskComment")]
+        public ResponseModel getTaskComment(int TaskId)
+        {
+            List<UserComment> _obClaimMaster = new List<UserComment>();
+            TaskCaller _taskcaller = new TaskCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                _obClaimMaster = _taskcaller.GetTaskComment(new TaskServices(_connectionSting), TaskId);
+                StatusCode =
+                   _obClaimMaster == null ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _obClaimMaster;
+            }
+            catch (Exception _ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
         #endregion
 
     }

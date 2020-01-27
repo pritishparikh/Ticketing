@@ -322,5 +322,50 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return lsttask;
         }
+
+        /// <summary>
+        /// Get list of the task comment for the task
+        /// </summary>
+        /// <param name="ClaimId"></param>
+        /// <returns></returns>
+        public List<UserComment> GetTaskComment(int TaskId)
+        {
+            DataSet ds = new DataSet();
+            List<UserComment> lstClaimComment = new List<UserComment>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetTaskCommentByTaskId", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Task_ID", TaskId);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        UserComment userComment = new UserComment();
+                        userComment.Name = Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
+                        userComment.Comment = Convert.ToString(ds.Tables[0].Rows[i]["Comment"]);
+                        userComment.datetime = Convert.ToString(ds.Tables[0].Rows[i]["datetime"]);
+                        lstClaimComment.Add(userComment);
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return lstClaimComment;
+        }
     }
 }
