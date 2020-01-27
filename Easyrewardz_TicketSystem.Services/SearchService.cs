@@ -416,7 +416,7 @@ namespace Easyrewardz_TicketSystem.Services
                     /*Column 4 (5)*/
                     sqlcmd.Parameters.AddWithValue("CustomerEmailID", searchModel.searchDataByAll.CustomerEmailID);
                     sqlcmd.Parameters.AddWithValue("CustomerMobileNo", string.IsNullOrEmpty(searchModel.searchDataByAll.CustomerMobileNo) ? "" : searchModel.searchDataByAll.CustomerMobileNo);
-                    sqlcmd.Parameters.AddWithValue("AssignTo", searchModel.searchDataByAll.AssignTo);
+                    sqlcmd.Parameters.AddWithValue("OtherAgentAssignTo", string.IsNullOrEmpty(Convert.ToString(searchModel.searchDataByAll.AssignTo)) ? 0 : Convert.ToInt32(searchModel.searchDataByAll.AssignTo));
                     sqlcmd.Parameters.AddWithValue("StoreCodeORAddress", searchModel.searchDataByAll.StoreCodeORAddress);
                     sqlcmd.Parameters.AddWithValue("WantToStoreCodeORAddress", searchModel.searchDataByAll.WantToStoreCodeORAddress);
 
