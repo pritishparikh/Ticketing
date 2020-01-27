@@ -20,5 +20,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int DeleteUser(int userID,int TenantID, int Modifyby);
         List<CustomUserList> UserList(int TenantID);
         CustomUserList GetuserDetailsById(int UserID,int TenantID);
+
     }
 }

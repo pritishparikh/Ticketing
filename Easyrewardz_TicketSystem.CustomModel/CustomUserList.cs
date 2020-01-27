@@ -38,5 +38,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public bool Is_AssignEscalation { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
     }
 }

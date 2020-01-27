@@ -48,6 +48,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _UserRepository = User;
             return _UserRepository.GetuserDetailsById(UserID, TenantID);
+
         }
     }
 }
