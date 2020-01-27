@@ -182,7 +182,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("ModifyTemplate")]
-        public ResponseModel ModifyTemplate(int TemplateID, string TemplateName, int issueType, bool isTemplateActive)
+        public ResponseModel ModifyTemplate(int TemplateID, string TemplateName, string issueType, bool isTemplateActive)
         {
             int updatecount = 0;
             ResponseModel _objResponseModel = new ResponseModel();
