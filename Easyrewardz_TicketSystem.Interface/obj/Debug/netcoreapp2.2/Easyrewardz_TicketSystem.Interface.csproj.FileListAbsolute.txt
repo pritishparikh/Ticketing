@@ -76,3 +76,17 @@ D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreap
 D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.csproj.CopyComplete
 D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
 D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.deps.json
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.csprojAssemblyReference.cache
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.csproj.CoreCompileInputs.cache
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.AssemblyInfoInputs.cache
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.AssemblyInfo.cs
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.csproj.CopyComplete
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
+E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
