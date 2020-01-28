@@ -212,6 +212,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ImasterFunctionbyDepartment.GetFunctionByDepartment(DepartmentID, TenantID);
         }
 
+        private IMasterInterface _ImasterAddDepartment;
+        public int AddDepartment(IMasterInterface _AddDepartment, string DepartmentName, int TenantID, int CreatedBy)
+        {
+            _ImasterAddDepartment = _AddDepartment;
+            return _ImasterAddDepartment.AddDepartment(DepartmentName, TenantID, CreatedBy);
+        }
+
+        private IMasterInterface _ImasterAddFunction;
+        public int AddDepartment(IMasterInterface _AddFunction,int DepartmentID ,string FunctionName, int TenantID, int CreatedBy)
+        {
+            _ImasterAddFunction = _AddFunction;
+            return _ImasterAddFunction.Addfunction(DepartmentID, FunctionName,TenantID, CreatedBy);
+        }
         #endregion
 
         #region PaymentMode

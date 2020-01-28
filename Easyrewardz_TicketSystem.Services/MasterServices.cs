@@ -498,5 +498,66 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return storeTypeMaster;
         }
+
+        public int AddDepartment(string DepartmentName, int TenantID, int CreatedBy)
+        {
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_AddDepartment", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Department_Name", DepartmentName);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return success;
+        }
+
+        public int Addfunction(int DepartmentID, string FunctionName, int TenantID, int CreatedBy)
+        {
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_AddFunction", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Department_ID", DepartmentID);
+                cmd.Parameters.AddWithValue("@Function_Name", FunctionName);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return success;
+        }
     }
 }

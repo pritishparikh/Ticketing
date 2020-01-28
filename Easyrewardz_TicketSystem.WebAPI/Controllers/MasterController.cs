@@ -86,6 +86,99 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Department
 
         /// <summary>
+        /// Add Department  
+        /// </summary>
+        /// <param name="DepartmentName"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddDepartment")]
+        public ResponseModel AddDepartment( string DepartmentName)
+        {         
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            int result = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                MasterCaller _newMasterBrand = new MasterCaller();
+
+                result = _newMasterBrand.AddDepartment(new MasterServices(_connectioSting), DepartmentName, authenticate.TenantId, authenticate.UserMasterID);
+
+                StatusCode =
+                result == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = "Message" + Convert.ToString(ex.Message) + "Inner Exception" + Convert.ToString(ex.InnerException);
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+        /// <summary>
+        /// Add Function   
+        /// </summary>
+        /// <param name="DepartmentID"></param>
+        ///  <param name="FunctionName"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddFunction")]
+        public ResponseModel AddFunction(int DepartmentID,string FunctionName)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            int result = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                MasterCaller _newMasterBrand = new MasterCaller();
+
+                result = _newMasterBrand.AddDepartment(new MasterServices(_connectioSting), DepartmentID, FunctionName, authenticate.TenantId, authenticate.UserMasterID);
+
+                StatusCode =
+                result == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = "Message" + Convert.ToString(ex.Message) + "Inner Exception" + Convert.ToString(ex.InnerException);
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+        /// <summary>
         /// Get Department List 
         /// </summary>
         /// <param name="TenantID"></param>
