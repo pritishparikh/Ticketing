@@ -387,7 +387,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getSelectedStores")]
-        public ResponseModel getStores(int TicketID)
+        public ResponseModel getSelectedStores(int TicketID)
         {
             List<StoreMaster> storeMasters = new List<StoreMaster>();
             ResponseModel _objResponseModel = new ResponseModel();
