@@ -42,7 +42,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("GetPriorityList")]
-        public ResponseModel GetPriorityList()
+        public ResponseModel GetPriorityList(int PriorityFor)
         {
             List<Priority> objPriority = new List<Priority>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -57,7 +57,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 MasterCaller _newMasterSubCat = new MasterCaller();
 
-                objPriority = _newMasterSubCat.GetPriorityList(new PriorityService(_connectionString), authenticate.TenantId);
+                objPriority = _newMasterSubCat.GetPriorityList(new PriorityService(_connectionString), authenticate.TenantId, PriorityFor);
 
                 StatusCode =
                 objPriority.Count == 0 ?
@@ -92,7 +92,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("AddPriority")]
-        public ResponseModel AddPriority(string PriorityName, int status)
+        public ResponseModel AddPriority(string PriorityName, int status,int PriorityFor)
         {
             MasterCaller _MasterCaller = new MasterCaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -104,7 +104,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _MasterCaller.Addpriority(new PriorityService(_connectionString), PriorityName, status, authenticate.TenantId, authenticate.UserMasterID);
+                int result = _MasterCaller.Addpriority(new PriorityService(_connectionString), PriorityName, status, authenticate.TenantId, authenticate.UserMasterID, PriorityFor);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -112,7 +112,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
-
+                _objResponseModel.ResponseData = result;
             }
             catch (Exception ex)
             {
@@ -133,7 +133,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdatePriority")]
-        public ResponseModel  UpdatePriority(int PriorityID, string PriorityName, int status)
+        public ResponseModel  UpdatePriority(int PriorityID, string PriorityName, int status, int PriorityFor)
         {
             MasterCaller _MasterCaller = new MasterCaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -145,7 +145,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _MasterCaller.Updatepriority(new PriorityService(_connectionString), PriorityID, PriorityName, status, authenticate.TenantId, authenticate.UserMasterID);
+                int result = _MasterCaller.Updatepriority(new PriorityService(_connectionString), PriorityID, PriorityName, status, authenticate.TenantId, authenticate.UserMasterID, PriorityFor);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -153,6 +153,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
 
             }
             catch (Exception ex)
@@ -174,7 +175,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("DeletePriority")]
-        public ResponseModel DeletePriority(int PriorityID)
+        public ResponseModel DeletePriority(int PriorityID, int PriorityFor)
         {
             MasterCaller _MasterCaller = new MasterCaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -186,7 +187,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _MasterCaller.Deletepriority(new PriorityService(_connectionString), PriorityID, authenticate.TenantId, authenticate.UserMasterID);
+                int result = _MasterCaller.Deletepriority(new PriorityService(_connectionString), PriorityID, authenticate.TenantId, authenticate.UserMasterID, PriorityFor);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -194,6 +195,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
 
             }
             catch (Exception ex)

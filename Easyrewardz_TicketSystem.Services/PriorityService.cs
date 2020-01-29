@@ -21,7 +21,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public int AddPriority(string PriorityName, int status,int tenantID,int UserID)
+        public int AddPriority(string PriorityName, int status,int tenantID,int UserID,int PriorityFor)
         {
 
             int success = 0;
@@ -34,6 +34,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Is_status", status);
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Priority_For", PriorityFor);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -57,7 +58,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public int DeletePriority(int PriorityID, int tenantID, int UserID)
+        public int DeletePriority(int PriorityID, int tenantID, int UserID,int PriorityFor)
         {
 
             int success = 0;
@@ -69,6 +70,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Priority_ID", PriorityID);
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Priority_For", PriorityFor);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -92,7 +94,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<Priority> GetPriorityList(int TenantID)
+        public List<Priority> GetPriorityList(int TenantID,int PriorityFor)
         {
 
             DataSet ds = new DataSet();
@@ -106,6 +108,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetPriorityList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@Priority_For", PriorityFor);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -115,16 +118,15 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         Priority priority = new Priority();
                         priority.PriorityID = Convert.ToInt32(ds.Tables[0].Rows[i]["PriorityID"]);
-                        priority.PriortyName = Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);
+                        priority.PriortyName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);
                         priority.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-
-                        priority.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                        priority.CreatedByName = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
                         priority.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
                         priority.CreatedDateFormated = priority.CreatedDate.ToString("dd/MMM/yyyy");
                         priority.ModifiedByName= Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
                         priority.ModifiedDate= Convert.ToDateTime(ds.Tables[0].Rows[i]["ModifiedDate"]);
                         priority.ModifiedDateFormated = priority.ModifiedDate.ToString("dd/MMM/yyyy");
-                        priority.PriortyStatus = Convert.ToString(ds.Tables[0].Rows[i]["PriortyStatus"]);  
+                        priority.PriortyStatus = ds.Tables[0].Rows[i]["PriortyStatus"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyStatus"]);  
                         objPriority.Add(priority);
                     }
                 }
@@ -148,7 +150,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public int UpdatePriority(int PriorityID, string PriorityName, int status, int tenantID, int UserID)
+        public int UpdatePriority(int PriorityID, string PriorityName, int status, int tenantID, int UserID,int PriorityFor)
         {
 
             int success = 0;
@@ -162,6 +164,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Is_status", status);
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Priority_For", PriorityFor);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 

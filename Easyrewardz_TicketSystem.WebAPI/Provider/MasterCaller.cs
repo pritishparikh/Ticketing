@@ -145,25 +145,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region Methods for the Priority
 
-        public List<Priority> GetPriorityList(IPriority _priority, int TenantID)
+        public List<Priority> GetPriorityList(IPriority _priority, int TenantID,int PriorityFor)
         {
             _priorityList = _priority;
-            return _priorityList.GetPriorityList(TenantID);
+            return _priorityList.GetPriorityList(TenantID, PriorityFor);
         }
-        public int  Addpriority(IPriority _priority, string PriorityName, int status, int tenantID, int UserID)
+        public int  Addpriority(IPriority _priority, string PriorityName, int status, int tenantID, int UserID,int PriorityFor)
         {
             _priorityList = _priority;
-            return _priorityList.AddPriority(PriorityName, status, tenantID, UserID);
+            return _priorityList.AddPriority(PriorityName, status, tenantID, UserID, PriorityFor);
         }
-        public int Updatepriority(IPriority _priority, int PriorityID, string PriorityName, int status, int tenantID, int UserID)
+        public int Updatepriority(IPriority _priority, int PriorityID, string PriorityName, int status, int tenantID, int UserID,int PriorityFor)
         {
             _priorityList = _priority;
-            return _priorityList.UpdatePriority(PriorityID,PriorityName, status, tenantID, UserID);
+            return _priorityList.UpdatePriority(PriorityID,PriorityName, status, tenantID, UserID, PriorityFor);
         }
-        public int Deletepriority(IPriority _priority, int PriorityID, int tenantID, int UserID)
+        public int Deletepriority(IPriority _priority, int PriorityID, int tenantID, int UserID,int PriorityFor)
         {
             _priorityList = _priority;
-            return _priorityList.DeletePriority(PriorityID,tenantID, UserID);
+            return _priorityList.DeletePriority(PriorityID,tenantID, UserID, PriorityFor);
         }
         #endregion
 
