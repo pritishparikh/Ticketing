@@ -295,6 +295,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _Imaster = _ImasterInterface;
             return _Imaster.GetStoreTypeList();
         }
+        public List<StoreTypeMaster> GetStoreNameWithStoreCode(IMasterInterface _ImasterInterface,int TenantID)
+        {
+            _Imaster = _ImasterInterface;
+            return _Imaster.GetStoreNameWithsStoreCode(TenantID);
+        }
 
         #endregion
 

@@ -551,6 +551,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+
+        /// <summary>
+        /// Get Store Code With Store Name
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [Route("GetStoreCodeWithStoreName")]
+        public ResponseModel GetStoreCodeWithStoreName()
+        {
+            List<StoreTypeMaster> _objStoreTypeList = new List<StoreTypeMaster>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                MasterCaller _newMasterRegion = new MasterCaller();
+
+                _objStoreTypeList = _newMasterRegion.GetStoreNameWithStoreCode(new MasterServices(_connectioSting), authenticate.TenantId);
+
+                StatusCode =
+                _objStoreTypeList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _objStoreTypeList;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = "Message" + Convert.ToString(ex.Message) + "Inner Exception" + Convert.ToString(ex.InnerException);
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
         #endregion
 
 

@@ -95,5 +95,12 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name=""></param>
         /// <returns></returns>
         List<StoreTypeMaster> GetStoreTypeList();
+
+        /// <summary>
+        ///Get StoreType List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        List<StoreTypeMaster> GetStoreNameWithsStoreCode(int TenantID);
     }
 }

@@ -499,6 +499,10 @@ namespace Easyrewardz_TicketSystem.Services
             return storeTypeMaster;
         }
 
+        /// <summary>
+        /// Add Department
+        /// </summary>
+        /// <returns></returns>
         public int AddDepartment(string DepartmentName, int TenantID, int CreatedBy)
         {
             int success = 0;
@@ -529,6 +533,10 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
+        /// <summary>
+        ///Add function
+        /// </summary>
+        /// <returns></returns>
         public int Addfunction(int DepartmentID, string FunctionName, int TenantID, int CreatedBy)
         {
             int success = 0;
@@ -558,6 +566,49 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return success;
+        }
+
+        public List<StoreTypeMaster> GetStoreNameWithsStoreCode(int TenantID)
+        {
+            DataSet ds = new DataSet();
+            List<StoreTypeMaster> storeMaster = new List<StoreTypeMaster>();
+
+            try
+            {
+
+                conn.Open();
+                
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreCodewithStoreName", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreTypeMaster storeType = new StoreTypeMaster();
+                        storeType.StoreTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
+                        storeType.StoreTypeName = Convert.ToString(ds.Tables[0].Rows[i]["StoreNameWithCode"]);
+                        storeMaster.Add(storeType);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return storeMaster;
         }
     }
 }
