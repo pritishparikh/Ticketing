@@ -343,24 +343,28 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CustomStoreList store = new CustomStoreList();
-                        store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
-                        store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        store.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        store.StoreID = ds.Tables[0].Rows[i]["StoreID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
+                        store.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        store.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
                         //store.BranName = Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
-                        store.CityName = Convert.ToString(ds.Tables[0].Rows[i]["CityName"]);
-                        store.StateName = Convert.ToString(ds.Tables[0].Rows[i]["StateName"]);
-                        store.strPinCode = Convert.ToString(ds.Tables[0].Rows[i]["PincodeID"]);
-                        store.Status = Convert.ToString(ds.Tables[0].Rows[i]["StoreStatus"]);
+                        store.CityName = ds.Tables[0].Rows[i]["CityName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CityName"]);
+                        store.StateName = ds.Tables[0].Rows[i]["StateName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StateName"]);
+                        store.strPinCode = ds.Tables[0].Rows[i]["PincodeID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PincodeID"]);
+                        store.Status = ds.Tables[0].Rows[i]["StoreStatus"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreStatus"]);
 
-                        store.CityID = Convert.ToInt32(ds.Tables[0].Rows[i]["CityID"]);
-                        store.StateID = Convert.ToInt32(ds.Tables[0].Rows[i]["StateID"]);
-                        store.RegionID = Convert.ToInt32(ds.Tables[0].Rows[i]["RegionID"]);
-                        store.ZoneID = Convert.ToInt32(ds.Tables[0].Rows[i]["ZoneID"]);
-                        store.StoreTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreTypeID"]);
+                        store.Address = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]); 
+                        store.PhoneNumber = ds.Tables[0].Rows[i]["StorePhoneNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StorePhoneNo"]);
+                        store.Email= ds.Tables[0].Rows[i]["StoreEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
+
+                        store.CityID = ds.Tables[0].Rows[i]["CityID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CityID"]);
+                        store.StateID = ds.Tables[0].Rows[i]["StateID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StateID"]);
+                        store.RegionID = ds.Tables[0].Rows[i]["RegionID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["RegionID"]);
+                        store.ZoneID = ds.Tables[0].Rows[i]["ZoneID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ZoneID"]);
+                        store.StoreTypeID = ds.Tables[0].Rows[i]["StoreTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreTypeID"]);
                         store.StatusID = Convert.ToBoolean(ds.Tables[0].Rows[i]["StatusID"]);
-                        store.BrandIDs = Convert.ToString(ds.Tables[0].Rows[i]["BrandIDs"]);
-                        store.BrandNames = Convert.ToString(ds.Tables[0].Rows[i]["BrandNames"]);
-                        store.Brand_Names = Convert.ToString(ds.Tables[0].Rows[i]["Brand_Names"]);
+                        store.BrandIDs = ds.Tables[0].Rows[i]["BrandIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandIDs"]);
+                        store.BrandNames = ds.Tables[0].Rows[i]["BrandNames"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandNames"]);
+                        store.Brand_Names = ds.Tables[0].Rows[i]["Brand_Names"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Brand_Names"]);
 
                         storeMaster.Add(store);
                     }
