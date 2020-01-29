@@ -42,7 +42,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("GetPriorityList")]
-        public ResponseModel GetPriorityList(int PriorityFor)
+        public ResponseModel GetPriorityList(int PriorityFor=1)
         {
             List<Priority> objPriority = new List<Priority>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -92,7 +92,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("AddPriority")]
-        public ResponseModel AddPriority(string PriorityName, int status,int PriorityFor)
+        public ResponseModel AddPriority(string PriorityName, int status,int PriorityFor=1)
         {
             MasterCaller _MasterCaller = new MasterCaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -133,7 +133,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdatePriority")]
-        public ResponseModel  UpdatePriority(int PriorityID, string PriorityName, int status, int PriorityFor)
+        public ResponseModel  UpdatePriority(int PriorityID, string PriorityName, int status, int PriorityFor=1)
         {
             MasterCaller _MasterCaller = new MasterCaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -175,7 +175,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("DeletePriority")]
-        public ResponseModel DeletePriority(int PriorityID, int PriorityFor)
+        public ResponseModel DeletePriority(int PriorityID, int PriorityFor=1)
         {
             MasterCaller _MasterCaller = new MasterCaller();
             ResponseModel _objResponseModel = new ResponseModel();
