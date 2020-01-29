@@ -220,7 +220,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
         private IMasterInterface _ImasterAddFunction;
-        public int AddDepartment(IMasterInterface _AddFunction,int DepartmentID ,string FunctionName, int TenantID, int CreatedBy)
+        public int AddFunction(IMasterInterface _AddFunction,int DepartmentID ,string FunctionName, int TenantID, int CreatedBy)
         {
             _ImasterAddFunction = _AddFunction;
             return _ImasterAddFunction.Addfunction(DepartmentID, FunctionName,TenantID, CreatedBy);

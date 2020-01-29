@@ -153,7 +153,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 MasterCaller _newMasterBrand = new MasterCaller();
 
-                result = _newMasterBrand.AddDepartment(new MasterServices(_connectioSting), DepartmentID, FunctionName, authenticate.TenantId, authenticate.UserMasterID);
+                result = _newMasterBrand.AddFunction(new MasterServices(_connectioSting), DepartmentID, FunctionName, authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =
                 result == 0 ?
