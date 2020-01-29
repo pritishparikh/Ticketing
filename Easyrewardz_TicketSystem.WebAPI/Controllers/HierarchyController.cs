@@ -85,7 +85,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("ListHierarchy")]
-        public ResponseModel ListHierarchy()
+        public ResponseModel ListHierarchy(int HierarchyFor=1)
         {
             List<CustomHierarchymodel> customHierarchymodels = new List<CustomHierarchymodel>();
             HierarchyCaller _Hierarchy = new HierarchyCaller();
@@ -97,7 +97,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                customHierarchymodels = _Hierarchy.ListofHierarchy(new HierarchyService(_connectionSting), authenticate.TenantId);
+                customHierarchymodels = _Hierarchy.ListofHierarchy(new HierarchyService(_connectionSting), authenticate.TenantId, HierarchyFor);
                 StatusCode =
                    customHierarchymodels.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

@@ -30,10 +30,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="TenantID"></param>
         /// <param name=""></param>
         /// <returns></returns>
-        public List<CustomHierarchymodel> ListofHierarchy(IHierarchy Hierarchy,int TenantID)
+        public List<CustomHierarchymodel> ListofHierarchy(IHierarchy Hierarchy,int TenantID, int HierarchyFor)
         {
             _HierarchyRepository = Hierarchy;
-            return _HierarchyRepository.ListHierarchy(TenantID);
+            return _HierarchyRepository.ListHierarchy(TenantID, HierarchyFor);
         }
     }
 }

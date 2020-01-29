@@ -33,6 +33,7 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd.Parameters.AddWithValue("@Is_Active", customHierarchymodel.IsActive);
                     cmd.Parameters.AddWithValue("@Tenant_ID", customHierarchymodel.TenantID);
                     cmd.Parameters.AddWithValue("@User_ID", customHierarchymodel.CreatedBy);
+                    cmd.Parameters.AddWithValue("@Hierarchy_For", customHierarchymodel.HierarchyFor);
                     Success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
                 }
@@ -64,6 +65,7 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd.Parameters.AddWithValue("@Is_Active", customHierarchymodel.IsActive);
                     cmd.Parameters.AddWithValue("@Tenant_ID", customHierarchymodel.TenantID);
                     cmd.Parameters.AddWithValue("@User_ID", customHierarchymodel.CreatedBy);
+                    cmd.Parameters.AddWithValue("@Hierarchy_For", customHierarchymodel.HierarchyFor);
                     cmd.Parameters.AddWithValue("@Delete_flag", customHierarchymodel.Deleteflag);
                     Success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -87,7 +89,7 @@ namespace Easyrewardz_TicketSystem.Services
                 return Success;
         }
 
-        public List<CustomHierarchymodel> ListHierarchy(int TenantID)
+        public List<CustomHierarchymodel> ListHierarchy(int TenantID, int HierarchyFor)
         {
             DataSet ds = new DataSet();
             List<CustomHierarchymodel> listHierarchy = new List<CustomHierarchymodel>();
@@ -97,6 +99,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_ListHierarchy", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Hierarchy_For", HierarchyFor);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;

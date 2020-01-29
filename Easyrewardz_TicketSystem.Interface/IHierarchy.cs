@@ -9,6 +9,6 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface IHierarchy
     {
         int CreateHierarchy(CustomHierarchymodel customHierarchymodel);
-        List<CustomHierarchymodel> ListHierarchy(int TenantID );
+        List<CustomHierarchymodel> ListHierarchy(int TenantID,int HierarchyFor);
     }
 }
