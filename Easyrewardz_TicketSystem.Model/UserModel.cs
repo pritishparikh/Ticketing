@@ -27,6 +27,10 @@ namespace Easyrewardz_TicketSystem.Model
          public int  ModifyBy { get; set; }
          public DateTime  ModifiedDate { get; set; }
          public string  FirstName { get; set; }
-         public string  LastName { get; set; }
+         public string LastName { get; set; }
+        public UserModel()
+        {
+            IsStoreUser = 1;
+        }
     }
 }

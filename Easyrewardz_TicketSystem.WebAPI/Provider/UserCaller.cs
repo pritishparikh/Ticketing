@@ -14,15 +14,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public IUser _UserRepository;
         #endregion
 
-        public int AddUserPersonaldetail(IUser User, UserModel userModel,int TenantID)
+        public int AddUserPersonaldetail(IUser User, UserModel userModel)
         {
             _UserRepository = User;
-            return _UserRepository.AddUserPersonaldetail(userModel, TenantID);
+            return _UserRepository.AddUserPersonaldetail(userModel);
         }
-        public int AddUserProfiledetail(IUser User, int DesignationID, int ReportTo, int CreatedBy, int TenantID, int UserID)
+        public int AddUserProfiledetail(IUser User, int DesignationID, int ReportTo, int CreatedBy, int TenantID, int UserID,int IsStoreUser)
         {
             _UserRepository = User;
-            return _UserRepository.AddUserProfiledetail(DesignationID, ReportTo, CreatedBy, TenantID, UserID);
+            return _UserRepository.AddUserProfiledetail(DesignationID, ReportTo, CreatedBy, TenantID, UserID, IsStoreUser);
         }
         public int Mappedcategory(IUser User, CustomUserModel customUserModel)
         {
@@ -34,20 +34,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _UserRepository = User;
             return _UserRepository.EditUser(customEditUserModel);
         }
-        public int DeleteUser(IUser User, int userID, int TenantID, int Modifyby)
+        public int DeleteUser(IUser User, int userID, int TenantID, int Modifyby,int IsStoreUser)
         {
             _UserRepository = User;
-            return _UserRepository.DeleteUser(userID,TenantID, Modifyby);
+            return _UserRepository.DeleteUser(userID,TenantID, Modifyby, IsStoreUser);
         }
-        public List<CustomUserList> UserList(IUser User,int TenantID)
+        public List<CustomUserList> UserList(IUser User,int TenantID,int IsStoreUser)
         {
             _UserRepository = User;
-            return _UserRepository.UserList(TenantID);
+            return _UserRepository.UserList(TenantID, IsStoreUser);
         }
-        public CustomUserList GetuserDetailsById(IUser User, int UserID, int TenantID)
+        public CustomUserList GetuserDetailsById(IUser User, int UserID, int TenantID,int IsStoreUser)
         {
             _UserRepository = User;
-            return _UserRepository.GetuserDetailsById(UserID, TenantID);
+            return _UserRepository.GetuserDetailsById(UserID, TenantID, IsStoreUser);
 
         }
     }

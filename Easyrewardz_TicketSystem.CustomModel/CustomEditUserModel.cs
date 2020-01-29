@@ -26,6 +26,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string IssuetypeIds { get; set; }
         public bool IsAgent { get; set; }
         public int EscalateAssignToId { get; set; }
-
+        public int IsStoreUser { get; set; }
+        public CustomEditUserModel()
+        {
+            IsStoreUser = -1;
+        }
     }
 }

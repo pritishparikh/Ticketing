@@ -105,7 +105,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 UserCaller userCaller = new UserCaller();
                 userModel.CreatedBy = authenticate.UserMasterID;
-                 int Result = userCaller.AddUserPersonaldetail(new UserServices(_connectioSting), userModel, authenticate.TenantId);
+                userModel.TenantID = authenticate.TenantId;
+                 int Result = userCaller.AddUserPersonaldetail(new UserServices(_connectioSting), userModel);
 
                 StatusCode =
                Result == 0 ?
@@ -138,7 +139,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="UserModel"></param>
         [HttpPost]
         [Route("AddUserProfileDetail")]
-        public ResponseModel AddUserProfileDetail(int DesignationID, int ReportTo, int UserID)
+        public ResponseModel AddUserProfileDetail(int DesignationID, int ReportTo, int UserID,int IsStoreUser=1)
         {
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -150,7 +151,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 UserCaller userCaller = new UserCaller();
-                int Result = userCaller.AddUserProfiledetail(new UserServices(_connectioSting), DesignationID, ReportTo, authenticate.UserMasterID, authenticate.TenantId, UserID);
+                int Result = userCaller.AddUserProfiledetail(new UserServices(_connectioSting), DesignationID, ReportTo, authenticate.UserMasterID, authenticate.TenantId, UserID, IsStoreUser);
 
                 StatusCode =
                Result == 0 ?
@@ -280,7 +281,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name=""></param>
         [HttpPost]
         [Route("DeleteUser")]
-        public ResponseModel DeleteUser(int userID)
+        public ResponseModel DeleteUser(int userID,int IsStoreUser=1)
         {
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -293,7 +294,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 UserCaller userCaller = new UserCaller();
 
-                int Result = userCaller.DeleteUser(new UserServices(_connectioSting), userID,authenticate.TenantId, authenticate.UserMasterID);
+                int Result = userCaller.DeleteUser(new UserServices(_connectioSting), userID,authenticate.TenantId, authenticate.UserMasterID, IsStoreUser);
 
                 StatusCode =
                Result == 0 ?
@@ -326,7 +327,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name=""></param>
         [HttpGet]
         [Route("GetUserListData")]
-        public ResponseModel GetUserListData()
+        public ResponseModel GetUserListData(int IsStoreUser=1)
         {
             List<CustomUserList> objUserList = new List<CustomUserList>();
 
@@ -342,7 +343,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 UserCaller userCaller = new UserCaller();
 
-                objUserList = userCaller.UserList(new UserServices(_connectioSting), authenticate.TenantId);
+                objUserList = userCaller.UserList(new UserServices(_connectioSting), authenticate.TenantId, IsStoreUser);
 
                 StatusCode =
                 objUserList.Count == 0 ?
@@ -377,7 +378,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name=""></param>
         [HttpPost]
         [Route("GetUserDetailsById")]
-        public ResponseModel GetUserDetailsById(int UserID)
+        public ResponseModel GetUserDetailsById(int UserID,int IsStoreUser=1)
         {
             CustomUserList objUser  = new CustomUserList();
 
@@ -393,7 +394,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 UserCaller userCaller = new UserCaller();
 
-                objUser = userCaller.GetuserDetailsById(new UserServices(_connectioSting), UserID,authenticate.TenantId);
+                objUser = userCaller.GetuserDetailsById(new UserServices(_connectioSting), UserID,authenticate.TenantId, IsStoreUser);
 
                 StatusCode =
                 objUser == null ? 

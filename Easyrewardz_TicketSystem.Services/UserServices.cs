@@ -21,7 +21,7 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
-        public int AddUserPersonaldetail(UserModel userModel, int TenantID)
+        public int AddUserPersonaldetail(UserModel userModel)
         {
             int UserID = 0;
             try
@@ -35,7 +35,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Last_Name", userModel.LastName);
                 cmd.Parameters.AddWithValue("@Email_ID", userModel.EmailID);
                 cmd.Parameters.AddWithValue("@Created_By", userModel.CreatedBy);
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Is_StoreUser", userModel.IsStoreUser);
+                cmd.Parameters.AddWithValue("@Tenant_ID", userModel.TenantID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 UserID = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -55,7 +56,7 @@ namespace Easyrewardz_TicketSystem.Services
             return UserID;
         }
 
-        public int AddUserProfiledetail(int DesignationID, int ReportTo, int CreatedBy, int TenantID, int UserID)
+        public int AddUserProfiledetail(int DesignationID, int ReportTo, int CreatedBy, int TenantID, int UserID,int IsStoreUser)
         {
             int success = 0;
             try
@@ -68,6 +69,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Is_StoreUser", IsStoreUser);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -87,7 +89,7 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
-        public int DeleteUser(int userID, int TenantID, int Modifyby)
+        public int DeleteUser(int userID, int TenantID, int Modifyby,int IsStoreUser)
         {
             int success = 0;
             try
@@ -98,6 +100,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@user_ID", userID);
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@Modify_by", Modifyby);
+                cmd.Parameters.AddWithValue("@Is_StoreUser", IsStoreUser);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -145,6 +148,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Is_Active", customEditUserModel.IsActive);
                 cmd.Parameters.AddWithValue("@Created_By", customEditUserModel.CreatedBy);
                 cmd.Parameters.AddWithValue("@Tenant_ID", customEditUserModel.TenantID);
+                cmd.Parameters.AddWithValue("@Is_StoreUser", customEditUserModel.IsStoreUser);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -164,7 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
-        public CustomUserList GetuserDetailsById(int UserID, int TenantID)
+        public CustomUserList GetuserDetailsById(int UserID, int TenantID,int IsStoreUser)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -178,6 +182,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd1.Parameters.AddWithValue("@User_ID", UserID);
+                cmd1.Parameters.AddWithValue("@Is_StoreUser", IsStoreUser);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -304,6 +309,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@User_ID", customUserModel.UserId);
                 cmd.Parameters.AddWithValue("@Tenant_ID", customUserModel.TenantID);
                 cmd.Parameters.AddWithValue("@EscalateAssignTo_Id", customUserModel.EscalateAssignToId);
+                cmd.Parameters.AddWithValue("@Is_StoreUser", customUserModel.IsStoreUser);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -323,7 +329,7 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
-        public List<CustomUserList> UserList(int TenantID)
+        public List<CustomUserList> UserList(int TenantID,int IsStoreUser)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -336,6 +342,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetUserListData", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@Is_StoreUser", IsStoreUser);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);

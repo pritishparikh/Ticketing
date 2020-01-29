@@ -19,5 +19,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public int CreatedBy { get; set; }
         public int TenantID { get; set; }
         public int EscalateAssignToId { get; set; }
+        public int IsStoreUser { get; set; }
+        public CustomUserModel()
+        {
+            IsStoreUser = -1;
+        }
     }
 }

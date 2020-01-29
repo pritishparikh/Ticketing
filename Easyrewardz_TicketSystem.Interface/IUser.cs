@@ -10,16 +10,16 @@ namespace Easyrewardz_TicketSystem.Interface
     {
         List<User> GetUserList(int TenantId ,int UserID);
 
-        int AddUserPersonaldetail(UserModel userModel,int TenantID);
+        int AddUserPersonaldetail(UserModel userModel);
 
-        int AddUserProfiledetail(int DesignationID,int ReportTo ,int CreatedBy,int TenantID,int UserID);
+        int AddUserProfiledetail(int DesignationID,int ReportTo ,int CreatedBy,int TenantID,int UserID,int IsStoreUser);
 
         int Mappedcategory(CustomUserModel customUserModel);
 
         int EditUser(CustomEditUserModel customEditUserModel);
-        int DeleteUser(int userID,int TenantID, int Modifyby);
-        List<CustomUserList> UserList(int TenantID);
-        CustomUserList GetuserDetailsById(int UserID,int TenantID);
+        int DeleteUser(int userID,int TenantID, int Modifyby,int IsStoreUser);
+        List<CustomUserList> UserList(int TenantID,int IsStoreUser);
+        CustomUserList GetuserDetailsById(int UserID,int TenantID,int IsStoreUser);
 
     }
 }
