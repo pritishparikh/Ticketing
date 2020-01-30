@@ -493,13 +493,6 @@ namespace Easyrewardz_TicketSystem.Services
                         loggedInAcc.LoginTime = ds.Tables[0].Rows[0]["logintime"] != System.DBNull.Value ? Convert.ToDateTime(ds.Tables[0].Rows[0]["logintime"]).ToString("h:mm tt", culture) : "";
                         loggedInAcc.LogoutTime = ds.Tables[0].Rows[0]["logouttime"] != System.DBNull.Value ? Convert.ToDateTime(ds.Tables[0].Rows[0]["logouttime"]).ToString("h:mm tt", culture) : "";
 
-                        //static values for now
-                        loggedInAcc.SLAScore = "60%";
-                        loggedInAcc.AvgResponseTime = "1 Hr";
-                        loggedInAcc.CSATScore = "90%";
-                       
-                        
-
                         if(!string.IsNullOrEmpty(loggedInAcc.LoginTime))
                         {
                             diff = now - Convert.ToDateTime(ds.Tables[0].Rows[0]["logintime"]);
@@ -515,6 +508,19 @@ namespace Easyrewardz_TicketSystem.Services
 
                         loggedInAcc.Chatstatus = chatstat;
                     }
+                    if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                    {
+                        loggedInAcc.SLAScore = ds.Tables[1].Rows[0]["SLAScore"] != System.DBNull.Value ? Convert.ToString(ds.Tables[1].Rows[0]["SLAScore"]) : string.Empty;
+                    }
+                    if (ds.Tables[2] != null && ds.Tables[2].Rows.Count > 0)
+                    {
+                        loggedInAcc.AvgResponseTime = ds.Tables[2].Rows[0]["AverageResponseTime"] != System.DBNull.Value ? Convert.ToString(ds.Tables[2].Rows[0]["AverageResponseTime"]) : string.Empty;
+                    }
+                    if (ds.Tables[3] != null && ds.Tables[3].Rows.Count > 0)
+                    {
+                        loggedInAcc.CSATScore = ds.Tables[3].Rows[0]["CSATScore"] != System.DBNull.Value ? Convert.ToString(ds.Tables[3].Rows[0]["CSATScore"]) : string.Empty;
+                    }
+
 
                 }
             }
