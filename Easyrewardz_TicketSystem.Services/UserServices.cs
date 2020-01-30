@@ -21,6 +21,10 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
+        /// <summary>
+        /// AddUserPersonaldetail
+        /// </summary>
+        /// <param name="UserModel"></param>
         public int AddUserPersonaldetail(UserModel userModel)
         {
             int UserID = 0;
@@ -55,7 +59,10 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UserID;
         }
-
+        /// <summary>
+        /// AddUserProfiledetail
+        /// </summary>
+        /// <param name=""></param>
         public int AddUserProfiledetail(int DesignationID, int ReportTo, int CreatedBy, int TenantID, int UserID,int IsStoreUser)
         {
             int success = 0;
@@ -88,7 +95,12 @@ namespace Easyrewardz_TicketSystem.Services
 
             return success;
         }
-
+        /// <summary>
+        /// Delete User
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="Modifyby"></param>
+        /// <param name="IsStoreUser"></param>
         public int DeleteUser(int userID, int TenantID, int Modifyby,int IsStoreUser)
         {
             int success = 0;
@@ -119,7 +131,10 @@ namespace Easyrewardz_TicketSystem.Services
 
             return success;
         }
-
+        /// <summary>
+        /// EditUser
+        /// </summary>
+        /// <param name="CustomEditUserModel"></param>
         public int EditUser(CustomEditUserModel customEditUserModel)
         {
             int success = 0;
@@ -167,7 +182,12 @@ namespace Easyrewardz_TicketSystem.Services
 
             return success;
         }
-
+        /// <summary>
+        /// GetuserDetailsById
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="IsStoreUser"></param>
         public CustomUserList GetuserDetailsById(int UserID, int TenantID,int IsStoreUser)
         {
             DataSet ds = new DataSet();
@@ -236,8 +256,10 @@ namespace Easyrewardz_TicketSystem.Services
 
             return customUserList;
         }
-
-
+        /// <summary>
+        /// GetUserList
+        /// </summary>
+        /// <param name="TenantID"></param>
         public List<User> GetUserList(int TenantID, int UserID)
         {
             DataSet ds = new DataSet();
@@ -287,7 +309,10 @@ namespace Easyrewardz_TicketSystem.Services
 
             return users;
         }
-
+        /// <summary>
+        /// User Mapped category
+        /// </summary>
+        /// <param name="CustomUserModel"></param>
         public int Mappedcategory(CustomUserModel customUserModel)
         {
             int success = 0;
@@ -328,7 +353,11 @@ namespace Easyrewardz_TicketSystem.Services
 
             return success;
         }
-
+        /// <summary>
+        /// User List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="IsStoreUser"></param>
         public List<CustomUserList> UserList(int TenantID,int IsStoreUser)
         {
             DataSet ds = new DataSet();
