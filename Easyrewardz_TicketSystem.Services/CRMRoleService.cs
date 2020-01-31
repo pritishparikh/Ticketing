@@ -182,6 +182,51 @@ namespace Easyrewardz_TicketSystem.Services
             return objCRMLst;
         }
 
+        public List<CRMRoleModel> GetCRMRoleDropdown(int tenantID)
+        {
+
+            List<CRMRoleModel> objCRMLst = new List<CRMRoleModel>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetCRMDropdown", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                //cmd1.Parameters.AddWithValue("@_tenantID", 1);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CRMRoleModel cRMRoleModel = new CRMRoleModel();
+                        cRMRoleModel.CRMRoleID = Convert.ToInt32(ds.Tables[0].Rows[i]["CRMRolesID"]);
+                        cRMRoleModel.RoleName = Convert.ToString(ds.Tables[0].Rows[i]["RoleName"]);
+                        objCRMLst.Add(cRMRoleModel);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return objCRMLst;
+        }
+
         #endregion
     }
 }

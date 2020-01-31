@@ -13,6 +13,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int DeleteCRMRole(int tenantID, int CRMRoleID);
 
         List<CRMRoleModel> GetCRMRoleList(int tenantID);
-
+        List<CRMRoleModel> GetCRMRoleDropdown(int tenantID);
     }
 }

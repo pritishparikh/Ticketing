@@ -54,6 +54,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _dCRMrole.GetCRMRoleList(tenantID);
 
         }
+        public List<CRMRoleModel> CRMRoleDropdown(ICRMRole CRM, int tenantID)
+        {
+            _dCRMrole = CRM;
+            return _dCRMrole.GetCRMRoleDropdown(tenantID);
+
+        }
 
         #endregion
 
