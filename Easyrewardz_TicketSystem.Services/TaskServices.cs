@@ -140,14 +140,14 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         CustomTaskMasterDetails taskMaster = new CustomTaskMasterDetails();
                         taskMaster.TicketingTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        taskMaster.TaskStatus = Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
-                        taskMaster.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        taskMaster.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["Departmentname"]);
+                        taskMaster.TaskStatus = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
+                        taskMaster.TaskTitle = ds.Tables[0].Rows[i]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
+                        taskMaster.DepartmentName = ds.Tables[0].Rows[i]["Departmentname"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Departmentname"]);
                         taskMaster.StoreCode = Convert.ToInt32(ds.Tables[0].Rows[i]["Storecode"]);
-                        taskMaster.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]);
+                        taskMaster.CreatedBy = ds.Tables[0].Rows[i]["Createdby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]);
                         taskMaster.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreationOn"]);
                         taskMaster.DateFormat = taskMaster.CreatedDate.ToString("dd/MMM/yyyy");
-                        taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
+                        taskMaster.AssignName = ds.Tables[0].Rows[i]["AssignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
                         lsttask.Add(taskMaster);
                     }
                 }
