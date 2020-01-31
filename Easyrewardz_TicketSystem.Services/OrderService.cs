@@ -139,6 +139,8 @@ namespace Easyrewardz_TicketSystem.Services
                         customOrderMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
                         customOrderMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
                         customOrderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
+                        customOrderMaster.OrdeItemPrice = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderPrice"]);
+                        customOrderMaster.OrderPricePaid = Convert.ToInt32(ds.Tables[0].Rows[i]["PricePaid"]);
                         customOrderMaster.DateFormat = customOrderMaster.InvoiceDate.ToString("dd/MMM/yyyy");
                         customOrderMaster.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
                         customOrderMaster.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
