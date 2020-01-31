@@ -356,5 +356,51 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return listCategoryMapping;
         }
+
+        public List<Category> GetCategoryListByMultiBrandID(string BrandIDs, int TenantId)
+        {
+            List<Category> categories = new List<Category>();
+            MySqlCommand cmd = new MySqlCommand();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetCategoryListByMultiBrandID", conn);
+                cmd1.Parameters.AddWithValue("@Brand_IDs", BrandIDs);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
+                DataTable dt = new DataTable();
+
+                da.Fill(dt);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        Category category = new Category();
+                        category.CategoryID = Convert.ToInt32(dt.Rows[i]["CategoryID"]);
+                        category.CategoryName = Convert.ToString(dt.Rows[i]["CategoryName"]);
+                        categories.Add(category);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return categories;
+        }
     }
 }

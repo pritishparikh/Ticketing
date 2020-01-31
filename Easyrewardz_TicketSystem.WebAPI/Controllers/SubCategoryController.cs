@@ -124,6 +124,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// Get SubCategoryBy CategoryID
+        /// </summary>
+        /// <param name="CategoryID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetSubCategoryByMultiCategoryID")]
+        public ResponseModel GetSubCategoryByMultiCategoryID(string CategoryIDs)
+        {
+            List<SubCategory> objSubCategory = new List<SubCategory>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                MasterCaller _newMasterSubCat = new MasterCaller();
+
+                objSubCategory = _newMasterSubCat.GetSubCategoryByMultiCategoryID(new SubCategoryService(_connectioSting), CategoryIDs);
+
+                StatusCode =
+                objSubCategory.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objSubCategory;
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
         #endregion
     }
 }

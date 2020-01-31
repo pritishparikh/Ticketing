@@ -17,6 +17,8 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<Category> CategoryList(int TenantId);
 
+        List<Category> GetCategoryListByMultiBrandID(string BrandIDs, int TenantId);
+
         int DeleteCategory(int CategoryID, int TenantId);
 
         int UpdateCategory(Category category);

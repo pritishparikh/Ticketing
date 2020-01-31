@@ -314,6 +314,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// Create Categorybrand mapping
+        /// </summary>
+        /// <param name="CustomCreateCategory"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetCategoryListByMultiBrandID")]
+        public ResponseModel GetCategoryListByMultiBrandID(string BrandIDs )
+        {
+            List<Category> objcategory = new List<Category>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                MasterCaller _newMasterCategory = new MasterCaller();
+
+                objcategory = _newMasterCategory.GetCategoryListByMultiBrandID(new CategoryServices(_connectioSting), BrandIDs, authenticate.TenantId);
+                StatusCode =
+               objcategory.Count == 0 ?
+                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objcategory;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = ex.Message;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
         #endregion
     }
 }

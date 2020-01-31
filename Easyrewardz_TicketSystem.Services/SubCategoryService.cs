@@ -109,6 +109,48 @@ namespace Easyrewardz_TicketSystem.Services
 
             return subCategoryId;
         }
+
+        public List<SubCategory> GetSubCategoryByMultiCategoryID(string CategoryIDs)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<SubCategory> objSubCategory = new List<SubCategory>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetSubCategoryListByMultiCatagoryID", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@CategoryIDs", CategoryIDs);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        SubCategory SubCat = new SubCategory();
+                        SubCat.SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        SubCat.SubCategoryName = Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        objSubCategory.Add(SubCat);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return objSubCategory;
+        }
         #endregion
     }
 }

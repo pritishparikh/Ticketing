@@ -102,6 +102,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _categoryList = _category;
             return _categoryList.CategoryList(TenantID);
         }
+        public List<Category> GetCategoryListByMultiBrandID(ICategory _category, string BrandIDs , int TenantID)
+        {
+            _categoryList = _category;
+            return _categoryList.GetCategoryListByMultiBrandID(BrandIDs,TenantID);
+        }
 
         public int DeleteCategory(ICategory _category, int CategoryID, int TenantId)
         {
@@ -132,6 +137,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _subCategoryList = _SubCategory;
             return _subCategoryList.GetSubCategoryByCategoryID(CategoryID);
+        }
+        public List<SubCategory> GetSubCategoryByMultiCategoryID(ISubCategories _SubCategory, string CategoryIDs)
+        {
+            _subCategoryList = _SubCategory;
+            return _subCategoryList.GetSubCategoryByMultiCategoryID(CategoryIDs);
         }
 
         public int AddSubCategory(ISubCategories _SubCategory, int CategoryID, string category, int TenantID, int UserID)
