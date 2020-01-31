@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _designationRepository.GetDesignations(TenantId);
         }
 
+        public List<DesignationMaster> GetReporteeDesignation(IDesignation designation, int DesignationID, int HierarchyFor, int TenantID)
+        {
+            _designationRepository = designation;
+            return _designationRepository.GetReporteeDesignation(DesignationID, HierarchyFor, TenantID);
+        }
+
+        public List<CustomSearchTicketAgent> GetReportToUser(IDesignation designation, int DesignationID, int IsStoreUser, int TenantID)
+        {
+            _designationRepository = designation;
+            return _designationRepository.GetReportToUser(DesignationID, IsStoreUser, TenantID);
+        }
         #endregion
 
 
