@@ -239,6 +239,62 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return resp;
         }
 
+        [AllowAnonymous]
+        [Route("validateprogramcode")]
+        [HttpGet]
+        public ResponseModel validateprogramcode()
+        {
+            string X_Authorized_Programcode = Convert.ToString(Request.Headers["X-Authorized-Programcode"]);
+            string X_Authorized_Domainname = Convert.ToString(Request.Headers["X-Authorized-Domainname"]);
+
+            ResponseModel resp = new ResponseModel();
+            securityCaller newSecurityCaller = new securityCaller();
+            try
+            {
+                securityCaller _newSecurityCaller = new securityCaller();
+                string Programcode = X_Authorized_Programcode.Replace(' ', '+');
+                string Domainname = X_Authorized_Domainname.Replace(' ', '+');
+
+                if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname))
+                {
+                    bool isValid = newSecurityCaller.validateProgramCode(new SecurityService(_connectioSting, _radisCacheServerAddress), Programcode, Domainname);
+
+                    if (isValid)
+                    {
+                        resp.Status = true;
+                        resp.StatusCode = (int)EnumMaster.StatusCode.Success;
+                        resp.ResponseData = "";
+                        resp.Message = "Valid Program code";
+                    }
+                    else
+                    {
+                        resp.Status = true;
+                        resp.StatusCode = (int)EnumMaster.StatusCode.Success;
+                        resp.ResponseData = "";
+                        resp.Message = "In-Valid Program code";
+                    }
+                }
+                else
+                {
+                    resp.Status = false;
+                    resp.ResponseData = "";
+                    resp.Message = "In-valid Program code";
+                }
+            }
+            catch (Exception _ex)
+            {
+                resp.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                resp.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                resp.ResponseData = "Message:" + Convert.ToString(_ex.Message) + "--- Inner Exception:" + Convert.ToString(_ex.InnerException)
+                   + "Other:" + "Authenticate controller, " + Convert.ToString(_ex.Data);
+            }
+            finally
+            {
+                GC.Collect();
+            }
+            return resp;
+        }
+
         #endregion
 
         #endregion

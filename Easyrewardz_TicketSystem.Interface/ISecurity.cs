@@ -51,5 +51,13 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="EmailId"></param>
         /// <returns></returns>
         Authenticate validateUserEmailId(string EmailId);
+
+        /// <summary>
+        /// validateProgramCode
+        /// </summary>
+        /// <param name="Programcode"></param>
+        /// <param name="Domainname"></param>
+        /// <returns></returns>
+        bool validateProgramCode(string Programcode, string Domainname);
     }
 }

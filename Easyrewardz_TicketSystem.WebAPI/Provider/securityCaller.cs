@@ -94,6 +94,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _SecurityRepository = security;
             return _SecurityRepository.validateUserEmailId(EmailId);
         }
+
+        /// <summary>
+        /// validateProgramCode
+        /// </summary>
+        /// <param name="security"></param>
+        /// <param name="Programcode"></param>
+        /// <param name="Domainname"></param>
+        /// <returns></returns>
+        public bool validateProgramCode(ISecurity security, string Programcode, string Domainname)
+        {
+            _SecurityRepository = security;
+            return _SecurityRepository.validateProgramCode(Programcode, Domainname);
+        }
         #endregion
     }
 }

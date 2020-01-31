@@ -626,6 +626,53 @@ namespace Easyrewardz_TicketSystem.Services
             }
         }
 
+        /// <summary>
+        /// Validate Program Code
+        /// </summary>
+        /// <param name="Programcode"></param>
+        /// <param name="Domainname"></param>
+        public bool validateProgramCode(string Programcode, string Domainname)
+        {
+            bool isValid = false;
+
+            try
+            {
+                DataSet ds = new DataSet();
+                MySqlCommand cmd = new MySqlCommand();
+                try
+                {
+
+                    Programcode=DecryptStringAES(Programcode);
+                    Domainname= DecryptStringAES(Domainname);
+
+                    conn.Open();
+                    cmd.Connection = conn;
+                    MySqlCommand cmd1 = new MySqlCommand("SP_validateProgramCode", conn);
+                    cmd1.CommandType = CommandType.StoredProcedure;
+                    cmd1.Parameters.AddWithValue("@Program_code", Programcode);
+                    cmd1.Parameters.AddWithValue("@Domain_name", Domainname);
+                    isValid = Convert.ToBoolean(cmd1.ExecuteScalar());
+                }
+                catch (MySqlException ex)
+                {
+                    throw (ex);
+                }
+                finally
+                {
+                    if (conn != null)
+                    {
+                        conn.Close();
+                    }
+                }
+                return isValid;
+
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
         #endregion
 
     }
