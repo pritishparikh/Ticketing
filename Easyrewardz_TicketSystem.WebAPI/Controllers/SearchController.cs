@@ -215,6 +215,52 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+
+        /// <summary>
+        /// Get tickets On page load
+        /// </summary>
+        /// <param name="searchparams"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetTicketsOnSavedSearch")]
+        
+        public ResponseModel GetTicketsOnSavedSearch(int SearchParamID)
+        {
+            List<SearchResponse> _searchResult = null;
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            SearchCaller _newsearchMaster = new SearchCaller();
+            try
+            {
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                var temp = SecurityService.DecryptStringAES(_token);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                _searchResult = _newsearchMaster.GetTicketsOnSavedSearch(new SearchService(_connectioSting),authenticate.TenantId, SearchParamID);
+
+                StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _searchResult.Count > 0 ? _searchResult : null;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = false;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
         #endregion
     }
 }

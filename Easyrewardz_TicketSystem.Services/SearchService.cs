@@ -501,6 +501,63 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
+        /// <summary>
+        /// Get tickets on the saved search params
+        /// </summary>
+        /// <param name="SearchParamID"></param>
+        /// <returns></returns>
+        /// 
+        public List<SearchResponse> GetTicketsOnSavedSearch(int TenantID, int SearchParamID)
+        {
+            string jsonSearchParams = string.Empty;
+            DataSet ds = new DataSet();
+            SearchModel searchModel = new SearchModel();
+            List<SearchResponse> objSearchResult = new List<SearchResponse>();
+          
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetSaveSearchByID_UTSM", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@SearchParam_ID", SearchParamID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if(ds.Tables[0].Rows.Count >0)
+                    {
+                        jsonSearchParams= Convert.ToString(ds.Tables[0].Rows[0]["SearchParameters"]);
+                    }
+                }
+
+                if(!string.IsNullOrEmpty(jsonSearchParams))
+                {
+                    searchModel = JsonConvert.DeserializeObject<SearchModel>(jsonSearchParams);
+
+                    if(searchModel!=null)
+                    {
+                        objSearchResult = GetTicketsOnSearch(searchModel);
+
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                //throw ex;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
+            return objSearchResult;
+        }
+
 
         #region Mapping
         public string setCreationdetails(string time, string ColName)
