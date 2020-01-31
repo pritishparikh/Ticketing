@@ -298,13 +298,14 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         CustomClaimMaster taskMaster = new CustomClaimMaster();
                         taskMaster.TicketClaimID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        taskMaster.TaskStatus = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
-                        taskMaster.ClaimIssueType = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
-                        taskMaster.Category = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        taskMaster.TaskStatus = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
+                        //taskMaster.TaskStatus = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
+                        taskMaster.ClaimIssueType = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        taskMaster.Category = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
                         taskMaster.Creation_on = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
                         taskMaster.Dateformat = taskMaster.Creation_on.ToString("dd/MMM/yyyy");
-                        taskMaster.RaisedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);         
+                        taskMaster.RaisedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                        taskMaster.AssignName = ds.Tables[0].Rows[i]["AssignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);         
                         lsttask.Add(taskMaster);
                     }
                 }
