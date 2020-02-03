@@ -460,7 +460,7 @@ namespace Easyrewardz_TicketSystem.Services
                         customOrderMaster.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
                         customOrderMaster.StoreAddress = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
                         customOrderMaster.Discount = Convert.ToInt32(ds.Tables[0].Rows[i]["Discount"]);
-                        /*int orderMasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
+                        int orderMasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
                         customOrderMaster.OrderItems = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("OrderMasterID")).
                         Equals(orderMasterId)).Select(x => new OrderItem()
                         {
@@ -475,7 +475,7 @@ namespace Easyrewardz_TicketSystem.Services
                         }).ToList();
                         customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                         customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
-                        customOrderMaster.PricePaid = customOrderMaster.OrderItems.Sum(item => item.PricePaid);*/
+                        customOrderMaster.PricePaid = customOrderMaster.OrderItems.Sum(item => item.PricePaid);
                         objorderMaster.Add(customOrderMaster);
                     }
 
