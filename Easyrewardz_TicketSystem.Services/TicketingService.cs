@@ -291,12 +291,12 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CustomDraftDetails DraftDetails = new CustomDraftDetails();
-                        DraftDetails.TicketId = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketId"]);
-                        DraftDetails.TicketTitle = Convert.ToString(ds.Tables[0].Rows[i]["TikcketTitle"]);
-                        DraftDetails.TicketDescription = Convert.ToString(ds.Tables[0].Rows[i]["TicketDescription"]);
-                        DraftDetails.CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
-                        DraftDetails.SubCategoryName = Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
-                        DraftDetails.IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        DraftDetails.TicketId = ds.Tables[0].Rows[i]["TicketId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketId"]);
+                        DraftDetails.TicketTitle = ds.Tables[0].Rows[i]["TikcketTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketTitle"]);
+                        DraftDetails.TicketDescription = ds.Tables[0].Rows[i]["TicketDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketDescription"]);
+                        DraftDetails.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        DraftDetails.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        DraftDetails.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
                         DraftDetails.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
                         Draftlist.Add(DraftDetails);
                     }
@@ -726,38 +726,38 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
 
-                        ticketDetails.TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
-                        ticketDetails.TicketTitle = Convert.ToString(ds.Tables[0].Rows[i]["TikcketTitle"]);
-                        ticketDetails.Ticketdescription = Convert.ToString(ds.Tables[0].Rows[i]["TicketDescription"]);
-                        ticketDetails.CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
-                        ticketDetails.BrandID = Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
-                        ticketDetails.SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
-                        ticketDetails.PriortyID = Convert.ToInt32(ds.Tables[0].Rows[i]["PriorityID"]);
-                        ticketDetails.ChannelOfPurchaseID = Convert.ToInt32(ds.Tables[0].Rows[i]["ChannelOfPurchaseID"]);
-                        ticketDetails.IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
-                        ticketDetails.TicketActionTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketActionID"]);
-                        ticketDetails.CustomerID = Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
-                        ticketDetails.CustomerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
-                        ticketDetails.CustomerEmailId = Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
-                        ticketDetails.CustomerPhoneNumber = Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
-                        ticketDetails.AltNumber = Convert.ToString(ds.Tables[0].Rows[i]["AltNumber"]);
-                        ticketDetails.Username = Convert.ToString(ds.Tables[0].Rows[i]["Username"]);
-                        ticketDetails.UpdateDate = Convert.ToString(ds.Tables[0].Rows[i]["UpdatedAt"]);
-                        ticketDetails.Status = Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]);
+                        ticketDetails.TicketID = ds.Tables[0].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
+                        ticketDetails.TicketTitle = ds.Tables[0].Rows[i]["TikcketTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketTitle"]);
+                        ticketDetails.Ticketdescription = ds.Tables[0].Rows[i]["TicketDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketDescription"]);
+                        ticketDetails.CategoryID = ds.Tables[0].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
+                        ticketDetails.BrandID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
+                        ticketDetails.SubCategoryID = ds.Tables[0].Rows[i]["SubCategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        ticketDetails.PriortyID = ds.Tables[0].Rows[i]["PriorityID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["PriorityID"]);
+                        ticketDetails.ChannelOfPurchaseID = ds.Tables[0].Rows[i]["ChannelOfPurchaseID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ChannelOfPurchaseID"]);
+                        ticketDetails.IssueTypeID = ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
+                        ticketDetails.TicketActionTypeID = ds.Tables[0].Rows[i]["TicketActionID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketActionID"]);
+                        ticketDetails.CustomerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
+                        ticketDetails.CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
+                        ticketDetails.CustomerEmailId = ds.Tables[0].Rows[i]["CustomerEmailId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
+                        ticketDetails.CustomerPhoneNumber = ds.Tables[0].Rows[i]["CustomerPhoneNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
+                        ticketDetails.AltNumber = ds.Tables[0].Rows[i]["AltNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AltNumber"]);
+                        ticketDetails.Username = ds.Tables[0].Rows[i]["Username"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Username"]);
+                        ticketDetails.UpdateDate = ds.Tables[0].Rows[i]["UpdatedAt"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedAt"]);
+                        ticketDetails.Status = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]);
                         ticketDetails.TargetClouredate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TargetClouredate"]);
-                        ticketDetails.OpenTicket = Convert.ToInt32(ds.Tables[0].Rows[i]["OpenTickets"]);
-                        ticketDetails.Totalticket = Convert.ToInt32(ds.Tables[0].Rows[i]["Totaltickets"]);
+                        ticketDetails.OpenTicket = ds.Tables[0].Rows[i]["OpenTickets"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OpenTickets"]);
+                        ticketDetails.Totalticket = ds.Tables[0].Rows[i]["Totaltickets"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Totaltickets"]);
                         ticketDetails.stores = ds.Tables[1].AsEnumerable().Select(x => new Store()
                         {
                             StoreID = Convert.ToInt32(x.Field<int>("StoreID")),
-                            Storename = Convert.ToString(x.Field<string>("StoreName"))
+                            Storename = x.Field<object>("StoreName") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("StoreName"))
 
                         }).ToList();
 
                         ticketDetails.products = ds.Tables[2].AsEnumerable().Select(x => new Product()
                         {
                             ItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
-                            ItemName = Convert.ToString(x.Field<string>("ItemName"))
+                            ItemName = x.Field<object>("ItemName") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("ItemName"))
 
                         }).ToList();
                     }
@@ -797,8 +797,8 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CustomTicketHistory TicketHistory = new CustomTicketHistory();
-                        TicketHistory.Name = Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
-                        TicketHistory.Action = Convert.ToString(ds.Tables[0].Rows[i]["Action"]);
+                        TicketHistory.Name = ds.Tables[0].Rows[i]["Name"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
+                        TicketHistory.Action = ds.Tables[0].Rows[i]["Action"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Action"]);
                         TicketHistory.DateandTime = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
                         ListTicketHistory.Add(TicketHistory);
                     }
@@ -925,11 +925,11 @@ namespace Easyrewardz_TicketSystem.Services
                          CustomTicketMessage TicketMessage = new CustomTicketMessage();
                         TicketMessage.MailID = Convert.ToInt32(ds.Tables[0].Rows[i]["MailID"]);
                         TicketMessage.TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
-                        TicketMessage.TicketMailSubject = Convert.ToString(ds.Tables[0].Rows[i]["TikcketMailSubject"]);
-                        TicketMessage.TicketMailBody = Convert.ToString(ds.Tables[0].Rows[i]["TicketMailBody"]);
+                        TicketMessage.TicketMailSubject = ds.Tables[0].Rows[i]["TikcketMailSubject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketMailSubject"]);
+                        TicketMessage.TicketMailBody = ds.Tables[0].Rows[i]["TicketMailBody"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketMailBody"]);
                         TicketMessage.IsCustomerComment = Convert.ToInt32(ds.Tables[0].Rows[i]["IsCustomerComment"]);
                         TicketMessage.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]);
-                        TicketMessage.CommentBy = Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
+                        TicketMessage.CommentBy = ds.Tables[0].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
                         TicketMessagelist.Add(TicketMessage);
                     }
                 }
@@ -962,8 +962,8 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         CustomSearchTicketAgent Searchagent = new CustomSearchTicketAgent();
                         Searchagent.User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
-                        Searchagent.AgentName = Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
-                        Searchagent.Designation = Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
+                        Searchagent.AgentName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
+                        Searchagent.Designation = ds.Tables[0].Rows[i]["DesignationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
                         listSearchagent.Add(Searchagent);
                     }
                 }
