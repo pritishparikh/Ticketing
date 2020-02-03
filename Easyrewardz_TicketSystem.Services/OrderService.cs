@@ -429,5 +429,71 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return success;
         }
+
+        public List<CustomOrderMaster> getOrderDetailByTicketID(int TicketID, int TenantID)
+        {
+            DataSet ds = new DataSet();
+            List<CustomOrderMaster> objorderMaster = new List<CustomOrderMaster>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetOrderDetailByTicketID", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Ticket_ID", TicketID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomOrderMaster customOrderMaster = new CustomOrderMaster();
+                        customOrderMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
+                        customOrderMaster.InvoiceNumber = ds.Tables[0].Rows[i]["InvoiceNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
+                        customOrderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
+                        customOrderMaster.OrdeItemPrice = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderPrice"]);
+                        customOrderMaster.OrderPricePaid = Convert.ToInt32(ds.Tables[0].Rows[i]["PricePaid"]);
+                        customOrderMaster.DateFormat = customOrderMaster.InvoiceDate.ToString("dd/MMM/yyyy");
+                        customOrderMaster.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        customOrderMaster.StoreAddress = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        customOrderMaster.Discount = Convert.ToInt32(ds.Tables[0].Rows[i]["Discount"]);
+                        /*int orderMasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
+                        customOrderMaster.OrderItems = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("OrderMasterID")).
+                        Equals(orderMasterId)).Select(x => new OrderItem()
+                        {
+                            OrderItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
+                            OrderMasterID = Convert.ToInt32(x.Field<int>("OrderMasterID")),
+                            ArticleNumber = Convert.ToString(x.Field<string>("SKUNumber")),
+                            ArticleSize = Convert.ToString(x.Field<string>("SKUName")),
+                            ItemPrice = Convert.ToInt32(x.Field<decimal>("ItemPrice")),
+                            PricePaid = Convert.ToInt32(x.Field<decimal>("PricePaid")),
+                            Discount = Convert.ToInt32(x.Field<decimal>("Discount")),
+                            RequireSize = Convert.ToInt32(x.Field<int>("RequireSize"))
+                        }).ToList();
+                        customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
+                        customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
+                        customOrderMaster.PricePaid = customOrderMaster.OrderItems.Sum(item => item.PricePaid);*/
+                        objorderMaster.Add(customOrderMaster);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return objorderMaster;
+        }
     }
 }

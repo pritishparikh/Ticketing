@@ -25,5 +25,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<CustomSearchProduct> SearchProduct(int CustomerID, string productName);
 
         int AttachOrder(string OrderID, int TicketId, int CreatedBy);
+        List<CustomOrderMaster> getOrderDetailByTicketID(int TicketID,int TenantID);
+
     }
 }
