@@ -460,12 +460,12 @@ namespace Easyrewardz_TicketSystem.Services
         public LoggedInAgentModel GetLogginAccountInfo(int tenantID, int UserID, string EmailID,string AccountName)
         {
             DataSet ds = new DataSet();
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.Now; DateTime temp = new DateTime();
             TimeSpan diff = new TimeSpan();
-
             MySqlCommand cmd = new MySqlCommand();
             LoggedInAgentModel loggedInAcc = new LoggedInAgentModel();
             ChatStatus chatstat = new ChatStatus();
+            int ShiftDuration = 0;
             try
             {
                 conn.Open();
@@ -493,10 +493,22 @@ namespace Easyrewardz_TicketSystem.Services
                         loggedInAcc.LoginTime = ds.Tables[0].Rows[0]["logintime"] != System.DBNull.Value ? Convert.ToDateTime(ds.Tables[0].Rows[0]["logintime"]).ToString("h:mm tt", culture) : "";
                         loggedInAcc.LogoutTime = ds.Tables[0].Rows[0]["logouttime"] != System.DBNull.Value ? Convert.ToDateTime(ds.Tables[0].Rows[0]["logouttime"]).ToString("h:mm tt", culture) : "";
 
-                        if(!string.IsNullOrEmpty(loggedInAcc.LoginTime))
+                        ShiftDuration = ds.Tables[0].Rows[0]["ShiftDuration"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[0].Rows[0]["ShiftDuration"]) : 0;
+
+                        if(ShiftDuration >0)
+                        {
+                            temp = temp.AddHours(ShiftDuration);
+                            loggedInAcc.ShiftDurationInHour = temp.Hour;
+                            loggedInAcc.ShiftDurationInMinutes = temp.Minute;
+                        }
+
+                        if (!string.IsNullOrEmpty(loggedInAcc.LoginTime))
                         {
                             diff = now - Convert.ToDateTime(ds.Tables[0].Rows[0]["logintime"]);
                             loggedInAcc.LoggedInDuration = Math.Abs(diff.Hours ) +"H " + Math.Abs(diff.Minutes) + "M";
+                            loggedInAcc.LoggedInDurationInHours = Math.Abs(diff.Hours);
+                            loggedInAcc.LoggedInDurationInMinutes = Math.Abs(diff.Minutes);
+
                             chatstat.isOnline = true;
                         }
                         else

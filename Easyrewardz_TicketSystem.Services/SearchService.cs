@@ -338,7 +338,11 @@ namespace Easyrewardz_TicketSystem.Services
             int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
-                conn.Open();
+                if(conn!=null && conn.State== ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+             
                 cmd.Connection = conn;
 
                 /*Based on active tab stored procedure will call
