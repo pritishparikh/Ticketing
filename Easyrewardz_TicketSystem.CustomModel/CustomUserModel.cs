@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public int IsStoreUser { get; set; }
         public CustomUserModel()
         {
-            IsStoreUser = -1;
+            IsStoreUser = 1;
         }
     }
 }
