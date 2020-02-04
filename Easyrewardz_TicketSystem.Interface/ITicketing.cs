@@ -41,7 +41,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         CustomCountByTicket GetCountByTicket(int ticketID);
 
-        List<CustomTicketMessage> TicketMessagelisting(int ticketID);
+        List<CustomTicketMessage> TicketMessagelisting(int ticketID,int TenantID);
 
        List< CustomSearchTicketAgent> GetAgentList( int TenantID);
     }

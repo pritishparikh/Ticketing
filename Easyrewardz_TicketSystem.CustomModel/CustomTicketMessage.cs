@@ -13,5 +13,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public int IsCustomerComment   { get; set; }
         public int HasAttachment { get; set; }
         public string CommentBy { get; set; }
+        public string UpdatedAt { get; set; }
     }
 }
