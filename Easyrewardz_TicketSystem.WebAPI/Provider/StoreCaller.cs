@@ -3,6 +3,7 @@ using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -59,6 +60,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _storeRepository = store;
             return _storeRepository.getSelectedStoreByTicketId(TicketId);
+        }
+        public int StoreBulkUpload(IStore Store, int TenantID, int CreatedBy, DataSet DataSetCSV)
+        {
+            _storeRepository = Store;
+            return _storeRepository.BulkUploadStore(TenantID, CreatedBy, DataSetCSV);
+
         }
     }
 }
