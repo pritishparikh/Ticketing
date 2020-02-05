@@ -1,11 +1,15 @@
 ﻿using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -237,5 +241,72 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return sList.ToString();
         }
+
+
+        /// <summary>
+        /// Convert CSV to datatable
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+
+
+
+        public static DataSet csvToDataSet(string FilePath)
+        {
+            DataTable dtCsv = new DataTable();
+            string FileContent = string.Empty;
+            DataSet dsCsv = new DataSet();
+       
+     
+            try
+            {
+                if (!string.IsNullOrEmpty(FilePath))
+                {
+                    using (StreamReader sr = new StreamReader(FilePath))
+                    {
+                        while (!sr.EndOfStream)
+                        {
+                            FileContent = sr.ReadToEnd().ToString(); //read full file text  
+                            string[] rows = FileContent.Split('\n'); //split full file text into rows  
+                            for (int i = 0; i < rows.Count() - 1; i++)
+                            {
+                                string[] rowValues = rows[i].Split(','); //split each row with comma to get individual values  
+                                {
+                                    if (i == 0)
+                                    {
+                                        for (int j = 0; j < rowValues.Count(); j++)
+                                        {
+                                            dtCsv.Columns.Add(rowValues[j].Trim()); //add headers  
+                                        }
+                                        
+                                    }
+                                    else
+                                    {
+                                        DataRow dr = dtCsv.NewRow();
+                                        for (int k = 0; k < rowValues.Count(); k++)
+                                        {
+                                            dr[k] = rowValues[k].ToString().Trim();
+                                        }
+                                      
+                                        dtCsv.Rows.Add(dr); //add other rows  
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    dsCsv.Tables.Add(dtCsv);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return dsCsv;
+
+        }
+
+
     }
 }

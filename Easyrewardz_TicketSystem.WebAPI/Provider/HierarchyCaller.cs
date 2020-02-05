@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using System.Data;
+using System.Xml;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -35,5 +37,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _HierarchyRepository = Hierarchy;
             return _HierarchyRepository.ListHierarchy(TenantID, HierarchyFor);
         }
+
+        public int HierarchyBulkUpload(IHierarchy Hierarchy, int TenantID, int CreatedBy, int HierarchyFor, DataSet DataSetCSV)
+        {
+            _HierarchyRepository = Hierarchy;
+            return _HierarchyRepository.BulkUploadHierarchy( TenantID,  CreatedBy,  HierarchyFor, DataSetCSV);
+        }
+
     }
 }
