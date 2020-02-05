@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -129,6 +130,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _categoryList = _category;
             return _categoryList.ListCategoryBrandMapping();
         }
+
+        public int CategoryBulkUpload(ICategory Category, int TenantID, int CreatedBy, DataSet DataSetCSV)
+        {
+            _categoryList = Category;
+            return _categoryList.BulkUploadCategory(TenantID, CreatedBy, DataSetCSV);
+        }
+
         #endregion
 
         #region Methods for the Subcategories
