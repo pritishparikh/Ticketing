@@ -238,8 +238,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Route("BulkUploadSLA")]
-        public ResponseModel BulkUploadSLA()
+        [Route("BulkUploadCRMRole")]
+        public ResponseModel BulkUploadCRMRole()
         {
 
 
@@ -268,7 +268,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 {
                     for (int i = 0; i < files.Count; i++)
                     {
-                        fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
+                        fileName += files[i].FileName.Replace(".", "_" + authenticate.UserMasterID + "_" + timeStamp + ".") + ",";
                     }
                     finalAttchment = fileName.TrimEnd(',');
                 }
@@ -277,7 +277,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                      .Assembly.GetExecutingAssembly().CodeBase);
                 Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
                 var appRoot = appPathMatcher.Match(exePath).Value;
-                string Folderpath = appRoot + "\\" + "BulkUpload";
+                string Folderpath = appRoot + "\\" + "BulkUpload\\CRMRole";
 
 
 
