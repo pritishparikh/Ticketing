@@ -902,7 +902,7 @@ namespace Easyrewardz_TicketSystem.Services
             return CountByTicket;
         }
 
-        public List<CustomTicketMessage> TicketMessagelisting(int ticketID)
+        public List<CustomTicketMessage> TicketMessagelisting(int ticketID, int TenantID)
         {
 
             DataSet ds = new DataSet();
@@ -915,6 +915,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetTicketMessage", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Ticket_Id", ticketID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -930,6 +931,7 @@ namespace Easyrewardz_TicketSystem.Services
                         TicketMessage.IsCustomerComment = Convert.ToInt32(ds.Tables[0].Rows[i]["IsCustomerComment"]);
                         TicketMessage.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]);
                         TicketMessage.CommentBy = ds.Tables[0].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
+                        TicketMessage.UpdatedAt = ds.Tables[0].Rows[i]["UpdatedAt"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedAt"]);
                         TicketMessagelist.Add(TicketMessage);
                     }
                 }

@@ -860,7 +860,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                objTicketMessage = _TicketCaller.TicketMessage(new TicketingService(_connectioSting), ticketID);
+                objTicketMessage = _TicketCaller.TicketMessage(new TicketingService(_connectioSting), ticketID, authenticate.TenantId);
                 StatusCode =
                objTicketMessage == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
