@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace Easyrewardz_TicketSystem.Interface
@@ -15,5 +16,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int DeleteAlert(int tenantID, int AlertID);
 
         List<AlertModel> GetAlertList(int tenantId);
+        int BulkUploadAlert(int TenantID, int CreatedBy, DataSet DataSetCSV);
     }
 }

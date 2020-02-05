@@ -189,6 +189,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Alerts.GetAlertList(tenantID);
 
         }
+        public int AlertBulkUpload(IAlerts alerts, int TenantID, int CreatedBy, DataSet DataSetCSV)
+        {
+            _Alerts = alerts;
+            return _Alerts.BulkUploadAlert(TenantID, CreatedBy, DataSetCSV);
+        }
 
         #endregion
 
