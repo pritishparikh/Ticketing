@@ -3,6 +3,7 @@ using Easyrewardz_TicketSystem.CustomModel;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Data;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
@@ -26,5 +27,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int CreateCategoryBrandMapping(CustomCreateCategory customCreateCategory);
 
         List<CustomCreateCategory> ListCategoryBrandMapping();
+
+        int BulkUploadCategory(int TenantID, int CreatedBy,  DataSet DataSetCSV);
     }
 }

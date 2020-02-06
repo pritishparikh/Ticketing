@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Xml;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using MySql.Data.MySqlClient;
@@ -10,6 +11,10 @@ namespace Easyrewardz_TicketSystem.Services
 {
    public class HierarchyService : IHierarchy
     {
+        #region variable
+        public static string Xpath = "//NewDataSet//Table1";
+        #endregion
+
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
         public HierarchyService(string _connectionString)
@@ -136,6 +141,57 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return listHierarchy;
+        }
+
+        public int BulkUploadHierarchy(int TenantID, int CreatedBy,int HierarchyFor,  DataSet DataSetCSV)
+        {
+            int uploadcount = 0;
+            XmlDocument xmlDoc = new XmlDocument();
+           
+            try
+            {
+                if(DataSetCSV!=null && DataSetCSV.Tables.Count >0 )
+                {
+                    if(DataSetCSV.Tables[0]!=null && DataSetCSV.Tables[0].Rows.Count > 0)
+                    {
+
+                        xmlDoc.LoadXml(DataSetCSV.GetXml());
+
+                        conn.Open();
+                        MySqlCommand cmd = new MySqlCommand("SP_BulkUploadHierarchy", conn);
+                        cmd.Connection = conn;
+                        cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
+                        cmd.Parameters.AddWithValue("@_node", Xpath);
+                        cmd.Parameters.AddWithValue("@_hierarchyFor", HierarchyFor);
+                        cmd.Parameters.AddWithValue("@_tenantID", TenantID);
+                        cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
+
+
+
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        uploadcount = cmd.ExecuteNonQuery();
+                    }
+                    
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if(DataSetCSV!=null)
+                {
+                    DataSetCSV.Dispose();
+                }
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return uploadcount;
         }
     }
 }

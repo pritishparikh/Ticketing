@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -61,6 +62,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
+        public int CRMRoleBulkUpload(ICRMRole CRM, int TenantID, int CreatedBy, DataSet DataSetCSV)
+        {
+            _dCRMrole = CRM;
+            return _dCRMrole.BulkUploadCRMRole(TenantID, CreatedBy, DataSetCSV);
+        }
+
         #endregion
 
         #region SLA
@@ -94,6 +101,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _SLA = SLA;
             return _SLA.BindIssueTypeList(tenantID);
+        }
+
+        public int SLABulkUpload(ISLA SLA, int TenantID, int CreatedBy, DataSet DataSetCSV)
+        {
+            _SLA = SLA;
+            return _SLA.BulkUploadSLA(TenantID, CreatedBy, DataSetCSV);
         }
 
         //public List<SLAResponseModel> SLAList(ISLA SLA, int TenantID, int pageNo, int PageSize)
@@ -175,6 +188,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _Alerts = Alert;
             return _Alerts.GetAlertList(tenantID);
 
+        }
+        public int AlertBulkUpload(IAlerts alerts, int TenantID, int CreatedBy, DataSet DataSetCSV)
+        {
+            _Alerts = alerts;
+            return _Alerts.BulkUploadAlert(TenantID, CreatedBy, DataSetCSV);
         }
 
         #endregion

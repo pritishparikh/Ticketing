@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace Easyrewardz_TicketSystem.Interface
@@ -23,8 +24,8 @@ namespace Easyrewardz_TicketSystem.Interface
         List<SLAResponseModel> SLAList(int tenantID);
 
         List<IssueTypeList> BindIssueTypeList(int tenantID);
-        
 
+        int BulkUploadSLA(int TenantID, int CreatedBy, DataSet DataSetCSV);
 
     }
 }

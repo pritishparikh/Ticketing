@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace Easyrewardz_TicketSystem.Interface
@@ -23,6 +24,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="TicketId"></param>
         /// <returns></returns>
         List<StoreMaster> getSelectedStoreByTicketId(int TicketId);
-        
+        int BulkUploadStore(int TenantID, int CreatedBy, DataSet DataSetCSV);
+
     }
 }

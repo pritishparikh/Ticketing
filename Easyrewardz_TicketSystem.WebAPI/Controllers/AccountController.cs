@@ -269,7 +269,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     else
                     {
                         resp.Status = true;
-                        resp.StatusCode = (int)EnumMaster.StatusCode.Success;
+                        resp.StatusCode = (int)EnumMaster.StatusCode.RecordNotFound;
                         resp.ResponseData = "";
                         resp.Message = "In-Valid Program code";
                     }

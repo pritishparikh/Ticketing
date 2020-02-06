@@ -9,7 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -429,7 +432,101 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Bulk Upload Store
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("BulkUploadStore")]
+        public ResponseModel BulkUploadStore()
+        {
+            StoreCaller _newMasterStore = new StoreCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            string fileName = "";
+            string finalAttchment = "";
+            string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
+            DataSet DataSetCSV = new DataSet();
+            string[] filesName = null;
 
+
+            try
+            {
+                var files = Request.Form.Files;
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                #region Read from Form
+
+                if (files.Count > 0)
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        fileName += files[i].FileName.Replace(".", "_" + authenticate.UserMasterID + "_" + timeStamp + ".") + ",";
+                    }
+                    finalAttchment = fileName.TrimEnd(',');
+                }
+
+                var exePath = Path.GetDirectoryName(System.Reflection
+                     .Assembly.GetExecutingAssembly().CodeBase);
+                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                var appRoot = appPathMatcher.Match(exePath).Value;
+                string Folderpath = appRoot + "\\" + "BulkUpload" + "\\" + "Store";
+
+
+                if (files.Count > 0)
+                {
+                    filesName = finalAttchment.Split(",");
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            files[i].CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                            MemoryStream msfile = new MemoryStream(fileBytes);
+                            FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                            msfile.WriteTo(docFile);
+                            docFile.Close();
+                            ms.Close();
+                            msfile.Close();
+
+                        }
+                    }
+                }
+
+                DataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + filesName[0]);
+
+                #endregion
+
+                // DataSetCSV = CommonService.csvToDataSet("D:\\TP\\hierarchymaster.csv");
+                int result = _newMasterStore.StoreBulkUpload(new StoreService(_connectionString),
+                    authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
+
+                StatusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+
+
+        }
         #endregion  
 
     }

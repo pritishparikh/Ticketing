@@ -9,11 +9,15 @@ using System.Text;
 using System.Linq;
 using Easyrewardz_TicketSystem.DBContext;
 using Easyrewardz_TicketSystem.CustomModel;
+using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class SLAServices : ISLA
     {
+        #region variable
+        public static string Xpath = "//NewDataSet//Table1";
+        #endregion
         MySqlConnection conn = new MySqlConnection();
 
         public SLAServices(string _connectionString)
@@ -364,6 +368,64 @@ namespace Easyrewardz_TicketSystem.Services
            
             return objIssueTypeLst;
         }
+
+        /// <summary>
+        /// BulkUploadSLA
+        /// </summary>
+        /// 
+        public int BulkUploadSLA(int TenantID, int CreatedBy, DataSet DataSetCSV)
+        {
+            int uploadcount = 0;
+            XmlDocument xmlDoc = new XmlDocument();
+
+            try
+            {
+                if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
+                {
+                    if (DataSetCSV.Tables[0] != null && DataSetCSV.Tables[0].Rows.Count > 0)
+                    {
+
+                        xmlDoc.LoadXml(DataSetCSV.GetXml());
+
+                        conn.Open();
+                        MySqlCommand cmd = new MySqlCommand("", conn);
+                        cmd.Connection = conn;
+                        cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
+                        cmd.Parameters.AddWithValue("@_node", Xpath);
+                    
+                        cmd.Parameters.AddWithValue("@_tenantID", TenantID);
+                        cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
+
+
+
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        uploadcount = cmd.ExecuteNonQuery();
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (DataSetCSV != null)
+                {
+                    DataSetCSV.Dispose();
+                }
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return uploadcount;
+        
+         }
+
+
 
     }
 }

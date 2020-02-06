@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using System.Data;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -49,6 +50,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _UserRepository = User;
             return _UserRepository.GetuserDetailsById(UserID, TenantID, IsStoreUser);
 
+        }
+        public int UserBulkUpload(IUser User, int TenantID, int CreatedBy, int IsStoreUser, DataSet DataSetCSV)
+        {
+            _UserRepository = User;
+            return _UserRepository.BulkUploadUser(TenantID, CreatedBy, IsStoreUser, DataSetCSV);
         }
     }
 }
