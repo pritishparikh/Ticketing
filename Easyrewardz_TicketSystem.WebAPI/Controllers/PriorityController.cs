@@ -190,7 +190,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 int result = _MasterCaller.Deletepriority(new PriorityService(_connectionString), PriorityID, authenticate.TenantId, authenticate.UserMasterID, PriorityFor);
                 StatusCode =
                 result == 0 ?
-                       (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;

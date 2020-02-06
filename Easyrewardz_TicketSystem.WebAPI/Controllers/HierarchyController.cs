@@ -18,7 +18,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+   [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class HierarchyController : ControllerBase
     {
         #region variable declaration
@@ -26,7 +26,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         private readonly string _radisCacheServerAddress;
         private readonly string _connectionSting;
         #endregion
-
+        
         #region Cunstructor
         public HierarchyController(IConfiguration _iConfig)
         {
@@ -58,29 +58,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 customHierarchymodel.TenantID = authenticate.TenantId;
                 customHierarchymodel.CreatedBy = authenticate.UserMasterID;
                 int result = _Hierarchy.CreateHierarchy(new HierarchyService(_connectionSting), customHierarchymodel);
-
-                if (customHierarchymodel.Deleteflag == 1)
-                {
-                    if (result == 0)
-                    {
-                        statusMessage = "Record in use";
-                    }
-                    else
-                    {
-                        statusMessage = "Record deleted successfully ";
-                    }
-
-                    StatusCode = 
-                        result == 0 ? (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
-
-                }
-                else
-                {
-                    StatusCode =
+                StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                }
-
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
@@ -105,7 +85,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("ListHierarchy")]
-        public ResponseModel ListHierarchy(int HierarchyFor = 1)
+        public ResponseModel ListHierarchy(int HierarchyFor=1)
         {
             List<CustomHierarchymodel> customHierarchymodels = new List<CustomHierarchymodel>();
             HierarchyCaller _Hierarchy = new HierarchyCaller();
