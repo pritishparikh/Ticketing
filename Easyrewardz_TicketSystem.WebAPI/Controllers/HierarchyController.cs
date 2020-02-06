@@ -64,9 +64,27 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 customHierarchymodel.TenantID = authenticate.TenantId;
                 customHierarchymodel.CreatedBy = authenticate.UserMasterID;
                 int result = _Hierarchy.CreateHierarchy(new HierarchyService(_connectionSting), customHierarchymodel);
-                StatusCode =
+                if (customHierarchymodel.Deleteflag == 1)
+                {
+                    if (result == 0)
+                    {
+                        statusMessage = "Record in use";
+                    }
+                    else
+                    {
+                        statusMessage = "Record deleted successfully ";
+                    }
+
+                    StatusCode =
+                        result == 0 ? (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
+
+                }
+                else
+                {
+                    StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                }
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;

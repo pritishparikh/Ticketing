@@ -61,19 +61,30 @@ namespace Easyrewardz_TicketSystem.Services
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("SP_UpdateHierarchy", conn);
+                    MySqlCommand cmd = new MySqlCommand();
                     cmd.Connection = conn;
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@Designation_ID", customHierarchymodel.DesignationID);
-                    cmd.Parameters.AddWithValue("@Designation_Name", string.IsNullOrEmpty(customHierarchymodel.DesignationName) ? "" : customHierarchymodel.DesignationName);
-                    cmd.Parameters.AddWithValue("@Reportto_ID", string.IsNullOrEmpty(Convert.ToString(customHierarchymodel.ReportToDesignation)) ? 0 : customHierarchymodel.ReportToDesignation);
-                    cmd.Parameters.AddWithValue("@Is_Active", customHierarchymodel.IsActive);
-                    cmd.Parameters.AddWithValue("@Tenant_ID", customHierarchymodel.TenantID);
-                    cmd.Parameters.AddWithValue("@User_ID", customHierarchymodel.CreatedBy);
-                    cmd.Parameters.AddWithValue("@Hierarchy_For", customHierarchymodel.HierarchyFor);
-                    cmd.Parameters.AddWithValue("@Delete_flag", customHierarchymodel.Deleteflag);
+                    if (customHierarchymodel.Deleteflag != 1)
+                    {
+                        cmd.CommandText = "SP_UpdateHierarchy";
+                        ////Update
+                        cmd.Parameters.AddWithValue("@Designation_ID", customHierarchymodel.DesignationID);
+                        cmd.Parameters.AddWithValue("@Designation_Name", string.IsNullOrEmpty(customHierarchymodel.DesignationName) ? "" : customHierarchymodel.DesignationName);
+                        cmd.Parameters.AddWithValue("@Reportto_ID", string.IsNullOrEmpty(Convert.ToString(customHierarchymodel.ReportToDesignation)) ? 0 : customHierarchymodel.ReportToDesignation);
+                        cmd.Parameters.AddWithValue("@Is_Active", customHierarchymodel.IsActive);
+                        cmd.Parameters.AddWithValue("@Tenant_ID", customHierarchymodel.TenantID);
+                        cmd.Parameters.AddWithValue("@User_ID", customHierarchymodel.CreatedBy);
+                        cmd.Parameters.AddWithValue("@Hierarchy_For", customHierarchymodel.HierarchyFor);
+                        cmd.Parameters.AddWithValue("@Delete_flag", customHierarchymodel.Deleteflag);
+                    }
+                    else
+                    {
+                        ////Delete the record
+                        cmd.CommandText = "SP_DeleteHierarchy";
+                        cmd.Parameters.AddWithValue("@Hierarchy_ID", customHierarchymodel.DesignationID);
+                        cmd.Parameters.AddWithValue("@Tenant_ID", customHierarchymodel.TenantID);
+                    }
                     Success = Convert.ToInt32(cmd.ExecuteNonQuery());
-
                 }
                 catch (Exception ex)
                 {
@@ -86,11 +97,7 @@ namespace Easyrewardz_TicketSystem.Services
                         conn.Close();
                     }
                 }
-
             }
-
-
-
                 return Success;
         }
 

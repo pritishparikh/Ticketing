@@ -51,7 +51,12 @@ namespace Easyrewardz_TicketSystem.CustomModel
             //[Description("Success")]
             //Success = 1010,
 
+            [Description("Record deleted Successfully")]
+            RecordDeletedSuccess = 1010,
 
+
+            [Description("Record In use")]
+            RecordInUse = 1011,
 
             #endregion
 
