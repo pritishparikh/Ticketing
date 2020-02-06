@@ -72,7 +72,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
                 cmd.Parameters.AddWithValue("@Priority_For", PriorityFor);
                 cmd.CommandType = CommandType.StoredProcedure;
-                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
