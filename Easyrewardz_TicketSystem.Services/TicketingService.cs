@@ -744,7 +744,7 @@ namespace Easyrewardz_TicketSystem.Services
                         ticketDetails.Username = ds.Tables[0].Rows[i]["Username"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Username"]);
                         ticketDetails.UpdateDate = ds.Tables[0].Rows[i]["UpdatedAt"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedAt"]);
                         ticketDetails.Status = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]);
-                        ticketDetails.TargetClouredate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TargetClouredate"]);
+                        ticketDetails.TargetClouredate = ds.Tables[0].Rows[i]["TargetClouredate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetClouredate"]);
                         ticketDetails.OpenTicket = ds.Tables[0].Rows[i]["OpenTickets"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OpenTickets"]);
                         ticketDetails.Totalticket = ds.Tables[0].Rows[i]["Totaltickets"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Totaltickets"]);
                         ticketDetails.stores = ds.Tables[1].AsEnumerable().Select(x => new Store()
@@ -759,6 +759,12 @@ namespace Easyrewardz_TicketSystem.Services
                             ItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
                             ItemName = x.Field<object>("ItemName") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("ItemName"))
 
+                        }).ToList();
+
+                        ticketDetails.attachment = ds.Tables[3].AsEnumerable().Select(x => new Attachment()
+                        {
+                            TicketAttachmentId = Convert.ToInt32(x.Field<int>("TicketAttachmentId")),
+                            AttachmentName = x.Field<object>("AttachmentName") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("AttachmentName"))
                         }).ToList();
                     }
                 }

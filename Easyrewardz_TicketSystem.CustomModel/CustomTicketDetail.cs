@@ -82,7 +82,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// <summary>
         /// TargetClouredate
         /// </summary>
-        public DateTime TargetClouredate { get; set; }
+        public string TargetClouredate { get; set; }
 
         /// <summary>
         /// Username
@@ -147,7 +147,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string OrderItemID { get; set; }
         public List<Store> stores { get; set; }
         public List<Product> products { get; set; }
-
+        public List<Attachment> attachment  { get; set; }
     }
     public class Store
     {
@@ -158,5 +158,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
     {
         public int ItemID { get; set; }
         public string ItemName { get; set; }
+    }
+    public class Attachment
+    {
+        public int TicketAttachmentId { get; set; }
+        public string AttachmentName { get; set; }
     }
 }
