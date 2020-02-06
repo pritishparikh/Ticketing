@@ -34,7 +34,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<TicketNotes> getNotesByTicketId(int TicketId);
         int submitticket(CustomTicketSolvedModel customTicketSolvedModel, int UserID, int TenantId);
 
-        CustomTicketDetail getTicketDetailsByTicketId(int TicketID, int TenantID);
+        CustomTicketDetail getTicketDetailsByTicketId(int TicketID, int TenantID,string url);
 
         bool SendMail(SMTPDetails sMTPDetails, string mailTo, string cc, string bcc, string subject, string mailBody, bool informStore, string storeIDs, int TenantID);
         List<CustomTicketHistory> GetTicketHistory(int TicketID);

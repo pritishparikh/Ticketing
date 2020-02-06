@@ -126,11 +126,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ticketList.submitticket(customTicketSolvedModel, UserID, TenantId);
         }
 
-        public CustomTicketDetail getTicketDetailsByTicketId(ITicketing _ticket, int ticketID, int TenantID)
+        public CustomTicketDetail getTicketDetailsByTicketId(ITicketing _ticket, int ticketID, int TenantID, string url)
         {
             _ticketList = _ticket;
 
-            return _ticketList.getTicketDetailsByTicketId(ticketID, TenantID);
+            return _ticketList.getTicketDetailsByTicketId(ticketID, TenantID, url);
 
         }
 

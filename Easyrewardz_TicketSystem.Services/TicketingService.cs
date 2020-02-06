@@ -705,7 +705,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TicketID"></param>
         /// <param name="TenantId"></param>
         /// <returns></returns>
-        public CustomTicketDetail getTicketDetailsByTicketId(int TicketID, int TenantID)
+        public CustomTicketDetail getTicketDetailsByTicketId(int TicketID, int TenantID, string url)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -764,7 +764,7 @@ namespace Easyrewardz_TicketSystem.Services
                         ticketDetails.attachment = ds.Tables[3].AsEnumerable().Select(x => new Attachment()
                         {
                             TicketAttachmentId = Convert.ToInt32(x.Field<int>("TicketAttachmentId")),
-                            AttachmentName = x.Field<object>("AttachmentName") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("AttachmentName"))
+                            AttachmentName = x.Field<object>("AttachmentName") == System.DBNull.Value ? string.Empty : url +"/" + Convert.ToString(x.Field<object>("AttachmentName"))
                         }).ToList();
                     }
                 }
