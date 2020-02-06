@@ -125,7 +125,6 @@ namespace Easyrewardz_TicketSystem.Services
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetCRMRolesDetails", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                //cmd1.Parameters.AddWithValue("@_tenantID", 1);
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
@@ -194,7 +193,6 @@ namespace Easyrewardz_TicketSystem.Services
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetCRMDropdown", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                //cmd1.Parameters.AddWithValue("@_tenantID", 1);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
