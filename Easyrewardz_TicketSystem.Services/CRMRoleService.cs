@@ -42,16 +42,13 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 if(CRMRoleID> 0)
                 {
-                    //cmd.Parameters.AddWithValue("@_Modify_By", 6);
                     cmd.Parameters.AddWithValue("@_Modify_By", UserID);
                     cmd.Parameters.AddWithValue("@_CRMRoles_ID", CRMRoleID); 
                 }
                 else
                 {
-                    //cmd.Parameters.AddWithValue("@_createdBy", 6);
                     cmd.Parameters.AddWithValue("@_createdBy", UserID);
                 }
-                //cmd.Parameters.AddWithValue("@_tenantID", 1);
                 cmd.Parameters.AddWithValue("@_tenantID", tenantID);
                 cmd.Parameters.AddWithValue("@_RoleName", RoleName);
                 cmd.Parameters.AddWithValue("@_isRoleActive", Convert.ToInt16(RoleisActive));
@@ -92,13 +89,10 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteCRMRole", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
-                //cmd.Parameters.AddWithValue("@Tenant_ID", 1);
                 cmd.Parameters.AddWithValue("@CRMRoles_ID", CRMRoleID);
               
-
-
                 cmd.CommandType = CommandType.StoredProcedure;
-                deletecount = cmd.ExecuteNonQuery();
+                deletecount = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception ex)
             {

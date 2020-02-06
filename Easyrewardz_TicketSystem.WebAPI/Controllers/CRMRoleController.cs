@@ -113,7 +113,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Deletecount = _newCRM.DeleteCRMRole(new CRMRoleService(_connectioSting), authenticate.TenantId, CRMRoleID);
 
                 StatusCode =
-                Deletecount == 0 ? (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
+                Deletecount == 0 ? (int)EnumMaster.StatusCode.RecordDeletedSuccess : (int)EnumMaster.StatusCode.RecordInUse;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
