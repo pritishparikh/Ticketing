@@ -159,8 +159,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 int result = _newMasterBrand.DeleteBrand(new BrandServices(_connectioSting), BrandID, authenticate.TenantId);
 
                 StatusCode =
-                result == 0 ?
-                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+               result == 0 ?
+                    (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
