@@ -245,6 +245,15 @@ namespace Easyrewardz_TicketSystem.Services
                 cmdMail.Parameters.AddWithValue("@Is_Sent", ticketingDetails.ticketingMailerQues[0].IsSent);
                 cmdMail.Parameters.AddWithValue("@Priority_ID", ticketingDetails.ticketingMailerQues[0].PriorityID);
                 cmdMail.Parameters.AddWithValue("@Created_By", ticketingDetails.ticketingMailerQues[0].CreatedBy);
+                if (finalAttchment == null || finalAttchment == String.Empty)
+                {
+                    cmdMail.Parameters.AddWithValue("@Has_Attachment",0);
+                }
+                else
+                {
+                    cmdMail.Parameters.AddWithValue("@Has_Attachment",1);
+                }
+
                 cmdMail.CommandType = CommandType.StoredProcedure;
                 a = Convert.ToInt32(cmdMail.ExecuteScalar());
 
