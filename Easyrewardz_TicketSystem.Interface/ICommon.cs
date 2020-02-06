@@ -11,7 +11,7 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface ICommon
     {
         /// <summary>
-        /// Send mail
+        /// Send mail.
         /// </summary>
         /// <param name="smtpDetails"></param>
         /// <param name="emailToAddress"></param>
