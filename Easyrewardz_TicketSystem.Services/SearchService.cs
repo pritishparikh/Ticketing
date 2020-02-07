@@ -338,11 +338,11 @@ namespace Easyrewardz_TicketSystem.Services
             int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
-                if(conn!=null && conn.State== ConnectionState.Closed)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
                     conn.Open();
                 }
-             
+
                 cmd.Connection = conn;
 
                 /*Based on active tab stored procedure will call
@@ -371,7 +371,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                     sqlcmd.Parameters.AddWithValue("CustomerMobileNo", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerMobileNo) ? "" : searchModel.searchDataByCustomerType.CustomerMobileNo);
                     sqlcmd.Parameters.AddWithValue("CustomerEmailID", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerEmailID) ? "" : searchModel.searchDataByCustomerType.CustomerEmailID);
-                    sqlcmd.Parameters.AddWithValue("Ticket_ID", searchModel.searchDataByCustomerType.TicketID==null?0:searchModel.searchDataByCustomerType.TicketID);
+                    sqlcmd.Parameters.AddWithValue("Ticket_ID", searchModel.searchDataByCustomerType.TicketID == null ? 0 : searchModel.searchDataByCustomerType.TicketID);
                     sqlcmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByCustomerType.TicketStatusID);
                 }
                 else if (searchModel.ActiveTabId == 3)
@@ -388,7 +388,7 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.CommandText = "SP_SearchTicketData_ByCategory";
 
                     sqlcmd.Parameters.AddWithValue("Category_Id", searchModel.searchDataByCategoryType.CategoryId);
-                    sqlcmd.Parameters.AddWithValue("SubCategory_Id",searchModel.searchDataByCategoryType.SubCategoryId);
+                    sqlcmd.Parameters.AddWithValue("SubCategory_Id", searchModel.searchDataByCategoryType.SubCategoryId);
                     sqlcmd.Parameters.AddWithValue("IssueType_Id", searchModel.searchDataByCategoryType.IssueTypeId);
                     sqlcmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByCategoryType.TicketStatusID);
                 }
@@ -414,15 +414,15 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.Parameters.AddWithValue("TicketClaim_ID", searchModel.searchDataByAll.ClaimId);
                     sqlcmd.Parameters.AddWithValue("InvoiceNumberORSubOrderNo", string.IsNullOrEmpty(searchModel.searchDataByAll.InvoiceNumberORSubOrderNo) ? "" : searchModel.searchDataByAll.InvoiceNumberORSubOrderNo);
                     sqlcmd.Parameters.AddWithValue("OrderItemId", searchModel.searchDataByAll.OrderItemId);
-                    sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.searchDataByAll.IsVisitStore=="yes"?1:0);
-                    sqlcmd.Parameters.AddWithValue("IsWantToVisitStore",searchModel.searchDataByAll.IsWantVistingStore=="yes"?1:0);
+                    sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.searchDataByAll.IsVisitStore == "yes" ? 1 : 0);
+                    sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", searchModel.searchDataByAll.IsWantVistingStore == "yes" ? 1 : 0);
 
                     /*Column 4 (5)*/
                     sqlcmd.Parameters.AddWithValue("CustomerEmailID", searchModel.searchDataByAll.CustomerEmailID);
                     sqlcmd.Parameters.AddWithValue("CustomerMobileNo", string.IsNullOrEmpty(searchModel.searchDataByAll.CustomerMobileNo) ? "" : searchModel.searchDataByAll.CustomerMobileNo);
                     sqlcmd.Parameters.AddWithValue("OtherAgentAssignTo", string.IsNullOrEmpty(Convert.ToString(searchModel.searchDataByAll.AssignTo)) ? 0 : Convert.ToInt32(searchModel.searchDataByAll.AssignTo));
                     sqlcmd.Parameters.AddWithValue("StoreCodeORAddress", searchModel.searchDataByAll.StoreCodeORAddress);
-                    sqlcmd.Parameters.AddWithValue("WantToStoreCodeORAddress", searchModel.searchDataByAll.WantToStoreCodeORAddress);
+                    sqlcmd.Parameters.AddWithValue("WantToStoreCodeORAddress", string.IsNullOrEmpty(searchModel.searchDataByAll.WantToStoreCodeORAddress) ? "" : searchModel.searchDataByAll.WantToStoreCodeORAddress);
 
                     //Row - 2 and Column - 1  (5)
                     sqlcmd.Parameters.AddWithValue("HaveClaim", searchModel.searchDataByAll.HaveClaim);
@@ -517,7 +517,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             SearchModel searchModel = new SearchModel();
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
-          
+
 
             try
             {
@@ -531,17 +531,17 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-                    if(ds.Tables[0].Rows.Count >0)
+                    if (ds.Tables[0].Rows.Count > 0)
                     {
-                        jsonSearchParams= Convert.ToString(ds.Tables[0].Rows[0]["SearchParameters"]);
+                        jsonSearchParams = Convert.ToString(ds.Tables[0].Rows[0]["SearchParameters"]);
                     }
                 }
 
-                if(!string.IsNullOrEmpty(jsonSearchParams))
+                if (!string.IsNullOrEmpty(jsonSearchParams))
                 {
                     searchModel = JsonConvert.DeserializeObject<SearchModel>(jsonSearchParams);
 
-                    if(searchModel!=null)
+                    if (searchModel != null)
                     {
                         objSearchResult = GetTicketsOnSearch(searchModel);
 

@@ -152,7 +152,7 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string StoreCodeORAddress { get; set; }
 
-        public int? WantToStoreCodeORAddress { get; set; }
+        public string WantToStoreCodeORAddress { get; set; }
 
         //Row - 2 and Column - 1  
         public int? HaveClaim { get; set; }

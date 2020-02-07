@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-    public class DashBoardService :IDashBoard
+    public class DashBoardService : IDashBoard
     {
         public CultureInfo culture = CultureInfo.InvariantCulture;
         #region Cunstructor
@@ -32,7 +32,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet Graphds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             DashBoardDataModel dashBoarddata = new DashBoardDataModel();
-           // DashBoardGraphModel dashBoardGraphdata = new DashBoardGraphModel();
+            // DashBoardGraphModel dashBoardGraphdata = new DashBoardGraphModel();
             int TotalTickets = 0; int resolvedTickets = 0; int UnresolvedTickets = 0;
             try
             {
@@ -101,7 +101,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                     if (ds.Tables[9].Rows.Count > 0) //Response SLA  ----hardcoded for now-----
                     {
-                        dashBoarddata.ResponseRate = ds.Tables[9].Rows[0]["ResponseSLA"] != System.DBNull.Value ? Convert.ToString(ds.Tables[9].Rows[0]["ResponseSLA"])+"%" : "";
+                        dashBoarddata.ResponseRate = ds.Tables[9].Rows[0]["ResponseSLA"] != System.DBNull.Value ? Convert.ToString(ds.Tables[9].Rows[0]["ResponseSLA"]) + "%" : "";
                         dashBoarddata.isResponseSuccess = true;
                     }
 
@@ -257,7 +257,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<SearchResponseDashBoard> objSearchResult = new List<SearchResponseDashBoard>();
-       
+
             List<string> CountList = new List<string>();
 
             int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
@@ -275,7 +275,7 @@ namespace Easyrewardz_TicketSystem.Services
                  */
                 MySqlCommand sqlcmd = new MySqlCommand("", conn);
 
-               // sqlcmd.Parameters.AddWithValue("HeaderStatus_Id", searchModel.HeaderStatusId);
+                // sqlcmd.Parameters.AddWithValue("HeaderStatus_Id", searchModel.HeaderStatusId);
 
                 if (searchModel.ActiveTabId == 1)//ByDate
                 {
@@ -292,7 +292,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                     sqlcmd.Parameters.AddWithValue("CustomerMobileNo", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerMobileNo) ? "" : searchModel.searchDataByCustomerType.CustomerMobileNo);
                     sqlcmd.Parameters.AddWithValue("customerEmail", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerEmailID) ? "" : searchModel.searchDataByCustomerType.CustomerEmailID);
-                    sqlcmd.Parameters.AddWithValue("TicketID", searchModel.searchDataByCustomerType.TicketID==null?0: searchModel.searchDataByCustomerType.TicketID);
+                    sqlcmd.Parameters.AddWithValue("TicketID", searchModel.searchDataByCustomerType.TicketID == null ? 0 : searchModel.searchDataByCustomerType.TicketID);
                     sqlcmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByCustomerType.TicketStatusID);
                 }
                 else if (searchModel.ActiveTabId == 3)//ByTicketType
@@ -332,13 +332,11 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.Parameters.AddWithValue("SLAStatus", string.IsNullOrEmpty(searchModel.searchDataByAll.SLAStatus) ? "" : searchModel.searchDataByAll.SLAStatus);
 
                     /*Column 3 (5)*/
-                    sqlcmd.Parameters.AddWithValue("TicketClaim_ID", searchModel.searchDataByAll.ClaimId);
+                    sqlcmd.Parameters.AddWithValue("TicketClaim_ID", Convert.ToInt32(searchModel.searchDataByAll.ClaimId));
                     sqlcmd.Parameters.AddWithValue("InvoiceNumberORSubOrderNo", string.IsNullOrEmpty(searchModel.searchDataByAll.InvoiceNumberORSubOrderNo) ? "" : searchModel.searchDataByAll.InvoiceNumberORSubOrderNo);
-                    sqlcmd.Parameters.AddWithValue("OrderItemId", searchModel.searchDataByAll.OrderItemId);
+                    sqlcmd.Parameters.AddWithValue("OrderItemId", string.IsNullOrEmpty(Convert.ToString(searchModel.searchDataByAll.OrderItemId)) ?  0 : Convert.ToInt32(searchModel.searchDataByAll.OrderItemId));
                     sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.searchDataByAll.IsVisitStore == "yes" ? 1 : 0);
                     sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", searchModel.searchDataByAll.IsWantVistingStore == "yes" ? 1 : 0);
-
-                    sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", searchModel.searchDataByAll.IsWantVistingStore);
 
                     /*Column 4 (5)*/
                     sqlcmd.Parameters.AddWithValue("CustomerEmailID", searchModel.searchDataByAll.CustomerEmailID);
@@ -365,8 +363,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                 sqlcmd.Parameters.AddWithValue("CurrentUserId", searchModel.curentUserId);
                 sqlcmd.Parameters.AddWithValue("Tenant_ID", searchModel.TenantID);
-                sqlcmd.Parameters.AddWithValue("Assignto_IDs", searchModel.AssigntoId);
-                sqlcmd.Parameters.AddWithValue("Brand_IDs", searchModel.BrandId);
+                sqlcmd.Parameters.AddWithValue("Assignto_IDs", searchModel.AssigntoId.TrimEnd(','));
+                sqlcmd.Parameters.AddWithValue("Brand_IDs", searchModel.BrandId.TrimEnd(','));
 
                 sqlcmd.CommandType = CommandType.StoredProcedure;
 
@@ -382,7 +380,7 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             ticketID = Convert.ToInt32(r.Field<object>("TicketID")),
                             ticketStatus = Convert.ToString((EnumMaster.TicketStatus)Convert.ToInt32(r.Field<object>("StatusID"))),
-                            Message = r.Field<object>("TicketDescription") == System.DBNull.Value ? string.Empty: Convert.ToString(r.Field<object>("TicketDescription")),
+                            Message = r.Field<object>("TicketDescription") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TicketDescription")),
                             Category = r.Field<object>("CategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CategoryName")),
                             subCategory = r.Field<object>("SubCategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SubCategoryName")),
                             IssueType = r.Field<object>("IssueTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueTypeName")),
@@ -400,14 +398,14 @@ namespace Easyrewardz_TicketSystem.Services
                             string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
                             responseOverdueBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityRespond") == System.DBNull.Value) ?
                             string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
-                            
+
                             resolutionOverdueBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityResolve") == System.DBNull.Value) ?
                             string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
 
-                            TaskStatus = r.Field<object>("TaskDetails") == System.DBNull.Value ? string.Empty:Convert.ToString(r.Field<object>("TaskDetails")),
+                            TaskStatus = r.Field<object>("TaskDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TaskDetails")),
                             ClaimStatus = r.Field<object>("ClaimDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ClaimDetails")),
                             TicketCommentCount = r.Field<object>("ClaimDetails") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TicketComments")),
-                            isEscalation = r.Field<object>("IsEscalated")==System.DBNull.Value ? 0 :Convert.ToInt32(r.Field<object>("IsEscalated"))
+                            isEscalation = r.Field<object>("IsEscalated") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsEscalated"))
 
                         }).ToList();
                     }
@@ -443,7 +441,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 objSearchResult = GetDashboardTicketsOnSearch(searchModel);
 
-                if(objSearchResult.Count > 0)
+                if (objSearchResult.Count > 0)
                 {
                     csv = CommonService.ListToCSV(objSearchResult, "");
                 }
@@ -453,11 +451,11 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            
+
             return csv;
         }
 
-        public LoggedInAgentModel GetLogginAccountInfo(int tenantID, int UserID, string EmailID,string AccountName)
+        public LoggedInAgentModel GetLogginAccountInfo(int tenantID, int UserID, string EmailID, string AccountName)
         {
             DataSet ds = new DataSet();
             DateTime now = DateTime.Now; DateTime temp = new DateTime();
@@ -489,13 +487,13 @@ namespace Easyrewardz_TicketSystem.Services
 
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                       
+
                         loggedInAcc.LoginTime = ds.Tables[0].Rows[0]["logintime"] != System.DBNull.Value ? Convert.ToDateTime(ds.Tables[0].Rows[0]["logintime"]).ToString("h:mm tt", culture) : "";
                         loggedInAcc.LogoutTime = ds.Tables[0].Rows[0]["logouttime"] != System.DBNull.Value ? Convert.ToDateTime(ds.Tables[0].Rows[0]["logouttime"]).ToString("h:mm tt", culture) : "";
 
                         ShiftDuration = ds.Tables[0].Rows[0]["ShiftDuration"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[0].Rows[0]["ShiftDuration"]) : 0;
 
-                        if(ShiftDuration >0)
+                        if (ShiftDuration > 0)
                         {
                             temp = temp.AddHours(ShiftDuration);
                             loggedInAcc.ShiftDurationInHour = temp.Hour;
@@ -505,7 +503,7 @@ namespace Easyrewardz_TicketSystem.Services
                         if (!string.IsNullOrEmpty(loggedInAcc.LoginTime))
                         {
                             diff = now - Convert.ToDateTime(ds.Tables[0].Rows[0]["logintime"]);
-                            loggedInAcc.LoggedInDuration = Math.Abs(diff.Hours ) +"H " + Math.Abs(diff.Minutes) + "M";
+                            loggedInAcc.LoggedInDuration = Math.Abs(diff.Hours) + "H " + Math.Abs(diff.Minutes) + "M";
                             loggedInAcc.LoggedInDurationInHours = Math.Abs(diff.Hours);
                             loggedInAcc.LoggedInDurationInMinutes = Math.Abs(diff.Minutes);
 
@@ -552,8 +550,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Creation Details Mapping
         /// </summary>
-            #region Mapping
-            public string setCreationdetails(string time, string ColName)
+        #region Mapping
+        public string setCreationdetails(string time, string ColName)
         {
             string timespan = string.Empty;
             DateTime now = DateTime.Now;
