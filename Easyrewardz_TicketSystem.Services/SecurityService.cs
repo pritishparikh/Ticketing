@@ -385,6 +385,7 @@ namespace Easyrewardz_TicketSystem.Services
                             authenticate.FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]);
                             authenticate.LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]);
                             authenticate.Message = "Valid user";
+                            authenticate.UserEmailID = User_EmailID;
                         }
                         else
                         {
