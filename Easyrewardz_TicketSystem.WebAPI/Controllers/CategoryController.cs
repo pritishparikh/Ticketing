@@ -47,7 +47,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetCategoryList")]
-        public List<Category> GetCategoryList(int BrandID)
+        public ResponseModel GetCategoryList(int BrandID)
         {
             List<Category> objCategoryList = new List<Category>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -80,7 +80,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = null;
             }
-            return objCategoryList;
+            return _objResponseModel;
         }
 
         [HttpPost]
@@ -207,7 +207,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("CategoryList")]
-        public List<Category> CategoryList()
+        public ResponseModel CategoryList()
         {
             List<Category> objcategory = new List<Category>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -242,7 +242,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Message = ex.Message;
                 _objResponseModel.ResponseData = null;
             }
-            return objcategory;
+            return _objResponseModel;
         }
 
         /// <summary>
