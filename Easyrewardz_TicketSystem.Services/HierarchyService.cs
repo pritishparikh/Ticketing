@@ -150,16 +150,18 @@ namespace Easyrewardz_TicketSystem.Services
             return listHierarchy;
         }
 
-        public int BulkUploadHierarchy(int TenantID, int CreatedBy,int HierarchyFor,  DataSet DataSetCSV)
+        public List<string> BulkUploadHierarchy(int TenantID, int CreatedBy, int HierarchyFor, string FileName, DataSet DataSetCSV)
         {
-            int uploadcount = 0;
+            int insertcount = 0;
             XmlDocument xmlDoc = new XmlDocument();
-           
+            DataSet Bulkds = new DataSet();
+            List<string> csvLst = new List<string>();
+            string SuccesFile = string.Empty; string ErroFile = string.Empty;
             try
             {
-                if(DataSetCSV!=null && DataSetCSV.Tables.Count >0 )
+                if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
                 {
-                    if(DataSetCSV.Tables[0]!=null && DataSetCSV.Tables[0].Rows.Count > 0)
+                    if (DataSetCSV.Tables[0] != null && DataSetCSV.Tables[0].Rows.Count > 0)
                     {
 
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
@@ -172,15 +174,28 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Parameters.AddWithValue("@_hierarchyFor", HierarchyFor);
                         cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                         cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
-
-
-
                         cmd.CommandType = CommandType.StoredProcedure;
-                        uploadcount = cmd.ExecuteNonQuery();
+                        MySqlDataAdapter da = new MySqlDataAdapter();
+                        da.SelectCommand = cmd;
+                        da.Fill(Bulkds);
+
+                        if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
+                        {
+
+                            //for success file
+                            SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(SuccesFile);
+
+                            //for error file
+                            ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            csvLst.Add(ErroFile);
+
+                        }
+
                     }
-                    
+
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -189,7 +204,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if(DataSetCSV!=null)
+                if (DataSetCSV != null)
                 {
                     DataSetCSV.Dispose();
                 }
@@ -198,7 +213,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return uploadcount;
+            return csvLst;
         }
     }
 }

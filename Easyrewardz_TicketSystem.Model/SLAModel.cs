@@ -10,6 +10,7 @@ namespace Easyrewardz_TicketSystem.Model
         public int IssueTypeID { get; set; }
         public int CreatedBy { get; set; }
         public bool isSLAActive { get; set; }
+        public int SLAFor { get; set; }
         public List<SLATargetModel> SLATarget { get; set; }
 
     }

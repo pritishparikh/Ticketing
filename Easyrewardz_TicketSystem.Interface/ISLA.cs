@@ -21,7 +21,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int DeleteSLA(int tenantID, int SLAID);
 
         //List<SLAResponseModel> SLAList(int tenantID, int pageNo, int PageSize);
-        List<SLAResponseModel> SLAList(int tenantID);
+        List<SLAResponseModel> SLAList(int tenantID, int SLAFor);
 
         List<IssueTypeList> BindIssueTypeList(int tenantID);
 

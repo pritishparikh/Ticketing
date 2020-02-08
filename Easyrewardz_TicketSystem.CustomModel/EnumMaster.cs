@@ -325,5 +325,33 @@ namespace Easyrewardz_TicketSystem.CustomModel
             [Description("South")]
             South = 263
         }
+
+
+        public enum FileUpload
+        {
+            /// <summary>
+            ///Ticketing
+            /// </summary>
+            [Description("Ticketing")]
+            Ticketing = 1,
+
+            /// <summary>
+            ///QA
+            /// </summary>
+            [Description("QA")]
+            QA = 2,
+
+            /// <summary>
+            ///Store
+            /// </summary>
+            [Description("Store")]
+            Store = 3,
+
+            /// <summary>
+            ///Chat 
+            /// </summary>
+            [Description("Chat")]
+            Chat = 4
+        }
     }
 }

@@ -56,6 +56,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             List<FileUploadLogs> _objresponseModel = new List<FileUploadLogs>();
             int StatusCode = 0;
             string statusMessage = "";
+            int fileuploadFor = 0;
             try
             {
                 //Get token (Double encrypted) and get the tenant id 
@@ -65,7 +66,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 SettingsCaller _newAlert = new SettingsCaller();
 
-                _objresponseModel = _newAlert.GetFileUploadLogs(new FileUploadService(_connectioSting), authenticate.TenantId);
+                _objresponseModel = _newAlert.GetFileUploadLogs(new FileUploadService(_connectioSting), authenticate.TenantId, fileuploadFor);
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

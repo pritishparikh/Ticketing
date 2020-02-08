@@ -95,6 +95,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_createdBy", SLA.CreatedBy);
                 cmd.Parameters.AddWithValue("@_issueType", SLA.IssueTypeID);
                 cmd.Parameters.AddWithValue("@isSLAActive", Convert.ToInt16(SLA.isSLAActive));
+                cmd.Parameters.AddWithValue("@_SLAFor", SLA.SLAFor); 
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -225,8 +226,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// GET SLA
         /// </summary>
-        //public List<SLAResponseModel> SLAList(int tenantID,int pageNo, int PageSize)
-            public List<SLAResponseModel> SLAList(int tenantID)
+
+            public List<SLAResponseModel> SLAList(int tenantID,int SLAFor)
         {
             List<SLAResponseModel> objSLALst = new List<SLAResponseModel>();
             DataSet ds = new DataSet();
@@ -242,6 +243,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.CommandType = CommandType.StoredProcedure;
                 //cmd1.Parameters.AddWithValue("@_tenantID", 1);
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
+                cmd1.Parameters.AddWithValue("@_SLAFor", SLAFor);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);

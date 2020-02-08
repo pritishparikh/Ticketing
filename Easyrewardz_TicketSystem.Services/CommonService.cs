@@ -307,6 +307,35 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        public static string DataTableToCsv(DataTable table)
+        {
+            StringBuilder sb = new StringBuilder();
 
+            IEnumerable<string> columnNames = table.Columns.Cast<DataColumn>().
+                                              Select(column => column.ColumnName);
+            sb.AppendLine(string.Join(",", columnNames));
+
+            foreach (DataRow row in table.Rows)
+            {
+                IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
+                sb.AppendLine(string.Join(",", fields));
+            }
+
+            return sb.ToString();
+        }
+
+        public static bool SaveFile(string filepath, string FileContent)
+        {
+
+
+            string lastFolderName = Path.GetDirectoryName(filepath);
+            if (!Directory.Exists(lastFolderName))
+            {
+                Directory.CreateDirectory(lastFolderName);
+            }
+            File.WriteAllText(filepath, FileContent);
+
+            return true;
+        }
     }
 }

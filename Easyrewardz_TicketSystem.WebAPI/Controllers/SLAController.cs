@@ -302,7 +302,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("GetSLA")]
 
-        public ResponseModel GetSLA()
+        public ResponseModel GetSLA(int SLAFor)
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
@@ -318,7 +318,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 SettingsCaller _newCRM = new SettingsCaller();
                 //_objresponseModel = _newCRM.SLAList(new SLAServices(_connectioSting), authenticate.TenantId,  pageNo,  PageSize);
-                _objresponseModel = _newCRM.SLAList(new SLAServices(_connectioSting), authenticate.TenantId);
+                _objresponseModel = _newCRM.SLAList(new SLAServices(_connectioSting), authenticate.TenantId, SLAFor);
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

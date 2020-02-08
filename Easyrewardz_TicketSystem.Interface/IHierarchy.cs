@@ -12,6 +12,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int CreateHierarchy(CustomHierarchymodel customHierarchymodel);
         List<CustomHierarchymodel> ListHierarchy(int TenantID,int HierarchyFor);
 
-        int BulkUploadHierarchy(int TenantID,int CreatedBy, int HierarchyFor, DataSet DataSetCSV);
+        List<string> BulkUploadHierarchy(int TenantID, int CreatedBy, int HierarchyFor, string FileName, DataSet DataSetCSV);
     }
 }

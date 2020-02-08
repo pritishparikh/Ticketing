@@ -91,10 +91,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-        public List<SLAResponseModel> SLAList(ISLA SLA,int TenantID)
+        public List<SLAResponseModel> SLAList(ISLA SLA,int TenantID,int SLAFor)
         {
             _SLA = SLA;
-            return _SLA.SLAList(TenantID );
+            return _SLA.SLAList(TenantID , SLAFor);
         }
 
         public List<IssueTypeList> BindIssueTypeList(ISLA SLA,int tenantID)
@@ -198,10 +198,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #endregion
 
         #region FileUploadLogs
-        public List<FileUploadLogs> GetFileUploadLogs(IFileUpload FileU,int tenantId)
+        public List<FileUploadLogs> GetFileUploadLogs(IFileUpload FileU,int tenantId,int fileuploadFor)
         {
             _FileUpload = FileU;
-            return _FileUpload.GetFileUploadLogs(tenantId);
+            return _FileUpload.GetFileUploadLogs(tenantId, fileuploadFor);
+        }
+
+        public int CreateFileUploadLog(IFileUpload FileU, int tenantid, string filename, bool isuploaded, string errorlogfilename,
+           string successlogfilename, int createdby, string filetype, string succesFilepath, string errorFilepath, int fileuploadFor)
+        {
+            _FileUpload = FileU;
+            return _FileUpload.CreateFileUploadLog(tenantid, filename, isuploaded, errorlogfilename, successlogfilename, createdby, filetype,
+                  succesFilepath, errorFilepath, fileuploadFor);
         }
 
         #endregion
