@@ -46,5 +46,6 @@ namespace Easyrewardz_TicketSystem.Interface
        List< CustomSearchTicketAgent> GetAgentList( int TenantID);
 
         int CommentReplyOnTicketDetail(TicketingMailerQue ticketingMailerQue);
+        int CommentOnTicketDetail(TicketingMailerQue ticketingMailerQue);
     }
 }

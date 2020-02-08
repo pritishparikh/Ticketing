@@ -1043,6 +1043,51 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return i;
         }
+
+        public int CommentOnTicketDetail(TicketingMailerQue ticketingMailerQue)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmdMail = new MySqlCommand("", conn);
+                cmdMail.Parameters.AddWithValue("@Tenant_ID", ticketingMailerQue.TenantID);
+                cmdMail.Parameters.AddWithValue("@Ticket_ID", ticketingMailerQue.TicketID);
+                cmdMail.Parameters.AddWithValue("@TikcketMail_Subject", ticketingMailerQue.TikcketMailSubject);
+                cmdMail.Parameters.AddWithValue("@TicketMail_Body", ticketingMailerQue.TicketMailBody);
+                cmdMail.Parameters.AddWithValue("@To_Email", ticketingMailerQue.ToEmail);
+                cmdMail.Parameters.AddWithValue("@User_CC", ticketingMailerQue.UserCC);
+                cmdMail.Parameters.AddWithValue("@User_BCC", ticketingMailerQue.UserBCC);
+                //cmdMail.Parameters.AddWithValue("@Ticket_Source", ticketingMailerQue.TicketSource);
+                cmdMail.Parameters.AddWithValue("@Alert_ID", ticketingMailerQue.AlertID);
+                cmdMail.Parameters.AddWithValue("@Is_Sent", ticketingMailerQue.IsSent);
+                cmdMail.Parameters.AddWithValue("@Priority_ID", ticketingMailerQue.PriorityID);
+                cmdMail.Parameters.AddWithValue("@Created_By", ticketingMailerQue.CreatedBy);
+                /* if (finalAttchment == null || finalAttchment == String.Empty)
+                 {
+                     cmdMail.Parameters.AddWithValue("@Has_Attachment", 0);
+                 }
+                 else
+                 {
+                     cmdMail.Parameters.AddWithValue("@Has_Attachment", 1);
+                 }*/
+
+                cmdMail.CommandType = CommandType.StoredProcedure;
+                i = Convert.ToInt32(cmdMail.ExecuteNonQuery());
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
     }
 }
 

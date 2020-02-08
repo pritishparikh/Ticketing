@@ -971,6 +971,50 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// Comment on ticket Detail
+        /// </summary>
+        /// <param name="TicketingMailerQue"></param>
+        /// <returns></returns>
+
+        [HttpPost]
+        [Route("CommentReply")]
+        public ResponseModel Comment([FromBody] TicketingMailerQue ticketingMailerQue)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                TicketingCaller _TicketCaller = new TicketingCaller();
+                ticketingMailerQue.TenantID = authenticate.TenantId;
+                ticketingMailerQue.CreatedBy = authenticate.UserMasterID;
+                int result = _TicketCaller.CommentticketDetail(new TicketingService(_connectioSting), ticketingMailerQue);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+
+            }
+            return _objResponseModel;
+        }
         #endregion
     }
 }

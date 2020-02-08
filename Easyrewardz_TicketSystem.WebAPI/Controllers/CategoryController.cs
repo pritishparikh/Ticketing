@@ -20,7 +20,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+   [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class CategoryController : ControllerBase
     {
 
@@ -47,7 +47,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetCategoryList")]
-        public ResponseModel GetCategoryList(int BrandID)
+        public List<Category> GetCategoryList(int BrandID)
         {
             List<Category> objCategoryList = new List<Category>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -61,14 +61,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 MasterCaller _newMasterCategory = new MasterCaller();
                 objCategoryList = _newMasterCategory.GetCategoryList(new CategoryServices(_connectioSting), authenticate.TenantId, BrandID);
-                StatusCode =
-             objCategoryList.Count == 0 ?
-                  (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objCategoryList;
+               
             }
             catch (Exception ex)
             {
@@ -80,7 +73,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objCategoryList;
         }
 
         [HttpPost]
@@ -207,7 +200,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("CategoryList")]
-        public ResponseModel CategoryList()
+        public List<Category> CategoryList()
         {
             List<Category> objcategory = new List<Category>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -223,14 +216,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 MasterCaller _newMasterCategory = new MasterCaller();
 
                 objcategory = _newMasterCategory.CategoryList(new CategoryServices(_connectioSting), authenticate.TenantId);
-                StatusCode =
-            objcategory.Count == 0 ?
-                 (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objcategory;
             }
             catch (Exception ex)
             {
@@ -242,7 +227,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Message = ex.Message;
                 _objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objcategory;
         }
 
         /// <summary>

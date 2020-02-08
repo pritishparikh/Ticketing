@@ -170,6 +170,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ticketList = _ticket;
             return _ticketList.CommentReplyOnTicketDetail(ticketingMailerQue);
         }
+        public int CommentticketDetail(ITicketing _ticket, TicketingMailerQue ticketingMailerQue)
+        {
+            _ticketList = _ticket;
+            return _ticketList.CommentOnTicketDetail(ticketingMailerQue);
+        }
         #endregion
     }
 }
