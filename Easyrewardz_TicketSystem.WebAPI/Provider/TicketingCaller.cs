@@ -154,7 +154,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ticketList.GetCountByTicket(ticketID);
         }
 
-        public List<CustomTicketMessage> TicketMessage(ITicketing _ticket, int ticketID,int TenantID)
+        public List<TicketMessage> TicketMessage(ITicketing _ticket, int ticketID,int TenantID)
         {
             _ticketList = _ticket;
             return _ticketList.TicketMessagelisting(ticketID, TenantID);

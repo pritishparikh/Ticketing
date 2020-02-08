@@ -23,7 +23,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+  [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class TicketingController : ControllerBase
     {
         #region variable declaration
@@ -848,7 +848,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("getticketmessage")]
         public ResponseModel getticketmessage(int ticketID)
         {
-           List< CustomTicketMessage> objTicketMessage = new List<CustomTicketMessage>();
+           List<TicketMessage> objTicketMessage = new List<TicketMessage>();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -979,7 +979,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
 
         [HttpPost]
-        [Route("CommentReply")]
+        [Route("Comment")]
         public ResponseModel Comment([FromBody] TicketingMailerQue ticketingMailerQue)
         {
             ResponseModel _objResponseModel = new ResponseModel();
