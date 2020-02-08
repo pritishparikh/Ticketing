@@ -61,6 +61,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 MasterCaller _newMasterCategory = new MasterCaller();
                 objCategoryList = _newMasterCategory.GetCategoryList(new CategoryServices(_connectioSting), authenticate.TenantId, BrandID);
+                StatusCode =
+             objCategoryList.Count == 0 ?
+                  (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objCategoryList;
             }
             catch (Exception ex)
             {
@@ -215,6 +223,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 MasterCaller _newMasterCategory = new MasterCaller();
 
                 objcategory = _newMasterCategory.CategoryList(new CategoryServices(_connectioSting), authenticate.TenantId);
+                StatusCode =
+            objcategory.Count == 0 ?
+                 (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objcategory;
             }
             catch (Exception ex)
             {
