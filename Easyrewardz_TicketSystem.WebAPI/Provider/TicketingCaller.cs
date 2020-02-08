@@ -164,6 +164,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ticketList = _ticket;
             return _ticketList.GetAgentList(TenantID);
         }
+
+        public int CommentReply(ITicketing _ticket, TicketingMailerQue ticketingMailerQue)
+        {
+            _ticketList = _ticket;
+            return _ticketList.CommentReplyOnTicketDetail(ticketingMailerQue);
+        }
         #endregion
     }
 }

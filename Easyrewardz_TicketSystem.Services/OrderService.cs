@@ -135,28 +135,30 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        CustomOrderMaster customOrderMaster = new CustomOrderMaster();
+                        
+                           CustomOrderMaster customOrderMaster = new CustomOrderMaster();
                         customOrderMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
-                        customOrderMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
+                        //customOrderMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
+                        customOrderMaster.InvoiceNumber = ds.Tables[0].Rows[i]["BillID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BillID"]);
                         customOrderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
-                        customOrderMaster.OrdeItemPrice = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderPrice"]);
-                        customOrderMaster.OrderPricePaid = Convert.ToInt32(ds.Tables[0].Rows[i]["PricePaid"]);
+                        customOrderMaster.OrdeItemPrice = ds.Tables[0].Rows[i]["OrderPrice"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["OrderPrice"]);
+                        customOrderMaster.OrderPricePaid = ds.Tables[0].Rows[i]["PricePaid"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["PricePaid"]);
                         customOrderMaster.DateFormat = customOrderMaster.InvoiceDate.ToString("dd/MMM/yyyy");
-                        customOrderMaster.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        customOrderMaster.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
-                        customOrderMaster.Discount = Convert.ToInt32(ds.Tables[0].Rows[i]["Discount"]);
+                        customOrderMaster.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        customOrderMaster.StoreAddress = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        customOrderMaster.Discount = ds.Tables[0].Rows[i]["Discount"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Discount"]);
                         int orderMasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
                         customOrderMaster.OrderItems = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("OrderMasterID")).
                         Equals(orderMasterId)).Select(x => new OrderItem()
                         {
                             OrderItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
                             OrderMasterID = Convert.ToInt32(x.Field<int>("OrderMasterID")),
-                            ArticleNumber = Convert.ToString(x.Field<string>("SKUNumber")),
-                            ArticleSize = Convert.ToString(x.Field<string>("SKUName")),
-                            ItemPrice = Convert.ToInt32(x.Field<decimal>("ItemPrice")),
-                            PricePaid = Convert.ToInt32(x.Field<decimal>("PricePaid")),
-                            Discount = Convert.ToInt32(x.Field<decimal>("Discount")),
-                            RequireSize = Convert.ToInt32(x.Field<int>("RequireSize"))
+                            ArticleNumber = x.Field<object>("SKUNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUNumber")),
+                            ArticleSize = x.Field<object>("SKUName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUName")),
+                            ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
+                            PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
+                            Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
+                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("RequireSize"))
                         }).ToList();
                         customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                         customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
@@ -208,27 +210,27 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         CustomOrderDetailsByCustomer customOrderMaster = new CustomOrderDetailsByCustomer();
                         customOrderMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
-                        customOrderMaster.CusotmerID = Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
-                        customOrderMaster.CusotmerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
-                        customOrderMaster.MobileNumber = Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
-                        customOrderMaster.EmailID = Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
-                        customOrderMaster.OrderNumber = Convert.ToString(ds.Tables[0].Rows[i]["OrderNumber"]);
-                        customOrderMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
+                        customOrderMaster.CusotmerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
+                        customOrderMaster.CusotmerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
+                        customOrderMaster.MobileNumber = ds.Tables[0].Rows[i]["CustomerPhoneNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
+                        customOrderMaster.EmailID = ds.Tables[0].Rows[i]["CustomerEmailId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
+                        customOrderMaster.OrderNumber = ds.Tables[0].Rows[i]["OrderNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["OrderNumber"]);
+                        customOrderMaster.InvoiceNumber = ds.Tables[0].Rows[i]["BillID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BillID"]);
                         customOrderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
                         customOrderMaster.DateFormat = customOrderMaster.InvoiceDate.ToString("dd/MMM/yyyy");
-                        customOrderMaster.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        customOrderMaster.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
-                        customOrderMaster.PaymentModename = Convert.ToString(ds.Tables[0].Rows[i]["PaymentModename"]);
+                        customOrderMaster.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        customOrderMaster.StoreAddress = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        customOrderMaster.PaymentModename = ds.Tables[0].Rows[i]["PaymentModename"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PaymentModename"]);
                         int orderMasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
                         customOrderMaster.OrderItems = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("OrderMasterID")).
                         Equals(orderMasterId)).Select(x => new OrderItem()
                         {
                             OrderItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
                             OrderMasterID = Convert.ToInt32(x.Field<int>("OrderMasterID")),
-                            ItemName = Convert.ToString(x.Field<string>("ItemName")),
-                            InvoiceNo = Convert.ToString(x.Field<string>("InvoiceNo")),
-                            ItemPrice = Convert.ToInt32(x.Field<decimal>("ItemPrice")),
-                            PricePaid = Convert.ToInt32(x.Field<decimal>("PricePaid")),
+                            ItemName = x.Field<object>("ItemName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("ItemName")),
+                            InvoiceNo = x.Field<object>("InvoiceNo") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("InvoiceNo")),
+                            ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
+                            PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0: Convert.ToInt32(x.Field<object>("PricePaid")),
                         }).ToList();
                         customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                         customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
@@ -297,7 +299,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         customClaimMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
                         customClaimMaster.OrderNumber = Convert.ToString(ds.Tables[0].Rows[i]["OrderNumber"]);
-                        customClaimMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
+                        customClaimMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["BillID"]);
                         customClaimMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
                         customClaimMaster.DateFormat = customClaimMaster.InvoiceDate.ToString("dd/MMM/yyyy");
                         customClaimMaster.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
@@ -452,26 +454,26 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         CustomOrderMaster customOrderMaster = new CustomOrderMaster();
                         customOrderMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
-                        customOrderMaster.InvoiceNumber = ds.Tables[0].Rows[i]["InvoiceNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
+                        customOrderMaster.InvoiceNumber = ds.Tables[0].Rows[i]["BillID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BillID"]);
                         customOrderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
-                        customOrderMaster.OrdeItemPrice = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderPrice"]);
-                        customOrderMaster.OrderPricePaid = Convert.ToInt32(ds.Tables[0].Rows[i]["PricePaid"]);
+                        customOrderMaster.OrdeItemPrice = ds.Tables[0].Rows[i]["OrderPrice"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OrderPrice"]);
+                        customOrderMaster.OrderPricePaid = ds.Tables[0].Rows[i]["PricePaid"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["PricePaid"]);
                         customOrderMaster.DateFormat = customOrderMaster.InvoiceDate.ToString("dd/MMM/yyyy");
                         customOrderMaster.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
                         customOrderMaster.StoreAddress = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
-                        customOrderMaster.Discount = Convert.ToInt32(ds.Tables[0].Rows[i]["Discount"]);
+                        customOrderMaster.Discount = ds.Tables[0].Rows[i]["Discount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Discount"]);
                         int orderMasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
                         customOrderMaster.OrderItems = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("OrderMasterID")).
                         Equals(orderMasterId)).Select(x => new OrderItem()
                         {
                             OrderItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
                             OrderMasterID = Convert.ToInt32(x.Field<int>("OrderMasterID")),
-                            ArticleNumber = Convert.ToString(x.Field<string>("SKUNumber")),
-                            ArticleSize = Convert.ToString(x.Field<string>("SKUName")),
-                            ItemPrice = Convert.ToInt32(x.Field<decimal>("ItemPrice")),
-                            PricePaid = Convert.ToInt32(x.Field<decimal>("PricePaid")),
-                            Discount = Convert.ToInt32(x.Field<decimal>("Discount")),
-                            RequireSize = Convert.ToInt32(x.Field<int>("RequireSize"))
+                            ArticleNumber = x.Field<object>("SKUNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUNumber")),
+                            ArticleSize = x.Field<object>("SKUName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUName")),
+                            ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
+                            PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
+                            Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
+                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("RequireSize"))
                         }).ToList();
                         customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                         customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
