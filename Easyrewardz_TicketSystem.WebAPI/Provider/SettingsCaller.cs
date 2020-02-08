@@ -62,10 +62,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-        public int CRMRoleBulkUpload(ICRMRole CRM, int TenantID, int CreatedBy, DataSet DataSetCSV)
+        public List<string> CRMRoleBulkUpload(ICRMRole CRM, int TenantID, int CreatedBy, int RoleFor, DataSet DataSetCSV)
         {
             _dCRMrole = CRM;
-            return _dCRMrole.BulkUploadCRMRole(TenantID, CreatedBy, DataSetCSV);
+            return _dCRMrole.BulkUploadCRMRole(TenantID, CreatedBy, RoleFor, DataSetCSV);
         }
 
         #endregion

@@ -228,10 +228,12 @@ namespace Easyrewardz_TicketSystem.Services
         /// BulkUploadCRMRole
         /// </summary>
         /// 
-        public int BulkUploadCRMRole(int TenantID, int CreatedBy, DataSet DataSetCSV)
+        public List<string> BulkUploadCRMRole(int TenantID, int CreatedBy, int RoleFor, DataSet DataSetCSV)
         {
-            int uploadcount = 0;
             XmlDocument xmlDoc = new XmlDocument();
+            List<string> csvLst = new List<string>();
+            string SuccesFile = string.Empty; string ErroFile = string.Empty;
+            DataSet Bulkds = new DataSet();
 
             try
             {
@@ -243,18 +245,36 @@ namespace Easyrewardz_TicketSystem.Services
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
 
                         conn.Open();
-                        MySqlCommand cmd = new MySqlCommand("", conn);
+                        MySqlCommand cmd = new MySqlCommand("SP_BulkUploadCRMRoles", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
                         cmd.Parameters.AddWithValue("@_node", Xpath);
-
+                        cmd.Parameters.AddWithValue("@_roleFor", RoleFor);
                         cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                         cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
 
-
-
                         cmd.CommandType = CommandType.StoredProcedure;
-                        uploadcount = cmd.ExecuteNonQuery();
+                        MySqlDataAdapter da = new MySqlDataAdapter();
+                        da.SelectCommand = cmd;
+                        da.Fill(Bulkds);
+
+                        if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
+                        {
+
+                            if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
+                            {
+
+                                //for success file
+                                SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                                csvLst.Add(SuccesFile);
+
+                                //for error file
+                                ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                                csvLst.Add(ErroFile);
+
+                            }
+
+                        }
                     }
 
                 }
@@ -276,7 +296,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return uploadcount;
+            return csvLst;
 
         }
 
