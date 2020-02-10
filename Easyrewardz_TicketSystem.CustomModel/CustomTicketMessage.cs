@@ -21,6 +21,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string TicketMailBody { get; set; }
         public int IsCustomerComment   { get; set; }
         public int HasAttachment { get; set; }
+        public int TicketSource { get; set; }
         public string CommentBy { get; set; }
         public string UpdatedAt { get; set; }
         public string CreatedDate { get; set; }

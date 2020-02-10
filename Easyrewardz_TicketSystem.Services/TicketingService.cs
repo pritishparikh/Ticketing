@@ -950,7 +950,8 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketMessageDetails.TicketMailSubject = ds.Tables[0].Rows[i]["TikcketMailSubject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketMailSubject"]);
                             TicketMessageDetails.TicketMailBody = ds.Tables[0].Rows[i]["TicketMailBody"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketMailBody"]);
                             TicketMessageDetails.IsCustomerComment = Convert.ToInt32(ds.Tables[0].Rows[i]["IsCustomerComment"]);
-                            TicketMessageDetails.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]);
+                            TicketMessageDetails.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]); 
+                            TicketMessageDetails.TicketSource = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketSource"]);
                             TicketMessageDetails.CommentBy = ds.Tables[0].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
                             TicketMessageDetails.UpdatedAt = ds.Tables[0].Rows[i]["UpdatedAt"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedAt"]);
                             TicketMessageDetails.CreatedDate= ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
