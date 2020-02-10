@@ -275,7 +275,7 @@ namespace Easyrewardz_TicketSystem.Services
                                     {
                                         for (int j = 0; j < rowValues.Count(); j++)
                                         {
-                                            dtCsv.Columns.Add(rowValues[j].Trim()); //add headers  
+                                            dtCsv.Columns.Add(rowValues[j].Trim().Replace(" ","")); //add headers  
                                         }
                                         
                                     }

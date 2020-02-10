@@ -353,5 +353,24 @@ namespace Easyrewardz_TicketSystem.CustomModel
             [Description("Chat")]
             Chat = 4
         }
-    }
+
+        public enum SavedSearch
+        {
+            /// <summary>
+            ///DashBoard
+            /// </summary>
+            [Description("DashBoard")]
+            DashBoard = 1,
+
+            /// <summary>
+            ///MyTickets
+            /// </summary>
+            [Description("MyTickets")]
+            MyTickets = 2,
+
+          
+        }
+
+
+        }
 }

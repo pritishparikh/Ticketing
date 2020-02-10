@@ -391,6 +391,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_GetSearchUTSMList", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@searchFor", 2);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -513,6 +514,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Search_Parameters", parameter);
                 cmd.Parameters.AddWithValue("@Search_Name", SearchSaveName);
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
+                cmd.Parameters.AddWithValue("@searchFor", 2);
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }

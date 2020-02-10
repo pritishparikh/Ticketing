@@ -525,6 +525,8 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_GetSaveSearchByID_UTSM", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@SearchParam_ID", SearchParamID);
+
+                cmd.Parameters.AddWithValue("@searchFor", 2);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -539,9 +541,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 if (!string.IsNullOrEmpty(jsonSearchParams))
                 {
+                
                     searchModel = JsonConvert.DeserializeObject<SearchModel>(jsonSearchParams);
 
-                    if (searchModel != null)
+                    if (searchModel!= null)
                     {
                         searchModel.TenantID = TenantID;
                         searchModel.AssigntoId = UserID;
