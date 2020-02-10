@@ -1114,7 +1114,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmdMail = new MySqlCommand("", conn);
+                MySqlCommand cmdMail = new MySqlCommand("SP_CommentOnMessage", conn);
                 cmdMail.Parameters.AddWithValue("@Tenant_ID", ticketingMailerQue.TenantID);
                 cmdMail.Parameters.AddWithValue("@Ticket_ID", ticketingMailerQue.TicketID);
                 cmdMail.Parameters.AddWithValue("@TikcketMail_Subject", ticketingMailerQue.TikcketMailSubject);
