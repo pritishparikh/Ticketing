@@ -241,7 +241,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 var temp = SecurityService.DecryptStringAES(_token);
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                _searchResult = _newsearchMaster.GetTicketsOnSavedSearch(new SearchService(_connectioSting),authenticate.TenantId, SearchParamID);
+                _searchResult = _newsearchMaster.GetTicketsOnSavedSearch(new SearchService(_connectioSting),authenticate.TenantId,authenticate.UserMasterID, SearchParamID);
 
                 StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

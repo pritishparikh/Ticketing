@@ -19,6 +19,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<SearchResponse> GetTicketsOnSearch(SearchModel searchModel);
 
-        List<SearchResponse> GetTicketsOnSavedSearch(int TenantID,int SearchParamID);
+        List<SearchResponse> GetTicketsOnSavedSearch(int TenantID,int UserID,int SearchParamID);
     }
 }

@@ -511,7 +511,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="SearchParamID"></param>
         /// <returns></returns>
         /// 
-        public List<SearchResponse> GetTicketsOnSavedSearch(int TenantID, int SearchParamID)
+        public List<SearchResponse> GetTicketsOnSavedSearch(int TenantID,int UserID, int SearchParamID)
         {
             string jsonSearchParams = string.Empty;
             DataSet ds = new DataSet();
@@ -533,7 +533,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0].Rows.Count > 0)
                     {
-                        jsonSearchParams = Convert.ToString(ds.Tables[0].Rows[0]["SearchParameters"]);
+                        jsonSearchParams = ds.Tables[0].Rows[0]["SearchParameters"] == DBNull.Value ? string.Empty: Convert.ToString(ds.Tables[0].Rows[0]["SearchParameters"]);
                     }
                 }
 
@@ -543,6 +543,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                     if (searchModel != null)
                     {
+                        searchModel.TenantID = TenantID;
+                        searchModel.AssigntoId = UserID;
                         objSearchResult = GetTicketsOnSearch(searchModel);
 
                     }
