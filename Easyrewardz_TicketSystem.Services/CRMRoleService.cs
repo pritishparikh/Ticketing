@@ -202,7 +202,7 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CRMRoleModel cRMRoleModel = new CRMRoleModel();
-                        cRMRoleModel.CRMRoleID = Convert.ToInt32(ds.Tables[0].Rows[i]["CRMRolesID"]);
+                        cRMRoleModel.CRMRoleID = Convert.ToInt32(ds.Tables[0].Rows[i]["RoleID"]);
                         cRMRoleModel.RoleName = Convert.ToString(ds.Tables[0].Rows[i]["RoleName"]);
                         objCRMLst.Add(cRMRoleModel);
                     }
