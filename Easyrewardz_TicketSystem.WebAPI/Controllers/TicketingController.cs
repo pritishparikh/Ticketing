@@ -23,7 +23,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-  [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+ [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class TicketingController : ControllerBase
     {
         #region variable declaration
@@ -929,58 +929,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Comment Reply
+        /// Message Comment
         /// </summary>
         /// <param name="TicketingMailerQue"></param>
         /// <returns></returns>
 
         [HttpPost]
-        [Route("CommentReply")]
-        public ResponseModel CommentReply([FromBody] TicketingMailerQue ticketingMailerQue)
-        {
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
-            string statusMessage = "";
-            try
-            {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
-                TicketingCaller _TicketCaller = new TicketingCaller();
-                ticketingMailerQue.TenantID = authenticate.TenantId;
-                ticketingMailerQue.CreatedBy = authenticate.UserMasterID;
-                int result = _TicketCaller.CommentReply(new TicketingService(_connectioSting), ticketingMailerQue);
-                StatusCode =
-                result == 0 ?
-                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
-            }
-            catch (Exception ex)
-            {
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
-
-            }
-            return _objResponseModel;
-        }
-
-        /// <summary>
-        /// Comment on ticket Detail
-        /// </summary>
-        /// <param name="TicketingMailerQue"></param>
-        /// <returns></returns>
-
-        [HttpPost]
-        [Route("Comment")]
-        public ResponseModel Comment([FromBody] TicketingMailerQue ticketingMailerQue)
+        [Route("MessageComment")]
+        public ResponseModel MessageComment([FromBody] TicketingMailerQue ticketingMailerQue)
         {
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;

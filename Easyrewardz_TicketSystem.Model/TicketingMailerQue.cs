@@ -20,6 +20,7 @@ namespace Easyrewardz_TicketSystem.Model
         public bool IsSent { get; set; }
         public int PriorityID { get; set; }
         public int CreatedBy { get; set; }
+        public bool IsCustomerComment { get; set; }
         public DateTime CreatedDate { get; set; }
         public int ModifiedBy { get; set; }
         public DateTime ModifiedDate { get; set; }
