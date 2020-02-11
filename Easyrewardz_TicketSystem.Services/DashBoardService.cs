@@ -292,7 +292,12 @@ namespace Easyrewardz_TicketSystem.Services
 
                     sqlcmd.Parameters.AddWithValue("CustomerMobileNo", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerMobileNo) ? "" : searchModel.searchDataByCustomerType.CustomerMobileNo);
                     sqlcmd.Parameters.AddWithValue("customerEmail", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerEmailID) ? "" : searchModel.searchDataByCustomerType.CustomerEmailID);
-                    sqlcmd.Parameters.AddWithValue("TicketID", searchModel.searchDataByCustomerType.TicketID == null ? 0 : searchModel.searchDataByCustomerType.TicketID);
+
+                    if (string.IsNullOrEmpty(Convert.ToString(searchModel.searchDataByCustomerType.TicketID)) || Convert.ToString(searchModel.searchDataByCustomerType.TicketID) == "")
+                        sqlcmd.Parameters.AddWithValue("TicketID", 0);
+                    else
+                        sqlcmd.Parameters.AddWithValue("TicketID", Convert.ToInt32(searchModel.searchDataByCustomerType.TicketID));
+                                       
                     sqlcmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByCustomerType.TicketStatusID);
                 }
                 else if (searchModel.ActiveTabId == 3)//ByTicketType
