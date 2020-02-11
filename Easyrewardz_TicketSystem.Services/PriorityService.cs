@@ -118,15 +118,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         Priority priority = new Priority();
                         priority.PriorityID = Convert.ToInt32(ds.Tables[0].Rows[i]["PriorityID"]);
-                        priority.PriortyName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);
-                        priority.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        priority.CreatedByName = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        priority.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
-                        priority.CreatedDateFormated = priority.CreatedDate.ToString("dd/MMM/yyyy");
-                        priority.ModifiedByName= Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
-                        priority.ModifiedDate= Convert.ToDateTime(ds.Tables[0].Rows[i]["ModifiedDate"]);
-                        priority.ModifiedDateFormated = priority.ModifiedDate.ToString("dd/MMM/yyyy");
-                        priority.PriortyStatus = ds.Tables[0].Rows[i]["PriortyStatus"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyStatus"]);  
+                        priority.PriortyName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);                      
                         objPriority.Add(priority);
                     }
                 }

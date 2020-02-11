@@ -216,7 +216,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("PriorityList")]
-        public ResponseModel PriorityList(int PriorityFor = 1)
+        public ResponseModel PriorityList(int PriorityFor)
         {
             List<Priority> objPriority = new List<Priority>();
             ResponseModel _objResponseModel = new ResponseModel();
