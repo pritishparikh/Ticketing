@@ -427,7 +427,51 @@ namespace Easyrewardz_TicketSystem.Services
         
          }
 
+        public List<IssueTypeList> SearchIssueType(int tenantID, string SearchText)
+        {
+            List<IssueTypeList> objIssueTypeLst = new List<IssueTypeList>();
+            DataSet ds = new DataSet();
+            try
+            {
+
+                conn.Open();          
+                MySqlCommand cmd1 = new MySqlCommand("SP_SearchIssueType", conn);
+                cmd1.Connection = conn;
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd1.Parameters.AddWithValue("@Search_Text", SearchText);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objIssueTypeLst = ds.Tables[0].AsEnumerable().Select(r => new IssueTypeList()
+                        {
+                            IssueTypeID = Convert.ToInt32(r.Field<object>("IssueTypeID")),
+                            IssueTypeName = r.Field<object>("IssueTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueTypeName")),
+
+                        }).ToList();
+                    }
 
 
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
+
+
+            return objIssueTypeLst;
+        }
     }
 }
