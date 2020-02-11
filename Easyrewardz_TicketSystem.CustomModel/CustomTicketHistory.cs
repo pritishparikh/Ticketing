@@ -8,6 +8,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
     {
         public string Name { get; set; }
         public string Action  { get; set; }
-        public DateTime DateandTime { get; set; }
+        public string DateandTime { get; set; }
     }
 }

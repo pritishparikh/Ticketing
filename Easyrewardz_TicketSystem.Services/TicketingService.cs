@@ -816,7 +816,7 @@ namespace Easyrewardz_TicketSystem.Services
                         CustomTicketHistory TicketHistory = new CustomTicketHistory();
                         TicketHistory.Name = ds.Tables[0].Rows[i]["Name"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
                         TicketHistory.Action = ds.Tables[0].Rows[i]["Action"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Action"]);
-                        TicketHistory.DateandTime = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
+                        TicketHistory.DateandTime = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
                         ListTicketHistory.Add(TicketHistory);
                     }
                 }
