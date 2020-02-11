@@ -21,7 +21,8 @@ namespace Easyrewardz_TicketSystem.Interface
         int DeleteUser(int userID,int TenantID, int Modifyby,int IsStoreUser);
         List<CustomUserList> UserList(int TenantID,int IsStoreUser);
         CustomUserList GetuserDetailsById(int UserID,int TenantID,int IsStoreUser);
-        int BulkUploadUser(int TenantID, int CreatedBy, int IsStoreUser, DataSet DataSetCSV);
+
+        List<string> BulkUploadUser(int TenantID, int CreatedBy, int UserFor, DataSet DataSetCSV);
 
     }
 }

@@ -51,10 +51,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _UserRepository.GetuserDetailsById(UserID, TenantID, IsStoreUser);
 
         }
-        public int UserBulkUpload(IUser User, int TenantID, int CreatedBy, int IsStoreUser, DataSet DataSetCSV)
+        public List<string> UserBulkUpload(IUser User, int TenantID, int CreatedBy, int UserFor, DataSet DataSetCSV)
         {
             _UserRepository = User;
-            return _UserRepository.BulkUploadUser(TenantID, CreatedBy, IsStoreUser, DataSetCSV);
+            return _UserRepository.BulkUploadUser(TenantID, CreatedBy, UserFor, DataSetCSV);
         }
     }
 }
