@@ -302,7 +302,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("GetSLA")]
 
-        public ResponseModel GetSLA(int SLAFor)
+        public ResponseModel GetSLA(int SLAFor=1)
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
@@ -441,54 +441,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         }
 
-        /// <summary>
-        /// Search Issue Type
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("SearchIssueType")]
-        public ResponseModel SearchIssueType(string SearchText)
-        {
-            List<IssueTypeList> objIssueTypeList = new List<IssueTypeList>();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
-            string statusMessage = "";
-            try
-            {
-                ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
-                SLACaller _newSLA = new SLACaller();
-
-                objIssueTypeList = _newSLA.SearchIssueType(new SLAServices(_connectioSting), authenticate.TenantId, SearchText);
-
-                StatusCode =
-                objIssueTypeList.Count == 0 ?
-                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objIssueTypeList;
-
-            }
-            catch (Exception ex)
-            {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
-            }
-
-            return _objResponseModel;
-        }
         #endregion
     }
 }
