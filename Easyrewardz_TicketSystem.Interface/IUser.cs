@@ -23,6 +23,6 @@ namespace Easyrewardz_TicketSystem.Interface
         CustomUserList GetuserDetailsById(int UserID,int TenantID,int IsStoreUser);
 
         List<string> BulkUploadUser(int TenantID, int CreatedBy, int UserFor, DataSet DataSetCSV);
-
+        int UpdateUserProfileDetail(UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
@@ -579,6 +580,80 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
 
 
+        }
+
+        /// <summary>
+        /// UpdateUserProfiledetails
+        /// </summary>
+        /// <param name="UpdateUserProfiledetailsModel"></param>
+        /// <returns></returns>
+        /// 
+        [HttpPost]
+        [Route("UpdateUserProfileDetails")]
+        public ResponseModel UpdateUserProfileDetails()
+        {
+            UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel = new UpdateUserProfiledetailsModel();
+
+            var Keys = Request.Form;
+            UpdateUserProfiledetailsModel = JsonConvert.DeserializeObject<UpdateUserProfiledetailsModel>(Keys["UpdateUserProfiledetailsModel"]);
+            var file = Request.Form.Files[0];
+            var folderName = Path.Combine("Resources", "Images");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            try
+            {
+                if (file.Length > 0)
+                {
+
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fileName_Id = fileName.Replace(".", UpdateUserProfiledetailsModel.UserId + ".") + "";
+                    var fullPath = Path.Combine(pathToSave, fileName_Id);
+                    var dbPath = Path.Combine(folderName, fileName_Id);
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                    UpdateUserProfiledetailsModel.ProfilePicture = dbPath;
+
+                }
+            }
+            catch (Exception ex) { }
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                UserCaller userCaller = new UserCaller();
+                int Result = userCaller.UpdateUserProfileDetail(new UserServices(_connectioSting), UpdateUserProfiledetailsModel);
+
+                StatusCode =
+               Result == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = Result;
+
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
         }
         #endregion
     }

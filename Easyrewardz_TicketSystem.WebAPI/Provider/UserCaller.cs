@@ -56,5 +56,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _UserRepository = User;
             return _UserRepository.BulkUploadUser(TenantID, CreatedBy, UserFor, DataSetCSV);
         }
+        public int UpdateUserProfileDetail(IUser User, UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel)
+        {
+            _UserRepository = User;
+            return _UserRepository.UpdateUserProfileDetail(UpdateUserProfiledetailsModel);
+        }
     }
 }
