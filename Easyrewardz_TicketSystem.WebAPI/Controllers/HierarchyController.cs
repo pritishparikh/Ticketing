@@ -234,12 +234,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 DataSetCSV = CommonService.csvToDataSet(BulkUploadFilesPath + "\\hierarchymaster.csv");
 
                 CSVlist = _Hierarchy.HierarchyBulkUpload(new HierarchyService(_connectionSting),
-                    authenticate.TenantId, authenticate.UserMasterID, HierarchyFor, "hierarchymaster.csv", DataSetCSV);
+                    authenticate.TenantId, authenticate.UserMasterID, HierarchyFor, DataSetCSV);
 
                 //CSVlist = _Hierarchy.HierarchyBulkUpload(new HierarchyService(_connectionSting),
                 //  authenticate.TenantId, authenticate.UserMasterID, HierarchyFor, filesName[0], DataSetCSV);
 
-                #region Create Error and Succes files and  Insert in FileUploadLog
+                #region Create Error and Success files and  Insert in FileUploadLog
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
                     errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", CSVlist[0]);

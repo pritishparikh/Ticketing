@@ -38,10 +38,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _HierarchyRepository.ListHierarchy(TenantID, HierarchyFor);
         }
 
-        public List<string> HierarchyBulkUpload(IHierarchy Hierarchy, int TenantID, int CreatedBy, int HierarchyFor, string FileName, DataSet DataSetCSV)
+        public List<string> HierarchyBulkUpload(IHierarchy Hierarchy, int TenantID, int CreatedBy, int HierarchyFor,DataSet DataSetCSV)
         {
             _HierarchyRepository = Hierarchy;
-            return _HierarchyRepository.BulkUploadHierarchy(TenantID, CreatedBy, HierarchyFor, FileName, DataSetCSV);
+            return _HierarchyRepository.BulkUploadHierarchy(TenantID, CreatedBy, HierarchyFor, DataSetCSV);
         }
 
     }

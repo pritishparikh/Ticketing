@@ -150,7 +150,7 @@ namespace Easyrewardz_TicketSystem.Services
             return listHierarchy;
         }
 
-        public List<string> BulkUploadHierarchy(int TenantID, int CreatedBy, int HierarchyFor, string FileName, DataSet DataSetCSV)
+        public List<string> BulkUploadHierarchy(int TenantID, int CreatedBy, int HierarchyFor, DataSet DataSetCSV)
         {
             int insertcount = 0;
             XmlDocument xmlDoc = new XmlDocument();
