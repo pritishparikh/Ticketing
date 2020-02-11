@@ -14,5 +14,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int AddPriority(string PriorityName, int status, int tenantID, int UserID,int PriorityFor);
         int UpdatePriority(int PriorityID, string PriorityName, int status, int tenantID, int UserID,int PriorityFor);
         int DeletePriority(int PriorityID,int tenantID, int UserID,int PriorityFor);
+        List<Priority> PriorityList(int tenantID, int PriorityFor);
     }
 }

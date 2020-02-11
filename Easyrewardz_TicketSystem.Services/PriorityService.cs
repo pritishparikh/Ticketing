@@ -145,6 +145,58 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objPriority;
         }
+
+        public List<Priority> PriorityList(int tenantID, int PriorityFor)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<Priority> objPriority = new List<Priority>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_PriorityList", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd1.Parameters.AddWithValue("@Priority_For", PriorityFor);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        Priority priority = new Priority();
+                        priority.PriorityID = Convert.ToInt32(ds.Tables[0].Rows[i]["PriorityID"]);
+                        priority.PriortyName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);
+                        priority.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        priority.CreatedByName = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                        priority.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
+                        priority.CreatedDateFormated = priority.CreatedDate.ToString("dd/MMM/yyyy");
+                        priority.ModifiedByName = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        priority.ModifiedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["ModifiedDate"]);
+                        priority.ModifiedDateFormated = priority.ModifiedDate.ToString("dd/MMM/yyyy");
+                        priority.PriortyStatus = ds.Tables[0].Rows[i]["PriortyStatus"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyStatus"]);
+                        objPriority.Add(priority);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return objPriority;
+        }
+
         /// <summary>
         ///  Update Priority
         /// </summary>

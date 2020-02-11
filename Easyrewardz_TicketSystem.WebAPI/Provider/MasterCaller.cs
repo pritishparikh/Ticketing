@@ -1,10 +1,7 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
-using Easyrewardz_TicketSystem.CustomModel;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Data;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
@@ -182,6 +179,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _priorityList = _priority;
             return _priorityList.DeletePriority(PriorityID,tenantID, UserID, PriorityFor);
+        }
+        public List<Priority> PriorityList(IPriority _priority, int TenantID, int PriorityFor)
+        {
+            _priorityList = _priority;
+            return _priorityList.PriorityList(TenantID, PriorityFor);
         }
         #endregion
 
