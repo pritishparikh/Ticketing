@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -550,6 +551,160 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return loggedInAcc;
+        }
+
+        public int AddDashBoardSearch(int UserID, string SearchSaveName, string parameter, int TenantId)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_SaveSearchUTSM", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Search_Parameters", parameter);
+                cmd.Parameters.AddWithValue("@Search_Name", SearchSaveName);
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
+                cmd.Parameters.AddWithValue("@searchFor", 1);
+                cmd.CommandType = CommandType.StoredProcedure;
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
+
+
+        public int DeleteDashBoardSavedSearch(int SearchParamID, int UserID)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_DeleteSearchByID_UTSM", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@SearchParam_ID", SearchParamID);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
+
+        public List<UserTicketSearchMaster> ListSavedDashBoardSearch(int UserID)
+        {
+
+            DataSet ds = new DataSet();
+            List<UserTicketSearchMaster> listSavedSearch = new List<UserTicketSearchMaster>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetSearchUTSMList", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@searchFor", 1);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        UserTicketSearchMaster Savedsearch = new UserTicketSearchMaster();
+                        Savedsearch.SearchParamID = Convert.ToInt32(ds.Tables[0].Rows[i]["SearchParamID"]);
+                        Savedsearch.SearchName = Convert.ToString(ds.Tables[0].Rows[i]["SearchName"]);
+                        listSavedSearch.Add(Savedsearch);
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (ds != null)
+                    ds.Dispose();
+                conn.Close();
+            }
+            return listSavedSearch;
+        }
+
+        public List<SearchResponseDashBoard> GetDashBoardTicketsOnSavedSearch(int TenantID, int UserID, int SearchParamID)
+        {
+            string jsonSearchParams = string.Empty;
+            DataSet ds = new DataSet();
+            SearchModelDashBoard searchModel = new SearchModelDashBoard();
+            List<SearchResponseDashBoard> objSearchResult = new List<SearchResponseDashBoard>();
+
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetSaveSearchByID_UTSM", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@SearchParam_ID", SearchParamID);
+
+                cmd.Parameters.AddWithValue("@searchFor", 1);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        jsonSearchParams = ds.Tables[0].Rows[0]["SearchParameters"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["SearchParameters"]);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(jsonSearchParams))
+                {
+
+                    searchModel = JsonConvert.DeserializeObject<SearchModelDashBoard>(jsonSearchParams);
+
+                    if (searchModel != null)
+                    {
+                        searchModel.TenantID = TenantID;
+                        searchModel.curentUserId = UserID;
+                        objSearchResult = GetDashboardTicketsOnSearch(searchModel);
+
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                //throw ex;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
+            return objSearchResult;
         }
 
         /// <summary>

@@ -15,6 +15,11 @@ namespace Easyrewardz_TicketSystem.Interface
         string DashBoardSearchDataToCSV(SearchModelDashBoard searchModel);
         LoggedInAgentModel GetLogginAccountInfo(int tenantID, int UserId, string emailID,string AccountName);
 
+        int AddDashBoardSearch(int UserID, string SearchSaveName, string parameter, int TenantId);
+        int DeleteDashBoardSavedSearch(int SearchParamID, int UserID);
+        List<UserTicketSearchMaster> ListSavedDashBoardSearch(int UserID);
 
+
+        List<SearchResponseDashBoard> GetDashBoardTicketsOnSavedSearch(int TenantID, int UserID, int SearchParamID);
     }
 }

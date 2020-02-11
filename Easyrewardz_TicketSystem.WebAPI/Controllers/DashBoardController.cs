@@ -241,6 +241,177 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Saved Searcht
+        /// </summary>
+        /// <returns></returns>
+
+        [HttpPost]
+        [Route("DashBoardSaveSearch")]
+
+        public ResponseModel DashBoardSaveSearch(string SearchSaveName, string parameter)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+
+            string statusMessage = "";
+            try
+            {
+                DashBoardCaller dcaller = new DashBoardCaller();
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                int result = dcaller.AddDashBoardSearch(new DashBoardService(_connectioSting), authenticate.UserMasterID, SearchSaveName, parameter, authenticate.TenantId);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+
+            }
+            return _objResponseModel;
+        }
+
+        /// <summary>
+        /// Delete Saved Searcht
+        /// </summary>
+        /// <param name="ticketingDetails"></param>
+        /// <returns></returns>
+
+        [HttpPost]
+        [Route("DeleteDashBoardSavedSearch")]
+        public ResponseModel DeleteDashBoardSavedSearch(int SearchParamID)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                DashBoardCaller dcaller = new DashBoardCaller();
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+
+                int result = dcaller.DeleteDashBoardSavedSearch(new DashBoardService(_connectioSting), SearchParamID, authenticate.UserMasterID);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+
+            }
+            return _objResponseModel;
+        }
+
+        /// <summary>
+        /// List of Saved Search
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetDashBoardSavedSearch")]
+        public ResponseModel GetDashBoardSavedSearch()
+        {
+            List<UserTicketSearchMaster> objSavedSearch = new List<UserTicketSearchMaster>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                DashBoardCaller dcaller = new DashBoardCaller();
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                objSavedSearch = dcaller.ListSavedDashBoardSearch(new DashBoardService(_connectioSting), authenticate.UserMasterID);
+                StatusCode =
+                objSavedSearch.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objSavedSearch;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+        [HttpPost]
+        [Route("GetDashBoardTicketsOnSavedSearch")]
+
+        public ResponseModel GetDashBoardTicketsOnSavedSearch(int SearchParamID)
+        {
+            List<SearchResponseDashBoard> _searchResult = null;
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            DashBoardCaller dcaller = new DashBoardCaller();
+            try
+            {
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                var temp = SecurityService.DecryptStringAES(_token);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                _searchResult = dcaller.GetDashBoardTicketsOnSavedSearch(new DashBoardService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, SearchParamID);
+
+                StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _searchResult.Count > 0 ? _searchResult : null;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = false;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
         #endregion
     }
 }

@@ -49,6 +49,35 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _dashboardlist = _dashboard;
             return _dashboardlist.GetLogginAccountInfo(tenantID,UserId,emailID, AccountName);
         }
+
+
+        public int AddDashBoardSearch(IDashBoard _dashboard, int UserID, string SearchParamID, string parameter, int TenantId)
+        {
+            _dashboardlist = _dashboard;
+            return _dashboardlist.AddDashBoardSearch(UserID, SearchParamID, parameter, TenantId);
+
+        }
+
+        public int DeleteDashBoardSavedSearch(IDashBoard _dashboard, int SearchParamID, int UserID)
+        {
+            _dashboardlist = _dashboard;
+            return _dashboardlist.DeleteDashBoardSavedSearch(SearchParamID, UserID);
+
+        }
+
+        public List<UserTicketSearchMaster> ListSavedDashBoardSearch(IDashBoard _dashboard, int UserID)
+        {
+            _dashboardlist = _dashboard;
+            return _dashboardlist.ListSavedDashBoardSearch(UserID);
+
+        }
+
+        public List<SearchResponseDashBoard> GetDashBoardTicketsOnSavedSearch(IDashBoard _dashboard, int TenantID, int UserID, int SearchParamID)
+        {
+            _dashboardlist = _dashboard;
+            return _dashboardlist.GetDashBoardTicketsOnSavedSearch(TenantID, UserID, SearchParamID);
+        }
+
         #endregion
     }
 }
