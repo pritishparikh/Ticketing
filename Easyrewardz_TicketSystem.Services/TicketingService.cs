@@ -552,7 +552,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
                 cmd.Parameters.AddWithValue("@Agent_ID", AgentID);
-                cmd.Parameters.AddWithValue("@Remarks", Remark);
+                cmd.Parameters.AddWithValue("@Remarks", string.IsNullOrEmpty(Remark) ? "" : Remark);
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }
