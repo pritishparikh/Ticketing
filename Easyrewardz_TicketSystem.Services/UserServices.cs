@@ -20,11 +20,14 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public UserServices(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
+        #region method
         /// <summary>
         /// AddUserPersonaldetail
         /// </summary>
@@ -587,7 +590,6 @@ namespace Easyrewardz_TicketSystem.Services
                         model.DesignationID = Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
                         model.DesignationName = ds.Tables[0].Rows[i]["DesignationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
                         model.ProfilePicture = ds.Tables[0].Rows[i]["ProfilePicture"] == DBNull.Value ? string.Empty :url + "/" + Convert.ToString(ds.Tables[0].Rows[i]["ProfilePicture"]);
-                 
                         UpdateUserProfiledetailsModel.Add(model);
                     }
                 }
@@ -607,6 +609,7 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateUserProfiledetailsModel;
         }
 
+        #endregion
     }
 }
 

@@ -26,7 +26,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         #endregion
 
-        #region Cunstructor
+        #region constructor
         public TenantController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
@@ -36,9 +36,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
         #endregion
 
+        #region method
         [HttpPost]
         [Route("InsertCompany")]
-        public ResponseModel InsertCompany([FromBody]CompanyModel companyModel )
+        public ResponseModel InsertCompany([FromBody] CompanyModel companyModel )
         {
             TenantCaller _newTenantCaller = new TenantCaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -80,5 +81,57 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// BillingDetails_crud
+        /// </summary>
+        /// <param name="BillingDetails"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("BillingDetails_crud")]
+        public ResponseModel BillingDetails_crud([FromBody] BillingDetails BillingDetails)
+        {
+            TenantCaller _newTenantCaller = new TenantCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                BillingDetails.Tennant_ID = authenticate.TenantId;
+                BillingDetails.Created_By = authenticate.UserMasterID;
+                BillingDetails.Modified_By = authenticate.UserMasterID;
+
+                int result = _newTenantCaller.BillingDetails_crud(new TenantService(_connectioSting), BillingDetails);
+
+                StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
+        #endregion
     }
 }

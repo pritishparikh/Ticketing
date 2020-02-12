@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
@@ -61,6 +62,44 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return k;
+
+        }
+
+        public int BillingDetails_crud(BillingDetails BillingDetails)
+        {
+            
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_BillingDetails_crud", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Billing_ID", BillingDetails.Billing_ID);
+                cmd.Parameters.AddWithValue("@InvoiceBilling_ID", BillingDetails.InvoiceBilling_ID);
+                cmd.Parameters.AddWithValue("@Tennant_ID", BillingDetails.Tennant_ID);
+                cmd.Parameters.AddWithValue("@CompanyRegistration_Number", BillingDetails.CompanyRegistration_Number);
+                cmd.Parameters.AddWithValue("@GSTTIN_Number", BillingDetails.GSTTIN_Number);
+                cmd.Parameters.AddWithValue("@Pan_No", BillingDetails.Pan_No);
+                cmd.Parameters.AddWithValue("@Tan_No", BillingDetails.Tan_No);
+                cmd.Parameters.AddWithValue("@Created_By", BillingDetails.Created_By);
+                cmd.Parameters.AddWithValue("@Modified_By", BillingDetails.Modified_By);
+                cmd.CommandType = CommandType.StoredProcedure;
+                result = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return result;
 
         }
     }
