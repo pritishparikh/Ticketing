@@ -24,5 +24,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<string> BulkUploadUser(int TenantID, int CreatedBy, int UserFor, DataSet DataSetCSV);
         int UpdateUserProfileDetail(UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel);
+
+        List<UpdateUserProfiledetailsModel> GetUserProfileDetails(int UserMasterID,string url);
     }
 }

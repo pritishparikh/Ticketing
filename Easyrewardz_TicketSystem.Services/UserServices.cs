@@ -552,6 +552,61 @@ namespace Easyrewardz_TicketSystem.Services
             return UserID;
         }
 
+
+        /// <summary>
+        /// GetUserProfileDetails
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="IsStoreUser"></param>
+        /// <returns></returns>
+        public List<UpdateUserProfiledetailsModel> GetUserProfileDetails(int UserMasterID,string url)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<UpdateUserProfiledetailsModel> UpdateUserProfiledetailsModel = new List<UpdateUserProfiledetailsModel>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetUserProfileDetails", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@User_ID", UserMasterID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        UpdateUserProfiledetailsModel model = new UpdateUserProfiledetailsModel();
+                        model.UserId = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        model.FirstName = ds.Tables[0].Rows[i]["FirstName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
+                        model.LastName = ds.Tables[0].Rows[i]["LastName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["LastName"]);
+                        model.MobileNo = ds.Tables[0].Rows[i]["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                        model.EmailId = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                        model.DesignationID = Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
+                        model.DesignationName = ds.Tables[0].Rows[i]["DesignationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
+                        model.ProfilePicture = ds.Tables[0].Rows[i]["ProfilePicture"] == DBNull.Value ? string.Empty :url + "/" + Convert.ToString(ds.Tables[0].Rows[i]["ProfilePicture"]);
+                 
+                        UpdateUserProfiledetailsModel.Add(model);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return UpdateUserProfiledetailsModel;
+        }
+
     }
 }
 

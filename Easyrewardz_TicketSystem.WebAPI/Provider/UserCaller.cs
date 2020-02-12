@@ -61,5 +61,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _UserRepository = User;
             return _UserRepository.UpdateUserProfileDetail(UpdateUserProfiledetailsModel);
         }
+
+        public List<UpdateUserProfiledetailsModel> GetUserProfileDetails(IUser User,  int UserMasterID,string url)
+        {
+            _UserRepository = User;
+            return _UserRepository.GetUserProfileDetails(UserMasterID, url);
+        }
+
     }
 }

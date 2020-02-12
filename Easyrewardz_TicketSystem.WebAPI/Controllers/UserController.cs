@@ -29,6 +29,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
         private readonly string rootPath;
+        private readonly string ProfileImg_Resources;
+        private readonly string ProfileImg_Image;
         #endregion
 
         #region Constructor
@@ -42,6 +44,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
             rootPath = configuration.GetValue<string>("APIURL");
+            ProfileImg_Resources = configuration.GetValue<string>("ProfileImg_Resources");
+            ProfileImg_Image = configuration.GetValue<string>("ProfileImg_Image");
         }
         #endregion
 
@@ -597,7 +601,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             var Keys = Request.Form;
             UpdateUserProfiledetailsModel = JsonConvert.DeserializeObject<UpdateUserProfiledetailsModel>(Keys["UpdateUserProfiledetailsModel"]);
             var file = Request.Form.Files[0];
-            var folderName = Path.Combine("Resources", "Images");
+            var folderName = Path.Combine(ProfileImg_Resources, ProfileImg_Image);
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             try
             {
@@ -613,7 +617,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     {
                         file.CopyTo(stream);
                     }
-                    UpdateUserProfiledetailsModel.ProfilePicture = dbPath;
+                    UpdateUserProfiledetailsModel.ProfilePicture = fileName_Id;
 
                 }
             }
@@ -655,6 +659,52 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// GetUserProfileDetails
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        [HttpPost]
+        [Route("GetUserProfileDetail")]
+        public ResponseModel GetUserProfileDetail()
+        {
+            List<UpdateUserProfiledetailsModel> objUserList = new List<UpdateUserProfiledetailsModel>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                string url = configuration.GetValue<string>("APIURL") + ProfileImg_Resources+ ProfileImg_Image;
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                UserCaller userCaller = new UserCaller();
+                objUserList = userCaller.GetUserProfileDetails(new UserServices(_connectioSting), authenticate.UserMasterID, url);
+                StatusCode =
+               objUserList.Count == 0 ?
+                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objUserList;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
         #endregion
     }
 }

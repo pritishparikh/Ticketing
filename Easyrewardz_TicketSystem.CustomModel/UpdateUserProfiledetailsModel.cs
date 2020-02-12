@@ -12,6 +12,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string MobileNo { get; set; }
         public string EmailId { get; set; }
         public int DesignationID { get; set; }
+        public string DesignationName { get; set; }
         public string ProfilePicture { get; set; }
     }
 }
