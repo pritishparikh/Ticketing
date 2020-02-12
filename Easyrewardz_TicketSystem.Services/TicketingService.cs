@@ -722,6 +722,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
+                TicketingMailerQue ticketingMailerObj = new TicketingMailerQue();
                 conn.Open();
                 cmd.Connection = conn;
                 CustomTicketDetail ticketDetails = new CustomTicketDetail();
@@ -777,6 +778,17 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketAttachmentId = Convert.ToInt32(x.Field<int>("TicketAttachmentId")),
                             AttachmentName = x.Field<object>("AttachmentName") == System.DBNull.Value ? string.Empty : url + "/" + Convert.ToString(x.Field<object>("AttachmentName"))
                         }).ToList();
+
+                        if (ds != null && ds.Tables[4] != null && ds.Tables[4].Rows.Count>0)
+                        {
+                            ticketingMailerObj.MailID= ds.Tables[4].Rows[0]["MailID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[4].Rows[0]["MailID"]);
+                            ticketingMailerObj.TikcketMailSubject= ds.Tables[4].Rows[0]["TikcketMailSubject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[0]["TikcketMailSubject"]);
+                            ticketingMailerObj.TicketMailBody = ds.Tables[4].Rows[0]["TicketMailBody"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[0]["TicketMailBody"]);
+                            ticketingMailerObj.ToEmail = ds.Tables[4].Rows[0]["ToEmail"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[0]["ToEmail"]);
+                            ticketingMailerObj.UserCC = ds.Tables[4].Rows[0]["UserCC"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[0]["UserCC"]);
+                            ticketingMailerObj.UserBCC = ds.Tables[4].Rows[0]["UserBCC"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[0]["UserBCC"]);
+                        }
+                        ticketDetails.ticketingMailerQue = ticketingMailerObj;
                     }
                 }
                 return ticketDetails;
@@ -929,8 +941,8 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                cmd.Connection = conn; 
-                 MySqlCommand cmd1 = new MySqlCommand("SP_GetTicketMessage", conn);
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetTicketMessage", conn);
                 //MySqlCommand cmd1 = new MySqlCommand("Test_GetTicketMessage", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Ticket_Id", ticketID);
@@ -952,11 +964,11 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketMessageDetails.TicketMailSubject = ds.Tables[0].Rows[i]["TikcketMailSubject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketMailSubject"]);
                             TicketMessageDetails.TicketMailBody = ds.Tables[0].Rows[i]["TicketMailBody"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketMailBody"]);
                             TicketMessageDetails.IsCustomerComment = Convert.ToInt32(ds.Tables[0].Rows[i]["IsCustomerComment"]);
-                            TicketMessageDetails.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]); 
+                            TicketMessageDetails.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]);
                             TicketMessageDetails.TicketSource = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketSource"]);
                             TicketMessageDetails.CommentBy = ds.Tables[0].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
                             TicketMessageDetails.UpdatedAt = ds.Tables[0].Rows[i]["UpdatedAt"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedAt"]);
-                            TicketMessageDetails.CreatedDate= ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
+                            TicketMessageDetails.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
                             CustumTicketMessagelist.Add(TicketMessageDetails);
                         }
                     }
@@ -966,14 +978,14 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
                         {
-                          
+
                             TicketMessage ticketMessage = new TicketMessage();
-                            ticketMessage.MessageCount= Convert.ToInt32(ds.Tables[1].Rows[i]["MessageCount"]);
-                            ticketMessage.MessageDate= ds.Tables[1].Rows[i]["MessageDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["MessageDate"]);
-                           
+                            ticketMessage.MessageCount = Convert.ToInt32(ds.Tables[1].Rows[i]["MessageCount"]);
+                            ticketMessage.MessageDate = ds.Tables[1].Rows[i]["MessageDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["MessageDate"]);
+
                             ticketMessage.CustomTicketMessages = CustumTicketMessagelist.Where(x => !string.IsNullOrEmpty(x.CreatedDate) && x.CreatedDate == ticketMessage.MessageDate).ToList();
                             ticketMessage.UpdatedDate = CustumTicketMessagelist.Where(x => !string.IsNullOrEmpty(x.CreatedDate) && x.CreatedDate == ticketMessage.MessageDate).Select(x => x.UpdatedAt).ToList().FirstOrDefault();
-                            
+
                             ticketMessages.Add(ticketMessage);
                         }
 
@@ -1081,7 +1093,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmdMail.Parameters.AddWithValue("@User_CC", ticketingMailerQue.UserCC);
                 cmdMail.Parameters.AddWithValue("@User_BCC", ticketingMailerQue.UserBCC);
                 cmdMail.Parameters.AddWithValue("@Ticket_Source", ticketingMailerQue.TicketSource);
-               // cmdMail.Parameters.AddWithValue("@Alert_ID", ticketingMailerQue.AlertID); 
+                // cmdMail.Parameters.AddWithValue("@Alert_ID", ticketingMailerQue.AlertID); 
                 cmdMail.Parameters.AddWithValue("@Is_Sent", ticketingMailerQue.IsSent);
                 cmdMail.Parameters.AddWithValue("@Is_CustomerComment", ticketingMailerQue.IsCustomerComment);
                 // cmdMail.Parameters.AddWithValue("@Priority_ID", ticketingMailerQue.PriorityID);
