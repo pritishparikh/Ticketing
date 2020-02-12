@@ -248,9 +248,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 brand.CreatedBy = authenticate.UserMasterID;
                 int result = _newMasterBrand.AddBrand(new BrandServices(_connectioSting), brand, authenticate.TenantId);
 
-                StatusCode =
-                result == 0 ?
-                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
