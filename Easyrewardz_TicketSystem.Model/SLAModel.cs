@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.Model
     public class SLAModel
     {
         public int TenantID { get; set; }
-        public int IssueTypeID { get; set; }
+        public string IssueTypeID { get; set; }
         public int CreatedBy { get; set; }
         public bool isSLAActive { get; set; }
         public int SLAFor { get; set; }
