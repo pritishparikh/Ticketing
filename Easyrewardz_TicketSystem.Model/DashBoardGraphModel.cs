@@ -6,7 +6,8 @@ namespace Easyrewardz_TicketSystem.Model
 {
     public class DashBoardGraphModel
     {
-        public List<PriorityGraphModel> PriorityChart { get; set; }
+        public int OpenPriorityTicketCount { get; set; }
+        public List<OpenByPriorityModel> PriorityChart { get; set; }
         public List<TicketToBillGraphModel> tickettoBillGraph { get; set; }
         public List<TicketSourceModel> ticketSourceGraph { get; set; }
 
@@ -14,11 +15,12 @@ namespace Easyrewardz_TicketSystem.Model
         public List<TicketToClaim> tickettoClaimGraph { get; set; }
     }
 
-    public class PriorityGraphModel
+        public class OpenByPriorityModel
     {
         public int priorityID { set; get; }
         public string priorityName { set; get; }
         public int priorityCount { set; get; }
+       
     }
 
     public class TicketSourceModel

@@ -158,6 +158,8 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             MySqlDataAdapter da = new MySqlDataAdapter();
             DashBoardGraphModel dashBoardGraphdata = new DashBoardGraphModel();
+           
+            List<OpenByPriorityModel> OpenPriorityTktList = new List<OpenByPriorityModel>();
             try
             {
                 conn.Open();
@@ -179,25 +181,30 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (Graphds.Tables[0].Rows.Count > 0) //PriorityGraph 
                     {
-                        dashBoardGraphdata.PriorityChart = Graphds.Tables[0].AsEnumerable().Select(r => new PriorityGraphModel()
-                        {
 
-                            priorityID = Convert.ToInt32(r.Field<object>("PriorityID")),
-                            priorityName = Convert.ToString(r.Field<object>("PriortyName")),
-                            priorityCount = Convert.ToInt32(r.Field<object>("PriorityCount"))
+                        dashBoardGraphdata.PriorityChart = Graphds.Tables[0].AsEnumerable().Select(r => new OpenByPriorityModel()
+                        {
+                            priorityID = r.Field<object>("PriorityID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("PriorityID")),
+                            priorityName = r.Field<object>("PriortyName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriortyName")),
+                            priorityCount = r.Field<object>("PriorityCount") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("PriorityCount")),
 
 
                         }).ToList();
+
+                        dashBoardGraphdata.OpenPriorityTicketCount = dashBoardGraphdata.PriorityChart.Count > 0 ?
+                            dashBoardGraphdata.PriorityChart.Sum(x => x.priorityCount) : 0;
+
+                        
                     }
 
                     if (Graphds.Tables[1].Rows.Count > 0) //Ticket To Bill   
                     {
                         dashBoardGraphdata.tickettoBillGraph = Graphds.Tables[1].AsEnumerable().Select(r => new TicketToBillGraphModel()
                         {
-                            ticketSourceID = Convert.ToInt32(r.Field<object>("TicketSourceID")),
-                            ticketSourceName = Convert.ToString(r.Field<object>("TicketSourceName")),
-                            totalBills = Convert.ToInt32(r.Field<object>("TotalBills")),
-                            ticketedBills = Convert.ToInt32(r.Field<object>("TicketedBills"))
+                            ticketSourceID = r.Field<object>("TicketSourceID") == System.DBNull.Value ? 0: Convert.ToInt32(r.Field<object>("TicketSourceID")),
+                            ticketSourceName = r.Field<object>("TicketSourceName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TicketSourceName")),
+                            totalBills = r.Field<object>("TotalBills") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TotalBills")),
+                            ticketedBills = r.Field<object>("TicketedBills") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TicketedBills"))
 
                         }).ToList();
                     }
@@ -208,9 +215,9 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         dashBoardGraphdata.ticketSourceGraph = Graphds.Tables[2].AsEnumerable().Select(r => new TicketSourceModel()
                         {
-                            ticketSourceID = Convert.ToInt32(r.Field<object>("TicketSourceID")),
-                            ticketSourceName = Convert.ToString(r.Field<object>("TicketSourceName")),
-                            ticketSourceCount = Convert.ToInt32(r.Field<object>("TicketSourceCount"))
+                            ticketSourceID = r.Field<object>("TicketSourceID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TicketSourceID")),
+                            ticketSourceName = r.Field<object>("TicketSourceName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TicketSourceName")),
+                            ticketSourceCount = r.Field<object>("TicketSourceCount") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TicketSourceCount"))
 
                         }).ToList();
                     }
@@ -220,9 +227,9 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         dashBoardGraphdata.tickettoTaskGraph = Graphds.Tables[3].AsEnumerable().Select(r => new TicketToTask()
                         {
-                            totalTickets = Convert.ToInt32(r.Field<object>("AllTicket")),
-                            taskTickets = Convert.ToInt32(r.Field<object>("Task")),
-                            Day = Convert.ToString(r.Field<object>("AllDay"))
+                            totalTickets = r.Field<object>("AllTicket") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("AllTicket")),
+                            taskTickets = r.Field<object>("Task") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("Task")),
+                            Day = r.Field<object>("AllDay") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AllDay"))
 
                         }).ToList();
                     }
@@ -231,9 +238,9 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         dashBoardGraphdata.tickettoClaimGraph = Graphds.Tables[4].AsEnumerable().Select(r => new TicketToClaim()
                         {
-                            totalTickets = Convert.ToInt32(r.Field<object>("AllTicket")),
-                            ClaimTickets = Convert.ToInt32(r.Field<object>("Claim")),
-                            Day = Convert.ToString(r.Field<object>("AllDay"))
+                            totalTickets = r.Field<object>("AllTicket") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("AllTicket")),
+                            ClaimTickets = r.Field<object>("Claim") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("Claim")),
+                            Day = r.Field<object>("AllDay") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AllDay"))
 
                         }).ToList();
                     }
