@@ -20,7 +20,9 @@ namespace Easyrewardz_TicketSystem.Services
 
         public int InsertCompany(CompanyModel companyModel, int TenantId)
         {
+
             int OutTenantID = 0;
+            DataSet ds = new DataSet();
             try
             {
                 conn.Open();
@@ -33,19 +35,29 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Company_Name", companyModel.CompanyName);
                 cmd.Parameters.AddWithValue("@CompanyIncorporation_date", companyModel.CompanyIncorporationDate);
                 cmd.Parameters.AddWithValue("@Company_NoOfEmployee", companyModel.NoOfEmployee);
-                cmd.Parameters.AddWithValue("@Company_Email", companyModel.CompanayEmailID);
-                cmd.Parameters.AddWithValue("@Company_ContactNo", companyModel.CompanayContactNo);
+                cmd.Parameters.AddWithValue("@Company_Email", companyModel.CompanyEmailID);
+                cmd.Parameters.AddWithValue("@Company_ContactNo", companyModel.CompanyContactNo);
                 cmd.Parameters.AddWithValue("@Contact_Person", companyModel.ContactPersonName);
                 cmd.Parameters.AddWithValue("@ContactPerson_No", companyModel.ContactPersonNo);
-                cmd.Parameters.AddWithValue("@Companay_Address", companyModel.CompanayAddress);
+                cmd.Parameters.AddWithValue("@Company_Address", companyModel.CompanyAddress);
                 cmd.Parameters.AddWithValue("@Pincode", companyModel.Pincode);
                 cmd.Parameters.AddWithValue("@City", companyModel.CityID);
                 cmd.Parameters.AddWithValue("@State", companyModel.StateID);
                 cmd.Parameters.AddWithValue("@Country", companyModel.CountryID);
-                cmd.Parameters.Add("@OutTenantID", MySqlDbType.Int32);
-                cmd.Parameters["@OutTenantID"].Direction = ParameterDirection.Output;
-                cmd.ExecuteNonQuery();
-                OutTenantID = Convert.ToInt32(cmd.Parameters["@OutTenantID"].Value.ToString());
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        OutTenantID = ds.Tables[0].Rows[0]["TenantID"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["TenantID"]);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -54,10 +66,9 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
+                if (ds != null)
+                ds.Dispose();
+                conn.Close();
             }
 
             return OutTenantID;

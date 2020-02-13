@@ -15,15 +15,15 @@ namespace Easyrewardz_TicketSystem.Model
 
         public int NoOfEmployee { get; set; }
 
-        public string CompanayEmailID  { get; set; }
+        public string CompanyEmailID  { get; set; }
 
-        public string CompanayContactNo { get; set; }
+        public string CompanyContactNo { get; set; }
 
         public string ContactPersonName { get; set; }
 
         public string ContactPersonNo { get; set; }
 
-        public string CompanayAddress { get; set; }
+        public string CompanyAddress { get; set; }
 
         public int Pincode { get; set; }
 
