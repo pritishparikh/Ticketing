@@ -29,6 +29,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _tenantlist = _tenant;
             return _tenantlist.BillingDetails_crud(BillingDetails);
         }
+
+        public int OtherDetails(ITenant _tenant, OtherDetailsModel OtherDetails)
+        {
+            _tenantlist = _tenant;
+            return _tenantlist.OtherDetails(OtherDetails);
+        }
+
         #endregion
     }
 }

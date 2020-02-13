@@ -112,5 +112,48 @@ namespace Easyrewardz_TicketSystem.Services
             return result;
 
         }
+
+
+        public int OtherDetails(OtherDetailsModel OtherDetails)
+        {
+
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_InsertOtherDetails", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", OtherDetails._TenantID);
+                cmd.Parameters.AddWithValue("@_NoOfUsers", OtherDetails._NoOfUsers);
+                cmd.Parameters.AddWithValue("@_NoOfSimultaneous", OtherDetails._NoOfSimultaneous);
+                cmd.Parameters.AddWithValue("@_MonthlyTicketVolume", OtherDetails._MonthlyTicketVolume);
+                cmd.Parameters.AddWithValue("@_TicketAchivePolicy", OtherDetails._TicketAchivePolicy);
+                cmd.Parameters.AddWithValue("@_TenantType", OtherDetails._TenantType);
+                cmd.Parameters.AddWithValue("@_ServerType", OtherDetails._ServerType);
+                cmd.Parameters.AddWithValue("@_EmailSenderID", OtherDetails._EmailSenderID);
+                cmd.Parameters.AddWithValue("@_SMSSenderID", OtherDetails._SMSSenderID);
+                cmd.Parameters.AddWithValue("@_CRMInterfaceLanguage", OtherDetails._CRMInterfaceLanguage);
+                cmd.Parameters.AddWithValue("@_ModifiedBy", OtherDetails._ModifiedBy);
+                cmd.Parameters.AddWithValue("@_Createdby", OtherDetails._Createdby);
+                cmd.CommandType = CommandType.StoredProcedure;
+                result = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return result;
+
+        }
+
     }
 }
