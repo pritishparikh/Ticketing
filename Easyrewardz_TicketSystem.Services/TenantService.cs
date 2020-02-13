@@ -20,33 +20,32 @@ namespace Easyrewardz_TicketSystem.Services
 
         public int InsertCompany(CompanyModel companyModel, int TenantId)
         {
-           
-            MySqlCommand cmd = new MySqlCommand();
-            int k = 0;
+            int OutTenantID = 0;
             try
             {
                 conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_InsertCompany", conn);
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_InsertCompany", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
-                cmd1.Parameters.AddWithValue("@User_ID", companyModel.CreatedBy);
-                cmd1.Parameters.AddWithValue("@Company_Type", companyModel.CompanyTypeID);
-                cmd1.Parameters.AddWithValue("@Company_Name", companyModel.CompanyName);
-                cmd1.Parameters.AddWithValue("@CompanyIncorporation_date", companyModel.CompanyIncorporationDate);
-                cmd1.Parameters.AddWithValue("@Company_NoOfEmployee", companyModel.NoOfEmployee);
-                cmd1.Parameters.AddWithValue("@Company_Email", companyModel.CompanayEmailID);
-                cmd1.Parameters.AddWithValue("@Company_ContactNo", companyModel.CompanayContactNo);
-                cmd1.Parameters.AddWithValue("@Contact_Person", companyModel.ContactPersonName);
-                cmd1.Parameters.AddWithValue("@ContactPerson_No", companyModel.ContactPersonNo);
-                cmd1.Parameters.AddWithValue("@Companay_Address", companyModel.CompanayAddress);
-                cmd1.Parameters.AddWithValue("@Pincode", companyModel.Pincode);
-                cmd1.Parameters.AddWithValue("@City", companyModel.CityID);
-                cmd1.Parameters.AddWithValue("@State", companyModel.StateID);
-                cmd1.Parameters.AddWithValue("@Country", companyModel.CountryID);
-        
-
-                k = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd.Parameters.AddWithValue("@User_ID", companyModel.CreatedBy);
+                cmd.Parameters.AddWithValue("@Company_Type", companyModel.CompanyTypeID);
+                cmd.Parameters.AddWithValue("@Company_Name", companyModel.CompanyName);
+                cmd.Parameters.AddWithValue("@CompanyIncorporation_date", companyModel.CompanyIncorporationDate);
+                cmd.Parameters.AddWithValue("@Company_NoOfEmployee", companyModel.NoOfEmployee);
+                cmd.Parameters.AddWithValue("@Company_Email", companyModel.CompanayEmailID);
+                cmd.Parameters.AddWithValue("@Company_ContactNo", companyModel.CompanayContactNo);
+                cmd.Parameters.AddWithValue("@Contact_Person", companyModel.ContactPersonName);
+                cmd.Parameters.AddWithValue("@ContactPerson_No", companyModel.ContactPersonNo);
+                cmd.Parameters.AddWithValue("@Companay_Address", companyModel.CompanayAddress);
+                cmd.Parameters.AddWithValue("@Pincode", companyModel.Pincode);
+                cmd.Parameters.AddWithValue("@City", companyModel.CityID);
+                cmd.Parameters.AddWithValue("@State", companyModel.StateID);
+                cmd.Parameters.AddWithValue("@Country", companyModel.CountryID);
+                cmd.Parameters.Add("@OutTenantID", MySqlDbType.Int32);
+                cmd.Parameters["@OutTenantID"].Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+                OutTenantID = Convert.ToInt32(cmd.Parameters["@OutTenantID"].Value.ToString());
             }
             catch (Exception ex)
             {
@@ -61,7 +60,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return k;
+            return OutTenantID;
 
         }
 
