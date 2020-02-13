@@ -16,11 +16,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// tenant
         /// </summary>
         private ITenant _tenantlist;
+        #endregion
 
+        #region method
         public int InsertCompany(ITenant _tenant,  CompanyModel companyModel, int TenantId)
         {
             _tenantlist = _tenant;
             return _tenantlist.InsertCompany(companyModel, TenantId);
+        }
+        public int BillingDetails_crud(ITenant _tenant, BillingDetails BillingDetails)
+        {
+            _tenantlist = _tenant;
+            return _tenantlist.BillingDetails_crud(BillingDetails);
         }
         #endregion
     }

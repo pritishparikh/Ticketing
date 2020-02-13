@@ -101,8 +101,8 @@ namespace Easyrewardz_TicketSystem.Model
         public string responseTimeRemainingBy { get; set; }
         public string responseOverdueBy { get; set; }
         public string resolutionOverdueBy { get; set; }
-
-
+        public string ticketSourceType { get; set; }
+        public int? ticketSourceTypeID { get; set; }
     }
 
     //public class TicketCreationDetails

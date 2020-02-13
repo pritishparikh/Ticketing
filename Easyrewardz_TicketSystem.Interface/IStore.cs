@@ -24,7 +24,8 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="TicketId"></param>
         /// <returns></returns>
         List<StoreMaster> getSelectedStoreByTicketId(int TicketId);
-        int BulkUploadStore(int TenantID, int CreatedBy, DataSet DataSetCSV);
+
+        List<string> BulkUploadStore(int TenantID, int CreatedBy, DataSet DataSetCSV);
 
     }
 }

@@ -296,7 +296,9 @@ namespace Easyrewardz_TicketSystem.Services
                             TaskStatus = Convert.ToString(r.Field<object>("TaskDetails")),
                             ClaimStatus = Convert.ToString(r.Field<object>("ClaimDetails")),
                             TicketCommentCount = Convert.ToInt32(r.Field<object>("TicketComments")),
-                            isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated"))
+                            isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated")),
+                            ticketSourceType =  Convert.ToString(r.Field<object>("TicketSourceType")),
+                            ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID"))
 
                         }).ToList();
                     }
@@ -489,7 +491,9 @@ namespace Easyrewardz_TicketSystem.Services
                             TaskStatus = Convert.ToString(r.Field<object>("TaskDetails")),
                             ClaimStatus = Convert.ToString(r.Field<object>("ClaimDetails")),
                             TicketCommentCount = Convert.ToInt32(r.Field<object>("TicketComments")),
-                            isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated"))
+                            isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated")),
+                            ticketSourceType = Convert.ToString(r.Field<object>("TicketSourceType")),
+                            ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID"))
 
                         }).ToList();
                     }

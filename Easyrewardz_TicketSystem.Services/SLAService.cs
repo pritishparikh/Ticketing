@@ -82,7 +82,9 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         public int InsertSLA(SLAModel SLA)
         {
-            int InsertSLAID = 0; int SLATargetInsertCount = 0;
+            
+            List<int> ListSlaID= new List<int>();
+            int SLATargetInsertCount = 0;
             DataSet ds = new DataSet();
 
             try
@@ -106,29 +108,41 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        InsertSLAID = ds.Tables[0].Rows[0]["InsertedSLA"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["InsertedSLA"]);
+                        for(int i=0;i< ds.Tables[0].Rows.Count; i++)
+                        {
+                            int slaID = ds.Tables[0].Rows[i]["SLAIDS"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SLAIDS"]);
+
+                            if(slaID > 0)
+                            {
+                                ListSlaID.Add(slaID);
+                            }
+                        }
 
                     }
 
-                    if(InsertSLAID > 0 )
+                    if(ListSlaID.Count > 0 )
                     {
                         if(SLA.SLATarget.Count > 0)
                         {
-                            for(int i=0;i< SLA.SLATarget.Count;i++)
+                            for(int k=0; k< ListSlaID.Count;k++)
                             {
-                                MySqlCommand Targetcmd = new MySqlCommand("SP_InsertSLATarget", conn);
-                                Targetcmd.Connection = conn;
-                                Targetcmd.Parameters.AddWithValue("@_slaID", InsertSLAID);
-                                Targetcmd.Parameters.AddWithValue("@_priorityID", SLA.SLATarget[i].PriorityID);
-                                Targetcmd.Parameters.AddWithValue("@_prioritySLABreach", SLA.SLATarget[i].SLABreachPercent);
-                                Targetcmd.Parameters.AddWithValue("@_priorityRespondValue", SLA.SLATarget[i].PriorityRespondValue);
-                                Targetcmd.Parameters.AddWithValue("@_priorityRespondDuraton", SLA.SLATarget[i].PriorityRespondDuration);
-                                Targetcmd.Parameters.AddWithValue("@_priorityResolutionValue", SLA.SLATarget[i].PriorityResolutionValue);
-                                Targetcmd.Parameters.AddWithValue("@_priorityResolutionDuraton", SLA.SLATarget[i].PriorityResolutionDuration);
-                                Targetcmd.Parameters.AddWithValue("@_createdBy", SLA.CreatedBy);
-                                Targetcmd.CommandType = CommandType.StoredProcedure;
-                                SLATargetInsertCount += Targetcmd.ExecuteNonQuery();
+                                for (int j = 0; j < SLA.SLATarget.Count; j++)
+                                {
+                                    MySqlCommand Targetcmd = new MySqlCommand("SP_InsertSLATarget", conn);
+                                    Targetcmd.Connection = conn;
+                                    Targetcmd.Parameters.AddWithValue("@_slaID", ListSlaID[k]);
+                                    Targetcmd.Parameters.AddWithValue("@_priorityID", SLA.SLATarget[j].PriorityID);
+                                    Targetcmd.Parameters.AddWithValue("@_prioritySLABreach", SLA.SLATarget[j].SLABreachPercent);
+                                    Targetcmd.Parameters.AddWithValue("@_priorityRespondValue", SLA.SLATarget[j].PriorityRespondValue);
+                                    Targetcmd.Parameters.AddWithValue("@_priorityRespondDuraton", SLA.SLATarget[j].PriorityRespondDuration);
+                                    Targetcmd.Parameters.AddWithValue("@_priorityResolutionValue", SLA.SLATarget[j].PriorityResolutionValue);
+                                    Targetcmd.Parameters.AddWithValue("@_priorityResolutionDuraton", SLA.SLATarget[j].PriorityResolutionDuration);
+                                    Targetcmd.Parameters.AddWithValue("@_createdBy", SLA.CreatedBy);
+                                    Targetcmd.CommandType = CommandType.StoredProcedure;
+                                    SLATargetInsertCount += Targetcmd.ExecuteNonQuery();
+                                }
                             }
+                            
                         }
                     }
                 }

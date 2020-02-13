@@ -61,7 +61,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _storeRepository = store;
             return _storeRepository.getSelectedStoreByTicketId(TicketId);
         }
-        public int StoreBulkUpload(IStore Store, int TenantID, int CreatedBy, DataSet DataSetCSV)
+        public List<string> StoreBulkUpload(IStore Store, int TenantID, int CreatedBy, DataSet DataSetCSV)
         {
             _storeRepository = Store;
             return _storeRepository.BulkUploadStore(TenantID, CreatedBy, DataSetCSV);
