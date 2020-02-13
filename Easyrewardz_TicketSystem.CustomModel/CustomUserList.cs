@@ -41,6 +41,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string AssignEscalation { get; set; }
         public string AssignName { get; set; }
         public int AssignID { get; set; }
+        public int ReporteeDesignationID { get; set; }
 
 
     }

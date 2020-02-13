@@ -245,6 +245,7 @@ namespace Easyrewardz_TicketSystem.Services
                         customUserList.AssignID = ds.Tables[0].Rows[i]["AssignID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["AssignID"]);
                         customUserList.AssignEscalation= ds.Tables[0].Rows[i]["AssignEscalation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignEscalation"]);
                         customUserList.AssignName= ds.Tables[0].Rows[i]["AssignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
+                        customUserList.ReporteeDesignationID= ds.Tables[0].Rows[i]["ReporteedesignationID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ReporteedesignationID"]);
                     }
                 }
             }
