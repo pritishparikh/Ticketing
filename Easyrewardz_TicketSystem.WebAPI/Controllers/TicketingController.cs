@@ -18,6 +18,8 @@ using Newtonsoft.Json;
 using static System.Net.Mime.MediaTypeNames;
 using System.Net;
 using System.Web;
+using Microsoft.AspNetCore.Http;
+
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -95,7 +97,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("createTicket")]
-        public ResponseModel createTicket()
+        public ResponseModel createTicket(IFormFile File)
         {
             TicketingDetails ticketingDetails = new TicketingDetails();
             var files = Request.Form.Files;
