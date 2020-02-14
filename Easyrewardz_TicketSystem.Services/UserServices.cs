@@ -631,7 +631,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", userModel.TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", userModel.UserID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                UserID = Convert.ToInt32(cmd.ExecuteScalar());
+                UserID = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
             catch (Exception ex)
