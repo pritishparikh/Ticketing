@@ -220,6 +220,48 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+
+        [HttpPost]
+        [Route("GetPlanDetails")]
+        public ResponseModel GetPlanDetails(int CustomPlanID)
+        {
+            List<GetPlanDetails> GetPlanDetails = new List<GetPlanDetails>();
+            TenantCaller _newTenantCaller = new TenantCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                GetPlanDetails = _newTenantCaller.GetPlanDetails(new TenantService(_connectioSting), CustomPlanID, authenticate.TenantId);
+
+                StatusCode =
+                GetPlanDetails.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = GetPlanDetails;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
         #endregion
     }
 }

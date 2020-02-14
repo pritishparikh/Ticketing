@@ -191,5 +191,49 @@ namespace Easyrewardz_TicketSystem.Services
             return result;
         }
 
+        public  List<GetPlanDetails> GetPlanDetails(int CustomPlanID, int TenantId)
+        {
+          
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List <GetPlanDetails> GetPlanDetails = new List<GetPlanDetails>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("GetPlanDetails", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_tenantId", TenantId);
+                cmd1.Parameters.AddWithValue("@_CustomPlanID", CustomPlanID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        GetPlanDetails PlanDetails = new GetPlanDetails();
+                        PlanDetails._PlanName = ds.Tables[0].Rows[i]["PlanName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PlanName"]);
+                        PlanDetails._FeatureName = ds.Tables[0].Rows[i]["FeatureName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FeatureName"]);
+                        GetPlanDetails.Add(PlanDetails);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return GetPlanDetails;
+        }
+
     }
 }

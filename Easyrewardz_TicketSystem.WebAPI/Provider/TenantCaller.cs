@@ -41,6 +41,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _tenantlist = _tenant;
             return _tenantlist.InsertPlanFeature(PlanName, FeatureID, UserMasterID, TenantId);
         }
+        public  List<GetPlanDetails> GetPlanDetails(ITenant _tenant,  int CustomPlanID, int TenantId)
+        {
+            _tenantlist = _tenant;
+            return _tenantlist.GetPlanDetails(CustomPlanID, TenantId);
+        }
 
         #endregion
     }
