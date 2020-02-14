@@ -94,7 +94,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", BillingDetails.Created_By);
                 cmd.Parameters.AddWithValue("@Modified_By", BillingDetails.Modified_By);
                 cmd.CommandType = CommandType.StoredProcedure;
-                result = Convert.ToInt32(cmd.ExecuteScalar());
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
             catch (Exception ex)
             {
@@ -136,7 +136,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ModifiedBy", OtherDetails._ModifiedBy);
                 cmd.Parameters.AddWithValue("@_Createdby", OtherDetails._Createdby);
                 cmd.CommandType = CommandType.StoredProcedure;
-                result = Convert.ToInt32(cmd.ExecuteScalar());
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
             catch (Exception ex)
             {
@@ -153,6 +153,42 @@ namespace Easyrewardz_TicketSystem.Services
 
             return result;
 
+        }
+
+
+        public int InsertPlanFeature(string PlanName, string FeatureID, int UserMasterID,int TenantId)
+        {
+            int _CreatedBy = UserMasterID;
+            int _ModifyBy = UserMasterID;
+
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_InsertCustomPlanFeatures", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_PlanName", PlanName);
+                cmd.Parameters.AddWithValue("@_FeatureID", FeatureID);
+                cmd.Parameters.AddWithValue("@_CreatedBy", _CreatedBy);
+                cmd.Parameters.AddWithValue("@_ModifyBy", _ModifyBy);
+                cmd.Parameters.AddWithValue("@_TenantId", TenantId);
+                cmd.CommandType = CommandType.StoredProcedure;
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return result;
         }
 
     }
