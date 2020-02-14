@@ -102,5 +102,20 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="TenantID"></param>
         /// <returns></returns>
         List<StoreTypeMaster> GetStoreNameWithsStoreCode(int TenantID);
+
+        /// <summary>
+        ///Get Language List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        List<LanguageModel> GetLanguageList(int TenantID);
+
+        /// <summary>
+        /// Get CountryStateCity
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        List<CommonModel> GetCountryStateCityList(int TenantID,string Pincode);
+
     }
 }

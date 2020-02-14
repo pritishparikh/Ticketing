@@ -328,5 +328,22 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #endregion
 
+        #region Language
+        public List<LanguageModel> GetLanguageList(IMasterInterface _masterInterface, int TenantID)
+        {
+            _Imaster = _masterInterface;
+            return _Imaster.GetLanguageList(TenantID);
+        }
+
+        #endregion
+
+        #region getCityStateCountry
+        public List<CommonModel> GetCountryStateCityList(IMasterInterface _masterInterface,int TenantID,string Pincode)
+        {
+            _Imaster = _masterInterface;
+            return _Imaster.GetCountryStateCityList(TenantID,Pincode);
+        }
+
+        #endregion
     }
 }

@@ -610,5 +610,114 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return storeMaster;
         }
+
+        /// <summary>
+        /// Get Language List
+        /// </summary>
+        /// <returns></returns>
+        public List<LanguageModel> GetLanguageList(int TenantID)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<LanguageModel> languageModels = new List<LanguageModel>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetLanguageList", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                //cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        LanguageModel languageModel = new LanguageModel();
+                        languageModel.LanguageID = Convert.ToInt32(ds.Tables[0].Rows[i]["LanguageID"]);
+                        languageModel.LanguageName = Convert.ToString(ds.Tables[0].Rows[i]["LanguageName"]);  
+                        //languageModel.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
+
+                        languageModels.Add(languageModel);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return languageModels;
+        }
+
+        /// <summary>
+        /// Get CountryStateCity
+        /// </summary>
+        /// <returns></returns>
+        public List<CommonModel> GetCountryStateCityList(int TenantID,string Pincode)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<CommonModel> commonModels = new List<CommonModel>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                CommonModel commonModel = new CommonModel();
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetCountryStateCity", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_PinCode", Pincode);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        commonModel.CityID = Convert.ToInt32(ds.Tables[0].Rows[i]["CityID"]);
+                        commonModel.CityName = Convert.ToString(ds.Tables[0].Rows[i]["CityName"]);
+                        commonModel.StateID = Convert.ToInt32(ds.Tables[1].Rows[i]["StateID"]);
+                        commonModel.StateName = Convert.ToString(ds.Tables[1].Rows[i]["StateName"]);
+                        commonModel.CountryID = Convert.ToInt32(ds.Tables[2].Rows[i]["CountryID"]);
+                        commonModel.CountryName = Convert.ToString(ds.Tables[2].Rows[i]["CountryName"]);
+
+                        commonModels.Add(commonModel);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return commonModels;
+        }
+
+
+
     }
 }

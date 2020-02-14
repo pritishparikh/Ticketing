@@ -93,7 +93,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("AddDepartment")]
         public ResponseModel AddDepartment( string DepartmentName)
-        {         
+        {
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             int result = 0;
@@ -503,7 +503,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         #endregion
 
-
         #region StoreType List 
 
         /// <summary>
@@ -598,9 +597,109 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
         #endregion
 
+        #region Get Language List
+        /// <summary>
+        /// Get language List
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetLanguageList")]
+        public ResponseModel GetLanguageList()
+        {
+            List<LanguageModel> objlanguagemodels = new List<LanguageModel>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                
+                MasterCaller _newMasterCaller = new MasterCaller();
 
+                objlanguagemodels = _newMasterCaller.GetLanguageList(new MasterServices(_connectioSting), authenticate.TenantId);
 
+                StatusCode =
+                objlanguagemodels.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objlanguagemodels;
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
         #endregion
+      
+        #region Get  Country State City List
+        /// <summary>
+        ///Get Country State City List
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetCountryStateCityList")]
+        public ResponseModel GetCountryStateCityList(string Pincode)
+        {
+            List<CommonModel> objcommonModels = new List<CommonModel>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                MasterCaller _newMasterCaller = new MasterCaller();
 
+                objcommonModels = _newMasterCaller.GetCountryStateCityList(new MasterServices(_connectioSting),authenticate.TenantId, Pincode);
+
+                StatusCode =
+                objcommonModels.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objcommonModels;
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
+        #endregion
+       
+        #endregion
     }
 }
