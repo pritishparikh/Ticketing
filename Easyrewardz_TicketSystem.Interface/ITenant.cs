@@ -11,5 +11,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int InsertCompany(CompanyModel companyModel, int TenantId);
         int BillingDetails_crud(BillingDetails BillingDetails);
         int OtherDetails(OtherDetailsModel OtherDetails);
+        int AddPlan(TenantPlan tenantPlan);
     }
 }
