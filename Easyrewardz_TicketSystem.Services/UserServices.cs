@@ -323,6 +323,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="CustomUserModel"></param>
         public int Mappedcategory(CustomUserModel customUserModel)
         {
+            string password = CommonService.GeneratePassword();
+            CommonService commonService = new CommonService();
+            string encryptedPassword = commonService.Encrypt(password);
+
             int success = 0;
             try
             {
@@ -343,6 +347,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", customUserModel.TenantID);
                 cmd.Parameters.AddWithValue("@EscalateAssignTo_Id", customUserModel.EscalateAssignToId);
                 cmd.Parameters.AddWithValue("@Is_StoreUser", customUserModel.IsStoreUser);
+                cmd.Parameters.AddWithValue("@Encrypted_Password", encryptedPassword);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
