@@ -99,7 +99,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Category_Name", categoryName);
                 cmd1.Parameters.AddWithValue("@Created_By", UserID);
                 cmd1.Parameters.AddWithValue("@Brand_ID", BrandID);
-                Success = Convert.ToInt32(cmd1.ExecuteScalar());
+                Success = Convert.ToInt32(cmd1.ExecuteNonQuery());
             }
             catch (Exception ex)
             {
