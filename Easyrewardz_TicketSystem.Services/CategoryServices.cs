@@ -84,7 +84,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TenantID"></param>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        public int AddCategory(string categoryName, int TenantID, int UserID)
+        public int AddCategory(string categoryName, int TenantID, int UserID, int BrandID)
         {
 
             MySqlCommand cmd = new MySqlCommand();
@@ -98,6 +98,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd1.Parameters.AddWithValue("@Category_Name", categoryName);
                 cmd1.Parameters.AddWithValue("@Created_By", UserID);
+                cmd1.Parameters.AddWithValue("@Brand_ID", BrandID);
                 Success = Convert.ToInt32(cmd1.ExecuteScalar());
             }
             catch (Exception ex)
