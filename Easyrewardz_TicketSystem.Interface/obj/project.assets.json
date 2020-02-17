@@ -721,23 +721,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\akash.mistry.BRAINVIRE\\.nuget\\packages\\": {},
+    "C:\\Users\\mangesh.mishra\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\PROJECTS_NEW\\EasyRewardsAPI\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj",
+      "projectUniqueName": "D:\\Ticketing\\React_API\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj",
       "projectName": "Easyrewardz_TicketSystem.Interface",
-      "projectPath": "E:\\PROJECTS_NEW\\EasyRewardsAPI\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj",
-      "packagesPath": "C:\\Users\\akash.mistry.BRAINVIRE\\.nuget\\packages\\",
-      "outputPath": "E:\\PROJECTS_NEW\\EasyRewardsAPI\\Ticketing\\Easyrewardz_TicketSystem.Interface\\obj\\",
+      "projectPath": "D:\\Ticketing\\React_API\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj",
+      "packagesPath": "C:\\Users\\mangesh.mishra\\.nuget\\packages\\",
+      "outputPath": "D:\\Ticketing\\React_API\\Ticketing\\Easyrewardz_TicketSystem.Interface\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\akash.mistry.BRAINVIRE\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\mangesh.mishra\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -750,11 +750,11 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "E:\\PROJECTS_NEW\\EasyRewardsAPI\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj": {
-              "projectPath": "E:\\PROJECTS_NEW\\EasyRewardsAPI\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj"
+            "D:\\Ticketing\\React_API\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj": {
+              "projectPath": "D:\\Ticketing\\React_API\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj"
             },
-            "E:\\PROJECTS_NEW\\EasyRewardsAPI\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
-              "projectPath": "E:\\PROJECTS_NEW\\EasyRewardsAPI\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
+            "D:\\Ticketing\\React_API\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
+              "projectPath": "D:\\Ticketing\\React_API\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
             }
           }
         }
