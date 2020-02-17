@@ -337,5 +337,46 @@ namespace Easyrewardz_TicketSystem.Services
 
             return true;
         }
+
+        #region Generate random password
+        /// <summary>
+        /// Generating random password
+        /// </summary>
+        /// <returns></returns>
+        public static string GeneratePassword()
+        {
+            string Password = "";
+            try
+            {
+
+                string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                string small_alphabets = "abcdefghijklmnopqrstuvwxyz";
+                string numbers = "1234567890";
+                string SpecialCharacters = "!@#$%^&*?_-";
+
+                string characters = "";
+                //if (rbType.SelectedItem.Value == "1")
+                {
+                    characters += alphabets + small_alphabets + numbers + SpecialCharacters;
+                }
+
+                for (int i = 0; i < 8; i++)
+                {
+                    string character = string.Empty;
+                    do
+                    {
+                        int index = new Random().Next(0, characters.Length);
+                        character = characters.ToCharArray()[index].ToString();
+                    } while (Password.IndexOf(character) != -1);
+                    Password += character;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return Password;
+        }
+        #endregion
     }
 }
