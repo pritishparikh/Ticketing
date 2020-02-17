@@ -421,8 +421,10 @@ namespace Easyrewardz_TicketSystem.Services
                             TaskStatus = r.Field<object>("TaskDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TaskDetails")),
                             ClaimStatus = r.Field<object>("ClaimDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ClaimDetails")),
                             TicketCommentCount = r.Field<object>("ClaimDetails") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TicketComments")),
-                            isEscalation = r.Field<object>("IsEscalated") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsEscalated"))
-
+                            isEscalation = r.Field<object>("IsEscalated") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsEscalated")),
+                            ticketSourceType = Convert.ToString(r.Field<object>("TicketSourceType")),
+                            ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID")),
+                            IsReassigned = Convert.ToBoolean(r.Field<object>("IsReassigned"))
                         }).ToList();
                     }
                 }
