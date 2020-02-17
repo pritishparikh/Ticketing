@@ -654,6 +654,51 @@ namespace Easyrewardz_TicketSystem.Services
             return UserID;
         }
 
+        public CustomChangePassword SendMailforchangepassword(int userID, int TenantID, int IsStoreUser)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            CustomChangePassword customChangePassword  = new CustomChangePassword();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetUserEmailandPassword", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@User_ID", userID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@Is_StoreUser", IsStoreUser);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        customChangePassword.UserID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        customChangePassword.EmailID = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                        customChangePassword.Password= ds.Tables[0].Rows[i]["SecurePassword"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SecurePassword"]);
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return customChangePassword;
+        }
+
         #endregion
     }
 }

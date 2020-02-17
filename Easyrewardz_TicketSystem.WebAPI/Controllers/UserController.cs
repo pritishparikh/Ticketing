@@ -753,6 +753,58 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        [HttpPost]
+        [Route("SendMailforchangepassword")]
+        public ResponseModel SendMailforchangepassword (int userID, int IsStoreUser = 1)
+        {
+            CustomChangePassword customChangePassword = new CustomChangePassword();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                UserCaller userCaller = new UserCaller();
+
+                customChangePassword = userCaller.SendMailforchangepassword(new UserServices(_connectioSting), userID, authenticate.TenantId, IsStoreUser);
+
+                MasterCaller masterCaller = new MasterCaller();
+                SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
+                securityCaller _securityCaller = new securityCaller();
+                CommonService commonService = new CommonService();
+                string encryptedUserId = commonService.Encrypt(customChangePassword.UserID.ToString());
+                string url = configuration.GetValue<string>("websiteURL") + "/changePassword";
+                string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url + "?Id=" + encryptedUserId;
+                bool isUpdate = _securityCaller.sendMail(new SecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID, body, authenticate.TenantId);
+
+                StatusCode =
+               customChangePassword ==null ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = customChangePassword;
+
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
         #endregion
     }
 }
