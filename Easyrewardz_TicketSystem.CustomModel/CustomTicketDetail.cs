@@ -86,6 +86,21 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string TargetClouredate { get; set; }
 
         /// <summary>
+        /// TargetClouredate
+        /// </summary>
+        public string TargetResponseDate { get; set; }
+
+        /// <summary>
+        /// TargetClouredate
+        /// </summary>
+        public string TargetResolutionDate { get; set; }
+
+        /// <summary>
+        /// TargetClouredate
+        /// </summary>
+        public string TicketAssignDate { get; set; }
+
+        /// <summary>
         /// Username
         /// </summary>
         public string Username { get; set; }

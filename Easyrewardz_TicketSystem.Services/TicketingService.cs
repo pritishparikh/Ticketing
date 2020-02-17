@@ -757,6 +757,11 @@ namespace Easyrewardz_TicketSystem.Services
                         ticketDetails.UpdateDate = ds.Tables[0].Rows[i]["UpdatedAt"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedAt"]);
                         ticketDetails.Status = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]);
                         ticketDetails.TargetClouredate = ds.Tables[0].Rows[i]["TargetClouredate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetClouredate"]);
+
+                        ticketDetails.TicketAssignDate = ds.Tables[0].Rows[i]["TicketAssignDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketAssignDate"]);
+                        ticketDetails.TargetResponseDate = ds.Tables[0].Rows[i]["TargetResponseDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetResponseDate"]);
+                        ticketDetails.TargetResolutionDate = ds.Tables[0].Rows[i]["TargetResolutionDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetResolutionDate"]);
+
                         ticketDetails.OpenTicket = ds.Tables[0].Rows[i]["OpenTickets"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OpenTickets"]);
                         ticketDetails.Totalticket = ds.Tables[0].Rows[i]["Totaltickets"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Totaltickets"]);
                         ticketDetails.stores = ds.Tables[1].AsEnumerable().Select(x => new Store()
