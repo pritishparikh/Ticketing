@@ -20,6 +20,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _UserRepository = User;
             return _UserRepository.AddUserPersonaldetail(userModel);
         }
+        public int EditUserPersonaldetail(IUser User, UserModel userModel)
+        {
+            _UserRepository = User;
+            return _UserRepository.EditUserPersonaldetail(userModel);
+        }
         public int AddUserProfiledetail(IUser User, int DesignationID, int ReportTo, int CreatedBy, int TenantID, int UserID,int IsStoreUser)
         {
             _UserRepository = User;

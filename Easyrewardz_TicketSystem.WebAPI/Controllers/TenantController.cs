@@ -181,27 +181,22 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
-
         [HttpPost]
-        [Route("AddPlan")]
-        public ResponseModel AddPlan([FromBody] TenantPlan tenantPlan)
+        [Route("InsertPlanFeature")]
+        public ResponseModel InsertPlanFeature(string PlanName,string FeatureID)
         {
             TenantCaller _newTenantCaller = new TenantCaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
-
             try
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                authenticate.TenantId = 1;
-                authenticate.UserMasterID = 6;
-                tenantPlan.TenantID = authenticate.TenantId;
-                tenantPlan.Created_By = authenticate.UserMasterID;
-                int result = _newTenantCaller.AddPlan(new TenantService(_connectioSting),tenantPlan);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                
+                int result = _newTenantCaller.InsertPlanFeature(new TenantService(_connectioSting), PlanName, FeatureID, authenticate.UserMasterID,authenticate.TenantId);
 
                 StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -211,7 +206,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = result;
-
             }
             catch (Exception ex)
             {
@@ -223,7 +217,49 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = null;
             }
+            return _objResponseModel;
+        }
 
+
+        [HttpPost]
+        [Route("GetPlanDetails")]
+        public ResponseModel GetPlanDetails(int CustomPlanID)
+        {
+            List<GetPlanDetails> GetPlanDetails = new List<GetPlanDetails>();
+            TenantCaller _newTenantCaller = new TenantCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                GetPlanDetails = _newTenantCaller.GetPlanDetails(new TenantService(_connectioSting), CustomPlanID, authenticate.TenantId);
+
+                StatusCode =
+                GetPlanDetails.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = GetPlanDetails;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
             return _objResponseModel;
         }
         #endregion

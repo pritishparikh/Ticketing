@@ -12,6 +12,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<User> GetUserList(int TenantId ,int UserID);
 
         int AddUserPersonaldetail(UserModel userModel);
+        int EditUserPersonaldetail(UserModel userModel);
 
         int AddUserProfiledetail(int DesignationID,int ReportTo ,int CreatedBy,int TenantID,int UserID,int IsStoreUser);
 

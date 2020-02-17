@@ -609,6 +609,45 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return UpdateUserProfiledetailsModel;
         }
+        /// <summary>
+        /// EditUserPersonaldetail
+        /// </summary>
+        /// <param name="UserModel"></param>
+        public int EditUserPersonaldetail(UserModel userModel)
+        {
+            int UserID = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_EditUserPeronalDetails", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@User_Name", userModel.UserName);
+                cmd.Parameters.AddWithValue("@Mobile_No", userModel.MobileNo);
+                cmd.Parameters.AddWithValue("@First_Name", userModel.FirstName);
+                cmd.Parameters.AddWithValue("@Last_Name", userModel.LastName);
+                cmd.Parameters.AddWithValue("@Email_ID", userModel.EmailID);
+                cmd.Parameters.AddWithValue("@Created_By", userModel.CreatedBy);
+                cmd.Parameters.AddWithValue("@Is_StoreUser", userModel.IsStoreUser);
+                cmd.Parameters.AddWithValue("@Tenant_ID", userModel.TenantID);
+                cmd.Parameters.AddWithValue("@User_ID", userModel.UserID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                UserID = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UserID;
+        }
 
         #endregion
     }

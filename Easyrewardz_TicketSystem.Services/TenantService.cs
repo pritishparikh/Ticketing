@@ -94,7 +94,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", BillingDetails.Created_By);
                 cmd.Parameters.AddWithValue("@Modified_By", BillingDetails.Modified_By);
                 cmd.CommandType = CommandType.StoredProcedure;
-                result = Convert.ToInt32(cmd.ExecuteScalar());
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
             catch (Exception ex)
             {
@@ -136,7 +136,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ModifiedBy", OtherDetails._ModifiedBy);
                 cmd.Parameters.AddWithValue("@_Createdby", OtherDetails._Createdby);
                 cmd.CommandType = CommandType.StoredProcedure;
-                result = Convert.ToInt32(cmd.ExecuteScalar());
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
             catch (Exception ex)
             {
@@ -153,6 +153,86 @@ namespace Easyrewardz_TicketSystem.Services
 
             return result;
 
+        }
+
+
+        public int InsertPlanFeature(string PlanName, string FeatureID, int UserMasterID,int TenantId)
+        {
+            int _CreatedBy = UserMasterID;
+            int _ModifyBy = UserMasterID;
+
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_InsertCustomPlanFeatures", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_PlanName", PlanName);
+                cmd.Parameters.AddWithValue("@_FeatureID", FeatureID);
+                cmd.Parameters.AddWithValue("@_CreatedBy", _CreatedBy);
+                cmd.Parameters.AddWithValue("@_ModifyBy", _ModifyBy);
+                cmd.Parameters.AddWithValue("@_TenantId", TenantId);
+                cmd.CommandType = CommandType.StoredProcedure;
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return result;
+        }
+
+        public  List<GetPlanDetails> GetPlanDetails(int CustomPlanID, int TenantId)
+        {
+          
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List <GetPlanDetails> GetPlanDetails = new List<GetPlanDetails>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("GetPlanDetails", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_tenantId", TenantId);
+                cmd1.Parameters.AddWithValue("@_CustomPlanID", CustomPlanID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        GetPlanDetails PlanDetails = new GetPlanDetails();
+                        PlanDetails._PlanName = ds.Tables[0].Rows[i]["PlanName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PlanName"]);
+                        PlanDetails._FeatureName = ds.Tables[0].Rows[i]["FeatureName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FeatureName"]);
+                        GetPlanDetails.Add(PlanDetails);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return GetPlanDetails;
         }
 
         public int AddPlan(TenantPlan _tenantPlan)
