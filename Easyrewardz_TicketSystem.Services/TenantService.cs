@@ -155,5 +155,44 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        public int AddPlan(TenantPlan _tenantPlan)
+        {
+
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_TenantPlanAdd", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Tenant_ID",_tenantPlan.TenantID);
+                cmd.Parameters.AddWithValue("@Plan_ID", _tenantPlan.PlanID);
+                cmd.Parameters.AddWithValue("@CustomPlan_ID", _tenantPlan.CustomPlanID);
+                cmd.Parameters.AddWithValue("@Effective_Date", _tenantPlan.EffectiveDate);
+                cmd.Parameters.AddWithValue("@ExpiryDate", _tenantPlan.ExpiryDate);
+                cmd.Parameters.AddWithValue("@GreacePeriodDays", _tenantPlan.GreacePeriodDays);
+                cmd.Parameters.AddWithValue("@GreacePeriodMonth", _tenantPlan.GreacePeriodMonth);
+                cmd.Parameters.AddWithValue("@IsCustomPlan", _tenantPlan.IsCustomPlan);
+                cmd.Parameters.AddWithValue("@User_ID", _tenantPlan.Created_By);
+                cmd.Parameters.AddWithValue("@Feature_ID", _tenantPlan.AddonsFeatureIDs);
+                cmd.CommandType = CommandType.StoredProcedure;
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return result;
+
+        }
+
     }
 }
