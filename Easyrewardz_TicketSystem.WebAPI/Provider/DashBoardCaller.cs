@@ -44,10 +44,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
 
-        public LoggedInAgentModel GetLogginAccountInfo(IDashBoard _dashboard, int tenantID, int UserId, string emailID,string AccountName)
+        public LoggedInAgentModel GetLogginAccountInfo(IDashBoard _dashboard, int tenantID, int UserId, string ProfilePicPath)
         {
             _dashboardlist = _dashboard;
-            return _dashboardlist.GetLogginAccountInfo(tenantID,UserId,emailID, AccountName);
+            return _dashboardlist.GetLogginAccountInfo(tenantID,UserId, ProfilePicPath);
         }
 
 
