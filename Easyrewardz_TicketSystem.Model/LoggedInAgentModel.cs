@@ -18,7 +18,7 @@ namespace Easyrewardz_TicketSystem.Model
         public int LoggedInDurationInMinutes { get; set; }
 
         public int ShiftDurationInHour { get; set; }
-        public int ShiftDurationInMinutes { get; set; }
+        public int ShiftDurationInMinutes { get; set; } 
 
         public string LoggedInDuration { get; set; }
         public string SLAScore { get; set; }

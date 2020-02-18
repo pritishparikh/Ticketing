@@ -47,7 +47,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public LoggedInAgentModel GetLogginAccountInfo(IDashBoard _dashboard, int tenantID, int UserId, string ProfilePicPath)
         {
             _dashboardlist = _dashboard;
-            return _dashboardlist.GetLogginAccountInfo(tenantID,UserId, ProfilePicPath);
+            return _dashboardlist.GetLogginAccountInfo(tenantID,UserId, ProfilePicPath); 
         }
 
 

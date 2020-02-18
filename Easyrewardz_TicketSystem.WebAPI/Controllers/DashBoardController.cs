@@ -215,7 +215,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             LoggedInAgentModel  _loggedinAccInfo = null;
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0; string statusMessage = "";
-            DashBoardCaller _dbsearchMaster = new DashBoardCaller();
+            DashBoardCaller _dbsearchMaster = new DashBoardCaller();  
             try
             {
 

@@ -489,7 +489,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
 
-                loggedInAcc.AgentId = UserID;
+                loggedInAcc.AgentId = UserID; 
                 //loggedInAcc.AgentName = AccountName;
                 //loggedInAcc.AgentEmailId = EmailID;
 
