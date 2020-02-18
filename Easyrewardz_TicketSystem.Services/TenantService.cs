@@ -274,5 +274,46 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        public List<CompanyTypeModel> GetCompanyType()
+        {
+            List<CompanyTypeModel> lstCompanyType = null;
+            try
+            {
+                lstCompanyType = new List<CompanyTypeModel>();
+                conn.Open();
+                DataSet ds = new DataSet();
+                MySqlCommand cmd = new MySqlCommand("SP_GetCompanyType", conn);
+                cmd.Connection = conn;               
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CompanyTypeModel companyType = new CompanyTypeModel();
+                        companyType.CompanyTypeID = ds.Tables[0].Rows[i]["CompanyTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CompanyTypeID"]);
+                        companyType.CompanyTypeName = ds.Tables[0].Rows[i]["TypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TypeName"]);
+                        lstCompanyType.Add(companyType);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return lstCompanyType;
+        }
     }
 }

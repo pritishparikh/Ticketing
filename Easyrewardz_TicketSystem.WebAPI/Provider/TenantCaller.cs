@@ -46,7 +46,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _tenantlist = _tenant;
             return _tenantlist.GetPlanDetails(CustomPlanID, TenantId);
         }
-
+        public List<CompanyTypeModel> GetCompanyType(ITenant _tenant)
+        {
+            _tenantlist = _tenant;
+            return _tenantlist.GetCompanyType();
+        }
         public int AddPlan(ITenant _tenant,TenantPlan _tenantPlan)
         {
             _tenantlist = _tenant;

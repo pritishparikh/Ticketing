@@ -14,5 +14,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int InsertPlanFeature(string PlanName, string FeatureID, int UserMasterID,int TenantId);
         List<GetPlanDetails> GetPlanDetails(int CustomPlanID, int TenantId);
         int AddPlan(TenantPlan tenantPlan);
+        List<CompanyTypeModel> GetCompanyType();
     }
 }
