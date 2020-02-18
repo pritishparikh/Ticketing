@@ -9,6 +9,7 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public interface IUser
     {
+        
         List<User> GetUserList(int TenantId ,int UserID);
 
         int AddUserPersonaldetail(UserModel userModel);
@@ -27,5 +28,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateUserProfileDetail(UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel);
 
         List<UpdateUserProfiledetailsModel> GetUserProfileDetails(int UserMasterID,string url);
+        CustomChangePassword SendMailforchangepassword(int userID, int TenantID, int IsStoreUser);
     }
 }

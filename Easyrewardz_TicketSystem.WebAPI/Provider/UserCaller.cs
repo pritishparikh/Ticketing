@@ -45,6 +45,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _UserRepository = User;
             return _UserRepository.DeleteUser(userID,TenantID, Modifyby, IsStoreUser);
         }
+        public CustomChangePassword SendMailforchangepassword(IUser User, int userID, int TenantID, int IsStoreUser)
+        {
+            _UserRepository = User;
+            return _UserRepository.SendMailforchangepassword(userID, TenantID, IsStoreUser);
+        }
         public List<CustomUserList> UserList(IUser User,int TenantID,int IsStoreUser)
         {
             _UserRepository = User;
