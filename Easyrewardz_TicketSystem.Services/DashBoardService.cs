@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -473,7 +474,7 @@ namespace Easyrewardz_TicketSystem.Services
             return csv;
         }
 
-        public LoggedInAgentModel GetLogginAccountInfo(int tenantID, int UserID, string EmailID, string AccountName)
+        public LoggedInAgentModel GetLogginAccountInfo(int tenantID, int UserID,string ProfilePicPath)
         {
             DataSet ds = new DataSet();
             DateTime now = DateTime.Now; DateTime temp = new DateTime();
@@ -481,15 +482,16 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             LoggedInAgentModel loggedInAcc = new LoggedInAgentModel();
             ChatStatus chatstat = new ChatStatus();
+            string profileImage = string.Empty;
             int ShiftDuration = 0;
             try
             {
                 conn.Open();
                 cmd.Connection = conn;
 
-                loggedInAcc.AgentId = UserID;
-                loggedInAcc.AgentName = AccountName;
-                loggedInAcc.AgentEmailId = EmailID;
+                loggedInAcc.AgentId = UserID; 
+                //loggedInAcc.AgentName = AccountName;
+                //loggedInAcc.AgentEmailId = EmailID;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_LoggedInAccountInformation", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -505,12 +507,17 @@ namespace Easyrewardz_TicketSystem.Services
 
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-
+                        
                         loggedInAcc.LoginTime = ds.Tables[0].Rows[0]["logintime"] != System.DBNull.Value ? Convert.ToDateTime(ds.Tables[0].Rows[0]["logintime"]).ToString("h:mm tt", culture) : "";
                         loggedInAcc.LogoutTime = ds.Tables[0].Rows[0]["logouttime"] != System.DBNull.Value ? Convert.ToDateTime(ds.Tables[0].Rows[0]["logouttime"]).ToString("h:mm tt", culture) : "";
-
+                        loggedInAcc.AgentName= ds.Tables[0].Rows[0]["AccountName"] != System.DBNull.Value ? Convert.ToString(ds.Tables[0].Rows[0]["AccountName"]) : string.Empty;
+                        loggedInAcc.AgentEmailId = ds.Tables[0].Rows[0]["EmailID"] != System.DBNull.Value ? Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]) : string.Empty ;
+                       
                         ShiftDuration = ds.Tables[0].Rows[0]["ShiftDuration"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[0].Rows[0]["ShiftDuration"]) : 0;
+                        profileImage= ds.Tables[0].Rows[0]["ProfilePicture"] != System.DBNull.Value ? Convert.ToString(ds.Tables[0].Rows[0]["ProfilePicture"]) : string.Empty;
 
+
+                        loggedInAcc.ProfilePicture = !string.IsNullOrEmpty(profileImage) ? Path.Combine(ProfilePicPath, profileImage) : string.Empty;
                         if (ShiftDuration > 0)
                         {
                             temp = temp.AddHours(ShiftDuration);

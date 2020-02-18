@@ -12,12 +12,13 @@ namespace Easyrewardz_TicketSystem.Model
         public ChatStatus Chatstatus { get; set; }
         public string LoginTime { get; set; }
         public string LogoutTime { get; set; }
+        public string ProfilePicture { get; set; }
 
         public int LoggedInDurationInHours { get; set; }
         public int LoggedInDurationInMinutes { get; set; }
 
         public int ShiftDurationInHour { get; set; }
-        public int ShiftDurationInMinutes { get; set; }
+        public int ShiftDurationInMinutes { get; set; } 
 
         public string LoggedInDuration { get; set; }
         public string SLAScore { get; set; }

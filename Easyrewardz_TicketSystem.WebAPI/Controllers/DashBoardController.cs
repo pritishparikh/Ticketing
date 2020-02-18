@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,6 +23,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         private IConfiguration configuration;
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
+        private readonly string ProfileImg_Resources;
+        private readonly string ProfileImg_Image;
+        private readonly string API_Url;
 
         #endregion
 
@@ -31,7 +35,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
-           
+            API_Url= configuration.GetValue<string>("APIURL");
+            ProfileImg_Resources = configuration.GetValue<string>("ProfileImg_Resources");
+            ProfileImg_Image = configuration.GetValue<string>("ProfileImg_Image");
+
         }
         #endregion
 
@@ -208,7 +215,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             LoggedInAgentModel  _loggedinAccInfo = null;
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0; string statusMessage = "";
-            DashBoardCaller _dbsearchMaster = new DashBoardCaller();
+            DashBoardCaller _dbsearchMaster = new DashBoardCaller();  
             try
             {
 
@@ -216,11 +223,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                _loggedinAccInfo = _dbsearchMaster.GetLogginAccountInfo(new DashBoardService(_connectioSting),
-                    authenticate.TenantId, authenticate.UserMasterID, authenticate.UserEmailID, authenticate.FirstName + " " + authenticate.LastName);
+                var folderName = Path.Combine(ProfileImg_Resources, ProfileImg_Image);
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
-                //_loggedinAccInfo = _dbsearchMaster.GetDashboardTicketsOnSearch(new DashBoardService(_connectioSting),
-                //    1, 6, "shlok.barot@brainvire.com", "Shlok Barot");
+                _loggedinAccInfo = _dbsearchMaster.GetLogginAccountInfo(new DashBoardService(_connectioSting),
+                    authenticate.TenantId, authenticate.UserMasterID, pathToSave);
+
+               
 
                 StatusCode = _loggedinAccInfo != null ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
