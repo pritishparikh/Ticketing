@@ -9,6 +9,8 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface IFeaturePlan
     {
         FeaturePlanModel GetFeaturePlanList(int TenantID);
+        string AddFeature(FeaturesModel objFeatures);
+        int DeleteFeature(int UserID,int FeatureID);
     }
 
 }

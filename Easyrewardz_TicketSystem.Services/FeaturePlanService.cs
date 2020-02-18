@@ -90,5 +90,82 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return featurePlanModel;
         }
+
+        /// <summary>
+        /// Add Feature
+        /// </summary>
+        /// <param name="objFeatures"></param>
+        /// <returns></returns>
+        public string AddFeature(FeaturesModel objFeatures)
+        {
+            int result = 0;
+            string message = string.Empty;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_AddFeature", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Feature_ID", objFeatures.FeatureID);
+                cmd.Parameters.AddWithValue("@Feature_Name", objFeatures.FeatureName);
+                cmd.Parameters.AddWithValue("@Monthly_Price", objFeatures.MonthlyPrice);
+                cmd.Parameters.AddWithValue("@Yearly_Price", objFeatures.YearlyPrice);
+                cmd.Parameters.AddWithValue("@_Tooltip", objFeatures.Tooltip);
+                cmd.Parameters.AddWithValue("@IsActive", objFeatures.IsActive);
+                cmd.Parameters.AddWithValue("@User_ID", objFeatures.UserID);
+                cmd.Parameters.AddWithValue("@Message","");
+                cmd.Parameters["@Message"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+                message = Convert.ToString(cmd.Parameters["@Message"].Value);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return message;
+        }
+
+        /// <summary>
+        /// Delete Feature
+        /// </summary>
+        /// <param name="objFeatures"></param>
+        /// <returns></returns>
+        public int DeleteFeature(int UserID,int FeatureID)
+        {
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_DeleteFeature", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Feature_ID", FeatureID);               
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return result;
+        }
     }
 }
