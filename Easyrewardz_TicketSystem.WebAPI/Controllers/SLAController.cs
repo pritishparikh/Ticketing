@@ -102,7 +102,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetIssueType")]
-        public ResponseModel GetIssueType()
+        public ResponseModel GetIssueType(string SearchText)
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
@@ -118,7 +118,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 SettingsCaller _newCRM = new SettingsCaller();
          
-                _objresponseModel = _newCRM.BindIssueTypeList(new SLAServices(_connectioSting), authenticate.TenantId);
+                _objresponseModel = _newCRM.BindIssueTypeList(new SLAServices(_connectioSting), authenticate.TenantId, SearchText);
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

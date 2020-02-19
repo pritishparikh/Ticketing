@@ -97,10 +97,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _SLA.SLAList(TenantID , SLAFor);
         }
 
-        public List<IssueTypeList> BindIssueTypeList(ISLA SLA,int tenantID)
+        public List<IssueTypeList> BindIssueTypeList(ISLA SLA,int tenantID,string SearchText)
         {
             _SLA = SLA;
-            return _SLA.BindIssueTypeList(tenantID);
+            return _SLA.BindIssueTypeList(tenantID, SearchText);
         }
 
         public int SLABulkUpload(ISLA SLA, int TenantID, int CreatedBy, DataSet DataSetCSV)

@@ -23,7 +23,7 @@ namespace Easyrewardz_TicketSystem.Interface
         //List<SLAResponseModel> SLAList(int tenantID, int pageNo, int PageSize);
         List<SLAResponseModel> SLAList(int tenantID, int SLAFor);
 
-        List<IssueTypeList> BindIssueTypeList(int tenantID);
+        List<IssueTypeList> BindIssueTypeList(int tenantID,string SearchText);
         List<IssueTypeList> SearchIssueType(int tenantID, string SearchText);
 
         int BulkUploadSLA(int TenantID, int CreatedBy, DataSet DataSetCSV);
