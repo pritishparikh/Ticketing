@@ -299,8 +299,9 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketCommentCount = Convert.ToInt32(r.Field<object>("TicketComments")),
                             isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated")),
                             ticketSourceType =  Convert.ToString(r.Field<object>("TicketSourceType")),
-                            ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID"))
-
+                            ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID")),
+                            IsReassigned = Convert.ToBoolean(r.Field<object>("IsReassigned")),
+                            IsSLANearBreach = Convert.ToBoolean(r.Field<object>("IsSLANearBreach"))
                         }).ToList();
                     }
                 }
