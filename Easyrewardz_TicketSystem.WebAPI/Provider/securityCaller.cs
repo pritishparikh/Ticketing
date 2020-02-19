@@ -62,6 +62,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
             return _SecurityRepository.sendMailForForgotPassword(sMTPDetails, EmailId, content, TenantId);
         }
+        public bool sendMailForChangePassword(ISecurity security, SMTPDetails sMTPDetails, string EmailId, string content, int TenantId)
+        {
+            _SecurityRepository = security;
+            CommonService commonService = new CommonService();
+
+
+            return _SecurityRepository.sendMailForChangePassword(sMTPDetails, EmailId, content, TenantId);
+        }
 
         /// <summary>
         /// Validate User Account

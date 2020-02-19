@@ -276,7 +276,25 @@ namespace Easyrewardz_TicketSystem.Services
             return isSent;
         }
         #endregion
+        #region Send mail for Change password
+        public bool sendMailForChangePassword(SMTPDetails sMTPDetails, string emailId, string content, int TenantId)
+        {
+            bool isSent = false;
+            try
+            {
+                CommonService commonService = new CommonService();
+                isSent = commonService.SendEmail(sMTPDetails, emailId, "Change Password", content, null, null, TenantId);
 
+                return isSent;
+            }
+            catch (Exception ex)
+            {
+                isSent = false;
+            }
+
+            return isSent;
+        }
+        #endregion
         #region Login/Authenticate Methods
 
         /// <summary>

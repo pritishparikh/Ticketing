@@ -59,5 +59,13 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="Domainname"></param>
         /// <returns></returns>
         bool validateProgramCode(string Programcode, string Domainname);
+
+        /// <summary>
+        /// Send mail for the Change password
+        /// </summary>
+        /// <param name="emailId"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        bool sendMailForChangePassword(SMTPDetails sMTPDetails, string emailId, string content, int TenantId);
     }
 }
