@@ -104,6 +104,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string ticketSourceType { get; set; }
         public int? ticketSourceTypeID { get; set; }
         public bool IsReassigned { get; set; }
+        public bool IsSLANearBreach { get; set; }
     }
 
     //public class TicketCreationDetails

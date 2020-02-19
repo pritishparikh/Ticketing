@@ -770,25 +770,49 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 UserCaller userCaller = new UserCaller();
 
                 customChangePassword = userCaller.SendMailforchangepassword(new UserServices(_connectioSting), userID, authenticate.TenantId, IsStoreUser);
+                if(customChangePassword.UserID >0 && customChangePassword.Password!=null && customChangePassword.EmailID !=null)
+                {
+                    MasterCaller masterCaller = new MasterCaller();
+                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
+                    securityCaller _securityCaller = new securityCaller();
+                    CommonService commonService = new CommonService();
+                    string encryptedUserId = commonService.Encrypt(customChangePassword.UserID.ToString());
+                    string decriptedPassword = commonService.Decrypt(customChangePassword.Password);
+                    string url = configuration.GetValue<string>("websiteURL") + "/ChangePassword";
+                    string body = "Hello, This is Demo Mail for testing purpose. <br/>" + "Your User Name is  : " + customChangePassword.EmailID + "<br/>" + "Your Password is : " + decriptedPassword + "<br/>" + "Click on Below link to change the Password <br/>" + url + "?Id=" + encryptedUserId;
+                    bool isUpdate = _securityCaller.sendMailForChangePassword(new SecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID,body,authenticate.TenantId);
+                    if (isUpdate)
+                    {
+                        _objResponseModel.Status = true;
+                        _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                        _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                        _objResponseModel.ResponseData = "Mail sent successfully";
+                    }
+                    else
+                    {
+                        _objResponseModel.Status = false;
+                        _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                        _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                        _objResponseModel.ResponseData = "Mail sent failure";
+                    }
+                }
 
-                MasterCaller masterCaller = new MasterCaller();
-                SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
-                securityCaller _securityCaller = new securityCaller();
-                CommonService commonService = new CommonService();
-                string encryptedUserId = commonService.Encrypt(customChangePassword.UserID.ToString());
-                string url = configuration.GetValue<string>("websiteURL") + "/changePassword";
-                string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url + "?Id=" + encryptedUserId;
-                bool isUpdate = _securityCaller.sendMail(new SecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID, body, authenticate.TenantId);
+                else
+                {
+                    _objResponseModel.Status = false;
+                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.RecordNotFound;
+                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.RecordNotFound);
+                    _objResponseModel.ResponseData = "Sorry User does not exist or active";
+                }
+                /* StatusCode =
+                isUpdate !=true ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                StatusCode =
-               customChangePassword ==null ?
-                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = customChangePassword;
+                 _objResponseModel.Status = true;
+                 _objResponseModel.StatusCode = StatusCode;
+                 _objResponseModel.Message = statusMessage;
+                 _objResponseModel.ResponseData = "Email Sent";*/
 
 
             }

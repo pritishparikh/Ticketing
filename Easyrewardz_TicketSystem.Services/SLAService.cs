@@ -331,7 +331,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Bind issuetype 
         /// </summary>
         /// 
-       public List<IssueTypeList> BindIssueTypeList(int tenantID)
+       public List<IssueTypeList> BindIssueTypeList(int tenantID, string SearchText)
         {
             List<IssueTypeList> objIssueTypeLst = new List<IssueTypeList>();
             DataSet ds = new DataSet();
@@ -346,7 +346,8 @@ namespace Easyrewardz_TicketSystem.Services
             cmd1.CommandType = CommandType.StoredProcedure;
             //cmd1.Parameters.AddWithValue("@_tenantID", 1);
             cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
-            MySqlDataAdapter da = new MySqlDataAdapter();
+            cmd1.Parameters.AddWithValue("@Search_Text", string.IsNullOrEmpty(SearchText) ? "" : SearchText);
+                MySqlDataAdapter da = new MySqlDataAdapter();
             da.SelectCommand = cmd1;
             da.Fill(ds);
 

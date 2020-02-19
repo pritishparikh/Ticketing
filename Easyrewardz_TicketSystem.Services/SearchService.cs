@@ -142,7 +142,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                             TaskStatus = Convert.ToString(r.Field<object>("TaskDetails")),
                             ClaimStatus = Convert.ToString(r.Field<object>("ClaimDetails")),
-                            TicketCommentCount = Convert.ToInt32(r.Field<object>("TicketComments")),
+                            //TicketCommentCount = Convert.ToInt32(r.Field<object>("TicketComments")),
+                            TicketCommentCount = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("TicketComments")))) ? 0 : Convert.ToInt32(r.Field<object>("TicketComments")),
                             isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated"))
 
                         }).ToList();
@@ -298,8 +299,9 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketCommentCount = Convert.ToInt32(r.Field<object>("TicketComments")),
                             isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated")),
                             ticketSourceType =  Convert.ToString(r.Field<object>("TicketSourceType")),
-                            ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID"))
-
+                            ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID")),
+                            IsReassigned = Convert.ToBoolean(r.Field<object>("IsReassigned")),
+                            IsSLANearBreach = Convert.ToBoolean(r.Field<object>("IsSLANearBreach"))
                         }).ToList();
                     }
                 }
@@ -494,8 +496,8 @@ namespace Easyrewardz_TicketSystem.Services
                             isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated")),
                             ticketSourceType = Convert.ToString(r.Field<object>("TicketSourceType")),
                             ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID")),
-                            IsReassigned = Convert.ToBoolean(r.Field<object>("IsReassigned"))
-
+                            IsReassigned = Convert.ToBoolean(r.Field<object>("IsReassigned")),
+                            IsSLANearBreach = Convert.ToBoolean(r.Field<object>("IsSLANearBreach"))
                         }).ToList();
                     }
                 }
