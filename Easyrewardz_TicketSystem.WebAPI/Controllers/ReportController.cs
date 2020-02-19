@@ -187,7 +187,49 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+        [HttpPost]
+        [Route("ReportSearch")]
+        public ResponseModel ReportSearch([FromBody]ReportSearchModel searchparams)
+        {
+            List<SearchResponseReport> _searchResult = null;
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            SettingsCaller _dbsearchMaster = new SettingsCaller();
+            try
+            {
 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                var temp = SecurityService.DecryptStringAES(_token);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                searchparams.TenantID = authenticate.TenantId; // add tenantID to request
+                searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
+
+
+                //searchparams.TenantID = 1; // add tenantID to request
+                //searchparams.curentUserId = 9; // add currentUserID to request
+                _searchResult = _dbsearchMaster.GetReportSearch(new ReportService(_connectioSting), searchparams);
+
+                StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _searchResult.Count > 0 ? _searchResult : null;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
         #endregion
     }
 }

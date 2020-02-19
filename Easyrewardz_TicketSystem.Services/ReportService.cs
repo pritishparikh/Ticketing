@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
@@ -159,7 +160,251 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        public List<SearchResponseReport> GetReportSearch(ReportSearchModel searchModel)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<SearchResponseReport> objSearchResult = new List<SearchResponseReport>();
+
+            List<string> CountList = new List<string>();
+
+            int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                cmd.Connection = conn;
+
+                /*Based on active tab stored procedure will call
+                    1. SP_SearchTicketData_ByDate
+                    2. SP_SearchTicketData_ByCustomerType
+                    3. SP_SearchTicketData_ByTicketType
+                    4. SP_SearchTicketData_ByCategoryType
+                    5. SP_SearchTicketData_ByAll                 
+                 */
+                MySqlCommand sqlcmd = new MySqlCommand("", conn);
+
+                // sqlcmd.Parameters.AddWithValue("HeaderStatus_Id", searchModel.HeaderStatusId);
+                sqlcmd.CommandText = "SP_SearchReportData";
+
+                /*Column 1 (5)*/
+                sqlcmd.Parameters.AddWithValue("Ticket_CreatedOn", string.IsNullOrEmpty(searchModel.reportSearch.CreatedDate) ? "" : searchModel.reportSearch.CreatedDate);
+                sqlcmd.Parameters.AddWithValue("Ticket_ModifiedOn", string.IsNullOrEmpty(searchModel.reportSearch.ModifiedDate) ? "" : searchModel.reportSearch.ModifiedDate);
+                sqlcmd.Parameters.AddWithValue("Category_Id", searchModel.reportSearch.CategoryId);
+                sqlcmd.Parameters.AddWithValue("SubCategory_Id", searchModel.reportSearch.SubCategoryId);
+                sqlcmd.Parameters.AddWithValue("IssueType_Id", searchModel.reportSearch.IssueTypeId);
+
+                /*Column 2 (5) */
+                sqlcmd.Parameters.AddWithValue("TicketSourceType_ID", searchModel.reportSearch.TicketSourceTypeID);
+                sqlcmd.Parameters.AddWithValue("TicketIdORTitle", string.IsNullOrEmpty(searchModel.reportSearch.TicketIdORTitle) ? "" : searchModel.reportSearch.TicketIdORTitle);
+                sqlcmd.Parameters.AddWithValue("Priority_Id", searchModel.reportSearch.PriorityId);
+                sqlcmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.reportSearch.TicketSatutsID);
+                sqlcmd.Parameters.AddWithValue("SLAStatus", string.IsNullOrEmpty(searchModel.reportSearch.SLAStatus) ? "" : searchModel.reportSearch.SLAStatus);
+
+                /*Column 3 (5)*/
+                sqlcmd.Parameters.AddWithValue("TicketClaim_ID", Convert.ToInt32(searchModel.reportSearch.ClaimId));
+                sqlcmd.Parameters.AddWithValue("InvoiceNumberORSubOrderNo", string.IsNullOrEmpty(searchModel.reportSearch.InvoiceNumberORSubOrderNo) ? "" : searchModel.reportSearch.InvoiceNumberORSubOrderNo);
+                sqlcmd.Parameters.AddWithValue("OrderItemId", string.IsNullOrEmpty(Convert.ToString(searchModel.reportSearch.OrderItemId)) ? 0 : Convert.ToInt32(searchModel.reportSearch.OrderItemId));
+                sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.reportSearch.IsVisitStore == "yes" ? 1 : 0);
+                sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", searchModel.reportSearch.IsWantVistingStore == "yes" ? 1 : 0);
+
+                /*Column 4 (5)*/
+                sqlcmd.Parameters.AddWithValue("Customer_EmailID", searchModel.reportSearch.CustomerEmailID);
+                sqlcmd.Parameters.AddWithValue("CustomerMobileNo", string.IsNullOrEmpty(searchModel.reportSearch.CustomerMobileNo) ? "" : searchModel.reportSearch.CustomerMobileNo);
+                sqlcmd.Parameters.AddWithValue("AssignTo", searchModel.reportSearch.AssignTo);
+                sqlcmd.Parameters.AddWithValue("StoreCodeORAddress", searchModel.reportSearch.StoreCodeORAddress);
+                sqlcmd.Parameters.AddWithValue("WantToStoreCodeORAddress", searchModel.reportSearch.WantToStoreCodeORAddress);
+
+                //Row - 2 and Column - 1  (5)
+                sqlcmd.Parameters.AddWithValue("HaveClaim", searchModel.reportSearch.HaveClaim);
+                sqlcmd.Parameters.AddWithValue("ClaimStatusId", searchModel.reportSearch.ClaimStatusId);
+                sqlcmd.Parameters.AddWithValue("ClaimCategoryId", searchModel.reportSearch.ClaimCategoryId);
+                sqlcmd.Parameters.AddWithValue("ClaimSubCategoryId", searchModel.reportSearch.ClaimSubCategoryId);
+                sqlcmd.Parameters.AddWithValue("ClaimIssueTypeId", searchModel.reportSearch.ClaimIssueTypeId);
+
+                //Row - 2 and Column - 2  (4)
+                sqlcmd.Parameters.AddWithValue("HaveTask", searchModel.reportSearch.HaveTask);
+                sqlcmd.Parameters.AddWithValue("TaskStatus_Id", searchModel.reportSearch.TaskStatusId);
+                sqlcmd.Parameters.AddWithValue("TaskDepartment_Id", searchModel.reportSearch.TaskDepartment_Id);
+                sqlcmd.Parameters.AddWithValue("TaskFunction_Id", searchModel.reportSearch.TaskFunction_Id);
+
+                sqlcmd.Parameters.AddWithValue("CurrentUserId", searchModel.curentUserId);
+                sqlcmd.Parameters.AddWithValue("Tenant_ID", searchModel.TenantID);
+                sqlcmd.Parameters.AddWithValue("Assignto_IDs", searchModel.reportSearch.AssignTo);
+                sqlcmd.Parameters.AddWithValue("Brand_IDs", searchModel.reportSearch.BrandID);
+
+                sqlcmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = sqlcmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objSearchResult = ds.Tables[0].AsEnumerable().Select(r => new SearchResponseReport()
+                        {
+                            ticketID = Convert.ToInt32(r.Field<object>("TicketID")),
+                            ticketStatus = Convert.ToString((EnumMaster.TicketStatus)Convert.ToInt32(r.Field<object>("StatusID"))),
+                            Message = r.Field<object>("TicketDescription") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TicketDescription")),
+                            Category = r.Field<object>("CategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CategoryName")),
+                            subCategory = r.Field<object>("SubCategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SubCategoryName")),
+                            IssueType = r.Field<object>("IssueTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueTypeName")),
+                            Priority = r.Field<object>("PriortyName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriortyName")),
+                            Assignee = r.Field<object>("AssignedName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
+                            CreatedOn = r.Field<object>("CreatedOn") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedOn")),
+                            createdBy = r.Field<object>("CreatedByName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedByName")),
+                            createdago = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("CreatedDate")), "CreatedSpan"),
+                            assignedTo = r.Field<object>("AssignedName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
+                            assignedago = r.Field<object>("AssignedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("AssignedDate")), "AssignedSpan"),
+                            updatedBy = r.Field<object>("ModifyByName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModifyByName")),
+                            updatedago = r.Field<object>("ModifiedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("ModifiedDate")), "ModifiedSpan"),
+
+                            responseTimeRemainingBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityRespond") == System.DBNull.Value) ?
+                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
+                            responseOverdueBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityRespond") == System.DBNull.Value) ?
+                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
+
+                            resolutionOverdueBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityResolve") == System.DBNull.Value) ?
+                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
+
+                            TaskStatus = r.Field<object>("TaskDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TaskDetails")),
+                            ClaimStatus = r.Field<object>("ClaimDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ClaimDetails")),
+                            TicketCommentCount = r.Field<object>("ClaimDetails") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TicketComments")),
+                            isEscalation = r.Field<object>("IsEscalated") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsEscalated")),
+                            ticketSourceType = Convert.ToString(r.Field<object>("TicketSourceType")),
+                            IsReassigned = Convert.ToBoolean(r.Field<object>("IsReassigned")),
+                            ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID"))
+                        }).ToList();
+                    }
+                }
+
+                //paging here
+                //if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
+                //    objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
+
+                //objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList();
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
+            return objSearchResult;
+        }
+
+        public string setCreationdetails(string time, string ColName)
+        {
+            string timespan = string.Empty;
+            DateTime now = DateTime.Now;
+            TimeSpan diff = new TimeSpan();
+            string[] PriorityArr = null;
+
+            try
+            {
+                if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
+                {
+                    diff = now - Convert.ToDateTime(time);
+                    timespan = CalculateSpan(diff) + " ago";
+
+                }
+                else if (ColName == "RespondTimeRemainingSpan")
+                {
+                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+
+                    switch (PriorityArr[1])
+                    {
+                        case "D":
+                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0]))) - now;
+
+                            break;
+
+                        case "H":
+                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0]))) - now;
+
+                            break;
+
+                        case "M":
+                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0]))) - now;
+
+                            break;
+
+                    }
+                    timespan = CalculateSpan(diff);
+                }
+                else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
+                {
+                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+
+                    switch (PriorityArr[1])
+                    {
+                        case "D":
+                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0])));
+
+                            break;
+
+                        case "H":
+                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0])));
+
+                            break;
+
+                        case "M":
+                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0])));
+
+                            break;
+
+                    }
+
+                    timespan = CalculateSpan(diff);
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+            finally
+            {
+                if (PriorityArr != null && PriorityArr.Length > 0)
+                    Array.Clear(PriorityArr, 0, PriorityArr.Length);
+            }
+            return timespan;
+        }
+
+        public string CalculateSpan(TimeSpan ts)
+        {
+            string span = string.Empty;
+
+            if (Math.Abs(ts.Days) > 0)
+            {
+                span = Convert.ToString(Math.Abs(ts.Days)) + " Days";
+            }
+            else if (Math.Abs(ts.Hours) > 0)
+            {
+                span = Convert.ToString(Math.Abs(ts.Hours)) + " Hours";
+            }
+            else if (Math.Abs(ts.Minutes) > 0)
+            {
+                span = Convert.ToString(Math.Abs(ts.Minutes)) + " Minutes";
+            }
+            else if (Math.Abs(ts.Seconds) > 0)
+            {
+                span = Convert.ToString(Math.Abs(ts.Seconds)) + " Seconds";
+            }
+
+            return span;
+        }
+
         #endregion
+
+
 
     }
 }

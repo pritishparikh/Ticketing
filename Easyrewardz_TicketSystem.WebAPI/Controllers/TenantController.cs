@@ -265,6 +265,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpGet]
         [Route("GetCompany")]
+        [AllowAnonymous]
         public ResponseModel GetCompanyType()
         {
             List<CompanyTypeModel> lstCompanyType = new List<CompanyTypeModel>();
@@ -277,7 +278,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 lstCompanyType = _newTenantCaller.GetCompanyType(new TenantService(_connectioSting));
 
