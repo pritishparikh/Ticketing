@@ -21,7 +21,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-   [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+  [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class UserController : ControllerBase
     {
         #region  Variable Declaration
@@ -776,10 +776,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
                     securityCaller _securityCaller = new securityCaller();
                     CommonService commonService = new CommonService();
-                    string encryptedUserId = commonService.Encrypt(customChangePassword.UserID.ToString());
+                    string encryptedEmailId = commonService.Encrypt(customChangePassword.EmailID);
                     string decriptedPassword = commonService.Decrypt(customChangePassword.Password);
                     string url = configuration.GetValue<string>("websiteURL") + "/ChangePassword";
-                    string body = "Hello, This is Demo Mail for testing purpose. <br/>" + "Your User Name is  : " + customChangePassword.EmailID + "<br/>" + "Your Password is : " + decriptedPassword + "<br/>" + "Click on Below link to change the Password <br/>" + url + "?Id=" + encryptedUserId;
+                    string body = "Hello, This is Demo Mail for testing purpose. <br/>" + "Your User Name is  : " + customChangePassword.EmailID + "<br/>" + "Your Password is : " + decriptedPassword + "<br/>" + "Click on Below link to change the Password <br/>" + url + "?Id=" + encryptedEmailId;
                     bool isUpdate = _securityCaller.sendMailForChangePassword(new SecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID,body,authenticate.TenantId);
                     if (isUpdate)
                     {
@@ -813,6 +813,59 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                  _objResponseModel.StatusCode = StatusCode;
                  _objResponseModel.Message = statusMessage;
                  _objResponseModel.ResponseData = "Email Sent";*/
+
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
+
+        /// <summary>
+        /// Change Password
+        /// </summary>
+        /// <param name=""></param>
+        [HttpPost]
+        [Route("ChangePassword")]
+        public ResponseModel ChangePassword([FromBody] CustomChangePassword customChangePassword, int IsStoreUser=1)
+        {
+            
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+               // CustomChangePassword CustomChangePassword = new CustomChangePassword();
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+               // UserCaller userCaller = new UserCaller();
+               // CustomChangePassword = userCaller.SendMailforchangepassword(new UserServices(_connectioSting), customChangePassword.UserID, authenticate.TenantId, IsStoreUser);
+
+                securityCaller _securityCaller = new securityCaller();
+                CommonService commonService = new CommonService();
+                customChangePassword.Password = commonService.Decrypt(customChangePassword.Password);
+                customChangePassword.NewPassword = commonService.Encrypt(customChangePassword.NewPassword);
+                bool Result = _securityCaller.ChangePassword(new SecurityService(_connectioSting), customChangePassword, authenticate.TenantId, authenticate.UserMasterID);
+
+                StatusCode =
+               Result == true ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = Result;
 
 
             }
