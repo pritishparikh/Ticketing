@@ -701,6 +701,8 @@ namespace Easyrewardz_TicketSystem.Services
         public bool ChangePassword(CustomChangePassword customChangePassword, int TenantId, int User_ID)
         {
             bool i=false;
+            int success = 0;
+
             try
             {
                 conn.Open();
@@ -713,7 +715,11 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 cmd.Parameters.AddWithValue("@User_ID", User_ID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                i = Convert.ToBoolean(cmd.ExecuteScalar());
+                success= cmd.ExecuteNonQuery();
+                if(success>0)
+                {
+                    i = true;
+                }             
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {

@@ -21,7 +21,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-  [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+ [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class UserController : ControllerBase
     {
         #region  Variable Declaration
@@ -853,12 +853,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 securityCaller _securityCaller = new securityCaller();
                 CommonService commonService = new CommonService();
-                customChangePassword.Password = commonService.Decrypt(customChangePassword.Password);
+                customChangePassword.Password = commonService.Encrypt(customChangePassword.Password);
                 customChangePassword.NewPassword = commonService.Encrypt(customChangePassword.NewPassword);
+                customChangePassword.EmailID = commonService.Decrypt(customChangePassword.EmailID);
                 bool Result = _securityCaller.ChangePassword(new SecurityService(_connectioSting), customChangePassword, authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =
-               Result == true ?
+               Result == false ?
                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
