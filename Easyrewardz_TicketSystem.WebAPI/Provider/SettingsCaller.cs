@@ -181,7 +181,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
         /// <summary>
-        /// Get AlertList
+        /// Get AlertList For Grid
        // / </summary>
         public List<AlertModel> GetAlertList(IAlerts Alert, int tenantID)
         {
@@ -189,6 +189,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Alerts.GetAlertList(tenantID);
 
         }
+
+        /// <summary>
+        /// Get AlertList For DropDown
+        // / </summary>
+        public List<AlertList> BindAlerts(IAlerts Alert, int tenantID)
+        {
+            _Alerts = Alert;
+            return _Alerts.BindAlerts(tenantID);
+
+        }
+
+        /// <summary>
+        /// Bulk Upload Alert in DB
+       // / </summary>
         public int AlertBulkUpload(IAlerts alerts, int TenantID, int CreatedBy, DataSet DataSetCSV)
         {
             _Alerts = alerts;
