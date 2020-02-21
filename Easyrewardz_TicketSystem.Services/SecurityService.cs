@@ -700,7 +700,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="UserID"></param>
         public bool ChangePassword(CustomChangePassword customChangePassword, int TenantId, int User_ID)
         {
-            bool i=false;
+            bool Result=false;
             int success = 0;
 
             try
@@ -715,10 +715,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 cmd.Parameters.AddWithValue("@User_ID", User_ID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                success= cmd.ExecuteNonQuery();
-                if(success>0)
+                success = Convert.ToInt32(cmd.ExecuteScalar());
+                if (success==1)
                 {
-                    i = true;
+                    Result = true;
                 }             
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
@@ -732,7 +732,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return i;
+            return Result;
         }
 
         #endregion
