@@ -776,10 +776,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
                     securityCaller _securityCaller = new securityCaller();
                     CommonService commonService = new CommonService();
-                    string encryptedEmailId = commonService.Encrypt(customChangePassword.EmailID);
-                    string decriptedPassword = commonService.Decrypt(customChangePassword.Password);
+                    string encryptedEmailId = SecurityService.Encrypt(customChangePassword.EmailID);
+                    string decriptedPassword = SecurityService.DecryptStringAES(customChangePassword.Password);
                     string url = configuration.GetValue<string>("websiteURL") + "/ChangePassword";
-                    string body = "Hello, This is Demo Mail for testing purpose. <br/>" + "Your User Name is  : " + customChangePassword.EmailID + "<br/>" + "Your Password is : " + decriptedPassword + "<br/>" + "Click on Below link to change the Password <br/>" + url + "?Id=" + encryptedEmailId;
+                    string body = "Hello, This is Demo Mail for testing purpose. <br/>" + "Your User Name is  : " + customChangePassword.EmailID + "<br/>" + "Your Password is : " + decriptedPassword + "<br/>" + "Click on Below link to change the Password <br/>" + url + "?Id:" + encryptedEmailId;
                     bool isUpdate = _securityCaller.sendMailForChangePassword(new SecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID,body,authenticate.TenantId);
                     if (isUpdate)
                     {
