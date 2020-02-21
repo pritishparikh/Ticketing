@@ -17,10 +17,11 @@ namespace Easyrewardz_TicketSystem.Model
 
         public bool isResolutionSuccess { get; set; }
         public string ResolutionRate { get; set; }
+        public string AvgResolutionTAT { get; set; }
 
         public bool isResponseSuccess { get; set; }
         public string ResponseRate { get; set; }
-       
+        public string AvgResponseTAT { get; set; }
 
         public int TaskClose { get; set; }
 
