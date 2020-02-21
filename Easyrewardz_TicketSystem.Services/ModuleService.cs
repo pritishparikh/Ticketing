@@ -40,8 +40,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ModuleID", ModuleID);
                 cmd.Parameters.AddWithValue("@_modifiedBy", ModifiedBy);
 
-                cmd.Parameters.AddWithValue("@_ActiveModuleItems", ModulesActive);
-                cmd.Parameters.AddWithValue("@_InactiveModuleItems", ModuleInactive);
+                cmd.Parameters.AddWithValue("@_ActiveModuleItems",!string.IsNullOrEmpty(ModulesActive)? ModulesActive: "");
+                cmd.Parameters.AddWithValue("@_InactiveModuleItems", !string.IsNullOrEmpty(ModuleInactive) ? ModuleInactive : "" );
         
                 cmd.CommandType = CommandType.StoredProcedure;
                 updatecount = cmd.ExecuteNonQuery();
