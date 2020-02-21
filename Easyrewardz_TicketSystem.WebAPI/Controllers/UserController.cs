@@ -777,6 +777,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     securityCaller _securityCaller = new securityCaller();
                     CommonService commonService = new CommonService();
                     string encryptedEmailId = SecurityService.Encrypt(customChangePassword.EmailID);
+
                     string decriptedPassword = SecurityService.DecryptStringAES(customChangePassword.Password);
                     string url = configuration.GetValue<string>("websiteURL") + "/ChangePassword";
                     string body = "Hello, This is Demo Mail for testing purpose. <br/>" + "Your User Name is  : " + customChangePassword.EmailID + "<br/>" + "Your Password is : " + decriptedPassword + "<br/>" + "Click on Below link to change the Password <br/>" + url + "?Id:" + encryptedEmailId;
@@ -853,9 +854,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 securityCaller _securityCaller = new securityCaller();
                 CommonService commonService = new CommonService();
-                customChangePassword.Password = commonService.Encrypt(customChangePassword.Password);
-                customChangePassword.NewPassword = commonService.Encrypt(customChangePassword.NewPassword);
-                customChangePassword.EmailID = commonService.Decrypt(customChangePassword.EmailID);
+                customChangePassword.Password = SecurityService.Encrypt(customChangePassword.Password);
+                customChangePassword.NewPassword = SecurityService.Encrypt(customChangePassword.NewPassword);
+                customChangePassword.EmailID = SecurityService.DecryptStringAES(customChangePassword.EmailID);
                 bool Result = _securityCaller.ChangePassword(new SecurityService(_connectioSting), customChangePassword, authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =
