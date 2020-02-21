@@ -386,8 +386,19 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.Parameters.AddWithValue("TicketClaim_ID", Convert.ToInt32(searchModel.searchDataByAll.ClaimId));
                     sqlcmd.Parameters.AddWithValue("InvoiceNumberORSubOrderNo", string.IsNullOrEmpty(searchModel.searchDataByAll.InvoiceNumberORSubOrderNo) ? "" : searchModel.searchDataByAll.InvoiceNumberORSubOrderNo);
                     sqlcmd.Parameters.AddWithValue("OrderItemId", string.IsNullOrEmpty(Convert.ToString(searchModel.searchDataByAll.OrderItemId)) ?  0 : Convert.ToInt32(searchModel.searchDataByAll.OrderItemId));
-                    sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.searchDataByAll.IsVisitStore == "yes" ? 1 : 0);
-                    sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", searchModel.searchDataByAll.IsWantVistingStore == "yes" ? 1 : 0);
+                    //sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.searchDataByAll.IsVisitStore == "yes" ? 1 : 0);
+                    //sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", searchModel.searchDataByAll.IsWantVistingStore == "yes" ? 1 : 0);
+
+                    /*All for to load all the data*/
+                    if (searchModel.searchDataByAll.IsVisitStore.ToLower() != "all")
+                        sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.searchDataByAll.IsVisitStore == "yes" ? 1 : 0);
+                    else
+                        sqlcmd.Parameters.AddWithValue("IsVisitedStore", -1);
+
+                    if (searchModel.searchDataByAll.IsWantVistingStore.ToLower() != "all")
+                        sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", searchModel.searchDataByAll.IsWantVistingStore == "yes" ? 1 : 0);
+                    else
+                        sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", -1);
 
                     /*Column 4 (5)*/
                     sqlcmd.Parameters.AddWithValue("Customer_EmailID", searchModel.searchDataByAll.CustomerEmailID);
