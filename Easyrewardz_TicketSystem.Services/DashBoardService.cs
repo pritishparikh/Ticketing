@@ -716,11 +716,12 @@ namespace Easyrewardz_TicketSystem.Services
             return listSavedSearch;
         }
 
-        public List<SearchResponseDashBoard> GetDashBoardTicketsOnSavedSearch(int TenantID, int UserID, int SearchParamID)
+        public DashBoardSavedSearch GetDashBoardTicketsOnSavedSearch(int TenantID, int UserID, int SearchParamID)
         {
             string jsonSearchParams = string.Empty;
             DataSet ds = new DataSet();
             SearchModelDashBoard searchModel = new SearchModelDashBoard();
+            DashBoardSavedSearch dbsavedsearch = new DashBoardSavedSearch();
             List<SearchResponseDashBoard> objSearchResult = new List<SearchResponseDashBoard>();
 
 
@@ -754,6 +755,9 @@ namespace Easyrewardz_TicketSystem.Services
                         searchModel.TenantID = TenantID;
                         searchModel.curentUserId = UserID;
                         objSearchResult = GetDashboardTicketsOnSearch(searchModel);
+                        dbsavedsearch.dbsearchParams = jsonSearchParams;
+                        dbsavedsearch.DashboardTicketList = objSearchResult;
+
 
                     }
 
@@ -769,7 +773,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (ds != null) ds.Dispose(); conn.Close();
             }
-            return objSearchResult;
+            return dbsavedsearch;
         }
 
         /// <summary>

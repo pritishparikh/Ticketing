@@ -20,6 +20,6 @@ namespace Easyrewardz_TicketSystem.Interface
         List<UserTicketSearchMaster> ListSavedDashBoardSearch(int UserID);
 
 
-        List<SearchResponseDashBoard> GetDashBoardTicketsOnSavedSearch(int TenantID, int UserID, int SearchParamID);
+        DashBoardSavedSearch GetDashBoardTicketsOnSavedSearch(int TenantID, int UserID, int SearchParamID);
     }
 }
