@@ -325,7 +325,8 @@ namespace Easyrewardz_TicketSystem.Services
         {
             string password = CommonService.GeneratePassword();
             CommonService commonService = new CommonService();
-            string encryptedPassword = commonService.Encrypt(password);
+            //string encryptedPassword = commonService.Encrypt(password);
+            string encryptedPassword = SecurityService.Encrypt(password);
 
             int success = 0;
             try
