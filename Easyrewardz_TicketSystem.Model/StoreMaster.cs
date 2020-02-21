@@ -17,6 +17,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string StoreCode { get; set; }
         public int RegionID { get; set; }
         public int ZoneID { get; set; }
+        
         public int StoreTypeID { get; set; }
         public string StoreEmailID { get; set; }
         public string StorePhoneNo { get; set; }
@@ -25,7 +26,8 @@ namespace Easyrewardz_TicketSystem.Model
         public DateTime CreatedDate { get; set; }
         public int? ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
-
+        public string StoreVisitDate { get; set; }
+        public int Purpose { get; set; }
         public string Pincode { get; set; }
 
         public string BrandIDs { get; set; }
