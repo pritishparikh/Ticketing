@@ -15,6 +15,7 @@ namespace Easyrewardz_TicketSystem.Services
     public class TicketingService : ITicketing
     {
 
+
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
         public TicketingService(string _connectionString)
