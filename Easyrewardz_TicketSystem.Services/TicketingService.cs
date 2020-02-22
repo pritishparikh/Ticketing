@@ -581,6 +581,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
 
             int i = 0;
+            int scheduleID = 0;
             try
             {
                 conn.Open();
@@ -588,6 +589,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Report_Name",string.IsNullOrEmpty(scheduleMaster.ReportName)==true?"": scheduleMaster.ReportName);
                 cmd.Parameters.AddWithValue("@Schedule_For", scheduleMaster.ScheduleFor);
                 cmd.Parameters.AddWithValue("@Schedule_Type", scheduleMaster.ScheduleType);
                 cmd.Parameters.AddWithValue("@Schedule_Time", scheduleMaster.ScheduleTime);
@@ -611,8 +613,11 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@NameOfMonthForDaily_Year", scheduleMaster.NameOfMonthForDailyYear);
                 cmd.Parameters.AddWithValue("@NoOfDayForDaily_Year", scheduleMaster.NoOfDayForDailyYear);
                 cmd.Parameters.AddWithValue("@SearchInput_Params", scheduleMaster.SearchInputParams);
+                cmd.Parameters.AddWithValue("@Schedule_ID", "");
+                cmd.Parameters["@Schedule_ID"].Direction = ParameterDirection.Output;
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
+                scheduleID = Convert.ToInt32(cmd.Parameters["@Schedule_ID"].Value);
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
@@ -625,7 +630,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return i;
+            return scheduleID;
         }
 
         /// <summary>

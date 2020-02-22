@@ -22,6 +22,11 @@ namespace Easyrewardz_TicketSystem.Model
         public string ScheduleFor { get; set; }
 
         /// <summary>
+        /// ReportName
+        /// </summary>
+        public string ReportName { get; set; }
+
+        /// <summary>
         /// Schedule Type
         /// </summary>
         public int ScheduleType { get; set; }

@@ -17,6 +17,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<ReportModel> GetReportList(int tenantID);
 
-        List<SearchResponseReport> GetReportSearch(ReportSearchModel searchModel);
+        int GetReportSearch(ReportSearchModel searchModel);
     }
 }

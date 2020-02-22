@@ -160,7 +160,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
-        public List<SearchResponseReport> GetReportSearch(ReportSearchModel searchModel)
+        public int GetReportSearch(ReportSearchModel searchModel)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -168,7 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             List<string> CountList = new List<string>();
 
-            int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
+            int resultCount = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -187,6 +187,8 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand sqlcmd = new MySqlCommand("", conn);
 
                 // sqlcmd.Parameters.AddWithValue("HeaderStatus_Id", searchModel.HeaderStatusId);
+                // sqlcmd.CommandText = "SP_SearchReportData";
+
                 sqlcmd.CommandText = "SP_SearchReportData";
 
                 /*Column 1 (5)*/
@@ -204,7 +206,7 @@ namespace Easyrewardz_TicketSystem.Services
                 sqlcmd.Parameters.AddWithValue("SLAStatus", string.IsNullOrEmpty(searchModel.reportSearch.SLAStatus) ? "" : searchModel.reportSearch.SLAStatus);
 
                 /*Column 3 (5)*/
-                sqlcmd.Parameters.AddWithValue("TicketClaim_ID", Convert.ToInt32(searchModel.reportSearch.ClaimId));
+                sqlcmd.Parameters.AddWithValue("TicketClaim_ID", Convert.ToInt32(searchModel.reportSearch.ClaimId==""?"0": searchModel.reportSearch.ClaimId));
                 sqlcmd.Parameters.AddWithValue("InvoiceNumberORSubOrderNo", string.IsNullOrEmpty(searchModel.reportSearch.InvoiceNumberORSubOrderNo) ? "" : searchModel.reportSearch.InvoiceNumberORSubOrderNo);
                 sqlcmd.Parameters.AddWithValue("OrderItemId", string.IsNullOrEmpty(Convert.ToString(searchModel.reportSearch.OrderItemId)) ? 0 : Convert.ToInt32(searchModel.reportSearch.OrderItemId));
                 sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.reportSearch.IsVisitStore == "yes" ? 1 : 0);
@@ -229,11 +231,12 @@ namespace Easyrewardz_TicketSystem.Services
                 sqlcmd.Parameters.AddWithValue("TaskStatus_Id", searchModel.reportSearch.TaskStatusId);
                 sqlcmd.Parameters.AddWithValue("TaskDepartment_Id", searchModel.reportSearch.TaskDepartment_Id);
                 sqlcmd.Parameters.AddWithValue("TaskFunction_Id", searchModel.reportSearch.TaskFunction_Id);
+           //     sqlcmd.Parameters.AddWithValue("Task_Priority", searchModel.reportSearch.TaskPriority);
 
                 sqlcmd.Parameters.AddWithValue("CurrentUserId", searchModel.curentUserId);
                 sqlcmd.Parameters.AddWithValue("Tenant_ID", searchModel.TenantID);
-                sqlcmd.Parameters.AddWithValue("Assignto_IDs", searchModel.reportSearch.AssignTo);
-                sqlcmd.Parameters.AddWithValue("Brand_IDs", searchModel.reportSearch.BrandID);
+                sqlcmd.Parameters.AddWithValue("Assignto_IDs", searchModel.reportSearch.AssignTo.ToString());
+                sqlcmd.Parameters.AddWithValue("Brand_IDs", searchModel.reportSearch.BrandID.ToString());
 
                 sqlcmd.CommandType = CommandType.StoredProcedure;
 
@@ -245,43 +248,45 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        objSearchResult = ds.Tables[0].AsEnumerable().Select(r => new SearchResponseReport()
-                        {
-                            ticketID = Convert.ToInt32(r.Field<object>("TicketID")),
-                            ticketStatus = Convert.ToString((EnumMaster.TicketStatus)Convert.ToInt32(r.Field<object>("StatusID"))),
-                            Message = r.Field<object>("TicketDescription") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TicketDescription")),
-                            Category = r.Field<object>("CategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CategoryName")),
-                            subCategory = r.Field<object>("SubCategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SubCategoryName")),
-                            IssueType = r.Field<object>("IssueTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueTypeName")),
-                            Priority = r.Field<object>("PriortyName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriortyName")),
-                            Assignee = r.Field<object>("AssignedName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
-                            CreatedOn = r.Field<object>("CreatedOn") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedOn")),
-                            createdBy = r.Field<object>("CreatedByName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedByName")),
-                            createdago = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("CreatedDate")), "CreatedSpan"),
-                            assignedTo = r.Field<object>("AssignedName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
-                            assignedago = r.Field<object>("AssignedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("AssignedDate")), "AssignedSpan"),
-                            updatedBy = r.Field<object>("ModifyByName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModifyByName")),
-                            updatedago = r.Field<object>("ModifiedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("ModifiedDate")), "ModifiedSpan"),
+                        resultCount =Convert.ToInt32(ds.Tables[0].Rows[0]["RowCount"]);
 
-                            responseTimeRemainingBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityRespond") == System.DBNull.Value) ?
-                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
-                            responseOverdueBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityRespond") == System.DBNull.Value) ?
-                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
+                        //objSearchResult = ds.Tables[0].AsEnumerable().Select(r => new SearchResponseReport()
+                        //{
+                        //    ticketID = Convert.ToInt32(r.Field<object>("TicketID")),
+                        //    ticketStatus = Convert.ToString((EnumMaster.TicketStatus)Convert.ToInt32(r.Field<object>("StatusID"))),
+                        //    Message = r.Field<object>("TicketDescription") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TicketDescription")),
+                        //    Category = r.Field<object>("CategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CategoryName")),
+                        //    subCategory = r.Field<object>("SubCategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SubCategoryName")),
+                        //    IssueType = r.Field<object>("IssueTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueTypeName")),
+                        //    Priority = r.Field<object>("PriortyName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriortyName")),
+                        //    Assignee = r.Field<object>("AssignedName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
+                        //    CreatedOn = r.Field<object>("CreatedOn") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedOn")),
+                        //    createdBy = r.Field<object>("CreatedByName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedByName")),
+                        //    createdago = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("CreatedDate")), "CreatedSpan"),
+                        //    assignedTo = r.Field<object>("AssignedName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
+                        //    assignedago = r.Field<object>("AssignedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("AssignedDate")), "AssignedSpan"),
+                        //    updatedBy = r.Field<object>("ModifyByName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModifyByName")),
+                        //    updatedago = r.Field<object>("ModifiedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("ModifiedDate")), "ModifiedSpan"),
 
-                            resolutionOverdueBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityResolve") == System.DBNull.Value) ?
-                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
+                        //    responseTimeRemainingBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityRespond") == System.DBNull.Value) ?
+                        //    string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
+                        //    responseOverdueBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityRespond") == System.DBNull.Value) ?
+                        //    string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
 
-                            TaskStatus = r.Field<object>("TaskDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TaskDetails")),
-                            ClaimStatus = r.Field<object>("ClaimDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ClaimDetails")),
-                            TicketCommentCount = r.Field<object>("ClaimDetails") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TicketComments")),
-                            isEscalation = r.Field<object>("IsEscalated") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsEscalated")),
-                            ticketSourceType = Convert.ToString(r.Field<object>("TicketSourceType")),
-                            IsReassigned = Convert.ToBoolean(r.Field<object>("IsReassigned")),
-                            ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID"))
-                        }).ToList();
+                        //    resolutionOverdueBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityResolve") == System.DBNull.Value) ?
+                        //    string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
+
+                        //    TaskStatus = r.Field<object>("TaskDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TaskDetails")),
+                        //    ClaimStatus = r.Field<object>("ClaimDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ClaimDetails")),
+                        //    TicketCommentCount = r.Field<object>("ClaimDetails") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TicketComments")),
+                        //    isEscalation = r.Field<object>("IsEscalated") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsEscalated")),
+                        //    ticketSourceType = Convert.ToString(r.Field<object>("TicketSourceType")),
+                        //    IsReassigned = Convert.ToBoolean(r.Field<object>("IsReassigned")),
+                        //    ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID"))
+                        //}).ToList();
                     }
                 }
-
+               // return resultCount;
                 //paging here
                 //if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
                 //    objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
@@ -297,7 +302,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (ds != null) ds.Dispose(); conn.Close();
             }
-            return objSearchResult;
+            return resultCount;
         }
 
         public string setCreationdetails(string time, string ColName)

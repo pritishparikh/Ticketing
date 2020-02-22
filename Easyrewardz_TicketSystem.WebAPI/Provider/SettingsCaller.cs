@@ -245,7 +245,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Reports.GetReportList(tenantID);
         }
 
-        public List<SearchResponseReport> GetReportSearch(IReports Report,ReportSearchModel searchModel)
+        public int GetReportSearch(IReports Report,ReportSearchModel searchModel)
         {
             _Reports = Report;
             return _Reports.GetReportSearch(searchModel);

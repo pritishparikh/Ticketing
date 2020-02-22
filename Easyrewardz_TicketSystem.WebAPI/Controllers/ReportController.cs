@@ -195,6 +195,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
+            int resultCount = 0;
             SettingsCaller _dbsearchMaster = new SettingsCaller();
             try
             {
@@ -210,14 +211,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 //searchparams.TenantID = 1; // add tenantID to request
                 //searchparams.curentUserId = 9; // add currentUserID to request
-                _searchResult = _dbsearchMaster.GetReportSearch(new ReportService(_connectioSting), searchparams);
+                resultCount = _dbsearchMaster.GetReportSearch(new ReportService(_connectioSting), searchparams);
 
-                StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                StatusCode = resultCount > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _searchResult.Count > 0 ? _searchResult : null;
+                _objResponseModel.ResponseData =resultCount;
             }
             catch (Exception ex)
             {
