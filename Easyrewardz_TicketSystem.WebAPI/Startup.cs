@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.DBContext;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -93,6 +95,20 @@ namespace Easyrewardz_TicketSystem.WebAPI
             app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseForwardedHeaders();
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "TicketAttachment")),
+                RequestPath = "/TicketAttachment"
+            });
+            //Enable directory browsing
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                            Path.Combine(Directory.GetCurrentDirectory(), "TicketAttachment")),
+                RequestPath = "/TicketAttachment"
+            });
             //         app.UseCors(
             //    options => options.WithOrigins("*").AllowAnyMethod()
             //);

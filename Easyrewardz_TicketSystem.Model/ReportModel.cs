@@ -8,6 +8,7 @@ namespace Easyrewardz_TicketSystem.Model
     {
         public int ReportID { get; set; }
         public int ScheduleID { get; set; }
+        public int IsDownloaded { get; set; }
         public string ReportName { get; set; }
         public string ScheduleStatus { get; set; }
         public string ReportStatus { get; set; }

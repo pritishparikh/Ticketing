@@ -138,8 +138,55 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+        /// <summary>
+        /// Save Report for download.Update Isdownload flag in ReportMaster
+        /// </summary>
+        /// <param name="ScheduleID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("SaveReportForDownload")]
+        public ResponseModel SaveReportForDownload(int ScheduleID)
+        {
+            int saveCount = 0;
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
+                SettingsCaller _newReport = new SettingsCaller();
 
+                saveCount = _newReport.SaveReportForDownload(new ReportService(_connectioSting), authenticate.TenantId,authenticate.UserMasterID, ScheduleID);
+
+                StatusCode =
+                saveCount == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = saveCount;
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
         /// <summary>
         /// Delete Report
         /// </summary>

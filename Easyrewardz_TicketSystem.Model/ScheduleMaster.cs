@@ -137,6 +137,16 @@ namespace Easyrewardz_TicketSystem.Model
         public string SearchInputParams { get; set; }
 
         /// <summary>
+        /// Schedule From  
+        /// </summary
+        public int? ScheduleFrom { get; set; }
+
+        /// <summary>
+        /// Schedule From  
+        /// </summary
+        public int? PrimaryScheduleID { get; set; }
+
+        /// <summary>
         /// IsActive   
         /// </summary
         public bool IsActive { get; set; }

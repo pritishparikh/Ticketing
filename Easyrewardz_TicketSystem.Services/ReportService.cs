@@ -25,7 +25,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Delete Report
         /// </summary>
-        public int DeleteReport(int tenantID, int ReportID)
+        public int DeleteReport(int tenantID,int ReportID)
         {
             int deletecount = 0;
             try
@@ -57,6 +57,40 @@ namespace Easyrewardz_TicketSystem.Services
             return deletecount;
         }
 
+
+        /// <summary>
+        /// Delete Report
+        /// </summary>
+        public int SaveReportForDownload(int tenantID, int UserID,int ScheduleID)
+        {
+            int saveCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_SaveReport", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Tenant_Id", tenantID);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Schedule_ID", ScheduleID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                saveCount = cmd.ExecuteNonQuery();
+            }
+
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return saveCount;
+        }
         /// <summary>
         /// Create Report 
         /// </summary>
@@ -131,6 +165,7 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             ReportID = Convert.ToInt32(r.Field<object>("ReportID")),
                             ScheduleID = Convert.ToInt32(r.Field<object>("ScheduleID")),
+                            IsDownloaded = Convert.ToInt32(r.Field<object>("IsDownloaded")),
                             ReportName = r.Field<object>("ReportName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ReportName")),
                             ReportStatus= r.Field<object>("ReportStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ReportStatus")),
                             ScheduleStatus = r.Field<object>("ScheduleStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleStatus")),
