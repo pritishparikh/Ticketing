@@ -252,6 +252,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
+        public int SaveReportForDownload(IReports Report, int tenantID,int UserID, int ScheduleID)
+        {
+            _Reports = Report;
+            return _Reports.SaveReportForDownload(tenantID,UserID,ScheduleID);
+
+        }
 
         public List<ReportModel > GetReportList(IReports Report, int tenantID)
         {
