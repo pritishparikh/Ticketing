@@ -50,4 +50,13 @@ namespace Easyrewardz_TicketSystem.Model
 
     }
 
+    public class AlertList
+    {
+        public int AlertID { get; set; }
+        public string AlertTypeName { get; set; }
+        public bool isAlertActive { get; set; }
+    }
+
+
+
 }

@@ -34,8 +34,12 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet Graphds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             DashBoardDataModel dashBoarddata = new DashBoardDataModel();
+            DateTime date = new DateTime();
+            TimeSpan ts = new TimeSpan();
             // DashBoardGraphModel dashBoardGraphdata = new DashBoardGraphModel();
-            int TotalTickets = 0; int resolvedTickets = 0; int UnresolvedTickets = 0;
+            int TotalTickets = 0;
+            int respondedTickets = 0; int UnrespondedTickets = 0; int TotalResponseTime = 0;
+            int resolvedTickets = 0; int UnresolvedTickets = 0;int TotalResolutionTime = 0;
             try
             {
                 conn.Open();
@@ -101,36 +105,66 @@ namespace Easyrewardz_TicketSystem.Services
                         dashBoarddata.ClaimClose = ds.Tables[8].Rows[0]["ClaimClose"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[8].Rows[0]["ClaimClose"]) : 0;
                     }
 
-                    if (ds.Tables[9].Rows.Count > 0) //Response SLA  ----hardcoded for now-----
-                    {
-                        dashBoarddata.ResponseRate = ds.Tables[9].Rows[0]["ResponseSLA"] != System.DBNull.Value ? Convert.ToString(ds.Tables[9].Rows[0]["ResponseSLA"]) + "%" : "";
-                        dashBoarddata.isResponseSuccess = true;
-                    }
+                    //if (ds.Tables[9].Rows.Count > 0) //Response SLA  ----hardcoded for now-----
+                    //{
+                    //    dashBoarddata.ResponseRate = ds.Tables[9].Rows[0]["ResponseSLA"] != System.DBNull.Value ? Convert.ToString(ds.Tables[9].Rows[0]["ResponseSLA"]) + "%" : "";
+                    //    dashBoarddata.isResponseSuccess = true;
+                    //}
 
 
-                    if ((ds.Tables[10].Rows.Count > 0)) //Resolution SLA
+                    if ((ds.Tables[9].Rows.Count > 0)) //Resolution SLA
                     {
-                        TotalTickets = ds.Tables[10].Rows[0]["TotalTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[10].Rows[0]["TotalTickets"]) : 0;
-                        resolvedTickets = ds.Tables[10].Rows[0]["ResolvedTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[10].Rows[0]["ResolvedTickets"]) : 0;
-                        UnresolvedTickets = ds.Tables[10].Rows[0]["UnresolvedTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[10].Rows[0]["UnresolvedTickets"]) : 0;
+                        TotalTickets = ds.Tables[9].Rows[0]["TotalTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["TotalTickets"]) : 0;
+                        respondedTickets = ds.Tables[9].Rows[0]["RespondedTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["RespondedTickets"]) : 0;
+                        resolvedTickets = ds.Tables[9].Rows[0]["ResolvedTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["ResolvedTickets"]) : 0;
+
+                        UnrespondedTickets = ds.Tables[9].Rows[0]["UnRespondedTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["UnRespondedTickets"]) : 0;
+                        TotalResponseTime = ds.Tables[9].Rows[0]["TotalRespondTime"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["TotalRespondTime"]) : 0;
+                        UnresolvedTickets = ds.Tables[9].Rows[0]["UnresolvedTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["UnresolvedTickets"]) : 0;
+                        TotalResolutionTime = ds.Tables[9].Rows[0]["TotalResolutionTime"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["TotalResolutionTime"]) : 0;
 
                         if (TotalTickets > 0)
                         {
-                            if (resolvedTickets > 0)
+                            #region response SLA calculation
+
+                            dashBoarddata.isResponseSuccess = respondedTickets > 0;
+                            dashBoarddata.isResolutionSuccess = resolvedTickets > 0;
+
+                            dashBoarddata.ResponseRate= ds.Tables[9].Rows[0]["ResponseRate"] != System.DBNull.Value ? Convert.ToString(ds.Tables[9].Rows[0]["ResponseRate"]) : "0%";
+                            dashBoarddata.ResolutionRate = ds.Tables[9].Rows[0]["ResolutionRate"] != System.DBNull.Value ? Convert.ToString(ds.Tables[9].Rows[0]["ResolutionRate"]) : "0%";
+
+                            if (TotalResponseTime > 0)
                             {
-                                dashBoarddata.ResolutionRate = Convert.ToString(Math.Round(Convert.ToDouble((resolvedTickets / TotalTickets) * 100), 2)) + "%";
-                                dashBoarddata.isResolutionSuccess = true;
+                                ts = date.AddHours(TotalResponseTime / UnrespondedTickets) - date;
+                                dashBoarddata.AvgResponseTAT = ts.Days + "d " + ts.Hours + "h";
                             }
                             else
                             {
-                                int test = UnresolvedTickets / TotalTickets * 100;
-                                dashBoarddata.ResolutionRate = Convert.ToString(Math.Round(Convert.ToDouble((UnresolvedTickets / TotalTickets) * 100), 2)) + "%";
-                                dashBoarddata.isResolutionSuccess = false;
-                            }
+                                dashBoarddata.AvgResponseTAT = "0d 0h";
 
+                            }
+                            #endregion
+
+                            #region resolution SLA calculation
+                            date = new DateTime();
+                            
+
+                            if (TotalResolutionTime > 0)
+                            {
+                                ts = date.AddHours(TotalResolutionTime/ UnresolvedTickets) - date;
+                                dashBoarddata.AvgResolutionTAT = ts.Days + "d " + ts.Hours + "h";
+                            }
+                            else
+                            {
+                                dashBoarddata.AvgResolutionTAT = "0d 0h";
+                            
+                            }
+                            #endregion
                         }
                         else
                         {
+                            dashBoarddata.isResponseSuccess = false;
+                            dashBoarddata.ResponseRate = "0 %";
                             dashBoarddata.isResolutionSuccess = false;
                             dashBoarddata.ResolutionRate = "0 %";
                         }
@@ -352,8 +386,19 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.Parameters.AddWithValue("TicketClaim_ID", Convert.ToInt32(searchModel.searchDataByAll.ClaimId));
                     sqlcmd.Parameters.AddWithValue("InvoiceNumberORSubOrderNo", string.IsNullOrEmpty(searchModel.searchDataByAll.InvoiceNumberORSubOrderNo) ? "" : searchModel.searchDataByAll.InvoiceNumberORSubOrderNo);
                     sqlcmd.Parameters.AddWithValue("OrderItemId", string.IsNullOrEmpty(Convert.ToString(searchModel.searchDataByAll.OrderItemId)) ?  0 : Convert.ToInt32(searchModel.searchDataByAll.OrderItemId));
-                    sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.searchDataByAll.IsVisitStore == "yes" ? 1 : 0);
-                    sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", searchModel.searchDataByAll.IsWantVistingStore == "yes" ? 1 : 0);
+                    //sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.searchDataByAll.IsVisitStore == "yes" ? 1 : 0);
+                    //sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", searchModel.searchDataByAll.IsWantVistingStore == "yes" ? 1 : 0);
+
+                    /*All for to load all the data*/
+                    if (searchModel.searchDataByAll.IsVisitStore.ToLower() != "all")
+                        sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.searchDataByAll.IsVisitStore == "yes" ? 1 : 0);
+                    else
+                        sqlcmd.Parameters.AddWithValue("IsVisitedStore", -1);
+
+                    if (searchModel.searchDataByAll.IsWantVistingStore.ToLower() != "all")
+                        sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", searchModel.searchDataByAll.IsWantVistingStore == "yes" ? 1 : 0);
+                    else
+                        sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", -1);
 
                     /*Column 4 (5)*/
                     sqlcmd.Parameters.AddWithValue("Customer_EmailID", searchModel.searchDataByAll.CustomerEmailID);
@@ -671,11 +716,12 @@ namespace Easyrewardz_TicketSystem.Services
             return listSavedSearch;
         }
 
-        public List<SearchResponseDashBoard> GetDashBoardTicketsOnSavedSearch(int TenantID, int UserID, int SearchParamID)
+        public DashBoardSavedSearch GetDashBoardTicketsOnSavedSearch(int TenantID, int UserID, int SearchParamID)
         {
             string jsonSearchParams = string.Empty;
             DataSet ds = new DataSet();
             SearchModelDashBoard searchModel = new SearchModelDashBoard();
+            DashBoardSavedSearch dbsavedsearch = new DashBoardSavedSearch();
             List<SearchResponseDashBoard> objSearchResult = new List<SearchResponseDashBoard>();
 
 
@@ -709,6 +755,9 @@ namespace Easyrewardz_TicketSystem.Services
                         searchModel.TenantID = TenantID;
                         searchModel.curentUserId = UserID;
                         objSearchResult = GetDashboardTicketsOnSearch(searchModel);
+                        dbsavedsearch.dbsearchParams = jsonSearchParams;
+                        dbsavedsearch.DashboardTicketList = objSearchResult;
+
 
                     }
 
@@ -724,7 +773,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (ds != null) ds.Dispose(); conn.Close();
             }
-            return objSearchResult;
+            return dbsavedsearch;
         }
 
         /// <summary>

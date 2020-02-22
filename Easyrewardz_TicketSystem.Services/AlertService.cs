@@ -170,6 +170,58 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Alert List
         /// </summary>
+        public List<AlertList> BindAlerts(int tenantID)
+        {
+            List<AlertList> objAlertLst = new List<AlertList>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+
+                conn.Open();
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("SP_BindAlerts", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objAlertLst = ds.Tables[0].AsEnumerable().Select(r => new AlertList()
+                        {
+                            AlertID = Convert.ToInt32(r.Field<object>("AlertID")),
+                            AlertTypeName = r.Field<object>("AlertTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AlertTypeName")),
+                            isAlertActive = r.Field<object>("IsActive") == System.DBNull.Value ? false : Convert.ToBoolean(Convert.ToInt16(r.Field<object>("IsActive")))
+
+                        }).ToList();
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
+
+
+            return objAlertLst;
+
+        }
+
+        /// <summary>
+        /// Get Alert List
+        /// </summary>
         public List<AlertModel> GetAlertList(int tenantID)
         {
             List<AlertModel> objAlertLst = new List<AlertModel>();

@@ -58,6 +58,13 @@ namespace Easyrewardz_TicketSystem.Model
         public bool IsSLANearBreach { get; set; }
     }
 
+    public class DashBoardSavedSearch
+    {
+        public string dbsearchParams { get; set; }
+        public List<SearchResponseDashBoard> DashboardTicketList { get; set; }
+    }
+
+
     public class SearchDataByDate
     {
 

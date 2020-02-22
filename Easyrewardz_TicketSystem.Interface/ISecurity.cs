@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Model;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -67,5 +68,13 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="content"></param>
         /// <returns></returns>
         bool sendMailForChangePassword(SMTPDetails sMTPDetails, string emailId, string content, int TenantId);
+
+        /// <summary>
+        /// Change Password
+        /// </summary>
+        /// <param name="emailId"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        bool ChangePassword(CustomChangePassword customChangePassword, int TenantId,int UserID);
     }
 }

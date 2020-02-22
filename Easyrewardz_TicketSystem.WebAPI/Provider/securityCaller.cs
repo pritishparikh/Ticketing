@@ -1,4 +1,5 @@
 ﻿
+using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
@@ -115,6 +116,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _SecurityRepository = security;
             return _SecurityRepository.validateProgramCode(Programcode, Domainname);
         }
-        #endregion
-    }
+        public bool ChangePassword(ISecurity security, CustomChangePassword customChangePassword, int TenantId, int UserID)
+        {
+            _SecurityRepository = security;
+            return _SecurityRepository.ChangePassword(customChangePassword, TenantId, UserID);
+        }
+    #endregion
+}
 }

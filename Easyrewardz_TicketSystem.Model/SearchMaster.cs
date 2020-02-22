@@ -107,6 +107,13 @@ namespace Easyrewardz_TicketSystem.Model
         public bool IsSLANearBreach { get; set; }
     }
 
+    public class TicketSaveSearch
+    {
+        public string searchParams { get; set; }
+        public List<SearchResponse> ticketList { get; set; }
+    }
+
+
     //public class TicketCreationDetails
     //{
     //    public string createdBy { get; set; }

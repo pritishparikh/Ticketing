@@ -47,7 +47,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _searchList.GetTicketsOnSearch(searchModel);
         }
 
-        public List<SearchResponse> GetTicketsOnSavedSearch(ISearchTicket _search, int TenantID, int UserID, int SearchParamID)
+        public TicketSaveSearch GetTicketsOnSavedSearch(ISearchTicket _search, int TenantID, int UserID, int SearchParamID)
         {
             _searchList = _search;
             return _searchList.GetTicketsOnSavedSearch(TenantID,  UserID, SearchParamID);

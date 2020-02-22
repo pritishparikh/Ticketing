@@ -72,7 +72,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-        public List<SearchResponseDashBoard> GetDashBoardTicketsOnSavedSearch(IDashBoard _dashboard, int TenantID, int UserID, int SearchParamID)
+        public DashBoardSavedSearch GetDashBoardTicketsOnSavedSearch(IDashBoard _dashboard, int TenantID, int UserID, int SearchParamID)
         {
             _dashboardlist = _dashboard;
             return _dashboardlist.GetDashBoardTicketsOnSavedSearch(TenantID, UserID, SearchParamID);

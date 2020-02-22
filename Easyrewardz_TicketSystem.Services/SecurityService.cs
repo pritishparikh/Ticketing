@@ -14,6 +14,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using Easyrewardz_TicketSystem.CustomModel;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -690,6 +691,48 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw (ex);
             }
+        }
+        /// <summary>
+        /// Change Passsword
+        /// </summary>
+        /// <param name="CustomChangePassword"></param>
+        /// <param name="TenantId"></param>
+        /// <param name="UserID"></param>
+        public bool ChangePassword(CustomChangePassword customChangePassword, int TenantId, int User_ID)
+        {
+            bool Result=false;
+            int success = 0;
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_ChangePassword", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_Password", customChangePassword.Password);
+                cmd.Parameters.AddWithValue("@_NewPassword", customChangePassword.NewPassword);
+                //cmd.Parameters.AddWithValue("@_UserID", customChangePassword.UserID);
+                cmd.Parameters.AddWithValue("@Email_ID", customChangePassword.EmailID);
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
+                cmd.Parameters.AddWithValue("@User_ID", User_ID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd.ExecuteScalar());
+                if (success==1)
+                {
+                    Result = true;
+                }             
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return Result;
         }
 
         #endregion

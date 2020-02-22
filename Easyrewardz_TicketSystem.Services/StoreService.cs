@@ -206,12 +206,14 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         StoreMaster store = new StoreMaster();
-                        store.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        store.Pincode = Convert.ToString(ds.Tables[0].Rows[i]["Pincode"]);
-                        store.StoreEmailID = Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
-                        store.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        store.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        store.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        store.Pincode = ds.Tables[0].Rows[i]["Pincode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Pincode"]);
+                        store.StoreEmailID = ds.Tables[0].Rows[i]["StoreEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
+                        store.Address = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
                         store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
+                        store.StoreVisitDate= ds.Tables[0].Rows[i]["StoreVisitDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreVisitDate"]);
+                        store.Purpose= ds.Tables[0].Rows[i]["Purpose"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Purpose"]);
                         storeMaster.Add(store);
                     }
                 }
@@ -411,14 +413,16 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
+                     
                         StoreMaster store = new StoreMaster();
-                        store.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        store.Pincode = Convert.ToString(ds.Tables[0].Rows[i]["Pincode"]);
-                        store.StoreEmailID = Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
-                        store.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        store.StoreCode = ds.Tables[0].Rows[i]["StoreCode"]== DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        store.StoreName = ds.Tables[0].Rows[i]["StoreName"]== DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        store.Pincode = ds.Tables[0].Rows[i]["Pincode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Pincode"]);
+                        store.StoreEmailID = ds.Tables[0].Rows[i]["StoreEmailID"]== DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
+                        store.Address = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
                         store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
-
+                        store.StoreVisitDate= ds.Tables[0].Rows[i]["StoreVisitDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreVisitDate"]);
+                        store.Purpose= ds.Tables[0].Rows[i]["Purpose"] == DBNull.Value ? 0: Convert.ToInt32(ds.Tables[0].Rows[i]["Purpose"]);
                         storeMaster.Add(store);
                     }
                 }

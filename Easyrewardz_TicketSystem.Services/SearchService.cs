@@ -527,11 +527,13 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="SearchParamID"></param>
         /// <returns></returns>
         /// 
-        public List<SearchResponse> GetTicketsOnSavedSearch(int TenantID,int UserID, int SearchParamID)
+        public TicketSaveSearch GetTicketsOnSavedSearch(int TenantID,int UserID, int SearchParamID)
         {
+
             string jsonSearchParams = string.Empty;
             DataSet ds = new DataSet();
             SearchModel searchModel = new SearchModel();
+            TicketSaveSearch tktSearch = new TicketSaveSearch();
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
 
 
@@ -566,7 +568,11 @@ namespace Easyrewardz_TicketSystem.Services
                         searchModel.AssigntoId = UserID;
                         objSearchResult = GetTicketsOnSearch(searchModel);
 
+                        tktSearch.ticketList = objSearchResult;
+                        tktSearch.searchParams = jsonSearchParams;
+
                     }
+
 
                 }
 
@@ -580,7 +586,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (ds != null) ds.Dispose(); conn.Close();
             }
-            return objSearchResult;
+            return tktSearch;
         }
 
 
