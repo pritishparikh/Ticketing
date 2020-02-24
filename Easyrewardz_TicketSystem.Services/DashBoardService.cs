@@ -592,15 +592,10 @@ namespace Easyrewardz_TicketSystem.Services
                     if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
                     {
                         loggedInAcc.SLAScore = ds.Tables[1].Rows[0]["SLAScore"] != System.DBNull.Value ? Convert.ToString(ds.Tables[1].Rows[0]["SLAScore"]) : string.Empty;
+                        loggedInAcc.AvgResponseTime = ds.Tables[1].Rows[0]["AverageResponseTime"] != System.DBNull.Value ? Convert.ToString(ds.Tables[1].Rows[0]["AverageResponseTime"]) : string.Empty;
+                        loggedInAcc.CSATScore = ds.Tables[1].Rows[0]["CSATScore"] != System.DBNull.Value ? Convert.ToString(ds.Tables[1].Rows[0]["CSATScore"]) : string.Empty;
                     }
-                    if (ds.Tables[2] != null && ds.Tables[2].Rows.Count > 0)
-                    {
-                        loggedInAcc.AvgResponseTime = ds.Tables[2].Rows[0]["AverageResponseTime"] != System.DBNull.Value ? Convert.ToString(ds.Tables[2].Rows[0]["AverageResponseTime"]) : string.Empty;
-                    }
-                    if (ds.Tables[3] != null && ds.Tables[3].Rows.Count > 0)
-                    {
-                        loggedInAcc.CSATScore = ds.Tables[3].Rows[0]["CSATScore"] != System.DBNull.Value ? Convert.ToString(ds.Tables[3].Rows[0]["CSATScore"]) : string.Empty;
-                    }
+                    
 
 
                 }

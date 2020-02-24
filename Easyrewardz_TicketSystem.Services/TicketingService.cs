@@ -15,6 +15,7 @@ namespace Easyrewardz_TicketSystem.Services
     public class TicketingService : ITicketing
     {
 
+
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
         public TicketingService(string _connectionString)
@@ -763,11 +764,11 @@ namespace Easyrewardz_TicketSystem.Services
                         ticketDetails.Username = ds.Tables[0].Rows[i]["Username"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Username"]);
                         ticketDetails.UpdateDate = ds.Tables[0].Rows[i]["UpdatedAt"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedAt"]);
                         ticketDetails.Status = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]);
-                        ticketDetails.TargetClouredate = ds.Tables[0].Rows[i]["TargetClouredate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetClouredate"]);
+                       // ticketDetails.TargetClouredate = ds.Tables[0].Rows[i]["TargetClouredate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetClouredate"]);
 
                         ticketDetails.TicketAssignDate = ds.Tables[0].Rows[i]["TicketAssignDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketAssignDate"]);
-                        ticketDetails.TargetResponseDate = ds.Tables[0].Rows[i]["TargetResponseDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetResponseDate"]);
-                        ticketDetails.TargetResolutionDate = ds.Tables[0].Rows[i]["TargetResolutionDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetResolutionDate"]);
+                       // ticketDetails.TargetResponseDate = ds.Tables[0].Rows[i]["TargetResponseDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetResponseDate"]);
+                        //ticketDetails.TargetResolutionDate = ds.Tables[0].Rows[i]["TargetResolutionDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetResolutionDate"]);
 
                         ticketDetails.OpenTicket = ds.Tables[0].Rows[i]["OpenTickets"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OpenTickets"]);
                         ticketDetails.Totalticket = ds.Tables[0].Rows[i]["Totaltickets"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Totaltickets"]);
@@ -801,6 +802,14 @@ namespace Easyrewardz_TicketSystem.Services
                             ticketingMailerObj.UserBCC = ds.Tables[4].Rows[0]["UserBCC"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[0]["UserBCC"]);
                         }
                         ticketDetails.ticketingMailerQue = ticketingMailerObj;
+
+                        if (ds.Tables[5] != null && ds.Tables[5].Rows.Count > 0)
+                        {
+                            ticketDetails.TargetClosuredate = ds.Tables[5].Rows[0]["TargetClosuredate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[5].Rows[0]["TargetClosuredate"]);
+                            ticketDetails.DurationRemaining = ds.Tables[5].Rows[0]["DaysRemaining"] == DBNull.Value ? "0 Day 0 Hour" : Convert.ToString(ds.Tables[5].Rows[0]["DaysRemaining"]);
+                            // ticketDetails.TargetResponseDate = ds.Tables[5].Rows[i]["TargetResponseDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetResponseDate"]);
+                            //ticketDetails.TargetResolutionDate = ds.Tables[5].Rows[i]["ResolutionDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ResolutionDate"]);
+                        }
                     }
                 }
                 return ticketDetails;
@@ -1110,6 +1119,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmdMail.Parameters.AddWithValue("@Is_CustomerComment", ticketingMailerQue.IsCustomerComment);
                 // cmdMail.Parameters.AddWithValue("@Priority_ID", ticketingMailerQue.PriorityID);
                 cmdMail.Parameters.AddWithValue("@Created_By", ticketingMailerQue.CreatedBy);
+                cmdMail.Parameters.AddWithValue("@ReplyMail_ID", ticketingMailerQue.MailID);
                 /* if (finalAttchment == null || finalAttchment == String.Empty)
                  {
                      cmdMail.Parameters.AddWithValue("@Has_Attachment", 0);

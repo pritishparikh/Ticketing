@@ -83,7 +83,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// <summary>
         /// TargetClouredate
         /// </summary>
-        public string TargetClouredate { get; set; }
+        public string TargetClosuredate { get; set; }
 
         /// <summary>
         /// TargetClouredate
@@ -159,7 +159,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// ProductNames
         /// </summary>
         public string ProductNames { get; set; }
-
+        
+        public string DurationRemaining { get; set; }
         public string OrderItemID { get; set; }
         public List<Store> stores { get; set; }
         public List<Product> products { get; set; }
