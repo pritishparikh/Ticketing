@@ -80,7 +80,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@TicketSourceID", orderMaster.TicketSourceID);
                 cmd1.Parameters.AddWithValue("@ModeOfPaymentID", orderMaster.ModeOfPaymentID);
                 cmd1.Parameters.AddWithValue("@TransactionDate", orderMaster.TransactionDate);
-                cmd1.Parameters.AddWithValue("@InvoiceNumber", orderMaster.InvoiceNumber);
+               // cmd1.Parameters.AddWithValue("@InvoiceNumber", orderMaster.InvoiceNumber);
                 cmd1.Parameters.AddWithValue("@InvoiceDate", orderMaster.InvoiceDate);
                 cmd1.Parameters.AddWithValue("@OrderPrice", orderMaster.OrderPrice);
                 cmd1.Parameters.AddWithValue("@PricePaid", orderMaster.PricePaid);
