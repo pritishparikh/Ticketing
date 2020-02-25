@@ -176,7 +176,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
     public class Product
     {
         public int ItemID { get; set; }
-        public string ItemName { get; set; }
+        public string InvoiceNumber { get; set; }
     }
     public class Attachment
     {
