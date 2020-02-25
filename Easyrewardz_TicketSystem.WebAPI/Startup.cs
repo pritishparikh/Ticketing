@@ -91,6 +91,8 @@ namespace Easyrewardz_TicketSystem.WebAPI
                 app.UseHsts();
             }
 
+            string CurrentDirectory = Directory.GetCurrentDirectory();
+
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");
             app.UseAuthentication();
@@ -108,6 +110,25 @@ namespace Easyrewardz_TicketSystem.WebAPI
                 FileProvider = new PhysicalFileProvider(
                             Path.Combine(Directory.GetCurrentDirectory(), "TicketAttachment")),
                 RequestPath = "/TicketAttachment"
+            });
+
+            string ReportDownload = "ReportDownload";
+            string ReportDownloadURL = Path.Combine(CurrentDirectory, ReportDownload);
+            if (!Directory.Exists(ReportDownloadURL))
+            {
+                Directory.CreateDirectory(ReportDownloadURL);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(ReportDownloadURL),
+                RequestPath = "/"+ ReportDownload
+            });
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                            Path.Combine(Directory.GetCurrentDirectory(), "ReportDownload")),
+                RequestPath = "/ReportDownload"
             });
             //         app.UseCors(
             //    options => options.WithOrigins("*").AllowAnyMethod()

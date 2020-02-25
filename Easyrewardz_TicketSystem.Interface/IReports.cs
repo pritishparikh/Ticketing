@@ -20,5 +20,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<ReportModel> GetReportList(int tenantID);
 
         int GetReportSearch(ReportSearchModel searchModel);
+
+        string DownloadReportSearch(int SchedulerID, int curentUserId, int TenantID);
     }
 }
