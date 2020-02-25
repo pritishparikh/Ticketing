@@ -31,6 +31,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _featurePlan = _feature;
             return _featurePlan.DeleteFeature(UserID,FeatureID);
         }
+
+        public int AddPlan(IFeaturePlan _feature, PlanModel plan)
+        {
+            _featurePlan = _feature;
+            return _featurePlan.AddPlan(plan);
+        }
+
+        public List<PlanModel> GetPlanOnEdit(IFeaturePlan _feature, int TenantID)
+        {
+            _featurePlan = _feature;
+            return _featurePlan.GetPlanOnEdit(TenantID);
+        }
         #endregion
     }
 }
