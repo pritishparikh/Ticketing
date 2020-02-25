@@ -354,5 +354,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Imaster.CreateDepartment(createDepartmentModel);
         }
         #endregion
+
+        #region create Claim Categoty
+
+        public int CreateClaimCategory(ICategory _category, ClaimCategory claimCategory)
+        {
+            _categoryList = _category;
+            return _categoryList.CreateClaimCategory(claimCategory);
+        }
+        #endregion
     }
 }

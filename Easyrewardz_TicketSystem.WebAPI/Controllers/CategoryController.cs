@@ -489,6 +489,52 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         }
 
+        #region Create Claim Category
+        [HttpPost]
+        [Route("CreateClaimCategory")]
+        public ResponseModel CreateClaimCategory([FromBody] ClaimCategory claimCategory)
+        {
+            MasterCaller _newMasterCaller = new MasterCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                claimCategory.CreatedBy = authenticate.UserMasterID;
+                claimCategory.TenantID = authenticate.TenantId;
+
+                int result = _newMasterCaller.CreateClaimCategory(new CategoryServices(_connectioSting), claimCategory);
+
+                StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = result;
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
+        #endregion
+
         #endregion
     }
 }

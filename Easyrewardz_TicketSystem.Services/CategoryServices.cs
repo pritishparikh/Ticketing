@@ -471,6 +471,45 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return csvLst;
         }
-       
+
+        /// <summary>
+        /// Create Claim Category
+        /// </summary>
+        /// <returns></returns>
+        public int CreateClaimCategory(ClaimCategory claimCategory)
+        {
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_CreateDepartment", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@BrandID", claimCategory.BrandName);
+                cmd.Parameters.AddWithValue("@StoreID", claimCategory.ClaimCategoryName);
+                cmd.Parameters.AddWithValue("@DepartmentID", claimCategory.ClaimSubCategory);
+                cmd.Parameters.AddWithValue("@FunctionID", claimCategory.ClaimIssueType);
+                cmd.Parameters.AddWithValue("@Status", claimCategory.Status);
+                cmd.Parameters.AddWithValue("@User_ID", claimCategory.CreatedBy);
+                cmd.Parameters.AddWithValue("@Tenant_ID", claimCategory.TenantID);
+
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return result;
+        }
     }
 }
