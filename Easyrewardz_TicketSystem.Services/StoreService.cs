@@ -515,6 +515,37 @@ namespace Easyrewardz_TicketSystem.Services
             return csvLst;
         }
 
+
+        /// <summary>
+        /// Create Campaign Script
+        /// </summary>
+        public int CreateCampaignScript(CampaignScript campaignScript)
+        {
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_CreateCampaignScript", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Tenant_ID", campaignScript.TenantID);
+                cmd.Parameters.AddWithValue("@User_ID", campaignScript.CreatedBy);
+                cmd.Parameters.AddWithValue("@Campaign_Name", campaignScript.CampaignName);
+                cmd.Parameters.AddWithValue("@Script_Details", campaignScript.ScriptDetails);
+
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+
         #endregion
     }
 }

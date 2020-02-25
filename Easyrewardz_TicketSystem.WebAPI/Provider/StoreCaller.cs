@@ -65,7 +65,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _storeRepository = Store;
             return _storeRepository.BulkUploadStore(TenantID, CreatedBy, DataSetCSV);
-
+        }
+        public int CreateCampaignScript(IStore Store, CampaignScript campaignScript)
+        {
+            _storeRepository = Store;
+            return _storeRepository.CreateCampaignScript(campaignScript);
         }
     }
 }
