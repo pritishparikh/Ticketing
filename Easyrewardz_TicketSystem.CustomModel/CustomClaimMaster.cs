@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.CustomModel
 {
-   public class CustomClaimMaster
+    public class CustomClaimMaster
     {
 
         public int TicketClaimID { get; set; }
@@ -12,8 +12,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string ClaimIssueType { get; set; }
         public string Category { get; set; }
         public string RaisedBy { get; set; }
-        public DateTime Creation_on  { get; set; }
-        public string  Dateformat { get; set; }
+        public DateTime Creation_on { get; set; }
+        public string Dateformat { get; set; }
         public string AssignName { get; set; }
 
         public List<ClaimCategory> claimCategory { get; set; }
@@ -36,3 +36,4 @@ namespace Easyrewardz_TicketSystem.CustomModel
 
         public int TenantID { get; set; }
     }
+}
