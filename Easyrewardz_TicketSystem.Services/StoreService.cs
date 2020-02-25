@@ -546,6 +546,35 @@ namespace Easyrewardz_TicketSystem.Services
             return result;
         }
 
+        /// <summary>
+        /// Update Claim Attechment Setting
+        /// </summary>
+        public int UpdateClaimAttechmentSetting(ClaimAttechment claimAttechment)
+        {
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateClaimAttechment", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Tenant_ID", claimAttechment.TenantID);
+                cmd.Parameters.AddWithValue("@Max_Size", claimAttechment.MaximumSize);
+                cmd.Parameters.AddWithValue("@File_Format", claimAttechment.FileFormat);
+
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+
         #endregion
     }
 }

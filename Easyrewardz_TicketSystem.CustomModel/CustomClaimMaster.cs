@@ -16,8 +16,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string AssignName { get; set; }
 
         public List<ClaimCategory> claimCategory { get; set; }
-
         public List<CampaignScript> campaignScript { get; set; }
+        public List<ClaimAttechment> claimAttechment { get; set; }
     }
     public class ClaimCategory
     {
@@ -35,6 +35,12 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string CampaignName { get; set; }
         public string ScriptDetails { get; set; }
         public int CreatedBy { get; set; }
-
+    }
+    public class ClaimAttechment
+    {
+        public int TenantID { get; set; }
+        public int CreatedBy { get; set; }
+        public string MaximumSize { get; set; }
+        public string FileFormat { get; set; } 
     }
 }
