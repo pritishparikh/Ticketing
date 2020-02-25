@@ -35,7 +35,7 @@ namespace Easyrewardz_TicketSystem.Model
 
         public int CreatedBy { get; set; }
 
-
+        public int TenantID { get; set; }
 
     }
 }
