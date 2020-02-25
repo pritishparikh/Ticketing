@@ -404,17 +404,17 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int AttachOrder(string OrderID, int TicketId, int CreatedBy)
         {
-            int success = 0;
+            int Success = 0;
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_BulkTicketOrderMapping", conn);
+                MySqlCommand cmd = new MySqlCommand("SP_BulkTicketOrderAttachMapping", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Ticket_Id", TicketId);
                 cmd.Parameters.AddWithValue("@OrderIDs", OrderID);
                 cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
                 cmd.CommandType = CommandType.StoredProcedure;
-                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                Success = Convert.ToInt32(cmd.ExecuteScalar());
                 conn.Close();
             }
             catch (Exception ex)
@@ -429,7 +429,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return success;
+            return Success;
         }
 
         public List<CustomOrderMaster> getOrderDetailByTicketID(int TicketID, int TenantID)

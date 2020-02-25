@@ -24,17 +24,17 @@ namespace Easyrewardz_TicketSystem.Services
 
         public int AttachStore(string StoreId, int TicketId, int CreatedBy)
         {
-            int TicketStoreMappingID = 0;
+            int Success = 0;
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_BulkTicketStoreMapping", conn);
+                MySqlCommand cmd = new MySqlCommand("SP_BulkTicketStoreattachMapping", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Ticket_Id", TicketId);
                 cmd.Parameters.AddWithValue("@StoreIds", StoreId);
                 cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
                 cmd.CommandType = CommandType.StoredProcedure;
-                TicketStoreMappingID = Convert.ToInt32(cmd.ExecuteScalar());
+                Success = Convert.ToInt32(cmd.ExecuteScalar());
                 conn.Close();
             }
             catch (Exception ex)
@@ -49,7 +49,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return TicketStoreMappingID;
+            return Success;
         }
 
         /// <summary>
