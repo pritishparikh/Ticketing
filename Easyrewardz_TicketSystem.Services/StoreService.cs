@@ -24,7 +24,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         public int AttachStore(string StoreId, int TicketId, int CreatedBy)
         {
-            int success = 0;
+            int TicketStoreMappingID = 0;
             try
             {
                 conn.Open();
@@ -34,7 +34,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@StoreIds", StoreId);
                 cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
                 cmd.CommandType = CommandType.StoredProcedure;
-                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                TicketStoreMappingID = Convert.ToInt32(cmd.ExecuteScalar());
                 conn.Close();
             }
             catch (Exception ex)
@@ -49,7 +49,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return success;
+            return TicketStoreMappingID;
         }
 
         /// <summary>
