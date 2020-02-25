@@ -43,7 +43,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
-            List<NotificationModel> _objresponseModel = new List<NotificationModel>();
+           NotificationModel _objresponseModel = new NotificationModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
@@ -56,7 +56,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 NotificationCaller _newNoti = new NotificationCaller();
 
                 _objresponseModel = _newNoti.GetNotification(new NotificationService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
-                StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                StatusCode = _objresponseModel.TicketNotification.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
