@@ -717,6 +717,47 @@ namespace Easyrewardz_TicketSystem.Services
             return commonModels;
         }
 
+        /// <summary>
+        /// Create Department
+        /// </summary>
+        /// <returns></returns>
+        public int CreateDepartment(CreateDepartmentModel createDepartmentModel)
+        {
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_CreateDepartment", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@BrandID", createDepartmentModel.BrandID);
+                cmd.Parameters.AddWithValue("@StoreID", createDepartmentModel.StoreID);
+                cmd.Parameters.AddWithValue("@DepartmentID", createDepartmentModel.DepartmentID);
+                cmd.Parameters.AddWithValue("@FunctionID", createDepartmentModel.FunctionID);
+                cmd.Parameters.AddWithValue("@Status", createDepartmentModel.Status);
+                cmd.Parameters.AddWithValue("@TenantID", createDepartmentModel.TenantID);
+                cmd.Parameters.AddWithValue("@UserID", createDepartmentModel.CreatedBy);
+
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return result;
+        }
+
+
 
 
     }
