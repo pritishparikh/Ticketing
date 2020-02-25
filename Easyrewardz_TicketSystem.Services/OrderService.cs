@@ -139,7 +139,8 @@ namespace Easyrewardz_TicketSystem.Services
                            CustomOrderMaster customOrderMaster = new CustomOrderMaster();
                         customOrderMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
                         //customOrderMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
-                        customOrderMaster.InvoiceNumber = ds.Tables[0].Rows[i]["BillID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BillID"]);
+                        // customOrderMaster.InvoiceNumber = ds.Tables[0].Rows[i]["BillID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BillID"]);
+                        customOrderMaster.InvoiceNumber = ds.Tables[0].Rows[i]["OrderNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["OrderNumber"]);
                         customOrderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
                         customOrderMaster.OrdeItemPrice = ds.Tables[0].Rows[i]["OrderPrice"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["OrderPrice"]);
                         customOrderMaster.OrderPricePaid = ds.Tables[0].Rows[i]["PricePaid"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["PricePaid"]);
@@ -215,7 +216,7 @@ namespace Easyrewardz_TicketSystem.Services
                         customOrderMaster.MobileNumber = ds.Tables[0].Rows[i]["CustomerPhoneNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
                         customOrderMaster.EmailID = ds.Tables[0].Rows[i]["CustomerEmailId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
                         customOrderMaster.OrderNumber = ds.Tables[0].Rows[i]["OrderNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["OrderNumber"]);
-                        customOrderMaster.InvoiceNumber = ds.Tables[0].Rows[i]["BillID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BillID"]);
+                        customOrderMaster.InvoiceNumber = ds.Tables[0].Rows[i]["InvoiceNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
                         customOrderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
                         customOrderMaster.DateFormat = customOrderMaster.InvoiceDate.ToString("dd/MMM/yyyy");
                         customOrderMaster.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
@@ -454,7 +455,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         CustomOrderMaster customOrderMaster = new CustomOrderMaster();
                         customOrderMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
-                        customOrderMaster.InvoiceNumber = ds.Tables[0].Rows[i]["BillID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BillID"]);
+                        customOrderMaster.InvoiceNumber = ds.Tables[0].Rows[i]["InvoiceNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]);
                         customOrderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]);
                         customOrderMaster.OrdeItemPrice = ds.Tables[0].Rows[i]["OrderPrice"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OrderPrice"]);
                         customOrderMaster.OrderPricePaid = ds.Tables[0].Rows[i]["PricePaid"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["PricePaid"]);
