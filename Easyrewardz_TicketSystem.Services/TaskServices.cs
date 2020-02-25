@@ -368,5 +368,44 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return lstClaimComment;
         }
+
+        /// <summary>
+        /// Add Comment ON task
+        /// </summary>
+        /// <returns></returns>
+        public int AddCommentOnTask(TaskMaster taskMaster)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd1 = new MySqlCommand("SP_AddCommentOnTask", conn);
+                cmd1.Connection = conn;
+                cmd1.Parameters.AddWithValue("@Task_title", taskMaster.TaskTitle);
+                cmd1.Parameters.AddWithValue("@Department_ID", taskMaster.DepartmentId);
+                cmd1.Parameters.AddWithValue("@Function_ID", taskMaster.FunctionID);
+                cmd1.Parameters.AddWithValue("@Task_Description", taskMaster.TaskDescription);
+                cmd1.Parameters.AddWithValue("@Task_Comments", taskMaster.TaskComments);
+                cmd1.Parameters.AddWithValue("@CreatedBy", taskMaster.CreatedBy);
+
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = Convert.ToInt32(cmd1.ExecuteNonQuery());
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
+
+        }
     }
 }

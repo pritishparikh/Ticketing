@@ -32,5 +32,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="ClaimId">Id of the Claim</param>
         /// <returns></returns>
         List<UserComment> GetTaskComment(int TaskId);
+
+        int AddCommentOnTask(TaskMaster taskMaster);
     }
 }
