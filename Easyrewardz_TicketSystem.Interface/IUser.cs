@@ -29,5 +29,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<UpdateUserProfiledetailsModel> GetUserProfileDetails(int UserMasterID,string url);
         CustomChangePassword SendMailforchangepassword(int userID, int TenantID, int IsStoreUser);
+
+        string validateUserExist(string UserEmailID, string UserMobile, int TenantId);
     }
 }
