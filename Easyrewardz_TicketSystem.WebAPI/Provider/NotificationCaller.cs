@@ -19,7 +19,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <summary>
         /// Get AlertList
         // / </summary>
-        public List<NotificationModel> GetNotification(INotification Notification, int TenantID, int UserID )
+        public NotificationModel GetNotification(INotification Notification, int TenantID, int UserID )
         {
             _Notification = Notification;
             return _Notification.GetNotification( TenantID,  UserID);

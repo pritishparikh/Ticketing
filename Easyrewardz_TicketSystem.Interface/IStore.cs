@@ -27,5 +27,9 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<string> BulkUploadStore(int TenantID, int CreatedBy, DataSet DataSetCSV);
 
+        int CreateCampaignScript(CampaignScript campaignScript);
+
+        int UpdateClaimAttechmentSetting(ClaimAttechment claimAttechment);
+
     }
 }

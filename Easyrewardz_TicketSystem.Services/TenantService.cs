@@ -18,7 +18,7 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
-        public int InsertCompany(CompanyModel companyModel, int TenantId)
+        public int InsertCompany(CompanyModel companyModel)
         {
 
             int OutTenantID = 0;
@@ -29,7 +29,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_InsertCompany", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd.Parameters.AddWithValue("@Tenant_ID", companyModel.TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", companyModel.CreatedBy);
                 cmd.Parameters.AddWithValue("@Company_Type", companyModel.CompanyTypeID);
                 cmd.Parameters.AddWithValue("@Company_Name", companyModel.CompanyName);
@@ -44,6 +44,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@City", companyModel.CityID);
                 cmd.Parameters.AddWithValue("@State", companyModel.StateID);
                 cmd.Parameters.AddWithValue("@Country", companyModel.CountryID);
+
+                cmd.ExecuteNonQuery();
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -315,5 +317,57 @@ namespace Easyrewardz_TicketSystem.Services
 
             return lstCompanyType;
         }
+
+        /// <summary>
+        /// Get Registered Tenant
+        /// </summary>
+        /// <returns></returns>
+        public List<CompanyModel> GetRegisteredTenant(int TenantId)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<CompanyModel> GetRegisteredTenant = new List<CompanyModel>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetRegisteredTenant", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                //cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CompanyModel companyModel = new CompanyModel();
+                        companyModel.TenantID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
+                        companyModel.CompanyName = Convert.ToString(ds.Tables[0].Rows[i]["CompanayName"]);
+                        //languageModel.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
+
+                        GetRegisteredTenant.Add(companyModel);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return GetRegisteredTenant;
+        }
+
     }
 }

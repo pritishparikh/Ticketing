@@ -61,7 +61,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _TaskRepository = task;
             return _TaskRepository.GetTaskComment(TaskId);
         }
-
+        public int AddCommentOnTask(ITask task, TaskMaster taskMaster)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.AddCommentOnTask(taskMaster);
+        }
 
     }
 }

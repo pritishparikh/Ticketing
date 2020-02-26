@@ -23,9 +23,10 @@ namespace Easyrewardz_TicketSystem.Services
 
         #region Custom Methods
 
-        public List<NotificationModel> GetNotification(int TenantID, int UserID)
+        public NotificationModel GetNotification(int TenantID, int UserID)
         {
-            List<NotificationModel> objNotiLst = new List<NotificationModel>();
+            List<TicketNotificationModel> TicketNoti = new List<TicketNotificationModel>();
+            NotificationModel objNotiLst = new NotificationModel();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             try
@@ -47,13 +48,20 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        objNotiLst = ds.Tables[0].AsEnumerable().Select(r => new NotificationModel()
+                        TicketNoti = ds.Tables[0].AsEnumerable().Select(r => new TicketNotificationModel()
                         {
                             TicketCount = Convert.ToInt32(r.Field<object>("TicketCount")),
                             NotificationMessage = r.Field<object>("ActionName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ActionName")),
                             TicketIDs = r.Field<object>("TicketIDs") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TicketIDs")),
 
                         }).ToList();
+
+                        if(TicketNoti.Count > 0)
+                        {
+                            objNotiLst.NotiCount = TicketNoti.Select(x => x.TicketCount).Sum();
+                            objNotiLst.TicketNotification = TicketNoti;
+                        }
+                        
 
                     }
 

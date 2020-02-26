@@ -185,7 +185,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 int result = _KnowledgeCaller.DeleteKB(new KnowlegeBaseService(_connectionSting), KBID, authenticate.TenantId);
                 StatusCode =
                result == 0 ?
-                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                       (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 

@@ -175,7 +175,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 int result = _taskcaller.DeleteTask(new TaskServices(_connectionSting), task_Id);
                 StatusCode =
                result == 0 ?
-                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                      (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
@@ -350,6 +350,48 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.ResponseData = _obClaimMaster;
             }
             catch (Exception _ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+        /// <summary>
+        /// Add Comment ON Task
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddCommentOnTask")]
+        public ResponseModel AddCommentOnTask(TaskMaster taskMaster)
+        {
+            TaskCaller _taskcaller = new TaskCaller();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                taskMaster.CreatedBy = authenticate.UserMasterID;
+
+                int result = _taskcaller.AddCommentOnTask(new TaskServices(_connectionSting), taskMaster);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+
+            }
+            catch (Exception ex)
             {
                 StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

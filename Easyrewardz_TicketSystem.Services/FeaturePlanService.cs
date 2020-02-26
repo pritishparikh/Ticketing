@@ -167,5 +167,94 @@ namespace Easyrewardz_TicketSystem.Services
 
             return result;
         }
+
+        #region AddPlan
+
+        public int AddPlan(PlanModel plan)
+        {
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_AddPlan", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                //cmd.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd.Parameters.AddWithValue("@UserID", plan.CreatedBy);
+                cmd.Parameters.AddWithValue("@Planname", plan.PlanName);
+                cmd.Parameters.AddWithValue("@MonthlyPlanPrice", plan.MonthlyAmount);
+                cmd.Parameters.AddWithValue("@YearlyPlanPrice", plan.YearlyAmount);
+                cmd.Parameters.AddWithValue("@TotalUsers", plan.TotalUsers);
+                cmd.Parameters.AddWithValue("@IsPublish", plan.IsPublished);
+                cmd.Parameters.AddWithValue("@IsMostPopular", plan.IsMostPopular);
+                cmd.Parameters.AddWithValue("@FeatureID", plan.FeatureID);
+                cmd.Parameters.AddWithValue("@AddOnsID", plan.AddOnsID);
+
+
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+        #endregion
+
+        #region Get_PlanOnEdit
+        public List<PlanModel> GetPlanOnEdit(int TenantID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<PlanModel> planModels = new List<PlanModel>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetPlanOnEdit", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                //cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        PlanModel model = new PlanModel();
+                        model.PlanName = Convert.ToString(ds.Tables[0].Rows[i]["PlanName"]);
+                        model.MonthlyAmount = Convert.ToDecimal(ds.Tables[0].Rows[i]["PlanMonthlyAmount"]);
+                        model.YearlyAmount = Convert.ToDecimal(ds.Tables[0].Rows[i]["PlanYearlyAmount"]);
+                        model.TotalUsers = Convert.ToInt32(ds.Tables[0].Rows[i]["TotalNumberOfUser"]);
+                        model.IsPublished = ds.Tables[0].Rows[i]["IsPublish"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IsPublish"]);
+                        model.IsMostPopular = ds.Tables[0].Rows[i]["IsMostPopular"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IsMostPopular"]);
+
+                        planModels.Add(model);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return planModels;
+
+        }
+        #endregion
     }
 }

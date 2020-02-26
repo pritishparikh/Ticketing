@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class TenantController : ControllerBase
     {
         #region variable declaration
@@ -55,8 +55,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 companyModel.CreatedBy = authenticate.UserMasterID;
+                companyModel.TenantID = authenticate.TenantId;
 
-                int result = _newTenantCaller.InsertCompany(new TenantService(_connectioSting), companyModel, authenticate.TenantId);
+                int result = _newTenantCaller.InsertCompany(new TenantService(_connectioSting), companyModel);
 
                 StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -305,6 +306,55 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        #region Get Registered Tenant
+
+        [HttpPost]
+        [Route("GetRegisteredTenant")]
+        public ResponseModel GetRegisteredTenant()
+        {
+            List<CompanyModel> objcompanyModels = new List<CompanyModel>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                TenantCaller _newtenantCaller = new TenantCaller();
+
+                objcompanyModels = _newtenantCaller.GetRegisteredTenant(new TenantService(_connectioSting), authenticate.TenantId);
+
+                StatusCode =
+                objcompanyModels.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = objcompanyModels;
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
+        #endregion
+
         #endregion
     }
 }
