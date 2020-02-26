@@ -614,8 +614,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@NameOfMonthForDaily_Year", scheduleMaster.NameOfMonthForDailyYear);
                 cmd.Parameters.AddWithValue("@NoOfDayForDaily_Year", scheduleMaster.NoOfDayForDailyYear);
                 cmd.Parameters.AddWithValue("@SearchInput_Params", scheduleMaster.SearchInputParams);
-                cmd.Parameters.AddWithValue("@Schedule_From", scheduleMaster.ScheduleFrom);
-                cmd.Parameters.AddWithValue("@Primary_Sch_ID", scheduleMaster.PrimaryScheduleID);
+                cmd.Parameters.AddWithValue("@Schedule_From", scheduleMaster.ScheduleFrom==null?0: scheduleMaster.ScheduleFrom);
+                cmd.Parameters.AddWithValue("@Primary_Sch_ID", scheduleMaster.PrimaryScheduleID==null?0: scheduleMaster.PrimaryScheduleID);
                 cmd.Parameters.AddWithValue("@Schedule_ID", "");
                 cmd.Parameters["@Schedule_ID"].Direction = ParameterDirection.Output;
                 cmd.CommandType = CommandType.StoredProcedure;
