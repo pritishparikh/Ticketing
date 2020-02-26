@@ -181,7 +181,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_DeleteTask", conn);
                 cmd1.Parameters.AddWithValue("@task_ID", taskId);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                i = cmd1.ExecuteNonQuery();
+                i = Convert.ToInt32(cmd1.ExecuteScalar());
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {

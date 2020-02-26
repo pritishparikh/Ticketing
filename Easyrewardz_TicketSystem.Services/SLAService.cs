@@ -217,7 +217,7 @@ namespace Easyrewardz_TicketSystem.Services
 
 
                 cmd.CommandType = CommandType.StoredProcedure;
-                deletecount = cmd.ExecuteNonQuery();
+                deletecount = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception ex)
             {

@@ -237,7 +237,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 int result = _newStore.DeleteStore(new StoreService(_connectionString), StoreID, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
-                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                       (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
