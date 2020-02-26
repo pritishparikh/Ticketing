@@ -117,5 +117,12 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <returns></returns>
         List<CommonModel> GetCountryStateCityList(int TenantID,string Pincode);
 
+        /// <summary>
+        /// Create Department
+        /// </summary>
+        /// <returns></returns>
+        int CreateDepartment(CreateDepartmentModel createDepartmentModel);
+
+
     }
 }

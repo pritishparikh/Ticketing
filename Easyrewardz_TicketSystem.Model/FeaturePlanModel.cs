@@ -19,7 +19,13 @@ namespace Easyrewardz_TicketSystem.Model
         public int PlanID { get; set; }
         public string PlanName { get; set; }
         public decimal MonthlyAmount { get; set; }
-        public decimal YearlyAmount { get; set; }   
+        public decimal YearlyAmount { get; set; }
+        public int TotalUsers { get; set; }
+        public int IsPublished { get; set; }
+        public int IsMostPopular { get; set; }
+        public int CreatedBy { get; set; }
+        public string FeatureID { get; set; }
+        public string AddOnsID { get; set; }
 
     }
 

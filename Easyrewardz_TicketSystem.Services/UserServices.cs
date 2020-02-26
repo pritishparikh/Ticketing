@@ -700,6 +700,39 @@ namespace Easyrewardz_TicketSystem.Services
             return customChangePassword;
         }
 
+        public string validateUserExist(string UserEmailID, string UserMobile, int TenantId)
+        {
+
+            MySqlCommand cmd = new MySqlCommand();
+            string message = "";
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("Sp_ValidateUserExists", conn);
+                cmd1.Parameters.AddWithValue("@User_EmailID", UserEmailID);
+                cmd1.Parameters.AddWithValue("@User_Mobile", UserMobile);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantId);
+
+                cmd1.CommandType = CommandType.StoredProcedure;
+                message = Convert.ToString(cmd1.ExecuteScalar());
+                conn.Close();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return message;
+        }
+
         #endregion
     }
 }

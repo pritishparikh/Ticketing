@@ -24,17 +24,17 @@ namespace Easyrewardz_TicketSystem.Services
 
         public int AttachStore(string StoreId, int TicketId, int CreatedBy)
         {
-            int success = 0;
+            int Success = 0;
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_BulkTicketStoreMapping", conn);
+                MySqlCommand cmd = new MySqlCommand("SP_BulkTicketStoreattachMapping", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Ticket_Id", TicketId);
                 cmd.Parameters.AddWithValue("@StoreIds", StoreId);
                 cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
                 cmd.CommandType = CommandType.StoredProcedure;
-                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                Success = Convert.ToInt32(cmd.ExecuteScalar());
                 conn.Close();
             }
             catch (Exception ex)
@@ -49,7 +49,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return success;
+            return Success;
         }
 
         /// <summary>
@@ -513,6 +513,66 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return csvLst;
+        }
+
+
+        /// <summary>
+        /// Create Campaign Script
+        /// </summary>
+        public int CreateCampaignScript(CampaignScript campaignScript)
+        {
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_CreateCampaignScript", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Tenant_ID", campaignScript.TenantID);
+                cmd.Parameters.AddWithValue("@User_ID", campaignScript.CreatedBy);
+                cmd.Parameters.AddWithValue("@Campaign_Name", campaignScript.CampaignName);
+                cmd.Parameters.AddWithValue("@Script_Details", campaignScript.ScriptDetails);
+
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Update Claim Attechment Setting
+        /// </summary>
+        public int UpdateClaimAttechmentSetting(ClaimAttechment claimAttechment)
+        {
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateClaimAttechment", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Tenant_ID", claimAttechment.TenantID);
+                cmd.Parameters.AddWithValue("@Max_Size", claimAttechment.MaximumSize);
+                cmd.Parameters.AddWithValue("@File_Format", claimAttechment.FileFormat);
+
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
         }
 
         #endregion

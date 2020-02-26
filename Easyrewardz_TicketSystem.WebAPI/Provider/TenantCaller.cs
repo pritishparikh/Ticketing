@@ -19,10 +19,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #endregion
 
         #region method
-        public int InsertCompany(ITenant _tenant,  CompanyModel companyModel, int TenantId)
+        public int InsertCompany(ITenant _tenant,  CompanyModel companyModel)
         {
             _tenantlist = _tenant;
-            return _tenantlist.InsertCompany(companyModel, TenantId);
+            return _tenantlist.InsertCompany(companyModel);
         }
         public int BillingDetails_crud(ITenant _tenant, BillingDetails BillingDetails)
         {
@@ -56,7 +56,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _tenantlist = _tenant;
             return _tenantlist.AddPlan(_tenantPlan);
         }
-
+        public List<CompanyModel> GetRegisteredTenant(ITenant _tenant, int TenantId)
+        {
+            _tenantlist = _tenant;
+            return _tenant.GetRegisteredTenant(TenantId);
+        }
         #endregion
     }
 }

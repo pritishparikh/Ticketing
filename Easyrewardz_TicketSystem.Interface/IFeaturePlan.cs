@@ -11,6 +11,10 @@ namespace Easyrewardz_TicketSystem.Interface
         FeaturePlanModel GetFeaturePlanList(int TenantID);
         string AddFeature(FeaturesModel objFeatures);
         int DeleteFeature(int UserID,int FeatureID);
+
+        int AddPlan(PlanModel plan);
+
+        List<PlanModel> GetPlanOnEdit(int TenantID);
     }
 
 }

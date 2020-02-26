@@ -65,6 +65,10 @@ namespace Easyrewardz_TicketSystem.Model
         ///Modified Date
         /// </summary>
         public DateTime ModifiedDate { get; set; }
+        /// <summary>
+        ///Task Comments
+        /// </summary>
+        public string TaskComments { get; set; }
     }
 
 }
