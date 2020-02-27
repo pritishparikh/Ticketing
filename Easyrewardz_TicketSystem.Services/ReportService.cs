@@ -165,7 +165,8 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             ReportID = Convert.ToInt32(r.Field<object>("ReportID")),
                             ScheduleID = Convert.ToInt32(r.Field<object>("ScheduleID")),
-                            ReportSearchParams= r.Field<object>("TicketReportSearchParams") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TicketReportSearchParams")),
+                            ScheduleType = Convert.ToInt32(r.Field<object>("ScheduleType")),
+                            ReportSearchParams = r.Field<object>("TicketReportSearchParams") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TicketReportSearchParams")),
                             IsDownloaded = Convert.ToInt32(r.Field<object>("IsDownloaded")),
                             ReportName = r.Field<object>("ReportName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ReportName")),
                             ReportStatus= r.Field<object>("ReportStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ReportStatus")),
