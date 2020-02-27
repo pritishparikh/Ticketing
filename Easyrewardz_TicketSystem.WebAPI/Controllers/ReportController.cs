@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -22,6 +24,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         private IConfiguration configuration;
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
+        private readonly string rootPath;
         #endregion
 
         #region Cunstructor
@@ -30,6 +33,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            rootPath = configuration.GetValue<string>("APIURL");
         }
         #endregion
 
@@ -266,6 +270,65 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData =resultCount;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+        [HttpPost]
+        [Route("DownloadReportSearch")]
+        public ResponseModel DownloadReportSearch(int SchedulerID)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            SettingsCaller _dbsearchMaster = new SettingsCaller();
+            string strcsv = string.Empty;
+            try
+            {
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                var temp = SecurityService.DecryptStringAES(_token);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                strcsv = _dbsearchMaster.DownloadReportSearch(new ReportService(_connectioSting), SchedulerID, authenticate.UserMasterID, authenticate.TenantId);
+
+                string dateformat = DateTime.Now.ToString("yyyyMMddHHmmssffff");
+                string csvname = "Repost" + SchedulerID + "_" + dateformat + ".csv";
+
+                var exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                var appRoot = appPathMatcher.Match(exePath).Value;
+
+                string Folderpath = Path.Combine(appRoot , "ReportDownload");
+                string URLFolderpath = Path.Combine(rootPath, "ReportDownload");
+
+                if (!Directory.Exists(Folderpath))
+                {
+                    Directory.CreateDirectory(Folderpath);
+                }
+
+                Folderpath = Path.Combine(Folderpath , csvname);
+                URLFolderpath = URLFolderpath + @"/" + csvname ;
+                CommonService.SaveFile(Folderpath, strcsv);
+
+                StatusCode =  (int)EnumMaster.StatusCode.Success ;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = !string.IsNullOrEmpty(URLFolderpath) ? URLFolderpath : null;
             }
             catch (Exception ex)
             {

@@ -10,6 +10,7 @@ using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -308,7 +309,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StatusCode =
                Result == 0 ?
-                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                      (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
                 _objResponseModel.Status = true;
@@ -594,28 +595,29 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// 
         [HttpPost]
         [Route("UpdateUserProfileDetails")]
-        public ResponseModel UpdateUserProfileDetails()
+        public ResponseModel UpdateUserProfileDetails(IFormFile File)
         {
             UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel = new UpdateUserProfiledetailsModel();
 
             var Keys = Request.Form;
             UpdateUserProfiledetailsModel = JsonConvert.DeserializeObject<UpdateUserProfiledetailsModel>(Keys["UpdateUserProfiledetailsModel"]);
-            var file = Request.Form.Files[0];
+            var file = Request.Form.Files;
+            
             var folderName = Path.Combine(ProfileImg_Resources, ProfileImg_Image);
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             try
             {
-                if (file.Length > 0)
+                if (file.Count > 0)
                 {
 
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fileName = ContentDispositionHeaderValue.Parse(file[0].ContentDisposition).FileName.Trim('"');
                     var fileName_Id = fileName.Replace(".", UpdateUserProfiledetailsModel.UserId + ".") + "";
                     var fullPath = Path.Combine(pathToSave, fileName_Id);
                     var dbPath = Path.Combine(folderName, fileName_Id);
 
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
-                        file.CopyTo(stream);
+                        file[0].CopyTo(stream);
                     }
                     UpdateUserProfiledetailsModel.ProfilePicture = fileName_Id;
 

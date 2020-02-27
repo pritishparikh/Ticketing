@@ -954,11 +954,78 @@ namespace Easyrewardz_TicketSystem.Services
 
         public List<TicketMessage> TicketMessagelisting(int ticketID, int TenantID)
         {
-
+           
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<TicketMessage> ticketMessages = new List<TicketMessage>();
-            List<CustomTicketMessage> CustumTicketMessagelist = new List<CustomTicketMessage>();
+            List<CustomTicketMessage> TrailTicketMessagelist = new List<CustomTicketMessage>();
+
+            List<MessageDetails> LatestTicketMessagelist = new List<MessageDetails>();
+
+            #region old approach
+
+            //try
+            //{
+            //    conn.Open();
+            //    cmd.Connection = conn;
+            //    MySqlCommand cmd1 = new MySqlCommand("SP_GetTicketMessage", conn);
+            //    //MySqlCommand cmd1 = new MySqlCommand("Test_GetTicketMessage", conn);
+            //    cmd1.CommandType = CommandType.StoredProcedure;
+            //    cmd1.Parameters.AddWithValue("@Ticket_Id", ticketID);
+            //    cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+            //    MySqlDataAdapter da = new MySqlDataAdapter();
+            //    da.SelectCommand = cmd1;
+            //    da.Fill(ds);
+
+            //    if (ds != null && ds.Tables.Count > 0)
+            //    {
+
+            //        if (ds.Tables[0] != null && ds.Tables[0] != null)
+            //        {
+            //            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            //            {
+            //                CustomTicketMessage TicketMessageDetails = new CustomTicketMessage();
+            //                TicketMessageDetails.MailID = Convert.ToInt32(ds.Tables[0].Rows[i]["MailID"]);
+            //                TicketMessageDetails.TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
+            //                TicketMessageDetails.TicketMailSubject = ds.Tables[0].Rows[i]["TikcketMailSubject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketMailSubject"]);
+            //                TicketMessageDetails.TicketMailBody = ds.Tables[0].Rows[i]["TicketMailBody"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketMailBody"]);
+            //                TicketMessageDetails.IsCustomerComment = Convert.ToInt32(ds.Tables[0].Rows[i]["IsCustomerComment"]);
+            //                TicketMessageDetails.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]);
+            //                TicketMessageDetails.TicketSource = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketSource"]);
+            //                TicketMessageDetails.CommentBy = ds.Tables[0].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
+            //                TicketMessageDetails.DayOfCreation = ds.Tables[0].Rows[i]["DayOfCreation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayOfCreation"]);
+            //                TicketMessageDetails.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
+            //                CustumTicketMessagelist.Add(TicketMessageDetails);
+            //            }
+            //        }
+
+
+            //        if (ds.Tables[1] != null && ds.Tables[1] != null)
+            //        {
+            //            for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+            //            {
+
+            //                TicketMessage ticketMessage = new TicketMessage();
+            //                ticketMessage.MessageCount = Convert.ToInt32(ds.Tables[1].Rows[i]["MessageCount"]);
+            //                ticketMessage.MessageDate = ds.Tables[1].Rows[i]["MessageDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["MessageDate"]);
+
+            //                ticketMessage.CustomTicketMessages = CustumTicketMessagelist.Where(x => !string.IsNullOrEmpty(x.CreatedDate) && x.CreatedDate == ticketMessage.MessageDate).ToList();
+            //                ticketMessage.UpdatedDate = CustumTicketMessagelist.Where(x => !string.IsNullOrEmpty(x.CreatedDate) && x.CreatedDate == ticketMessage.MessageDate).Select(x => x.UpdatedAt).ToList().FirstOrDefault();
+
+            //                ticketMessages.Add(ticketMessage);
+            //            }
+
+            //        }
+            //    }
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
+
+            #endregion
+
             try
             {
                 conn.Open();
@@ -971,91 +1038,101 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
-
                 if (ds != null && ds.Tables.Count > 0)
                 {
 
-                    if (ds.Tables[0] != null && ds.Tables[0] != null)
-                    {
-                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    
+
+                        //get trail messages date wise
+                        if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                         {
-                            CustomTicketMessage TicketMessageDetails = new CustomTicketMessage();
-                            TicketMessageDetails.MailID = Convert.ToInt32(ds.Tables[0].Rows[i]["MailID"]);
-                            TicketMessageDetails.TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
-                            TicketMessageDetails.TicketMailSubject = ds.Tables[0].Rows[i]["TikcketMailSubject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketMailSubject"]);
-                            TicketMessageDetails.TicketMailBody = ds.Tables[0].Rows[i]["TicketMailBody"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketMailBody"]);
-                            TicketMessageDetails.IsCustomerComment = Convert.ToInt32(ds.Tables[0].Rows[i]["IsCustomerComment"]);
-                            TicketMessageDetails.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]);
-                            TicketMessageDetails.TicketSource = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketSource"]);
-                            TicketMessageDetails.CommentBy = ds.Tables[0].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
-                            TicketMessageDetails.UpdatedAt = ds.Tables[0].Rows[i]["UpdatedAt"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedAt"]);
-                            TicketMessageDetails.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
-                            CustumTicketMessagelist.Add(TicketMessageDetails);
+                            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                            {
+                                CustomTicketMessage TicketMessageDetails = new CustomTicketMessage();
+                                TicketMessageDetails.MailID = Convert.ToInt32(ds.Tables[0].Rows[i]["MailID"]);
+                                TicketMessageDetails.LatestMessageID = Convert.ToInt32(ds.Tables[0].Rows[i]["ThreadLatestID"]);
+                                TicketMessageDetails.TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
+                                TicketMessageDetails.TicketMailSubject = ds.Tables[0].Rows[i]["TikcketMailSubject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketMailSubject"]);
+                                TicketMessageDetails.TicketMailBody = ds.Tables[0].Rows[i]["TicketMailBody"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketMailBody"]);
+                                TicketMessageDetails.IsCustomerComment = Convert.ToInt32(ds.Tables[0].Rows[i]["IsCustomerComment"]);
+                                TicketMessageDetails.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]);
+                                TicketMessageDetails.TicketSource = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketSource"]);
+                                TicketMessageDetails.CommentBy = ds.Tables[0].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
+                                TicketMessageDetails.DayOfCreation = ds.Tables[0].Rows[i]["DayOfCreation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayOfCreation"]);
+                                TicketMessageDetails.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
+                                TrailTicketMessagelist.Add(TicketMessageDetails);
+
+                            }
+
                         }
-                    }
+                    // ends here
 
-
-                    if (ds.Tables[1] != null && ds.Tables[1] != null)
+                    // get Latest Message in the thread
+                    if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
                         {
+                            MessageDetails MsgDetails = new MessageDetails();
+                               CustomTicketMessage TicketMessageDetails = new CustomTicketMessage();
+                            TicketMessageDetails.MailID = Convert.ToInt32(ds.Tables[1].Rows[i]["MailID"]);
+                            TicketMessageDetails.TicketID = Convert.ToInt32(ds.Tables[1].Rows[i]["TicketID"]);
+                            TicketMessageDetails.TicketMailSubject = ds.Tables[1].Rows[i]["TikcketMailSubject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["TikcketMailSubject"]);
+                            TicketMessageDetails.TicketMailBody = ds.Tables[1].Rows[i]["TicketMailBody"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["TicketMailBody"]);
+                            TicketMessageDetails.IsCustomerComment = Convert.ToInt32(ds.Tables[1].Rows[i]["IsCustomerComment"]);
+                            TicketMessageDetails.HasAttachment = Convert.ToInt32(ds.Tables[1].Rows[i]["HasAttachment"]);
+                            TicketMessageDetails.TicketSource = Convert.ToInt32(ds.Tables[1].Rows[i]["TicketSource"]);
+                            TicketMessageDetails.CommentBy = ds.Tables[1].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CommentBy"]);
+                            TicketMessageDetails.DayOfCreation = ds.Tables[1].Rows[i]["DayOfCreation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["DayOfCreation"]);
+                            TicketMessageDetails.CreatedDate = ds.Tables[1].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CreatedDate"]);
+
+                            MsgDetails.LatestMessageDetails = TicketMessageDetails;
+                            MsgDetails.TrailMessageDetails= TrailTicketMessagelist
+                                    .Where(x => x.LatestMessageID > 0 && x.LatestMessageID.Equals(MsgDetails.LatestMessageDetails.MailID)).ToList();
+
+
+                            LatestTicketMessagelist.Add(MsgDetails);
+
+                            
+                        }
+                    }
+
+                    // ends here
+
+
+
+                    //get message grouped by date and bing the latest message with trail message
+                    if (ds.Tables[2] != null && ds.Tables[2].Rows.Count > 0)
+                    {
+
+                        for (int i = 0; i < ds.Tables[2].Rows.Count; i++)
+                        {
 
                             TicketMessage ticketMessage = new TicketMessage();
-                            ticketMessage.MessageCount = Convert.ToInt32(ds.Tables[1].Rows[i]["MessageCount"]);
-                            ticketMessage.MessageDate = ds.Tables[1].Rows[i]["MessageDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["MessageDate"]);
+                            ticketMessage.MessageCount = Convert.ToInt32(ds.Tables[2].Rows[i]["MessageCount"]);
+                            ticketMessage.MessageDate = ds.Tables[2].Rows[i]["MessageDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[i]["MessageDate"]);
 
-                            ticketMessage.CustomTicketMessages = CustumTicketMessagelist.Where(x => !string.IsNullOrEmpty(x.CreatedDate) && x.CreatedDate == ticketMessage.MessageDate).ToList();
-                            ticketMessage.UpdatedDate = CustumTicketMessagelist.Where(x => !string.IsNullOrEmpty(x.CreatedDate) && x.CreatedDate == ticketMessage.MessageDate).Select(x => x.UpdatedAt).ToList().FirstOrDefault();
-
+                            if(!string.IsNullOrEmpty(ticketMessage.MessageDate) && LatestTicketMessagelist.Count > 0)
+                            {
+                                ticketMessage.MsgDetails = LatestTicketMessagelist.Where(x => !string.IsNullOrEmpty(x.LatestMessageDetails.CreatedDate) &&
+                                 x.LatestMessageDetails.CreatedDate.Equals(ticketMessage.MessageDate)).ToList();
+                            }
+                          
                             ticketMessages.Add(ticketMessage);
                         }
 
                     }
-                }
+                    //ends here
 
+                }
             }
             catch (Exception ex)
             {
+
+                
                 throw ex;
             }
-            return ticketMessages;
 
-            // DataSet ds = new DataSet();
-            // MySqlCommand cmd = new MySqlCommand();
-            //List<CustomTicketMessage> TicketMessagelist = new List <CustomTicketMessage>();
-            // try
-            // {
-            //     conn.Open();
-            //     cmd.Connection = conn;
-            //     MySqlCommand cmd1 = new MySqlCommand("SP_GetTicketMessage", conn);
-            //     cmd1.CommandType = CommandType.StoredProcedure;
-            //     cmd1.Parameters.AddWithValue("@Ticket_Id", ticketID);
-            //     cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
-            //     MySqlDataAdapter da = new MySqlDataAdapter();
-            //     da.SelectCommand = cmd1;
-            //     da.Fill(ds);
-            //     if (ds != null && ds.Tables[0] != null)
-            //     {
-            //         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-            //         {
-            //              CustomTicketMessage TicketMessage = new CustomTicketMessage();
-            //             TicketMessage.MailID = Convert.ToInt32(ds.Tables[0].Rows[i]["MailID"]);
-            //             TicketMessage.TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
-            //             TicketMessage.TicketMailSubject = ds.Tables[0].Rows[i]["TikcketMailSubject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketMailSubject"]);
-            //             TicketMessage.TicketMailBody = ds.Tables[0].Rows[i]["TicketMailBody"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketMailBody"]);
-            //             TicketMessage.IsCustomerComment = Convert.ToInt32(ds.Tables[0].Rows[i]["IsCustomerComment"]);
-            //             TicketMessage.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]);
-            //             TicketMessage.CommentBy = ds.Tables[0].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
-            //             TicketMessage.UpdatedAt = ds.Tables[0].Rows[i]["UpdatedAt"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedAt"]);
-            //             TicketMessagelist.Add(TicketMessage);
-            //         }
-            //     }
-            // }
-            // catch (Exception ex)
-            // {
-            //     throw ex;
-            // }
-            // return TicketMessagelist;
+            return ticketMessages;
         }
 
         public List<CustomSearchTicketAgent> GetAgentList(int TenantID)

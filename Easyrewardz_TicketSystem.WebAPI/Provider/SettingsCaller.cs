@@ -271,6 +271,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Reports.GetReportSearch(searchModel);
         }
 
+        public string DownloadReportSearch(IReports Report, int SchedulerID, int curentUserId, int TenantID)
+        {
+            _Reports = Report;
+            return _Reports.DownloadReportSearch(SchedulerID, curentUserId, TenantID);
+        }
+
         #endregion
 
         #region Modules

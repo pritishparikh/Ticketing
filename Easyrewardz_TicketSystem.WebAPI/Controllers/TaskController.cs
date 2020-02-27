@@ -175,7 +175,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 int result = _taskcaller.DeleteTask(new TaskServices(_connectionSting), task_Id);
                 StatusCode =
                result == 0 ?
-                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                      (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;

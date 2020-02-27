@@ -32,12 +32,12 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd1 = new MySqlCommand("SP_createTask", conn);
                 cmd1.Connection = conn;
-                cmd1.Parameters.AddWithValue("@TicketID", taskMaster.TicketID);
+                cmd1.Parameters.AddWithValue("@Ticket_ID", taskMaster.TicketID);
                 cmd1.Parameters.AddWithValue("@TaskTitle", taskMaster.TaskTitle);
                 cmd1.Parameters.AddWithValue("@TaskDescription", taskMaster.TaskDescription);
                 cmd1.Parameters.AddWithValue("@DepartmentId", taskMaster.DepartmentId);
                 cmd1.Parameters.AddWithValue("@FunctionID", taskMaster.FunctionID);
-                cmd1.Parameters.AddWithValue("@AssignToID", taskMaster.AssignToID);
+                cmd1.Parameters.AddWithValue("@AssignTo_ID", taskMaster.AssignToID);
                 cmd1.Parameters.AddWithValue("@PriorityID", taskMaster.PriorityID);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 taskId = Convert.ToInt32(cmd1.ExecuteNonQuery());
@@ -181,7 +181,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_DeleteTask", conn);
                 cmd1.Parameters.AddWithValue("@task_ID", taskId);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                i = cmd1.ExecuteNonQuery();
+                i = Convert.ToInt32(cmd1.ExecuteScalar());
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
