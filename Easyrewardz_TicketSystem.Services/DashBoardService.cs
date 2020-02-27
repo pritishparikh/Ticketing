@@ -403,7 +403,7 @@ namespace Easyrewardz_TicketSystem.Services
                     /*Column 4 (5)*/
                     sqlcmd.Parameters.AddWithValue("Customer_EmailID", searchModel.searchDataByAll.CustomerEmailID);
                     sqlcmd.Parameters.AddWithValue("CustomerMobileNo", string.IsNullOrEmpty(searchModel.searchDataByAll.CustomerMobileNo) ? "" : searchModel.searchDataByAll.CustomerMobileNo);
-                    sqlcmd.Parameters.AddWithValue("AssignTo", searchModel.searchDataByAll.AssignTo);
+                    sqlcmd.Parameters.AddWithValue("AssignTo", string.IsNullOrEmpty(searchModel.searchDataByAll.AssignTo) ? 0 : Convert.ToInt32(searchModel.searchDataByAll.AssignTo));
                     sqlcmd.Parameters.AddWithValue("StoreCodeORAddress", searchModel.searchDataByAll.StoreCodeORAddress);
                     sqlcmd.Parameters.AddWithValue("WantToStoreCodeORAddress", searchModel.searchDataByAll.WantToStoreCodeORAddress);
 
