@@ -524,10 +524,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 TicketingCaller _TicketCaller = new TicketingCaller();
 
                 int result =_TicketCaller.Schedule(new TicketingService(_connectioSting), scheduleMaster, authenticate.TenantId, authenticate.UserMasterID);
-                StatusCode =
-                result >= 0 ?
-                       (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                if(result==1062)
+                {
+                    statusMessage = "duplicate";
+                    StatusCode = (int)EnumMaster.StatusCode.RecordNotFound;
+                }
+                else
+                {
+                    StatusCode =
+                    result >= 0 ?
+                      (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                    statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                }
+               
 
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
