@@ -98,18 +98,43 @@ namespace Easyrewardz_TicketSystem.WebAPI
             app.UseAuthentication();
             app.UseForwardedHeaders();
             app.UseStaticFiles();
+
+            string Resources = "Resources";
+            string ResourcesURL = Path.Combine(CurrentDirectory, Resources);
+            if (!Directory.Exists(ResourcesURL))
+            {
+                Directory.CreateDirectory(ResourcesURL);
+            }
+
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(
-                Path.Combine(Directory.GetCurrentDirectory(), "TicketAttachment")),
-                RequestPath = "/TicketAttachment"
+                FileProvider = new PhysicalFileProvider(ResourcesURL),
+                RequestPath = "/" + Resources
             });
             //Enable directory browsing
             app.UseDirectoryBrowser(new DirectoryBrowserOptions
             {
-                FileProvider = new PhysicalFileProvider(
-                            Path.Combine(Directory.GetCurrentDirectory(), "TicketAttachment")),
-                RequestPath = "/TicketAttachment"
+                FileProvider = new PhysicalFileProvider(ResourcesURL),
+                RequestPath = "/" + Resources
+            });
+
+            string TicketAttachment = "TicketAttachment";
+            string TicketAttachmentURL = Path.Combine(CurrentDirectory, TicketAttachment);
+            if (!Directory.Exists(TicketAttachmentURL))
+            {
+                Directory.CreateDirectory(TicketAttachmentURL);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(TicketAttachmentURL),
+                RequestPath = "/"+ TicketAttachment
+            });
+            //Enable directory browsing
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(TicketAttachmentURL),
+                RequestPath = "/"+ TicketAttachment
             });
 
             string ReportDownload = "ReportDownload";
@@ -126,9 +151,8 @@ namespace Easyrewardz_TicketSystem.WebAPI
             });
             app.UseDirectoryBrowser(new DirectoryBrowserOptions
             {
-                FileProvider = new PhysicalFileProvider(
-                            Path.Combine(Directory.GetCurrentDirectory(), "ReportDownload")),
-                RequestPath = "/ReportDownload"
+                FileProvider = new PhysicalFileProvider(ReportDownloadURL),
+                RequestPath = "/" + ReportDownload
             });
             //         app.UseCors(
             //    options => options.WithOrigins("*").AllowAnyMethod()
