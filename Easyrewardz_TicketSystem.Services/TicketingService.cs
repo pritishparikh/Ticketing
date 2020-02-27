@@ -1055,8 +1055,9 @@ namespace Easyrewardz_TicketSystem.Services
                                 TicketMessageDetails.TicketMailSubject = ds.Tables[0].Rows[i]["TikcketMailSubject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketMailSubject"]);
                                 TicketMessageDetails.TicketMailBody = ds.Tables[0].Rows[i]["TicketMailBody"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketMailBody"]);
                                 TicketMessageDetails.IsCustomerComment = Convert.ToInt32(ds.Tables[0].Rows[i]["IsCustomerComment"]);
-                                TicketMessageDetails.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]);
-                                TicketMessageDetails.TicketSource = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketSource"]);
+                                 TicketMessageDetails.HasAttachment = ds.Tables[0].Rows[i]["HasAttachment"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]);
+                                 TicketMessageDetails.TicketSourceID = ds.Tables[0].Rows[i]["TicketSource"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketSource"]);
+                                TicketMessageDetails.TicketSourceName = ds.Tables[0].Rows[i]["TicketSourceName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketSourceName"]);
                                 TicketMessageDetails.CommentBy = ds.Tables[0].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
                                 TicketMessageDetails.DayOfCreation = ds.Tables[0].Rows[i]["DayOfCreation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayOfCreation"]);
                                 TicketMessageDetails.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
@@ -1079,8 +1080,9 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketMessageDetails.TicketMailSubject = ds.Tables[1].Rows[i]["TikcketMailSubject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["TikcketMailSubject"]);
                             TicketMessageDetails.TicketMailBody = ds.Tables[1].Rows[i]["TicketMailBody"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["TicketMailBody"]);
                             TicketMessageDetails.IsCustomerComment = Convert.ToInt32(ds.Tables[1].Rows[i]["IsCustomerComment"]);
-                            TicketMessageDetails.HasAttachment = Convert.ToInt32(ds.Tables[1].Rows[i]["HasAttachment"]);
-                            TicketMessageDetails.TicketSource = Convert.ToInt32(ds.Tables[1].Rows[i]["TicketSource"]);
+                            TicketMessageDetails.HasAttachment = ds.Tables[1].Rows[i]["HasAttachment"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["HasAttachment"]);
+                            TicketMessageDetails.TicketSourceID = ds.Tables[1].Rows[i]["TicketSource"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["TicketSource"]);
+                            TicketMessageDetails.TicketSourceName = ds.Tables[1].Rows[i]["TicketSourceName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["TicketSourceName"]);
                             TicketMessageDetails.CommentBy = ds.Tables[1].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CommentBy"]);
                             TicketMessageDetails.DayOfCreation = ds.Tables[1].Rows[i]["DayOfCreation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["DayOfCreation"]);
                             TicketMessageDetails.CreatedDate = ds.Tables[1].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CreatedDate"]);
@@ -1100,7 +1102,7 @@ namespace Easyrewardz_TicketSystem.Services
 
 
 
-                    //get message grouped by date and bing the latest message with trail message
+                    //get message grouped by date and bind the latest message with trail message
                     if (ds.Tables[2] != null && ds.Tables[2].Rows.Count > 0)
                     {
 
@@ -1111,12 +1113,14 @@ namespace Easyrewardz_TicketSystem.Services
                             ticketMessage.MessageCount = Convert.ToInt32(ds.Tables[2].Rows[i]["MessageCount"]);
                             ticketMessage.MessageDate = ds.Tables[2].Rows[i]["MessageDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[i]["MessageDate"]);
 
-                            if(!string.IsNullOrEmpty(ticketMessage.MessageDate) && LatestTicketMessagelist.Count > 0)
+                            if (!string.IsNullOrEmpty(ticketMessage.MessageDate) && LatestTicketMessagelist.Count > 0)
                             {
+                                ticketMessage.DayOfCreation = LatestTicketMessagelist.Where(x => !string.IsNullOrEmpty(x.LatestMessageDetails.CreatedDate) &&
+                                   x.LatestMessageDetails.CreatedDate.Equals(ticketMessage.MessageDate)).Select(x => x.LatestMessageDetails.DayOfCreation).FirstOrDefault();
                                 ticketMessage.MsgDetails = LatestTicketMessagelist.Where(x => !string.IsNullOrEmpty(x.LatestMessageDetails.CreatedDate) &&
                                  x.LatestMessageDetails.CreatedDate.Equals(ticketMessage.MessageDate)).ToList();
                             }
-                          
+
                             ticketMessages.Add(ticketMessage);
                         }
 
