@@ -96,37 +96,37 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createTicket", conn);
-                cmd1.Parameters.AddWithValue("@TenantID", TenantId);
-                cmd1.Parameters.AddWithValue("@TicketDescription", ticketingDetails.Ticketdescription);
-                cmd1.Parameters.AddWithValue("@TicketSourceID", ticketingDetails.TicketSourceID);
-                cmd1.Parameters.AddWithValue("@BrandID", ticketingDetails.BrandID);
-                cmd1.Parameters.AddWithValue("@CategoryID", ticketingDetails.CategoryID);
-                cmd1.Parameters.AddWithValue("@SubCategoryID", ticketingDetails.SubCategoryID);
-                cmd1.Parameters.AddWithValue("@PriorityID", ticketingDetails.PriorityID);
-                cmd1.Parameters.AddWithValue("@CustomerID", ticketingDetails.CustomerID);
-                cmd1.Parameters.AddWithValue("@OrderMasterID", ticketingDetails.OrderMasterID);
-                cmd1.Parameters.AddWithValue("@IssueTypeID", ticketingDetails.IssueTypeID);
-                cmd1.Parameters.AddWithValue("@ChannelOfPurchaseID", ticketingDetails.ChannelOfPurchaseID);
+                cmd1.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd1.Parameters.AddWithValue("@_TicketDescription", ticketingDetails.Ticketdescription);
+                cmd1.Parameters.AddWithValue("@_TicketSourceID", ticketingDetails.TicketSourceID);
+                cmd1.Parameters.AddWithValue("@_BrandID", ticketingDetails.BrandID);
+                cmd1.Parameters.AddWithValue("@_CategoryID", ticketingDetails.CategoryID);
+                cmd1.Parameters.AddWithValue("@_SubCategoryID", ticketingDetails.SubCategoryID);
+                cmd1.Parameters.AddWithValue("@_PriorityID", ticketingDetails.PriorityID);
+                cmd1.Parameters.AddWithValue("@_CustomerID", ticketingDetails.CustomerID);
+                cmd1.Parameters.AddWithValue("@_OrderMasterID", ticketingDetails.OrderMasterID);
+                cmd1.Parameters.AddWithValue("@_IssueTypeID", ticketingDetails.IssueTypeID);
+                cmd1.Parameters.AddWithValue("@_ChannelOfPurchaseID", ticketingDetails.ChannelOfPurchaseID);
                 //need to change as per TicketActionType ID[QB / ETA]
-                cmd1.Parameters.AddWithValue("@AssignedID", ticketingDetails.AssignedID);
-                cmd1.Parameters.AddWithValue("@TicketActionID", ticketingDetails.TicketActionID);
+                cmd1.Parameters.AddWithValue("@_AssignedID", ticketingDetails.AssignedID);
+                cmd1.Parameters.AddWithValue("@_TicketActionID", ticketingDetails.TicketActionID);
 
-                cmd1.Parameters.AddWithValue("@StatusID", ticketingDetails.StatusID);
+                cmd1.Parameters.AddWithValue("@_StatusID", ticketingDetails.StatusID);
 
-                cmd1.Parameters.AddWithValue("@TicketTemplateID", ticketingDetails.TicketTemplateID);
+                cmd1.Parameters.AddWithValue("@_TicketTemplateID", ticketingDetails.TicketTemplateID);
 
-                cmd1.Parameters.AddWithValue("@CreatedBy", ticketingDetails.CreatedBy);
-                cmd1.Parameters.AddWithValue("@Notes", ticketingDetails.Ticketnotes);
+                cmd1.Parameters.AddWithValue("@_CreatedBy", ticketingDetails.CreatedBy);
+                cmd1.Parameters.AddWithValue("@_Notes", ticketingDetails.Ticketnotes);
 
-                cmd1.Parameters.AddWithValue("@IsInstantEscalateToHighLevel", Convert.ToInt16(ticketingDetails.IsInstantEscalateToHighLevel));
-                cmd1.Parameters.AddWithValue("@IsWantToVisitedStore", Convert.ToInt16(ticketingDetails.IsWantToVisitedStore));
-                cmd1.Parameters.AddWithValue("@IsAlreadyVisitedStore", Convert.ToInt16(ticketingDetails.IsAlreadyVisitedStore));
-                cmd1.Parameters.AddWithValue("@IsWantToAttachOrder", Convert.ToInt16(ticketingDetails.IsWantToAttachOrder));
-                cmd1.Parameters.AddWithValue("@IsActive", Convert.ToInt16(ticketingDetails.IsActive));
-                cmd1.Parameters.AddWithValue("@OrderItemID", string.IsNullOrEmpty(ticketingDetails.OrderItemID) ? "" : ticketingDetails.OrderItemID);
+                cmd1.Parameters.AddWithValue("@_IsInstantEscalateToHighLevel", Convert.ToInt16(ticketingDetails.IsInstantEscalateToHighLevel));
+                cmd1.Parameters.AddWithValue("@_IsWantToVisitedStore", Convert.ToInt16(ticketingDetails.IsWantToVisitedStore));
+                cmd1.Parameters.AddWithValue("@_IsAlreadyVisitedStore", Convert.ToInt16(ticketingDetails.IsAlreadyVisitedStore));
+                cmd1.Parameters.AddWithValue("@_IsWantToAttachOrder", Convert.ToInt16(ticketingDetails.IsWantToAttachOrder));
+                cmd1.Parameters.AddWithValue("@_IsActive", Convert.ToInt16(ticketingDetails.IsActive));
+                cmd1.Parameters.AddWithValue("@_OrderItemID", string.IsNullOrEmpty(ticketingDetails.OrderItemID) ? "" : ticketingDetails.OrderItemID);
 
-                cmd1.Parameters.AddWithValue("@TikcketTitle", string.IsNullOrEmpty(ticketingDetails.TicketTitle) ? "" : ticketingDetails.TicketTitle);
-                cmd1.Parameters.AddWithValue("@StoreID", string.IsNullOrEmpty(ticketingDetails.StoreID) ? "" : ticketingDetails.StoreID);
+                cmd1.Parameters.AddWithValue("@_TikcketTitle", string.IsNullOrEmpty(ticketingDetails.TicketTitle) ? "" : ticketingDetails.TicketTitle);
+                cmd1.Parameters.AddWithValue("@_StoreID", string.IsNullOrEmpty(ticketingDetails.StoreID) ? "" : ticketingDetails.StoreID);
 
 
                 cmd1.CommandType = CommandType.StoredProcedure;
