@@ -1226,6 +1226,46 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return i;
         }
+
+        public ProgressBarDetail GetProgressBarDetails(int TicketID, int TenantID)
+        {
+            ProgressBarDetail progressBarDetail = new ProgressBarDetail();
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmdMail = new MySqlCommand("sp_getProgressBarDetailByTicketID", conn);
+                cmdMail.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmdMail.Parameters.AddWithValue("@Ticket_ID", TicketID);
+                cmdMail.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmdMail;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        progressBarDetail.ProgressFirstPercentage = Convert.ToInt16( ds.Tables[0].Rows[0]["ProgessFirst"]);
+                        progressBarDetail.ProgressFirstColorCode = Convert.ToString(ds.Tables[0].Rows[0]["ProgessFirstColorCode"]);
+                        progressBarDetail.ProgressSecondPercentage = Convert.ToInt16(ds.Tables[0].Rows[0]["ProgessSecond"]);
+                        progressBarDetail.ProgressSecondColorCode = Convert.ToString(ds.Tables[0].Rows[0]["ProgessSecondColorCode"]);
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return progressBarDetail;
+        }
     }
 }
 

@@ -169,6 +169,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ticketList = _ticket;
             return _ticketList.CommentOnTicketDetail(ticketingMailerQue);
         }
+        /// <summary>
+        /// Get Progress bar details
+        /// </summary>
+        /// <param name="_ticket">Interface</param>
+        /// <param name="TicketID">Id of the ticket</param>
+        /// <param name="TenantID">Id of the tenant</param>
+        /// <returns></returns>
+        public ProgressBarDetail GetProgressBarDetails(ITicketing _ticket, int TicketID, int TenantID)
+        {
+            _ticketList = _ticket;
+            return _ticketList.GetProgressBarDetails(TicketID, TenantID);
+        }
         #endregion
     }
 }
