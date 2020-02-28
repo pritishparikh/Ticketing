@@ -145,12 +145,12 @@ namespace Easyrewardz_TicketSystem.Services
                             //cmd.Connection = conn;
                             MySqlCommand cmdtask = new MySqlCommand("SP_createTask", conn);
                             cmdtask.Connection = conn;
-                            cmdtask.Parameters.AddWithValue("@TicketID", ticketID);
+                            cmdtask.Parameters.AddWithValue("@Ticket_ID", ticketID);
                             cmdtask.Parameters.AddWithValue("@TaskTitle", ticketingDetails.taskMasters[j].TaskTitle);
                             cmdtask.Parameters.AddWithValue("@TaskDescription", ticketingDetails.taskMasters[j].TaskDescription);
                             cmdtask.Parameters.AddWithValue("@DepartmentId", ticketingDetails.taskMasters[j].DepartmentId);
                             cmdtask.Parameters.AddWithValue("@FunctionID", ticketingDetails.taskMasters[j].FunctionID);
-                            cmdtask.Parameters.AddWithValue("@AssignToID", ticketingDetails.taskMasters[j].AssignToID);
+                            cmdtask.Parameters.AddWithValue("@AssignTo_ID", ticketingDetails.taskMasters[j].AssignToID);
                             cmdtask.Parameters.AddWithValue("@PriorityID", ticketingDetails.taskMasters[j].PriorityID);
                             cmdtask.CommandType = CommandType.StoredProcedure;
                             taskId = Convert.ToInt32(cmdtask.ExecuteScalar());
