@@ -19,10 +19,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name=""></param>
         /// <param name=""></param>
         /// <returns></returns>
-        public int AddTask(ITask task, TaskMaster taskMaster)
+        public int AddTask(ITask task, TaskMaster taskMaster, int TenantID, int UserID)
         {
             _TaskRepository = task;
-            return _TaskRepository.AddTaskDetails(taskMaster);
+            return _TaskRepository.AddTaskDetails(taskMaster, TenantID, UserID);
         }
         public CustomTaskMasterDetails gettaskDetailsById(ITask task, int taskID)
         {
