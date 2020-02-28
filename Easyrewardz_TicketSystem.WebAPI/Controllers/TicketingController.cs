@@ -524,19 +524,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 TicketingCaller _TicketCaller = new TicketingCaller();
 
                 int result =_TicketCaller.Schedule(new TicketingService(_connectioSting), scheduleMaster, authenticate.TenantId, authenticate.UserMasterID);
-                if(result==1062)
-                {
-                    statusMessage = "duplicate";
-                    StatusCode = (int)EnumMaster.StatusCode.RecordNotFound;
-                }
-                else
-                {
-                    StatusCode =
-                    result >= 0 ?
-                      (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                    statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                }
-               
+                StatusCode =
+                result >= 0 ?
+                       (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
@@ -982,52 +973,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
-
-        /// <summary>
-        /// Get Ticket Detail progress bar
-        /// </summary>
-        /// <param name="TikcketTitle"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("getprogressbardetail")]
-        public ResponseModel getprogressbardetail(int TicketID)
-        {
-            ProgressBarDetail objProgressBarDetail = new ProgressBarDetail();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
-            string statusMessage = "";
-            try
-            {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
-                TicketingCaller _Ticket = new TicketingCaller();
-
-                objProgressBarDetail = _Ticket.GetProgressBarDetails(new TicketingService(_connectioSting), TicketID, authenticate.TenantId);
-                StatusCode =
-                objProgressBarDetail == null ?
-                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objProgressBarDetail;
-            }
-            catch (Exception ex)
-            {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
-            }
-            return _objResponseModel;
-        }
-
-
-
         #endregion
     }
 }

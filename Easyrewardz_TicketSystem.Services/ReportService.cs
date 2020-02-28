@@ -444,7 +444,7 @@ namespace Easyrewardz_TicketSystem.Services
                             searchModel.curentUserId = curentUserId;
 
                             searchresponsereport = GetDownloadReportSearch(searchModel);
-                            csv = CommonService.ListToCSV(searchresponsereport, "totalpages,isEscalation,ClaimStatus,TaskStatus,TicketCommentCount");
+                            csv = CommonService.ListToCSV(searchresponsereport, "");
 
                             
                         }
