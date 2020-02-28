@@ -35,6 +35,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
         #endregion
 
+
         #region Custom Methods
 
         /// <summary>
