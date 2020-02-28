@@ -23,6 +23,7 @@ namespace Easyrewardz_TicketSystem.Model
         public decimal Discount { get; set; }
         public string ArticleNumber { get; set; }
         public string ArticleName { get; set; }
+        public bool isCheck { get; set; }
 
     }
 }
