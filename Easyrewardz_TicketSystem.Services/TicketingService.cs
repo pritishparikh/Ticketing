@@ -1204,6 +1204,8 @@ namespace Easyrewardz_TicketSystem.Services
                 // cmdMail.Parameters.AddWithValue("@Priority_ID", ticketingMailerQue.PriorityID);
                 cmdMail.Parameters.AddWithValue("@Created_By", ticketingMailerQue.CreatedBy);
                 cmdMail.Parameters.AddWithValue("@ReplyMail_ID", ticketingMailerQue.MailID);
+                //cmdMail.Parameters.AddWithValue("@Is_InternalComment", ticketingMailerQue.IsInternalComment);
+                cmdMail.Parameters.AddWithValue("@Is_ResponseToCustomer", ticketingMailerQue.IsResponseToCustomer);
                 /* if (finalAttchment == null || finalAttchment == String.Empty)
                  {
                      cmdMail.Parameters.AddWithValue("@Has_Attachment", 0);
