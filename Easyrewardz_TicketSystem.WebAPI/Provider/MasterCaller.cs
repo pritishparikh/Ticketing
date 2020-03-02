@@ -185,10 +185,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _priorityList = _priority;
             return _priorityList.PriorityList(TenantID, PriorityFor);
         }
-        public bool UpdatePriorityOrder(IPriority _priority, int TenantID, int selectedPriorityID, int previousPriorityID)
+        public bool UpdatePriorityOrder(IPriority _priority, int TenantID, int selectedPriorityID, int currentPriorityID, int PriorityFor)
         {
             _priorityList = _priority;
-            return _priorityList.UpdatePriorityOrder(TenantID, selectedPriorityID, previousPriorityID);
+            return _priorityList.UpdatePriorityOrder(TenantID, selectedPriorityID, currentPriorityID, PriorityFor);
         }
 
         #endregion

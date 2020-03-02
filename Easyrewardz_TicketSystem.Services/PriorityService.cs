@@ -247,9 +247,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <param name="selectedPriorityID"></param>
-        /// <param name="previousPriorityID"></param>
+        /// <param name="currentPriorityID"></param>
+        /// <param name="PriorityFor"></param>        
         /// <returns></returns>
-        public bool UpdatePriorityOrder(int TenantID, int selectedPriorityID, int previousPriorityID)
+        public bool UpdatePriorityOrder(int TenantID, int selectedPriorityID, int currentPriorityID, int PriorityFor)
         {
             bool isUpdate = false;
 
@@ -260,7 +261,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@selectedPriorityID", selectedPriorityID);
-                cmd.Parameters.AddWithValue("@previousPriorityID", previousPriorityID);
+                cmd.Parameters.AddWithValue("@currentPriorityID", currentPriorityID);
+                cmd.Parameters.AddWithValue("@Priority_For", PriorityFor);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.ExecuteScalar();
 

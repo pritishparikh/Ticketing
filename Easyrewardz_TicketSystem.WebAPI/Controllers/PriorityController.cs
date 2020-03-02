@@ -266,7 +266,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("UpdatePriorityOrder")]
-        public ResponseModel UpdatePriorityOrder(int selectedPriorityID, int previousPriorityID)
+        public ResponseModel UpdatePriorityOrder(int selectedPriorityID, int currentPriorityID, int PriorityFor = 1)
         {
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -275,11 +275,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 MasterCaller _newMaster = new MasterCaller();
 
-                bool iStatus = _newMaster.UpdatePriorityOrder(new PriorityService(_connectionString), authenticate.TenantId, selectedPriorityID, previousPriorityID);
+                bool iStatus = _newMaster.UpdatePriorityOrder(new PriorityService(_connectionString), authenticate.TenantId, selectedPriorityID, currentPriorityID, PriorityFor);
 
                 StatusCode =
                 iStatus ?
