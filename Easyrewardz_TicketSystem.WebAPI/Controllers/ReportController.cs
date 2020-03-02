@@ -284,6 +284,65 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Route("DownloadDefaultReport")]
+        public ResponseModel DownloadDefaultReport([FromBody] DefaultReportRequestModel objRequest)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            SettingsCaller _dbsearchMaster = new SettingsCaller();
+            string strcsv = string.Empty;
+            try
+            {
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                var temp = SecurityService.DecryptStringAES(_token);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                strcsv = _dbsearchMaster.DownloadDefaultReport(new ReportService(_connectioSting), objRequest, authenticate.UserMasterID, authenticate.TenantId);
+
+                string dateformat = DateTime.Now.ToString("yyyyMMddHHmmssffff");
+                string csvname = "DefaultReport" + "_" + dateformat + ".csv";
+
+                var exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                var appRoot = appPathMatcher.Match(exePath).Value;
+
+                string Folderpath = Path.Combine(appRoot, "ReportDownload");
+                string URLFolderpath = Path.Combine(rootPath, "ReportDownload");
+
+                if (!Directory.Exists(Folderpath))
+                {
+                    Directory.CreateDirectory(Folderpath);
+                }
+
+                Folderpath = Path.Combine(Folderpath, csvname);
+                URLFolderpath = URLFolderpath + @"/" + csvname;
+                CommonService.SaveFile(Folderpath, strcsv);
+
+                StatusCode = (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = !string.IsNullOrEmpty(URLFolderpath) ? URLFolderpath : null;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
+        [HttpPost]
         [Route("DownloadReportSearch")]
         public ResponseModel DownloadReportSearch(int SchedulerID)
         {

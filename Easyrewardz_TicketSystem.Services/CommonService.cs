@@ -182,8 +182,8 @@ namespace Easyrewardz_TicketSystem.Services
             Type type = typeof(T);
             var props = type.GetProperties();
 
-
-            if (string.IsNullOrEmpty(ExcludeColumns))
+            // This is testing 
+            if (string.IsNullOrEmpty(ExcludeColumns))  
             {
                 sList.Append(string.Join(",", props.Select(p => p.Name)));
             }

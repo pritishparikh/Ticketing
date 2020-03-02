@@ -705,6 +705,108 @@ namespace Easyrewardz_TicketSystem.Services
             return span;
         }
 
+        public string DownloadDefaultReport(DefaultReportRequestModel objRequest, int curentUserId, int TenantID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+
+            List<ScheduleMaster> ticketschedulemodal = new List<ScheduleMaster>();
+
+            List<string> CountList = new List<string>();
+            string csv = String.Empty;
+
+            int resultCount = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                cmd.Connection = conn;
+
+
+                MySqlCommand sqlcmd = new MySqlCommand("", conn);
+
+                sqlcmd.CommandText = "SP_DownloadReportSearch";
+
+               // sqlcmd.Parameters.AddWithValue("Schedule_ID", SchedulerID);
+
+
+                sqlcmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = sqlcmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+
+                        ticketschedulemodal = ds.Tables[0].AsEnumerable().Select(r => new ScheduleMaster()
+                        {
+                            ScheduleID = r.Field<object>("ScheduleID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("ScheduleID")),
+                            TenantID = r.Field<object>("TenantID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TenantID")),
+                            ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),
+                            ScheduleType = r.Field<object>("ScheduleType") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("ScheduleType")),
+                            //ScheduleTime = Convert.ToString(r.Field<object>("ScheduleTime")),
+                            IsDaily = Convert.ToBoolean(r.Field<object>("IsDaily")),
+                            NoOfDay = r.Field<object>("NoOfDay") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDay")),
+                            IsWeekly = Convert.ToBoolean(r.Field<object>("IsWeekly")),
+                            NoOfWeek = r.Field<object>("NoOfWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeek")),
+                            DayIds = r.Field<object>("DayIds") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("DayIds")),
+                            IsDailyForMonth = Convert.ToBoolean(r.Field<object>("IsDailyForMonth")),
+                            NoOfDaysForMonth = r.Field<object>("NoOfDaysForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDaysForMonth")),
+                            NoOfMonthForMonth = r.Field<object>("NoOfMonthForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfMonthForMonth")),
+                            IsWeeklyForMonth = Convert.ToBoolean(r.Field<object>("IsWeeklyForMonth")),
+                            NoOfMonthForWeek = r.Field<object>("NoOfMonthForWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfMonthForWeek")),
+                            NoOfWeekForWeek = r.Field<object>("NoOfWeekForWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeekForWeek")),
+                            NameOfDayForWeek = r.Field<object>("NameOfDayForWeek") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfDayForWeek")),
+                            IsWeeklyForYear = Convert.ToBoolean(r.Field<object>("IsWeeklyForYear")),
+                            NoOfWeekForYear = r.Field<object>("NoOfWeekForYear") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeekForYear")),
+                            NameOfDayForYear = r.Field<object>("NameOfDayForYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfDayForYear")),
+                            NameOfMonthForYear = r.Field<object>("NameOfMonthForYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfMonthForYear")),
+                            IsDailyForYear = Convert.ToBoolean(r.Field<object>("IsDailyForYear")),
+                            NameOfMonthForDailyYear = r.Field<object>("NameOfMonthForDailyYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfMonthForDailyYear")),
+                            NoOfDayForDailyYear = r.Field<object>("NoOfDayForDailyYear") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDayForDailyYear")),
+                            SearchInputParams = r.Field<object>("SearchInputParams") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SearchInputParams")),
+                            IsActive = Convert.ToBoolean(r.Field<object>("IsActive")),
+                            CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("CreatedBy")),
+                            CreatedDate = Convert.ToDateTime(r.Field<object>("CreatedDate")),
+                            ModifyBy = r.Field<object>("ModifyBy") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("ModifyBy")),
+                            ModifyDate = Convert.ToDateTime(r.Field<object>("ModifyDate")),
+                            ScheduleFrom = r.Field<object>("ScheduleFrom") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("ScheduleFrom"))
+                        }).ToList();
+
+                        if (ticketschedulemodal.Count > 0)
+                        {
+                            conn.Close();
+                            ReportSearchModel searchModel = new ReportSearchModel();
+                            searchModel.reportSearch = JsonConvert.DeserializeObject<ReportSearchData>(ticketschedulemodal[0].SearchInputParams);
+                            List<SearchResponseReport> searchresponsereport = new List<SearchResponseReport>();
+                            searchModel.TenantID = TenantID;
+                            searchModel.curentUserId = curentUserId;
+
+                            searchresponsereport = GetDownloadReportSearch(searchModel);
+                            csv = CommonService.ListToCSV(searchresponsereport, "");
+
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
+            return csv;
+        }
+
         #endregion
 
 
