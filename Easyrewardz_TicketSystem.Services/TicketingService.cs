@@ -1064,6 +1064,7 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketMessageDetails.CommentBy = ds.Tables[0].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
                             TicketMessageDetails.DayOfCreation = ds.Tables[0].Rows[i]["DayOfCreation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayOfCreation"]);
                             TicketMessageDetails.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
+                            TicketMessageDetails.IsInternalComment = ds.Tables[0].Rows[i]["IsInternalComment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsInternalComment"]);
                             TrailTicketMessagelist.Add(TicketMessageDetails);
 
                         }
@@ -1089,6 +1090,7 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketMessageDetails.CommentBy = ds.Tables[1].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CommentBy"]);
                             TicketMessageDetails.DayOfCreation = ds.Tables[1].Rows[i]["DayOfCreation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["DayOfCreation"]);
                             TicketMessageDetails.CreatedDate = ds.Tables[1].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CreatedDate"]);
+                            TicketMessageDetails.IsInternalComment = ds.Tables[1].Rows[i]["IsInternalComment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[1].Rows[i]["IsInternalComment"]);
 
                             MsgDetails.LatestMessageDetails = TicketMessageDetails;
                             MsgDetails.TrailMessageDetails = TrailTicketMessagelist
@@ -1204,7 +1206,7 @@ namespace Easyrewardz_TicketSystem.Services
                 // cmdMail.Parameters.AddWithValue("@Priority_ID", ticketingMailerQue.PriorityID);
                 cmdMail.Parameters.AddWithValue("@Created_By", ticketingMailerQue.CreatedBy);
                 cmdMail.Parameters.AddWithValue("@ReplyMail_ID", ticketingMailerQue.MailID);
-                //cmdMail.Parameters.AddWithValue("@Is_InternalComment", ticketingMailerQue.IsInternalComment);
+                cmdMail.Parameters.AddWithValue("@Is_InternalComment", ticketingMailerQue.IsInternalComment);
                 cmdMail.Parameters.AddWithValue("@Is_ResponseToCustomer", ticketingMailerQue.IsResponseToCustomer);
                 /* if (finalAttchment == null || finalAttchment == String.Empty)
                  {

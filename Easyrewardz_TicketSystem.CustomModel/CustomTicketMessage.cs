@@ -34,5 +34,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string CommentBy { get; set; }
         public string DayOfCreation { get; set; }
         public string CreatedDate { get; set; }
+        public bool IsInternalComment { get; set; }
+
     }
 }
