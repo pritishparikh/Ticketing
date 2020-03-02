@@ -12,10 +12,16 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
+
         public PriorityService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+
+        #endregion
+
+        #region Methods
+
         /// <summary>
         ///  Add Priority
         /// </summary>
@@ -53,6 +59,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             return success;
         }
+        
         /// <summary>
         ///  Delete Priority
         /// </summary>
@@ -89,6 +96,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             return success;
         }
+        
         /// <summary>
         /// Get Priority List
         /// </summary>
@@ -138,6 +146,12 @@ namespace Easyrewardz_TicketSystem.Services
             return objPriority;
         }
 
+        /// <summary>
+        /// Get list of the priority
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="PriorityFor"></param>
+        /// <returns></returns>
         public List<Priority> PriorityList(int tenantID, int PriorityFor)
         {
             DataSet ds = new DataSet();
@@ -227,6 +241,42 @@ namespace Easyrewardz_TicketSystem.Services
 
             return success;
         }
+
+        /// <summary>
+        /// Update priority order
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="selectedPriorityID"></param>
+        /// <param name="previousPriorityID"></param>
+        /// <returns></returns>
+        public bool UpdatePriorityOrder(int TenantID, int selectedPriorityID, int previousPriorityID)
+        {
+            bool isUpdate = false;
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdatePriorityOrder", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@selectedPriorityID", selectedPriorityID);
+                cmd.Parameters.AddWithValue("@previousPriorityID", previousPriorityID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.ExecuteScalar();
+
+                isUpdate = true;
+            }
+            catch (Exception)
+            {
+                isUpdate = false;
+            }
+            finally
+            {
+            }
+
+            return isUpdate;
+        }
+               
         #endregion
     }
 }
