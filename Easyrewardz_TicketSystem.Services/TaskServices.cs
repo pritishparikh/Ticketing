@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="customerMaster"></param>
         /// <returns></returns>
-        public int AddTaskDetails(TaskMaster taskMaster)
+        public int AddTaskDetails(TaskMaster taskMaster, int TenantID, int UserID)
         {
 
             // MySqlCommand cmd = new MySqlCommand();
@@ -39,6 +39,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@FunctionID", taskMaster.FunctionID);
                 cmd1.Parameters.AddWithValue("@AssignTo_ID", taskMaster.AssignToID);
                 cmd1.Parameters.AddWithValue("@PriorityID", taskMaster.PriorityID);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.Parameters.AddWithValue("@Created_By", UserID);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 taskId = Convert.ToInt32(cmd1.ExecuteNonQuery());
 

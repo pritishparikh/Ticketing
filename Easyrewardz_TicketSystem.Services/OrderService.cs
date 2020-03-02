@@ -64,10 +64,11 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="orderMaster"></param>
         /// <returns></returns>
-        public int addOrderDetails(OrderMaster orderMaster, int TenantId)
+        public string addOrderDetails(OrderMaster orderMaster, int TenantId)
         {
             MySqlCommand cmd = new MySqlCommand();
             int i = 0;
+            string OrderNumber="";
             try
             {
                 conn.Open();
@@ -91,7 +92,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@RequireSize", orderMaster.RequireSize);
                 cmd1.Parameters.AddWithValue("@CreatedBy", orderMaster.CreatedBy);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                i = Convert.ToInt32(cmd1.ExecuteScalar());
+                OrderNumber = Convert.ToString(cmd1.ExecuteScalar());
                 conn.Close();
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
@@ -105,7 +106,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return i;
+            return OrderNumber;
         }
         /// <summary>
         /// Get Order Detail with Item List

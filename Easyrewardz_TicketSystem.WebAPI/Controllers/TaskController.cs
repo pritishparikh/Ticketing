@@ -52,7 +52,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                int result = _taskcaller.AddTask(new TaskServices(_connectionSting), taskMaster);
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                int result = _taskcaller.AddTask(new TaskServices(_connectionSting), taskMaster, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -60,7 +64,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
-
+                _objResponseModel.ResponseData = result;
             }
             catch (Exception ex)
             {

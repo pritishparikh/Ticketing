@@ -98,16 +98,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
                 orderMaster.CreatedBy = authenticate.UserMasterID;
-                int result = _ordercaller.addOrder(new OrderService(_connectioSting), orderMaster, authenticate.TenantId);
+                string OrderNumber = _ordercaller.addOrder(new OrderService(_connectioSting), orderMaster, authenticate.TenantId);
                 //OrderMaster order = _ordercaller.getOrderDetailsByNumber(new OrderService(_connectioSting), orderMaster);
                 StatusCode =
-                result == 0 ?
+               string.IsNullOrEmpty (OrderNumber) ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                _objResponseModel.ResponseData = OrderNumber;
             }
             catch (Exception ex)
             {

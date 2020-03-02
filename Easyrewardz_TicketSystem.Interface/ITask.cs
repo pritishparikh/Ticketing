@@ -12,7 +12,7 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface ITask
     {
     
-        int AddTaskDetails(TaskMaster taskMaster);
+        int AddTaskDetails(TaskMaster taskMaster,int TenantID,int UserID);
 
         CustomTaskMasterDetails GetTaskbyId(int taskID);
 
