@@ -152,7 +152,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
 
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetReportList", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetReportList1", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
