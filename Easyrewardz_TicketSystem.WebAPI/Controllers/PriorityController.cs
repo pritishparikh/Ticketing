@@ -264,7 +264,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [Route("UpdatePriorityOrder")]
         public ResponseModel UpdatePriorityOrder(int selectedPriorityID, int currentPriorityID, int PriorityFor = 1)
         {
