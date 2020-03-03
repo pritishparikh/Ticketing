@@ -707,7 +707,7 @@ namespace Easyrewardz_TicketSystem.Services
             return span;
         }
 
-        public string DownloadDefaultReport(DefaultReportRequestModel objRequest, int curentUserId, int TenantID)
+        public string DownloadDefaultReport(DefaultReportRequestModel defaultReportRequestModel, int curentUserId, int TenantID)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -725,17 +725,19 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Open();
                 }
                 cmd.Connection = conn;
-
-
                 MySqlCommand sqlcmd = new MySqlCommand("", conn);
-
-                sqlcmd.CommandText = "SP_DownloadReportSearch";
-
-               // sqlcmd.Parameters.AddWithValue("Schedule_ID", SchedulerID);
-
-
                 sqlcmd.CommandType = CommandType.StoredProcedure;
 
+                if (defaultReportRequestModel.ReportTypeID == 1) //Total Ticket Created
+                {
+                    sqlcmd.CommandText = "sp_DefaultReport_TotalTicketCreated";
+
+                    sqlcmd.Parameters.AddWithValue("TicketCreatedFrom", defaultReportRequestModel.Ticket_CreatedFrom);
+                    sqlcmd.Parameters.AddWithValue("TicketCreatedTo", defaultReportRequestModel.Ticket_CreatedTo);
+                    sqlcmd.Parameters.AddWithValue("TicketSourceIDs", defaultReportRequestModel.Ticket_SourceIDs);
+                    sqlcmd.Parameters.AddWithValue("Tenant_ID", TenantID);
+                }
+                
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = sqlcmd;
                 da.Fill(ds);
