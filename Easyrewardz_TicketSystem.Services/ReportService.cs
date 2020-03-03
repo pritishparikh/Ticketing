@@ -712,7 +712,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
 
-            List<ScheduleMaster> ticketschedulemodal = new List<ScheduleMaster>();
+            List<SearchResponse> objSearchResult = new List<SearchResponse>();
 
             List<string> CountList = new List<string>();
             string csv = String.Empty;
@@ -747,54 +747,45 @@ namespace Easyrewardz_TicketSystem.Services
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
 
-                        ticketschedulemodal = ds.Tables[0].AsEnumerable().Select(r => new ScheduleMaster()
+                        objSearchResult = ds.Tables[0].AsEnumerable().Select(r => new SearchResponse()
                         {
-                            ScheduleID = r.Field<object>("ScheduleID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("ScheduleID")),
-                            TenantID = r.Field<object>("TenantID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TenantID")),
-                            ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),
-                            ScheduleType = r.Field<object>("ScheduleType") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("ScheduleType")),
-                            //ScheduleTime = Convert.ToString(r.Field<object>("ScheduleTime")),
-                            IsDaily = Convert.ToBoolean(r.Field<object>("IsDaily")),
-                            NoOfDay = r.Field<object>("NoOfDay") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDay")),
-                            IsWeekly = Convert.ToBoolean(r.Field<object>("IsWeekly")),
-                            NoOfWeek = r.Field<object>("NoOfWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeek")),
-                            DayIds = r.Field<object>("DayIds") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("DayIds")),
-                            IsDailyForMonth = Convert.ToBoolean(r.Field<object>("IsDailyForMonth")),
-                            NoOfDaysForMonth = r.Field<object>("NoOfDaysForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDaysForMonth")),
-                            NoOfMonthForMonth = r.Field<object>("NoOfMonthForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfMonthForMonth")),
-                            IsWeeklyForMonth = Convert.ToBoolean(r.Field<object>("IsWeeklyForMonth")),
-                            NoOfMonthForWeek = r.Field<object>("NoOfMonthForWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfMonthForWeek")),
-                            NoOfWeekForWeek = r.Field<object>("NoOfWeekForWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeekForWeek")),
-                            NameOfDayForWeek = r.Field<object>("NameOfDayForWeek") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfDayForWeek")),
-                            IsWeeklyForYear = Convert.ToBoolean(r.Field<object>("IsWeeklyForYear")),
-                            NoOfWeekForYear = r.Field<object>("NoOfWeekForYear") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeekForYear")),
-                            NameOfDayForYear = r.Field<object>("NameOfDayForYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfDayForYear")),
-                            NameOfMonthForYear = r.Field<object>("NameOfMonthForYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfMonthForYear")),
-                            IsDailyForYear = Convert.ToBoolean(r.Field<object>("IsDailyForYear")),
-                            NameOfMonthForDailyYear = r.Field<object>("NameOfMonthForDailyYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfMonthForDailyYear")),
-                            NoOfDayForDailyYear = r.Field<object>("NoOfDayForDailyYear") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDayForDailyYear")),
-                            SearchInputParams = r.Field<object>("SearchInputParams") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SearchInputParams")),
-                            IsActive = Convert.ToBoolean(r.Field<object>("IsActive")),
-                            CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("CreatedBy")),
-                            CreatedDate = Convert.ToDateTime(r.Field<object>("CreatedDate")),
-                            ModifyBy = r.Field<object>("ModifyBy") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("ModifyBy")),
-                            ModifyDate = Convert.ToDateTime(r.Field<object>("ModifyDate")),
-                            ScheduleFrom = r.Field<object>("ScheduleFrom") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("ScheduleFrom"))
+                            ticketID = Convert.ToInt32(r.Field<object>("TicketID")),
+                            ticketStatus = Convert.ToString((EnumMaster.TicketStatus)Convert.ToInt32(r.Field<object>("StatusID"))),
+                            Message = Convert.ToString(r.Field<object>("TicketDescription")),
+                            Category = Convert.ToString(r.Field<object>("CategoryName")),
+                            subCategory = Convert.ToString(r.Field<object>("SubCategoryName")),
+                            IssueType = Convert.ToString(r.Field<object>("IssueTypeName")),
+                            Priority = Convert.ToString(r.Field<object>("PriortyName")),
+                            Assignee = Convert.ToString(r.Field<object>("AssignedName")),
+                            CreatedOn = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedOn"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedOn")),
+                            createdBy = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedByName"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedByName")),
+                            createdago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("CreatedDate")), "CreatedSpan"),
+                            assignedTo = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedName"))) ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
+                            assignedago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("AssignedDate")), "AssignedSpan"),
+                            updatedBy = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("ModifyByName"))) ? string.Empty : Convert.ToString(r.Field<object>("ModifyByName")),
+                            updatedago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("ModifiedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("ModifiedDate")), "ModifiedSpan"),
+
+                            responseTimeRemainingBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityRespond")))) ?
+                           string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
+                            responseOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityRespond")))) ?
+                           string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
+
+                            resolutionOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityResolve")))) ?
+                           string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
+
+                            TaskStatus = Convert.ToString(r.Field<object>("TaskDetails")),
+                            ClaimStatus = Convert.ToString(r.Field<object>("ClaimDetails")),
+                            TicketCommentCount = Convert.ToInt32(r.Field<object>("TicketComments")),
+                            isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated")),
+                            ticketSourceType = Convert.ToString(r.Field<object>("TicketSourceType")),
+                            ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID")),
+                            IsReassigned = Convert.ToBoolean(r.Field<object>("IsReassigned")),
+                            IsSLANearBreach = Convert.ToBoolean(r.Field<object>("IsSLANearBreach"))
                         }).ToList();
 
-                        if (ticketschedulemodal.Count > 0)
+                        if (objSearchResult.Count > 0)
                         {
-                            conn.Close();
-                            ReportSearchModel searchModel = new ReportSearchModel();
-                            searchModel.reportSearch = JsonConvert.DeserializeObject<ReportSearchData>(ticketschedulemodal[0].SearchInputParams);
-                            List<SearchResponseReport> searchresponsereport = new List<SearchResponseReport>();
-                            searchModel.TenantID = TenantID;
-                            searchModel.curentUserId = curentUserId;
-
-                            searchresponsereport = GetDownloadReportSearch(searchModel);
-                            csv = CommonService.ListToCSV(searchresponsereport, "");
-
-
+                            csv = CommonService.ListToCSV(objSearchResult, "");
                         }
                     }
                 }
