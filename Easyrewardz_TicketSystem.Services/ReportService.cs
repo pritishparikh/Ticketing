@@ -785,7 +785,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                         if (objSearchResult.Count > 0)
                         {
-                            csv = CommonService.ListToCSV(objSearchResult, "");
+                            csv = CommonService.ListToCSV(objSearchResult, "totalpages,isEscalation,ClaimStatus,TaskStatus,TicketCommentCount," +
+                                "" +
+                                "createdago,assignedago,updatedBy,updatedago," +
+                                "responseTimeRemainingBy,responseOverdueBy,resolutionOverdueBy,ticketSourceTypeID,IsReassigned,IsSLANearBreach");
                         }
                     }
                 }
