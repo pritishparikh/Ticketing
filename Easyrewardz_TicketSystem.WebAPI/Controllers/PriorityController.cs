@@ -283,7 +283,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StatusCode =
                 iStatus ?
-                     (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
+                     (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
