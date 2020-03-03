@@ -955,7 +955,7 @@ namespace Easyrewardz_TicketSystem.Services
             return CountByTicket;
         }
 
-        public List<TicketMessage> TicketMessagelisting(int ticketID, int TenantID)
+        public List<TicketMessage> TicketMessagelisting(int ticketID, int TenantID,string url)
         {
 
             DataSet ds = new DataSet();
@@ -1091,6 +1091,8 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketMessageDetails.DayOfCreation = ds.Tables[1].Rows[i]["DayOfCreation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["DayOfCreation"]);
                             TicketMessageDetails.CreatedDate = ds.Tables[1].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CreatedDate"]);
                             TicketMessageDetails.IsInternalComment = ds.Tables[1].Rows[i]["IsInternalComment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[1].Rows[i]["IsInternalComment"]);
+                            TicketMessageDetails.MessageAttachmentId= ds.Tables[1].Rows[i]["MessageAttachmentId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["MessageAttachmentId"]);
+                            TicketMessageDetails.AttachmentName = ds.Tables[1].Rows[i]["AttachmentName"] == DBNull.Value ? string.Empty : url + "/" + Convert.ToString(ds.Tables[1].Rows[i]["AttachmentName"]);
 
                             MsgDetails.LatestMessageDetails = TicketMessageDetails;
                             MsgDetails.TrailMessageDetails = TrailTicketMessagelist
@@ -1185,7 +1187,7 @@ namespace Easyrewardz_TicketSystem.Services
             return listSearchagent;
         }
 
-        public int CommentOnTicketDetail(TicketingMailerQue ticketingMailerQue)
+        public int CommentOnTicketDetail(TicketingMailerQue ticketingMailerQue, string finalAttchment)
         {
             int i = 0;
             try
@@ -1208,15 +1210,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmdMail.Parameters.AddWithValue("@ReplyMail_ID", ticketingMailerQue.MailID);
                 cmdMail.Parameters.AddWithValue("@Is_InternalComment", ticketingMailerQue.IsInternalComment);
                 cmdMail.Parameters.AddWithValue("@Is_ResponseToCustomer", ticketingMailerQue.IsResponseToCustomer);
-                /* if (finalAttchment == null || finalAttchment == String.Empty)
-                 {
-                     cmdMail.Parameters.AddWithValue("@Has_Attachment", 0);
-                 }
-                 else
-                 {
-                     cmdMail.Parameters.AddWithValue("@Has_Attachment", 1);
-                 }*/
-
+                cmdMail.Parameters.AddWithValue("@fileName", string.IsNullOrEmpty(finalAttchment) ? "" : finalAttchment);
+                cmdMail.Parameters.AddWithValue("@Has_Attachment",string.IsNullOrEmpty(finalAttchment) ? 0 : 1);              
                 cmdMail.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmdMail.ExecuteNonQuery());
             }
@@ -1224,6 +1219,22 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
+           /* if (finalAttchment != null || finalAttchment != String.Empty)
+            {
+                try
+                {
+                    int Success = 0;
+                    MySqlCommand cmdattachment = new MySqlCommand("SP_SaveMessageAttachment", conn);
+                    cmdattachment.Parameters.AddWithValue("@fileName", finalAttchment);
+                    cmdattachment.Parameters.AddWithValue("@Ticket_ID", ticketingMailerQue.TicketID);
+                    cmdattachment.CommandType = CommandType.StoredProcedure;
+                    Success = cmdattachment.ExecuteNonQuery();
+                }
+                catch (IOException ioex)
+                {
+                    Console.WriteLine(ioex.Message);
+                }
+            }  */               
             finally
             {
                 if (conn != null)

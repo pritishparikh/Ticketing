@@ -154,20 +154,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ticketList.GetCountByTicket(ticketID);
         }
 
-        public List<TicketMessage> TicketMessage(ITicketing _ticket, int ticketID,int TenantID)
+        public List<TicketMessage> TicketMessage(ITicketing _ticket, int ticketID,int TenantID,string url)
         {
             _ticketList = _ticket;
-            return _ticketList.TicketMessagelisting(ticketID, TenantID);
+            return _ticketList.TicketMessagelisting(ticketID, TenantID, url);
         }
         public List<CustomSearchTicketAgent> AgentList(ITicketing _ticket,int TenantID)
         {
             _ticketList = _ticket;
             return _ticketList.GetAgentList(TenantID);
         }
-        public int CommentticketDetail(ITicketing _ticket, TicketingMailerQue ticketingMailerQue)
+        public int CommentticketDetail(ITicketing _ticket, TicketingMailerQue ticketingMailerQue, string finalAttchment )
         {
             _ticketList = _ticket;
-            return _ticketList.CommentOnTicketDetail(ticketingMailerQue);
+            return _ticketList.CommentOnTicketDetail(ticketingMailerQue, finalAttchment);
         }
 
         /// <summary>

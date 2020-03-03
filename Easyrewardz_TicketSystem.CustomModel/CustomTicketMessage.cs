@@ -35,6 +35,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string DayOfCreation { get; set; }
         public string CreatedDate { get; set; }
         public bool IsInternalComment { get; set; }
+        public int MessageAttachmentId { get; set; }
+        public string AttachmentName { get; set; }
 
     }
 }

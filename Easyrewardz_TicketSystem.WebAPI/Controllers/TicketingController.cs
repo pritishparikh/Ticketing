@@ -861,8 +861,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
-                objTicketMessage = _TicketCaller.TicketMessage(new TicketingService(_connectioSting), ticketID, authenticate.TenantId);
+                string url = configuration.GetValue<string>("APIURL") + _ticketAttachmentFolderName;
+                objTicketMessage = _TicketCaller.TicketMessage(new TicketingService(_connectioSting), ticketID, authenticate.TenantId, url);
                 StatusCode =
                objTicketMessage == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -938,13 +938,38 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("MessageComment")]
-        public ResponseModel MessageComment([FromBody] TicketingMailerQue ticketingMailerQue)
+        public ResponseModel MessageComment(IFormFile File)
         {
+            TicketingMailerQue ticketingMailerQue = new TicketingMailerQue();
+
+            var files = Request.Form.Files;
+            string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
+            string fileName = "";
+            string finalAttchment = "";
+
+            if (files.Count > 0)
+            {
+                for (int i = 0; i < files.Count; i++)
+                {
+                    fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
+                }
+                finalAttchment = fileName.TrimEnd(',');
+            }
+            var Keys = Request.Form;
+            ticketingMailerQue = JsonConvert.DeserializeObject<TicketingMailerQue>(Keys["ticketingMailerQue"]);
+
+            var exePath = Path.GetDirectoryName(System.Reflection
+                    .Assembly.GetExecutingAssembly().CodeBase);
+            Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+            var appRoot = appPathMatcher.Match(exePath).Value;
+            string Folderpath = appRoot + "\\" + _ticketAttachmentFolderName;
+
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
-            {
+            {         
+
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
@@ -952,7 +977,33 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 TicketingCaller _TicketCaller = new TicketingCaller();
                 ticketingMailerQue.TenantID = authenticate.TenantId;
                 ticketingMailerQue.CreatedBy = authenticate.UserMasterID;
-                int result = _TicketCaller.CommentticketDetail(new TicketingService(_connectioSting), ticketingMailerQue);
+               
+                int result = _TicketCaller.CommentticketDetail(new TicketingService(_connectioSting), ticketingMailerQue, finalAttchment);
+                if (result > 0)
+                {
+                    if (files.Count > 0)
+                    {
+                        string[] filesName = finalAttchment.Split(",");
+                        for (int i = 0; i < files.Count; i++)
+                        {
+                            using (var ms = new MemoryStream())
+                            {
+                                files[i].CopyTo(ms);
+                                var fileBytes = ms.ToArray();
+                                MemoryStream msfile = new MemoryStream(fileBytes);
+                                FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                                msfile.WriteTo(docFile);
+                                docFile.Close();
+                                ms.Close();
+                                msfile.Close();
+                                string s = Convert.ToBase64String(fileBytes);
+                                byte[] a = Convert.FromBase64String(s);
+                                // act on the Base64 data
+
+                            }
+                        }
+                    }
+                }
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

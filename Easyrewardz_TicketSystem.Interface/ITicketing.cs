@@ -41,11 +41,11 @@ namespace Easyrewardz_TicketSystem.Interface
 
         CustomCountByTicket GetCountByTicket(int ticketID);
 
-        List<TicketMessage> TicketMessagelisting(int ticketID, int TenantID);
+        List<TicketMessage> TicketMessagelisting(int ticketID, int TenantID,string url);
 
         List<CustomSearchTicketAgent> GetAgentList(int TenantID);
 
-        int CommentOnTicketDetail(TicketingMailerQue ticketingMailerQue);
+        int CommentOnTicketDetail(TicketingMailerQue ticketingMailerQue, string finalAttchment);
 
         ProgressBarDetail GetProgressBarDetails(int TicketID, int TenantID);
     }
