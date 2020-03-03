@@ -113,9 +113,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Deletecount = _newCRM.DeleteCRMRole(new CRMRoleService(_connectioSting), authenticate.TenantId, CRMRoleID);
 
                 StatusCode =
-                Deletecount == 0 ? (int)EnumMaster.StatusCode.RecordDeletedSuccess : (int)EnumMaster.StatusCode.RecordInUse;
+                Deletecount == 0 ? (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode); 
 
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
