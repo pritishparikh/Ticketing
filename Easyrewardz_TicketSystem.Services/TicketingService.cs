@@ -1091,8 +1091,13 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketMessageDetails.DayOfCreation = ds.Tables[1].Rows[i]["DayOfCreation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["DayOfCreation"]);
                             TicketMessageDetails.CreatedDate = ds.Tables[1].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CreatedDate"]);
                             TicketMessageDetails.IsInternalComment = ds.Tables[1].Rows[i]["IsInternalComment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[1].Rows[i]["IsInternalComment"]);
-                            TicketMessageDetails.MessageAttachmentId= ds.Tables[1].Rows[i]["MessageAttachmentId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["MessageAttachmentId"]);
-                            TicketMessageDetails.AttachmentName = ds.Tables[1].Rows[i]["AttachmentName"] == DBNull.Value ? string.Empty : url + "/" + Convert.ToString(ds.Tables[1].Rows[i]["AttachmentName"]);
+                            TicketMessageDetails.messageAttachments = ds.Tables[3].AsEnumerable().Where(x => x.Field<object>("TicketMessageID")!= DBNull.Value && Convert.ToInt32(x.Field<int>("TicketMessageID")).
+                         Equals(TicketMessageDetails.MailID)).Select(x => new MessageAttachment()
+                         {
+                             
+                             MessageAttachmentId= x.Field<object>("MessageAttachmentId") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("MessageAttachmentId")),
+                             AttachmentName = x.Field<object>("AttachmentName") == DBNull.Value ? string.Empty : url + "/" + Convert.ToString(x.Field<object>("AttachmentName"))
+                         }).ToList();
 
                             MsgDetails.LatestMessageDetails = TicketMessageDetails;
                             MsgDetails.TrailMessageDetails = TrailTicketMessagelist
