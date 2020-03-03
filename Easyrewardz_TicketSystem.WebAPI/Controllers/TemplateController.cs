@@ -301,7 +301,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 SettingsCaller _newTemplate = new SettingsCaller();
                 _objresponseModel = _newTemplate.GetTemplates(new TemplateService(_connectioSting), authenticate.TenantId);
 
-                StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
+                StatusCode = _objresponseModel.Count > 0 ? (int)EnumMaster.StatusCode.Success  : (int)EnumMaster.StatusCode.RecordNotFound; ;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 

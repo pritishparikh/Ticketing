@@ -260,7 +260,9 @@ namespace Easyrewardz_TicketSystem.Services
                             TemplateID = Convert.ToInt32(r.Field<object>("TemplateID")),
 
                             TemplateName = r.Field<object>("TemplateName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TemplateName")),
-                            IssueType = r.Field<object>("IssueType") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueType")),
+                            IssueTypeCount = r.Field<object>("IssueTypeCount") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IssueTypeCount")),
+                            IssueTypeID = r.Field<object>("IssueTypeIDs") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueTypeIDs")),
+                            IssueTypeName = r.Field<object>("IssueTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueTypeName")),
                             CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
                             ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),

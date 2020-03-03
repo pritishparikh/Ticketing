@@ -9,7 +9,9 @@ namespace Easyrewardz_TicketSystem.Model
        
         public int TemplateID { get; set; }
         public string TemplateName { get; set; }
-        public string IssueType{ get; set; }
+        public int IssueTypeCount { get; set; }
+        public string IssueTypeID{ get; set; }
+        public string IssueTypeName { get; set; }
 
         public string CreatedBy { get; set; }
         public string CreatedDate { get; set; }
