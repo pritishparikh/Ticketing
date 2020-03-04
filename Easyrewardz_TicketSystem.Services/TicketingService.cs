@@ -792,7 +792,7 @@ namespace Easyrewardz_TicketSystem.Services
                         ticketDetails.attachment = ds.Tables[3].AsEnumerable().Select(x => new Attachment()
                         {
                             TicketAttachmentId = Convert.ToInt32(x.Field<int>("TicketAttachmentId")),
-                            AttachmentName = x.Field<object>("AttachmentName") == System.DBNull.Value ? string.Empty : url + "/" + Convert.ToString(x.Field<object>("AttachmentName"))
+                            AttachmentName = x.Field<object>("AttachmentName") == System.DBNull.Value || string.IsNullOrEmpty(Convert.ToString(x.Field<object>("AttachmentName")) ) ? string.Empty : url + "/" + Convert.ToString(x.Field<object>("AttachmentName"))
                         }).ToList();
 
                         if (ds != null && ds.Tables[4] != null && ds.Tables[4].Rows.Count > 0)
