@@ -19,7 +19,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string ModifiedDate { get; set; }
         public string ScheduleFor { get; set; }
         public int ScheduleType { get; set; }
-        public DateTime ScheduleTime { get; set; }
+        public DateTime? ScheduleTime { get; set; }
         public bool IsDaily { get; set; }
         public int NoOfDay { get; set; }
         public bool IsWeekly { get; set; }

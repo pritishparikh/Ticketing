@@ -34,7 +34,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Schedule Time
         /// </summary>
-        public DateTime ScheduleTime { get; set; }
+        public DateTime? ScheduleTime { get; set; }
 
         /// <summary>
         /// IsDaily

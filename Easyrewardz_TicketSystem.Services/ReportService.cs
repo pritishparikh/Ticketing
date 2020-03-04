@@ -152,7 +152,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
 
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetReportList1", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetReportList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -177,7 +177,7 @@ namespace Easyrewardz_TicketSystem.Services
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
                             ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
                             ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),
-                            ScheduleTime =Convert.ToDateTime(r.Field<object>("ScheduleTime") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleTime"))),
+                          //  ScheduleTime =Convert.ToDateTime(r.Field<object>("ScheduleTime") == System.DBNull.Value ? DateTime.Now.ToString() : Convert.ToString(r.Field<object>("ScheduleTime"))),
                             IsDaily =Convert.ToBoolean(r.Field<object>("IsDaily") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDaily"))),
                             NoOfDay = Convert.ToInt32(r.Field<object>("NoOfDay") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDay"))),
                             IsWeekly = Convert.ToBoolean(r.Field<object>("IsWeekly") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsWeekly"))),
