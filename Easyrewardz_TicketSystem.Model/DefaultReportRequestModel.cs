@@ -35,9 +35,19 @@ namespace Easyrewardz_TicketSystem.Model
         public int Ticket_StatusID { get; set; }
 
         /// <summary>
+        /// Ticket close From date
+        /// </summary>
+        public string Ticket_CloseFrom { get; set; }
+
+        /// <summary>
+        /// Multiple Ticket Status ID
+        /// </summary>
+        public string Ticket_StatusIDs { get; set; }
+
+        /// <summary>
         /// Ticket close on this day
         /// </summary>
-        public string Ticket_CloseOn { get; set; }
+        public string Ticket_CloseTo { get; set; }
 
         /// <summary>
         /// Ticket assign Ids
