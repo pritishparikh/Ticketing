@@ -45,6 +45,7 @@ namespace Easyrewardz_TicketSystem.Services
         
                 cmd.CommandType = CommandType.StoredProcedure;
                 updatecount = cmd.ExecuteNonQuery();
+                updatecount =Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception ex)
             {
