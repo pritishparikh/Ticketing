@@ -171,13 +171,13 @@ namespace Easyrewardz_TicketSystem.Services
                             ReportSearchParams = r.Field<object>("TicketReportSearchParams") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TicketReportSearchParams")),
                             IsDownloaded = Convert.ToInt32(r.Field<object>("IsDownloaded")),
                             ReportName = r.Field<object>("ReportName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ReportName")),
-                            ReportStatus= r.Field<object>("ReportStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ReportStatus")),
+                            ReportStatus = r.Field<object>("ReportStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ReportStatus")),
                             ScheduleStatus = r.Field<object>("ScheduleStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleStatus")),
                             CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
                             ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
-                            ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),
-                          //  ScheduleTime =Convert.ToDateTime(r.Field<object>("ScheduleTime") == System.DBNull.Value ? DateTime.Now.ToString() : Convert.ToString(r.Field<object>("ScheduleTime"))),
+                            ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),                          
+                            ScheduleTime = r.Field<object>("ScheduleTime") == "" ? default(DateTime?) : Convert.ToDateTime(r.Field<object>("ScheduleTime")),
                             IsDaily =Convert.ToBoolean(r.Field<object>("IsDaily") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDaily"))),
                             NoOfDay = Convert.ToInt32(r.Field<object>("NoOfDay") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDay"))),
                             IsWeekly = Convert.ToBoolean(r.Field<object>("IsWeekly") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsWeekly"))),
@@ -738,8 +738,9 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.Parameters.AddWithValue("TicketSourceIDs", defaultReportRequestModel.Ticket_SourceIDs);
                     
                 }
-                ////2. Total Open Tickets //5. Escalated Tickets  //7.Re-Opened Tickets //8. Re-Assigned Tickets
-                else if (defaultReportRequestModel.ReportTypeID == 2 || defaultReportRequestModel.ReportTypeID == 7 
+                ////2. Total Open Tickets //5. Escalated Tickets //6.Re-Assigned Tickets
+                //7.Re-Opened Tickets  //4. Ticket Count by Associates
+                else if (defaultReportRequestModel.ReportTypeID >= 2 || defaultReportRequestModel.ReportTypeID == 7
                     || defaultReportRequestModel.ReportTypeID == 5 || defaultReportRequestModel.ReportTypeID == 6)
                 {
                     sqlcmd.CommandText = "sp_DefaultReport_TicketsByStatus";
@@ -748,6 +749,11 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.Parameters.AddWithValue("TicketCreatedFrom", defaultReportRequestModel.Ticket_CreatedFrom);
                     sqlcmd.Parameters.AddWithValue("TicketCreatedTo", defaultReportRequestModel.Ticket_CreatedTo);
                     sqlcmd.Parameters.AddWithValue("TicketSourceIDs", defaultReportRequestModel.Ticket_SourceIDs);
+
+                    sqlcmd.Parameters.AddWithValue("TicketAssignIDs", string.IsNullOrEmpty(defaultReportRequestModel.Ticket_AssignIDs) ? "" : defaultReportRequestModel.Ticket_AssignIDs);
+
+                    sqlcmd.Parameters.AddWithValue("ReportTypeID", defaultReportRequestModel.ReportTypeID);
+
                 }
 
 

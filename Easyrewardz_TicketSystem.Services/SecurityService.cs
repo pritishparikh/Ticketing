@@ -259,13 +259,13 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
 
         #region Send mail for forget password
-        public bool sendMailForForgotPassword(SMTPDetails sMTPDetails,string emailId, string content,int TenantId)
+        public bool sendMailForForgotPassword(SMTPDetails sMTPDetails, string emailId, string subject, string content, int TenantId)
         {
             bool isSent = false;
             try
             {
                 CommonService commonService = new CommonService();
-                isSent = commonService.SendEmail(sMTPDetails, emailId, "Forgot Password", content, null, null,TenantId);
+                isSent = commonService.SendEmail(sMTPDetails, emailId, subject, content, null, null, TenantId);
 
                 return isSent;
             }
@@ -662,8 +662,8 @@ namespace Easyrewardz_TicketSystem.Services
                 try
                 {
 
-                    Programcode=DecryptStringAES(Programcode);
-                    Domainname= DecryptStringAES(Domainname);
+                    Programcode = DecryptStringAES(Programcode);
+                    Domainname = DecryptStringAES(Domainname);
 
                     conn.Open();
                     cmd.Connection = conn;
@@ -700,7 +700,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="UserID"></param>
         public bool ChangePassword(CustomChangePassword customChangePassword, int TenantId, int User_ID)
         {
-            bool Result=false;
+            bool Result = false;
             int success = 0;
 
             try
@@ -716,10 +716,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@User_ID", User_ID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteScalar());
-                if (success==1)
+                if (success == 1)
                 {
                     Result = true;
-                }             
+                }
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
@@ -733,6 +733,48 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return Result;
+        }
+
+
+        public void GetForgetPassowrdMailContent(int TenantId, string url, string emailid, out string content, out string subject)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            content = "";
+            subject = "";
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetForgetPassowrdMailContent", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_TenantId", TenantId);
+                cmd1.Parameters.AddWithValue("@_url", url);
+                cmd1.Parameters.AddWithValue("@_emilId", emailid);
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        content = Convert.ToString(ds.Tables[0].Rows[0]["MailContent"]);
+                        subject = Convert.ToString(ds.Tables[0].Rows[0]["MailSubject"]);
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
         }
 
         #endregion
