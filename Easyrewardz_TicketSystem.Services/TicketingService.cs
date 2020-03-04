@@ -1096,7 +1096,7 @@ namespace Easyrewardz_TicketSystem.Services
                          {
                              
                              MessageAttachmentId= x.Field<object>("MessageAttachmentId") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("MessageAttachmentId")),
-                             AttachmentName = x.Field<object>("AttachmentName") == DBNull.Value ? string.Empty : url + "/" + Convert.ToString(x.Field<object>("AttachmentName"))
+                             AttachmentName = x.Field<object>("AttachmentName") == DBNull.Value || string.IsNullOrEmpty(Convert.ToString(x.Field<object>("AttachmentName"))) ? string.Empty : url + "/" + Convert.ToString(x.Field<object>("AttachmentName"))
                          }).ToList();
 
                             MsgDetails.LatestMessageDetails = TicketMessageDetails;
