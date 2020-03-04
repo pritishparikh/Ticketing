@@ -728,16 +728,32 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand sqlcmd = new MySqlCommand("", conn);
                 sqlcmd.CommandType = CommandType.StoredProcedure;
 
-                if (defaultReportRequestModel.ReportTypeID == 1) //Total Ticket Created
+                ////1. Total Ticket Created
+                if (defaultReportRequestModel.ReportTypeID == 1) 
                 {
                     sqlcmd.CommandText = "sp_DefaultReport_TotalTicketCreated";
 
                     sqlcmd.Parameters.AddWithValue("TicketCreatedFrom", defaultReportRequestModel.Ticket_CreatedFrom);
                     sqlcmd.Parameters.AddWithValue("TicketCreatedTo", defaultReportRequestModel.Ticket_CreatedTo);
                     sqlcmd.Parameters.AddWithValue("TicketSourceIDs", defaultReportRequestModel.Ticket_SourceIDs);
-                    sqlcmd.Parameters.AddWithValue("Tenant_ID", TenantID);
+                    
                 }
-                
+                ////2. Total Open Tickets //5. Escalated Tickets  //7.Re-Opened Tickets //8. Re-Assigned Tickets
+                else if (defaultReportRequestModel.ReportTypeID == 2 || defaultReportRequestModel.ReportTypeID == 7 
+                    || defaultReportRequestModel.ReportTypeID == 5 || defaultReportRequestModel.ReportTypeID == 6)
+                {
+                    sqlcmd.CommandText = "sp_DefaultReport_TicketsByStatus";
+
+                    sqlcmd.Parameters.AddWithValue("Ticket_StatusID", defaultReportRequestModel.Ticket_StatusID);
+                    sqlcmd.Parameters.AddWithValue("TicketCreatedFrom", defaultReportRequestModel.Ticket_CreatedFrom);
+                    sqlcmd.Parameters.AddWithValue("TicketCreatedTo", defaultReportRequestModel.Ticket_CreatedTo);
+                    sqlcmd.Parameters.AddWithValue("TicketSourceIDs", defaultReportRequestModel.Ticket_SourceIDs);
+                }
+
+
+
+                sqlcmd.Parameters.AddWithValue("Tenant_ID", TenantID);
+
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = sqlcmd;
                 da.Fill(ds);
