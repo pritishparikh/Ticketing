@@ -81,23 +81,22 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-                    
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {                      
                         taskMaster.TicketingTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        taskMaster.TaskStatus = Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
-                        taskMaster.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        taskMaster.TaskDescription = Convert.ToString(ds.Tables[0].Rows[i]["TaskDescription"]);           
+                        taskMaster.TaskStatus = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
+                        taskMaster.TaskTitle = ds.Tables[0].Rows[i]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
+                        taskMaster.TaskDescription = ds.Tables[0].Rows[i]["TaskDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskDescription"]);           
                         taskMaster.Duedate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TaskEndTime"]);
-                        taskMaster.AssignName = Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
+                        taskMaster.AssignName = ds.Tables[0].Rows[i]["AssignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
                         taskMaster.DateFormat = taskMaster.Duedate.ToString("dd/MMM/yyyy");
                         int MasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
                         taskMaster.Comments = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("TicketingTaskID")).
                         Equals(MasterId)).Select(x => new UserComment()
                         {
-                            Name = Convert.ToString(x.Field<string>("Name")),
-                            Comment= Convert.ToString(x.Field<string>("TaskComment")),
-                            datetime= Convert.ToString(x.Field<string>("CommentAt"))
+                            Name = x.Field<object>("Name") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Name")),
+                            Comment= x.Field<object>("TaskComment") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("TaskComment")),
+                            datetime= x.Field<object>("CommentAt") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CommentAt"))
                         }).ToList();
                     }
                 }       
