@@ -55,13 +55,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="cipherEmailId">Encrypted email Id</param>
         /// <param name="Password">Plain text Password </param>
         /// <returns></returns>
-        public bool sendMail(ISecurity security, SMTPDetails sMTPDetails, string EmailId, string content, int TenantId)
+        public bool sendMail(ISecurity security, SMTPDetails sMTPDetails, string EmailId, string subject, string content, int TenantId)
         {
             _SecurityRepository = security;
             CommonService commonService = new CommonService();
 
 
-            return _SecurityRepository.sendMailForForgotPassword(sMTPDetails, EmailId, content, TenantId);
+            return _SecurityRepository.sendMailForForgotPassword(sMTPDetails, EmailId, subject, content, TenantId);
         }
         public bool sendMailForChangePassword(ISecurity security, SMTPDetails sMTPDetails, string EmailId, string content, int TenantId)
         {
@@ -121,6 +121,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _SecurityRepository = security;
             return _SecurityRepository.ChangePassword(customChangePassword, TenantId, UserID);
         }
-    #endregion
-}
+
+        public void GetForgetPassowrdMailContent(ISecurity security, int TenantId, string url, string emailid, out string content, out string subject)
+        {
+            _SecurityRepository = security;
+            _SecurityRepository.GetForgetPassowrdMailContent(TenantId, url,emailid, out content, out subject);
+        }
+        #endregion
+    }
 }

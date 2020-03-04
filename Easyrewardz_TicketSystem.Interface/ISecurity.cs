@@ -28,7 +28,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="emailId"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        bool sendMailForForgotPassword(SMTPDetails sMTPDetails, string emailId,string content, int TenantId);
+        bool sendMailForForgotPassword(SMTPDetails sMTPDetails, string emailId, string subject, string content, int TenantId);
 
         /// <summary>
         /// Authenticate User 
@@ -76,5 +76,13 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="content"></param>
         /// <returns></returns>
         bool ChangePassword(CustomChangePassword customChangePassword, int TenantId,int UserID);
+
+
+        /// <summary>
+        /// Ge tForgetPassowrd MailContent
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
+        void GetForgetPassowrdMailContent(int TenantId, string url, string emailid, out string content, out string subject);
     }
 }
