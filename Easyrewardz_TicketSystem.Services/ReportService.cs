@@ -715,19 +715,19 @@ namespace Easyrewardz_TicketSystem.Services
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
             if(!string.IsNullOrEmpty(defaultReportRequestModel.Ticket_CreatedFrom) && defaultReportRequestModel.Ticket_CreatedFrom.Equals("Invalid date"))
             {
-                defaultReportRequestModel.Ticket_CreatedFrom = null;
+                defaultReportRequestModel.Ticket_CreatedFrom = "";
             }
             if (!string.IsNullOrEmpty(defaultReportRequestModel.Ticket_CreatedTo)&&defaultReportRequestModel.Ticket_CreatedTo.Equals("Invalid date"))
             {
-                defaultReportRequestModel.Ticket_CreatedTo = null;
+                defaultReportRequestModel.Ticket_CreatedTo = "";
             }
             if (!string.IsNullOrEmpty(defaultReportRequestModel.Ticket_CloseFrom)&&defaultReportRequestModel.Ticket_CloseFrom.Equals("Invalid date"))
             {
-                defaultReportRequestModel.Ticket_CloseFrom = null;
+                defaultReportRequestModel.Ticket_CloseFrom = "";
             }
             if (!string.IsNullOrEmpty(defaultReportRequestModel.Ticket_CloseTo)&&defaultReportRequestModel.Ticket_CloseTo.Equals("Invalid date"))
             {
-                defaultReportRequestModel.Ticket_CloseTo = null;
+                defaultReportRequestModel.Ticket_CloseTo = "";
             }
 
             List<string> CountList = new List<string>();
