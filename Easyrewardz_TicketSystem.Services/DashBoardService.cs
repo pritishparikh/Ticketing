@@ -600,7 +600,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         loggedInAcc.WorkTimeInPercentage = Convert.ToString(ds.Tables[2].Rows[0]["WorkTimeInPercentage"]);
                         loggedInAcc.TotalWorkingTime = Convert.ToString(ds.Tables[2].Rows[0]["TotalWorkingTime"]);
-                        loggedInAcc.workingMinute = Convert.ToString(ds.Tables[1].Rows[0]["workingMinute"]);
+                        loggedInAcc.workingMinute = Convert.ToString(ds.Tables[2].Rows[0]["workingMinute"]);
                     }
 
 
