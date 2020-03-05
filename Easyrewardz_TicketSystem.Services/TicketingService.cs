@@ -1206,40 +1206,24 @@ namespace Easyrewardz_TicketSystem.Services
                 cmdMail.Parameters.AddWithValue("@To_Email", ticketingMailerQue.ToEmail);
                 cmdMail.Parameters.AddWithValue("@User_CC", ticketingMailerQue.UserCC);
                 cmdMail.Parameters.AddWithValue("@User_BCC", ticketingMailerQue.UserBCC);
-                cmdMail.Parameters.AddWithValue("@Ticket_Source", ticketingMailerQue.TicketSource);
-                // cmdMail.Parameters.AddWithValue("@Alert_ID", ticketingMailerQue.AlertID); 
+                cmdMail.Parameters.AddWithValue("@Ticket_Source", ticketingMailerQue.TicketSource); 
                 cmdMail.Parameters.AddWithValue("@Is_Sent", ticketingMailerQue.IsSent);
                 cmdMail.Parameters.AddWithValue("@Is_CustomerComment", ticketingMailerQue.IsCustomerComment);
-                // cmdMail.Parameters.AddWithValue("@Priority_ID", ticketingMailerQue.PriorityID);
                 cmdMail.Parameters.AddWithValue("@Created_By", ticketingMailerQue.CreatedBy);
                 cmdMail.Parameters.AddWithValue("@ReplyMail_ID", ticketingMailerQue.MailID);
                 cmdMail.Parameters.AddWithValue("@Is_InternalComment", ticketingMailerQue.IsInternalComment);
                 cmdMail.Parameters.AddWithValue("@Is_ResponseToCustomer", ticketingMailerQue.IsResponseToCustomer);
                 cmdMail.Parameters.AddWithValue("@fileName", string.IsNullOrEmpty(finalAttchment) ? "" : finalAttchment);
-                cmdMail.Parameters.AddWithValue("@Has_Attachment",string.IsNullOrEmpty(finalAttchment) ? 0 : 1);              
+                cmdMail.Parameters.AddWithValue("@Has_Attachment",string.IsNullOrEmpty(finalAttchment) ? 0 : 1);
+                cmdMail.Parameters.AddWithValue("@IsInformTo_Store", ticketingMailerQue.IsInformToStore);
+                cmdMail.Parameters.AddWithValue("@Store_IDs", string.IsNullOrEmpty(ticketingMailerQue.StoreID) ? "" : ticketingMailerQue.StoreID);
                 cmdMail.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmdMail.ExecuteNonQuery());
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
 
-            }
-           /* if (finalAttchment != null || finalAttchment != String.Empty)
-            {
-                try
-                {
-                    int Success = 0;
-                    MySqlCommand cmdattachment = new MySqlCommand("SP_SaveMessageAttachment", conn);
-                    cmdattachment.Parameters.AddWithValue("@fileName", finalAttchment);
-                    cmdattachment.Parameters.AddWithValue("@Ticket_ID", ticketingMailerQue.TicketID);
-                    cmdattachment.CommandType = CommandType.StoredProcedure;
-                    Success = cmdattachment.ExecuteNonQuery();
-                }
-                catch (IOException ioex)
-                {
-                    Console.WriteLine(ioex.Message);
-                }
-            }  */               
+            }               
             finally
             {
                 if (conn != null)

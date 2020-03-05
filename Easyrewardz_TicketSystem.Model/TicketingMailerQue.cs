@@ -26,7 +26,9 @@ namespace Easyrewardz_TicketSystem.Model
         public DateTime ModifiedDate { get; set; }
         public bool IsInternalComment { get; set; }
         public bool IsResponseToCustomer { get; set; }
-     
+        public bool IsInformToStore { get; set; }
+        public string StoreID { get; set; }
+
     }
 
 }
