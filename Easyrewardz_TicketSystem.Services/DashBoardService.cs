@@ -595,7 +595,13 @@ namespace Easyrewardz_TicketSystem.Services
                         loggedInAcc.AvgResponseTime = ds.Tables[1].Rows[0]["AverageResponseTime"] != System.DBNull.Value ? Convert.ToString(ds.Tables[1].Rows[0]["AverageResponseTime"]) : string.Empty;
                         loggedInAcc.CSATScore = ds.Tables[1].Rows[0]["CSATScore"] != System.DBNull.Value ? Convert.ToString(ds.Tables[1].Rows[0]["CSATScore"]) : string.Empty;
                     }
-                    
+
+                    if (ds.Tables[2] != null && ds.Tables[2].Rows.Count > 0)
+                    {
+                        loggedInAcc.WorkTimeInPercentage = Convert.ToString(ds.Tables[2].Rows[0]["WorkTimeInPercentage"]);
+                        loggedInAcc.TotalWorkingTime = Convert.ToString(ds.Tables[2].Rows[0]["TotalWorkingTime"]);
+                        loggedInAcc.workingMinute = Convert.ToString(ds.Tables[1].Rows[0]["workingMinute"]);
+                    }
 
 
                 }

@@ -25,6 +25,10 @@ namespace Easyrewardz_TicketSystem.Model
         public string AvgResponseTime { get; set; }
         public string CSATScore { get; set; }
 
+        public string WorkTimeInPercentage { get; set; }
+        public string TotalWorkingTime { get; set; }
+        public string workingMinute { get; set; }
+
     }
 
     public class ChatStatus
