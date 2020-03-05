@@ -42,6 +42,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
     {
         public int? MessageAttachmentId { get; set; }
         public string AttachmentName { get; set; }
+        public int? TicketMessageID { get; set; }     
     }
 
 }
