@@ -151,6 +151,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _Temp = Temp;
             return _Temp.GetTemplates(TenantID);
         }
+
+        public List<MailParameterModel> GetMailParameter(ITemplate Temp, int TenantID)
+        {
+            _Temp = Temp;
+            return _Temp.GetMailParameter(TenantID);
+        }
         #endregion
 
 
