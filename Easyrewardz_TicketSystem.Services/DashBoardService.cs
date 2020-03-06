@@ -167,8 +167,6 @@ namespace Easyrewardz_TicketSystem.Services
                             dashBoarddata.ResponseRate = "0 %";
                             dashBoarddata.isResolutionSuccess = false;
                             dashBoarddata.ResolutionRate = "0 %";
-                            dashBoarddata.ResponseRate = "0%";
-                            dashBoarddata.ResolutionRate = "0%";
                             dashBoarddata.AvgResponseTAT = "0d 0h";
                             dashBoarddata.AvgResolutionTAT = "0d 0h";
                         }
