@@ -43,7 +43,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
-           NotificationModel _objresponseModel = new NotificationModel();
+           NotificationModel _objresponseModel = new NotificationModel(); 
             int StatusCode = 0;
             string statusMessage = "";
             try

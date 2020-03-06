@@ -9,7 +9,7 @@ namespace Easyrewardz_TicketSystem.Interface
     {
         NotificationModel GetNotification(int TenantID, int UserID);
 
-        int ReadNotification(int TenantID, int UserID, int TicketID);
+        int ReadNotification(int TenantID, int UserID, int TicketID); 
 
     }
 }
