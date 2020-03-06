@@ -20,6 +20,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<TemplateModel> GetTemplates(int tenantId );
 
+        List<MailParameterModel> GetMailParameter(int tenantId);
 
 
         #endregion

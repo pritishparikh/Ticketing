@@ -49,7 +49,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_DashBoardList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_BrandID", string.IsNullOrEmpty(BrandID) ? "" : BrandID);
-                cmd1.Parameters.AddWithValue("@User_ID", UserID);
+                cmd1.Parameters.AddWithValue("@User_ID", string.IsNullOrEmpty(UserID) ? "" : UserID);
                 //cmd1.Parameters.AddWithValue("@Tenant_ID", 1);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd1.Parameters.AddWithValue("@_FromDate", fromdate);
@@ -167,6 +167,8 @@ namespace Easyrewardz_TicketSystem.Services
                             dashBoarddata.ResponseRate = "0 %";
                             dashBoarddata.isResolutionSuccess = false;
                             dashBoarddata.ResolutionRate = "0 %";
+                            dashBoarddata.AvgResponseTAT = "0d 0h";
+                            dashBoarddata.AvgResolutionTAT = "0d 0h";
                         }
                     }
                 }
@@ -205,7 +207,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("Sp_DashBoardGraphData", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_BrandID", string.IsNullOrEmpty(BrandID) ? "" : BrandID);
-                cmd1.Parameters.AddWithValue("_userid", UserID);
+                cmd1.Parameters.AddWithValue("_userid", string.IsNullOrEmpty(UserID) ? "" : UserID);
                 cmd1.Parameters.AddWithValue("_tenantID", TenantID);
                 cmd1.Parameters.AddWithValue("_fromdate", fromdate);
                 cmd1.Parameters.AddWithValue("_todate", todate);

@@ -161,7 +161,7 @@ namespace Easyrewardz_TicketSystem.Services
                                         ModuleName = r.Field<object>("ModuleName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModuleName")),
                                         Modulestatus = r.Field<object>("ModuleStatus") == System.DBNull.Value ? false : Convert.ToBoolean(Convert.ToInt16(r.Field<object>("ModuleStatus"))),
 
-                                     }).ToList();
+                                     }).OrderBy(x=>x.ModuleID).ToList();
                         }
 
                         }
@@ -222,6 +222,80 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return objCRMLst;
+        }
+
+        public CRMRoleModel GetCRMRoleByUserID(int tenantID, int UserID)
+        {
+            CRMRoleModel cRMRoleModel = new CRMRoleModel();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("GetCRMRoleDetailsByUserID", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
+                cmd1.Parameters.AddWithValue("@_userID", UserID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                var test = ds.Tables.Count;
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        cRMRoleModel = ds.Tables[0].AsEnumerable().Select(r => new CRMRoleModel()
+                        {
+                            CRMRoleID = Convert.ToInt32(r.Field<object>("CRMRolesID")),
+
+                            RoleName = r.Field<object>("RoleName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("RoleName")),
+                            isRoleActive = r.Field<object>("RoleStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("RoleStatus")),
+                            CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
+                            CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
+                            ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
+                            ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
+                        }).FirstOrDefault();
+
+                    }
+
+                    if (cRMRoleModel != null)
+                    {
+                        if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                        {
+
+                                cRMRoleModel.Modules = ds.Tables[1].AsEnumerable().Where(r => r.Field<object>("CRMRolesID") != System.DBNull.Value &&
+                                    cRMRoleModel.CRMRoleID.Equals(Convert.ToInt32(r.Field<object>("CRMRolesID")))).Select(r => new ModuleDetails()
+                                    {
+                                        CRMRoleID = Convert.ToInt32(r.Field<object>("CRMRolesID")),
+                                        ModuleID = Convert.ToInt32(r.Field<object>("ModuleID")),
+                                        ModuleName = r.Field<object>("ModuleName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModuleName")),
+                                        Modulestatus = r.Field<object>("ModuleStatus") == System.DBNull.Value ? false : Convert.ToBoolean(Convert.ToInt16(r.Field<object>("ModuleStatus"))),
+
+                                    }).OrderBy(x => x.ModuleID).ToList();
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                    ds.Dispose();
+            }
+
+            return cRMRoleModel;
         }
 
         // <summary>

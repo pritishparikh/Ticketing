@@ -185,6 +185,54 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+
+        /// <summary>
+        /// View  CRMROLE
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetRolesByUserID")]
+        public ResponseModel GetRolesByUserID(int UserId)
+        {
+
+            ResponseModel _objResponseModel = new ResponseModel();
+            CRMRoleModel _objresponseModel = new CRMRoleModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                SettingsCaller _newCRM = new SettingsCaller();
+                _objresponseModel = _newCRM.GetCRMRoleByUserID(new CRMRoleService(_connectioSting), authenticate.TenantId, UserId);
+
+                StatusCode = _objresponseModel == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _objresponseModel;
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+
+            return _objResponseModel;
+        }
+
         /// <summary>
         /// GetCRMRoleDropdown
         /// </summary>
