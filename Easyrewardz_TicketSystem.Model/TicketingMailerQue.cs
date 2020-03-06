@@ -28,6 +28,8 @@ namespace Easyrewardz_TicketSystem.Model
         public bool IsResponseToCustomer { get; set; }
         public bool IsInformToStore { get; set; }
         public string StoreID { get; set; }
+        public int OldAgentID { get; set; }
+        public int NewAgentID { get; set; }
 
     }
 
