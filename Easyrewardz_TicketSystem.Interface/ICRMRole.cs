@@ -15,7 +15,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<CRMRoleModel> GetCRMRoleList(int tenantID);
         List<CRMRoleModel> GetCRMRoleDropdown(int tenantID);
-
+        CRMRoleModel GetCRMRoleByUserID(int tenantID, int UserID);
         List<string> BulkUploadCRMRole(int TenantID, int CreatedBy, int RoleFor, DataSet DataSetCSV);
     }
 }
