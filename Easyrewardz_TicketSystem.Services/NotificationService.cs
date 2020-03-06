@@ -83,7 +83,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-        public int ReadNotification(int TenantID, int UserID, string TicketIDs)
+        public int ReadNotification(int TenantID, int UserID, int TicketID)
         {
             int updatecount = 0;
             try
@@ -93,7 +93,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                 cmd.Parameters.AddWithValue("@_userID", UserID);
-                cmd.Parameters.AddWithValue("@_ticketIds", TicketIDs);
+                cmd.Parameters.AddWithValue("@_ticketIds", TicketID);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 updatecount = cmd.ExecuteNonQuery();

@@ -86,7 +86,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("ReadNotification")]
-        public ResponseModel ReadNotification(string TicketIDs)
+        public ResponseModel ReadNotification(int TicketID)
         {
             int updatecount = 0;
             ResponseModel _objResponseModel = new ResponseModel();
@@ -100,9 +100,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
                 NotificationCaller _newNoti = new NotificationCaller();
 
-                updatecount = _newNoti.GetNotification(new NotificationService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID,TicketIDs);
+                updatecount = _newNoti.ReadNotification(new NotificationService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, TicketID);
 
-                StatusCode = updatecount == 0 ? (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
+                StatusCode = updatecount > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServiceNotWorking;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 

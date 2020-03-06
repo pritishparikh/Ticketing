@@ -29,10 +29,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <summary>
         /// Update is Read on Notification Read
         // / </summary>
-        public int  GetNotification(INotification Notification, int TenantID, int UserID, string TicketIDs)
+        public int ReadNotification(INotification Notification, int TenantID, int UserID, int  TicketID)
         {
             _Notification = Notification;
-            return _Notification.ReadNotification(TenantID, UserID, TicketIDs);
+            return _Notification.ReadNotification(TenantID, UserID, TicketID);
 
         }
     }
