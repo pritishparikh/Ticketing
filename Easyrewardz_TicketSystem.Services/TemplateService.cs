@@ -288,6 +288,57 @@ namespace Easyrewardz_TicketSystem.Services
             return objTempLst;
         }
 
+        /// <summary>
+        /// GetTemplates
+        /// </summary>
+        public List<MailParameterModel> GetMailParameter(int tenantId)
+        {
+            List<MailParameterModel> objTempLst = new List<MailParameterModel>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetMailParameter", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+
+                //cmd1.Parameters.AddWithValue("@_tenantID", tenantId);
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objTempLst = ds.Tables[0].AsEnumerable().Select(r => new MailParameterModel()
+                        {
+                            MailParameterID = Convert.ToInt32(r.Field<object>("MailParameterID")),
+                            ParameterName = r.Field<object>("ParameterName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ParameterName")),
+                            Description = r.Field<object>("Description") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("Description")),
+
+                        }).ToList();
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
+
+            return objTempLst;
+        }
+
         #endregion
 
     }
