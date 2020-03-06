@@ -1091,6 +1091,16 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketMessageDetails.DayOfCreation = ds.Tables[1].Rows[i]["DayOfCreation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["DayOfCreation"]);
                             TicketMessageDetails.CreatedDate = ds.Tables[1].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["CreatedDate"]);
                             TicketMessageDetails.IsInternalComment = ds.Tables[1].Rows[i]["IsInternalComment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[1].Rows[i]["IsInternalComment"]);
+                            TicketMessageDetails.OldAgentID= ds.Tables[1].Rows[i]["OldAgentID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["OldAgentID"]);
+                            TicketMessageDetails.OldAgentName = ds.Tables[1].Rows[i]["OldAgentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["OldAgentName"]);
+                            TicketMessageDetails.NewAgentID = ds.Tables[1].Rows[i]["NewAgentID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["NewAgentID"]);
+                            TicketMessageDetails.NewAgentName = ds.Tables[1].Rows[i]["NewAgentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["NewAgentName"]);
+                            if (TicketMessageDetails.OldAgentID>0)
+                            {
+                                TicketMessageDetails.IsReAssign = true;
+                            }
+                               
+
                             TicketMessageDetails.messageAttachments = ds.Tables[3].AsEnumerable().Where(x => x.Field<object>("TicketMessageID")!= DBNull.Value && Convert.ToInt32(x.Field<int>("TicketMessageID")).
                          Equals(TicketMessageDetails.MailID)).Select(x => new MessageAttachment()
                          {
@@ -1217,6 +1227,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmdMail.Parameters.AddWithValue("@Has_Attachment",string.IsNullOrEmpty(finalAttchment) ? 0 : 1);
                 cmdMail.Parameters.AddWithValue("@IsInformTo_Store", ticketingMailerQue.IsInformToStore);
                 cmdMail.Parameters.AddWithValue("@Store_IDs", string.IsNullOrEmpty(ticketingMailerQue.StoreID) ? "" : ticketingMailerQue.StoreID);
+                cmdMail.Parameters.AddWithValue("@OldAgent_ID", ticketingMailerQue.OldAgentID);
+                cmdMail.Parameters.AddWithValue("@NewAgent_ID", ticketingMailerQue.NewAgentID);
                 cmdMail.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmdMail.ExecuteNonQuery());
             }
