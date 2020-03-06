@@ -733,7 +733,6 @@ namespace Easyrewardz_TicketSystem.Services
             List<string> CountList = new List<string>();
             string csv = String.Empty;
 
-            int resultCount = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -756,18 +755,18 @@ namespace Easyrewardz_TicketSystem.Services
                 }
                 ////2. Total Open Tickets //5. Escalated Tickets //6.Re-Assigned Tickets
                 //7.Re-Opened Tickets  //4. Ticket Count by Associates
-                else if (defaultReportRequestModel.ReportTypeID >= 2 || defaultReportRequestModel.ReportTypeID == 7
-                    || defaultReportRequestModel.ReportTypeID == 5 || defaultReportRequestModel.ReportTypeID == 6)
+                else if (defaultReportRequestModel.ReportTypeID == 2 || defaultReportRequestModel.ReportTypeID == 4
+                    || defaultReportRequestModel.ReportTypeID == 5 || defaultReportRequestModel.ReportTypeID == 6
+                    || defaultReportRequestModel.ReportTypeID == 7)
                 {
                     sqlcmd.CommandText = "sp_DefaultReport_TicketsByStatus";
 
+                    sqlcmd.Parameters.AddWithValue("Ticket_StatusIDs", defaultReportRequestModel.Ticket_StatusIDs);
                     sqlcmd.Parameters.AddWithValue("Ticket_StatusID", defaultReportRequestModel.Ticket_StatusID);
                     sqlcmd.Parameters.AddWithValue("TicketCreatedFrom", defaultReportRequestModel.Ticket_CreatedFrom);
                     sqlcmd.Parameters.AddWithValue("TicketCreatedTo", defaultReportRequestModel.Ticket_CreatedTo);
                     sqlcmd.Parameters.AddWithValue("TicketSourceIDs", defaultReportRequestModel.Ticket_SourceIDs);
-
                     sqlcmd.Parameters.AddWithValue("TicketAssignIDs", string.IsNullOrEmpty(defaultReportRequestModel.Ticket_AssignIDs) ? "" : defaultReportRequestModel.Ticket_AssignIDs);
-
                     sqlcmd.Parameters.AddWithValue("ReportTypeID", defaultReportRequestModel.ReportTypeID);
                 }
                 //3. 3.	Total Closed Ticket
@@ -794,50 +793,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-
-                        objSearchResult = ds.Tables[0].AsEnumerable().Select(r => new SearchResponse()
-                        {
-                            ticketID = Convert.ToInt32(r.Field<object>("TicketID")),
-                            ticketStatus = Convert.ToString((EnumMaster.TicketStatus)Convert.ToInt32(r.Field<object>("StatusID"))),
-                            Message = Convert.ToString(r.Field<object>("TicketDescription")),
-                            Category = Convert.ToString(r.Field<object>("CategoryName")),
-                            subCategory = Convert.ToString(r.Field<object>("SubCategoryName")),
-                            IssueType = Convert.ToString(r.Field<object>("IssueTypeName")),
-                            Priority = Convert.ToString(r.Field<object>("PriortyName")),
-                            Assignee = Convert.ToString(r.Field<object>("AssignedName")),
-                            CreatedOn = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedOn"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedOn")),
-                            createdBy = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedByName"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedByName")),
-                            createdago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("CreatedDate")), "CreatedSpan"),
-                            assignedTo = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedName"))) ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
-                            assignedago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("AssignedDate")), "AssignedSpan"),
-                            updatedBy = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("ModifyByName"))) ? string.Empty : Convert.ToString(r.Field<object>("ModifyByName")),
-                            updatedago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("ModifiedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("ModifiedDate")), "ModifiedSpan"),
-
-                            responseTimeRemainingBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityRespond")))) ?
-                           string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
-                            responseOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityRespond")))) ?
-                           string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
-
-                            resolutionOverdueBy = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedDate"))) || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("PriorityResolve")))) ?
-                           string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
-
-                            TaskStatus = Convert.ToString(r.Field<object>("TaskDetails")),
-                            ClaimStatus = Convert.ToString(r.Field<object>("ClaimDetails")),
-                            TicketCommentCount = Convert.ToInt32(r.Field<object>("TicketComments")),
-                            isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated")),
-                            ticketSourceType = Convert.ToString(r.Field<object>("TicketSourceType")),
-                            ticketSourceTypeID = Convert.ToInt16(r.Field<object>("TicketSourceTypeID")),
-                            IsReassigned = Convert.ToBoolean(r.Field<object>("IsReassigned")),
-                            IsSLANearBreach = Convert.ToBoolean(r.Field<object>("IsSLANearBreach"))
-                        }).ToList();
-
-                        if (objSearchResult.Count > 0)
-                        {
-                            csv = CommonService.ListToCSV(objSearchResult, "totalpages,isEscalation,ClaimStatus,TaskStatus,TicketCommentCount," +
-                                "" +
-                                "createdago,assignedago,updatedBy,updatedago," +
-                                "responseTimeRemainingBy,responseOverdueBy,resolutionOverdueBy,ticketSourceTypeID,IsReassigned,IsSLANearBreach");
-                        }
+                        csv = CommonService.DataTableToCsv(ds.Tables[0]);
                     }
                 }
             }
@@ -851,6 +807,50 @@ namespace Easyrewardz_TicketSystem.Services
                 if (ds != null) ds.Dispose(); conn.Close();
             }
             return csv;
+        }
+
+        private string ConvertToCSV(DataSet objDataSet)
+        {
+            StringBuilder content = new StringBuilder();
+
+            if (objDataSet.Tables.Count >= 1)
+            {
+                DataTable table = objDataSet.Tables[0];
+
+                if (table.Rows.Count > 0)
+                {
+                    DataRow dr1 = (DataRow)table.Rows[0];
+                    int intColumnCount = dr1.Table.Columns.Count;
+                    int index = 1;
+
+                    //add column names
+                    foreach (DataColumn item in dr1.Table.Columns)
+                    {
+                        content.Append(String.Format("\"{0}\"", item.ColumnName));
+                        if (index < intColumnCount)
+                            content.Append(",");
+                        else
+                            content.Append("\r\n");
+                        index++;
+                    }
+
+                    //add column data
+                    foreach (DataRow currentRow in table.Rows)
+                    {
+                        string strRow = string.Empty;
+                        for (int y = 0; y <= intColumnCount - 1; y++)
+                        {
+                            strRow += "\"" + currentRow[y].ToString() + "\"";
+
+                            if (y < intColumnCount - 1 && y >= 0)
+                                strRow += ",";
+                        }
+                        content.Append(strRow + "\r\n");
+                    }
+                }
+            }
+
+            return content.ToString();
         }
 
         #endregion
