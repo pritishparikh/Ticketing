@@ -70,7 +70,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                     CommonService commonService = new CommonService();
                     string encryptedEmailId = commonService.Encrypt(EmailId);
-                    string url = configuration.GetValue<string>("websiteURL") + "/changePassword?Id=" + encryptedEmailId;
+                    string url = configuration.GetValue<string>("websiteURL") + "/userforgotPassword?Id:" + encryptedEmailId;
                    // string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url;
 
                     string content = "";
