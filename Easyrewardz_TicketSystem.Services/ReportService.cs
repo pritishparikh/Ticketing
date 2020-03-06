@@ -23,11 +23,11 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
 
 
-            #region custom Methods
+        #region custom Methods
         /// <summary>
         /// Delete Report
         /// </summary>
-        public int DeleteReport(int tenantID,int ReportID)
+        public int DeleteReport(int tenantID, int ReportID)
         {
             int deletecount = 0;
             try
@@ -63,7 +63,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Delete Report
         /// </summary>
-        public int SaveReportForDownload(int tenantID, int UserID,int ScheduleID)
+        public int SaveReportForDownload(int tenantID, int UserID, int ScheduleID)
         {
             int saveCount = 0;
             try
@@ -128,7 +128,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (conn != null)  
+                if (conn != null)
                 {
                     conn.Close();
                 }
@@ -176,9 +176,9 @@ namespace Easyrewardz_TicketSystem.Services
                             CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
                             ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
-                            ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),                          
+                            ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),
                             ScheduleTime = r.Field<object>("ScheduleTime") == "" ? default(DateTime?) : Convert.ToDateTime(r.Field<object>("ScheduleTime")),
-                            IsDaily =Convert.ToBoolean(r.Field<object>("IsDaily") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDaily"))),
+                            IsDaily = Convert.ToBoolean(r.Field<object>("IsDaily") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDaily"))),
                             NoOfDay = Convert.ToInt32(r.Field<object>("NoOfDay") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDay"))),
                             IsWeekly = Convert.ToBoolean(r.Field<object>("IsWeekly") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsWeekly"))),
                             NoOfWeek = Convert.ToInt32(r.Field<object>("NoOfWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeek"))),
@@ -186,9 +186,9 @@ namespace Easyrewardz_TicketSystem.Services
                             IsDailyForMonth = Convert.ToBoolean(r.Field<object>("IsDailyForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDailyForMonth"))),
                             NoOfDaysForMonth = Convert.ToInt32(r.Field<object>("NoOfDaysForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDaysForMonth"))),
                             NoOfMonthForMonth = Convert.ToInt32(r.Field<object>("NoOfMonthForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfMonthForMonth"))),
-                            IsWeeklyForMonth = Convert.ToBoolean(r.Field<object>("IsWeeklyForMonth") == System.DBNull.Value ?0 : Convert.ToInt32(r.Field<object>("IsWeeklyForMonth"))),
+                            IsWeeklyForMonth = Convert.ToBoolean(r.Field<object>("IsWeeklyForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsWeeklyForMonth"))),
                             NoOfMonthForWeek = Convert.ToInt32(r.Field<object>("NoOfMonthForWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfMonthForWeek"))),
-                            NoOfWeekForWeek = Convert.ToInt32(r.Field<object>("NoOfWeekForWeek") == System.DBNull.Value ?0 : Convert.ToInt32(r.Field<object>("NoOfWeekForWeek"))),
+                            NoOfWeekForWeek = Convert.ToInt32(r.Field<object>("NoOfWeekForWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeekForWeek"))),
                             NameOfDayForYear = r.Field<object>("NameOfDayForYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfDayForYear")),
                             NameOfDayForWeek = r.Field<object>("NameOfDayForWeek") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfDayForWeek")),
                             NoOfWeekForYear = r.Field<object>("NoOfWeekForYear") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeekForYear")),
@@ -264,7 +264,7 @@ namespace Easyrewardz_TicketSystem.Services
                 sqlcmd.Parameters.AddWithValue("SLAStatus", string.IsNullOrEmpty(searchModel.reportSearch.SLAStatus) ? "" : searchModel.reportSearch.SLAStatus);
 
                 /*Column 3 (5)*/
-                sqlcmd.Parameters.AddWithValue("TicketClaim_ID", Convert.ToInt32(searchModel.reportSearch.ClaimId==""?"0": searchModel.reportSearch.ClaimId));
+                sqlcmd.Parameters.AddWithValue("TicketClaim_ID", Convert.ToInt32(searchModel.reportSearch.ClaimId == "" ? "0" : searchModel.reportSearch.ClaimId));
                 sqlcmd.Parameters.AddWithValue("InvoiceNumberORSubOrderNo", string.IsNullOrEmpty(searchModel.reportSearch.InvoiceNumberORSubOrderNo) ? "" : searchModel.reportSearch.InvoiceNumberORSubOrderNo);
                 sqlcmd.Parameters.AddWithValue("OrderItemId", string.IsNullOrEmpty(Convert.ToString(searchModel.reportSearch.OrderItemId)) ? 0 : Convert.ToInt32(searchModel.reportSearch.OrderItemId));
                 //sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.reportSearch.IsVisitStore == "yes" ? 1 : 0);
@@ -299,7 +299,7 @@ namespace Easyrewardz_TicketSystem.Services
                 sqlcmd.Parameters.AddWithValue("TaskStatus_Id", searchModel.reportSearch.TaskStatusId);
                 sqlcmd.Parameters.AddWithValue("TaskDepartment_Id", searchModel.reportSearch.TaskDepartment_Id);
                 sqlcmd.Parameters.AddWithValue("TaskFunction_Id", searchModel.reportSearch.TaskFunction_Id);
-           //     sqlcmd.Parameters.AddWithValue("Task_Priority", searchModel.reportSearch.TaskPriority);
+                //     sqlcmd.Parameters.AddWithValue("Task_Priority", searchModel.reportSearch.TaskPriority);
 
                 sqlcmd.Parameters.AddWithValue("CurrentUserId", searchModel.curentUserId);
                 sqlcmd.Parameters.AddWithValue("Tenant_ID", searchModel.TenantID);
@@ -316,7 +316,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        resultCount =Convert.ToInt32(ds.Tables[0].Rows[0]["RowCount"]);
+                        resultCount = Convert.ToInt32(ds.Tables[0].Rows[0]["RowCount"]);
 
                         //objSearchResult = ds.Tables[0].AsEnumerable().Select(r => new SearchResponseReport()
                         //{
@@ -354,7 +354,7 @@ namespace Easyrewardz_TicketSystem.Services
                         //}).ToList();
                     }
                 }
-               // return resultCount;
+                // return resultCount;
                 //paging here
                 //if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
                 //    objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
@@ -382,7 +382,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             List<string> CountList = new List<string>();
             string csv = String.Empty;
-            
+
             int resultCount = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
@@ -458,7 +458,7 @@ namespace Easyrewardz_TicketSystem.Services
                             searchresponsereport = GetDownloadReportSearch(searchModel);
                             csv = CommonService.ListToCSV(searchresponsereport, "totalpages,isEscalation,ClaimStatus,TaskStatus,TicketCommentCount");
 
-                            
+
                         }
                     }
                 }
@@ -564,8 +564,8 @@ namespace Easyrewardz_TicketSystem.Services
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
                         // resultCount = Convert.ToInt32(ds.Tables[0].Rows[0]["RowCount"]);
-                       
-                         objSearchResult = ds.Tables[0].AsEnumerable().Select(r => new SearchResponseReport()
+
+                        objSearchResult = ds.Tables[0].AsEnumerable().Select(r => new SearchResponseReport()
                         {
                             ticketID = Convert.ToInt32(r.Field<object>("TicketID")),
                             ticketStatus = Convert.ToString((EnumMaster.TicketStatus)Convert.ToInt32(r.Field<object>("StatusID"))),
@@ -584,12 +584,12 @@ namespace Easyrewardz_TicketSystem.Services
                             updatedago = r.Field<object>("ModifiedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("ModifiedDate")), "ModifiedSpan"),
 
                             responseTimeRemainingBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityRespond") == System.DBNull.Value) ?
-                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
+                           string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
                             responseOverdueBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityRespond") == System.DBNull.Value) ?
-                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
+                           string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
 
                             resolutionOverdueBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityResolve") == System.DBNull.Value) ?
-                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
+                           string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
 
                             TaskStatus = r.Field<object>("TaskDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TaskDetails")),
                             ClaimStatus = r.Field<object>("ClaimDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ClaimDetails")),
@@ -723,19 +723,19 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
 
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
-            if(!string.IsNullOrEmpty(defaultReportRequestModel.Ticket_CreatedFrom) && defaultReportRequestModel.Ticket_CreatedFrom.Equals("Invalid date"))
+            if (!string.IsNullOrEmpty(defaultReportRequestModel.Ticket_CreatedFrom) && defaultReportRequestModel.Ticket_CreatedFrom.Equals("Invalid date"))
             {
                 defaultReportRequestModel.Ticket_CreatedFrom = "";
             }
-            if (!string.IsNullOrEmpty(defaultReportRequestModel.Ticket_CreatedTo)&&defaultReportRequestModel.Ticket_CreatedTo.Equals("Invalid date"))
+            if (!string.IsNullOrEmpty(defaultReportRequestModel.Ticket_CreatedTo) && defaultReportRequestModel.Ticket_CreatedTo.Equals("Invalid date"))
             {
                 defaultReportRequestModel.Ticket_CreatedTo = "";
             }
-            if (!string.IsNullOrEmpty(defaultReportRequestModel.Ticket_CloseFrom)&&defaultReportRequestModel.Ticket_CloseFrom.Equals("Invalid date"))
+            if (!string.IsNullOrEmpty(defaultReportRequestModel.Ticket_CloseFrom) && defaultReportRequestModel.Ticket_CloseFrom.Equals("Invalid date"))
             {
                 defaultReportRequestModel.Ticket_CloseFrom = "";
             }
-            if (!string.IsNullOrEmpty(defaultReportRequestModel.Ticket_CloseTo)&&defaultReportRequestModel.Ticket_CloseTo.Equals("Invalid date"))
+            if (!string.IsNullOrEmpty(defaultReportRequestModel.Ticket_CloseTo) && defaultReportRequestModel.Ticket_CloseTo.Equals("Invalid date"))
             {
                 defaultReportRequestModel.Ticket_CloseTo = "";
             }
@@ -791,7 +791,7 @@ namespace Easyrewardz_TicketSystem.Services
                     sqlcmd.Parameters.AddWithValue("TicketCreatedTo", defaultReportRequestModel.Ticket_CreatedTo);
 
                     sqlcmd.Parameters.AddWithValue("TicketSourceIDs", defaultReportRequestModel.Ticket_SourceIDs);
-                }             
+                }
 
                 sqlcmd.Parameters.AddWithValue("Tenant_ID", TenantID);
 
@@ -817,50 +817,6 @@ namespace Easyrewardz_TicketSystem.Services
                 if (ds != null) ds.Dispose(); conn.Close();
             }
             return csv;
-        }
-
-        private string ConvertToCSV(DataSet objDataSet)
-        {
-            StringBuilder content = new StringBuilder();
-
-            if (objDataSet.Tables.Count >= 1)
-            {
-                DataTable table = objDataSet.Tables[0];
-
-                if (table.Rows.Count > 0)
-                {
-                    DataRow dr1 = (DataRow)table.Rows[0];
-                    int intColumnCount = dr1.Table.Columns.Count;
-                    int index = 1;
-
-                    //add column names
-                    foreach (DataColumn item in dr1.Table.Columns)
-                    {
-                        content.Append(String.Format("\"{0}\"", item.ColumnName));
-                        if (index < intColumnCount)
-                            content.Append(",");
-                        else
-                            content.Append("\r\n");
-                        index++;
-                    }
-
-                    //add column data
-                    foreach (DataRow currentRow in table.Rows)
-                    {
-                        string strRow = string.Empty;
-                        for (int y = 0; y <= intColumnCount - 1; y++)
-                        {
-                            strRow += "\"" + currentRow[y].ToString() + "\"";
-
-                            if (y < intColumnCount - 1 && y >= 0)
-                                strRow += ",";
-                        }
-                        content.Append(strRow + "\r\n");
-                    }
-                }
-            }
-
-            return content.ToString();
         }
 
         #endregion
