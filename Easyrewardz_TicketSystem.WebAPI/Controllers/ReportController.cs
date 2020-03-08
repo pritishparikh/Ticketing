@@ -283,6 +283,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// DownloadDefaultReportAPI
+        /// </summary>
+        /// <param name="objRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("DownloadDefaultReport")]
         public ResponseModel DownloadDefaultReport([FromBody] DefaultReportRequestModel objRequest)
