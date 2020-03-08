@@ -269,6 +269,9 @@ namespace Easyrewardz_TicketSystem.Services
                             ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
                             TemplateStatus= r.Field<object>("TemplateStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TemplateStatus")),
 
+                            TemplateContent = r.Field<object>("TemplateContent") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TemplateContent")),
+                            TemplateSubject = r.Field<object>("TemplateSubject") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TemplateSubject")),
+
                         }).ToList();
 
                 }

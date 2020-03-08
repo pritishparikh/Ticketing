@@ -19,5 +19,8 @@ namespace Easyrewardz_TicketSystem.Model
         public string ModifiedDate { get; set; }
 
         public string TemplateStatus { get; set; }
+
+        public string TemplateContent { get; set; }
+        public string TemplateSubject { get; set; }
     }
 }

@@ -22,17 +22,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public NotificationModel GetNotification(INotification Notification, int TenantID, int UserID )
         {
             _Notification = Notification;
-            return _Notification.GetNotification( TenantID,  UserID);
+            return _Notification.GetNotification( TenantID,  UserID); 
 
         }
 
         /// <summary>
         /// Update is Read on Notification Read
         // / </summary>
-        public int  GetNotification(INotification Notification, int TenantID, int UserID, string TicketIDs)
+        public int ReadNotification(INotification Notification, int TenantID, int UserID, int  TicketID)
         {
             _Notification = Notification;
-            return _Notification.ReadNotification(TenantID, UserID, TicketIDs);
+            return _Notification.ReadNotification(TenantID, UserID, TicketID);
 
         }
     }

@@ -35,6 +35,12 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string DayOfCreation { get; set; }
         public string CreatedDate { get; set; }
         public bool IsInternalComment { get; set; }
+        public bool IsReAssign { get; set; } = false;
+        public int OldAgentID { get; set; }
+        public string OldAgentName { get; set; }
+        public int NewAgentID { get; set; }
+        public string NewAgentName { get; set; }
+
         public List<MessageAttachment> messageAttachments { get; set; }
 
     }
