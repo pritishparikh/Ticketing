@@ -432,6 +432,53 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        [HttpPost]
+        [Route("SendReportMail")]
+        public ResponseModel SendReportMail([FromBody] ReportMailModel reportmailmodel)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            TicketingCaller _ticketingCaller = new TicketingCaller();
+            MasterCaller masterCaller = new MasterCaller();
+
+            try
+            {
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                SettingsCaller _dbsearchMaster = new SettingsCaller();
+
+                bool IsSent = _dbsearchMaster.SendReportMail(new ReportService(_connectioSting), reportmailmodel.EmailID, reportmailmodel.FilePath, authenticate.TenantId, authenticate.UserMasterID);
+
+                if (IsSent)
+                {
+                    _objResponseModel.Status = true;
+                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                    _objResponseModel.ResponseData = "Mail sent successfully.";
+                }
+                else
+                {
+                    _objResponseModel.Status = false;
+                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                    _objResponseModel.ResponseData = "Mail sent failure.";
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                _objResponseModel.ResponseData = "We had an error! Sorry about that.";
+            }
+            return _objResponseModel;
+        }
+
         #endregion
     }
 }
