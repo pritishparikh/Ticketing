@@ -128,7 +128,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@_TikcketTitle", string.IsNullOrEmpty(ticketingDetails.TicketTitle) ? "" : ticketingDetails.TicketTitle);
                 cmd1.Parameters.AddWithValue("@_StoreID", string.IsNullOrEmpty(ticketingDetails.StoreID) ? "" : ticketingDetails.StoreID);
                 // added for mailer check 
-                cmd1.Parameters.AddWithValue("@_Is_Sent ", Convert.ToInt16(!string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody)));
+                cmd1.Parameters.AddWithValue("@_Is_Sent", Convert.ToInt16(!string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody)));
 
                 cmd1.CommandType = CommandType.StoredProcedure;
 
