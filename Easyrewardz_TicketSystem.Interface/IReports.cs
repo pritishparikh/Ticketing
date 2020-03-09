@@ -24,5 +24,7 @@ namespace Easyrewardz_TicketSystem.Interface
         string DownloadReportSearch(int SchedulerID, int curentUserId, int TenantID);
 
         string DownloadDefaultReport(DefaultReportRequestModel defaultReportRequestModel, int curentUserId, int TenantID);
+
+        bool SendReportMail(string EmailID, string FilePath, int TenantID, int UserMasterID);
     }
 }

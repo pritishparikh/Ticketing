@@ -819,6 +819,49 @@ namespace Easyrewardz_TicketSystem.Services
             return csv;
         }
 
+        public bool SendReportMail(string EmailID, string FilePath, int TenantID, int UserMasterID)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+
+            bool result = false;
+            int resultcount = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                cmd.Connection = conn;
+
+                cmd.CommandText = "SP_SendReportMail";
+
+                cmd.Parameters.AddWithValue("_EmailID", EmailID);
+                cmd.Parameters.AddWithValue("_FilePath", FilePath);
+                cmd.Parameters.AddWithValue("_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("_UserMasterID", UserMasterID);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                resultcount = cmd.ExecuteNonQuery();
+
+                if(resultcount == 1)
+                {
+                    result = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+
         #endregion
 
 
