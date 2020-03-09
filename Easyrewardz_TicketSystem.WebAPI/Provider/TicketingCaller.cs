@@ -187,7 +187,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _ticketList = _ticket;
             _ticketList.setticketassigforfollowup(TicketID, FollowUPUserID, UserID);
-        }
+        } 
                
 
         #endregion
