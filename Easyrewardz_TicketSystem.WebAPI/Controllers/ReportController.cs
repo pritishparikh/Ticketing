@@ -344,7 +344,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     }
                     else
                     {
-                        _objResponseModel.ResponseData = !string.IsNullOrEmpty(URLFolderpath) ? URLFolderpath + "@download" : null;
+                        _objResponseModel.ResponseData = URLFolderpath;
                     }
                 }
 
@@ -406,7 +406,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = !string.IsNullOrEmpty(URLFolderpath) ? URLFolderpath : null;
+                if (System.IO.File.Exists(Folderpath))
+                {
+                    FileInfo fileInfo = new FileInfo(Folderpath);
+                    float sizeInMB = (fileInfo.Length / 1024f) / 1024f;
+                    if (sizeInMB > 5)
+                    {
+                        _objResponseModel.ResponseData = !string.IsNullOrEmpty(URLFolderpath) ? URLFolderpath + "@mail" : null;
+                    }
+                    else
+                    {
+                        _objResponseModel.ResponseData = URLFolderpath;
+                    }
+                }
+              //  _objResponseModel.ResponseData = !string.IsNullOrEmpty(URLFolderpath) ? URLFolderpath : null;
             }
             catch (Exception ex)
             {
