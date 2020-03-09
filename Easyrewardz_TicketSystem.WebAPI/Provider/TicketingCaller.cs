@@ -182,6 +182,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ticketList = _ticket;
             return _ticketList.GetProgressBarDetails(TicketID, TenantID);
         }
+
+        public void setticketassigforfollowup(ITicketing _ticket, int TicketID, string FollowUPUserID, int UserID)
+        {
+            _ticketList = _ticket;
+            _ticketList.setticketassigforfollowup(TicketID, FollowUPUserID, UserID);
+        }
+               
+
         #endregion
     }
 }

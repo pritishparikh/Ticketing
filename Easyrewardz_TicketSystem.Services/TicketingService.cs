@@ -1286,6 +1286,42 @@ namespace Easyrewardz_TicketSystem.Services
             return progressBarDetail;
         }
 
+        /// <summary>
+        /// Set ticket Assignment for the followup
+        /// </summary>
+        /// <param name="TicketID"></param>
+        /// <param name="FollowUPUserID"></param>
+        /// <param name="UserID"></param>
+        public void setticketassigforfollowup(int TicketID, string FollowUPUserID, int UserID)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmdMail = new MySqlCommand("SP_assignTicketFollowUP", conn);
+                
+                cmdMail.Parameters.AddWithValue("@Ticket_ID", TicketID);
+                cmdMail.Parameters.AddWithValue("@FollowUPUserIDs", FollowUPUserID);
+                cmdMail.Parameters.AddWithValue("@User_ID", UserID);
+                cmdMail.CommandType = CommandType.StoredProcedure;
+                cmdMail.ExecuteScalar();
+                
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+           
+        }
     }
 }
+
+
 
