@@ -178,12 +178,15 @@ namespace Easyrewardz_TicketSystem.Services
                     //    DirectoryInfo di = Directory.CreateDirectory(FolderPath);
                     //}
 
-
-                    MySqlCommand cmdattachment = new MySqlCommand("SP_SaveAttachment", conn);
-                    cmdattachment.Parameters.AddWithValue("@fileName", finalAttchment);
-                    cmdattachment.Parameters.AddWithValue("@Ticket_ID", ticketID);
-                    cmdattachment.CommandType = CommandType.StoredProcedure;
-                    i = cmdattachment.ExecuteNonQuery();
+                    if(!string.IsNullOrEmpty(finalAttchment))
+                    {
+                        MySqlCommand cmdattachment = new MySqlCommand("SP_SaveAttachment", conn);
+                        cmdattachment.Parameters.AddWithValue("@fileName", finalAttchment);
+                        cmdattachment.Parameters.AddWithValue("@Ticket_ID", ticketID);
+                        cmdattachment.CommandType = CommandType.StoredProcedure;
+                        i = cmdattachment.ExecuteNonQuery();
+                    }
+                   
 
 
                 }
