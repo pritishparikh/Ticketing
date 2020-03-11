@@ -1351,7 +1351,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            ticketIds = ticketIds + Convert.ToString(ds.Tables[0].Rows[0][i]) + ",";
+                            ticketIds = ticketIds + Convert.ToString(ds.Tables[0].Rows[i][0]) + ",";
                         }
 
                         if (!string.IsNullOrEmpty(ticketIds))
