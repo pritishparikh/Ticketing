@@ -52,5 +52,7 @@ namespace Easyrewardz_TicketSystem.Interface
         void setticketassigforfollowup(int TicketID, string FollowUPUserID, int UserID);
 
         string getticketsforfollowup(int UserID);
+
+        bool ticketunassigfromfollowup(string TicketIDs, int UserID);
     }
 }

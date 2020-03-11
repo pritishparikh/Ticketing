@@ -154,17 +154,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ticketList.GetCountByTicket(ticketID);
         }
 
-        public List<TicketMessage> TicketMessage(ITicketing _ticket, int ticketID,int TenantID,string url)
+        public List<TicketMessage> TicketMessage(ITicketing _ticket, int ticketID, int TenantID, string url)
         {
             _ticketList = _ticket;
             return _ticketList.TicketMessagelisting(ticketID, TenantID, url);
         }
-        public List<CustomSearchTicketAgent> AgentList(ITicketing _ticket,int TenantID)
+        public List<CustomSearchTicketAgent> AgentList(ITicketing _ticket, int TenantID)
         {
             _ticketList = _ticket;
             return _ticketList.GetAgentList(TenantID);
         }
-        public int CommentticketDetail(ITicketing _ticket, TicketingMailerQue ticketingMailerQue, string finalAttchment )
+        public int CommentticketDetail(ITicketing _ticket, TicketingMailerQue ticketingMailerQue, string finalAttchment)
         {
             _ticketList = _ticket;
             return _ticketList.CommentOnTicketDetail(ticketingMailerQue, finalAttchment);
@@ -183,13 +183,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _ticketList.GetProgressBarDetails(TicketID, TenantID);
         }
 
+        /// <summary>
+        /// Set ticket assign for follow up
+        /// </summary>
+        /// <param name="_ticket"></param>
+        /// <param name="TicketID"></param>
+        /// <param name="FollowUPUserID"></param>
+        /// <param name="UserID"></param>
         public void setticketassigforfollowup(ITicketing _ticket, int TicketID, string FollowUPUserID, int UserID)
         {
             _ticketList = _ticket;
             _ticketList.setticketassigforfollowup(TicketID, FollowUPUserID, UserID);
         }
-        
 
+        /// <summary>
+        /// Get tickets for follow up
+        /// </summary>
+        /// <param name="_ticket"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public string getticketsforfollowup(ITicketing _ticket, int UserID)
         {
             string ticketIDs = "";
@@ -197,6 +209,23 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             ticketIDs = _ticketList.getticketsforfollowup(UserID);
             return ticketIDs;
         }
+
+        /// <summary>
+        /// Ticket Unassignment from follow up
+        /// </summary>
+        /// <param name="_ticket"></param>
+        /// <param name="TicketIDs"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public bool ticketunassigfromfollowup(ITicketing _ticket, string TicketIDs, int UserID)
+        {
+            bool isUpdated = false;
+            _ticketList = _ticket;
+            isUpdated = _ticketList.ticketunassigfromfollowup(TicketIDs, UserID);
+            return isUpdated;
+        }
+
+
         #endregion
     }
 }

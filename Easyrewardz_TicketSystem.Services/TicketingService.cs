@@ -1375,6 +1375,41 @@ namespace Easyrewardz_TicketSystem.Services
 
             return ticketIds;
         }
+
+        /// <summary>
+        /// Un-assign ticketids from the follow up
+        /// </summary>
+        /// <param name="TicketIDs"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public bool ticketunassigfromfollowup(string TicketIDs, int UserID)
+        {
+            bool isUpdate = false;
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmdMail = new MySqlCommand("SP_updateTicketFollowUP", conn);
+
+                cmdMail.Parameters.AddWithValue("@Ticket_IDs", TicketIDs);
+                cmdMail.Parameters.AddWithValue("@User_ID", UserID);
+                cmdMail.CommandType = CommandType.StoredProcedure;
+                cmdMail.ExecuteScalar();
+                isUpdate = true;
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                isUpdate = false;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return isUpdate;
+        }
     }
 }
 
