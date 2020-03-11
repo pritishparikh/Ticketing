@@ -1105,6 +1105,44 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+
+        [HttpGet]
+        [Route("getticketsforfollowup")]
+        public ResponseModel getticketsforfollowup()
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                TicketingCaller _TicketCaller = new TicketingCaller();
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                int UserID = authenticate.UserMasterID;
+                string ticketIds = _TicketCaller.getticketsforfollowup(new TicketingService(_connectioSting), authenticate.UserMasterID);
+                StatusCode =
+                string.IsNullOrEmpty(ticketIds) ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = ticketIds;
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = null;
+            }
+            return _objResponseModel;
+        }
+
         #endregion
     }
 }

@@ -187,9 +187,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _ticketList = _ticket;
             _ticketList.setticketassigforfollowup(TicketID, FollowUPUserID, UserID);
-        } 
-               
+        }
+        
 
+        public string getticketsforfollowup(ITicketing _ticket, int UserID)
+        {
+            string ticketIDs = "";
+            _ticketList = _ticket;
+            ticketIDs = _ticketList.getticketsforfollowup(UserID);
+            return ticketIDs;
+        }
         #endregion
     }
 }

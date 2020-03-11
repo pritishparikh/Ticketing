@@ -1324,6 +1324,57 @@ namespace Easyrewardz_TicketSystem.Services
             }
            
         }
+
+        /// <summary>
+        /// Get ticket Ids which show in Follow up
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public string getticketsforfollowup(int UserID)
+        {
+            string ticketIds = "";
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_getTicketIdsForFollowUP", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Connection = conn;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            ticketIds = ticketIds + Convert.ToString(ds.Tables[0].Rows[0][i]) + ",";
+                        }
+
+                        if (!string.IsNullOrEmpty(ticketIds))
+                        {
+                            ticketIds = ticketIds.TrimEnd(',');
+                        }
+                    }
+                }
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return ticketIds;
+        }
     }
 }
 

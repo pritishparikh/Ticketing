@@ -50,5 +50,7 @@ namespace Easyrewardz_TicketSystem.Interface
         ProgressBarDetail GetProgressBarDetails(int TicketID, int TenantID);
 
         void setticketassigforfollowup(int TicketID, string FollowUPUserID, int UserID);
+
+        string getticketsforfollowup(int UserID);
     }
 }
