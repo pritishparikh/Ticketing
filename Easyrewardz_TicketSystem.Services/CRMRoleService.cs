@@ -52,10 +52,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_tenantID", tenantID);
                 cmd.Parameters.AddWithValue("@_RoleName", RoleName);
                 cmd.Parameters.AddWithValue("@_isRoleActive", Convert.ToInt16(RoleisActive));
-               
-                cmd.Parameters.AddWithValue("@_ModulesIsEnabled", ModulesEnabled);
-                cmd.Parameters.AddWithValue("@_ModulesIsDisabled", ModulesDisabled);
 
+                cmd.Parameters.AddWithValue("@_ModulesIsEnabled", string.IsNullOrEmpty(ModulesEnabled) ? "" : ModulesEnabled.TrimEnd(','));
+                cmd.Parameters.AddWithValue("@_ModulesIsDisabled", string.IsNullOrEmpty(ModulesDisabled) ? "" : ModulesDisabled.TrimEnd(','));
                 count = cmd.ExecuteNonQuery();
 
             }
