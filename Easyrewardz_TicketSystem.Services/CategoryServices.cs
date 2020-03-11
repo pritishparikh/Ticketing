@@ -332,18 +332,17 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-
                         CustomCreateCategory CreateCategory = new CustomCreateCategory();
-                        CreateCategory.BrandCategoryMappingID = Convert.ToInt32(ds.Tables[0].Rows[i]["BrandCategoryMappingID"]);
-                        CreateCategory.BraindID = Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
-                        CreateCategory.BrandName = Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
-                        CreateCategory.CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
-                        CreateCategory.CategoryName= Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
-                        CreateCategory.SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
-                        CreateCategory.SubCategoryName = Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
-                        CreateCategory.IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
-                        CreateCategory.IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
-                        CreateCategory.StatusName = Convert.ToString(ds.Tables[0].Rows[i]["IsActive"]);
+                        CreateCategory.BrandCategoryMappingID = ds.Tables[0].Rows[i]["BrandCategoryMappingID"] == DBNull.Value ? 0: Convert.ToInt32(ds.Tables[0].Rows[i]["BrandCategoryMappingID"]);
+                        CreateCategory.BraindID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
+                        CreateCategory.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                        CreateCategory.CategoryID = ds.Tables[0].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
+                        CreateCategory.CategoryName= ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        CreateCategory.SubCategoryID = ds.Tables[0].Rows[i]["SubCategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        CreateCategory.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        CreateCategory.IssueTypeID = ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
+                        CreateCategory.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        CreateCategory.StatusName = ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsActive"]);
                         listCategoryMapping.Add(CreateCategory);
                     }
                 }
