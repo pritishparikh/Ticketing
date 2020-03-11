@@ -55,7 +55,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd.Parameters.AddWithValue("@_ModulesIsEnabled", string.IsNullOrEmpty(ModulesEnabled) ? "" : ModulesEnabled.TrimEnd(','));
                 cmd.Parameters.AddWithValue("@_ModulesIsDisabled", string.IsNullOrEmpty(ModulesDisabled) ? "" : ModulesDisabled.TrimEnd(','));
-                count = cmd.ExecuteNonQuery();
+                count = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
             catch (Exception ex)
