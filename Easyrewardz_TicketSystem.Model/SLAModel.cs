@@ -30,7 +30,16 @@ namespace Easyrewardz_TicketSystem.Model
         public int SLAID { get; set; }
         public int IssueTpeID { get; set; }
         public string  IssueTpeName { get; set; }
-       
+
+        public int BrandID { get; set; }
+        public string BrandName { get; set; }
+
+        public int CategoryID { get; set; }
+        public string CategoryName { get; set; }
+
+        public int SubCategoryID { get; set; }
+        public string SubCategoryName { get; set; }
+
         public string isSLAActive { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedDate { get; set; }
