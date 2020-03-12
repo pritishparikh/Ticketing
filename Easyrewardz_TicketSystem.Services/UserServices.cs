@@ -219,15 +219,15 @@ namespace Easyrewardz_TicketSystem.Services
                     {
 
                         customUserList.UserId = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
-                        customUserList.RoleID= Convert.ToInt32(ds.Tables[0].Rows[i]["RoleID"]);
-                        customUserList.DesignationID= Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
-                        customUserList.ReporteeID= Convert.ToInt32(ds.Tables[0].Rows[i]["ReporteeID"]);
+                        customUserList.RoleID= ds.Tables[0].Rows[i]["RoleID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["RoleID"]);
+                        customUserList.DesignationID= ds.Tables[0].Rows[i]["DesignationID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
+                        customUserList.ReporteeID= ds.Tables[0].Rows[i]["ReporteeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ReporteeID"]);
                         customUserList.UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
                         customUserList.MobileNumber = ds.Tables[0].Rows[i]["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
                         customUserList.EmailID = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
-                        customUserList.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        customUserList.Is_CopyEscalation = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsCopyEscalation"]);
-                        customUserList.Is_AssignEscalation = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsAssignEscalation"]);
+                        customUserList.IsActive = ds.Tables[0].Rows[i]["IsActive"]== DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        customUserList.Is_CopyEscalation = ds.Tables[0].Rows[i]["IsCopyEscalation"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsCopyEscalation"]);
+                        customUserList.Is_AssignEscalation = ds.Tables[0].Rows[i]["IsAssignEscalation"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsAssignEscalation"]);
                         customUserList.FirstName = ds.Tables[0].Rows[i]["FirstName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
                         customUserList.LastName = ds.Tables[0].Rows[i]["LastName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["LastName"]);
                         customUserList.BrandIDs = ds.Tables[0].Rows[i]["BrandIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandIDs"]);
