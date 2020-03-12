@@ -35,7 +35,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             configuration = _iConfig;
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
-            rootPath =  configuration.GetValue<string>("APIURL");
+            rootPath = configuration.GetValue<string>("APIURL");
         }
         #endregion
 
@@ -194,7 +194,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _newStore.EditStore(new StoreService(_connectionString), storeMaster, StoreID, authenticate.TenantId, authenticate.UserMasterID);
+                int result = _newStore.EditStore(new StoreService(_connectionString), storeMaster, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -441,7 +441,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadStore")]
-        public ResponseModel BulkUploadStore(int StoreFor=1)
+        public ResponseModel BulkUploadStore(int StoreFor = 1)
         {
             StoreCaller _newMasterStore = new StoreCaller();
             string DownloadFilePath = string.Empty;

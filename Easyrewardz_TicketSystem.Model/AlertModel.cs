@@ -16,6 +16,10 @@ namespace Easyrewardz_TicketSystem.Model
         public string isAlertActive { get; set; }
 
         public CommunicationModeBy ModeOfCommunication { get; set; }
+        public string MailContent { get; set; }
+        public string Subject { get; set; }
+        public string SMSContent { get; set; }
+        public string NotificationContent { get; set; }
     }
 
     public class CommunicationModeBy
@@ -38,7 +42,7 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class CommunicationMode
     {
-       
+
         public int Communication_Mode { get; set; }
         public int CommunicationFor { get; set; }
         public string Content { get; set; }
@@ -46,7 +50,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string CCEmailID { get; set; }
         public string BCCEmailID { get; set; }
         public string Subject { get; set; }
-       
+
 
     }
 

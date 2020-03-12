@@ -10,7 +10,7 @@ using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-    public class AlertService: IAlerts
+    public class AlertService : IAlerts
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
@@ -248,9 +248,10 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             AlertID = Convert.ToInt32(r.Field<object>("AlertID")),
                             AlertTypeName = r.Field<object>("AlertTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AlertTypeName")),
-                            ModeOfCommunication=new CommunicationModeBy {
+                            ModeOfCommunication = new CommunicationModeBy
+                            {
 
-                                isByEmail= r.Field<object>("EmailMode") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("EmailMode")) ==0 ? false : true,
+                                isByEmail = r.Field<object>("EmailMode") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("EmailMode")) == 0 ? false : true,
                                 isBySMS = r.Field<object>("SMSMode") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("SMSMode")) == 0 ? false : true,
                                 isByNotification = r.Field<object>("NotificationMode") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("NotificationMode")) == 0 ? false : true,
                             },
@@ -258,12 +259,16 @@ namespace Easyrewardz_TicketSystem.Services
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
                             ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
                             ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
-                            isAlertActive= r.Field<object>("AlertStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AlertStatus"))
+                            isAlertActive = r.Field<object>("AlertStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AlertStatus")),
 
+                            MailContent = r.Field<object>("MailContent") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("MailContent")),
+                            Subject = r.Field<object>("Subject") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("Subject")),
+                            SMSContent = r.Field<object>("SMSContent") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SMSContent")),
+                            NotificationContent = r.Field<object>("NotificationContent") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NotificationContent"))
                         }).ToList();
                     }
 
-                    
+
                 }
             }
             catch (Exception ex)
