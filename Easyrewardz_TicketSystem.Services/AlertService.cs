@@ -264,7 +264,12 @@ namespace Easyrewardz_TicketSystem.Services
                             MailContent = r.Field<object>("MailContent") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("MailContent")),
                             Subject = r.Field<object>("Subject") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("Subject")),
                             SMSContent = r.Field<object>("SMSContent") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SMSContent")),
-                            NotificationContent = r.Field<object>("NotificationContent") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NotificationContent"))
+                            NotificationContent = r.Field<object>("NotificationContent") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NotificationContent")),
+                            IsEmailCustomer = r.Field<object>("IsEmailCustomer") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsEmailCustomer")) == 0 ? false : true,
+                            IsEmailInternal = r.Field<object>("IsEmailInternal") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsEmailInternal")) == 0 ? false : true,
+                            IsEmailStore = r.Field<object>("IsEmailStore") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsEmailStore")) == 0 ? false : true,
+                            IsSMSCustomer = r.Field<object>("IsSMSCustomer") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsSMSCustomer")) == 0 ? false : true,
+                            IsNotificationInternal = r.Field<object>("IsNotificationInternal") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsNotificationInternal")) == 0 ? false : true,
                         }).ToList();
                     }
 

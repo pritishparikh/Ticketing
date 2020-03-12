@@ -20,6 +20,12 @@ namespace Easyrewardz_TicketSystem.Model
         public string Subject { get; set; }
         public string SMSContent { get; set; }
         public string NotificationContent { get; set; }
+
+        public bool IsEmailCustomer { get; set; }
+        public bool IsEmailInternal { get; set; }
+        public bool IsEmailStore { get; set; }
+        public bool IsSMSCustomer { get; set; }
+        public bool IsNotificationInternal { get; set; }
     }
 
     public class CommunicationModeBy

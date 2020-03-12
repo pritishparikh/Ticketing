@@ -194,7 +194,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// UpdateTemplate
         /// </summary>
-        public int UpdateTemplate(int tenantId,int TemplateID ,string TemplateName, string issueType, bool isTemplateActive,int ModifiedBy)
+        public int UpdateTemplate(int tenantId, int TemplateID, string TemplateName, string issueType, bool isTemplateActive, int ModifiedBy, string templateSubject, string templateContent)
         {
             int updatecount = 0;
 
@@ -210,6 +210,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_issueTypeID", issueType);
                 cmd.Parameters.AddWithValue("@_isTemplateActive", Convert.ToInt16(isTemplateActive));
                 cmd.Parameters.AddWithValue("@_modifiedBy", ModifiedBy);
+                cmd.Parameters.AddWithValue("@_templateContent", templateContent);
+                cmd.Parameters.AddWithValue("@_templateSubject", templateSubject);
+
                 cmd.CommandType = CommandType.StoredProcedure;
                 updatecount = cmd.ExecuteNonQuery();
             }

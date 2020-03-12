@@ -133,10 +133,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Temp.InsertTemplate( tenantId,  TemplateName,  TemplatSubject,  TemplatBody,  issueTypes,  isTemplateActive,  createdBy);
         }
 
-        public int UpdateTemplate(ITemplate Temp, int tenantId, int TemplateID, string TemplateName, string issueType, bool isTemplateActive, int ModifiedBy)
+        public int UpdateTemplate(ITemplate Temp, int tenantId, int TemplateID, string TemplateName, string issueType, bool isTemplateActive, int ModifiedBy, string templateSubject, string templateContent)
         {
             _Temp = Temp;
-            return _Temp.UpdateTemplate( tenantId,  TemplateID,  TemplateName,  issueType,  isTemplateActive,  ModifiedBy);
+            return _Temp.UpdateTemplate( tenantId,  TemplateID,  TemplateName,  issueType,  isTemplateActive,  ModifiedBy, templateSubject, templateContent);
         }
 
         public int DeleteTemplate(ITemplate Temp, int tenantID, int TemplateID)
