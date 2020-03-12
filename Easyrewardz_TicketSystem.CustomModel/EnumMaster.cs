@@ -58,6 +58,9 @@ namespace Easyrewardz_TicketSystem.CustomModel
             [Description("Record In use")]
             RecordInUse = 1011,
 
+            [Description("Record Already Exists ")]
+            RecordAlreadyExists = 1012,
+
             #endregion
 
             #region HTTP Request/Response Code
