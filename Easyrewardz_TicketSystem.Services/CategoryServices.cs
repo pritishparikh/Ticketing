@@ -276,9 +276,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         conn.Close();
                     }
-                }
-
-                
+                }              
             }
             if(customCreateCategory.BrandCategoryMappingID >0)
             {
