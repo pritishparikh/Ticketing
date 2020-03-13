@@ -263,7 +263,7 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd.Parameters.AddWithValue("@IssueType_ID", customCreateCategory.IssueTypeID);
                     cmd.Parameters.AddWithValue("@Is_Active", customCreateCategory.Status);
                     cmd.Parameters.AddWithValue("@Created_By", customCreateCategory.CreatedBy);
-                    Success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                    Success = Convert.ToInt32(cmd.ExecuteScalar());
                 }
                 catch (Exception ex)
                 {

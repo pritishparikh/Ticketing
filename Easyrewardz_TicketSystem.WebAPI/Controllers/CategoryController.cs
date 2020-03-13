@@ -253,9 +253,29 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 MasterCaller _newMasterCategory = new MasterCaller();
                 customCreateCategory.CreatedBy = authenticate.UserMasterID;
                 result = _newMasterCategory.CreateCategoryBrandMapping(new CategoryServices(_connectioSting), customCreateCategory);
-                StatusCode =
-               result == 0 ?
-                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+               if( customCreateCategory.BrandCategoryMappingID==0)
+                {
+                    if (result == 0)
+                    {
+                        StatusCode =
+                     result == 0 ?
+                        (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
+                    }
+                    else
+                    {
+                        StatusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                    }
+                }
+                else
+                {
+                    StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                }
+
+               // StatusCode =
+               //result == 0 ?
+               //       (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
                 _objResponseModel.Status = true;
