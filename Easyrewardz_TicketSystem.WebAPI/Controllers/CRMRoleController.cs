@@ -192,7 +192,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetRolesByUserID")]
-        public ResponseModel GetRolesByUserID(int UserId)
+        public ResponseModel GetRolesByUserID()
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
@@ -207,7 +207,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newCRM = new SettingsCaller();
-                _objresponseModel = _newCRM.GetCRMRoleByUserID(new CRMRoleService(_connectioSting), authenticate.TenantId, UserId);
+                _objresponseModel = _newCRM.GetCRMRoleByUserID(new CRMRoleService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode = _objresponseModel == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
