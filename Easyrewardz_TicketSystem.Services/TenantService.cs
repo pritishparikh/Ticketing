@@ -9,6 +9,9 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
+    /// <summary>
+    /// Tenant Service
+    /// </summary>
     public class TenantService : ITenant
     {
         MySqlConnection conn = new MySqlConnection();
