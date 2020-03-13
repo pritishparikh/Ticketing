@@ -72,4 +72,32 @@ namespace Easyrewardz_TicketSystem.Model
         public string BrandName { get; set; }
     }
 
+
+    public class SLADetail
+    {
+
+        public bool IsActive { get; set; }
+        public string BrandName { get; set; }
+        public string CategoryName { get; set; }
+        public string SubCategoryName { get; set; }
+        public string IssueTypeName { get; set; }
+        public List<SLATargetDetail> sLATargetDetails { get; set; }
+    }
+
+    public class SLATargetDetail
+    {
+        public int PriorityID { get; set; }
+        public string PriorityName { get; set; }
+        public bool IsActive { get; set; }
+        public int SLATargetID { get; set; }
+        public int SLABridgeInPercantage { get; set; }
+
+        public int SLAResponseValue { get; set; }
+        public string SLAResponseType { get; set; }
+
+        public int SLAResolveValue { get; set; }
+        public string SLAResolveType { get; set; }
+
+    }
+
 }

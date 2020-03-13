@@ -82,8 +82,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         public int InsertSLA(SLAModel SLA)
         {
-            
-            List<int> ListSlaID= new List<int>();
+
+            List<int> ListSlaID = new List<int>();
             int SLATargetInsertCount = 0;
             DataSet ds = new DataSet();
 
@@ -97,7 +97,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_createdBy", SLA.CreatedBy);
                 cmd.Parameters.AddWithValue("@_issueType", SLA.IssueTypeID);
                 cmd.Parameters.AddWithValue("@isSLAActive", Convert.ToInt16(SLA.isSLAActive));
-                cmd.Parameters.AddWithValue("@_SLAFor", SLA.SLAFor); 
+                cmd.Parameters.AddWithValue("@_SLAFor", SLA.SLAFor);
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -108,11 +108,11 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        for(int i=0;i< ds.Tables[0].Rows.Count; i++)
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
                             int slaID = ds.Tables[0].Rows[i]["SLAIDS"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SLAIDS"]);
 
-                            if(slaID > 0)
+                            if (slaID > 0)
                             {
                                 ListSlaID.Add(slaID);
                             }
@@ -120,11 +120,11 @@ namespace Easyrewardz_TicketSystem.Services
 
                     }
 
-                    if(ListSlaID.Count > 0 )
+                    if (ListSlaID.Count > 0)
                     {
-                        if(SLA.SLATarget.Count > 0)
+                        if (SLA.SLATarget.Count > 0)
                         {
-                            for(int k=0; k< ListSlaID.Count;k++)
+                            for (int k = 0; k < ListSlaID.Count; k++)
                             {
                                 for (int j = 0; j < SLA.SLATarget.Count; j++)
                                 {
@@ -142,7 +142,7 @@ namespace Easyrewardz_TicketSystem.Services
                                     SLATargetInsertCount += Targetcmd.ExecuteNonQuery();
                                 }
                             }
-                            
+
                         }
                     }
                 }
@@ -166,9 +166,9 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Update SLA
         /// </summary>
-        public int UpdateSLA(int SLAID, int tenantID, int IssuetypeID,  bool isActive, int modifiedBy)
+        public int UpdateSLA(int SLAID, int tenantID, int IssuetypeID, bool isActive, int modifiedBy)
         {
-            int updatecount = 0; 
+            int updatecount = 0;
 
             try
             {
@@ -178,7 +178,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_tenantID", tenantID);
                 cmd.Parameters.AddWithValue("@_slaID", SLAID);
                 cmd.Parameters.AddWithValue("@_issueType", IssuetypeID);
-               
+
                 cmd.Parameters.AddWithValue("@_isSLAActive", Convert.ToInt16(isActive));
                 cmd.Parameters.AddWithValue("@_modifiedBy", modifiedBy);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -241,7 +241,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// GET SLA
         /// </summary>
 
-            public List<SLAResponseModel> SLAList(int tenantID,int SLAFor)
+        public List<SLAResponseModel> SLAList(int tenantID, int SLAFor)
         {
             List<SLAResponseModel> objSLALst = new List<SLAResponseModel>();
             DataSet ds = new DataSet();
@@ -275,14 +275,14 @@ namespace Easyrewardz_TicketSystem.Services
                             isSLAActive = r.Field<object>("SLAStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SLAStatus")),
                             CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
-                            ModifiedBy= r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
+                            ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
                             ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
                             BrandID = r.Field<object>("BrandID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("BrandID")),
-                            BrandName= r.Field<object>("BrandName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("BrandName")),
-                            CategoryID= r.Field<object>("CategoryID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("CategoryID")),
+                            BrandName = r.Field<object>("BrandName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("BrandName")),
+                            CategoryID = r.Field<object>("CategoryID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("CategoryID")),
                             CategoryName = r.Field<object>("CategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CategoryName")),
-                            SubCategoryID= r.Field<object>("SubCategoryID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("SubCategoryID")),
-                            SubCategoryName= r.Field<object>("SubCategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SubCategoryName")),
+                            SubCategoryID = r.Field<object>("SubCategoryID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("SubCategoryID")),
+                            SubCategoryName = r.Field<object>("SubCategoryName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SubCategoryName")),
                         }).ToList();
                     }
 
@@ -327,7 +327,7 @@ namespace Easyrewardz_TicketSystem.Services
                 if (ds != null) ds.Dispose(); conn.Close();
             }
 
-           
+
             return objSLALst;
 
         }
@@ -337,7 +337,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Bind issuetype 
         /// </summary>
         /// 
-       public List<IssueTypeList> BindIssueTypeList(int tenantID, string SearchText)
+        public List<IssueTypeList> BindIssueTypeList(int tenantID, string SearchText)
         {
             List<IssueTypeList> objIssueTypeLst = new List<IssueTypeList>();
             DataSet ds = new DataSet();
@@ -346,23 +346,23 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
                 conn.Open();
-            cmd.Connection = conn;
+                cmd.Connection = conn;
 
-            MySqlCommand cmd1 = new MySqlCommand("SP_GetIssueTypeForSLACreation", conn);
-            cmd1.CommandType = CommandType.StoredProcedure;
-            //cmd1.Parameters.AddWithValue("@_tenantID", 1);
-            cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
-            cmd1.Parameters.AddWithValue("@Search_Text", string.IsNullOrEmpty(SearchText) ? "" : SearchText);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetIssueTypeForSLACreation", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                //cmd1.Parameters.AddWithValue("@_tenantID", 1);
+                cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
+                cmd1.Parameters.AddWithValue("@Search_Text", string.IsNullOrEmpty(SearchText) ? "" : SearchText);
                 MySqlDataAdapter da = new MySqlDataAdapter();
-            da.SelectCommand = cmd1;
-            da.Fill(ds);
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
 
-            if (ds != null && ds.Tables != null)
-            {
-                if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                if (ds != null && ds.Tables != null)
                 {
-                        objIssueTypeLst = ds.Tables[0].AsEnumerable().Select(r => new IssueTypeList()
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
+                        objIssueTypeLst = ds.Tables[0].AsEnumerable().Select(r => new IssueTypeList()
+                        {
                             IssueTypeID = Convert.ToInt32(r.Field<object>("IssueTypeID")),
 
                             IssueTypeName = r.Field<object>("IssueTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IssueTypeName")),
@@ -373,12 +373,12 @@ namespace Easyrewardz_TicketSystem.Services
                             BrandName = r.Field<object>("BrandName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("BrandName"))
 
                         }).ToList();
+                    }
+
+
                 }
 
-                
-              }
-
-        }
+            }
             catch (Exception ex)
             {
                 string message = Convert.ToString(ex.InnerException);
@@ -389,7 +389,7 @@ namespace Easyrewardz_TicketSystem.Services
                 if (ds != null) ds.Dispose(); conn.Close();
             }
 
-           
+
             return objIssueTypeLst;
         }
 
@@ -416,7 +416,7 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
                         cmd.Parameters.AddWithValue("@_node", Xpath);
-                    
+
                         cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                         cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
 
@@ -446,8 +446,8 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return uploadcount;
-        
-         }
+
+        }
 
         public List<IssueTypeList> SearchIssueType(int tenantID, string SearchText)
         {
@@ -456,7 +456,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
 
-                conn.Open();          
+                conn.Open();
                 MySqlCommand cmd1 = new MySqlCommand("SP_SearchIssueType", conn);
                 cmd1.Connection = conn;
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -494,6 +494,78 @@ namespace Easyrewardz_TicketSystem.Services
 
 
             return objIssueTypeLst;
+        }
+
+        /// <summary>
+        /// Get SLA details for Edit using SLAID
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="SLAID"></param>
+        /// <returns></returns>
+        public SLADetail GetSLADetail(int tenantID, int SLAID)
+        {
+            SLADetail objSLADetail = new SLADetail();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetSLADetailsBySLAID", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd1.Parameters.AddWithValue("@SLA_ID", SLAID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objSLADetail.BrandName = Convert.ToString(ds.Tables[0].Rows[0]["BrandName"]);
+                        objSLADetail.SubCategoryName = Convert.ToString(ds.Tables[0].Rows[0]["SubCategoryName"]);
+                        objSLADetail.CategoryName = Convert.ToString(ds.Tables[0].Rows[0]["CategoryName"]);
+                        objSLADetail.IssueTypeName = Convert.ToString(ds.Tables[0].Rows[0]["IssueTypeName"]);
+                    }
+
+                    List<SLATargetDetail> sLATargetDetails = new List<SLATargetDetail>();
+
+                    if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                        {
+                            SLATargetDetail sLATargetDetail = new SLATargetDetail();
+                            sLATargetDetail.SLATargetID = Convert.ToInt32(ds.Tables[1].Rows[i]["SLATargetID"]);
+                            sLATargetDetail.PriorityID = Convert.ToInt32(ds.Tables[1].Rows[i]["PriorityID"]);
+                            sLATargetDetail.PriorityName = Convert.ToString(ds.Tables[1].Rows[i]["PriortyName"]);
+                            sLATargetDetail.IsActive = Convert.ToBoolean(ds.Tables[1].Rows[i]["IsActive"]);
+                            sLATargetDetail.SLABridgeInPercantage = Convert.ToInt32(ds.Tables[1].Rows[i]["PrioritySLABreach"]);
+                            sLATargetDetail.SLAResponseType = Convert.ToString(ds.Tables[1].Rows[i]["PriorityRespondType"]);
+                            sLATargetDetail.SLAResponseValue = Convert.ToInt32(ds.Tables[1].Rows[i]["PriorityRespondValue"]);
+                            sLATargetDetail.SLAResolveType = Convert.ToString(ds.Tables[1].Rows[i]["PriorityResolveType"]);
+                            sLATargetDetail.SLAResolveValue = Convert.ToInt32(ds.Tables[1].Rows[i]["PriorityResolveValue"]);
+
+                            sLATargetDetails.Add(sLATargetDetail);
+                        }
+                    }
+
+                    objSLADetail.sLATargetDetails = sLATargetDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
+
+            return objSLADetail;
+
         }
     }
 }
