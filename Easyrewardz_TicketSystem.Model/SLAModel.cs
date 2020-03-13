@@ -69,6 +69,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string CategoryName { get; set; }
         public int SubCategoryID { get; set; }
         public string SubCategoryName { get; set; }
+        public string BrandName { get; set; }
     }
 
 }
