@@ -94,7 +94,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("ModifyAlert")]
-        public ResponseModel ModifyAlert(int AlertID, string AlertTypeName, bool isAlertActive)
+        public ResponseModel ModifyAlert([FromBody] AlertUpdateModel alertModel)
         {
             int updatecount = 0;
             ResponseModel _objResponseModel = new ResponseModel();
@@ -102,18 +102,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                ////Get token (Double encrypted) and get the tenant id 
+                ////Get token (Double encrypted) and get the tenant id
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                // authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newAlert = new SettingsCaller();
 
-                updatecount = _newAlert.UpdateAlert(new AlertService(_connectioSting), authenticate.TenantId, AlertID, AlertTypeName, isAlertActive, authenticate.UserMasterID);
+                //updatecount = _newAlert.UpdateAlert(new AlertService(_connectioSting), authenticate.TenantId, AlertID, AlertTypeName, isAlertActive, authenticate.UserMasterID);
+                updatecount = _newAlert.UpdateAlert(new AlertService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, alertModel);
 
                 StatusCode =
                 updatecount == 0 ?
-                     (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
+                (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 

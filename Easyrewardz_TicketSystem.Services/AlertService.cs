@@ -98,9 +98,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Update Alert
         /// </summary>
-        public int UpdateAlert(int tenantId, int AlertID, string AlertTypeName, bool isAlertActive, int ModifiedBy)
+        public int UpdateAlert(int tenantId, int ModifiedBy, AlertUpdateModel alertModel)
         {
             int updatecount = 0;
+            int AlertConfigUpdateCount = 0;
 
             try
             {
@@ -108,13 +109,38 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateAlert", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_alertID", AlertID);
-                cmd.Parameters.AddWithValue("@_alertTypeName", AlertTypeName);
-
-                cmd.Parameters.AddWithValue("@_isAlertActive", Convert.ToInt16(isAlertActive));
+                cmd.Parameters.AddWithValue("@_alertID", alertModel.AlertId);
+                cmd.Parameters.AddWithValue("@_alertTypeName", alertModel.AlertTypeName);
+                cmd.Parameters.AddWithValue("@_isAlertActive", Convert.ToInt16(alertModel.isAlertActive));
                 cmd.Parameters.AddWithValue("@_modifiedBy", ModifiedBy);
                 cmd.CommandType = CommandType.StoredProcedure;
                 updatecount = cmd.ExecuteNonQuery();
+
+                if (updatecount > 0)
+                {
+                    if (alertModel.CommunicationModeDetails.Count > 0)
+                    {
+                        for (int i = 0; i < alertModel.CommunicationModeDetails.Count; i++)
+                        {
+                            MySqlCommand Targetcmd = new MySqlCommand("SP_UpdateAlerMasterConfig", conn);
+                            Targetcmd.Connection = conn;
+                            Targetcmd.Parameters.AddWithValue("@_alertID", alertModel.AlertId);
+                            Targetcmd.Parameters.AddWithValue("@_commMode", alertModel.CommunicationModeDetails[i].Communication_Mode);
+                            Targetcmd.Parameters.AddWithValue("@_commFor", alertModel.CommunicationModeDetails[i].CommunicationFor);
+                            Targetcmd.Parameters.AddWithValue("@_content", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].Content) ? string.Empty : alertModel.CommunicationModeDetails[i].Content);
+                            Targetcmd.Parameters.AddWithValue("@_toemail", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].ToEmailID) ? string.Empty : alertModel.CommunicationModeDetails[i].ToEmailID);
+                            Targetcmd.Parameters.AddWithValue("@_ccemail", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].CCEmailID) ? string.Empty : alertModel.CommunicationModeDetails[i].CCEmailID);
+                            Targetcmd.Parameters.AddWithValue("@_bccemail", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].BCCEmailID) ? string.Empty : alertModel.CommunicationModeDetails[i].BCCEmailID);
+                            Targetcmd.Parameters.AddWithValue("@_emailSubject", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].Subject) ? string.Empty : alertModel.CommunicationModeDetails[i].Subject);
+                            Targetcmd.Parameters.AddWithValue("@_modifiedBy", alertModel.CreatedBy);
+                            Targetcmd.Parameters.AddWithValue("@_isactive", Convert.ToInt16(alertModel.isAlertActive));
+                            Targetcmd.Parameters.AddWithValue("@_alertTypeID", Convert.ToInt16(alertModel.CommunicationModeDetails[i].AlertTypeID));
+                            Targetcmd.CommandType = CommandType.StoredProcedure;
+                            AlertConfigUpdateCount += Targetcmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+
             }
             catch (Exception ex)
             {
@@ -129,7 +155,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return updatecount;
+            return AlertConfigUpdateCount;
         }
 
         /// <summary>

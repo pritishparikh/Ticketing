@@ -11,7 +11,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int InsertAlert(AlertInsertModel alertModel);
 
 
-        int UpdateAlert(int tenantId, int AlertID, string AlertTypeName, bool isAlertActive, int ModifiedBy);
+        int UpdateAlert(int tenantId, int ModifiedBy, AlertUpdateModel alertModel);
 
         int DeleteAlert(int tenantID, int AlertID);
 

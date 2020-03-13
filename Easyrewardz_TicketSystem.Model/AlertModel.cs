@@ -14,18 +14,18 @@ namespace Easyrewardz_TicketSystem.Model
         public string ModifiedBy { get; set; }
         public string ModifiedDate { get; set; }
         public string isAlertActive { get; set; }
-
-        public CommunicationModeBy ModeOfCommunication { get; set; }
         public string MailContent { get; set; }
         public string Subject { get; set; }
         public string SMSContent { get; set; }
         public string NotificationContent { get; set; }
-
         public bool IsEmailCustomer { get; set; }
         public bool IsEmailInternal { get; set; }
         public bool IsEmailStore { get; set; }
         public bool IsSMSCustomer { get; set; }
         public bool IsNotificationInternal { get; set; }
+        public int AlertTypeID { get; set; }
+
+        public CommunicationModeBy ModeOfCommunication { get; set; }
     }
 
     public class CommunicationModeBy
@@ -45,10 +45,19 @@ namespace Easyrewardz_TicketSystem.Model
 
         public List<CommunicationMode> CommunicationModeDetails { get; set; }
     }
+    public class AlertUpdateModel
+    {
+        public int AlertId { get; set; }
+        public int? TenantId { get; set; }
+        public string AlertTypeName { get; set; }
+        public int? CreatedBy { get; set; }
+        public bool isAlertActive { get; set; }
+        public List<CommunicationMode> CommunicationModeDetails { get; set; }
+    }
 
     public class CommunicationMode
     {
-
+        public int AlertTypeID { get; set; }
         public int Communication_Mode { get; set; }
         public int CommunicationFor { get; set; }
         public string Content { get; set; }
