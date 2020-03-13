@@ -847,18 +847,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-               // CustomChangePassword CustomChangePassword = new CustomChangePassword();
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-               // UserCaller userCaller = new UserCaller();
-               // CustomChangePassword = userCaller.SendMailforchangepassword(new UserServices(_connectioSting), customChangePassword.UserID, authenticate.TenantId, IsStoreUser);
 
                 securityCaller _securityCaller = new securityCaller();
                 CommonService commonService = new CommonService();
+                
+                if(customChangePassword.ChangePasswordType.Equals("mail"))
+                {
+                    customChangePassword.EmailID = SecurityService.DecryptStringAES(customChangePassword.EmailID);
+                }
                 customChangePassword.Password = SecurityService.Encrypt(customChangePassword.Password);
                 customChangePassword.NewPassword = SecurityService.Encrypt(customChangePassword.NewPassword);
-                customChangePassword.EmailID = SecurityService.DecryptStringAES(customChangePassword.EmailID);
+                
                 bool Result = _securityCaller.ChangePassword(new SecurityService(_connectioSting), customChangePassword, authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =

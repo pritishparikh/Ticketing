@@ -10,6 +10,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string EmailID { get; set; }
         public string Password { get; set; }
         public string NewPassword { get; set; }
+        public string ChangePasswordType { get; set; }
 
     }
 }
