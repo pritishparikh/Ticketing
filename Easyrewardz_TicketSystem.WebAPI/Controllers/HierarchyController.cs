@@ -24,7 +24,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-  // [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+  [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class HierarchyController : ControllerBase
     {
         #region variable declaration
@@ -81,6 +81,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                         result == 0 ? (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
 
                 }
+                if (customHierarchymodel.DesignationID == 0)
+                {
+                    if (result == 0)
+                    {
+                        StatusCode =
+                     result == 0 ?
+                        (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
+                    }
+                    else
+                    {
+                        StatusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                    }
+                }              
                 else
                 {
                     StatusCode =
