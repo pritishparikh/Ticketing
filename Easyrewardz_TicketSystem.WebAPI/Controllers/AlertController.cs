@@ -64,7 +64,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StatusCode =
                 insertcount == 0 ?
-                     (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
+                     (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
