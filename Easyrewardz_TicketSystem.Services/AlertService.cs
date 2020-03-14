@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
@@ -248,19 +249,22 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Alert List
         /// </summary>
-        public List<AlertModel> GetAlertList(int tenantID)
+        public List<AlertModel> GetAlertList(int tenantID, int alertID)
         {
             List<AlertModel> objAlertLst = new List<AlertModel>();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
+            
             try
             {
 
                 conn.Open();
                 cmd.Connection = conn;
-
+                
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetAlertList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
+          
+                cmd1.Parameters.AddWithValue("@_alertID", alertID);
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
@@ -273,6 +277,22 @@ namespace Easyrewardz_TicketSystem.Services
                         objAlertLst = ds.Tables[0].AsEnumerable().Select(r => new AlertModel()
                         {
                             AlertID = Convert.ToInt32(r.Field<object>("AlertID")),
+                            AlertTypeName = r.Field<object>("AlertTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AlertTypeName")),
+                            isAlertActive = r.Field<object>("AlertStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AlertStatus")),
+
+                            isByEmail = r.Field<object>("EmailMode") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("EmailMode")) == 0 ? false : true,
+                            isBySMS = r.Field<object>("SMSMode") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("SMSMode")) == 0 ? false : true,
+                            isByNotification = r.Field<object>("NotificationMode") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("NotificationMode")) == 0 ? false : true,
+
+                            CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
+                            CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
+                            ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
+                            ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
+
+
+                            #region old approach
+
+                            /*  AlertID = Convert.ToInt32(r.Field<object>("AlertID")),
                             AlertTypeName = r.Field<object>("AlertTypeName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AlertTypeName")),
                             ModeOfCommunication = new CommunicationModeBy
                             {
@@ -295,9 +315,43 @@ namespace Easyrewardz_TicketSystem.Services
                             IsEmailInternal = r.Field<object>("IsEmailInternal") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsEmailInternal")) == 0 ? false : true,
                             IsEmailStore = r.Field<object>("IsEmailStore") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsEmailStore")) == 0 ? false : true,
                             IsSMSCustomer = r.Field<object>("IsSMSCustomer") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsSMSCustomer")) == 0 ? false : true,
-                            IsNotificationInternal = r.Field<object>("IsNotificationInternal") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsNotificationInternal")) == 0 ? false : true,
+                            IsNotificationInternal = r.Field<object>("IsNotificationInternal") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsNotificationInternal")) == 0 ? false : true,*/
+
+                            #endregion
+
                         }).ToList();
+
                     }
+
+                    if(objAlertLst.Count > 0)
+                    {
+                        if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                        {
+                            foreach(AlertModel am in objAlertLst)
+                            {
+                                am.AlertContent = ds.Tables[1].AsEnumerable().Where(r => r.Field<object>("AlertID") != System.DBNull.Value &&
+                                    am.AlertID == Convert.ToInt32(r.Field<object>("AlertID"))).Select(r=> new AlertConfigModel()
+                                    {
+                                        AlertID = Convert.ToInt32(r.Field<object>("AlertID")),
+                                        AlertTypeID = Convert.ToInt32(r.Field<object>("AlertTypeID")),
+
+                                        IsEmailCustomer = r.Field<object>("IsEmailCustomer") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsEmailCustomer")) == 0 ? false : true,
+                                        IsEmailInternal = r.Field<object>("IsEmailInternal") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsEmailInternal")) == 0 ? false : true,
+                                        IsEmailStore = r.Field<object>("IsEmailStore") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsEmailStore")) == 0 ? false : true,
+                                        IsSMSCustomer = r.Field<object>("IsSMSCustomer") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsSMSCustomer")) == 0 ? false : true,
+                                        IsNotificationInternal = r.Field<object>("IsNotificationInternal") == System.DBNull.Value || Convert.ToInt32(r.Field<object>("IsNotificationInternal")) == 0 ? false : true,
+
+                                        MailContent = r.Field<object>("MailContent") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("MailContent")),
+                                        Subject = r.Field<object>("Subject") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("Subject")),
+                                        SMSContent = r.Field<object>("SMSContent") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SMSContent")),
+                                        NotificationContent = r.Field<object>("NotificationContent") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NotificationContent"))
+
+                                    }).ToList();
+                            }
+                        }
+                    }
+                   
+
 
 
                 }

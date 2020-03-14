@@ -15,7 +15,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int DeleteAlert(int tenantID, int AlertID);
 
-        List<AlertModel> GetAlertList(int tenantId);
+        List<AlertModel> GetAlertList(int tenantId, int alertID);
 
         List<AlertList> BindAlerts(int tenantID);
 

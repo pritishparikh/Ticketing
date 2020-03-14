@@ -195,7 +195,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetAlertList")]
-        public ResponseModel GetAlertList()
+        public ResponseModel GetAlertList(int alertId=0)
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
@@ -211,7 +211,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 SettingsCaller _newAlert = new SettingsCaller();
 
-                _objresponseModel = _newAlert.GetAlertList(new AlertService(_connectioSting), authenticate.TenantId);
+                _objresponseModel = _newAlert.GetAlertList(new AlertService(_connectioSting), authenticate.TenantId, alertId);
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

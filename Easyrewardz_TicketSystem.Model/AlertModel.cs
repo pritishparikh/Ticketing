@@ -4,28 +4,42 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Model
 {
+
     public class AlertModel
     {
-
         public int AlertID { get; set; }
         public string AlertTypeName { get; set; }
+        public string isAlertActive { get; set; }
+        public bool isByEmail { get; set; }
+        public bool isBySMS { get; set; }
+        public bool isByNotification { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedDate { get; set; }
         public string ModifiedBy { get; set; }
         public string ModifiedDate { get; set; }
-        public string isAlertActive { get; set; }
-        public string MailContent { get; set; }
-        public string Subject { get; set; }
-        public string SMSContent { get; set; }
-        public string NotificationContent { get; set; }
+
+        public List<AlertConfigModel> AlertContent { get; set; }
+
+    }
+
+    public class AlertConfigModel
+    {
+
+        public int AlertID { get; set; }
+        public int AlertTypeID { get; set; }
+
         public bool IsEmailCustomer { get; set; }
         public bool IsEmailInternal { get; set; }
         public bool IsEmailStore { get; set; }
         public bool IsSMSCustomer { get; set; }
         public bool IsNotificationInternal { get; set; }
-        public int AlertTypeID { get; set; }
 
-        public CommunicationModeBy ModeOfCommunication { get; set; }
+        public string MailContent { get; set; }
+        public string Subject { get; set; }
+        public string SMSContent { get; set; }
+        public string NotificationContent { get; set; }
+
+        // public CommunicationModeBy ModeOfCommunication { get; set; }
     }
 
     public class CommunicationModeBy

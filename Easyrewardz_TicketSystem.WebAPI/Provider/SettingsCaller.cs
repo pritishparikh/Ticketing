@@ -198,10 +198,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <summary>
         /// Get AlertList For Grid
        // / </summary>
-        public List<AlertModel> GetAlertList(IAlerts Alert, int tenantID)
+        public List<AlertModel> GetAlertList(IAlerts Alert, int tenantID, int alertID)
         {
             _Alerts = Alert;
-            return _Alerts.GetAlertList(tenantID);
+            return _Alerts.GetAlertList(tenantID, alertID);
 
         }
 
