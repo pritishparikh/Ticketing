@@ -19,7 +19,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class SLAController : ControllerBase
     {
 
@@ -117,7 +117,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newCRM = new SettingsCaller();
-         
+
                 _objresponseModel = _newCRM.BindIssueTypeList(new SLAServices(_connectioSting), authenticate.TenantId, SearchText);
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -201,7 +201,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("ModifySLA")]
-        public ResponseModel ModifySLA(int SLAID,int IssueTypeID, bool isActive)
+        public ResponseModel ModifySLA(int SLAID, int IssueTypeID, bool isActive)
         {
             int updatecount = 0;
             ResponseModel _objResponseModel = new ResponseModel();
@@ -216,7 +216,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 SettingsCaller _newSLA = new SettingsCaller();
 
-                updatecount = _newSLA.UpdateSLA(new SLAServices(_connectioSting), authenticate.TenantId,SLAID ,IssueTypeID, isActive, authenticate.UserMasterID);
+                updatecount = _newSLA.UpdateSLA(new SLAServices(_connectioSting), authenticate.TenantId, SLAID, IssueTypeID, isActive, authenticate.UserMasterID);
 
                 StatusCode =
                 updatecount == 0 ?
@@ -302,7 +302,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [HttpPost]
         [Route("GetSLA")]
 
-        public ResponseModel GetSLA(int SLAFor=1)
+        public ResponseModel GetSLA(int SLAFor = 1)
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
@@ -489,7 +489,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("GetSLADetail")]
         public ResponseModel GetSLADetail(int SLAId)
