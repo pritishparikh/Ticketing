@@ -235,12 +235,9 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
-
-
         /// <summary>
         /// GET SLA
         /// </summary>
-
         public List<SLAResponseModel> SLAList(int tenantID, int SLAFor)
         {
             List<SLAResponseModel> objSLALst = new List<SLAResponseModel>();
@@ -331,7 +328,6 @@ namespace Easyrewardz_TicketSystem.Services
             return objSLALst;
 
         }
-
 
         /// <summary>
         /// Bind issuetype 
@@ -567,6 +563,66 @@ namespace Easyrewardz_TicketSystem.Services
 
             return objSLADetail;
 
+        }
+
+        /// <summary>
+        /// Update SLA 
+        /// </summary>
+        public bool UpdateSLADetails(SLADetail SLA, int TenantID, int UserId)
+        {
+            bool isUpdateDone = false;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateSLAStatus", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@modified_By", UserId);
+                cmd.Parameters.AddWithValue("@SLA_ID", SLA.SLAId);
+                cmd.Parameters.AddWithValue("@Is_Active", SLA.IsActive);
+                cmd.ExecuteScalar();
+
+                if (SLA != null)
+                {
+                    if (SLA.sLATargetDetails.Count > 0)
+                    {
+                        for (int k = 0; k < SLA.sLATargetDetails.Count; k++)
+                        {
+                            MySqlCommand cmdSLA = new MySqlCommand("SP_UpdateSLATargetDetails", conn);
+                            cmdSLA.Connection = conn;
+                            cmdSLA.Parameters.AddWithValue("@SLATarget_ID", SLA.sLATargetDetails[k].SLATargetID);
+                            cmdSLA.Parameters.AddWithValue("@priority_ID", SLA.sLATargetDetails[k].PriorityID);
+                            cmdSLA.Parameters.AddWithValue("@priority_SLABreach", SLA.sLATargetDetails[k].SLABridgeInPercantage);
+                            cmdSLA.Parameters.AddWithValue("@priority_RespondValue", SLA.sLATargetDetails[k].SLAResponseValue);
+                            cmdSLA.Parameters.AddWithValue("@priority_RespondType", SLA.sLATargetDetails[k].SLAResponseType);
+                            cmdSLA.Parameters.AddWithValue("@priority_ResolutionValue", SLA.sLATargetDetails[k].SLAResolveValue);
+                            cmdSLA.Parameters.AddWithValue("@priority_ResolutionType", SLA.sLATargetDetails[k].SLAResolveType);
+                            cmdSLA.Parameters.AddWithValue("@modified_By", UserId);
+                            cmdSLA.Parameters.AddWithValue("@tenant_ID", TenantID);
+                            cmdSLA.Parameters.AddWithValue("@Sla_ID", SLA.SLAId);
+                            cmdSLA.CommandType = CommandType.StoredProcedure;
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+                isUpdateDone = true;
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return isUpdateDone;
         }
     }
 }

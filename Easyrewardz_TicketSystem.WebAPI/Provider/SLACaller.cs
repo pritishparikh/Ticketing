@@ -25,7 +25,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _SLARepository = SLA;
             return _SLARepository.GetSLAStatusList(TenantId);
         }
-        public List<IssueTypeList> SearchIssueType(ISLA SLA, int TenantId,string SearchText)
+        public List<IssueTypeList> SearchIssueType(ISLA SLA, int TenantId, string SearchText)
         {
             _SLARepository = SLA;
             return _SLARepository.SearchIssueType(TenantId, SearchText);
@@ -37,5 +37,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _SLARepository.GetSLADetail(TenantID, SLAID);
         }
 
+        public bool UpdateSLADetails(ISLA SLA, SLADetail sLADetail, int TenantID, int UserID)
+        {
+            _SLARepository = SLA;
+            return _SLARepository.UpdateSLADetails(sLADetail, TenantID, UserID);
+        }
     }
 }
