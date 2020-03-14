@@ -933,6 +933,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// DeleteUserProfile
+        /// </summary>
+        /// <param name=""></param>
+        [HttpPost]
+        [Route("DeleteUserProfile")]
+        public ResponseModel DeleteUserProfile(int IsStoreUser = 1)
+        {
+            ResponseModel responseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                UserCaller userCaller = new UserCaller();
+                int Result = userCaller.DeleteProfilePicture(new UserServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, IsStoreUser);
+
+                StatusCode =
+                Result == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                responseModel.Status = true;
+                responseModel.StatusCode = StatusCode;
+                responseModel.Message = statusMessage;
+                responseModel.ResponseData = Result;
+
+
+            }
+            catch (Exception ex)
+            {
+                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                responseModel.Status = true;
+                responseModel.StatusCode = StatusCode;
+                responseModel.Message = statusMessage;
+                responseModel.ResponseData = null;
+            }
+
+            return responseModel;
+        }
 
         #endregion
     }

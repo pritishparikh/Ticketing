@@ -17,6 +17,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int AddUserProfiledetail(int DesignationID,int ReportTo ,int CreatedBy,int TenantID,int UserID,int IsStoreUser);
 
+        int DeleteProfilePicture(int tenantID, int userID, int isStoreUser);
         int Mappedcategory(CustomUserModel customUserModel);
 
         int EditUser(CustomEditUserModel customEditUserModel);
