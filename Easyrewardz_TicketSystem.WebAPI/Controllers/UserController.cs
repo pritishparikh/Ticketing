@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Net.Http.Headers;
-using System.Text.RegularExpressions;
-using Easyrewardz_TicketSystem.CustomModel;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
@@ -14,6 +8,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -781,8 +780,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     string encryptedEmailId = SecurityService.Encrypt(customChangePassword.EmailID);
 
                     string decriptedPassword = SecurityService.DecryptStringAES(customChangePassword.Password);
-                    string url = configuration.GetValue<string>("websiteURL") + "/changePassword";
-                    string body = "Dear User, Please find the below details.  <br/><br/>" + "Your User Name  : " + customChangePassword.EmailID + "<br/>" + "Your Password : " + decriptedPassword + "<br/><br/>" + "Click on Below link to change the Password <br/>" + url + "?Id:" + encryptedEmailId;
+                    string url = configuration.GetValue<string>("websiteURL") + "/ChangePassword";
+                    string body = "Dear User, <br/>Please find the below details.  <br/><br/>" + "Your User Name  : " + customChangePassword.EmailID + "<br/>" + "Your Password : " + decriptedPassword + "<br/><br/>" + "Click on Below link to change the Password <br/>" + url + "?Id:" + encryptedEmailId;
                     bool isUpdate = _securityCaller.sendMailForChangePassword(new SecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID,body,authenticate.TenantId);
                     if (isUpdate)
                     {

@@ -284,7 +284,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 CommonService commonService = new CommonService();
-                isSent = commonService.SendEmail(sMTPDetails, emailId, "Change Password", content, null, null, TenantId);
+                isSent = commonService.SendEmail(sMTPDetails, emailId, "EasyRewardz User Created", content, null, null, TenantId);
 
                 return isSent;
             }
