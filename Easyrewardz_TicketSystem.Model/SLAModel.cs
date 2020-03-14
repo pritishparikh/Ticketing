@@ -75,7 +75,7 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class SLADetail
     {
-
+        public int SLAId { get; set; }
         public bool IsActive { get; set; }
         public string BrandName { get; set; }
         public string CategoryName { get; set; }

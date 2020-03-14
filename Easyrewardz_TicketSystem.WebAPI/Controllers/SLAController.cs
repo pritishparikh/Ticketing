@@ -489,6 +489,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("GetSLADetail")]
         public ResponseModel GetSLADetail(int SLAId)

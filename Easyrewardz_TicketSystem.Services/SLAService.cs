@@ -524,6 +524,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
+                        objSLADetail.SLAId = Convert.ToInt16(ds.Tables[0].Rows[0]["SlaID"]);
                         objSLADetail.BrandName = Convert.ToString(ds.Tables[0].Rows[0]["BrandName"]);
                         objSLADetail.SubCategoryName = Convert.ToString(ds.Tables[0].Rows[0]["SubCategoryName"]);
                         objSLADetail.CategoryName = Convert.ToString(ds.Tables[0].Rows[0]["CategoryName"]);
