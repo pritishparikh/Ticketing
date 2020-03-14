@@ -28,5 +28,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int BulkUploadSLA(int TenantID, int CreatedBy, DataSet DataSetCSV);
 
+        SLADetail GetSLADetail(int tenantID, int SLAFor);
+
     }
 }
