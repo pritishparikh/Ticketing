@@ -545,11 +545,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 SLACaller _newSLA = new SLACaller();
-                _newSLA.UpdateSLADetails(new SLAServices(_connectioSting), sladetails, authenticate.TenantId, authenticate.UserMasterID);
+                bool isUdpated = _newSLA.UpdateSLADetails(new SLAServices(_connectioSting), sladetails, authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =
-                insertcount == 0 ?
-                     (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
+                isUdpated ?
+                     (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
