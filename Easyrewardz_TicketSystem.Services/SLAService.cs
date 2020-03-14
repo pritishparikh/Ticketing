@@ -602,7 +602,7 @@ namespace Easyrewardz_TicketSystem.Services
                             cmdSLA.Parameters.AddWithValue("@tenant_ID", TenantID);
                             cmdSLA.Parameters.AddWithValue("@Sla_ID", SLA.SLAId);
                             cmdSLA.CommandType = CommandType.StoredProcedure;
-                            cmd.ExecuteNonQuery();
+                            cmdSLA.ExecuteNonQuery();
                         }
                     }
                 }
