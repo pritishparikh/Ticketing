@@ -138,10 +138,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region Methods for the Subcategories
 
-        public List<SubCategory> GetSubCategoryByCategoryID(ISubCategories _SubCategory, int CategoryID)
+        public List<SubCategory> GetSubCategoryByCategoryID(ISubCategories _SubCategory, int CategoryID,int TypeId)
         {
             _subCategoryList = _SubCategory;
-            return _subCategoryList.GetSubCategoryByCategoryID(CategoryID);
+            return _subCategoryList.GetSubCategoryByCategoryID(CategoryID,TypeId);
         }
         public List<SubCategory> GetSubCategoryByMultiCategoryID(ISubCategories _SubCategory, string CategoryIDs)
         {

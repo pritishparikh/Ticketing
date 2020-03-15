@@ -42,7 +42,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetSubCategoryByCategoryID")]
-        public ResponseModel GetSubCategoryByCategoryID(int CategoryID)
+        public ResponseModel GetSubCategoryByCategoryID(int CategoryID,int TypeId=0)
         {
             List<SubCategory> objSubCategory = new List<SubCategory>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -52,7 +52,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 MasterCaller _newMasterSubCat = new MasterCaller();
 
-                objSubCategory = _newMasterSubCat.GetSubCategoryByCategoryID(new SubCategoryService(_connectioSting), CategoryID);
+                objSubCategory = _newMasterSubCat.GetSubCategoryByCategoryID(new SubCategoryService(_connectioSting), CategoryID,TypeId);
 
                 StatusCode =
                 objSubCategory.Count == 0 ?

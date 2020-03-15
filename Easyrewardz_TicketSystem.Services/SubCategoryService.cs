@@ -25,7 +25,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="CategoryID"></param>
         /// <returns></returns>
-        public List<SubCategory> GetSubCategoryByCategoryID(int CategoryID)
+        public List<SubCategory> GetSubCategoryByCategoryID(int CategoryID,int TypeId)
         {
 
             DataSet ds = new DataSet();
@@ -37,8 +37,9 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetListofSubCategoriesByCategoryId", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.CommandType = CommandType.StoredProcedure; 
                 cmd1.Parameters.AddWithValue("@Category_ID", CategoryID);
+                cmd1.Parameters.AddWithValue("@Type_Id", TypeId);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
