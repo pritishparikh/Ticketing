@@ -894,7 +894,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getagentlist")]
-        public ResponseModel getagentlist()
+        public ResponseModel getagentlist(int TicketID)
         {
             List<CustomSearchTicketAgent> objSearchagent = new List<CustomSearchTicketAgent>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -908,7 +908,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                objSearchagent = _TicketCaller.AgentList(new TicketingService(_connectioSting), authenticate.TenantId);
+                objSearchagent = _TicketCaller.AgentList(new TicketingService(_connectioSting), authenticate.TenantId, TicketID);
                 StatusCode =
                 objSearchagent.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
