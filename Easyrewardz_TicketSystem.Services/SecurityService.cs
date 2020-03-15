@@ -240,7 +240,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_UpdatePassword", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@EmailId", EmailId);
-                cmd1.Parameters.AddWithValue("@Password", Password);
+                cmd1.Parameters.AddWithValue("@Password", Password.Trim());
                 cmd1.ExecuteScalar();
                 isUpdated = true;
             }
