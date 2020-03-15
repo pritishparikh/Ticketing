@@ -131,16 +131,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
                 securityCaller _newSecurityCaller = new securityCaller();
-                string encryptedEmailId = string.Empty;
+               
                 CommonService commonService = new CommonService();
-                try
-                {
-                    encryptedEmailId = commonService.Decrypt(cipherEmailId);
-                }
-                catch 
-                {
-                    encryptedEmailId = cipherEmailId;
-                }
+                string encryptedEmailId = commonService.Decrypt(cipherEmailId);               
                 
 
                 bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_connectioSting), encryptedEmailId, Password);
