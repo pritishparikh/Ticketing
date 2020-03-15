@@ -40,6 +40,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@_userID", UserID);
 
 
+
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -58,8 +59,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                         if(TicketNoti.Count > 0)
                         {
-                            objNotiLst.NotiCount = TicketNoti.Select(x => x.TicketCount).Sum();
-                            objNotiLst.TicketNotification = TicketNoti; 
+                            objNotiLst.NotiCount = TicketNoti.Where(x => x.TicketCount > 0).Select(x=> x.TicketCount).Sum();
+                            objNotiLst.TicketNotification = TicketNoti.Where(x => x.TicketCount > 0).ToList() ; 
                         }
                         
 
