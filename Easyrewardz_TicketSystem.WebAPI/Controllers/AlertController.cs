@@ -105,7 +105,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                // authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newAlert = new SettingsCaller();
 
