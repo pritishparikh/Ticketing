@@ -195,7 +195,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
 
             MySqlCommand cmd = new MySqlCommand();
-            int k = 0;
+            int success = 0;
             try
             {
                 conn.Open();
@@ -208,7 +208,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Is_Active", brand.IsActive);
                 cmd1.Parameters.AddWithValue("@Created_By", brand.CreatedBy);
 
-                k = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                success = Convert.ToInt32(cmd1.ExecuteScalar());
             }
             catch (Exception ex)
             {
@@ -223,7 +223,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return k;
+            return success;
 
         }
 
