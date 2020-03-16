@@ -133,8 +133,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 securityCaller _newSecurityCaller = new securityCaller();
                
                 CommonService commonService = new CommonService();
-                string encryptedEmailId = commonService.Decrypt(cipherEmailId);               
-                
+                string encryptedEmailId = commonService.Decrypt(cipherEmailId);
+                Password = SecurityService.Encrypt(Password);
 
                 bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_connectioSting), encryptedEmailId, Password);
 
