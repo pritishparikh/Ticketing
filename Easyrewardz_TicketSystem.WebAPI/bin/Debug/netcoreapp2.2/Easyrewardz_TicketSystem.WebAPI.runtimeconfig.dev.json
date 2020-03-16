@@ -1,8 +1,8 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "C:\\Users\\akash.mistry.BRAINVIRE\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\akash.mistry.BRAINVIRE\\.nuget\\packages",
+      "C:\\Users\\chetan.poojari\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\chetan.poojari\\.nuget\\packages",
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
     ]
   }

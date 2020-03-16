@@ -399,6 +399,8 @@ namespace Easyrewardz_TicketSystem.Services
         {
             List<StoreMaster> storeMaster = new List<StoreMaster>();
             DataSet ds = new DataSet();
+            string GMT = " GMT+0530 (" + TimeZoneInfo.Local.StandardName + ")";
+
             try
             {
                 conn.Open();
@@ -421,7 +423,7 @@ namespace Easyrewardz_TicketSystem.Services
                         store.StoreEmailID = ds.Tables[0].Rows[i]["StoreEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
                         store.Address = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
                         store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
-                        store.StoreVisitDate = ds.Tables[0].Rows[i]["StoreVisitDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreVisitDate"]);
+                        store.StoreVisitDate = ds.Tables[0].Rows[i]["StoreVisitDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreVisitDate"]) + GMT;
                         store.Purpose = ds.Tables[0].Rows[i]["Purpose"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Purpose"]);
                         storeMaster.Add(store);
                     }
