@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -154,7 +155,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Store_Name", storeMaster.StoreName);
                 cmd.Parameters.AddWithValue("@State_ID", storeMaster.StateID);
                 cmd.Parameters.AddWithValue("@City_ID", storeMaster.CityID);
-                cmd.Parameters.AddWithValue("@Pincode_ID", storeMaster.Pincode);
+                cmd.Parameters.AddWithValue("@Pincode_ID", storeMaster.PincodeID);
                 cmd.Parameters.AddWithValue("@Store_Address", storeMaster.Address);
                 cmd.Parameters.AddWithValue("@Region_ID", storeMaster.RegionID);
                 cmd.Parameters.AddWithValue("@Zone_ID", storeMaster.ZoneID);
@@ -182,6 +183,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
+           
             return Success;
         }
 
