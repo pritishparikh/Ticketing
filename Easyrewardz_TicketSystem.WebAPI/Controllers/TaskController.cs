@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _radisCacheServerAddress;
+        private readonly string _radisCacheServerAddress;//testing
         private readonly string _connectionSting;
         #endregion
 
