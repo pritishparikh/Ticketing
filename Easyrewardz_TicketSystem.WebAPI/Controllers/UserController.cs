@@ -6,12 +6,14 @@ using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -30,6 +32,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
         private readonly string rootPath;
+        private readonly IDistributedCache _cache;
+        internal static TicketDBContext Db { get; set; }
         private readonly string ProfileImg_Resources;
         private readonly string ProfileImg_Image;
         #endregion
@@ -39,7 +43,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// User Controller
         /// </summary>
         /// <param name="_iConfig"></param>
-        public UserController(IConfiguration _iConfig)
+        public UserController(IConfiguration _iConfig, IDistributedCache cache, TicketDBContext db)
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
@@ -47,12 +51,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             rootPath = configuration.GetValue<string>("APIURL");
             ProfileImg_Resources = configuration.GetValue<string>("ProfileImg_Resources");
             ProfileImg_Image = configuration.GetValue<string>("ProfileImg_Image");
+            _cache = cache;
+            Db = db;
         }
         #endregion
 
         #region Custom Methods 
         [HttpPost]
         [Route("GetUserList")]
+        [AllowAnonymous]
         public ResponseModel GetUserList( )
         {
             List<User> objUserList = new List<User>();
@@ -65,11 +72,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
 
                 MasterCaller _newMasterBrand = new MasterCaller();
 
-                objUserList = _newMasterBrand.GetUserList(new UserServices(_connectioSting), authenticate.TenantId,authenticate.UserMasterID);
+                objUserList = _newMasterBrand.GetUserList(new UserServices(Db), authenticate.TenantId,authenticate.UserMasterID);
 
                 StatusCode =
                 objUserList.Count == 0 ?
@@ -783,7 +790,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     string decriptedPassword = SecurityService.DecryptStringAES(customChangePassword.Password);
                     string url = configuration.GetValue<string>("websiteURL") + "/ChangePassword";
                     string body = "Dear User, Please find the below details.  <br/><br/>" + "Your User Name  : " + customChangePassword.EmailID + "<br/>" + "Your Password : " + decriptedPassword + "<br/><br/>" + "Click on Below link to change the Password <br/>" + url + "?Id:" + encryptedEmailId;
-                    bool isUpdate = _securityCaller.sendMailForChangePassword(new SecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID,body,authenticate.TenantId);
+                    bool isUpdate = _securityCaller.sendMailForChangePassword(new SecurityService(_cache,Db), sMTPDetails, customChangePassword.EmailID,body,authenticate.TenantId);
                     if (isUpdate)
                     {
                         _objResponseModel.Status = true;
@@ -859,7 +866,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 customChangePassword.Password = SecurityService.Encrypt(customChangePassword.Password);
                 customChangePassword.NewPassword = SecurityService.Encrypt(customChangePassword.NewPassword);
                 customChangePassword.EmailID = SecurityService.DecryptStringAES(customChangePassword.EmailID);
-                bool Result = _securityCaller.ChangePassword(new SecurityService(_connectioSting), customChangePassword, authenticate.TenantId, authenticate.UserMasterID);
+                bool Result = _securityCaller.ChangePassword(new SecurityService(_cache,Db), customChangePassword, authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =
                Result == false ?

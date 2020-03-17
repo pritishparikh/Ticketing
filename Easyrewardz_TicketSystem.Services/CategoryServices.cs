@@ -10,6 +10,7 @@ using System.Linq;
 using Easyrewardz_TicketSystem.DBContext;
 using Easyrewardz_TicketSystem.CustomModel;
 using System.Xml;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -17,6 +18,7 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        public TicketDBContext Db { get; set; }
         #endregion
 
         /// <summary>
@@ -27,22 +29,21 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         MySqlConnection conn = new MySqlConnection();
-        public CategoryServices(string _connectionString)
+        public CategoryServices(TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
         }
         public List<Category> GetCategoryList(int TenantID,int BrandID)
         {
 
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
+           
             List<Category> categoryList = new List<Category>();
 
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetCategoryList", conn);
+                conn = Db.Connection;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetCategoryListTemp", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
                 cmd1.Parameters.AddWithValue("@Brand_ID", BrandID);
@@ -68,13 +69,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return categoryList;
         }
         /// <summary>

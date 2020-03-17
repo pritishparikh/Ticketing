@@ -7,12 +7,14 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -27,14 +29,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region variable declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly IDistributedCache _cache;
+        internal static TicketDBContext TicketDb { get; set; }
         private readonly string _radisCacheServerAddress;
+      
         private readonly string rootPath;
         #endregion
 
         #region Cunstructor
-        public CategoryController(IConfiguration _iConfig)
+        public CategoryController(IConfiguration _iConfig,TicketDBContext Db, IDistributedCache cache)
         {
             configuration = _iConfig;
+            TicketDb = Db;
+            _cache = cache;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
@@ -48,20 +55,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetCategoryList")]
+        [AllowAnonymous]
         public List<Category> GetCategoryList(int BrandID)
         {
             List<Category> objCategoryList = new List<Category>();
             ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int StatusCode = 0;           
             string statusMessage = "";
             try
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
+                //authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate.TenantId = 1;
                 MasterCaller _newMasterCategory = new MasterCaller();
-                objCategoryList = _newMasterCategory.GetCategoryList(new CategoryServices(_connectioSting), authenticate.TenantId, BrandID);
+                objCategoryList = _newMasterCategory.GetCategoryList(new CategoryServices(TicketDb), authenticate.TenantId, BrandID);
                
             }
             catch (Exception ex)
@@ -79,7 +87,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("AddCategory")]
-        public ResponseModel AddCategory(int BrandID,string category)
+        public ResponseModel AddCategory(int BrandID, string category)
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
@@ -90,9 +98,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
                 MasterCaller _newMasterCategory = new MasterCaller();
-                result = _newMasterCategory.AddCategory(new CategoryServices(_connectioSting), category, authenticate.TenantId, authenticate.UserMasterID,BrandID);
+                result = _newMasterCategory.AddCategory(new CategoryServices(TicketDb), category, authenticate.TenantId, authenticate.UserMasterID, BrandID);
                 StatusCode =
                result == 0 ?
                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -133,7 +141,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-               int result = _newMasterCategory.DeleteCategory(new CategoryServices(_connectioSting), CategoryID, authenticate.TenantId);
+                int result = _newMasterCategory.DeleteCategory(new CategoryServices(TicketDb), CategoryID, authenticate.TenantId);
                 StatusCode =
                                result == 0 ?
                                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -169,12 +177,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
 
                 MasterCaller _newMasterCategory = new MasterCaller();
                 category.TenantID = authenticate.TenantId;
                 category.ModifyBy = authenticate.UserMasterID;
-                result = _newMasterCategory.UpdateCategory(new CategoryServices(_connectioSting), category);
+                result = _newMasterCategory.UpdateCategory(new CategoryServices(TicketDb), category);
 
                 StatusCode =
                 result == 0 ?
@@ -212,11 +220,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
 
                 MasterCaller _newMasterCategory = new MasterCaller();
 
-                objcategory = _newMasterCategory.CategoryList(new CategoryServices(_connectioSting), authenticate.TenantId);
+                objcategory = _newMasterCategory.CategoryList(new CategoryServices(TicketDb), authenticate.TenantId);
             }
             catch (Exception ex)
             {
@@ -249,10 +257,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
                 MasterCaller _newMasterCategory = new MasterCaller();
                 customCreateCategory.CreatedBy = authenticate.UserMasterID;
-                result = _newMasterCategory.CreateCategoryBrandMapping(new CategoryServices(_connectioSting), customCreateCategory);
+                result = _newMasterCategory.CreateCategoryBrandMapping(new CategoryServices(TicketDb), customCreateCategory);
                 StatusCode =
                result == 0 ?
                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -296,7 +304,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
                 MasterCaller _newMasterCategory = new MasterCaller();
-                customCreateCategories = _newMasterCategory.ListCategoryBrandMapping(new CategoryServices(_connectioSting));
+                customCreateCategories = _newMasterCategory.ListCategoryBrandMapping(new CategoryServices(TicketDb));
                 StatusCode =
                customCreateCategories.Count == 0 ?
                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -327,7 +335,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetCategoryListByMultiBrandID")]
-        public ResponseModel GetCategoryListByMultiBrandID(string BrandIDs )
+        public ResponseModel GetCategoryListByMultiBrandID(string BrandIDs)
         {
             List<Category> objcategory = new List<Category>();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -338,11 +346,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
+                //  authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate.TenantId = 1;
                 MasterCaller _newMasterCategory = new MasterCaller();
 
-                objcategory = _newMasterCategory.GetCategoryListByMultiBrandID(new CategoryServices(_connectioSting), BrandIDs, authenticate.TenantId);
+                objcategory = _newMasterCategory.GetCategoryListByMultiBrandID(new CategoryServices(TicketDb), BrandIDs, authenticate.TenantId);
                 StatusCode =
                objcategory.Count == 0 ?
                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -371,7 +379,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadCategory")]
-        public ResponseModel BulkUploadCategory( int CategoryFor=1)
+        public ResponseModel BulkUploadCategory(int CategoryFor = 1)
         {
             string DownloadFilePath = string.Empty;
             string BulkUploadFilesPath = string.Empty;
@@ -397,7 +405,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
 
                 #region FilePath
                 //BulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
@@ -448,9 +456,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 //#endregion
 
                 DataSetCSV = CommonService.csvToDataSet("D:\\VipinSingh\\CategoryBulk.csv");
-               // DataSetCSV = CommonService.csvToDataSet(BulkUploadFilesPath + "\\Categorymaster.csv");
+                // DataSetCSV = CommonService.csvToDataSet(BulkUploadFilesPath + "\\Categorymaster.csv");
 
-                CSVlist = masterCaller.CategoryBulkUpload(new CategoryServices(_connectioSting),
+                CSVlist = masterCaller.CategoryBulkUpload(new CategoryServices(TicketDb),
                   authenticate.TenantId, authenticate.UserMasterID, CategoryFor, "Categorymaster.csv", DataSetCSV);
                 // int result = masterCaller.CategoryBulkUpload(new CategoryServices(_connectioSting),authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
                 #region Create Error and Succes files and  Insert in FileUploadLog
@@ -503,12 +511,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
 
                 claimCategory.CreatedBy = authenticate.UserMasterID;
                 claimCategory.TenantID = authenticate.TenantId;
 
-                int result = _newMasterCaller.CreateClaimCategory(new CategoryServices(_connectioSting), claimCategory);
+                int result = _newMasterCaller.CreateClaimCategory(new CategoryServices(TicketDb), claimCategory);
 
                 StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 

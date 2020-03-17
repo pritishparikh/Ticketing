@@ -59,3 +59,11 @@ E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debu
 E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.AssemblyInfo.cs
 E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
 E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.deps.json
+D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.csproj.CoreCompileInputs.cache
+D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.AssemblyInfoInputs.cache
+D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.AssemblyInfo.cs
+D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb

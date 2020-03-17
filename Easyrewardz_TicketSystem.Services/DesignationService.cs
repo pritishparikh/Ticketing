@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,16 @@ namespace Easyrewardz_TicketSystem.Services
     public class DesignationService:IDesignation
     {
         MySqlConnection conn = new MySqlConnection();
+        public TicketDBContext Db { get; set; }
         public DesignationService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
-
+        public DesignationService(TicketDBContext db)
+        {
+            Db = db;
+        }
+   
         /// <summary>
         /// Get Designation List
         /// </summary>
@@ -24,13 +30,12 @@ namespace Easyrewardz_TicketSystem.Services
         public List<DesignationMaster> GetDesignations(int TenantID)
         {
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
+            //MySqlCommand cmd = new MySqlCommand();
             List<DesignationMaster> designationMasters = new List<DesignationMaster>();
 
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
+                conn = Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getDesignationMaster", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -52,14 +57,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
                 throw ex;
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            }         
 
             return designationMasters;
         }

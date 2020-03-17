@@ -10,6 +10,7 @@ using System.Linq;
 using Easyrewardz_TicketSystem.DBContext;
 using Easyrewardz_TicketSystem.CustomModel;
 using System.Xml;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -17,6 +18,7 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        public TicketDBContext Db { get; set; }
         #endregion
         MySqlConnection conn = new MySqlConnection();
 
@@ -24,6 +26,10 @@ namespace Easyrewardz_TicketSystem.Services
         public UserServices(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
+        }
+        public UserServices(TicketDBContext db)
+        {
+            Db= db;
         }
         #endregion
 
@@ -276,8 +282,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
+                conn = Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetUserFullName", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
@@ -295,9 +300,6 @@ namespace Easyrewardz_TicketSystem.Services
                         user.ReporteeID = Convert.ToInt32(ds.Tables[0].Rows[i]["ReporteeID"]);
                         user.RoleID= Convert.ToInt32(ds.Tables[0].Rows[i]["RoleID"]);
                         user.RoleName = Convert.ToString(ds.Tables[0].Rows[i]["RoleName"]);
-
-
-
                         users.Add(user);
                     }
                 }
@@ -307,13 +309,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
 
             return users;
         }

@@ -1,6 +1,4 @@
-﻿using Easyrewardz_TicketSystem.Model;
-using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 

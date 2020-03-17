@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -22,6 +24,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Variable Declaration
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly IDistributedCache _cache;
+        internal static TicketDBContext Db { get; set; }
         private readonly string _radisCacheServerAddress;
         #endregion
 
@@ -31,9 +35,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// Designation 
         /// </summary>
         /// <param name="_iConfig"></param>
-        public DesignationController(IConfiguration _iConfig)
+        public DesignationController(IConfiguration _iConfig,IDistributedCache cache, TicketDBContext db)
         {
             configuration = _iConfig;
+            _cache = cache;
+            Db = db;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
@@ -59,9 +65,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
                 DesignationCaller designationCaller = new DesignationCaller();
-                designationMasters = designationCaller.GetDesignations(new DesignationService(_connectioSting), authenticate.TenantId);
+                designationMasters = designationCaller.GetDesignations(new DesignationService(Db), authenticate.TenantId);
 
                 StatusCode =
                 designationMasters.Count == 0 ?
@@ -74,7 +80,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = designationMasters;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -104,7 +110,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
                 DesignationCaller designationCaller = new DesignationCaller();
                 designationMasters = designationCaller.GetReporteeDesignation(new DesignationService(_connectioSting), DesignationID, HierarchyFor,authenticate.TenantId);
 
@@ -119,7 +125,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = designationMasters;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -148,7 +154,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
                 DesignationCaller designationCaller = new DesignationCaller();
                 designationMasters = designationCaller.GetReportToUser(new DesignationService(_connectioSting), DesignationID , IsStoreUser, authenticate.TenantId);
 
@@ -163,7 +169,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = designationMasters;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

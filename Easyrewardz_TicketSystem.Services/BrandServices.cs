@@ -8,13 +8,18 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Linq;
 using Easyrewardz_TicketSystem.DBContext;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class BrandServices : IBrand
     {
         MySqlConnection conn = new MySqlConnection();
-
+        public TicketDBContext Db { get; set; }
+        public BrandServices(TicketDBContext db)
+        {
+            Db= db;
+        }
         public BrandServices(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
@@ -29,8 +34,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
+                conn= Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetBrandList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
@@ -57,14 +61,6 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
             return brands;
         }
 

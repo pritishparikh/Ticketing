@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -31,15 +33,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Variable
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly IDistributedCache _cache;
+        internal static TicketDBContext Db { get; set; }
         private readonly string _radisCacheServerAddress;
         #endregion
 
         #region Constructor
-        public AccountController(IConfiguration _iConfig)
+        public AccountController(IConfiguration _iConfig,TicketDBContext db,IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _cache = cache;
+            //_connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            //_radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
 
@@ -62,7 +68,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 /////Validate User
                 securityCaller _securityCaller = new securityCaller();
-                Authenticate authenticate = _securityCaller.validateUserEmailId(new SecurityService(_connectioSting, _radisCacheServerAddress), EmailId);
+                Authenticate authenticate = _securityCaller.validateUserEmailId(new SecurityService(_cache,Db), EmailId);
                 if (authenticate.UserMasterID > 0)
                 {
                     MasterCaller masterCaller = new MasterCaller();
@@ -76,9 +82,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     string content = "";
                     string subject = "";
 
-                    _securityCaller.GetForgetPassowrdMailContent(new SecurityService(_connectioSting), authenticate.TenantId, url, EmailId, out content, out subject);
+                    _securityCaller.GetForgetPassowrdMailContent(new SecurityService(_cache,Db), authenticate.TenantId, url, EmailId, out content, out subject);
 
-                    bool isUpdate = _securityCaller.sendMail(new SecurityService(_connectioSting), sMTPDetails, EmailId, subject, content, authenticate.TenantId);
+                    bool isUpdate = _securityCaller.sendMail(new SecurityService(_cache,Db), sMTPDetails, EmailId, subject, content, authenticate.TenantId);
 
                     if (isUpdate)
                     {
@@ -135,7 +141,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 CommonService commonService = new CommonService();
                 string encryptedEmailId = commonService.Decrypt(cipherEmailId);
 
-                bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_connectioSting), encryptedEmailId, Password);
+                bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_cache,Db), encryptedEmailId, Password);
 
                 if (isUpdate)
                 {
@@ -145,7 +151,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     _objResponseModel.ResponseData = "Update password successfully";
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
@@ -182,7 +188,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
-                    account = _newSecurityCaller.validateUser(new SecurityService(_connectioSting, _radisCacheServerAddress), Programcode, Domainname, userId, password);
+                    account = _newSecurityCaller.validateUser(new SecurityService(_cache,Db), Programcode, Domainname, userId, password);
 
                     if (!string.IsNullOrEmpty(account.Token))
                     {
@@ -216,10 +222,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 resp.ResponseData = "Message:" + Convert.ToString(_ex.Message) + "--- Inner Exception:" + Convert.ToString(_ex.InnerException)
                    + "Other:" + "Authenticate controller, " + Convert.ToString(_ex.Data);
             }
-            finally
-            {
-                GC.Collect();
-            }
+           
             return resp;
         }
 
@@ -233,13 +236,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             _token = SecurityService.DecryptStringAES(_token);
 
             RedisCacheService radisCacheService = new RedisCacheService(_radisCacheServerAddress);
-            if (!radisCacheService.Exists(_token))
-            {
-                radisCacheService.Remove(_token);
-            }
+            //if (!radisCacheService.Exists(_token))
+            //{
+            //    radisCacheService.Remove(_token);
+            //}
 
             securityCaller _newSecurityCaller = new securityCaller();
-            _newSecurityCaller.Logout(new SecurityService(_connectioSting), _token);
+            _newSecurityCaller.Logout(new SecurityService(_cache,Db), _token);
 
             resp.Status = true;
             resp.StatusCode = (int)EnumMaster.StatusCode.Success;
@@ -267,7 +270,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname))
                 {
-                    bool isValid = newSecurityCaller.validateProgramCode(new SecurityService(_connectioSting, _radisCacheServerAddress), Programcode, Domainname);
+                    bool isValid = newSecurityCaller.validateProgramCode(new SecurityService(_cache,Db), Programcode, Domainname);
 
                     if (isValid)
                     {
@@ -297,11 +300,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 resp.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
                 resp.ResponseData = "Message:" + Convert.ToString(_ex.Message) + "--- Inner Exception:" + Convert.ToString(_ex.InnerException)
                    + "Other:" + "Authenticate controller, " + Convert.ToString(_ex.Data);
-            }
-            finally
-            {
-                GC.Collect();
-            }
+            }           
             return resp;
         }
 

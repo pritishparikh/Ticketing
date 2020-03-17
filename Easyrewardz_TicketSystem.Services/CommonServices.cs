@@ -1,14 +1,4 @@
-﻿using Easyrewardz_TicketSystem.DBContext;
-using Easyrewardz_TicketSystem.Interface;
-using Easyrewardz_TicketSystem.Model;
-using Microsoft.Extensions.Configuration;
-using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Reflection;
-using System.Text;
+﻿using System;
 
 namespace Easyrewardz_TicketSystem.Services
 {
