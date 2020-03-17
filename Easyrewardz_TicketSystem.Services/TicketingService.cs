@@ -1414,6 +1414,201 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return isUpdate;
         }
+
+
+
+        public int UpdateDraftTicket(TicketingDetails ticketingDetails, int TenantId, string FolderPath, string finalAttchment)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int ticketID = ticketingDetails.TicketID;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_UpdateDraftTicket", conn);
+                cmd1.Parameters.AddWithValue("@_TicketID", ticketingDetails.TicketID);
+                cmd1.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd1.Parameters.AddWithValue("@_TicketDescription", ticketingDetails.Ticketdescription);
+                cmd1.Parameters.AddWithValue("@_TicketSourceID", ticketingDetails.TicketSourceID);
+                cmd1.Parameters.AddWithValue("@_BrandID", ticketingDetails.BrandID);
+                cmd1.Parameters.AddWithValue("@_CategoryID", ticketingDetails.CategoryID);
+                cmd1.Parameters.AddWithValue("@_SubCategoryID", ticketingDetails.SubCategoryID);
+                cmd1.Parameters.AddWithValue("@_PriorityID", ticketingDetails.PriorityID);
+                cmd1.Parameters.AddWithValue("@_CustomerID", ticketingDetails.CustomerID);
+                cmd1.Parameters.AddWithValue("@_OrderMasterID", ticketingDetails.OrderMasterID);
+                cmd1.Parameters.AddWithValue("@_IssueTypeID", ticketingDetails.IssueTypeID);
+                cmd1.Parameters.AddWithValue("@_ChannelOfPurchaseID", ticketingDetails.ChannelOfPurchaseID);
+                //need to change as per TicketActionType ID[QB / ETA]
+                cmd1.Parameters.AddWithValue("@_AssignedID", ticketingDetails.AssignedID);
+                cmd1.Parameters.AddWithValue("@_TicketActionID", ticketingDetails.TicketActionID);
+
+                cmd1.Parameters.AddWithValue("@_StatusID", ticketingDetails.StatusID);
+
+                cmd1.Parameters.AddWithValue("@_TicketTemplateID", ticketingDetails.TicketTemplateID);
+
+                cmd1.Parameters.AddWithValue("@_CreatedBy", ticketingDetails.CreatedBy);
+                cmd1.Parameters.AddWithValue("@_Notes", ticketingDetails.Ticketnotes);
+
+                cmd1.Parameters.AddWithValue("@_IsInstantEscalateToHighLevel", Convert.ToInt16(ticketingDetails.IsInstantEscalateToHighLevel));
+                cmd1.Parameters.AddWithValue("@_IsWantToVisitedStore", Convert.ToInt16(ticketingDetails.IsWantToVisitedStore));
+                cmd1.Parameters.AddWithValue("@_IsAlreadyVisitedStore", Convert.ToInt16(ticketingDetails.IsAlreadyVisitedStore));
+                cmd1.Parameters.AddWithValue("@_IsWantToAttachOrder", Convert.ToInt16(ticketingDetails.IsWantToAttachOrder));
+                cmd1.Parameters.AddWithValue("@_IsActive", Convert.ToInt16(ticketingDetails.IsActive));
+                cmd1.Parameters.AddWithValue("@_OrderItemID", string.IsNullOrEmpty(ticketingDetails.OrderItemID) ? "" : ticketingDetails.OrderItemID);
+
+                cmd1.Parameters.AddWithValue("@_TikcketTitle", string.IsNullOrEmpty(ticketingDetails.TicketTitle) ? "" : ticketingDetails.TicketTitle);
+                cmd1.Parameters.AddWithValue("@_StoreID", string.IsNullOrEmpty(ticketingDetails.StoreID) ? "" : ticketingDetails.StoreID);
+                // added for mailer check 
+                cmd1.Parameters.AddWithValue("@_Is_Sent", Convert.ToInt16(!string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody)));
+
+                cmd1.CommandType = CommandType.StoredProcedure;
+
+
+                 Convert.ToInt32(cmd1.ExecuteScalar());
+
+                if (ticketingDetails.taskMasters.Count > 0)
+                {
+                    for (int j = 0; j < ticketingDetails.taskMasters.Count; j++)
+                    {
+                        int taskId = 0;
+                        try
+                        {
+
+                            //conn.Open();
+                            //cmd.Connection = conn;
+                            MySqlCommand cmdtask = new MySqlCommand("SP_UpdateDraftTask", conn);
+                            cmdtask.Connection = conn;
+                            cmdtask.Parameters.AddWithValue("@Ticket_ID", ticketingDetails.TicketID);
+                            cmdtask.Parameters.AddWithValue("@_TicketingTaskID", ticketingDetails.taskMasters[j].TicketingTaskID);
+                            cmdtask.Parameters.AddWithValue("@_TaskTitle", ticketingDetails.taskMasters[j].TaskTitle);
+                            cmdtask.Parameters.AddWithValue("@_TaskDescription", ticketingDetails.taskMasters[j].TaskDescription);
+                            cmdtask.Parameters.AddWithValue("@_DepartmentId", ticketingDetails.taskMasters[j].DepartmentId);
+                            cmdtask.Parameters.AddWithValue("@_FunctionID", ticketingDetails.taskMasters[j].FunctionID);
+                            cmdtask.Parameters.AddWithValue("@_AssignTo_ID", ticketingDetails.taskMasters[j].AssignToID);
+                            cmdtask.Parameters.AddWithValue("@_PriorityID", ticketingDetails.taskMasters[j].PriorityID);
+                            cmdtask.Parameters.AddWithValue("@Tenant_Id", TenantId);
+                            cmdtask.Parameters.AddWithValue("@_Created_By", ticketingDetails.CreatedBy);
+                            cmdtask.Parameters.AddWithValue("@_StatusID", ticketingDetails.StatusID);
+                            cmdtask.CommandType = CommandType.StoredProcedure;
+                            taskId = Convert.ToInt32(cmdtask.ExecuteScalar());
+                            //conn.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            ticketID = 0;
+                            throw ex;
+                        }
+
+                    }
+                }
+
+                //Attchment 
+                try
+                {
+                    int i = 0;
+
+                    if (!string.IsNullOrEmpty(finalAttchment))
+                    {
+                        MySqlCommand cmdattachment = new MySqlCommand("SP_UpdateDraftAttachment", conn);
+                        cmdattachment.Parameters.AddWithValue("@fileName", finalAttchment);
+                        cmdattachment.Parameters.AddWithValue("@Ticket_ID", ticketingDetails.TicketID);
+                        cmdattachment.CommandType = CommandType.StoredProcedure;
+                        i = cmdattachment.ExecuteNonQuery();
+                    }
+                }
+                catch (IOException ioex)
+                {
+                    Console.WriteLine(ioex.Message);
+                    ticketID = 0;
+                }
+                int a = 0;
+
+
+                #region Fetch email based on storeID
+
+                string storeIDlst = ticketingDetails.StoreID;
+                if (!string.IsNullOrEmpty(storeIDlst) && ticketingDetails.IsInforToStore)
+                {
+                    string emailID = string.Empty;
+                    List<string> emailLst = new List<string>();
+                    DataSet EmailDs = new DataSet();
+                    MySqlCommand cmdemail = new MySqlCommand("SP_GetEmailsOnStoreID", conn);
+                    cmdemail.Parameters.AddWithValue("StoreIds", storeIDlst);
+                    MySqlDataAdapter adapter = new MySqlDataAdapter();
+                    adapter.SelectCommand = cmdemail;
+                    adapter.Fill(EmailDs);
+
+                    if (EmailDs != null && EmailDs.Tables.Count > 0)
+                    {
+                        if (EmailDs.Tables[0] != null && EmailDs.Tables[0].Rows.Count > 0)
+                        {
+                            emailLst = EmailDs.Tables[0].AsEnumerable().Select(x => Convert.ToString((x.Field<object>("StoreEmailID")))).ToList();
+                            emailLst.RemoveAll(x => string.IsNullOrEmpty(x));
+
+                            if (emailLst.Count > 0)
+                                emailID = string.Join(",", emailLst);
+
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(emailID))
+                        ticketingDetails.ticketingMailerQues[0].UserCC += emailID;
+                }
+
+                #endregion
+
+
+                if (!string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody) && ticketingDetails.StatusID != 100)
+                {
+
+                    ticketingDetails.ticketingMailerQues[0].CreatedBy = ticketingDetails.CreatedBy;
+
+
+                    MySqlCommand cmdMail = new MySqlCommand("SP_SendTicketingEmail", conn);
+                    cmdMail.Parameters.AddWithValue("@Tenant_ID", ticketingDetails.TenantID);
+                    cmdMail.Parameters.AddWithValue("@Ticket_ID", ticketingDetails.TicketID);
+                    cmdMail.Parameters.AddWithValue("@TikcketMail_Subject", ticketingDetails.ticketingMailerQues[0].TikcketMailSubject);
+                    cmdMail.Parameters.AddWithValue("@TicketMail_Body", ticketingDetails.ticketingMailerQues[0].TicketMailBody);
+                    cmdMail.Parameters.AddWithValue("@To_Email", ticketingDetails.ticketingMailerQues[0].ToEmail);
+                    cmdMail.Parameters.AddWithValue("@User_CC", ticketingDetails.ticketingMailerQues[0].UserCC);
+                    cmdMail.Parameters.AddWithValue("@User_BCC", ticketingDetails.ticketingMailerQues[0].UserBCC);
+                    cmdMail.Parameters.AddWithValue("@Ticket_Source", ticketingDetails.ticketingMailerQues[0].TicketSource);
+                    cmdMail.Parameters.AddWithValue("@Alert_ID", ticketingDetails.ticketingMailerQues[0].AlertID);
+                    cmdMail.Parameters.AddWithValue("@Is_Sent", ticketingDetails.ticketingMailerQues[0].IsSent);
+                    cmdMail.Parameters.AddWithValue("@Priority_ID", ticketingDetails.ticketingMailerQues[0].PriorityID);
+                    cmdMail.Parameters.AddWithValue("@Created_By", ticketingDetails.ticketingMailerQues[0].CreatedBy);
+                    if (finalAttchment == null || finalAttchment == String.Empty)
+                    {
+                        cmdMail.Parameters.AddWithValue("@Has_Attachment", 0);
+                    }
+                    else
+                    {
+                        cmdMail.Parameters.AddWithValue("@Has_Attachment", 1);
+                    }
+
+                    cmdMail.CommandType = CommandType.StoredProcedure;
+                    a = Convert.ToInt32(cmdMail.ExecuteScalar());
+
+                }
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                var tessst = ex.ToString() + "\n" + ex.InnerException + "\n" + ex.StackTrace;
+                ticketID = 0;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return ticketID;
+        }
+
     }
 }
 

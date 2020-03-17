@@ -1178,6 +1178,110 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return _objResponseModel;
         }
+
+        [HttpPost]
+        [Route("UpdateDraftTicket")]
+        public ResponseModel UpdateDraftTicket()
+        {
+            TicketingDetails ticketingDetails = new TicketingDetails();
+
+            var files = Request.Form.Files;
+            string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
+            string fileName = "";
+            string finalAttchment = "";
+
+            if (files.Count > 0)
+            {
+                for (int i = 0; i < files.Count; i++)
+                {
+                    fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
+                }
+                finalAttchment = fileName.TrimEnd(',');
+            }
+            var Keys = Request.Form;
+            ticketingDetails = JsonConvert.DeserializeObject<TicketingDetails>(Keys["ticketingDetails"]);
+
+
+            List<TicketingDetails> objTicketList = new List<TicketingDetails>();
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                TicketingCaller _newTicket = new TicketingCaller();
+
+                ticketingDetails.TenantID = authenticate.TenantId;
+                ticketingDetails.CreatedBy = authenticate.UserMasterID; ///Created  By from the token
+                ticketingDetails.AssignedID = authenticate.UserMasterID;
+
+                var exePath = Path.GetDirectoryName(System.Reflection
+                     .Assembly.GetExecutingAssembly().CodeBase);
+                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                var appRoot = appPathMatcher.Match(exePath).Value;
+                string Folderpath = appRoot + "\\" + _ticketAttachmentFolderName;
+
+                int result = _newTicket.UpdateDraftTicket(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
+
+                if (result > 0)
+                {
+                    if (files.Count > 0)
+                    {
+                        string[] filesName = finalAttchment.Split(",");
+                        for (int i = 0; i < files.Count; i++)
+                        {
+                            using (var ms = new MemoryStream())
+                            {
+                                files[i].CopyTo(ms);
+                                var fileBytes = ms.ToArray();
+                                MemoryStream msfile = new MemoryStream(fileBytes);
+
+                                string path = Folderpath + "\\" + filesName[i];
+
+                                bool fileExist = System.IO.File.Exists(path);
+                                if (fileExist)
+                                {
+                                    System.IO.File.Delete(path);
+                                }
+
+                                FileStream docFile = new FileStream(path, FileMode.Create, FileAccess.Write);                                
+
+                                msfile.WriteTo(docFile);
+                                docFile.Close();
+                                ms.Close();
+                                msfile.Close();
+                                string s = Convert.ToBase64String(fileBytes);
+                                byte[] a = Convert.FromBase64String(s);
+                                // act on the Base64 data
+
+                            }
+                        }
+                    }
+                }
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = "Ticket updated successfully.";
+                _objResponseModel.ResponseData = result;
+            }
+            catch (Exception ex)
+            {
+                _objResponseModel.Status = false;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = "Ticket not created.";
+                _objResponseModel.ResponseData = null;
+
+            }
+            return _objResponseModel;
+        }
+
         #endregion
     }
 }

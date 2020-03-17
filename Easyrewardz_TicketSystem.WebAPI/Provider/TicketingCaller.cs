@@ -225,6 +225,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return isUpdated;
         }
 
+        /// <summary>
+        /// Update Ticke tDetails
+        /// </summary>
+        /// <param name="_ticket"></param>
+        /// <param name="ticketingDetails"></param>
+        /// <param name="TenantId"></param>
+        /// <param name="FolderPath"></param>
+        /// <param name="finalAttchment"></param>
+        /// <returns></returns>
+        public int UpdateDraftTicket(ITicketing _ticket, TicketingDetails ticketingDetails, int TenantId, string FolderPath, string finalAttchment)
+        {
+            _ticketList = _ticket;
+            return _ticketList.UpdateDraftTicket(ticketingDetails, TenantId, FolderPath, finalAttchment);
+        }
+
 
         #endregion
     }
