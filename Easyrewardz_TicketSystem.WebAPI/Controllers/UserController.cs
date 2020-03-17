@@ -618,7 +618,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                         file[0].CopyTo(stream);
                     }
                     UpdateUserProfiledetailsModel.ProfilePicture = fileName_Id;
-                    profileDetailsmodel.ProfilePath = fullPath;
+                    string url = configuration.GetValue<string>("APIURL") + ProfileImg_Resources + "/" + ProfileImg_Image + "/" + fileName_Id;
+                    profileDetailsmodel.ProfilePath = url;
                 }
             }
             catch (Exception ex) { }
