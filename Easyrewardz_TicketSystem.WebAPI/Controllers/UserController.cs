@@ -597,7 +597,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel UpdateUserProfileDetails(IFormFile File)
         {
             UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel = new UpdateUserProfiledetailsModel();
-
+            ProfileDetailsmodel profileDetailsmodel = new ProfileDetailsmodel();
             var Keys = Request.Form;
             UpdateUserProfiledetailsModel = JsonConvert.DeserializeObject<UpdateUserProfiledetailsModel>(Keys["UpdateUserProfiledetailsModel"]);
             var file = Request.Form.Files;
@@ -619,7 +619,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                         file[0].CopyTo(stream);
                     }
                     UpdateUserProfiledetailsModel.ProfilePicture = fileName_Id;
-
+                    profileDetailsmodel.ProfilePath = fullPath;
                 }
             }
             catch (Exception ex) { }
@@ -634,7 +634,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 UserCaller userCaller = new UserCaller();
                 int Result = userCaller.UpdateUserProfileDetail(new UserServices(_connectioSting), UpdateUserProfiledetailsModel);
-
+                
+                profileDetailsmodel.Result = Result;
+             
                 StatusCode =
                Result == 0 ?
                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -643,7 +645,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = Result;
+                _objResponseModel.ResponseData = profileDetailsmodel;
 
 
             }
