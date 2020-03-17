@@ -608,7 +608,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 if (file.Count > 0)
                 {
-
                     var fileName = ContentDispositionHeaderValue.Parse(file[0].ContentDisposition).FileName.Trim('"');
                     var fileName_Id = fileName.Replace(".", UpdateUserProfiledetailsModel.UserId + ".") + "";
                     var fullPath = Path.Combine(pathToSave, fileName_Id);

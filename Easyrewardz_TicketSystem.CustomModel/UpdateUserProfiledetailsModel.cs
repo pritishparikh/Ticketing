@@ -18,6 +18,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
 
     public class ProfileDetailsmodel
     {
+
         public int Result { get; set; }
         public string ProfilePath { get; set; }
     }
