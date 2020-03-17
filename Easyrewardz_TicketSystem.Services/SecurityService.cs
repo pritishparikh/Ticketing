@@ -244,13 +244,7 @@ namespace Easyrewardz_TicketSystem.Services
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return isUpdated;
         }
         #endregion
