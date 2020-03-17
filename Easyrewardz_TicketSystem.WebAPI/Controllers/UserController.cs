@@ -858,7 +858,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     customChangePassword.EmailID = SecurityService.DecryptStringAES(customChangePassword.EmailID);
                 }
                 customChangePassword.Password = SecurityService.Encrypt(customChangePassword.Password);
-                customChangePassword.NewPassword = SecurityService.Encrypt(customChangePassword.NewPassword);
+               
                 
                 bool Result = _securityCaller.ChangePassword(new SecurityService(_connectioSting), customChangePassword, authenticate.TenantId, authenticate.UserMasterID);
 
