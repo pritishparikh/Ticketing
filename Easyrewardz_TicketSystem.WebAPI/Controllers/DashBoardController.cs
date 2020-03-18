@@ -1,5 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
@@ -10,8 +11,6 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -22,9 +21,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly IDistributedCache _cache;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         private readonly string ProfileImg_Resources;
         private readonly string ProfileImg_Image;
         private readonly string API_Url;
@@ -32,19 +30,26 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region Cunstructor
-        public DashBoardController(IConfiguration _iConfig,IDistributedCache cache)
+        public DashBoardController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _cache = cache;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
-            API_Url= configuration.GetValue<string>("APIURL");
+            _Cache = cache;
+            Db = db;
+            API_Url = configuration.GetValue<string>("APIURL");
             ProfileImg_Resources = configuration.GetValue<string>("ProfileImg_Resources");
             ProfileImg_Image = configuration.GetValue<string>("ProfileImg_Image");
 
         }
         #endregion
 
+        /// <summary>
+        /// Dashboard count data
+        /// </summary>
+        /// <param name="BrandID"></param>
+        /// <param name="UserIds"></param>
+        /// <param name="fromdate"></param>
+        /// <param name="todate"></param>
+        /// <returns></returns>
         #region custom Methods
         [HttpPost]
         [Route("DashBoardCountData")]
@@ -60,9 +65,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 DashBoardCaller dcaller = new DashBoardCaller();
                 var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                db = dcaller.GetDashBoardCountData(new DashBoardService(_connectioSting), BrandID, UserIds, fromdate, todate, authenticate.TenantId);
+                db = dcaller.GetDashBoardCountData(new DashBoardService(_Cache, Db), BrandID, UserIds, fromdate, todate, authenticate.TenantId);
 
                 StatusCode = db == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -84,7 +89,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
-
+        /// <summary>
+        /// Dashboard graph data
+        /// </summary>
+        /// <param name="BrandID"></param>
+        /// <param name="UserIds"></param>
+        /// <param name="fromdate"></param>
+        /// <param name="todate"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("DashBoardGraphData")]
         public ResponseModel DashBoardGraphData(string BrandID, string UserIds, string fromdate, string todate)
@@ -99,9 +111,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 DashBoardCaller dcaller = new DashBoardCaller();
                 var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                db = dcaller.GetDashBoardGraphdata(new DashBoardService(_connectioSting), BrandID, UserIds, fromdate, todate, authenticate.TenantId);
+                db = dcaller.GetDashBoardGraphdata(new DashBoardService(_Cache, Db), BrandID, UserIds, fromdate, todate, authenticate.TenantId);
 
                 StatusCode = db == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -123,6 +135,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Dashboard search ticket
+        /// </summary>
+        /// <param name="searchparams"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("DashBoardSearchTicket")]
         public ResponseModel DashBoardSearchTicket([FromBody]SearchModelDashBoard searchparams)
@@ -139,14 +156,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 searchparams.TenantID = authenticate.TenantId; // add tenantID to request
                 searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
 
 
                 //searchparams.TenantID = 1; // add tenantID to request
                 //searchparams.curentUserId = 9; // add currentUserID to request
-                _searchResult = _dbsearchMaster.GetDashboardTicketsOnSearch(new DashBoardService(_connectioSting), searchparams);
+                _searchResult = _dbsearchMaster.GetDashboardTicketsOnSearch(new DashBoardService(_Cache, Db), searchparams);
 
                 StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -167,6 +184,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Export Dashboard search to CSV
+        /// </summary>
+        /// <param name="searchparams"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ExportDashBoardSearchToCSV")]
         public ResponseModel ExportDashBoardSearchToCSV([FromBody] SearchModelDashBoard searchparams)
@@ -184,10 +206,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 searchparams.TenantID = authenticate.TenantId; // add tenantID to request
                 searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
-                strcsv = _dbsearchMaster.DashBoardSearchDataToCSV(new DashBoardService(_connectioSting), searchparams);
+                strcsv = _dbsearchMaster.DashBoardSearchDataToCSV(new DashBoardService(_Cache, Db), searchparams);
 
                 StatusCode = !string.IsNullOrEmpty(strcsv) ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -211,6 +233,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// LoggedIn Account details
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("LoggedInAccountDetails")]
         public ResponseModel LoggedInAccountDetails()
@@ -224,12 +250,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 var folderName = Path.Combine(ProfileImg_Resources, ProfileImg_Image);
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
-                _loggedinAccInfo = _dbsearchMaster.GetLogginAccountInfo(new DashBoardService(_connectioSting),
+                _loggedinAccInfo = _dbsearchMaster.GetLogginAccountInfo(new DashBoardService(_Cache, Db),
                     authenticate.TenantId, authenticate.UserMasterID, pathToSave);
 
                
@@ -254,13 +280,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Saved Searcht
+        /// Saved Search
         /// </summary>
         /// <returns></returns>
 
         [HttpPost]
         [Route("DashBoardSaveSearch")]
-
         public ResponseModel DashBoardSaveSearch(string SearchSaveName, string parameter)
         {
             ResponseModel _objResponseModel = new ResponseModel();
@@ -273,9 +298,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                int result = dcaller.AddDashBoardSearch(new DashBoardService(_connectioSting), authenticate.UserMasterID, SearchSaveName, parameter, authenticate.TenantId);
+                int result = dcaller.AddDashBoardSearch(new DashBoardService(_Cache, Db), authenticate.UserMasterID, SearchSaveName, parameter, authenticate.TenantId);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -316,10 +341,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
 
-                int result = dcaller.DeleteDashBoardSavedSearch(new DashBoardService(_connectioSting), SearchParamID, authenticate.UserMasterID);
+                int result = dcaller.DeleteDashBoardSavedSearch(new DashBoardService(_Cache, Db), SearchParamID, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -360,9 +385,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                objSavedSearch = dcaller.ListSavedDashBoardSearch(new DashBoardService(_connectioSting), authenticate.UserMasterID);
+                objSavedSearch = dcaller.ListSavedDashBoardSearch(new DashBoardService(_Cache, Db), authenticate.UserMasterID);
                 StatusCode =
                 objSavedSearch.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -384,9 +409,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Get Dashboard tickets saved search
+        /// </summary>
+        /// <param name="SearchParamID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetDashBoardTicketsOnSavedSearch")]
-
         public ResponseModel GetDashBoardTicketsOnSavedSearch(int SearchParamID)
         {
             DashBoardSavedSearch _searchResult = null;
@@ -401,9 +430,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _searchResult = dcaller.GetDashBoardTicketsOnSavedSearch(new DashBoardService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, SearchParamID);
+                _searchResult = dcaller.GetDashBoardTicketsOnSavedSearch(new DashBoardService(_Cache, Db), authenticate.TenantId, authenticate.UserMasterID, SearchParamID);
 
                 StatusCode = _searchResult.DashboardTicketList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

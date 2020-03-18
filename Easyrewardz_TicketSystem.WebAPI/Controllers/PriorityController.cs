@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -21,16 +23,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectionString;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         #endregion
 
         #region Cunstructor
-        public PriorityController(IConfiguration _iConfig)
+        public PriorityController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectionString = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
         }
         #endregion
 
@@ -53,11 +55,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 MasterCaller _newMasterSubCat = new MasterCaller();
 
-                objPriority = _newMasterSubCat.GetPriorityList(new PriorityService(_connectionString), authenticate.TenantId, PriorityFor);
+                objPriority = _newMasterSubCat.GetPriorityList(new PriorityService(_Cache, Db), authenticate.TenantId, PriorityFor);
 
                 StatusCode =
                 objPriority.Count == 0 ?
@@ -103,8 +105,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _MasterCaller.Addpriority(new PriorityService(_connectionString), PriorityName, status, authenticate.TenantId, authenticate.UserMasterID, PriorityFor);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                int result = _MasterCaller.Addpriority(new PriorityService(_Cache, Db), PriorityName, status, authenticate.TenantId, authenticate.UserMasterID, PriorityFor);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -144,8 +146,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _MasterCaller.Updatepriority(new PriorityService(_connectionString), PriorityID, PriorityName, status, authenticate.TenantId, authenticate.UserMasterID, PriorityFor);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                int result = _MasterCaller.Updatepriority(new PriorityService(_Cache, Db), PriorityID, PriorityName, status, authenticate.TenantId, authenticate.UserMasterID, PriorityFor);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -186,8 +188,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _MasterCaller.Deletepriority(new PriorityService(_connectionString), PriorityID, authenticate.TenantId, authenticate.UserMasterID, PriorityFor);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                int result = _MasterCaller.Deletepriority(new PriorityService(_Cache, Db), PriorityID, authenticate.TenantId, authenticate.UserMasterID, PriorityFor);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
@@ -227,11 +229,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 MasterCaller _newMasterSubCat = new MasterCaller();
 
-                objPriority = _newMasterSubCat.PriorityList(new PriorityService(_connectionString), authenticate.TenantId, PriorityFor);
+                objPriority = _newMasterSubCat.PriorityList(new PriorityService(_Cache, Db), authenticate.TenantId, PriorityFor);
 
                 StatusCode =
                 objPriority.Count == 0 ?
@@ -275,11 +277,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 MasterCaller _newMaster = new MasterCaller();
 
-                bool iStatus = _newMaster.UpdatePriorityOrder(new PriorityService(_connectionString), authenticate.TenantId, selectedPriorityID, currentPriorityID, PriorityFor);
+                bool iStatus = _newMaster.UpdatePriorityOrder(new PriorityService(_Cache, Db), authenticate.TenantId, selectedPriorityID, currentPriorityID, PriorityFor);
 
                 StatusCode =
                 iStatus ?

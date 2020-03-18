@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
-using Easyrewardz_TicketSystem.Interface;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Easyrewardz_TicketSystem.WebAPI.Filters;
-using System.Net.Http;
-using System.Net;
-using System.IO;
-using System.Text.RegularExpressions;
 using System.Data;
-using System.Xml;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -29,17 +19,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _radisCacheServerAddress;
-        private readonly string _connectionSting;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         private readonly string rootPath;
         #endregion
 
         #region Cunstructor
-        public HierarchyController(IConfiguration _iConfig)
+        public HierarchyController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectionSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
             rootPath = configuration.GetValue<string>("APIURL");
         }
         #endregion
@@ -62,10 +52,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 customHierarchymodel.TenantID = authenticate.TenantId;
                 customHierarchymodel.CreatedBy = authenticate.UserMasterID;
-                int result = _Hierarchy.CreateHierarchy(new HierarchyService(_connectionSting), customHierarchymodel);
+                int result = _Hierarchy.CreateHierarchy(new HierarchyService(_Cache, Db), customHierarchymodel);
                 if (customHierarchymodel.Deleteflag == 1)
                 {
                     if (result == 0)
@@ -122,8 +112,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                customHierarchymodels = _Hierarchy.ListofHierarchy(new HierarchyService(_connectionSting), authenticate.TenantId, HierarchyFor);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                customHierarchymodels = _Hierarchy.ListofHierarchy(new HierarchyService(_Cache, Db), authenticate.TenantId, HierarchyFor);
                 StatusCode =
                    customHierarchymodels.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -180,7 +170,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 #region FilePath
                 BulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
@@ -233,7 +223,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 DataSetCSV = CommonService.csvToDataSet(BulkUploadFilesPath + "\\hierarchymaster.csv");
 
-                CSVlist = _Hierarchy.HierarchyBulkUpload(new HierarchyService(_connectionSting),
+                CSVlist = _Hierarchy.HierarchyBulkUpload(new HierarchyService(_Cache, Db),
                     authenticate.TenantId, authenticate.UserMasterID, HierarchyFor, DataSetCSV);
 
                 //CSVlist = _Hierarchy.HierarchyBulkUpload(new HierarchyService(_connectionSting),
@@ -247,7 +237,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 if (!string.IsNullOrEmpty(CSVlist[1]))
                     successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv", CSVlist[1]);
 
-                count = fileU.CreateFileUploadLog(new FileUploadService(_connectionSting), authenticate.TenantId, "hierarchymaster.csv", errorfilesaved,
+                count = fileU.CreateFileUploadLog(new FileUploadService(_Cache, Db), authenticate.TenantId, "hierarchymaster.csv", errorfilesaved,
                                    "HierarchyErrorFile.csv", "HierarchySuccessFile.csv", authenticate.UserMasterID, "Hierarchy",
                                    DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv",
                                    DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", HierarchyFor

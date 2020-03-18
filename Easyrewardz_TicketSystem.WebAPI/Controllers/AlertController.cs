@@ -1,10 +1,12 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -23,16 +25,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         #endregion
 
         #region Cunstructor
-        public AlertController(IConfiguration _iConfig)
+        public AlertController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
+
         }
         #endregion
 
@@ -54,13 +57,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newAlert = new SettingsCaller();
 
                 alertModel.TenantId = authenticate.TenantId;
                 alertModel.CreatedBy = authenticate.UserMasterID;
-                insertcount = _newAlert.CreateAlert(new AlertService(_connectioSting), alertModel);
+                insertcount = _newAlert.CreateAlert(new AlertService(_Cache, Db), alertModel);
 
                 StatusCode =
                 insertcount == 0 ?
@@ -105,11 +108,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newAlert = new SettingsCaller();
 
-                updatecount = _newAlert.UpdateAlert(new AlertService(_connectioSting), authenticate.TenantId, AlertID, AlertTypeName, isAlertActive, authenticate.UserMasterID);
+                updatecount = _newAlert.UpdateAlert(new AlertService(_Cache, Db), authenticate.TenantId, AlertID, AlertTypeName, isAlertActive, authenticate.UserMasterID);
 
                 StatusCode =
                 updatecount == 0 ?
@@ -155,11 +158,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newAlert = new SettingsCaller();
 
-                Deletecount = _newAlert.DeleteAlert(new AlertService(_connectioSting), authenticate.TenantId, AlertID);
+                Deletecount = _newAlert.DeleteAlert(new AlertService(_Cache, Db), authenticate.TenantId, AlertID);
 
                 StatusCode =
                 Deletecount == 0 ?
@@ -206,11 +209,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 //Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newAlert = new SettingsCaller();
 
-                _objresponseModel = _newAlert.GetAlertList(new AlertService(_connectioSting), authenticate.TenantId);
+                _objresponseModel = _newAlert.GetAlertList(new AlertService(_Cache, Db), authenticate.TenantId);
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -253,11 +256,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 //Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newAlert = new SettingsCaller();
 
-                _objresponseModel = _newAlert.BindAlerts(new AlertService(_connectioSting), authenticate.TenantId);
+                _objresponseModel = _newAlert.BindAlerts(new AlertService(_Cache, Db), authenticate.TenantId);
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -309,7 +312,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 #region Read from Form
 
@@ -355,7 +358,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 #endregion
 
                 // DataSetCSV = CommonService.csvToDataSet("D:\\TP\\hierarchymaster.csv");
-                int result = _newAlert.AlertBulkUpload(new AlertService(_connectioSting),
+                int result = _newAlert.AlertBulkUpload(new AlertService(_Cache, Db),
                     authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
 
                 StatusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;

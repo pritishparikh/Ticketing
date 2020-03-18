@@ -1,6 +1,8 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -11,11 +13,18 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class PaymentService : IPayment
     {
+
+        #region variable
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         MySqlConnection conn = new MySqlConnection();
 
-        public PaymentService(string _connectionString)
+        public PaymentService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
 
         public int InsertChequeDetails(OfflinePaymentModel offlinePaymentModel)
@@ -24,7 +33,7 @@ namespace Easyrewardz_TicketSystem.Services
             int result = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertChequeDetails", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -44,10 +53,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                conn.Close();
-            }
+            
             return result;
         }
     }

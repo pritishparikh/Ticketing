@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,16 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class DesignationService:IDesignation
     {
-        MySqlConnection conn = new MySqlConnection();
+        #region variable
+        private readonly IDistributedCache _Cache;
         public TicketDBContext Db { get; set; }
-        public DesignationService(string _connectionString)
-        {
-            conn.ConnectionString = _connectionString;
-        }
-        public DesignationService(TicketDBContext db)
+        #endregion
+
+        MySqlConnection conn = new MySqlConnection();
+        public DesignationService(IDistributedCache cache, TicketDBContext db)
         {
             Db = db;
+            _Cache = cache;
         }
    
         /// <summary>
@@ -70,7 +72,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetReporteeDesignation", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -96,14 +98,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return designationMasters;
         }
 
@@ -115,7 +110,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetUserBasedonReportee", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -141,14 +136,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return Users;
         }
     }

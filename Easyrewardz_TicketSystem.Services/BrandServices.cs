@@ -9,22 +9,24 @@ using System.Text;
 using System.Linq;
 using Easyrewardz_TicketSystem.DBContext;
 using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class BrandServices : IBrand
     {
-        MySqlConnection conn = new MySqlConnection();
+        #region variable
+        private readonly IDistributedCache _Cache;
         public TicketDBContext Db { get; set; }
-        public BrandServices(TicketDBContext db)
-        {
-            Db= db;
-        }
-        public BrandServices(string _connectionString)
-        {
-            conn.ConnectionString = _connectionString;
-        }
+        #endregion
 
+        MySqlConnection conn = new MySqlConnection();
+        public BrandServices(IDistributedCache cache, TicketDBContext db)
+        {
+            Db = db;
+            _Cache = cache;
+        }
+       
         public List<Brand> GetBrandList(int TenantID)
         {
 
@@ -71,7 +73,7 @@ namespace Easyrewardz_TicketSystem.Services
             int i = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_UpdateBrand", conn);
                 cmd1.Parameters.AddWithValue("@Brand_ID", brand.BrandID);
@@ -90,14 +92,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return i;
         }
 
@@ -107,7 +102,7 @@ namespace Easyrewardz_TicketSystem.Services
             int k = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_DeleteBrand", conn);
                 cmd1.Parameters.AddWithValue("@Brand_ID", BrandID);
@@ -120,14 +115,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return k;
         }
 
@@ -138,7 +126,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_BrandList", conn);
 
@@ -176,14 +164,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return brands;
         }
 
@@ -194,7 +175,7 @@ namespace Easyrewardz_TicketSystem.Services
             int k = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_InsertBrand", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -211,14 +192,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return k;
 
         }

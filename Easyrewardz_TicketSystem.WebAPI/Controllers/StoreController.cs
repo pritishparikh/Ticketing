@@ -1,19 +1,16 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
-using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -24,17 +21,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectionString;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         private readonly string rootPath;
         #endregion
 
         #region Cunstructor
-        public StoreController(IConfiguration _iConfig)
+        public StoreController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectionString = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
             rootPath =  configuration.GetValue<string>("APIURL");
         }
         #endregion
@@ -60,10 +57,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 StoreCaller _newStore = new StoreCaller();
 
-                objstoreList = _newStore.getStoreDetailbyNameAndPincode(new StoreService(_connectionString), SearchText, authenticate.TenantId);
+                objstoreList = _newStore.getStoreDetailbyNameAndPincode(new StoreService(_Cache, Db), SearchText, authenticate.TenantId);
                 StatusCode =
                 objstoreList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -104,11 +101,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 StoreCaller _newMasterBrand = new StoreCaller();
 
-                storeMasters = _newMasterBrand.getStores(new StoreService(_connectionString), searchText, authenticate.TenantId);
+                storeMasters = _newMasterBrand.getStores(new StoreService(_Cache, Db), searchText, authenticate.TenantId);
 
                 StatusCode =
                 storeMasters.Count == 0 ?
@@ -153,8 +150,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _newStore.AddStore(new StoreService(_connectionString), storeMaster, authenticate.TenantId, authenticate.UserMasterID);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                int result = _newStore.AddStore(new StoreService(_Cache, Db), storeMaster, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -193,8 +190,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _newStore.EditStore(new StoreService(_connectionString), storeMaster, StoreID, authenticate.TenantId, authenticate.UserMasterID);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                int result = _newStore.EditStore(new StoreService(_Cache, Db), storeMaster, StoreID, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -233,8 +230,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _newStore.DeleteStore(new StoreService(_connectionString), StoreID, authenticate.TenantId, authenticate.UserMasterID);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                int result = _newStore.DeleteStore(new StoreService(_Cache, Db), StoreID, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
@@ -273,10 +270,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 StoreCaller _newStore = new StoreCaller();
 
-                objstoreList = _newStore.StoreList(new StoreService(_connectionString), authenticate.TenantId);
+                objstoreList = _newStore.StoreList(new StoreService(_Cache, Db), authenticate.TenantId);
                 StatusCode =
                 objstoreList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -317,10 +314,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 StoreCaller _newStore = new StoreCaller();
 
-                objstoreList = _newStore.SearchStore(new StoreService(_connectionString), StateID, PinCode, Area, IsCountry);
+                objstoreList = _newStore.SearchStore(new StoreService(_Cache, Db), StateID, PinCode, Area, IsCountry);
                 StatusCode =
                 objstoreList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -360,9 +357,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                int result = _newStore.AttachStore(new StoreService(_connectionString), StoreId, TicketId, authenticate.UserMasterID);
+                int result = _newStore.AttachStore(new StoreService(_Cache, Db), StoreId, TicketId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -402,11 +399,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 StoreCaller _newMasterStore = new StoreCaller();
 
-                storeMasters = _newMasterStore.getSelectedStores(new StoreService(_connectionString), TicketID);
+                storeMasters = _newMasterStore.getSelectedStores(new StoreService(_Cache, Db), TicketID);
 
                 StatusCode =
                 storeMasters.Count == 0 ?
@@ -467,7 +464,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 #region FilePath
                 BulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor);
@@ -519,7 +516,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 #endregion
 
                 DataSetCSV = CommonService.csvToDataSet(BulkUploadFilesPath + "\\StoreBulkUpload.csv");
-                CSVlist = _newMasterStore.StoreBulkUpload(new StoreService(_connectionString), authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
+                CSVlist = _newMasterStore.StoreBulkUpload(new StoreService(_Cache, Db), authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
 
                 #region Create Error and Succes files and  Insert in FileUploadLog
 
@@ -529,7 +526,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 if (!string.IsNullOrEmpty(CSVlist[1]))
                     successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Store\\Error" + "\\" + "StoreErrorFile.csv", CSVlist[1]);
 
-                count = _newFile.CreateFileUploadLog(new FileUploadService(_connectionString), authenticate.TenantId, "StoreBulkUpload.csv", errorfilesaved,
+                count = _newFile.CreateFileUploadLog(new FileUploadService(_Cache, Db), authenticate.TenantId, "StoreBulkUpload.csv", errorfilesaved,
                                    "StoreErrorFile.csv", "StoreSuccessFile.csv", authenticate.UserMasterID, "Store",
                                    DownloadFilePath + "\\Store\\Error" + "\\" + "StoreErrorFile.csv",
                                    DownloadFilePath + "\\Store\\ Success" + "\\" + "StoreSuccessFile.csv", 1

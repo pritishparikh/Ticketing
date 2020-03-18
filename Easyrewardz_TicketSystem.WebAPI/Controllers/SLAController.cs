@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -25,8 +24,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         #region Variable Declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         #endregion
 
         #region Constructor
@@ -35,11 +34,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// Brand Controller
         /// </summary>
         /// <param name="_iConfig"></param>
-        public SLAController(IConfiguration _iConfig)
+        public SLAController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
         }
 
         #endregion
@@ -63,11 +62,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SLACaller _newSLA = new SLACaller();
 
-                objSLAStatusList = _newSLA.GetSLAStatusList(new SLAServices(_connectioSting), authenticate.TenantId);
+                objSLAStatusList = _newSLA.GetSLAStatusList(new SLAServices(_Cache, Db), authenticate.TenantId);
 
                 StatusCode =
                 objSLAStatusList.Count == 0 ?
@@ -114,11 +113,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newCRM = new SettingsCaller();
          
-                _objresponseModel = _newCRM.BindIssueTypeList(new SLAServices(_connectioSting), authenticate.TenantId, SearchText);
+                _objresponseModel = _newCRM.BindIssueTypeList(new SLAServices(_Cache, Db), authenticate.TenantId, SearchText);
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -160,13 +159,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newSLA = new SettingsCaller();
 
                 insertSLA.TenantID = authenticate.TenantId;
                 insertSLA.CreatedBy = authenticate.UserMasterID;
-                insertcount = _newSLA.InsertSLA(new SLAServices(_connectioSting), insertSLA);
+                insertcount = _newSLA.InsertSLA(new SLAServices(_Cache, Db), insertSLA);
 
                 StatusCode =
                 insertcount == 0 ?
@@ -212,11 +211,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newSLA = new SettingsCaller();
 
-                updatecount = _newSLA.UpdateSLA(new SLAServices(_connectioSting), authenticate.TenantId,SLAID ,IssueTypeID, isActive, authenticate.UserMasterID);
+                updatecount = _newSLA.UpdateSLA(new SLAServices(_Cache, Db), authenticate.TenantId,SLAID ,IssueTypeID, isActive, authenticate.UserMasterID);
 
                 StatusCode =
                 updatecount == 0 ?
@@ -262,11 +261,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newSLA = new SettingsCaller();
 
-                Deletecount = _newSLA.DeleteSLA(new SLAServices(_connectioSting), authenticate.TenantId, SLAID);
+                Deletecount = _newSLA.DeleteSLA(new SLAServices(_Cache, Db), authenticate.TenantId, SLAID);
 
                 StatusCode =
                 Deletecount == 0 ?
@@ -301,7 +300,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetSLA")]
-
         public ResponseModel GetSLA(int SLAFor=1)
         {
 
@@ -314,11 +312,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newCRM = new SettingsCaller();
                 //_objresponseModel = _newCRM.SLAList(new SLAServices(_connectioSting), authenticate.TenantId,  pageNo,  PageSize);
-                _objresponseModel = _newCRM.SLAList(new SLAServices(_connectioSting), authenticate.TenantId, SLAFor);
+                _objresponseModel = _newCRM.SLAList(new SLAServices(_Cache, Db), authenticate.TenantId, SLAFor);
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -371,7 +369,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 #region Read from Form
 
@@ -417,7 +415,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 #endregion
 
                 // DataSetCSV = CommonService.csvToDataSet("D:\\TP\\hierarchymaster.csv");
-                int result = _newSLA.SLABulkUpload(new SLAServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
+                int result = _newSLA.SLABulkUpload(new SLAServices(_Cache, Db), authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
 
                 StatusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -440,6 +438,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         }
+
         /// <summary>
         /// Search Issue Type
         /// </summary>
@@ -457,11 +456,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SLACaller _newSLA = new SLACaller();
 
-                objIssueTypeList = _newSLA.SearchIssueType(new SLAServices(_connectioSting), authenticate.TenantId, SearchText);
+                objIssueTypeList = _newSLA.SearchIssueType(new SLAServices(_Cache, Db), authenticate.TenantId, SearchText);
 
                 StatusCode =
                 objIssueTypeList.Count == 0 ?

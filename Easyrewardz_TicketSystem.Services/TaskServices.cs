@@ -6,15 +6,24 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+
 namespace Easyrewardz_TicketSystem.Services
 {
     public class TaskServices : ITask
     {
+        #region variable
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
-        public TaskServices(string _connectionString)
+        public TaskServices(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
         #endregion
         /// <summary>
@@ -29,7 +38,7 @@ namespace Easyrewardz_TicketSystem.Services
             int taskId = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createTask", conn);
                 cmd1.Connection = conn;
                 cmd1.Parameters.AddWithValue("@Ticket_ID", taskMaster.TicketID);
@@ -49,13 +58,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
 
             return taskId;
         }
@@ -71,7 +74,7 @@ namespace Easyrewardz_TicketSystem.Services
             //List<CustomTaskMasterDetails> listtaskMaster = new List<CustomTaskMasterDetails>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetTaskById", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@task_ID", taskID);
@@ -106,13 +109,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return taskMaster;
         }
         /// <summary>
@@ -127,7 +124,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<CustomTaskMasterDetails> lsttask = new List<CustomTaskMasterDetails>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetTaskList", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Ticket_ID", TicketId);
@@ -157,13 +154,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return lsttask;
         }
         /// <summary>
@@ -177,7 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
             int i = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_DeleteTask", conn);
                 cmd1.Parameters.AddWithValue("@task_ID", taskId);
@@ -188,13 +179,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return i;
         }
         /// <summary>
@@ -208,7 +193,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<CustomUserAssigned> Assignedto = new List<CustomUserAssigned>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetAssignedTo", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Function_ID", Function_ID);
@@ -231,13 +216,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return Assignedto;
         }
 
@@ -252,7 +231,7 @@ namespace Easyrewardz_TicketSystem.Services
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("SP_AddComment", conn);
                 cmd1.Connection = conn;
                 cmd1.Parameters.AddWithValue("@CommentForId", CommentForId);
@@ -267,14 +246,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return success;
 
         }
@@ -285,7 +257,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<CustomClaimMaster> lsttask = new List<CustomClaimMaster>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetClaimList", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Ticket_ID", TicketId);
@@ -315,13 +287,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return lsttask;
         }
 
@@ -336,7 +302,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<UserComment> lstClaimComment = new List<UserComment>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetTaskCommentByTaskId", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Task_ID", TaskId);
@@ -360,13 +326,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return lstClaimComment;
         }
 
@@ -379,7 +339,7 @@ namespace Easyrewardz_TicketSystem.Services
             int i = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("SP_AddCommentOnTask", conn);
                 cmd1.Connection = conn;
                 cmd1.Parameters.AddWithValue("@Task_title", taskMaster.TaskTitle);
@@ -397,13 +357,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
 
             return i;
 

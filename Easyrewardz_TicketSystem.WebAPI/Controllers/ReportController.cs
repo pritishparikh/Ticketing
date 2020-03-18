@@ -12,6 +12,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -22,17 +24,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         private readonly string rootPath;
         #endregion
 
         #region Cunstructor
-        public ReportController(IConfiguration _iConfig)
+        public ReportController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
             rootPath = configuration.GetValue<string>("APIURL");
         }
         #endregion
@@ -59,11 +61,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newReport= new SettingsCaller();
 
-                insertcount = _newReport.InsertReport(new ReportService(_connectioSting), authenticate.TenantId,
+                insertcount = _newReport.InsertReport(new ReportService(_Cache, Db), authenticate.TenantId,
                      ReportName,  isReportActive,  TicketReportParams, IsDaily,  IsDailyForMonth,  IsWeekly,  IsWeeklyForMonth,
                      IsDailyForYear,  IsWeeklyForYear, authenticate.UserMasterID);
 
@@ -95,7 +97,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         /// <summary>
-        /// Delete Report
+        /// Delete alert
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -111,11 +113,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newReport = new SettingsCaller();
 
-                Deletecount = _newReport.DeleteReport(new ReportService(_connectioSting), authenticate.TenantId, ReportID);
+                Deletecount = _newReport.DeleteReport(new ReportService(_Cache, Db), authenticate.TenantId, ReportID);
 
                 StatusCode =
                 Deletecount == 0 ?
@@ -142,8 +144,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+
         /// <summary>
-        /// Save Report for download.Update Isdownload flag in ReportMaster
+        /// Save report for download.Update Isdownload flag in ReportMaster
         /// </summary>
         /// <param name="ScheduleID"></param>
         /// <returns></returns>
@@ -160,11 +163,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newReport = new SettingsCaller();
 
-                saveCount = _newReport.SaveReportForDownload(new ReportService(_connectioSting), authenticate.TenantId,authenticate.UserMasterID, ScheduleID);
+                saveCount = _newReport.SaveReportForDownload(new ReportService(_Cache, Db), authenticate.TenantId,authenticate.UserMasterID, ScheduleID);
 
                 StatusCode =
                 saveCount == 0 ?
@@ -191,8 +194,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+
         /// <summary>
-        /// Delete Report
+        /// Delete report
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -209,11 +213,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newReport = new SettingsCaller();
 
-                _objresponseModel = _newReport.GetReportList(new ReportService(_connectioSting), authenticate.TenantId);
+                _objresponseModel = _newReport.GetReportList(new ReportService(_Cache, Db), authenticate.TenantId);
 
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -238,6 +242,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// Search report
+        /// </summary>
+        /// <param name="searchparams"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ReportSearch")]
         public ResponseModel ReportSearch([FromBody]ReportSearchModel searchparams)
@@ -255,14 +265,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 searchparams.TenantID = authenticate.TenantId; // add tenantID to request
                 searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
 
 
                 //searchparams.TenantID = 1; // add tenantID to request
                 //searchparams.curentUserId = 9; // add currentUserID to request
-                resultCount = _dbsearchMaster.GetReportSearch(new ReportService(_connectioSting), searchparams);
+                resultCount = _dbsearchMaster.GetReportSearch(new ReportService(_Cache, Db), searchparams);
 
                 StatusCode = resultCount > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -284,7 +294,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// DownloadDefaultReportAPI
+        /// Download Default ReportAPI
         /// </summary>
         /// <param name="objRequest"></param>
         /// <returns></returns>
@@ -304,9 +314,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                strcsv = _dbsearchMaster.DownloadDefaultReport(new ReportService(_connectioSting), objRequest, authenticate.UserMasterID, authenticate.TenantId);
+                strcsv = _dbsearchMaster.DownloadDefaultReport(new ReportService(_Cache, Db), objRequest, authenticate.UserMasterID, authenticate.TenantId);
 
                 string dateformat = DateTime.Now.ToString("yyyyMMddHHmmssffff");
                 string csvname = "DefaultReport" + "_" + dateformat + ".csv";
@@ -361,6 +371,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Download report search
+        /// </summary>
+        /// <param name="SchedulerID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("DownloadReportSearch")]
         public ResponseModel DownloadReportSearch(int SchedulerID)
@@ -377,9 +392,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                strcsv = _dbsearchMaster.DownloadReportSearch(new ReportService(_connectioSting), SchedulerID, authenticate.UserMasterID, authenticate.TenantId);
+                strcsv = _dbsearchMaster.DownloadReportSearch(new ReportService(_Cache, Db), SchedulerID, authenticate.UserMasterID, authenticate.TenantId);
 
                 string dateformat = DateTime.Now.ToString("yyyyMMddHHmmssffff");
                 string csvname = "Repost" + SchedulerID + "_" + dateformat + ".csv";
@@ -433,6 +448,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Send report mail
+        /// </summary>
+        /// <param name="reportmailmodel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("SendReportMail")]
         public ResponseModel SendReportMail([FromBody] ReportMailModel reportmailmodel)
@@ -446,11 +466,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _dbsearchMaster = new SettingsCaller();
 
-                bool IsSent = _dbsearchMaster.SendReportMail(new ReportService(_connectioSting), reportmailmodel.EmailID, reportmailmodel.FilePath, authenticate.TenantId, authenticate.UserMasterID);
+                bool IsSent = _dbsearchMaster.SendReportMail(new ReportService(_Cache, Db), reportmailmodel.EmailID, reportmailmodel.FilePath, authenticate.TenantId, authenticate.UserMasterID);
 
                 if (IsSent)
                 {

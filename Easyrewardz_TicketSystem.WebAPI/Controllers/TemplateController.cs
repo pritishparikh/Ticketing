@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -19,22 +18,27 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class TemplateController : ControllerBase
     {
-            #region variable declaration
-            private IConfiguration configuration;
-            private readonly string _connectioSting;
-            private readonly string _radisCacheServerAddress;
-            #endregion
+        #region variable declaration
+        private IConfiguration configuration;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
+        #endregion
 
-            #region Cunstructor
-            public TemplateController(IConfiguration _iConfig)
-            {
-                configuration = _iConfig;
-                _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-                _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
-            }
-            #endregion
+        #region Cunstructor
+        public TemplateController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
+        {
+            configuration = _iConfig;
+            Db = db;
+            _Cache = cache;
+        }
+        #endregion
 
         #region Custom Methods
+        /// <summary>
+        /// Get list of template list
+        /// </summary>
+        /// <param name="IssueTypeID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("getListOfTemplateForNote")]
         public ResponseModel getListOfTemplateForNote(int IssueTypeID)
@@ -49,10 +53,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
 
-                _objTemplate = _templatecaller.GetTemplateForNote(new TemplateService(_connectioSting), IssueTypeID, authenticate.TenantId);
+                _objTemplate = _templatecaller.GetTemplateForNote(new TemplateService(_Cache, Db), IssueTypeID, authenticate.TenantId);
                 StatusCode =
                    _objTemplate.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -78,7 +82,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
-
+        /// <summary>
+        /// Get template content
+        /// </summary>
+        /// <param name="TemplateId"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("getTemplateContent")]
         public ResponseModel getTemplateContent(int TemplateId)
@@ -92,11 +100,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _objTemplate = _templatecaller.GetTemplateContent(new TemplateService(_connectioSting), TemplateId, authenticate.TenantId);
+                _objTemplate = _templatecaller.GetTemplateContent(new TemplateService(_Cache, Db), TemplateId, authenticate.TenantId);
                 StatusCode =
-                   _objTemplate == null  ?
+                   _objTemplate == null ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -123,7 +131,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         #region Contoller for Setting
-
         /// <summary>
         /// Create Template
         /// </summary>
@@ -141,13 +148,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newTemplate = new SettingsCaller();
 
-              
-                insertcount = _newTemplate.InsertTemplate(new TemplateService(_connectioSting), authenticate.TenantId,TemplateName, TemplateSubject,
-                    TemplateBody, issueTypes, isTemplateActive,authenticate.UserMasterID);
+
+                insertcount = _newTemplate.InsertTemplate(new TemplateService(_Cache, Db), authenticate.TenantId, TemplateName, TemplateSubject,
+                    TemplateBody, issueTypes, isTemplateActive, authenticate.UserMasterID);
 
                 StatusCode =
                 insertcount == 0 ?
@@ -193,12 +200,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newTemplate = new SettingsCaller();
 
 
-                updatecount = _newTemplate.UpdateTemplate(new TemplateService(_connectioSting), authenticate.TenantId, TemplateID,TemplateName, issueType, isTemplateActive,
+                updatecount = _newTemplate.UpdateTemplate(new TemplateService(_Cache, Db), authenticate.TenantId, TemplateID, TemplateName, issueType, isTemplateActive,
                     authenticate.UserMasterID);
 
                 StatusCode =
@@ -245,10 +252,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newTemplate = new SettingsCaller();
-                Deletecount = _newTemplate.DeleteTemplate(new TemplateService(_connectioSting), authenticate.TenantId, TemplateID );
+                Deletecount = _newTemplate.DeleteTemplate(new TemplateService(_Cache, Db), authenticate.TenantId, TemplateID);
 
                 StatusCode =
                 Deletecount == 0 ?
@@ -283,7 +290,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetTemplate")]
-
         public ResponseModel GetTemplate()
         {
 
@@ -296,12 +302,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newTemplate = new SettingsCaller();
-                _objresponseModel = _newTemplate.GetTemplates(new TemplateService(_connectioSting), authenticate.TenantId);
+                _objresponseModel = _newTemplate.GetTemplates(new TemplateService(_Cache, Db), authenticate.TenantId);
 
-                StatusCode = _objresponseModel.Count > 0 ? (int)EnumMaster.StatusCode.Success  : (int)EnumMaster.StatusCode.RecordNotFound; ;
+                StatusCode = _objresponseModel.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound; ;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
@@ -325,7 +331,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
-
+        /// <summary>
+        /// Get mail parameter
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetMailParameter")]
         public ResponseModel GetMailParameter()
@@ -340,10 +349,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newTemplate = new SettingsCaller();
-                _objMailParameterModel = _newTemplate.GetMailParameter(new TemplateService(_connectioSting), authenticate.TenantId);
+                _objMailParameterModel = _newTemplate.GetMailParameter(new TemplateService(_Cache, Db), authenticate.TenantId);
 
                 StatusCode = _objMailParameterModel.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound; ;
 

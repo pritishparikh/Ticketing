@@ -1,9 +1,11 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -18,24 +20,28 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         #endregion
 
         #region Cunstructor
-        public SearchController(IConfiguration _iConfig)
+        public SearchController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
         }
         #endregion
 
         #region custom Methods
+        /// <summary>
+        /// Search ticket
+        /// </summary>
+        /// <param name="searchparams"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("SearchTicket")]
       //  [AllowAnonymous]
-
         public ResponseModel SearchTicket([FromBody]SearchRequest searchparams )
         {
             List<SearchResponse> _searchResult = null;
@@ -50,10 +56,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 searchparams.tenantID = authenticate.TenantId; // add tenantID to request
                 searchparams.assignedTo = authenticate.UserMasterID; // add assignedID to request
-                _searchResult = _newsearchMaster.GetSearchResults(new SearchService(_connectioSting), searchparams);
+                _searchResult = _newsearchMaster.GetSearchResults(new SearchService(_Cache, Db), searchparams);
 
                  StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -74,11 +80,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
-
+        /// <summary>
+        /// Ticket status count
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("TicketStatusCount")]
        // [AllowAnonymous]
-
         public ResponseModel TicketStatusCount()
         {
             List<TicketStatusModel> _searchResult = null;
@@ -91,11 +99,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 SearchRequest searchparams = new SearchRequest();
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 searchparams.tenantID = authenticate.TenantId; // add tenantID to request
                 searchparams.assignedTo = authenticate.UserMasterID;// add assignedID to request
 
-                _searchResult = _newsearchMaster.GetStatusCount(new SearchService(_connectioSting), searchparams);
+                _searchResult = _newsearchMaster.GetStatusCount(new SearchService(_Cache, Db), searchparams);
 
                 StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -138,9 +146,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _searchResult = _newsearchMaster.GetTicketsOnLoad(new SearchService(_connectioSting), HeaderStatusID,authenticate.TenantId,authenticate.UserMasterID);
+                _searchResult = _newsearchMaster.GetTicketsOnLoad(new SearchService(_Cache, Db), HeaderStatusID,authenticate.TenantId,authenticate.UserMasterID);
 
                 StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -184,7 +192,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 //authenticate.UserMasterID = 6;
                 //authenticate.TenantId = 1;
 
@@ -195,7 +203,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 searchModel.TenantID = authenticate.TenantId;
                 
 
-                _searchResult = _newsearchMaster.GetTicketsOnSearch(new SearchService(_connectioSting), searchModel);
+                _searchResult = _newsearchMaster.GetTicketsOnSearch(new SearchService(_Cache, Db), searchModel);
 
                 StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -224,7 +232,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetTicketsOnSavedSearch")]
-        
         public ResponseModel GetTicketsOnSavedSearch(int SearchParamID)
         {
             TicketSaveSearch _searchResult = null;
@@ -239,9 +246,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _searchResult = _newsearchMaster.GetTicketsOnSavedSearch(new SearchService(_connectioSting),authenticate.TenantId,authenticate.UserMasterID, SearchParamID);
+                _searchResult = _newsearchMaster.GetTicketsOnSavedSearch(new SearchService(_Cache, Db),authenticate.TenantId,authenticate.UserMasterID, SearchParamID);
 
                 StatusCode = _searchResult.ticketList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -21,16 +23,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         #endregion
 
         #region Cunstructor
-        public OrderController(IConfiguration _iConfig)
+        public OrderController(IConfiguration _iConfig,TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
         }
         #endregion
 
@@ -54,9 +56,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _objorderMaster = _ordercaller.getOrderDetailsByNumber(new OrderService(_connectioSting), OrderNumber, authenticate.TenantId);
+                _objorderMaster = _ordercaller.getOrderDetailsByNumber(new OrderService(_Cache, Db), OrderNumber, authenticate.TenantId);
                 StatusCode =
                    _objorderMaster == null ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -96,9 +98,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 orderMaster.CreatedBy = authenticate.UserMasterID;
-                string OrderNumber = _ordercaller.addOrder(new OrderService(_connectioSting), orderMaster, authenticate.TenantId);
+                string OrderNumber = _ordercaller.addOrder(new OrderService(_Cache, Db), orderMaster, authenticate.TenantId);
                 //OrderMaster order = _ordercaller.getOrderDetailsByNumber(new OrderService(_connectioSting), orderMaster);
                 StatusCode =
                string.IsNullOrEmpty (OrderNumber) ?
@@ -140,9 +142,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _objorderMaster = _ordercaller.GetOrderItemList(new OrderService(_connectioSting), OrderNumber, CustomerID, authenticate.TenantId);
+                _objorderMaster = _ordercaller.GetOrderItemList(new OrderService(_Cache, Db), OrderNumber, CustomerID, authenticate.TenantId);
                 StatusCode =
                    _objorderMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -186,9 +188,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _objorderMaster = _ordercaller.GetOrderDetailsByCustomerID(new OrderService(_connectioSting), CustomerID, authenticate.TenantId);
+                _objorderMaster = _ordercaller.GetOrderDetailsByCustomerID(new OrderService(_Cache, Db), CustomerID, authenticate.TenantId);
                 StatusCode =
                    _objorderMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -233,9 +235,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _objorderMaster = _ordercaller.GetOrderListByClaimID(new OrderService(_connectioSting), CustomerID, ClaimID, authenticate.TenantId);
+                _objorderMaster = _ordercaller.GetOrderListByClaimID(new OrderService(_Cache, Db), CustomerID, ClaimID, authenticate.TenantId);
                 StatusCode =
                    _objorderMaster == null ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -279,9 +281,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _objorderMaster = _ordercaller.SearchProduct(new OrderService(_connectioSting), CustomerID, Searchtext);
+                _objorderMaster = _ordercaller.SearchProduct(new OrderService(_Cache, Db), CustomerID, Searchtext);
                 StatusCode =
                    _objorderMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -325,9 +327,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                int result = _ordercaller.AttachOrder(new OrderService(_connectioSting), OrderID, TicketId, authenticate.UserMasterID);
+                int result = _ordercaller.AttachOrder(new OrderService(_Cache, Db), OrderID, TicketId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -368,9 +370,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _objorderMaster = _ordercaller.GetOrderDetailByticketID(new OrderService(_connectioSting), TicketID, authenticate.TenantId);
+                _objorderMaster = _ordercaller.GetOrderDetailByticketID(new OrderService(_Cache, Db), TicketID, authenticate.TenantId);
                 StatusCode =
                    _objorderMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

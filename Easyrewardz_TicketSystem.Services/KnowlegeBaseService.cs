@@ -5,17 +5,24 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class KnowlegeBaseService : IKnowledge
     {
+        #region variable
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
-        public KnowlegeBaseService(string _connectionString)
+        public KnowlegeBaseService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
         #endregion
         /// Search By Category ,SubCategory and Type
@@ -30,7 +37,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<KnowlegeBaseMaster> listknowledge = new List<KnowlegeBaseMaster>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_SearchByTypeCategory", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@type_ID", type_ID);
@@ -57,13 +64,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return listknowledge;
         }
 
@@ -79,7 +80,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_SearchKB", conn);
 
@@ -150,14 +151,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return customKBLists;
         }
 
@@ -168,7 +162,7 @@ namespace Easyrewardz_TicketSystem.Services
             int k = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_InsertKnowlegeBase", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -190,14 +184,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return k;
 
         }
@@ -210,7 +197,7 @@ namespace Easyrewardz_TicketSystem.Services
             int i = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_UpdateKnowlegeBase", conn);
@@ -233,14 +220,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return i;
         }
 
@@ -251,7 +231,7 @@ namespace Easyrewardz_TicketSystem.Services
             int k = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_DeleteKnowlegeBase", conn);
                 cmd1.Parameters.AddWithValue("@KB_ID", KBID);
@@ -287,7 +267,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_KBList", conn);
 
@@ -374,7 +354,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
 
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_ApproveRejectKB", conn);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", knowlegeBaseMaster.TenantID);

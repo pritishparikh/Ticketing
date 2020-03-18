@@ -24,7 +24,7 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region Variable Declartion 
        // private readonly string radisCacheServerAddress;
-        private readonly IDistributedCache _cache;
+        private readonly IDistributedCache _Cache;
         public TicketDBContext Db { get; set; }
         #endregion 
 
@@ -33,7 +33,7 @@ namespace Easyrewardz_TicketSystem.Services
         public SecurityService(IDistributedCache cache,TicketDBContext db)
         {
             Db = db;
-            _cache = cache;
+            _Cache = cache;
         }
         #endregion
 
@@ -327,8 +327,8 @@ namespace Easyrewardz_TicketSystem.Services
                     //Serialise Token & save token to Cache 
                     string jsonString = JsonConvert.SerializeObject(authenticate);
 
-                    RedisCacheService radisCacheService = new RedisCacheService(_cache);
-                    radisCacheService.Set(_cache,authenticate.Token, jsonString);
+                    RedisCacheService radisCacheService = new RedisCacheService(_Cache);
+                    radisCacheService.Set(_Cache,authenticate.Token, jsonString);
 
                     accountModal.Message = "Valid user";
 

@@ -1,5 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -11,11 +13,17 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class TemplateService : ITemplate
     {
+        #region variable
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
-        public TemplateService(string _connectionString)
+        public TemplateService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
         #endregion
         public List<Template> getTemplateForNote(int IssueTypeId, int TenantID)
@@ -27,7 +35,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getTemplateList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -54,13 +62,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return objtemplate;
         }
 
@@ -73,7 +75,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getTemplateContent", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -99,13 +101,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return objtemplate;
         }
 
@@ -121,7 +117,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
 
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertTemplate", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -143,14 +139,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return insertcount;
         }
 
@@ -163,7 +152,7 @@ namespace Easyrewardz_TicketSystem.Services
             int deletecount = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteTemplate", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantId", tenantID);
@@ -179,14 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return deletecount;
         }
 
@@ -200,7 +182,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateTemplate", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", tenantId);
@@ -218,14 +200,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return updatecount;
         }
 
@@ -239,7 +214,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetTemplates", conn);
@@ -285,7 +260,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
 
             return objTempLst;
@@ -301,7 +276,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetMailParameter", conn);
@@ -336,7 +311,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
 
             return objTempLst;

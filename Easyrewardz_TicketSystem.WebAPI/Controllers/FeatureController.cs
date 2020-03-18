@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -21,16 +20,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         #endregion
 
         #region Cunstructor
-        public FeatureController(IConfiguration _iConfig)
+        public FeatureController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
         }
         #endregion
 
@@ -55,9 +54,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 FeaturePlanCaller fcaller = new FeaturePlanCaller();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                feature = fcaller.GetFeaturePlan(new FeaturePlanService(_connectioSting),authenticate.TenantId);
+                feature = fcaller.GetFeaturePlan(new FeaturePlanService(_Cache, Db),authenticate.TenantId);
 
                 StatusCode = feature == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -81,6 +80,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region Add Feature 
+        /// <summary>
+        /// Add new feature
+        /// </summary>
+        /// <param name="objFeatures"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddFeature")]
         [AllowAnonymous]
@@ -100,7 +104,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                // authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 objFeatures.UserID = 6;
-                Result = fcaller.AddFeature(new FeaturePlanService(_connectioSting),objFeatures);
+                Result = fcaller.AddFeature(new FeaturePlanService(_Cache, Db),objFeatures);
 
                 StatusCode = Result !=""  ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -124,6 +128,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region Delete Feature 
+        /// <summary>
+        /// Delete Future
+        /// </summary>
+        /// <param name="FeatureID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("DeleteFeature")]
         [AllowAnonymous]
@@ -144,7 +153,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 int UserID = 6;
                
-                Result = fcaller.DeleteFeature(new FeaturePlanService(_connectioSting), UserID, FeatureID);
+                Result = fcaller.DeleteFeature(new FeaturePlanService(_Cache, Db), UserID, FeatureID);
 
                 StatusCode = Result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -168,6 +177,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region Add Plan
+        /// <summary>
+        /// Add new plan
+        /// </summary>
+        /// <param name="planModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddPlan")]
         public ResponseModel AddPlan([FromBody] PlanModel planModel)
@@ -182,11 +196,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 planModel.CreatedBy = authenticate.UserMasterID;
 
-                int result = _newfeaturePlanCaller.AddPlan(new FeaturePlanService(_connectioSting), planModel);
+                int result = _newfeaturePlanCaller.AddPlan(new FeaturePlanService(_Cache, Db), planModel);
 
                 StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -215,6 +229,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region GetPlanOnEdit
+        /// <summary>
+        /// Get plan on edit
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetPlanOnEdit")]
         public ResponseModel GetPlanOnEdit()
@@ -228,11 +246,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 FeaturePlanCaller _newFeaturePlanCaller = new FeaturePlanCaller();
 
-                objplanModels = _newFeaturePlanCaller.GetPlanOnEdit(new FeaturePlanService(_connectioSting), authenticate.TenantId);
+                objplanModels = _newFeaturePlanCaller.GetPlanOnEdit(new FeaturePlanService(_Cache, Db), authenticate.TenantId);
 
                 StatusCode =
                 objplanModels.Count == 0 ?

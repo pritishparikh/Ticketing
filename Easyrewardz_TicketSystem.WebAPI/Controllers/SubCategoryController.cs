@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -21,16 +23,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         #endregion 
 
         #region Custom Methods
-        public SubCategoryController(IConfiguration _iConfig)
+        public SubCategoryController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
         }
         #endregion 
 
@@ -52,7 +54,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 MasterCaller _newMasterSubCat = new MasterCaller();
 
-                objSubCategory = _newMasterSubCat.GetSubCategoryByCategoryID(new SubCategoryService(_connectioSting), CategoryID);
+                objSubCategory = _newMasterSubCat.GetSubCategoryByCategoryID(new SubCategoryService(_Cache, Db), CategoryID);
 
                 StatusCode =
                 objSubCategory.Count == 0 ?
@@ -79,6 +81,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+
         /// <summary>
         /// Add Sub Category
         /// </summary>
@@ -98,9 +101,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 MasterCaller _newMasterCategory = new MasterCaller();
-                result = _newMasterCategory.AddSubCategory(new SubCategoryService(_connectioSting), categoryID, SubcategoryName, authenticate.TenantId, authenticate.UserMasterID);
+                result = _newMasterCategory.AddSubCategory(new SubCategoryService(_Cache, Db), categoryID, SubcategoryName, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                result == 0 ?
                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -142,7 +145,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 MasterCaller _newMasterSubCat = new MasterCaller();
 
-                objSubCategory = _newMasterSubCat.GetSubCategoryByMultiCategoryID(new SubCategoryService(_connectioSting), CategoryIDs);
+                objSubCategory = _newMasterSubCat.GetSubCategoryByMultiCategoryID(new SubCategoryService(_Cache, Db), CategoryIDs);
 
                 StatusCode =
                 objSubCategory.Count == 0 ?

@@ -24,10 +24,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region Variable Declaration
         private IConfiguration configuration;
-       // private readonly string _connectioSting;
-        private readonly IDistributedCache _cache;
+        private readonly IDistributedCache _Cache;
         internal static TicketDBContext Db { get; set; }
-        //private readonly string _radisCacheServerAddress;
+       
         #endregion
 
         #region Constructor
@@ -39,7 +38,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public BrandController(IConfiguration _iConfig,IDistributedCache cache, TicketDBContext db)
         {
             configuration = _iConfig;
-            _cache = cache;
+            _Cache = cache;
             Db = db;
             //_connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             //_radisCacheServerAddress = configuration.GetValue<string>("radishCache");
@@ -67,11 +66,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 MasterCaller _newMasterBrand = new MasterCaller();
 
-                objBrandList = _newMasterBrand.GetBrandList(new BrandServices(Db), authenticate.TenantId);
+                objBrandList = _newMasterBrand.GetBrandList(new BrandServices(_Cache, Db), authenticate.TenantId);
 
                 StatusCode =
                 objBrandList.Count == 0 ?
@@ -99,6 +98,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Update brand list for the Brand dropdown
+        /// </summary>
+        /// <param name="brand"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateBrand")]
         public ResponseModel UpdateBrand([FromBody]Brand brand)
@@ -112,12 +116,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 MasterCaller _newMasterBrand = new MasterCaller();
                 brand.TenantID = authenticate.TenantId;
                 brand.ModifyBy = authenticate.UserMasterID;
-                int result = _newMasterBrand.UpdateBrand(new BrandServices(Db), brand);
+                int result = _newMasterBrand.UpdateBrand(new BrandServices(_Cache, Db), brand);
 
                 StatusCode =
                 result == 0 ?
@@ -145,6 +149,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Delete brand list for the Brand dropdown
+        /// </summary>
+        /// <param name="BrandID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("DeleteBrand")]
         public ResponseModel DeleteBrand(int BrandID)
@@ -159,11 +168,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 MasterCaller _newMasterBrand = new MasterCaller();
 
-                int result = _newMasterBrand.DeleteBrand(new BrandServices(Db), BrandID, authenticate.TenantId);
+                int result = _newMasterBrand.DeleteBrand(new BrandServices(_Cache, Db), BrandID, authenticate.TenantId);
 
                 StatusCode =
                result == 0 ?
@@ -190,6 +199,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// Brand List
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("BrandList")]
         public ResponseModel BrandList()
@@ -203,11 +217,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 MasterCaller _newMasterBrand = new MasterCaller();
 
-                objBrandList = _newMasterBrand.BrandList(new BrandServices(Db), authenticate.TenantId);
+                objBrandList = _newMasterBrand.BrandList(new BrandServices(_Cache, Db), authenticate.TenantId);
 
                 StatusCode =
                 objBrandList.Count == 0 ?
@@ -235,7 +249,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
-
+        /// <summary>
+        /// Insert brand list for the Brand dropdown
+        /// </summary>
+        /// <param name="brand"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddBrand")]
         public ResponseModel AddBrand([FromBody]Brand brand)
@@ -251,9 +269,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 brand.CreatedBy = authenticate.UserMasterID;
-                int result = _newMasterBrand.AddBrand(new BrandServices(Db), brand, authenticate.TenantId);
+                int result = _newMasterBrand.AddBrand(new BrandServices(_Cache, Db), brand, authenticate.TenantId);
 
                 StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 

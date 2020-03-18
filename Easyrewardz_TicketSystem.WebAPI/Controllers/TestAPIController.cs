@@ -22,10 +22,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         /// 
-        private readonly IDistributedCache _cache;
+        private readonly IDistributedCache _Cache;
         public TestAPIController(IDistributedCache cache)
         {
-            _cache = cache;
+            _Cache = cache;
         }
         [HttpGet]
         [Route("values")]
@@ -40,12 +40,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             _objResponseModel.Message = statusMessage;
             
             _objResponseModel.ResponseData = null;
-            SetProgramDetails(_cache,"abcd","mangsh");
-            GetProgramDetails(_cache, "abcd");
+            SetProgramDetails(_Cache,"abcd","mangsh");
+            GetProgramDetails(_Cache, "abcd");
 
             return _objResponseModel;
         }
-        public static bool SetProgramDetails(IDistributedCache _cache, string programkey,string data)
+        public static bool SetProgramDetails(IDistributedCache _Cache, string programkey,string data)
         {
             if (string.IsNullOrEmpty(programkey))
             {
@@ -53,16 +53,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
 
             byte[] bytes = Encoding.ASCII.GetBytes(data);
-            _cache.Set("prgdtl:" + programkey, bytes);
+            _Cache.Set("prgdtl:" + programkey, bytes);
             return true;
         }
-        public static string GetProgramDetails(IDistributedCache _cache, string programkey)
+        public static string GetProgramDetails(IDistributedCache _Cache, string programkey)
         {
             if (string.IsNullOrEmpty(programkey))
             {
                 return null;
             }
-            byte[] bytes =_cache.Get("prgdtl:" + programkey);
+            byte[] bytes =_Cache.Get("prgdtl:" + programkey);
             if (bytes == null)
             {
                 return null;

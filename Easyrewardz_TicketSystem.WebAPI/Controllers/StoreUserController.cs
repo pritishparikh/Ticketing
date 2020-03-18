@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
@@ -11,7 +7,8 @@ using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -25,19 +22,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region  Variable Declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         #endregion
         #region Constructor
         /// <summary>
         /// StoreUser Controller
         /// </summary>
         /// <param name="_iConfig"></param>
-        public StoreUserController(IConfiguration _iConfig)
+        public StoreUserController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
         }
         #endregion
 
@@ -57,12 +54,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
                 storeUser.CreatedBy = authenticate.UserMasterID;
                 storeUser.TenantID = authenticate.TenantId;
-                int Result = userCaller.StoreUserPersonaldetail(new StoreUserService(_connectioSting), storeUser);
+                int Result = userCaller.StoreUserPersonaldetail(new StoreUserService(_Cache, Db), storeUser);
 
                 StatusCode =
                Result == 0 ?
@@ -105,12 +102,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
                 storeUser.CreatedBy = authenticate.UserMasterID;
                 storeUser.TenantID = authenticate.TenantId;
-                int Result = userCaller.StoreUserProfiledetail(new StoreUserService(_connectioSting), storeUser);
+                int Result = userCaller.StoreUserProfiledetail(new StoreUserService(_Cache, Db), storeUser);
 
                 StatusCode =
                Result == 0 ?
@@ -153,12 +150,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
                 storeUser.CreatedBy = authenticate.UserMasterID;
                 storeUser.TenantID = authenticate.TenantId;
-                int Result = userCaller.StoreUserMapping(new StoreUserService(_connectioSting), storeUser);
+                int Result = userCaller.StoreUserMapping(new StoreUserService(_Cache, Db), storeUser);
 
                 StatusCode =
                Result == 0 ?
@@ -201,12 +198,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
                 editStoreUser.CreatedBy = authenticate.UserMasterID;
                 editStoreUser.TenantID = authenticate.TenantId;
-                int Result = userCaller.EditStoreUser(new StoreUserService(_connectioSting), editStoreUser);
+                int Result = userCaller.EditStoreUser(new StoreUserService(_Cache, Db), editStoreUser);
 
                 StatusCode =
                Result == 0 ?
@@ -235,6 +232,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         #region Create Campaign Script
+        /// <summary>
+        /// Create Campaign script
+        /// </summary>
+        /// <param name="campaignScript"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("CreateCampaignScript")]
         public ResponseModel CreateCampaignScript([FromBody] CampaignScript campaignScript)
@@ -250,12 +252,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 //authenticate.TenantId = 0;
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 campaignScript.CreatedBy = authenticate.UserMasterID;
                 campaignScript.TenantID = authenticate.TenantId;
 
-                int result = storeCaller.CreateCampaignScript(new StoreService(_connectioSting), campaignScript);
+                int result = storeCaller.CreateCampaignScript(new StoreService(_Cache, Db), campaignScript);
 
                 StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -283,6 +285,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region Update Claim Attechment Setting
+        /// <summary>
+        /// Update Claim Attechment Setting
+        /// </summary>
+        /// <param name="claimAttechment"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateClaimAttechmentSetting")]
         public ResponseModel UpdateClaimAttechmentSetting([FromBody] ClaimAttechment claimAttechment)
@@ -298,12 +305,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 //authenticate.TenantId = 0;
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 claimAttechment.CreatedBy = authenticate.UserMasterID;
                 claimAttechment.TenantID = authenticate.TenantId;
 
-                int result = storeCaller.UpdateClaimAttechmentSetting(new StoreService(_connectioSting), claimAttechment);
+                int result = storeCaller.UpdateClaimAttechmentSetting(new StoreService(_Cache, Db), claimAttechment);
 
                 StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 

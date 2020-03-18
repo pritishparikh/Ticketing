@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -21,17 +19,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
 
         #endregion
 
         #region constructor
-        public PaymentController(IConfiguration _iConfig)
+        public PaymentController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
 
         }
         #endregion
@@ -40,6 +38,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Methods 
 
         #region Insert Cheque Details
+        /// <summary>
+        /// Insert cheque details
+        /// </summary>
+        /// <param name="offlinePaymentModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("InsertChequeDetails")]
         public ResponseModel InsertChequeDetails([FromBody] OfflinePaymentModel offlinePaymentModel)
@@ -55,12 +58,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 //authenticate.TenantId = 0;
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 offlinePaymentModel.CreatedBy = authenticate.UserMasterID;
                 offlinePaymentModel.TenantID = authenticate.TenantId;
 
-                int result = _newPaymentCaller.InsertChequeDetails(new PaymentService(_connectioSting), offlinePaymentModel);
+                int result = _newPaymentCaller.InsertChequeDetails(new PaymentService(_Cache, Db), offlinePaymentModel);
 
                 StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 

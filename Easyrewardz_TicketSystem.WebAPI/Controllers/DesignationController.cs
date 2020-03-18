@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.MySqlDBContext;
@@ -9,7 +7,6 @@ using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
@@ -23,10 +20,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region Variable Declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly IDistributedCache _cache;
+        private readonly IDistributedCache _Cache;
         internal static TicketDBContext Db { get; set; }
-        private readonly string _radisCacheServerAddress;
         #endregion
 
         #region Constructor
@@ -38,10 +33,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public DesignationController(IConfiguration _iConfig,IDistributedCache cache, TicketDBContext db)
         {
             configuration = _iConfig;
-            _cache = cache;
+            _Cache = cache;
             Db = db;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
 
         #endregion
@@ -65,9 +58,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 DesignationCaller designationCaller = new DesignationCaller();
-                designationMasters = designationCaller.GetDesignations(new DesignationService(Db), authenticate.TenantId);
+                designationMasters = designationCaller.GetDesignations(new DesignationService(_Cache, Db), authenticate.TenantId);
 
                 StatusCode =
                 designationMasters.Count == 0 ?
@@ -110,9 +103,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 DesignationCaller designationCaller = new DesignationCaller();
-                designationMasters = designationCaller.GetReporteeDesignation(new DesignationService(_connectioSting), DesignationID, HierarchyFor,authenticate.TenantId);
+                designationMasters = designationCaller.GetReporteeDesignation(new DesignationService(_Cache, Db), DesignationID, HierarchyFor,authenticate.TenantId);
 
                 StatusCode =
                 designationMasters.Count == 0 ?
@@ -154,9 +147,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 DesignationCaller designationCaller = new DesignationCaller();
-                designationMasters = designationCaller.GetReportToUser(new DesignationService(_connectioSting), DesignationID , IsStoreUser, authenticate.TenantId);
+                designationMasters = designationCaller.GetReportToUser(new DesignationService(_Cache, Db), DesignationID , IsStoreUser, authenticate.TenantId);
 
                 StatusCode =
                 designationMasters.Count == 0 ?

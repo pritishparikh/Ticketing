@@ -5,6 +5,8 @@ using System.Text;
 using System.Xml;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -13,13 +15,16 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
         #endregion
 
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
-        public HierarchyService(string _connectionString)
+        public HierarchyService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
         #endregion
         public int CreateHierarchy(CustomHierarchymodel customHierarchymodel)
@@ -29,7 +34,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 try
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                     MySqlCommand cmd = new MySqlCommand("SP_CreateHierarchy", conn);
                     cmd.Connection = conn;
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -46,21 +51,14 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     throw ex;
                 }
-                finally
-                {
-                    if (conn != null)
-                    {
-                        conn.Close();
-                    }
-                }
-
+                
             }
             if (customHierarchymodel.DesignationID > 0)
             {
 
                 try
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                     MySqlCommand cmd = new MySqlCommand();
                     cmd.Connection = conn;
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -90,13 +88,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     throw ex;
                 }
-                finally
-                {
-                    if (conn != null)
-                    {
-                        conn.Close();
-                    }
-                }
+                
             }
                 return Success;
         }
@@ -107,7 +99,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<CustomHierarchymodel> listHierarchy = new List<CustomHierarchymodel>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_ListHierarchy", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
@@ -140,13 +132,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return listHierarchy;
         }
 
@@ -166,7 +152,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
 
-                        conn.Open();
+                        conn = Db.Connection;
                         MySqlCommand cmd = new MySqlCommand("SP_BulkUploadHierarchy", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
@@ -208,10 +194,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     DataSetCSV.Dispose();
                 }
-                if (conn != null)
-                {
-                    conn.Close();
-                }
+               
             }
             return csvLst;
         }

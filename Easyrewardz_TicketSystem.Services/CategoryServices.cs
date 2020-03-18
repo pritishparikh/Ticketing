@@ -11,6 +11,7 @@ using Easyrewardz_TicketSystem.DBContext;
 using Easyrewardz_TicketSystem.CustomModel;
 using System.Xml;
 using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -18,6 +19,7 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        private readonly IDistributedCache _Cache;
         public TicketDBContext Db { get; set; }
         #endregion
 
@@ -29,9 +31,10 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         MySqlConnection conn = new MySqlConnection();
-        public CategoryServices(TicketDBContext db)
+        public CategoryServices(IDistributedCache cache, TicketDBContext db)
         {
             Db = db;
+            _Cache = cache;
         }
         public List<Category> GetCategoryList(int TenantID,int BrandID)
         {
@@ -86,7 +89,7 @@ namespace Easyrewardz_TicketSystem.Services
             int Success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_InsertCategory", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -101,14 +104,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return Success;
 
         }
@@ -119,7 +115,7 @@ namespace Easyrewardz_TicketSystem.Services
             int k = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_DeleteCategory", conn);
                 cmd1.Parameters.AddWithValue("@Category_ID", CategoryID);
@@ -132,14 +128,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return k;
         }
 
@@ -150,7 +139,7 @@ namespace Easyrewardz_TicketSystem.Services
             int i = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_UpdateCategory", conn);
                 cmd1.Parameters.AddWithValue("@Category_ID", category.CategoryID);
@@ -162,21 +151,14 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmd1.ExecuteNonQuery());
-                conn.Close();
+                
 
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return i;
         }
 
@@ -189,7 +171,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_CategoryList", conn);
 
@@ -226,14 +208,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return categories;
         }
         /// <summary>
@@ -248,7 +223,7 @@ namespace Easyrewardz_TicketSystem.Services
             {             
                 try
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                     MySqlCommand cmd = new MySqlCommand("SP_CreateCategoryBrandMapping", conn);
                     cmd.Connection = conn;
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -265,21 +240,14 @@ namespace Easyrewardz_TicketSystem.Services
 
                     throw ex;
                 }
-                finally
-                {
-                    if (conn != null)
-                    {
-                        conn.Close();
-                    }
-                }
-
+                
                 
             }
             if(customCreateCategory.BrandCategoryMappingID >0)
             {
                 try
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                     MySqlCommand cmd = new MySqlCommand("SP_UpdateCategoryBrandMapping", conn);
                     cmd.Connection = conn;
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -298,14 +266,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                     throw ex;
                 }
-                finally
-                {
-                    if (conn != null)
-                    {
-                        conn.Close();
-                    }
-                }
-
+                
             }
             return Success;
         }
@@ -316,7 +277,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<CustomCreateCategory> listCategoryMapping = new List<CustomCreateCategory>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_ListCategoryBrandMapping", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -347,13 +308,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return listCategoryMapping;
         }
 
@@ -364,7 +319,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetCategoryListByMultiBrandID", conn);
                 cmd1.Parameters.AddWithValue("@Brand_IDs", BrandIDs);
@@ -392,14 +347,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return categories;
         }
 
@@ -418,7 +366,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
 
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
-                        conn.Open();
+                        conn = Db.Connection;
                         MySqlCommand cmd = new MySqlCommand("SP_CategoryBulkUpload", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
@@ -459,10 +407,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     DataSetCSV.Dispose();
                 }
-                if (conn != null)
-                {
-                    conn.Close();
-                }
+               
             }
             return csvLst;
         }
@@ -476,7 +421,7 @@ namespace Easyrewardz_TicketSystem.Services
             int result = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_CreateDepartment", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@BrandID", claimCategory.BrandName);
@@ -496,14 +441,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return result;
         }
     }

@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
 
@@ -24,16 +26,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectionSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         #endregion
 
         #region Cunstructor
-        public KnowledgeBaseController(IConfiguration _iConfig)
+        public KnowledgeBaseController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectionSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
         }
         #endregion
 
@@ -59,9 +61,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _objKnowlegeBaseMaster = _KnowledgeCaller.SearchByCategory(new KnowlegeBaseService(_connectionSting), Type_ID, Category_ID, SubCategor_ID, authenticate.TenantId);
+                _objKnowlegeBaseMaster = _KnowledgeCaller.SearchByCategory(new KnowlegeBaseService(_Cache, Db), Type_ID, Category_ID, SubCategor_ID, authenticate.TenantId);
                 StatusCode =
                _objKnowlegeBaseMaster == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -85,10 +87,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
-      
+        /// <summary>
+        /// Add new KB
+        /// </summary>
+        /// <param name="knowlegeBaseMaster"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddKB")]
-        
         public ResponseModel AddKB([FromBody]KnowlegeBaseMaster knowlegeBaseMaster)
         {
 
@@ -100,10 +105,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 knowlegeBaseMaster.TenantID = authenticate.TenantId;
                 knowlegeBaseMaster.CreatedBy = authenticate.UserMasterID;
-                int result = _KnowledgeCaller.AddKB(new KnowlegeBaseService(_connectionSting), knowlegeBaseMaster);
+                int result = _KnowledgeCaller.AddKB(new KnowlegeBaseService(_Cache, Db), knowlegeBaseMaster);
                 StatusCode =
                result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -127,6 +132,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Update KB
+        /// </summary>
+        /// <param name="knowlegeBaseMaster"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateKB")]
         public ResponseModel UpdateKB([FromBody]KnowlegeBaseMaster knowlegeBaseMaster)
@@ -140,10 +150,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 knowlegeBaseMaster.TenantID = authenticate.TenantId;
                 knowlegeBaseMaster.ModifyBy = authenticate.UserMasterID;
-                int result = _KnowledgeCaller.UpdateKB(new KnowlegeBaseService(_connectionSting), knowlegeBaseMaster);
+                int result = _KnowledgeCaller.UpdateKB(new KnowlegeBaseService(_Cache, Db), knowlegeBaseMaster);
                 StatusCode =
                result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -167,6 +177,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Delete KB 
+        /// </summary>
+        /// <param name="KBID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("DeleteKB")]
         public ResponseModel DeleteKB(int KBID)
@@ -180,9 +195,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                
-                int result = _KnowledgeCaller.DeleteKB(new KnowlegeBaseService(_connectionSting), KBID, authenticate.TenantId);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+
+                int result = _KnowledgeCaller.DeleteKB(new KnowlegeBaseService(_Cache, Db), KBID, authenticate.TenantId);
                 StatusCode =
                result == 0 ?
                        (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
@@ -206,13 +221,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Get the list of KB
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("KBList")]
         public ResponseModel KBList()
         {
 
             CustomKBList _objKnowlegeBaseMaster = new CustomKBList();
-           
+
             KnowledgeCaller _KnowledgeCaller = new KnowledgeCaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -221,10 +240,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _objKnowlegeBaseMaster = _KnowledgeCaller.KBList(new KnowlegeBaseService(_connectionSting), authenticate.TenantId);
-                
+                _objKnowlegeBaseMaster = _KnowledgeCaller.KBList(new KnowlegeBaseService(_Cache, Db), authenticate.TenantId);
+
                 StatusCode =
                _objKnowlegeBaseMaster == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -248,6 +267,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Search KB using categoryId, SubcategoryId, typeId
+        /// </summary>
+        /// <param name="Category_ID"></param>
+        /// <param name="SubCategory_ID"></param>
+        /// <param name="type_ID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("SearchKB")]
         public ResponseModel SearchKB(int Category_ID, int SubCategory_ID, int type_ID)
@@ -263,9 +289,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                _objKnowlegeBaseMaster = _KnowledgeCaller.SearchKB(new KnowlegeBaseService(_connectionSting), Category_ID, SubCategory_ID, type_ID, authenticate.TenantId);
+                _objKnowlegeBaseMaster = _KnowledgeCaller.SearchKB(new KnowlegeBaseService(_Cache, Db), Category_ID, SubCategory_ID, type_ID, authenticate.TenantId);
 
                 StatusCode =
                _objKnowlegeBaseMaster == null ?
@@ -290,6 +316,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// Get reject approve KB
+        /// </summary>
+        /// <param name="knowlegeBaseMaster"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("RejectApproveKB")]
         public ResponseModel RejectApproveKB([FromBody]KnowlegeBaseMaster knowlegeBaseMaster)
@@ -304,9 +335,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 knowlegeBaseMaster.TenantID = authenticate.TenantId;
-                int result = _KnowledgeCaller.RejectApproveKB(new KnowlegeBaseService(_connectionSting), knowlegeBaseMaster);
+                int result = _KnowledgeCaller.RejectApproveKB(new KnowlegeBaseService(_Cache, Db), knowlegeBaseMaster);
                 StatusCode =
                result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

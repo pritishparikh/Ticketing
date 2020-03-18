@@ -9,15 +9,23 @@ using System.Data.SqlClient;
 using System.Linq;
 using Easyrewardz_TicketSystem.DBContext;
 using Easyrewardz_TicketSystem.CustomModel;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
    public class StoreUserService:IStoreUser
     {
+        #region variable
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         MySqlConnection conn = new MySqlConnection();
-        public StoreUserService(string _connectionString)
+        public StoreUserService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
         /// <summary>
         /// AddStoreUserPersonaldetail
@@ -28,7 +36,7 @@ namespace Easyrewardz_TicketSystem.Services
             int UserID = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InserStoreUserPersonalDetail", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@User_Name", storeUserModel.UserName);
@@ -49,13 +57,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
 
             return UserID;
         }
@@ -69,7 +71,7 @@ namespace Easyrewardz_TicketSystem.Services
             int Success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertStoreUserProfileDetails", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Department_Id", customStoreUserModel.DepartmentId);
@@ -88,13 +90,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
 
             return Success;
         }
@@ -107,7 +103,7 @@ namespace Easyrewardz_TicketSystem.Services
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateStoreUser", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@User_ID", customStoreUserEdit.UserID);
@@ -140,14 +136,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return success;
         }
         /// <summary>
@@ -160,7 +149,7 @@ namespace Easyrewardz_TicketSystem.Services
             int Success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertStoreUserMappedCategory", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Brand_IDs", customStoreUser.BrandIDs);
@@ -182,14 +171,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return Success;
         }
     }

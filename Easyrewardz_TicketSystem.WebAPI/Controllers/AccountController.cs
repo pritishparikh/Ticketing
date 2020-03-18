@@ -32,10 +32,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region Variable
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly IDistributedCache _cache;
+        private readonly IDistributedCache _Cache;
         internal static TicketDBContext Db { get; set; }
-        private readonly string _radisCacheServerAddress;
         #endregion
 
         #region Constructor
@@ -43,9 +41,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             configuration = _iConfig;
             Db = db;
-            _cache = cache;
-            //_connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            //_radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            _Cache = cache;
         }
         #endregion
 
@@ -68,11 +64,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 /////Validate User
                 securityCaller _securityCaller = new securityCaller();
-                Authenticate authenticate = _securityCaller.validateUserEmailId(new SecurityService(_cache,Db), EmailId);
+                Authenticate authenticate = _securityCaller.validateUserEmailId(new SecurityService(_Cache,Db), EmailId);
                 if (authenticate.UserMasterID > 0)
                 {
                     MasterCaller masterCaller = new MasterCaller();
-                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
+                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_Cache, Db), authenticate.TenantId);
 
                     CommonService commonService = new CommonService();
                     string encryptedEmailId = commonService.Encrypt(EmailId);
@@ -82,9 +78,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     string content = "";
                     string subject = "";
 
-                    _securityCaller.GetForgetPassowrdMailContent(new SecurityService(_cache,Db), authenticate.TenantId, url, EmailId, out content, out subject);
+                    _securityCaller.GetForgetPassowrdMailContent(new SecurityService(_Cache,Db), authenticate.TenantId, url, EmailId, out content, out subject);
 
-                    bool isUpdate = _securityCaller.sendMail(new SecurityService(_cache,Db), sMTPDetails, EmailId, subject, content, authenticate.TenantId);
+                    bool isUpdate = _securityCaller.sendMail(new SecurityService(_Cache,Db), sMTPDetails, EmailId, subject, content, authenticate.TenantId);
 
                     if (isUpdate)
                     {
@@ -141,7 +137,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 CommonService commonService = new CommonService();
                 string encryptedEmailId = commonService.Decrypt(cipherEmailId);
 
-                bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_cache,Db), encryptedEmailId, Password);
+                bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_Cache,Db), encryptedEmailId, Password);
 
                 if (isUpdate)
                 {
@@ -164,7 +160,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region Authenticate User
-
+        /// <summary>
+        /// Authenticate User
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("authenticateUser")]
         [HttpPost]
@@ -188,7 +187,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
-                    account = _newSecurityCaller.validateUser(new SecurityService(_cache,Db), Programcode, Domainname, userId, password);
+                    account = _newSecurityCaller.validateUser(new SecurityService(_Cache,Db), Programcode, Domainname, userId, password);
 
                     if (!string.IsNullOrEmpty(account.Token))
                     {
@@ -226,6 +225,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return resp;
         }
 
+        
+        /// <summary>
+        /// Logout User
+        /// </summary>
+        /// <returns></returns>
         [Route("Logout")]
         [HttpPost]
         public ResponseModel Logout()
@@ -235,14 +239,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
             _token = SecurityService.DecryptStringAES(_token);
 
-            RedisCacheService radisCacheService = new RedisCacheService(_radisCacheServerAddress);
+            RedisCacheService radisCacheService = new RedisCacheService(_Cache);
             //if (!radisCacheService.Exists(_token))
             //{
             //    radisCacheService.Remove(_token);
             //}
 
             securityCaller _newSecurityCaller = new securityCaller();
-            _newSecurityCaller.Logout(new SecurityService(_cache,Db), _token);
+            _newSecurityCaller.Logout(new SecurityService(_Cache,Db), _token);
 
             resp.Status = true;
             resp.StatusCode = (int)EnumMaster.StatusCode.Success;
@@ -251,7 +255,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return resp;
         }
+        
 
+        /// <summary>
+        /// Validate Program code 
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("validateprogramcode")]
         [HttpGet]
@@ -270,7 +279,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname))
                 {
-                    bool isValid = newSecurityCaller.validateProgramCode(new SecurityService(_cache,Db), Programcode, Domainname);
+                    bool isValid = newSecurityCaller.validateProgramCode(new SecurityService(_Cache,Db), Programcode, Domainname);
 
                     if (isValid)
                     {

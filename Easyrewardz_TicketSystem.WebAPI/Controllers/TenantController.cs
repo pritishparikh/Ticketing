@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -21,25 +23,23 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
-
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         #endregion
 
         #region constructor
-        public TenantController(IConfiguration _iConfig)
+        public TenantController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
-
+            Db = db;
+            _Cache = cache;
         }
         #endregion
 
         #region method
         [HttpPost]
         [Route("InsertCompany")]
-        public ResponseModel InsertCompany([FromBody] CompanyModel companyModel )
+        public ResponseModel InsertCompany([FromBody] CompanyModel companyModel)
         {
             TenantCaller _newTenantCaller = new TenantCaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -52,12 +52,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 companyModel.CreatedBy = authenticate.UserMasterID;
                 companyModel.TenantID = authenticate.TenantId;
 
-                int result = _newTenantCaller.InsertCompany(new TenantService(_connectioSting), companyModel);
+                int result = _newTenantCaller.InsertCompany(new TenantService(_Cache, Db), companyModel);
 
                 StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -102,13 +102,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 BillingDetails.Tennant_ID = authenticate.TenantId;
                 BillingDetails.Created_By = authenticate.UserMasterID;
                 BillingDetails.Modified_By = authenticate.UserMasterID;
 
-                int result = _newTenantCaller.BillingDetails_crud(new TenantService(_connectioSting), BillingDetails);
+                int result = _newTenantCaller.BillingDetails_crud(new TenantService(_Cache, Db), BillingDetails);
 
                 StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -153,12 +153,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 OtherDetails._TenantID = authenticate.TenantId;
                 OtherDetails._ModifiedBy = authenticate.UserMasterID;
                 OtherDetails._Createdby = authenticate.UserMasterID;
-                int result = _newTenantCaller.OtherDetails(new TenantService(_connectioSting), OtherDetails);
+                int result = _newTenantCaller.OtherDetails(new TenantService(_Cache, Db), OtherDetails);
 
                 StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -169,7 +169,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -184,7 +184,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("InsertPlanFeature")]
-        public ResponseModel InsertPlanFeature(string PlanName,string FeatureID)
+        public ResponseModel InsertPlanFeature(string PlanName, string FeatureID)
         {
             TenantCaller _newTenantCaller = new TenantCaller();
             ResponseModel _objResponseModel = new ResponseModel();
@@ -195,9 +195,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                
-                int result = _newTenantCaller.InsertPlanFeature(new TenantService(_connectioSting), PlanName, FeatureID, authenticate.UserMasterID,authenticate.TenantId);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+
+                int result = _newTenantCaller.InsertPlanFeature(new TenantService(_Cache, Db), PlanName, FeatureID, authenticate.UserMasterID, authenticate.TenantId);
 
                 StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -236,9 +236,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                GetPlanDetails = _newTenantCaller.GetPlanDetails(new TenantService(_connectioSting), CustomPlanID, authenticate.TenantId);
+                GetPlanDetails = _newTenantCaller.GetPlanDetails(new TenantService(_Cache, Db), CustomPlanID, authenticate.TenantId);
 
                 StatusCode =
                 GetPlanDetails.Count == 0 ?
@@ -279,9 +279,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                //authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
-                lstCompanyType = _newTenantCaller.GetCompanyType(new TenantService(_connectioSting));
+                lstCompanyType = _newTenantCaller.GetCompanyType(new TenantService(_Cache, Db));
 
                 StatusCode =
                 lstCompanyType.Count == 0 ?
@@ -322,11 +322,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 TenantCaller _newtenantCaller = new TenantCaller();
 
-                objcompanyModels = _newtenantCaller.GetRegisteredTenant(new TenantService(_connectioSting), authenticate.TenantId);
+                objcompanyModels = _newtenantCaller.GetRegisteredTenant(new TenantService(_Cache, Db), authenticate.TenantId);
 
                 StatusCode =
                 objcompanyModels.Count == 0 ?

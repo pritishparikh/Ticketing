@@ -1,6 +1,8 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -11,11 +13,17 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class TenantService : ITenant
     {
+        #region variable
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         MySqlConnection conn = new MySqlConnection();
 
-        public TenantService(string _connectionString)
+        public TenantService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
 
         public int InsertCompany(CompanyModel companyModel)
@@ -25,7 +33,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertCompany", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -70,7 +78,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (ds != null)
                 ds.Dispose();
-                conn.Close();
+                
             }
 
             return OutTenantID;
@@ -83,7 +91,7 @@ namespace Easyrewardz_TicketSystem.Services
             int result = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_BillingDetails_crud", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Billing_ID", BillingDetails.Billing_ID);
@@ -103,14 +111,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return result;
 
         }
@@ -122,7 +123,7 @@ namespace Easyrewardz_TicketSystem.Services
             int result = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertOtherDetails", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_TenantID", OtherDetails._TenantID);
@@ -145,14 +146,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return result;
 
         }
@@ -166,7 +160,7 @@ namespace Easyrewardz_TicketSystem.Services
             int result = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertCustomPlanFeatures", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_PlanName", PlanName);
@@ -182,14 +176,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return result;
         }
 
@@ -201,7 +188,7 @@ namespace Easyrewardz_TicketSystem.Services
             List <GetPlanDetails> GetPlanDetails = new List<GetPlanDetails>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("GetPlanDetails", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -226,14 +213,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return GetPlanDetails;
         }
 
@@ -243,7 +223,7 @@ namespace Easyrewardz_TicketSystem.Services
             int result = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_TenantPlanAdd", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID",_tenantPlan.TenantID);
@@ -264,14 +244,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return result;
 
         }
@@ -282,7 +255,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 lstCompanyType = new List<CompanyTypeModel>();
-                conn.Open();
+                conn = Db.Connection;
                 DataSet ds = new DataSet();
                 MySqlCommand cmd = new MySqlCommand("SP_GetCompanyType", conn);
                 cmd.Connection = conn;               
@@ -307,14 +280,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return lstCompanyType;
         }
 
@@ -331,7 +297,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetRegisteredTenant", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -358,14 +324,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return GetRegisteredTenant;
         }
 

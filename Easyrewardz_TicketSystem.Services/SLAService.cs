@@ -10,6 +10,8 @@ using System.Linq;
 using Easyrewardz_TicketSystem.DBContext;
 using Easyrewardz_TicketSystem.CustomModel;
 using System.Xml;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -17,12 +19,16 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
         #endregion
+
         MySqlConnection conn = new MySqlConnection();
 
-        public SLAServices(string _connectionString)
+        public SLAServices(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
 
         /// <summary>
@@ -39,7 +45,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetSLAStatusList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -66,13 +72,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
 
             return slas;
         }
@@ -89,7 +89,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertSLAMaster", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -152,14 +152,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return SLATargetInsertCount;
         }
 
@@ -172,7 +165,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateSLA", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", tenantID);
@@ -189,14 +182,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return updatecount;
         }
 
@@ -209,7 +195,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteSLA", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", tenantID);
@@ -224,13 +210,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return deletecount;
 
         }
@@ -250,7 +230,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
                 //int rowStart = (pageNo - 1) * PageSize;
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetSLAList", conn);
@@ -318,7 +298,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
 
            
@@ -339,8 +319,8 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
 
-                conn.Open();
-            cmd.Connection = conn;
+                conn = Db.Connection;
+                cmd.Connection = conn;
 
             MySqlCommand cmd1 = new MySqlCommand("SP_GetIssueTypeForSLACreation", conn);
             cmd1.CommandType = CommandType.StoredProcedure;
@@ -379,7 +359,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
 
            
@@ -404,7 +384,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
 
-                        conn.Open();
+                        conn = Db.Connection;
                         MySqlCommand cmd = new MySqlCommand("", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
@@ -433,10 +413,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     DataSetCSV.Dispose();
                 }
-                if (conn != null)
-                {
-                    conn.Close();
-                }
+                
             }
             return uploadcount;
         
@@ -449,7 +426,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
 
-                conn.Open();          
+                conn = Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("SP_SearchIssueType", conn);
                 cmd1.Connection = conn;
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -482,7 +459,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
 
 

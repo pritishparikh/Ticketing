@@ -1,17 +1,13 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
-using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -22,23 +18,29 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly IDistributedCache _cache;
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
+        internal static TicketDBContext Db { get; set; }
         #endregion
 
         #region Cunstructor
-        public ModuleController(IConfiguration _iConfig,IDistributedCache cache)
+
+        public ModuleController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
             configuration = _iConfig;
-            _cache = cache;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Db = db;
+            _Cache = cache;
+
         }
         #endregion
 
         #region Custom Methods
-
+        /// <summary>
+        /// Update module items
+        /// </summary>
+        /// <param name="ModuleID"></param>
+        /// <param name="ModulesActive"></param>
+        /// <param name="ModuleInactive"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ModifyModuleItems")]
         public ResponseModel ModifyModuleItems(int ModuleID, string ModulesActive, string ModuleInactive)
@@ -52,11 +54,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newModule = new SettingsCaller();
 
-                updatecount = _newModule.UpdateModules(new ModuleService(_connectioSting), authenticate.TenantId, ModuleID, ModulesActive, ModuleInactive,
+                updatecount = _newModule.UpdateModules(new ModuleService(_Cache, Db), authenticate.TenantId, ModuleID, ModulesActive, ModuleInactive,
                     authenticate.UserMasterID);
 
                 StatusCode =
@@ -92,7 +94,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetModulesItems")]
-
         public ResponseModel GetModulesItems(int ModuleID)
         {
 
@@ -105,11 +106,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newModule = new SettingsCaller();
 
-                _objresponseModel = _newModule.GetModulesItemList(new ModuleService(_connectioSting), authenticate.TenantId, ModuleID);
+                _objresponseModel = _newModule.GetModulesItemList(new ModuleService(_Cache, Db), authenticate.TenantId, ModuleID);
 
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -142,7 +143,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetModules")]
-
         public ResponseModel GetModules()
         {
 
@@ -155,11 +155,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ////Get token (Double encrypted) and get the tenant id 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newModule = new SettingsCaller();
 
-                _objresponseModel = _newModule.GetModulesList(new ModuleService(_connectioSting), authenticate.TenantId);
+                _objresponseModel = _newModule.GetModulesList(new ModuleService(_Cache, Db), authenticate.TenantId);
 
                 StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 

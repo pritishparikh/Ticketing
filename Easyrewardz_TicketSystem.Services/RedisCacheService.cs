@@ -8,21 +8,21 @@ namespace Easyrewardz_TicketSystem.Services
     public class RedisCacheService: ICacheService
     {
         //private readonly ISettings _settings;
-        private readonly IDistributedCache _cache;
+        private readonly IDistributedCache _Cache;
         private ConnectionMultiplexer _connectionMultiplexer;
 
         public RedisCacheService(string _radisCacheServerAddress)
         {
             var connection = _radisCacheServerAddress;
             _connectionMultiplexer = ConnectionMultiplexer.Connect(connection);
-            //_cache = _connectionMultiplexer.GetDatabase();
+            //_Cache = _connectionMultiplexer.GetDatabase();
         }
         public RedisCacheService(IDistributedCache cache)
         {
-            _cache = cache;
+            _Cache = cache;
         }
 
-        public bool Set(IDistributedCache _cache, string key, string data)
+        public bool Set(IDistributedCache _Cache, string key, string data)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
                 byte[] bytes = Encoding.ASCII.GetBytes(data);
-                _cache.Set(key, bytes);
+                _Cache.Set(key, bytes);
                 return true;
             }
             catch (System.Exception ex)
@@ -42,13 +42,13 @@ namespace Easyrewardz_TicketSystem.Services
             }
             
         }
-        public string Get(IDistributedCache _cache, string key)
+        public string Get(IDistributedCache _Cache, string key)
         {
             if (string.IsNullOrEmpty(key))
             {
                 return null;
             }
-            byte[] bytes = _cache.Get(key);
+            byte[] bytes = _Cache.Get(key);
             if (bytes == null)
             {
                 return null;
