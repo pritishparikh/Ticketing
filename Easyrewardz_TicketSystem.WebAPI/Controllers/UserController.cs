@@ -601,7 +601,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             var Keys = Request.Form;
             UpdateUserProfiledetailsModel = JsonConvert.DeserializeObject<UpdateUserProfiledetailsModel>(Keys["UpdateUserProfiledetailsModel"]);
             var file = Request.Form.Files;
-            
+            string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
             var folderName = Path.Combine(ProfileImg_Resources, ProfileImg_Image);
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             try
@@ -609,7 +609,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 if (file.Count > 0)
                 {
                     var fileName = ContentDispositionHeaderValue.Parse(file[0].ContentDisposition).FileName.Trim('"');
-                    var fileName_Id = fileName.Replace(".", UpdateUserProfiledetailsModel.UserId + ".") + "";
+                    var fileName_Id = fileName.Replace(".", UpdateUserProfiledetailsModel.UserId + timeStamp + ".") + "";
                     var fullPath = Path.Combine(pathToSave, fileName_Id);
                     var dbPath = Path.Combine(folderName, fileName_Id);
 

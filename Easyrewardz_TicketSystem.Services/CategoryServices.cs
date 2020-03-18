@@ -405,7 +405,7 @@ namespace Easyrewardz_TicketSystem.Services
             return categories;
         }
 
-        public List<string> BulkUploadCategory(int TenantID, int CreatedBy, int CategoryFor, string FileName, DataSet DataSetCSV)
+        public List<string> BulkUploadCategory(int TenantID, int CreatedBy, int CategoryFor, DataSet DataSetCSV)
         {
             int insertcount = 0;
             XmlDocument xmlDoc = new XmlDocument();

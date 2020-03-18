@@ -128,10 +128,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _categoryList.ListCategoryBrandMapping();
         }
 
-        public List<string> CategoryBulkUpload(ICategory Category, int TenantID, int CreatedBy, int CategoryFor, string FileName, DataSet DataSetCSV)
+        public List<string> CategoryBulkUpload(ICategory Category, int TenantID, int CreatedBy, int CategoryFor, DataSet DataSetCSV)
         {
             _categoryList = Category;
-            return _categoryList.BulkUploadCategory(TenantID, CreatedBy, CategoryFor, FileName, DataSetCSV);
+            return _categoryList.BulkUploadCategory(TenantID, CreatedBy, CategoryFor, DataSetCSV);
         }
 
         #endregion
