@@ -5,6 +5,7 @@ using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -27,6 +28,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         private readonly string _connectionString;
         private readonly string _radisCacheServerAddress;
         private readonly string rootPath;
+        private readonly string _UploadedBulkFile;
         #endregion
 
         #region Cunstructor
@@ -36,6 +38,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
             rootPath = configuration.GetValue<string>("APIURL");
+            _UploadedBulkFile = configuration.GetValue<string>("FileUploadLocation");
         }
         #endregion
 
@@ -441,23 +444,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadStore")]
-        public ResponseModel BulkUploadStore(int StoreFor = 1)
+        public ResponseModel BulkUploadStore(IFormFile File,int StoreFor = 1)
         {
             StoreCaller _newMasterStore = new StoreCaller();
+
             string DownloadFilePath = string.Empty;
             string BulkUploadFilesPath = string.Empty;
-            int count = 0;
             bool errorfilesaved = false;
             bool successfilesaved = false;
+            int count = 0;
+
             List<string> CSVlist = new List<string>();
             SettingsCaller _newFile = new SettingsCaller();
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
+            DataSet DataSetCSV = new DataSet();
             string fileName = "";
             string finalAttchment = "";
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
-            DataSet DataSetCSV = new DataSet();
             string[] filesName = null;
 
 
@@ -465,13 +470,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 var files = Request.Form.Files;
 
+                if (files.Count > 0)
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
+                    }
+                    finalAttchment = fileName.TrimEnd(',');
+                }
+                var Keys = Request.Form;
+
+                var exePath = Path.GetDirectoryName(System.Reflection
+                     .Assembly.GetExecutingAssembly().CodeBase);
+                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                var appRoot = appPathMatcher.Match(exePath).Value;
+                string Folderpath = appRoot + "\\" + _UploadedBulkFile;
+                if (files.Count > 0)
+                {
+                    filesName = finalAttchment.Split(",");
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            files[i].CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                            MemoryStream msfile = new MemoryStream(fileBytes);
+                            FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                            msfile.WriteTo(docFile);
+                            docFile.Close();
+                            ms.Close();
+                            msfile.Close();
+                            string s = Convert.ToBase64String(fileBytes);
+                            byte[] a = Convert.FromBase64String(s);
+                            // act on the Base64 data
+
+                        }
+                    }
+                }
+
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 #region FilePath
-                BulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor);
-                DownloadFilePath = rootPath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor);
+                BulkUploadFilesPath = appRoot + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor);
+                DownloadFilePath = appRoot + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor);
 
                 #endregion
 
@@ -518,16 +561,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 #endregion
 
-                DataSetCSV = CommonService.csvToDataSet(BulkUploadFilesPath + "\\StoreBulkUpload.csv");
+                DataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + finalAttchment);
                 CSVlist = _newMasterStore.StoreBulkUpload(new StoreService(_connectionString), authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
 
                 #region Create Error and Succes files and  Insert in FileUploadLog
-
+                
                 if (!string.IsNullOrEmpty(CSVlist[0]))
-                    errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Store\\ Success" + "\\" + "StoreSuccessFile.csv", CSVlist[0]);
+                    successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Store\\ Success" + "\\" + "StoreSuccessFile.csv", CSVlist[0]);
 
                 if (!string.IsNullOrEmpty(CSVlist[1]))
-                    successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Store\\Error" + "\\" + "StoreErrorFile.csv", CSVlist[1]);
+                    errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Store\\Error" + "\\" + "StoreErrorFile.csv", CSVlist[1]);
 
                 count = _newFile.CreateFileUploadLog(new FileUploadService(_connectionString), authenticate.TenantId, "StoreBulkUpload.csv", errorfilesaved,
                                    "StoreErrorFile.csv", "StoreSuccessFile.csv", authenticate.UserMasterID, "Store",
