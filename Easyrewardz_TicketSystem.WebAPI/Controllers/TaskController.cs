@@ -20,8 +20,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
+
         private readonly IDistributedCache _Cache;
         internal static TicketDBContext Db { get; set; }
+
         #endregion
 
         #region Cunstructor
