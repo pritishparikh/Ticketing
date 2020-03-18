@@ -17,6 +17,8 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class CommonService
     {
+        public static string sLogFormat;
+        public static string sErrorTime;
         /// <summary>
         /// Send Email
         /// </summary>
@@ -379,8 +381,40 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return Password;
         }
+
+        public static void CreateLogFiles()
+        {
+            //sLogFormat used to create log files format :
+            // dd/mm/yyyy hh:mm:ss AM/PM ==> Log Message
+            sLogFormat = DateTime.Now.ToShortDateString().ToString() + " " + DateTime.Now.ToLongTimeString().ToString() + " ==> ";
+
+            //this variable used to create log filename format "
+            //for example filename : ErrorLogYYYYMMDD
+            string sYear = DateTime.Now.Year.ToString();
+            string sMonth = DateTime.Now.Month.ToString();
+            string sDay = DateTime.Now.Day.ToString();
+            sErrorTime = sYear + sMonth + sDay;
+        }
+        public static void ErrorLog(string sPathName, string sErrMsg)
+        {
+           if( File.Exists(sPathName))
+            {
+                StreamWriter sw = new StreamWriter(sPathName + sErrorTime, true);
+                sw.WriteLine(sLogFormat + sErrMsg);
+                sw.Flush();
+                sw.Close();
+            }
+           else
+            {
+                StreamWriter stwriter = File.CreateText(sPathName);
+                stwriter.WriteLine(sLogFormat + sErrMsg);
+                stwriter.Flush();
+                stwriter.Close();
+            }
+
+        }
         #endregion
 
-      
+
     }
 }
