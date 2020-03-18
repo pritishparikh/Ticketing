@@ -279,7 +279,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         /// <summary>
-        /// Bullk Upload  SLA
+        /// Bullk Upload  SLA Role
         /// </summary>
         /// <returns></returns>
         [HttpPost]
