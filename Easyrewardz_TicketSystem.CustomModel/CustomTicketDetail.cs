@@ -159,7 +159,16 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// ProductNames
         /// </summary>
         public string ProductNames { get; set; }
-        
+
+        /// <summary>
+        /// RoleID
+        /// </summary>
+        public int RoleID { get; set; }
+        /// <summary>
+        /// RoleName
+        /// </summary>
+        public string RoleName { get; set; }
+
         public string DurationRemaining { get; set; }
         public string OrderItemID { get; set; }
         public List<Store> stores { get; set; }
