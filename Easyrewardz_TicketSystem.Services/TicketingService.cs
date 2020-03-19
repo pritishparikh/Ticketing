@@ -1076,6 +1076,9 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketMessageDetails.DayOfCreation = ds.Tables[0].Rows[i]["DayOfCreation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayOfCreation"]);
                             TicketMessageDetails.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
                             TicketMessageDetails.IsInternalComment = ds.Tables[0].Rows[i]["IsInternalComment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsInternalComment"]);
+
+                            TicketMessageDetails.IsSystemGenerated = Convert.ToInt32(ds.Tables[0].Rows[i]["IsSystemGenerated"]) > 0;
+
                             TrailTicketMessagelist.Add(TicketMessageDetails);
 
                         }
@@ -1106,6 +1109,8 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketMessageDetails.OldAgentName = ds.Tables[1].Rows[i]["OldAgentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["OldAgentName"]);
                             TicketMessageDetails.NewAgentID = ds.Tables[1].Rows[i]["NewAgentID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["NewAgentID"]);
                             TicketMessageDetails.NewAgentName = ds.Tables[1].Rows[i]["NewAgentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["NewAgentName"]);
+                            TicketMessageDetails.IsSystemGenerated = Convert.ToInt32(ds.Tables[1].Rows[i]["IsSystemGenerated"]) > 0;
+
                             if (TicketMessageDetails.OldAgentID>0)
                             {
                                 TicketMessageDetails.IsReAssign = true;
