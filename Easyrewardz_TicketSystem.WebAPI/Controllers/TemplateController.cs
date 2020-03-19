@@ -328,7 +328,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("GetMailParameter")]
-        public ResponseModel GetMailParameter()
+        public ResponseModel GetMailParameter(int AlertID)
         {
 
             ResponseModel _objResponseModel = new ResponseModel();
@@ -343,7 +343,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 SettingsCaller _newTemplate = new SettingsCaller();
-                _objMailParameterModel = _newTemplate.GetMailParameter(new TemplateService(_connectioSting), authenticate.TenantId);
+                _objMailParameterModel = _newTemplate.GetMailParameter(new TemplateService(_connectioSting), authenticate.TenantId, AlertID);
 
                 StatusCode = _objMailParameterModel.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound; ;
 

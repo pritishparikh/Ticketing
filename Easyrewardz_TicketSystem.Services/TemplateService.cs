@@ -305,7 +305,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// GetTemplates
         /// </summary>
-        public List<MailParameterModel> GetMailParameter(int tenantId)
+        public List<MailParameterModel> GetMailParameter(int tenantId, int AlertID)
         {
             List<MailParameterModel> objTempLst = new List<MailParameterModel>();
             DataSet ds = new DataSet();
@@ -317,8 +317,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetMailParameter", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-
-                //cmd1.Parameters.AddWithValue("@_tenantID", tenantId);
+                cmd1.Parameters.AddWithValue("@_tenantId", tenantId);
+                cmd1.Parameters.AddWithValue("@_AlertID", AlertID);
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
