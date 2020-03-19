@@ -40,6 +40,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string OldAgentName { get; set; }
         public int NewAgentID { get; set; }
         public string NewAgentName { get; set; }
+        public bool IsSystemGenerated { get; set; }
 
         public List<MessageAttachment> messageAttachments { get; set; }
 
