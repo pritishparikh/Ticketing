@@ -525,6 +525,7 @@ namespace Easyrewardz_TicketSystem.Services
                         objSLADetail.SubCategoryName = Convert.ToString(ds.Tables[0].Rows[0]["SubCategoryName"]);
                         objSLADetail.CategoryName = Convert.ToString(ds.Tables[0].Rows[0]["CategoryName"]);
                         objSLADetail.IssueTypeName = Convert.ToString(ds.Tables[0].Rows[0]["IssueTypeName"]);
+                        objSLADetail.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsActive"]);
                     }
 
                     List<SLATargetDetail> sLATargetDetails = new List<SLATargetDetail>();
