@@ -120,23 +120,16 @@ namespace Easyrewardz_TicketSystem.Services
             int insertcount = 0;
             try
             {
-                var template_name = "";
-                if(TemplatSubject != null)
-                {
-                    template_name = TemplatSubject;
-                }
-                else
-                {
-                    template_name = "";
-                }
+              
+
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_InsertTemplate", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@_tenantID", tenantId);
                 cmd.Parameters.AddWithValue("@_temaplateName", TemplateName);
-                cmd.Parameters.AddWithValue("@_templatesubject", template_name);
-                cmd.Parameters.AddWithValue("@_templatebody", TemplatBody);
+                cmd.Parameters.AddWithValue("@_templatesubject", string.IsNullOrEmpty(TemplatSubject) ? "": TemplatSubject);
+                cmd.Parameters.AddWithValue("@_templatebody", string.IsNullOrEmpty(TemplatBody) ? "" : TemplatBody);
                 cmd.Parameters.AddWithValue("@_issueTypes", issueTypes);
                 cmd.Parameters.AddWithValue("@_isTemplateActive", Convert.ToInt16(isTemplateActive));
 
@@ -218,8 +211,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_issueTypeID", issueType);
                 cmd.Parameters.AddWithValue("@_isTemplateActive", Convert.ToInt16(isTemplateActive));
                 cmd.Parameters.AddWithValue("@_modifiedBy", ModifiedBy);
-                cmd.Parameters.AddWithValue("@_templateContent", templateContent);
-                cmd.Parameters.AddWithValue("@_templateSubject", templateSubject);
+                cmd.Parameters.AddWithValue("@_templateContent", string.IsNullOrEmpty(templateContent) ? "" : templateContent);
+                cmd.Parameters.AddWithValue("@_templateSubject", string.IsNullOrEmpty(templateSubject) ? "" : templateSubject);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 updatecount = cmd.ExecuteNonQuery();
