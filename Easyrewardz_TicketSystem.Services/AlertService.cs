@@ -418,6 +418,38 @@ namespace Easyrewardz_TicketSystem.Services
             return uploadcount;
         }
 
+        public string ValidateAlert(int AlertID, int TenantID)
+        {
+
+            string Message = "";
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("Sp_ValidateAlertExists", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Alert_ID", AlertID);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                Message = Convert.ToString(cmd.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                string messages = Convert.ToString(ex.InnerException);
+                throw ex;
+            } 
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return Message;
+        }
+
 
         #region Communication Mode Mapping
 

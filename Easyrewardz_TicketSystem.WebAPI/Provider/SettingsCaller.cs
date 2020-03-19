@@ -171,6 +171,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Alerts.InsertAlert( alertModel);
 
         }
+        public string VallidateAlert(IAlerts Alert, int AlertID,int tenantID)
+        {
+            _Alerts = Alert;
+            return _Alerts.ValidateAlert(AlertID, tenantID);
+
+        }
 
 
         /// <summary>
