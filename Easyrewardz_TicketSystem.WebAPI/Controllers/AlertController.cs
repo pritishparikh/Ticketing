@@ -382,7 +382,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Create Alert
+        /// ValidateAlertNameExist
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -393,6 +393,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             ResponseModel _objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
+
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
@@ -403,7 +404,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 SettingsCaller _newAlert = new SettingsCaller();
 
                 resultMessage = _newAlert.VallidateAlert(new AlertService(_connectioSting), alertTypeId, authenticate.TenantId);
-
+                
                 StatusCode =
               string.IsNullOrEmpty(resultMessage) ?
                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

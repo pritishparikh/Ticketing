@@ -459,8 +459,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 #region FilePath
-                BulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
-                DownloadFilePath = rootPath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
+                BulkUploadFilesPath = appRoot + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
+                DownloadFilePath = appRoot + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
 
                 #endregion
 
@@ -469,11 +469,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                   authenticate.TenantId, authenticate.UserMasterID, CategoryFor, DataSetCSV);
                 #region Create Error and Succes files and  Insert in FileUploadLog
                 
-                if (!string.IsNullOrEmpty(CSVlist[0]))
-                    errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Category\\ Error" + "\\" + "CategorySuccessFile.csv", CSVlist[0]);
+                if (!string.IsNullOrEmpty(CSVlist[0])) 
+                     errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Category\\ Error" + "\\" + "CategoryErrorFile.csv", CSVlist[0]);
 
                 if (!string.IsNullOrEmpty(CSVlist[1]))
-                    successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Category\\Success" + "\\" + "CategoryErrorFile.csv", CSVlist[1]);
+                    successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Category\\Success" + "\\" + "CategorySuccessFile.csv", CSVlist[1]);
 
                 count = fileU.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, "Categorymaster.csv", errorfilesaved,
                                    "CategoryErrorFile.csv", "CategorySuccessFile.csv", authenticate.UserMasterID, "Category",
