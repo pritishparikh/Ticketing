@@ -35,8 +35,9 @@ namespace Easyrewardz_TicketSystem.Services
                 try
                 {
                     conn = Db.Connection;
+                    conn.Open();
                     MySqlCommand cmd = new MySqlCommand("SP_CreateHierarchy", conn);
-                    cmd.Connection = conn;
+                    //cmd.Connection = conn;
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Designation_Name", customHierarchymodel.DesignationName);
                     cmd.Parameters.AddWithValue("@Reportto_ID", customHierarchymodel.ReportToDesignation);

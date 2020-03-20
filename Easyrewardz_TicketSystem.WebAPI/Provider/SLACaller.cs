@@ -31,6 +31,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _SLARepository.SearchIssueType(TenantId, SearchText);
         }
 
+        public SLADetail GetSLADetail(ISLA SLA, int TenantID, int SLAID)
+        {
+            _SLARepository = SLA;
+            return _SLARepository.GetSLADetail(TenantID, SLAID);
+        }
 
+        public bool UpdateSLADetails(ISLA SLA, SLADetail sLADetail, int TenantID, int UserID)
+        {
+            _SLARepository = SLA;
+            return _SLARepository.UpdateSLADetails(sLADetail, TenantID, UserID);
+        }
     }
 }

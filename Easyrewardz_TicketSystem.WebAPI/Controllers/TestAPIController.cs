@@ -22,30 +22,30 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         /// 
-        private readonly IDistributedCache _Cache;
+        private readonly IDistributedCache Cache;
         public TestAPIController(IDistributedCache cache)
         {
-            _Cache = cache;
+            Cache = cache;
         }
         [HttpGet]
         [Route("values")]
         public ResponseModel values()
         {
 
-            int StatusCode = (int)EnumMaster.StatusCode.Success;
-            string statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-            ResponseModel _objResponseModel = new ResponseModel();
-            _objResponseModel.Status = true;
-            _objResponseModel.StatusCode = StatusCode;
-            _objResponseModel.Message = statusMessage;
+            int statusCode = (int)EnumMaster.StatusCode.Success;
+            string statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+            ResponseModel objResponseModel = new ResponseModel();
+            objResponseModel.Status = true;
+            objResponseModel.StatusCode = statusCode;
+            objResponseModel.Message = statusMessage;
             
-            _objResponseModel.ResponseData = null;
-            SetProgramDetails(_Cache,"abcd","mangsh");
-            GetProgramDetails(_Cache, "abcd");
+            objResponseModel.ResponseData = null;
+            SetProgramDetails(Cache,"abcd","mangsh");
+            GetProgramDetails(Cache, "abcd");
 
-            return _objResponseModel;
+            return objResponseModel;
         }
-        public static bool SetProgramDetails(IDistributedCache _Cache, string programkey,string data)
+        public static bool SetProgramDetails(IDistributedCache Cache, string programkey,string data)
         {
             if (string.IsNullOrEmpty(programkey))
             {
@@ -53,16 +53,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
 
             byte[] bytes = Encoding.ASCII.GetBytes(data);
-            _Cache.Set("prgdtl:" + programkey, bytes);
+            Cache.Set("prgdtl:" + programkey, bytes);
             return true;
         }
-        public static string GetProgramDetails(IDistributedCache _Cache, string programkey)
+        public static string GetProgramDetails(IDistributedCache Cache, string programkey)
         {
             if (string.IsNullOrEmpty(programkey))
             {
                 return null;
             }
-            byte[] bytes =_Cache.Get("prgdtl:" + programkey);
+            byte[] bytes =Cache.Get("prgdtl:" + programkey);
             if (bytes == null)
             {
                 return null;

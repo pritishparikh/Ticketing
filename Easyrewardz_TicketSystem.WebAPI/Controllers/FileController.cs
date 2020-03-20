@@ -21,8 +21,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         #region Variable Declaration
-        private IConfiguration configuration;
-        private readonly IDistributedCache _Cache;
+        private IConfiguration Configuration;
+        private readonly IDistributedCache Cache;
         internal static TicketDBContext Db { get; set; }
         #endregion
 
@@ -34,9 +34,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="_iConfig"></param>
         public FileController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
-            configuration = _iConfig;
+            Configuration = _iConfig;
             Db = db;
-            _Cache = cache;
+            Cache = cache;
         }
 
         #endregion
@@ -52,43 +52,43 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel GetFileUploadLogs()
         {
 
-            ResponseModel _objResponseModel = new ResponseModel();
-            List<FileUploadLogs> _objresponseModel = new List<FileUploadLogs>();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            List<FileUploadLogs> objFileUploadModel = new List<FileUploadLogs>();
+            int statusCode = 0;
             string statusMessage = "";
-            int fileuploadFor = 0;
+            int fileUploadFor = 0;
             try
             {
                 //Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newAlert = new SettingsCaller();
+                SettingsCaller newAlert = new SettingsCaller();
 
-                _objresponseModel = _newAlert.GetFileUploadLogs(new FileUploadService(_Cache, Db), authenticate.TenantId, fileuploadFor);
-                StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                objFileUploadModel = newAlert.GetFileUploadLogs(new FileUploadService(Cache, Db), authenticate.TenantId, fileUploadFor);
+                statusCode = objFileUploadModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objresponseModel;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objFileUploadModel;
 
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         #endregion

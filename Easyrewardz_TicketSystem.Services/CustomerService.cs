@@ -143,7 +143,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@DOB", customerMaster.DateOfBirth);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmd1.ExecuteScalar());
-                conn.Close();
 
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)

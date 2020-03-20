@@ -465,5 +465,131 @@ namespace Easyrewardz_TicketSystem.Services
 
             return objIssueTypeLst;
         }
+
+        /// <summary>
+        /// Get SLA details for Edit using SLAID
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="SLAID"></param>
+        /// <returns></returns>
+        public SLADetail GetSLADetail(int tenantID, int SLAID)
+        {
+            SLADetail objSLADetail = new SLADetail();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn = Db.Connection;
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetSLADetailsBySLAID", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd1.Parameters.AddWithValue("@SLA_ID", SLAID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objSLADetail.SLAId = Convert.ToInt16(ds.Tables[0].Rows[0]["SlaID"]);
+                        objSLADetail.BrandName = Convert.ToString(ds.Tables[0].Rows[0]["BrandName"]);
+                        objSLADetail.SubCategoryName = Convert.ToString(ds.Tables[0].Rows[0]["SubCategoryName"]);
+                        objSLADetail.CategoryName = Convert.ToString(ds.Tables[0].Rows[0]["CategoryName"]);
+                        objSLADetail.IssueTypeName = Convert.ToString(ds.Tables[0].Rows[0]["IssueTypeName"]);
+                    }
+
+                    List<SLATargetDetail> sLATargetDetails = new List<SLATargetDetail>();
+
+                    if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                        {
+                            SLATargetDetail sLATargetDetail = new SLATargetDetail();
+                            sLATargetDetail.SLATargetID = Convert.ToInt32(ds.Tables[1].Rows[i]["SLATargetID"]);
+                            sLATargetDetail.PriorityID = Convert.ToInt32(ds.Tables[1].Rows[i]["PriorityID"]);
+                            sLATargetDetail.PriorityName = Convert.ToString(ds.Tables[1].Rows[i]["PriortyName"]);
+                            sLATargetDetail.IsActive = Convert.ToBoolean(ds.Tables[1].Rows[i]["IsActive"]);
+                            sLATargetDetail.SLABridgeInPercantage = Convert.ToInt32(ds.Tables[1].Rows[i]["PrioritySLABreach"]);
+                            sLATargetDetail.SLAResponseType = Convert.ToString(ds.Tables[1].Rows[i]["PriorityRespondType"]);
+                            sLATargetDetail.SLAResponseValue = Convert.ToInt32(ds.Tables[1].Rows[i]["PriorityRespondValue"]);
+                            sLATargetDetail.SLAResolveType = Convert.ToString(ds.Tables[1].Rows[i]["PriorityResolveType"]);
+                            sLATargetDetail.SLAResolveValue = Convert.ToInt32(ds.Tables[1].Rows[i]["PriorityResolveValue"]);
+
+                            sLATargetDetails.Add(sLATargetDetail);
+                        }
+                    }
+
+                    objSLADetail.sLATargetDetails = sLATargetDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose();
+            }
+
+            return objSLADetail;
+
+        }
+
+        /// <summary>
+        /// Update SLA 
+        /// </summary>
+        public bool UpdateSLADetails(SLADetail SLA, int TenantID, int UserId)
+        {
+            bool isUpdateDone = false;
+            try
+            {
+                conn = Db.Connection;
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateSLAStatus", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@modified_By", UserId);
+                cmd.Parameters.AddWithValue("@SLA_ID", SLA.SLAId);
+                cmd.Parameters.AddWithValue("@Is_Active", SLA.IsActive);
+                cmd.ExecuteScalar();
+
+                if (SLA != null)
+                {
+                    if (SLA.sLATargetDetails.Count > 0)
+                    {
+                        for (int k = 0; k < SLA.sLATargetDetails.Count; k++)
+                        {
+                            MySqlCommand cmdSLA = new MySqlCommand("SP_UpdateSLATargetDetails", conn);
+                            cmdSLA.Connection = conn;
+                            cmdSLA.Parameters.AddWithValue("@SLATarget_ID", SLA.sLATargetDetails[k].SLATargetID);
+                            cmdSLA.Parameters.AddWithValue("@priority_ID", SLA.sLATargetDetails[k].PriorityID);
+                            cmdSLA.Parameters.AddWithValue("@priority_SLABreach", SLA.sLATargetDetails[k].SLABridgeInPercantage);
+                            cmdSLA.Parameters.AddWithValue("@priority_RespondValue", SLA.sLATargetDetails[k].SLAResponseValue);
+                            cmdSLA.Parameters.AddWithValue("@priority_RespondType", SLA.sLATargetDetails[k].SLAResponseType);
+                            cmdSLA.Parameters.AddWithValue("@priority_ResolutionValue", SLA.sLATargetDetails[k].SLAResolveValue);
+                            cmdSLA.Parameters.AddWithValue("@priority_ResolutionType", SLA.sLATargetDetails[k].SLAResolveType);
+                            cmdSLA.Parameters.AddWithValue("@modified_By", UserId);
+                            cmdSLA.Parameters.AddWithValue("@tenant_ID", TenantID);
+                            cmdSLA.Parameters.AddWithValue("@Sla_ID", SLA.SLAId);
+                            cmdSLA.CommandType = CommandType.StoredProcedure;
+                            cmdSLA.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+                isUpdateDone = true;
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+           
+            return isUpdateDone;
+        }
     }
 }

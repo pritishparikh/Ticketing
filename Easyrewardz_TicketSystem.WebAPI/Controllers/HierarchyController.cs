@@ -9,17 +9,19 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using Microsoft.Extensions.Caching.Distributed;
 using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.AspNetCore.Authorization;
+using Easyrewardz_TicketSystem.WebAPI.Filters;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-  // [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class HierarchyController : ControllerBase
     {
         #region variable declaration
-        private IConfiguration configuration;
-        private readonly IDistributedCache _Cache;
+        private IConfiguration Configuration;
+        private readonly IDistributedCache Cache;
         internal static TicketDBContext Db { get; set; }
         private readonly string rootPath;
         #endregion
@@ -27,10 +29,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Cunstructor
         public HierarchyController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
-            configuration = _iConfig;
+            Configuration = _iConfig;
             Db = db;
-            _Cache = cache;
-            rootPath = configuration.GetValue<string>("APIURL");
+            Cache = cache;
+            rootPath = Configuration.GetValue<string>("APIURL");
         }
         #endregion
 
@@ -44,18 +46,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("CreateHierarchy")]
         public ResponseModel CreateHierarchy([FromBody] CustomHierarchymodel customHierarchymodel)
         {
-            HierarchyCaller _Hierarchy = new HierarchyCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            HierarchyCaller hierarchy = new HierarchyCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
                 customHierarchymodel.TenantID = authenticate.TenantId;
                 customHierarchymodel.CreatedBy = authenticate.UserMasterID;
-                int result = _Hierarchy.CreateHierarchy(new HierarchyService(_Cache, Db), customHierarchymodel);
+                int result = hierarchy.CreateHierarchy(new HierarchyService(Cache, Db), customHierarchymodel);
                 if (customHierarchymodel.Deleteflag == 1)
                 {
                     if (result == 0)
@@ -67,33 +69,33 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                         statusMessage = "Record deleted successfully ";
                     }
 
-                    StatusCode =
+                    statusCode =
                         result == 0 ? (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
 
                 }
                 else
                 {
-                    StatusCode =
+                    statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 }
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
 
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -101,64 +103,64 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("ListHierarchy")]
-        public ResponseModel ListHierarchy(int HierarchyFor=1)
+        public ResponseModel ListHierarchy(int HierarchyFor = 1)
         {
             List<CustomHierarchymodel> customHierarchymodels = new List<CustomHierarchymodel>();
-            HierarchyCaller _Hierarchy = new HierarchyCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            HierarchyCaller hierarchy = new HierarchyCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
-                customHierarchymodels = _Hierarchy.ListofHierarchy(new HierarchyService(_Cache, Db), authenticate.TenantId, HierarchyFor);
-                StatusCode =
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
+                customHierarchymodels = hierarchy.ListofHierarchy(new HierarchyService(Cache, Db), authenticate.TenantId, HierarchyFor);
+                statusCode =
                    customHierarchymodels.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = customHierarchymodels;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = customHierarchymodels;
 
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// Bullk Upload  Hierarchy
         /// </summary>
         /// <returns></returns>
-           [HttpPost]
+        [HttpPost]
         [Route("BulkUploadHierarchy")]
         public ResponseModel BulkUploadHierarchy(int HierarchyFor)
         {
-            string DownloadFilePath = string.Empty;
-            string BulkUploadFilesPath = string.Empty;
-            bool errorfilesaved = false;
-            bool successfilesaved = false;
+            string downloadFilePath = string.Empty;
+            string bulkUploadFilesPath = string.Empty;
+            bool errorFileSaved = false;
+            bool successFileSaved = false;
             int count = 0;
-            HierarchyCaller _Hierarchy = new HierarchyCaller();
+            HierarchyCaller hierarchy = new HierarchyCaller();
             SettingsCaller fileU = new SettingsCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = ""; string fileName = ""; string finalAttchment = "";
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
-            DataSet DataSetCSV = new DataSet();
+            DataSet dataSetCSV = new DataSet();
             string[] filesName = null;
             List<string> CSVlist = new List<string>();
 
@@ -168,13 +170,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 var files = Request.Form.Files;
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
                 #region FilePath
-                BulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
-                DownloadFilePath = rootPath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
+                bulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
+                downloadFilePath = rootPath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
 
                 #endregion
 
@@ -217,51 +219,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 //     }
                 // }
 
-                //DataSetCSV = CommonService.csvToDataSet(BulkUploadFilesPath + "\\" + filesName[0]);
+                //dataSetCSV = CommonService.csvToDataSet(BulkUploadFilesPath + "\\" + filesName[0]);
 
                 #endregion
 
-                DataSetCSV = CommonService.csvToDataSet(BulkUploadFilesPath + "\\hierarchymaster.csv");
+                dataSetCSV = CommonService.csvToDataSet(bulkUploadFilesPath + "\\hierarchymaster.csv");
 
-                CSVlist = _Hierarchy.HierarchyBulkUpload(new HierarchyService(_Cache, Db),
-                    authenticate.TenantId, authenticate.UserMasterID, HierarchyFor, DataSetCSV);
+                CSVlist = hierarchy.HierarchyBulkUpload(new HierarchyService(Cache, Db),
+                    authenticate.TenantId, authenticate.UserMasterID, HierarchyFor, dataSetCSV);
 
-                //CSVlist = _Hierarchy.HierarchyBulkUpload(new HierarchyService(_connectionSting),
-                //  authenticate.TenantId, authenticate.UserMasterID, HierarchyFor, filesName[0], DataSetCSV);
+                //CSVlist = hierarchy.HierarchyBulkUpload(new HierarchyService(_connectionSting),
+                //  authenticate.TenantId, authenticate.UserMasterID, HierarchyFor, filesName[0], dataSetCSV);
 
                 #region Create Error and Success files and  Insert in FileUploadLog
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
-                    errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", CSVlist[0]);
+                    errorFileSaved = CommonService.SaveFile(downloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", CSVlist[0]);
 
                 if (!string.IsNullOrEmpty(CSVlist[1]))
-                    successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv", CSVlist[1]);
+                    successFileSaved = CommonService.SaveFile(downloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv", CSVlist[1]);
 
-                count = fileU.CreateFileUploadLog(new FileUploadService(_Cache, Db), authenticate.TenantId, "hierarchymaster.csv", errorfilesaved,
+                count = fileU.CreateFileUploadLog(new FileUploadService(Cache, Db), authenticate.TenantId, "hierarchymaster.csv", errorFileSaved,
                                    "HierarchyErrorFile.csv", "HierarchySuccessFile.csv", authenticate.UserMasterID, "Hierarchy",
-                                   DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv",
-                                   DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", HierarchyFor
+                                   downloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv",
+                                   downloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", HierarchyFor
                                    );
                 #endregion
 
-                StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = CSVlist.Count;
+                statusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = CSVlist.Count;
 
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
 
 
         }
