@@ -113,7 +113,18 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_alertID", alertModel.AlertId);
                 cmd.Parameters.AddWithValue("@_alertTypeName", alertModel.AlertTypeName);
                 cmd.Parameters.AddWithValue("@_isAlertActive", Convert.ToInt16(alertModel.isAlertActive));
-                cmd.Parameters.AddWithValue("@_modifiedBy", ModifiedBy);
+                cmd.Parameters.AddWithValue("@_modifiedBy", ModifiedBy); 
+                if(alertModel.CommunicationModeDetails.Count > 0)
+                {
+                    cmd.Parameters.AddWithValue("@_enabledCommMode", 
+                        string.Join(',', alertModel.CommunicationModeDetails.Select(x=>x.Communication_Mode).Distinct().ToList())  );
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@_enabledCommMode", "" );
+                }
+               
+
                 cmd.CommandType = CommandType.StoredProcedure;
                 updatecount = cmd.ExecuteNonQuery();
 
