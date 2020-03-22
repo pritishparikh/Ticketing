@@ -49,6 +49,11 @@ namespace Easyrewardz_TicketSystem.WebAPI
                              .AllowAnyHeader();
                          });
                  });
+            //services.AddMvc(
+            //    config => {
+            //        config.Filters.Add(typeof(CustomExceptionFilter));
+            //    }
+            //);
             services.AddOptions();
 
             ////Register Appsetting---------------------------------------------------------- 
