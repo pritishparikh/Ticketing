@@ -310,14 +310,20 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        CustomDraftDetails DraftDetails = new CustomDraftDetails();
-                        DraftDetails.TicketId = ds.Tables[0].Rows[i]["TicketId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketId"]);
-                        DraftDetails.TicketTitle = ds.Tables[0].Rows[i]["TikcketTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketTitle"]);
-                        DraftDetails.TicketDescription = ds.Tables[0].Rows[i]["TicketDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketDescription"]);
-                        DraftDetails.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
-                        DraftDetails.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
-                        DraftDetails.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
-                        DraftDetails.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
+                        CustomDraftDetails DraftDetails = new CustomDraftDetails
+                        {
+                            TicketId = ds.Tables[0].Rows[i]["TicketId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketId"]),
+                            TicketTitle = ds.Tables[0].Rows[i]["TikcketTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketTitle"]),
+                            TicketDescription = ds.Tables[0].Rows[i]["TicketDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketDescription"]),
+                            CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]),
+                            SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]),
+                            IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]),
+                            CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]),
+                            CustomerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]),
+                            CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
+                            AssignedID = ds.Tables[0].Rows[i]["AssignedID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["AssignedID"]),
+                        };
+                       
                         Draftlist.Add(DraftDetails);
                     }
                 }
