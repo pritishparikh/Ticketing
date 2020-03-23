@@ -16,24 +16,24 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class CategoryController : ControllerBase
     {
 
         #region variable declaration
-        private IConfiguration configuration;
-        private readonly IDistributedCache _Cache;
+        private IConfiguration Configuration;
+        private readonly IDistributedCache Cache;
         internal static TicketDBContext Db { get; set; }
 
         private readonly string rootPath;
         #endregion
 
         #region Cunstructor
-        public CategoryController(IConfiguration _iConfig,TicketDBContext db, IDistributedCache cache)
+        public CategoryController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
-            configuration = _iConfig;
+            Configuration = _iConfig;
             Db = db;
-            _Cache = cache;
+            Cache = cache;
         }
         #endregion
 
@@ -45,32 +45,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetCategoryList")]
-        [AllowAnonymous]
         public List<Category> GetCategoryList(int BrandID)
         {
             List<Category> objCategoryList = new List<Category>();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;           
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                //authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                //authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
                 authenticate.TenantId = 1;
-                MasterCaller _newMasterCategory = new MasterCaller();
-                objCategoryList = _newMasterCategory.GetCategoryList(new CategoryServices(_Cache, Db), authenticate.TenantId, BrandID);
-               
+                MasterCaller newMasterCategory = new MasterCaller();
+                objCategoryList = newMasterCategory.GetCategoryList(new CategoryServices(Cache, Db), authenticate.TenantId, BrandID);
+
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
             return objCategoryList;
         }
@@ -86,39 +85,39 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel AddCategory(int BrandID, string category)
         {
 
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             int result = 0;
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
-                MasterCaller _newMasterCategory = new MasterCaller();
-                result = _newMasterCategory.AddCategory(new CategoryServices(_Cache, Db), category, authenticate.TenantId, authenticate.UserMasterID, BrandID);
-                StatusCode =
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
+                MasterCaller newMasterCategory = new MasterCaller();
+                result = newMasterCategory.AddCategory(new CategoryServices(Cache, Db), category, authenticate.TenantId, authenticate.UserMasterID, BrandID);
+                statusCode =
                result == 0 ?
                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
 
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = ex.Message;
-                _objResponseModel.ResponseData = null;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = ex.Message;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -131,37 +130,37 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel DeleteCategory(int CategoryID)
         {
 
-            MasterCaller _newMasterCategory = new MasterCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            MasterCaller newMasterCategory = new MasterCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                int result = _newMasterCategory.DeleteCategory(new CategoryServices(_Cache, Db), CategoryID, authenticate.TenantId);
-                StatusCode =
+                int result = newMasterCategory.DeleteCategory(new CategoryServices(Cache, Db), CategoryID, authenticate.TenantId);
+                statusCode =
                                result == 0 ?
                                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
 
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = ex.Message;
-                _objResponseModel.ResponseData = null;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = ex.Message;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -174,42 +173,42 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel UpdateCategory([FromBody]Category category)
         {
 
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             int result = 0;
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                MasterCaller _newMasterCategory = new MasterCaller();
+                MasterCaller newMasterCategory = new MasterCaller();
                 category.TenantID = authenticate.TenantId;
                 category.ModifyBy = authenticate.UserMasterID;
-                result = _newMasterCategory.UpdateCategory(new CategoryServices(_Cache, Db), category);
+                result = newMasterCategory.UpdateCategory(new CategoryServices(Cache, Db), category);
 
-                StatusCode =
+                statusCode =
                 result == 0 ?
                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = false;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = ex.Message;
-                _objResponseModel.ResponseData = null;
+                objResponseModel.Status = false;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = ex.Message;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -221,29 +220,29 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public List<Category> CategoryList()
         {
             List<Category> objcategory = new List<Category>();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
 
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                MasterCaller _newMasterCategory = new MasterCaller();
+                MasterCaller newMasterCategory = new MasterCaller();
 
-                objcategory = _newMasterCategory.CategoryList(new CategoryServices(_Cache, Db), authenticate.TenantId);
+                objcategory = newMasterCategory.CategoryList(new CategoryServices(Cache, Db), authenticate.TenantId);
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = ex.Message;
-                _objResponseModel.ResponseData = null;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = ex.Message;
+                objResponseModel.ResponseData = null;
             }
             return objcategory;
         }
@@ -258,40 +257,40 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel CreateCategorybrandmapping([FromBody] CustomCreateCategory customCreateCategory)
         {
 
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             int result = 0;
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
-                MasterCaller _newMasterCategory = new MasterCaller();
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
+                MasterCaller newMasterCategory = new MasterCaller();
                 customCreateCategory.CreatedBy = authenticate.UserMasterID;
-                result = _newMasterCategory.CreateCategoryBrandMapping(new CategoryServices(_Cache, Db), customCreateCategory);
-                StatusCode =
+                result = newMasterCategory.CreateCategoryBrandMapping(new CategoryServices(Cache, Db), customCreateCategory);
+                statusCode =
                result == 0 ?
                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
 
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = ex.Message;
-                _objResponseModel.ResponseData = null;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = ex.Message;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -304,37 +303,37 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel ListCategorybrandmapping()
         {
             List<CustomCreateCategory> customCreateCategories = new List<CustomCreateCategory>();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
-                MasterCaller _newMasterCategory = new MasterCaller();
-                customCreateCategories = _newMasterCategory.ListCategoryBrandMapping(new CategoryServices(_Cache, Db));
-                StatusCode =
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
+                MasterCaller newMasterCategory = new MasterCaller();
+                customCreateCategories = newMasterCategory.ListCategoryBrandMapping(new CategoryServices(Cache, Db));
+                statusCode =
                customCreateCategories.Count == 0 ?
                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = customCreateCategories;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = customCreateCategories;
 
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = ex.Message;
-                _objResponseModel.ResponseData = null;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = ex.Message;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -347,39 +346,39 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel GetCategoryListByMultiBrandID(string BrandIDs)
         {
             List<Category> objcategory = new List<Category>();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
 
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 //  authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
                 authenticate.TenantId = 1;
-                MasterCaller _newMasterCategory = new MasterCaller();
+                MasterCaller newMasterCategory = new MasterCaller();
 
-                objcategory = _newMasterCategory.GetCategoryListByMultiBrandID(new CategoryServices(_Cache, Db), BrandIDs, authenticate.TenantId);
-                StatusCode =
+                objcategory = newMasterCategory.GetCategoryListByMultiBrandID(new CategoryServices(Cache, Db), BrandIDs, authenticate.TenantId);
+                statusCode =
                objcategory.Count == 0 ?
                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objcategory;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objcategory;
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = ex.Message;
-                _objResponseModel.ResponseData = null;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = ex.Message;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -390,21 +389,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("BulkUploadCategory")]
         public ResponseModel BulkUploadCategory(int CategoryFor = 1)
         {
-            string DownloadFilePath = string.Empty;
-            string BulkUploadFilesPath = string.Empty;
-            bool errorfilesaved = false;
-            bool successfilesaved = false;
-            int count = 0;
+            string downloadFilePath = string.Empty;
+            string bulkUploadFilesPath = string.Empty;
+            bool errorFileSaved = false;
+            bool successFileSaved = false;
+            int Count = 0;
 
             MasterCaller masterCaller = new MasterCaller();
             SettingsCaller fileU = new SettingsCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             string fileName = "";
             string finalAttchment = "";
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
-            DataSet DataSetCSV = new DataSet();
+            DataSet dataSetCSV = new DataSet();
             string[] filesName = null;
             List<string> CSVlist = new List<string>();
 
@@ -412,13 +411,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 //var files = Request.Form.Files;
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
                 #region FilePath
-                //BulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
-                //DownloadFilePath = rootPath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
+                //bulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
+                //downloadFilePath = rootPath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
 
                 #endregion
                 //#region Read from Form
@@ -464,44 +463,44 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 //#endregion
 
-                DataSetCSV = CommonService.csvToDataSet("D:\\VipinSingh\\CategoryBulk.csv");
-                // DataSetCSV = CommonService.csvToDataSet(BulkUploadFilesPath + "\\Categorymaster.csv");
+                dataSetCSV = CommonService.csvToDataSet("D:\\VipinSingh\\CategoryBulk.csv");
+                // DataSetCSV = CommonService.csvToDataSet(bulkUploadFilesPath + "\\Categorymaster.csv");
 
-                CSVlist = masterCaller.CategoryBulkUpload(new CategoryServices(_Cache, Db),
-                  authenticate.TenantId, authenticate.UserMasterID, CategoryFor, "Categorymaster.csv", DataSetCSV);
+                CSVlist = masterCaller.CategoryBulkUpload(new CategoryServices(Cache, Db),
+                  authenticate.TenantId, authenticate.UserMasterID, CategoryFor, "Categorymaster.csv", dataSetCSV);
                 // int result = masterCaller.CategoryBulkUpload(new CategoryServices(_connectioSting),authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
                 #region Create Error and Succes files and  Insert in FileUploadLog
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
-                    errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Category\\ Success" + "\\" + "CategorySuccessFile.csv", CSVlist[0]);
+                    errorFileSaved = CommonService.SaveFile(downloadFilePath + "\\Category\\ Success" + "\\" + "CategorySuccessFile.csv", CSVlist[0]);
 
                 if (!string.IsNullOrEmpty(CSVlist[1]))
-                    successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Category\\Error" + "\\" + "CategoryErrorFile.csv", CSVlist[1]);
+                    successFileSaved = CommonService.SaveFile(downloadFilePath + "\\Category\\Error" + "\\" + "CategoryErrorFile.csv", CSVlist[1]);
 
-                count = fileU.CreateFileUploadLog(new FileUploadService(_Cache, Db), authenticate.TenantId, "Categorymaster.csv", errorfilesaved,
+                Count = fileU.CreateFileUploadLog(new FileUploadService(Cache, Db), authenticate.TenantId, "Categorymaster.csv", errorFileSaved,
                                    "CategoryErrorFile.csv", "CategorySuccessFile.csv", authenticate.UserMasterID, "Category",
-                                   DownloadFilePath + "\\Category\\Error" + "\\" + "CategoryErrorFile.csv",
-                                   DownloadFilePath + "\\Category\\ Success" + "\\" + "CategorySuccessFile.csv", CategoryFor
+                                   downloadFilePath + "\\Category\\Error" + "\\" + "CategoryErrorFile.csv",
+                                   downloadFilePath + "\\Category\\ Success" + "\\" + "CategorySuccessFile.csv", CategoryFor
                                    );
                 #endregion
-                StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = CSVlist.Count;
+                statusCode = Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = CSVlist.Count;
 
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
 
 
         }
@@ -516,44 +515,44 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("CreateClaimCategory")]
         public ResponseModel CreateClaimCategory([FromBody] ClaimCategory claimCategory)
         {
-            MasterCaller _newMasterCaller = new MasterCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            MasterCaller newMasterCaller = new MasterCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
                 claimCategory.CreatedBy = authenticate.UserMasterID;
                 claimCategory.TenantID = authenticate.TenantId;
 
-                int result = _newMasterCaller.CreateClaimCategory(new CategoryServices(_Cache, Db), claimCategory);
+                int result = newMasterCaller.CreateClaimCategory(new CategoryServices(Cache, Db), claimCategory);
 
-                StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
 
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
         #endregion
 

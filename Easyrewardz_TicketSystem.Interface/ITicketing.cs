@@ -54,5 +54,7 @@ namespace Easyrewardz_TicketSystem.Interface
         string getticketsforfollowup(int UserID);
 
         bool ticketunassigfromfollowup(string TicketIDs, int UserID);
+
+        int UpdateDraftTicket(TicketingDetails ticketingDetails, int TenantId, string FolderPath, string finalAttchment);
     }
 }

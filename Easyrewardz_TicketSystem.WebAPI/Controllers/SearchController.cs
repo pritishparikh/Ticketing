@@ -9,8 +9,6 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -19,17 +17,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     public class SearchController :ControllerBase
     {
         #region variable declaration
-        private IConfiguration configuration;
-        private readonly IDistributedCache _Cache;
+        private IConfiguration Configuration;
+        private readonly IDistributedCache Cache;
         internal static TicketDBContext Db { get; set; }
         #endregion
 
         #region Cunstructor
         public SearchController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
-            configuration = _iConfig;
+            Configuration = _iConfig;
             Db = db;
-            _Cache = cache;
+            Cache = cache;
         }
         #endregion
 
@@ -44,40 +42,40 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
       //  [AllowAnonymous]
         public ResponseModel SearchTicket([FromBody]SearchRequest searchparams )
         {
-            List<SearchResponse> _searchResult = null;
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            List<SearchResponse> searchResult = null;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
-            SearchCaller _newsearchMaster = new SearchCaller();
+            SearchCaller newSearchMaster = new SearchCaller();
             try
             {
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                var temp = SecurityService.DecryptStringAES(token);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
                 searchparams.tenantID = authenticate.TenantId; // add tenantID to request
                 searchparams.assignedTo = authenticate.UserMasterID; // add assignedID to request
-                _searchResult = _newsearchMaster.GetSearchResults(new SearchService(_Cache, Db), searchparams);
+                searchResult = newSearchMaster.GetSearchResults(new SearchService(Cache, Db), searchparams);
 
-                 StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _searchResult.Count > 0 ? _searchResult : null;
+                 statusCode = searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = searchResult.Count > 0 ? searchResult : null;
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -89,39 +87,39 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
        // [AllowAnonymous]
         public ResponseModel TicketStatusCount()
         {
-            List<TicketStatusModel> _searchResult = null;
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            List<TicketStatusModel> searchResult = null;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
-            SearchCaller _newsearchMaster = new SearchCaller();
+            SearchCaller newSearchMaster = new SearchCaller();
             try
             {
                 SearchRequest searchparams = new SearchRequest();
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
                 searchparams.tenantID = authenticate.TenantId; // add tenantID to request
                 searchparams.assignedTo = authenticate.UserMasterID;// add assignedID to request
 
-                _searchResult = _newsearchMaster.GetStatusCount(new SearchService(_Cache, Db), searchparams);
+                searchResult = newSearchMaster.GetStatusCount(new SearchService(Cache, Db), searchparams);
 
-                StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _searchResult.Count > 0 ? _searchResult : null;
+                statusCode = searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = searchResult.Count > 0 ? searchResult : null;
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -134,39 +132,39 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [AllowAnonymous]
         public ResponseModel GetTicketsOnPageLoad(int HeaderStatusID)
         {
-            List<SearchResponse> _searchResult = null;
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            List<SearchResponse> searchResult = null;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
-            SearchCaller _newsearchMaster = new SearchCaller();
+            SearchCaller newSearchMaster = new SearchCaller();
             try
             {
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                var temp = SecurityService.DecryptStringAES(token);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                _searchResult = _newsearchMaster.GetTicketsOnLoad(new SearchService(_Cache, Db), HeaderStatusID,authenticate.TenantId,authenticate.UserMasterID);
+                searchResult = newSearchMaster.GetTicketsOnLoad(new SearchService(Cache, Db), HeaderStatusID,authenticate.TenantId,authenticate.UserMasterID);
 
-                StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _searchResult.Count > 0 ? _searchResult : null;
+                statusCode = searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = searchResult.Count > 0 ? searchResult : null;
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = false;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = false;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
@@ -180,19 +178,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         //[AllowAnonymous]
         public ResponseModel GetTicketsOnSearch([FromBody]SearchModel searchModel)
         {
-            List<SearchResponse> _searchResult = null;
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            List<SearchResponse> searchResult = null;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
-            SearchCaller _newsearchMaster = new SearchCaller();
+            SearchCaller newSearchMaster = new SearchCaller();
             try
             {
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                var temp = SecurityService.DecryptStringAES(token);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
                 //authenticate.UserMasterID = 6;
                 //authenticate.TenantId = 1;
 
@@ -203,25 +201,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 searchModel.TenantID = authenticate.TenantId;
                 
 
-                _searchResult = _newsearchMaster.GetTicketsOnSearch(new SearchService(_Cache, Db), searchModel);
+                searchResult = newSearchMaster.GetTicketsOnSearch(new SearchService(Cache, Db), searchModel);
 
-                StatusCode = _searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _searchResult.Count > 0 ? _searchResult : null;
+                statusCode = searchResult.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = searchResult.Count > 0 ? searchResult : null;
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = false;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = false;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
@@ -234,39 +232,39 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("GetTicketsOnSavedSearch")]
         public ResponseModel GetTicketsOnSavedSearch(int SearchParamID)
         {
-            TicketSaveSearch _searchResult = null;
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            TicketSaveSearch searchResult = null;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
-            SearchCaller _newsearchMaster = new SearchCaller();
+            SearchCaller newSearchMaster = new SearchCaller();
             try
             {
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(_token));
+                var temp = SecurityService.DecryptStringAES(token);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                _searchResult = _newsearchMaster.GetTicketsOnSavedSearch(new SearchService(_Cache, Db),authenticate.TenantId,authenticate.UserMasterID, SearchParamID);
+                searchResult = newSearchMaster.GetTicketsOnSavedSearch(new SearchService(Cache, Db),authenticate.TenantId,authenticate.UserMasterID, SearchParamID);
 
-                StatusCode = _searchResult.ticketList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _searchResult;
+                statusCode = searchResult.ticketList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = searchResult;
             }
             catch (Exception ex)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = false;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = false;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
         #endregion
     }

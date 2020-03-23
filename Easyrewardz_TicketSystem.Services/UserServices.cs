@@ -648,6 +648,32 @@ namespace Easyrewardz_TicketSystem.Services
             return message;
         }
 
+        public int DeleteProfilePicture(int tenantID, int userID, int isStoreUser)
+        {
+            int success = 0;
+            try
+            {
+                conn = Db.Connection;
+                MySqlCommand cmd = new MySqlCommand("SP_DeleteUserProfile", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@User_ID", userID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@isStore_User", isStoreUser);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
+            return success;
+        }
+
         #endregion
     }
 }

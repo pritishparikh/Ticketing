@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -21,13 +22,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
     public class TokenAuthenticationHandler : AuthenticationHandler<TokenAuthenticationOptions>
     {
         private const string SchemeName = "TokenAuth";
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache _Cache;
 
         public TokenAuthenticationHandler(IOptionsMonitor<TokenAuthenticationOptions> options,
-            ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IConfiguration configuration)
+            ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IConfiguration configuration,IDistributedCache cache)
                 : base(options, logger, encoder, clock)
         {
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            _Cache = cache;
         }
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
@@ -60,7 +61,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                 //}
 
 
-                Authenticate authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                Authenticate authenticate = SecurityService.GetAuthenticateDataFromTokenCache(_Cache, SecurityService.DecryptStringAES(token));
 
                 if (!string.IsNullOrEmpty(authenticate.Token))
                 {

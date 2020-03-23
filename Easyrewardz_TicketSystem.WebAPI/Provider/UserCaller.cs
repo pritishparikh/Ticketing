@@ -84,5 +84,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _UserRepository.validateUserExist(UserEmailID, UserMobile, TenantId);
         }
 
+        public int DeleteProfilePicture(IUser User, int tenantID, int userID, int isStoreUser)
+        {
+            _UserRepository = User;
+            return _UserRepository.DeleteProfilePicture(tenantID, userID, isStoreUser);
+        }
     }
 }
