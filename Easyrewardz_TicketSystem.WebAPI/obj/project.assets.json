@@ -4862,7 +4862,8 @@
         "framework": ".NETCoreApp,Version=v2.2",
         "dependencies": {
           "Easyrewardz_TicketSystem.CustomModel": "1.0.0",
-          "Easyrewardz_TicketSystem.Model": "1.0.0"
+          "Easyrewardz_TicketSystem.Model": "1.0.0",
+          "Microsoft.AspNetCore.Mvc.Abstractions": "2.2.0"
         },
         "compile": {
           "bin/placeholder/Easyrewardz_TicketSystem.Interface.dll": {}

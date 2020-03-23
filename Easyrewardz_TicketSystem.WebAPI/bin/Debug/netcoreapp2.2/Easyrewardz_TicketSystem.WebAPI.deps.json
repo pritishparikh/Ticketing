@@ -495,7 +495,8 @@
       "Easyrewardz_TicketSystem.Interface/1.0.0": {
         "dependencies": {
           "Easyrewardz_TicketSystem.CustomModel": "1.0.0",
-          "Easyrewardz_TicketSystem.Model": "1.0.0"
+          "Easyrewardz_TicketSystem.Model": "1.0.0",
+          "Microsoft.AspNetCore.Mvc.Abstractions": "2.2.0"
         },
         "runtime": {
           "Easyrewardz_TicketSystem.Interface.dll": {}

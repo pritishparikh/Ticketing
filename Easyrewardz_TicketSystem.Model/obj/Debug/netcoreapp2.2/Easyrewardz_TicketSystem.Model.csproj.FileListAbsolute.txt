@@ -67,3 +67,4 @@ D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model
 D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.AssemblyInfo.cs
 D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
 D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Ticketing\Ticketing-DI\Ticket-New-DI\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.csprojAssemblyReference.cache

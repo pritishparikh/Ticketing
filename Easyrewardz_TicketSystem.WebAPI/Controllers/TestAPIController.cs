@@ -31,6 +31,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("values")]
         public ResponseModel values()
         {
+          
 
             int StatusCode = (int)EnumMaster.StatusCode.Success;
             string statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

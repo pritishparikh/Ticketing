@@ -41,7 +41,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         #region Custom Methods
         /// <summary>
-        /// Create Alert
+        /// Create Alert insert
         /// </summary>
         /// <returns></returns>
         [HttpPost]
