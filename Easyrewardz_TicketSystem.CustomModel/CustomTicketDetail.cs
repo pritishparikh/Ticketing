@@ -81,6 +81,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// </summary>
         public int? Totalticket { get; set; }
         /// <summary>
+        /// Total Task
+        /// </summary>
+        public int? TotalTask { get; set; }
+        /// <summary>
         /// TargetClouredate
         /// </summary>
         public string TargetClosuredate { get; set; }
