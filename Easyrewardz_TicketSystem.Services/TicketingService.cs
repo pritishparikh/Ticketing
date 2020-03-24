@@ -820,6 +820,8 @@ namespace Easyrewardz_TicketSystem.Services
                             ticketingMailerObj.ToEmail = ds.Tables[4].Rows[0]["ToEmail"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[0]["ToEmail"]);
                             ticketingMailerObj.UserCC = ds.Tables[4].Rows[0]["UserCC"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[0]["UserCC"]);
                             ticketingMailerObj.UserBCC = ds.Tables[4].Rows[0]["UserBCC"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[0]["UserBCC"]);
+                            ticketingMailerObj.IsCustomerComment = ds.Tables[4].Rows[0]["IsCustomerComment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[4].Rows[0]["IsCustomerComment"]);
+                            ticketingMailerObj.AlertID = ds.Tables[4].Rows[0]["AlertID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[4].Rows[0]["AlertID"]);
                         }
                         ticketDetails.ticketingMailerQue = ticketingMailerObj;
 
