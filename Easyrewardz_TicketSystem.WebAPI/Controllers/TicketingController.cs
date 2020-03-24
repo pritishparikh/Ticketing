@@ -104,6 +104,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
             string fileName = "";
             string finalAttchment = "";
+            string ResponseMessage = "";
+            string ErrorResponseMessage = "";
 
             if (files.Count > 0)
             {
@@ -141,6 +143,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
 
+                if(ticketingDetails.StatusID == 100)
+                {
+                    ResponseMessage = "Draft created successfully.";
+                }
+                else
+                {
+                    ResponseMessage = "Ticket created successfully.";
+                }
                 if (result > 0)
                 {
                     if (files.Count > 0)
@@ -173,14 +183,23 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 _objResponseModel.Status = true;
                 _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = "Ticket created successfully.";
+                _objResponseModel.Message = ResponseMessage;
                 _objResponseModel.ResponseData = result;
             }
             catch (Exception ex)
             {
+                if (ticketingDetails.StatusID == 100)
+                {
+                    ErrorResponseMessage = "Draft not created.";
+                }
+                else
+                {
+                    ErrorResponseMessage = "Ticket not created.";
+                }
+
                 _objResponseModel.Status = false;
                 _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = "Ticket not created.";
+                _objResponseModel.Message = ErrorResponseMessage;
                 _objResponseModel.ResponseData = null;
 
             }
