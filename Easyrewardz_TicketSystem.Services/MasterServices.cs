@@ -1,5 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -10,11 +12,17 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class MasterServices : IMasterInterface
     {
+        #region variable
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region
         MySqlConnection conn = new MySqlConnection();
-        public MasterServices(string _connectionString)
+        public MasterServices(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
         #endregion
 

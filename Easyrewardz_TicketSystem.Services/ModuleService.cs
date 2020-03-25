@@ -1,5 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -11,13 +13,18 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class ModuleService : IModules
     {
+        #region variable
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
 
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
 
-        public ModuleService(string _connectionString)
+        public ModuleService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
 
         #endregion
@@ -33,7 +40,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("Sp_UpdateModuleItems", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", tenantID);
@@ -52,14 +59,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return updatecount;
         }
 
@@ -77,7 +77,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetModuleItemList", conn);
@@ -114,7 +114,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
 
             return objModuleItemLst;
@@ -131,7 +131,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_ModuleList", conn);
@@ -168,7 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
 
             return objModuleLst;
