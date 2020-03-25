@@ -1,8 +1,9 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,12 +16,16 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
         #endregion
+
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
-        public StoreService(string _connectionString)
+        public StoreService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
 
         public int AttachStore(string StoreId, int TicketId, int CreatedBy)
@@ -28,7 +33,7 @@ namespace Easyrewardz_TicketSystem.Services
             int Success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_BulkTicketStoreattachMapping", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Ticket_Id", TicketId);
@@ -43,13 +48,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return Success;
         }
 
@@ -64,7 +63,7 @@ namespace Easyrewardz_TicketSystem.Services
             int storeId = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertStore", conn);
                 cmd.Connection = conn;
                 //cmd.Parameters.AddWithValue("@Brand_ID", storeMaster.BrandID);
@@ -91,14 +90,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return storeId;
         }
         /// <summary>
@@ -112,7 +104,7 @@ namespace Easyrewardz_TicketSystem.Services
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteStore", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Store_ID", StoreID);
@@ -126,14 +118,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return success;
         }
 
@@ -147,7 +132,7 @@ namespace Easyrewardz_TicketSystem.Services
             int Success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateStore", conn);
                 cmd.Connection = conn;
                 //cmd.Parameters.AddWithValue("@Brand_ID", storeMaster.BrandID);
@@ -175,14 +160,6 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
            
             return Success;
         }
@@ -194,7 +171,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getStoreSDetialwithStorenamenPincode", conn);
                 cmd1.Parameters.AddWithValue("@searchText", searchText);
@@ -225,13 +202,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return storeMaster;
         }
         /// <summary>
@@ -246,7 +217,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getStores", conn);
                 cmd1.Parameters.AddWithValue("@Tenant_Id", tenantID);
@@ -272,13 +243,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return storeMaster;
         }
 
@@ -288,7 +253,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_SearchStore", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@State_ID", StateID);
@@ -317,13 +282,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return storeMaster;
         }
 
@@ -338,7 +297,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetStoreList", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantID);
@@ -360,7 +319,7 @@ namespace Easyrewardz_TicketSystem.Services
                         store.strPinCode = ds.Tables[0].Rows[i]["PincodeID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PincodeID"]);
                         store.Status = ds.Tables[0].Rows[i]["StoreStatus"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreStatus"]);
 
-                        store.Address = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        store.Address = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]); 
                         store.PhoneNumber = ds.Tables[0].Rows[i]["StorePhoneNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StorePhoneNo"]);
                         store.Email = ds.Tables[0].Rows[i]["StoreEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
 
@@ -382,13 +341,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return storeMaster;
         }
 
@@ -402,10 +355,9 @@ namespace Easyrewardz_TicketSystem.Services
             List<StoreMaster> storeMaster = new List<StoreMaster>();
             DataSet ds = new DataSet();
             string GMT = " GMT+0530 (" + TimeZoneInfo.Local.StandardName + ")";
-
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetSelectedStoresByTicketID", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Ticket_ID", TicketId);
@@ -417,7 +369,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-
+                     
                         StoreMaster store = new StoreMaster();
                         store.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
                         store.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
@@ -428,20 +380,14 @@ namespace Easyrewardz_TicketSystem.Services
                         store.StoreVisitDate = ds.Tables[0].Rows[i]["StoreVisitDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreVisitDate"]) + GMT;
                         store.Purpose = ds.Tables[0].Rows[i]["Purpose"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Purpose"]);
                         storeMaster.Add(store);
-                    } 
+                    }
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return storeMaster;
         }
 
@@ -465,7 +411,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
 
-                        conn.Open();
+                        conn = Db.Connection;
                         MySqlCommand cmd = new MySqlCommand("SP_BulkUploadStore", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
@@ -511,10 +457,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     DataSetCSV.Dispose();
                 }
-                if (conn != null)
-                {
-                    conn.Close();
-                }
+               
             }
             return csvLst;
         }
@@ -528,7 +471,7 @@ namespace Easyrewardz_TicketSystem.Services
             int result = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_CreateCampaignScript", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -543,10 +486,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                conn.Close();
-            }
+            
             return result;
         }
 
@@ -558,7 +498,7 @@ namespace Easyrewardz_TicketSystem.Services
             int result = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateClaimAttechment", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -572,10 +512,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                conn.Close();
-            }
+           
             return result;
         }
 
