@@ -28,6 +28,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Controller_Name", errorLog.ControllerName );
                 cmd.Parameters.AddWithValue("@Action_Name", errorLog.ActionName);
                 cmd.Parameters.AddWithValue("@_Exceptions", errorLog.Exceptions);
+                cmd.Parameters.AddWithValue("@_MessageException", errorLog.MessageException);
                 cmd.Parameters.AddWithValue("@_IPAddress", errorLog.IPAddress);
                 cmd.CommandType = CommandType.StoredProcedure;
                 Success = Convert.ToInt32(cmd.ExecuteNonQuery());

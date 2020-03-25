@@ -1,5 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -15,13 +17,16 @@ namespace Easyrewardz_TicketSystem.Services
 
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
         #endregion
         MySqlConnection conn = new MySqlConnection();
         #region Cunstructor
 
-        public CRMRoleService(string _connectionString)
+        public CRMRoleService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
         #endregion
 
@@ -36,7 +41,7 @@ namespace Easyrewardz_TicketSystem.Services
  
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand(CRMRoleID > 0 ? "SP_UpdateCRMRole" : "SP_InsertCRMRole", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -63,13 +68,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
 
             return count;
         }
@@ -84,7 +83,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteCRMRole", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
@@ -98,13 +97,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return deletecount;
 
         }
@@ -119,7 +112,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetCRMRolesDetails", conn);
@@ -174,7 +167,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
             return objCRMLst;
         }
@@ -187,7 +180,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetCRMDropdown", conn);
@@ -212,14 +205,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return objCRMLst;
         }
 
@@ -230,7 +216,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("GetCRMRoleDetailsByUserID", conn);
@@ -286,10 +272,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
                 if (ds != null)
                     ds.Dispose();
             }
@@ -317,7 +299,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
 
-                        conn.Open();
+                        conn = Db.Connection;
                         MySqlCommand cmd = new MySqlCommand("SP_BulkUploadCRMRoles", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
@@ -364,10 +346,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     DataSetCSV.Dispose();
                 }
-                if (conn != null)
-                {
-                    conn.Close();
-                }
+                
             }
             return csvLst;
 

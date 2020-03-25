@@ -1,5 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -10,11 +12,17 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class CustomerService : ICustomer
     {
+        #region variable
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
-        public CustomerService(string _connectionString)
+        public CustomerService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
         #endregion
 
@@ -31,7 +39,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getCustomerDetailsById", conn);
                 cmd1.Parameters.AddWithValue("@Customer_ID", CustomerID);
@@ -59,13 +67,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return customerMaster;
         }
 
@@ -84,7 +86,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_searchCustomerByEmailAndPhone", conn);
                 cmd1.Parameters.AddWithValue("@searchText", searchText);
@@ -110,13 +112,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return customerMasters;
         }
 
@@ -132,7 +128,7 @@ namespace Easyrewardz_TicketSystem.Services
             int i = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createCustomer", conn);
                 cmd1.Parameters.AddWithValue("@TenantID", TenantId);
@@ -147,21 +143,13 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@DOB", customerMaster.DateOfBirth);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmd1.ExecuteScalar());
-                conn.Close();
 
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return i;
         }
 
@@ -178,7 +166,7 @@ namespace Easyrewardz_TicketSystem.Services
             int i = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_updateCustomer", conn);
                 cmd1.Parameters.AddWithValue("@objCustomerID", customerMaster.CustomerID);
@@ -198,14 +186,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return i;
         }
 
@@ -223,7 +204,7 @@ namespace Easyrewardz_TicketSystem.Services
             string message = "";
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("Sp_ValidateCustomerExists", conn);
                 cmd1.Parameters.AddWithValue("@Cust_EmailId", Cust_EmailId);
@@ -238,14 +219,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return message;
         }
     }
