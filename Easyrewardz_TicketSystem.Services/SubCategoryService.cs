@@ -17,6 +17,7 @@ namespace Easyrewardz_TicketSystem.Services
         public TicketDBContext Db { get; set; }
         #endregion
 
+
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
         public SubCategoryService(IDistributedCache cache, TicketDBContext db)
