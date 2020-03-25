@@ -15,7 +15,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string DesignationName { get; set; }
         public string ProfilePicture { get; set; }
     }
-
     public class ProfileDetailsmodel
     {
 

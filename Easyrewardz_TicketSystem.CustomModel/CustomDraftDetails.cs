@@ -39,6 +39,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// CreatedDate
         /// </summary>
         public DateTime CreatedDate { get; set; }
+
         /// <summary>
         /// Customer ID
         /// </summary>
