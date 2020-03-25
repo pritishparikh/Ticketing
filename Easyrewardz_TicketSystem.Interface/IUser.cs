@@ -31,5 +31,7 @@ namespace Easyrewardz_TicketSystem.Interface
         CustomChangePassword SendMailforchangepassword(int userID, int TenantID, int IsStoreUser);
 
         string validateUserExist(string UserEmailID, string UserMobile, int TenantId);
+
+    
     }
 }

@@ -28,7 +28,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<CustomCreateCategory> ListCategoryBrandMapping();
 
-        List<string> BulkUploadCategory(int TenantID, int CreatedBy,int CategoryFor, DataSet DataSetCSV);
+        List<string> BulkUploadCategory(int TenantID, int CreatedBy, int CategoryFor, DataSet DataSetCSV);
 
         int CreateClaimCategory(ClaimCategory claimCategory);
     }
