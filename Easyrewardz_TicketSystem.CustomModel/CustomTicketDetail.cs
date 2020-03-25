@@ -81,7 +81,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// </summary>
         public int? Totalticket { get; set; }
         /// <summary>
-        /// Total Task
+         /// Total Task
         /// </summary>
         public int? TotalTask { get; set; }
         /// <summary>
@@ -163,7 +163,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// ProductNames
         /// </summary>
         public string ProductNames { get; set; }
-
         /// <summary>
         /// RoleID
         /// </summary>
@@ -172,7 +171,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// RoleName
         /// </summary>
         public string RoleName { get; set; }
-
         public string DurationRemaining { get; set; }
         public string OrderItemID { get; set; }
         public List<Store> stores { get; set; }
