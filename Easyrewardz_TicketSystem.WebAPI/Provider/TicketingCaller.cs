@@ -239,8 +239,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ticketList = _ticket;
             return _ticketList.UpdateDraftTicket(ticketingDetails, TenantId, FolderPath, finalAttchment);
         }
-
-
         #endregion
     }
 }

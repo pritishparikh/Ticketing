@@ -88,6 +88,5 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _UserRepository = User;
             return _UserRepository.validateUserExist(UserEmailID, UserMobile, TenantId);
         }
-
     }
 }
