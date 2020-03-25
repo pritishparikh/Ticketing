@@ -783,71 +783,97 @@ namespace Easyrewardz_TicketSystem.Services
         /// Creation Details Mapping
         /// </summary>
         #region Mapping
+
+
         public string setCreationdetails(string time, string ColName)
         {
             string timespan = string.Empty;
             DateTime now = DateTime.Now;
             TimeSpan diff = new TimeSpan();
             string[] PriorityArr = null;
-
+            string spantext = "{0} Days {1} Hrs {2} Mins Ago";
             try
             {
                 if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
                 {
-                    diff = now - Convert.ToDateTime(time);
-                    timespan = CalculateSpan(diff) + " ago";
-
+                    diff = DateTime.Now - Convert.ToDateTime(time);
+                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
+                  
                 }
                 else if (ColName == "RespondTimeRemainingSpan")
                 {
                     PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+                    DateTime assigneddate = Convert.ToDateTime(time.Split(new char[] { '|' })[1]);
+                    
 
                     switch (PriorityArr[1])
                     {
                         case "D":
-                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0]))) - now;
-
+                            if(assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
+                            {
+                                diff = (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
+                            }
                             break;
 
                         case "H":
-                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0]))) - now;
+
+                            if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
+                            {
+                                diff = (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
+                            }
+                           
 
                             break;
 
                         case "M":
-                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0]))) - now;
 
+                            if (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
+                            {
+                                diff = (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
+                            }
+                           
                             break;
 
                     }
-                    timespan = CalculateSpan(diff);
+                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
+                    
                 }
                 else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
                 {
                     PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+                    DateTime assigneddate = Convert.ToDateTime(time.Split(new char[] { '|' })[1]);
 
                     switch (PriorityArr[1])
                     {
                         case "D":
-                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0])));
-
+                            if (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
+                            {
+                                diff = DateTime.Now - (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])));
+                            }
                             break;
 
                         case "H":
-                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0])));
+                            if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
+                            {
+                                diff = DateTime.Now - (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])));
+                            }
+                            
 
                             break;
 
                         case "M":
-                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0])));
+                            if(assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
+                            {
+                                diff = DateTime.Now - (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])));
+                            }
+                            
 
                             break;
 
                     }
 
-                    timespan = CalculateSpan(diff);
+                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
                 }
-
             }
             catch (Exception)
             {
@@ -859,7 +885,87 @@ namespace Easyrewardz_TicketSystem.Services
                     Array.Clear(PriorityArr, 0, PriorityArr.Length);
             }
             return timespan;
+
         }
+
+        //public string setCreationdetails1(string time, string ColName)
+        //{
+        //    string timespan = string.Empty;
+        //    DateTime now = DateTime.Now;
+        //    TimeSpan diff = new TimeSpan();
+        //    string[] PriorityArr = null;
+           
+
+        //    try
+        //    {
+        //        if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
+        //        {
+        //            diff = now - Convert.ToDateTime(time);
+        //            timespan = CalculateSpan(diff) + " ago";
+
+        //        }
+        //        else if (ColName == "RespondTimeRemainingSpan")
+        //        {
+        //            PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+
+        //            switch (PriorityArr[1])
+        //            {
+        //                case "D":
+        //                    diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0]))) - now;
+
+        //                    break;
+
+        //                case "H":
+        //                    diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0]))) - now;
+
+        //                    break;
+
+        //                case "M":
+        //                    diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0]))) - now;
+
+        //                    break;
+
+        //            }
+        //            timespan = CalculateSpan(diff);
+        //        }
+        //        else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
+        //        {
+        //            PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+
+        //            switch (PriorityArr[1])
+        //            {
+        //                case "D":
+        //                    diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0])));
+
+        //                    break;
+
+        //                case "H":
+        //                    diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0])));
+
+        //                    break;
+
+        //                case "M":
+        //                    diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0])));
+
+        //                    break;
+
+        //            }
+
+        //            timespan = CalculateSpan(diff);
+        //        }
+
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //    }
+        //    finally
+        //    {
+        //        if (PriorityArr != null && PriorityArr.Length > 0)
+        //            Array.Clear(PriorityArr, 0, PriorityArr.Length);
+        //    }
+        //    return timespan;
+        //}
 
         public string CalculateSpan(TimeSpan ts)
         {
