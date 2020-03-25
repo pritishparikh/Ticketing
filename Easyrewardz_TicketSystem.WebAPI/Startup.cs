@@ -1,23 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Easyrewardz_TicketSystem.DBContext;
+﻿using System.IO;
 using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Cors.Internal;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+
 
 namespace Easyrewardz_TicketSystem.WebAPI
 {
@@ -36,7 +28,7 @@ namespace Easyrewardz_TicketSystem.WebAPI
         public ISecurity Security { get; }
 
         //This method gets called by the runtime.Use this method to add services to the container.
-             public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
                  {
@@ -49,11 +41,13 @@ namespace Easyrewardz_TicketSystem.WebAPI
                              .AllowAnyHeader();
                          });
                  });
-            //services.AddMvc(
-            //    config => {
-            //        config.Filters.Add(typeof(CustomExceptionFilter));
-            //    }
-            //);
+
+            services.AddMvc(
+                config =>
+                {
+                    config.Filters.Add(typeof(CustomExceptionFilter));
+                }
+            );
             services.AddOptions();
 
             ////Register Appsetting---------------------------------------------------------- 
@@ -65,6 +59,16 @@ namespace Easyrewardz_TicketSystem.WebAPI
 
             ////----------Register Interface-------------------------------------------------
             services.AddTransient<ISecurity, SecurityService>();
+            #region DBContext
+             services.AddTransient<TicketDBContext>(_ => new TicketDBContext(Configuration["ConnectionStrings:DataAccessMySqlProvider"]));
+            #endregion
+            #region AddStackExchangeRedisCache
+            services.AddStackExchangeRedisCache(o =>
+            {
+                o.Configuration = Configuration["Redis:Uri"];
+                o.InstanceName = Configuration["Redis:env"];
+            });
+            #endregion
             #region AuthenticationAddTransient
             services.AddAuthentication(o =>
             {
