@@ -88,8 +88,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@CustomerID", orderMaster.CustomerID);
                 cmd1.Parameters.AddWithValue("@PurchaseFromStoreId", orderMaster.PurchaseFromStoreId);
                 cmd1.Parameters.AddWithValue("@Discount", orderMaster.Discount);
-                cmd1.Parameters.AddWithValue("@Size", orderMaster.Size);
-                cmd1.Parameters.AddWithValue("@RequireSize", orderMaster.RequireSize);
+                cmd1.Parameters.AddWithValue("@Size", string.IsNullOrEmpty(orderMaster.Size) ? "" :orderMaster.Size);
+                cmd1.Parameters.AddWithValue("@RequireSize", string.IsNullOrEmpty(orderMaster.RequireSize) ? "" :orderMaster.RequireSize);
                 cmd1.Parameters.AddWithValue("@CreatedBy", orderMaster.CreatedBy);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 OrderNumber = Convert.ToString(cmd1.ExecuteScalar());
@@ -160,7 +160,7 @@ namespace Easyrewardz_TicketSystem.Services
                             ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
                             PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
                             Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
-                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("RequireSize"))
+                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("RequireSize"))
                         }).ToList();
                         customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                         customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
@@ -475,7 +475,7 @@ namespace Easyrewardz_TicketSystem.Services
                             ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
                             PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
                             Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
-                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("RequireSize"))
+                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty: Convert.ToString(x.Field<object>("RequireSize"))
                         }).ToList();
                         customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                         customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
