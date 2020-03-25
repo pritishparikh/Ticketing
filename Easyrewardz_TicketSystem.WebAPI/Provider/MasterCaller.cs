@@ -47,6 +47,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #endregion
 
+
         #region Methods for the Brand
 
         public List<Brand> GetBrandList(IBrand _brand, int TenantID)

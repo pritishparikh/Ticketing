@@ -16,7 +16,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         private IPayment _PaymentList;
         #endregion
 
-
         #region Method
 
         public int InsertChequeDetails(IPayment _payment, OfflinePaymentModel offlinePaymentModel)

@@ -14,6 +14,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #region Variable
         public IKnowledge _KnowledgeRepository;
         #endregion
+
         /// <summary>
         /// Search By Category
         /// </summary>

@@ -12,6 +12,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
     public class HierarchyCaller
     {
+        
         #region Variable
         public IHierarchy _HierarchyRepository;
         #endregion

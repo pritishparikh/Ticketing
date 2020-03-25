@@ -16,6 +16,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #endregion
 
         #region Methods
+
         public FeaturePlanModel GetFeaturePlan(IFeaturePlan _feature, int TenantID)
         {
             _featurePlan = _feature;
