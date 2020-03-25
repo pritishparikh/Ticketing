@@ -18,6 +18,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         private ITenant _tenantlist;
         #endregion
 
+
         #region method
         public int InsertCompany(ITenant _tenant,  CompanyModel companyModel)
         {

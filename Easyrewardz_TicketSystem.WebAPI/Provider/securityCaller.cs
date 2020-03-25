@@ -51,7 +51,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             //{
             //    plainEmailId = cipherEmailId;
             //}
-           
+
             //string encryptedPassword = commonService.Encrypt(Password);
 
             return _SecurityRepository.UpdatePassword(cipherEmailId, Password);

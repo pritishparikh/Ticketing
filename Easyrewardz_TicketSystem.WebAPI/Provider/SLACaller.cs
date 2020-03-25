@@ -11,6 +11,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
     public class SLACaller
     {
+
         #region Variable
         public ISLA _SLARepository;
         #endregion

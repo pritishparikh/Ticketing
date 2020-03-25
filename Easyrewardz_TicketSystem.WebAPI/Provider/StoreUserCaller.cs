@@ -14,6 +14,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public IStoreUser _StoreUserRepository;
         #endregion
 
+
         public int StoreUserPersonaldetail(IStoreUser Users, CustomStoreUserModel  storeUserModel)
         {
             _StoreUserRepository = Users;
