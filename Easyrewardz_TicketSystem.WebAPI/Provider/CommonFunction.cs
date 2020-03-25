@@ -10,6 +10,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
     /// </summary>
     public static class CommonFunction
     {
+
         /// <summary>
         /// Get description of the Enum
         /// </summary>

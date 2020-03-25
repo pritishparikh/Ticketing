@@ -11,6 +11,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
     public class DashBoardCaller
     {
 
+
         #region Variable declaration
 
         private IDashBoard _dashboardlist;

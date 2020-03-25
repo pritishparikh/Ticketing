@@ -10,6 +10,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
     public class DesignationCaller
     {
+
         #region Variable
         public IDesignation _designationRepository;
         #endregion

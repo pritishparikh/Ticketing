@@ -12,6 +12,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
     /// </summary>
     public class commonCaller
     {
+
         #region Varialbe declaration
         public ICommon _commonRepository;
         #endregion

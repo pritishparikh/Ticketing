@@ -14,6 +14,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public IErrorLogging _IErrorLogging;
         #endregion
 
+
         public int AddErrorLog(IErrorLogging errorLogging, ErrorLog errorLog)
         {
             _IErrorLogging = errorLogging;
