@@ -31,6 +31,5 @@ namespace Easyrewardz_TicketSystem.Interface
         SLADetail GetSLADetail(int tenantID, int SLAFor);
 
         bool UpdateSLADetails(SLADetail sLADetail, int TenantID, int UserID);
-
     }
 }
