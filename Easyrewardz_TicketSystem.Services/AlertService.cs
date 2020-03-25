@@ -1,6 +1,7 @@
-﻿using Easyrewardz_TicketSystem.CustomModel;
-using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,20 @@ using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-    public class AlertService : IAlerts
+    public class AlertService: IAlerts
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
         #endregion
+
         MySqlConnection conn = new MySqlConnection();
 
-        public AlertService(string _connectionString)
+        public AlertService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
 
         /// <summary>
@@ -33,7 +38,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertAlert", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -85,14 +90,6 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
             return AlertConfigInsertCount;
         }
 
@@ -113,8 +110,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_alertID", alertModel.AlertId);
                 cmd.Parameters.AddWithValue("@_alertTypeName", alertModel.AlertTypeName);
                 cmd.Parameters.AddWithValue("@_isAlertActive", Convert.ToInt16(alertModel.isAlertActive));
-                cmd.Parameters.AddWithValue("@_modifiedBy", ModifiedBy); 
-               
+                cmd.Parameters.AddWithValue("@_modifiedBy", ModifiedBy);
+
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 updatecount = cmd.ExecuteNonQuery();
@@ -150,13 +147,6 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
 
             return AlertConfigUpdateCount;
         }
@@ -170,7 +160,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteAlert", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", tenantID);
@@ -185,13 +175,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return deletecount;
 
         }
@@ -207,7 +191,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
 
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_BindAlerts", conn);
@@ -238,12 +222,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (ds != null) ds.Dispose(); conn.Close();
-            }
-
-
+            
             return objAlertLst;
 
         }
@@ -253,19 +232,20 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         public List<AlertModel> GetAlertList(int tenantID, int alertID)
         {
+
             List<AlertModel> objAlertLst = new List<AlertModel>();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
-            
+
             try
             {
 
                 conn.Open();
                 cmd.Connection = conn;
-                
+
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetAlertList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-          
+
                 cmd1.Parameters.AddWithValue("@_alertID", alertID);
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -352,7 +332,7 @@ namespace Easyrewardz_TicketSystem.Services
                             }
                         }
                     }
-                   
+
 
 
 
@@ -363,6 +343,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
+
             finally
             {
                 if (ds != null) ds.Dispose(); conn.Close();
@@ -387,7 +368,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
 
-                        conn.Open();
+                        conn = Db.Connection;
                         MySqlCommand cmd = new MySqlCommand("", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
@@ -422,7 +403,6 @@ namespace Easyrewardz_TicketSystem.Services
 
         public string ValidateAlert(int AlertID, int TenantID)
         {
-
             string Message = "";
 
             try
@@ -441,7 +421,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 string messages = Convert.ToString(ex.InnerException);
                 throw ex;
-            } 
+            }
             finally
             {
                 if (conn != null)

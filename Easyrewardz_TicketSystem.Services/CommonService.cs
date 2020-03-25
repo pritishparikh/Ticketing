@@ -1,13 +1,11 @@
 ﻿using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -381,7 +379,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return Password;
         }
-
         public static void CreateLogFiles()
         {
             //sLogFormat used to create log files format :
@@ -397,14 +394,14 @@ namespace Easyrewardz_TicketSystem.Services
         }
         public static void ErrorLog(string sPathName, string sErrMsg)
         {
-           if( File.Exists(sPathName))
+            if( File.Exists(sPathName))
             {
                 StreamWriter sw = new StreamWriter(sPathName + sErrorTime, true);
                 sw.WriteLine(sLogFormat + sErrMsg);
                 sw.Flush();
                 sw.Close();
             }
-           else
+            else
             {
                 StreamWriter stwriter = File.CreateText(sPathName);
                 stwriter.WriteLine(sLogFormat + sErrMsg);
@@ -414,7 +411,5 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
         #endregion
-
-
     }
 }
