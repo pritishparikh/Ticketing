@@ -22,6 +22,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         public TenantService(IDistributedCache cache, TicketDBContext db)
         {
+
             Db = db;
             _Cache = cache;
         }
