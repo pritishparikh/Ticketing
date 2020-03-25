@@ -6,19 +6,25 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
-
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class ReportService : IReports
     {
+        #region variable
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
-        public ReportService(string _connectionString)
+        public ReportService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
         #endregion
 
@@ -32,7 +38,7 @@ namespace Easyrewardz_TicketSystem.Services
             int deletecount = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteReport", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantId", tenantID);
@@ -48,14 +54,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return deletecount;
         }
 
@@ -68,7 +67,7 @@ namespace Easyrewardz_TicketSystem.Services
             int saveCount = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_SaveReport", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_Id", tenantID);
@@ -82,13 +81,6 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
                 throw ex;
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
             }
 
             return saveCount;
@@ -104,7 +96,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertReport", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantId", tenantId);
@@ -126,14 +118,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return InsertCount;
         }
 
@@ -149,7 +134,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
 
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetReportList", conn);
@@ -177,7 +162,7 @@ namespace Easyrewardz_TicketSystem.Services
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
                             ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
                             ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),
-                            ScheduleTime = r.Field<object>("ScheduleTime") == "" ? default(DateTime?) : Convert.ToDateTime(r.Field<object>("ScheduleTime")),
+                            ScheduleTime = r.Field<object>("ScheduleTime") == System.DBNull.Value || string.IsNullOrEmpty(Convert.ToString(r.Field<object>("ScheduleTime")))? default(DateTime?) : Convert.ToDateTime(r.Field<object>("ScheduleTime")),
                             IsDaily = Convert.ToBoolean(r.Field<object>("IsDaily") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDaily"))),
                             NoOfDay = Convert.ToInt32(r.Field<object>("NoOfDay") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDay"))),
                             IsWeekly = Convert.ToBoolean(r.Field<object>("IsWeekly") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsWeekly"))),
@@ -210,7 +195,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose(); 
             }
 
 
@@ -231,7 +216,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                 }
                 cmd.Connection = conn;
 
@@ -368,7 +353,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose(); 
             }
             return resultCount;
         }
@@ -388,7 +373,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                 }
                 cmd.Connection = conn;
 
@@ -470,7 +455,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose(); 
             }
             return csv;
         }
@@ -488,7 +473,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                 }
                 cmd.Connection = conn;
 
@@ -610,7 +595,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose(); 
             }
             return objSearchResult;
         }
@@ -747,7 +732,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                 }
                 cmd.Connection = conn;
                 MySqlCommand sqlcmd = new MySqlCommand("", conn);
@@ -814,7 +799,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose(); 
             }
             return csv;
         }
@@ -829,7 +814,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                 }
                 cmd.Connection = conn;
 
@@ -855,10 +840,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                conn.Close();
-            }
+            
             return result;
         }
 

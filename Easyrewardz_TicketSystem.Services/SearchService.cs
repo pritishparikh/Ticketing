@@ -8,16 +8,24 @@ using System.Text;
 using System.Linq;
 using Easyrewardz_TicketSystem.CustomModel;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class SearchService : ISearchTicket
     {
+        #region variable
+        private readonly IDistributedCache _Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region DB connection
         MySqlConnection conn = new MySqlConnection();
-        public SearchService(string _connectionString)
+        public SearchService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            _Cache = cache;
         }
         #endregion
 
@@ -32,7 +40,7 @@ namespace Easyrewardz_TicketSystem.Services
             int rowStart = (searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand sqlcmd = new MySqlCommand("SP_SearchTickets", conn);
                 sqlcmd.CommandType = CommandType.StoredProcedure;
@@ -174,7 +182,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose(); 
             }
             return objSearchResult;
             //return temp;   
@@ -189,7 +197,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
 
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand sqlcmd = new MySqlCommand("SP_TicketStatusCount", conn);
                 sqlcmd.CommandType = CommandType.StoredProcedure;
@@ -227,7 +235,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (ds != null)
                     ds.Dispose();
-                conn.Close();
+                
             }
 
             return ticketCount;
@@ -251,7 +259,7 @@ namespace Easyrewardz_TicketSystem.Services
             //int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand sqlcmd = new MySqlCommand("SP_getTicketSearchOnLoad", conn);
                 sqlcmd.CommandType = CommandType.StoredProcedure;
@@ -319,7 +327,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
             return objSearchResult;
         }
@@ -344,7 +352,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                 }
 
                 cmd.Connection = conn;
@@ -515,7 +523,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
             return objSearchResult;
         }
@@ -539,7 +547,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetSaveSearchByID_UTSM", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@SearchParam_ID", SearchParamID);
@@ -584,7 +592,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
             return tktSearch;
         }
