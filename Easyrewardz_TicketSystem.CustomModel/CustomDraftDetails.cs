@@ -51,5 +51,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// Assigned ID
         /// </summary>
         public int AssignedID { get; set; }
+        
+
     }
 }

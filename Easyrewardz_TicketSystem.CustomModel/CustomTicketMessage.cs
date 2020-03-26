@@ -42,6 +42,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string NewAgentName { get; set; }
         public bool IsSystemGenerated { get; set; }
 
+
+
         public List<MessageAttachment> messageAttachments { get; set; }
 
     }

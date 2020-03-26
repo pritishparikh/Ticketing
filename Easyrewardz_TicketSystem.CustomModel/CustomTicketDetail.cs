@@ -84,6 +84,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// Total Task
         /// </summary>
         public int? TotalTask { get; set; }
+
+
         /// <summary>
         /// TargetClouredate
         /// </summary>
@@ -172,6 +174,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// RoleName
         /// </summary>
         public string RoleName { get; set; }
+
+
 
         public string DurationRemaining { get; set; }
         public string OrderItemID { get; set; }
