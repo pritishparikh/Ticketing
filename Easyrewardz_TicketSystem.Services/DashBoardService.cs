@@ -791,7 +791,7 @@ namespace Easyrewardz_TicketSystem.Services
             DateTime now = DateTime.Now;
             TimeSpan diff = new TimeSpan();
             string[] PriorityArr = null;
-            string spantext = "{0} Days {1} Hrs {2} Mins Ago";
+            string spantext = "{0}D {1}H {2}M Ago";
             try
             {
                 if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
