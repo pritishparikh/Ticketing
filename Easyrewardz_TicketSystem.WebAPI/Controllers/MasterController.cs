@@ -754,7 +754,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("GetLogedInEmail")]
         public ResponseModel GetLogedInEmail()
         {
+
             MasterCaller  masterCaller = new MasterCaller();
+            CustomGetEmailID customGetEmailID = new CustomGetEmailID();
             ResponseModel  objResponseModel = new ResponseModel();
             int statusCode = 0;
             string statusMessage = "";
@@ -766,17 +768,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                string userEmailID = masterCaller.GetLogedInEmail(new MasterServices(_connectioSting), authenticate.UserMasterID, authenticate.TenantId);
+                customGetEmailID = masterCaller.GetLogedInEmail(new MasterServices(_connectioSting), authenticate.UserMasterID, authenticate.TenantId);
                 statusCode =
-           string.IsNullOrEmpty(userEmailID) ?
-                (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+           customGetEmailID == null ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = userEmailID;
+                objResponseModel.ResponseData = customGetEmailID;
 
             }
             catch (Exception ex)

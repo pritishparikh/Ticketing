@@ -372,7 +372,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region Get LogedInEmail
 
-        public string GetLogedInEmail(IMasterInterface _masterInterface, int UserID,int TenantID)
+        public CustomGetEmailID GetLogedInEmail(IMasterInterface _masterInterface, int UserID,int TenantID)
         {
             _Imaster = _masterInterface;
             return _Imaster.GetLogedInEmail(UserID, TenantID);

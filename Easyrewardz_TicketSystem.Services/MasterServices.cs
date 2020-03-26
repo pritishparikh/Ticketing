@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
@@ -756,11 +757,14 @@ namespace Easyrewardz_TicketSystem.Services
 
             return result;
         }
-
-        public string GetLogedInEmail(int UserID, int TenantID)
+        /// <summary>
+        /// GetLogedInEmail
+        /// </summary>
+        /// <returns></returns>
+        public CustomGetEmailID GetLogedInEmail(int UserID, int TenantID)
         {
-            string userEmailID = "";
-
+            DataSet ds = new DataSet();
+            CustomGetEmailID customGetEmailID = new CustomGetEmailID(); 
             try
             {
                 conn.Open();
@@ -769,8 +773,18 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                userEmailID = Convert.ToString(cmd.ExecuteScalar());
-                conn.Close();
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        customGetEmailID.EmailID = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]);
+                        customGetEmailID.RoleID = ds.Tables[0].Rows[i]["RoleID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["RoleID"]);
+                        customGetEmailID.RoleName = ds.Tables[0].Rows[i]["RoleName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["RoleName"]);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -784,7 +798,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return userEmailID;
+            return customGetEmailID;
         }
     }
     }

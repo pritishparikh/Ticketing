@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Model;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -127,7 +128,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// Get LogedInEmail
         /// </summary>
         /// <returns></returns>
-        string GetLogedInEmail(int UserID, int TenantID);
+        CustomGetEmailID GetLogedInEmail(int UserID, int TenantID);
 
 
     }
