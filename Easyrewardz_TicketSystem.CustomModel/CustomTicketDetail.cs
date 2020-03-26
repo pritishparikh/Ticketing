@@ -172,6 +172,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// RoleName
         /// </summary>
         public string RoleName { get; set; }
+        public string UserEmailID { get; set; }
 
         public string DurationRemaining { get; set; }
         public string OrderItemID { get; set; }

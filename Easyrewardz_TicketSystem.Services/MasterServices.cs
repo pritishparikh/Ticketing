@@ -757,8 +757,34 @@ namespace Easyrewardz_TicketSystem.Services
             return result;
         }
 
+        public string GetLogedInEmail(int UserID, int TenantID)
+        {
+            string userEmailID = "";
 
-
-
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("Sp_GetLogInEmailID", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                userEmailID = Convert.ToString(cmd.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                string messages = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return userEmailID;
+        }
     }
-}
+    }

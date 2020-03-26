@@ -369,5 +369,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _categoryList.CreateClaimCategory(claimCategory);
         }
         #endregion
+
+        #region Get LogedInEmail
+
+        public string GetLogedInEmail(IMasterInterface _masterInterface, int UserID,int TenantID)
+        {
+            _Imaster = _masterInterface;
+            return _Imaster.GetLogedInEmail(UserID, TenantID);
+        }
+        #endregion
     }
 }

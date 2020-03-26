@@ -749,6 +749,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
         #endregion
 
+        #region Get LogedInEmail
+        [HttpPost]
+        [Route("GetLogedInEmail")]
+        public ResponseModel GetLogedInEmail()
+        {
+            MasterCaller  masterCaller = new MasterCaller();
+            ResponseModel  objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                string userEmailID = masterCaller.GetLogedInEmail(new MasterServices(_connectioSting), authenticate.UserMasterID, authenticate.TenantId);
+                statusCode =
+           string.IsNullOrEmpty(userEmailID) ?
+                (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = userEmailID;
+
+            }
+            catch (Exception ex)
+            {
+                statusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
+            }
+
+            return objResponseModel;
+        }
+        #endregion
+
         #endregion
     }
 }

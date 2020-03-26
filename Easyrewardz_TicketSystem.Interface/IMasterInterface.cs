@@ -123,6 +123,12 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <returns></returns>
         int CreateDepartment(CreateDepartmentModel createDepartmentModel);
 
+        /// <summary>
+        /// Get LogedInEmail
+        /// </summary>
+        /// <returns></returns>
+        string GetLogedInEmail(int UserID, int TenantID);
+
 
     }
 }
