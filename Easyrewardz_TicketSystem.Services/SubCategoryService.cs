@@ -1,5 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -10,11 +12,17 @@ namespace Easyrewardz_TicketSystem.Services
 {
    public class SubCategoryService : ISubCategories
     {
+        #region variable
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
-        public SubCategoryService(string _connectionString)
+        public SubCategoryService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            Cache = cache;
         }
         #endregion
 
@@ -25,7 +33,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="CategoryID"></param>
         /// <returns></returns>
-        public List<SubCategory> GetSubCategoryByCategoryID(int CategoryID,int TypeId)
+        public List<SubCategory> GetSubCategoryByCategoryID(int CategoryID, int TypeId)
         {
 
             DataSet ds = new DataSet();
@@ -34,10 +42,10 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetListofSubCategoriesByCategoryId", conn);
-                cmd1.CommandType = CommandType.StoredProcedure; 
+                cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Category_ID", CategoryID);
                 cmd1.Parameters.AddWithValue("@Type_Id", TypeId);
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -62,13 +70,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return objSubCategory;
         }
 
@@ -85,7 +87,7 @@ namespace Easyrewardz_TicketSystem.Services
             int subCategoryId = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertSubCategory", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -100,14 +102,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return subCategoryId;
         }
 
@@ -119,7 +114,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetSubCategoryListByMultiCatagoryID", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -143,13 +138,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return objSubCategory;
         }
         #endregion

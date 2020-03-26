@@ -1,6 +1,8 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -12,12 +14,15 @@ namespace Easyrewardz_TicketSystem.Services
 { 
     public class NotificationService : INotification
     {
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
 
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
-        public NotificationService(string _connectionString)
+        public NotificationService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            Cache = cache;
         }
         #endregion
 
@@ -25,20 +30,19 @@ namespace Easyrewardz_TicketSystem.Services
 
         public NotificationModel GetNotification(int TenantID, int UserID)
         {
-            List<TicketNotificationModel> TicketNoti = new List<TicketNotificationModel>();
+            List<TicketNotificationModel> ticketNotification = new List<TicketNotificationModel>();
             NotificationModel objNotiLst = new NotificationModel();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                 conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetNotifications", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_tenantID", TenantID);
                 cmd1.Parameters.AddWithValue("@_userID", UserID);
-
 
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -49,7 +53,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        TicketNoti = ds.Tables[0].AsEnumerable().Select(r => new TicketNotificationModel()
+                        ticketNotification = ds.Tables[0].AsEnumerable().Select(r => new TicketNotificationModel()
                         {
                             TicketCount = Convert.ToInt32(r.Field<object>("TicketCount")),
                             NotificationMessage = r.Field<object>("ActionName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ActionName")),
@@ -57,10 +61,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                         }).ToList();
 
-                        if(TicketNoti.Count > 0)
+                        if(ticketNotification.Count > 0)
                         {
-                            objNotiLst.NotiCount = TicketNoti.Where(x => x.TicketCount > 0).Select(x=> x.TicketCount).Sum();
-                            objNotiLst.TicketNotification = TicketNoti.Where(x => x.TicketCount > 0).ToList() ; 
+                            objNotiLst.NotiCount = ticketNotification.Select(x => x.TicketCount).Sum();
+                            objNotiLst.TicketNotification = ticketNotification; 
                         }
                         
 
@@ -77,7 +81,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (ds != null)
                     ds.Dispose();
-                conn.Close();
+                
             }
 
             return objNotiLst;
@@ -89,7 +93,7 @@ namespace Easyrewardz_TicketSystem.Services
             int updatecount = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateOnReadNotifications", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", TenantID);

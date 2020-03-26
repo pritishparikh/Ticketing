@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
@@ -10,8 +7,9 @@ using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -21,17 +19,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     public class TaskController : ControllerBase
     {
         #region variable declaration
-        private IConfiguration configuration;
-        private readonly string _radisCacheServerAddress;
-        private readonly string _connectionSting;
+        private IConfiguration Configuration;
+
+        private readonly IDistributedCache Cache;
+        internal static TicketDBContext Db { get; set; }
+
         #endregion
 
         #region Cunstructor
-        public TaskController(IConfiguration _iConfig)
+        public TaskController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
-            configuration = _iConfig;
-            _connectionSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Configuration = _iConfig;
+            Db = db;
+            Cache = cache;
         }
         #endregion
 
@@ -46,36 +46,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("createTask")]
         public ResponseModel createTask([FromBody]TaskMaster taskMaster)
         {
-            TaskCaller _taskcaller = new TaskCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            TaskCaller taskCaller = new TaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                int result = _taskcaller.AddTask(new TaskServices(_connectionSting), taskMaster, authenticate.TenantId, authenticate.UserMasterID);
-                StatusCode =
+                int result = taskCaller.AddTask(new TaskServices(Cache, Db), taskMaster, authenticate.TenantId, authenticate.UserMasterID);
+                statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -88,35 +83,30 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel gettaskdetailsbyid(int taskId)
         {
 
-            CustomTaskMasterDetails _objtaskMaster = new CustomTaskMasterDetails();
-            TaskCaller _taskcaller = new TaskCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            CustomTaskMasterDetails objTaskMaster = new CustomTaskMasterDetails();
+            TaskCaller taskCaller = new TaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                _objtaskMaster = _taskcaller.gettaskDetailsById(new TaskServices(_connectionSting), taskId);
-                StatusCode =
-               _objtaskMaster == null ?
+                objTaskMaster = taskCaller.gettaskDetailsById(new TaskServices(Cache, Db), taskId);
+                statusCode =
+               objTaskMaster == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objtaskMaster;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objTaskMaster;
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
         
         /// <summary>
@@ -128,36 +118,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("gettasklist")]
         public ResponseModel gettasklist(int TicketId)
         {
-            List<CustomTaskMasterDetails> _objtaskMaster = new List<CustomTaskMasterDetails>();
-            TaskCaller _taskcaller = new TaskCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            List<CustomTaskMasterDetails> objTaskMaster = new List<CustomTaskMasterDetails>();
+            TaskCaller taskCaller = new TaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                _objtaskMaster = _taskcaller.gettaskList(new TaskServices(_connectionSting), TicketId);
-                StatusCode =
-                   _objtaskMaster.Count == 0 ?
+                objTaskMaster = taskCaller.gettaskList(new TaskServices(Cache, Db), TicketId);
+                statusCode =
+                   objTaskMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objtaskMaster;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objTaskMaster;
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
@@ -170,32 +155,27 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("deleteask")]
         public ResponseModel deletetask(int task_Id)
         {
-            TaskCaller _taskcaller = new TaskCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            TaskCaller taskCaller = new TaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                int result = _taskcaller.DeleteTask(new TaskServices(_connectionSting), task_Id);
-                StatusCode =
+                int result = taskCaller.DeleteTask(new TaskServices(Cache, Db), task_Id);
+                statusCode =
                result == 0 ?
                       (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -207,36 +187,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("getassignedto")]
         public ResponseModel getassignedto(int Function_ID)
         {
-            List<CustomUserAssigned> _objuserassign = new List<CustomUserAssigned>();
-            TaskCaller _taskcaller = new TaskCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            List<CustomUserAssigned> objUserAssign = new List<CustomUserAssigned>();
+            TaskCaller taskCaller = new TaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                _objuserassign = _taskcaller.GetAssignedTo(new TaskServices(_connectionSting), Function_ID);
-                StatusCode =
-                   _objuserassign.Count == 0 ?
+                objUserAssign = taskCaller.GetAssignedTo(new TaskServices(Cache, Db), Function_ID);
+                statusCode =
+                   objUserAssign.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objuserassign;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objUserAssign;
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -253,36 +228,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         //public ResponseModel AddComment(int Id, int TaskID, int ClaimID, int TicketID, string Comment)
         public ResponseModel AddComment(int CommentForId, int ID, string Comment)
         {
-            TaskCaller _taskcaller = new TaskCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            TaskCaller taskCaller = new TaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                int result = _taskcaller.AddComment(new TaskServices(_connectionSting), CommentForId, ID, Comment, authenticate.UserMasterID);
-                StatusCode =
+                int result = taskCaller.AddComment(new TaskServices(Cache, Db), CommentForId, ID, Comment, authenticate.UserMasterID);
+                statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -293,36 +263,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("getclaimlist")]
         public ResponseModel getclaimlist(int TicketId)
         {
-            List<CustomClaimMaster> _obClaimMaster = new List<CustomClaimMaster>();
-            TaskCaller _taskcaller = new TaskCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            List<CustomClaimMaster> obClaimMaster = new List<CustomClaimMaster>();
+            TaskCaller taskCaller = new TaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                _obClaimMaster = _taskcaller.GetClaimList(new TaskServices(_connectionSting), TicketId);
-                StatusCode =
-                   _obClaimMaster.Count == 0 ?
+                obClaimMaster = taskCaller.GetClaimList(new TaskServices(Cache, Db), TicketId);
+                statusCode =
+                   obClaimMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _obClaimMaster;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = obClaimMaster;
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -333,36 +298,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("getTaskComment")]
         public ResponseModel getTaskComment(int TaskId)
         {
-            List<UserComment> _obClaimMaster = new List<UserComment>();
-            TaskCaller _taskcaller = new TaskCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            List<UserComment> obClaimMaster = new List<UserComment>();
+            TaskCaller taskCaller = new TaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                _obClaimMaster = _taskcaller.GetTaskComment(new TaskServices(_connectionSting), TaskId);
-                StatusCode =
-                   _obClaimMaster == null ?
+                obClaimMaster = taskCaller.GetTaskComment(new TaskServices(Cache, Db), TaskId);
+                statusCode =
+                   obClaimMaster == null ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _obClaimMaster;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = obClaimMaster;
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -373,38 +333,33 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("AddCommentOnTask")]
         public ResponseModel AddCommentOnTask(TaskMaster taskMaster)
         {
-            TaskCaller _taskcaller = new TaskCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            TaskCaller taskCaller = new TaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
                 taskMaster.CreatedBy = authenticate.UserMasterID;
 
-                int result = _taskcaller.AddCommentOnTask(new TaskServices(_connectionSting), taskMaster);
-                StatusCode =
+                int result = taskCaller.AddCommentOnTask(new TaskServices(Cache, Db), taskMaster);
+                statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         #endregion

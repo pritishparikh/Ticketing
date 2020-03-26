@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -21,19 +21,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     public class ReportController: ControllerBase
     {
         #region variable declaration
-        private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private IConfiguration Configuration;
+        private readonly IDistributedCache Cache;
+        internal static TicketDBContext Db { get; set; }
         private readonly string rootPath;
         #endregion
 
         #region Cunstructor
-        public ReportController(IConfiguration _iConfig)
+        public ReportController(IConfiguration _iConfig, TicketDBContext db, IDistributedCache cache)
         {
-            configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
-            rootPath = configuration.GetValue<string>("APIURL");
+            Configuration = _iConfig;
+            Db = db;
+            Cache = cache;
+            rootPath = Configuration.GetValue<string>("APIURL");
         }
         #endregion
 
@@ -50,100 +50,89 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         {
 
-            int insertcount = 0;
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int insertCount = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newReport= new SettingsCaller();
+                SettingsCaller newReport= new SettingsCaller();
 
-                insertcount = _newReport.InsertReport(new ReportService(_connectioSting), authenticate.TenantId,
+                insertCount = newReport.InsertReport(new ReportService(Cache, Db), authenticate.TenantId,
                      ReportName,  isReportActive,  TicketReportParams, IsDaily,  IsDailyForMonth,  IsWeekly,  IsWeeklyForMonth,
                      IsDailyForYear,  IsWeeklyForYear, authenticate.UserMasterID);
 
-                StatusCode =
-                insertcount == 0 ?
+                statusCode =
+                insertCount == 0 ?
                      (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = insertcount;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = insertCount;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
         /// <summary>
-        /// Delete Report
+        /// Delete alert
         /// </summary>
         /// <returns></returns>
         [HttpPost]
         [Route("DeleteReport")]
-        public ResponseModel DeleteAlert(int ReportID)
+        public ResponseModel DeleteReport(int ReportID)
         {
-            int Deletecount = 0;
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int deleteCount = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newReport = new SettingsCaller();
+                SettingsCaller newReport = new SettingsCaller();
 
-                Deletecount = _newReport.DeleteReport(new ReportService(_connectioSting), authenticate.TenantId, ReportID);
+                deleteCount = newReport.DeleteReport(new ReportService(Cache, Db), authenticate.TenantId, ReportID);
 
-                StatusCode =
-                Deletecount == 0 ?
+                statusCode =
+                deleteCount == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = Deletecount;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = deleteCount;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
+
         /// <summary>
-        /// Save Report for download.Update Isdownload flag in ReportMaster
+        /// Save report for download.Update Isdownload flag in ReportMaster
         /// </summary>
         /// <param name="ScheduleID"></param>
         /// <returns></returns>
@@ -152,139 +141,129 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel SaveReportForDownload(int ScheduleID)
         {
             int saveCount = 0;
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newReport = new SettingsCaller();
+                SettingsCaller newReport = new SettingsCaller();
 
-                saveCount = _newReport.SaveReportForDownload(new ReportService(_connectioSting), authenticate.TenantId,authenticate.UserMasterID, ScheduleID);
+                saveCount = newReport.SaveReportForDownload(new ReportService(Cache, Db), authenticate.TenantId,authenticate.UserMasterID, ScheduleID);
 
-                StatusCode =
+                statusCode =
                 saveCount == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = saveCount;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = saveCount;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
+
         /// <summary>
-        /// Delete Report
+        /// Delete report
         /// </summary>
         /// <returns></returns>
         [HttpPost]
         [Route("GetReports")]
         public ResponseModel GetReports()
         {
-            int Deletecount = 0;
-            ResponseModel _objResponseModel = new ResponseModel();
-            List<ReportModel> _objresponseModel = new List<ReportModel>();
-            int StatusCode = 0;
+            int deleteCount = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            List<ReportModel> obReportResponseModel = new List<ReportModel>();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newReport = new SettingsCaller();
+                SettingsCaller newReport = new SettingsCaller();
 
-                _objresponseModel = _newReport.GetReportList(new ReportService(_connectioSting), authenticate.TenantId);
+                obReportResponseModel = newReport.GetReportList(new ReportService(Cache, Db), authenticate.TenantId);
 
-                StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode = obReportResponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objresponseModel;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = obReportResponseModel;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
+
+        /// <summary>
+        /// Search report
+        /// </summary>
+        /// <param name="searchparams"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ReportSearch")]
         public ResponseModel ReportSearch([FromBody]ReportSearchModel searchparams)
         {
-            List<SearchResponseReport> _searchResult = null;
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            List<SearchResponseReport> searchResult = null;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             int resultCount = 0;
-            SettingsCaller _dbsearchMaster = new SettingsCaller();
+            SettingsCaller dbSearchMaster = new SettingsCaller();
             try
             {
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                var temp = SecurityService.DecryptStringAES(token);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
                 searchparams.TenantID = authenticate.TenantId; // add tenantID to request
                 searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
 
 
                 //searchparams.TenantID = 1; // add tenantID to request
                 //searchparams.curentUserId = 9; // add currentUserID to request
-                resultCount = _dbsearchMaster.GetReportSearch(new ReportService(_connectioSting), searchparams);
+                resultCount = dbSearchMaster.GetReportSearch(new ReportService(Cache, Db), searchparams);
 
-                StatusCode = resultCount > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData =resultCount;
+                statusCode = resultCount > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData =resultCount;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
-        /// DownloadDefaultReportAPI
+        /// Download Default ReportAPI
         /// </summary>
         /// <param name="objRequest"></param>
         /// <returns></returns>
@@ -293,20 +272,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel DownloadDefaultReport([FromBody] DefaultReportRequestModel objRequest)
         {
 
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
-            SettingsCaller _dbsearchMaster = new SettingsCaller();
-            string strcsv = string.Empty;
+            SettingsCaller dbSearchMaster = new SettingsCaller();
+            string strCSV = string.Empty;
             try
             {              
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                var temp = SecurityService.DecryptStringAES(token);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                strcsv = _dbsearchMaster.DownloadDefaultReport(new ReportService(_connectioSting), objRequest, authenticate.UserMasterID, authenticate.TenantId);
+                strCSV = dbSearchMaster.DownloadDefaultReport(new ReportService(Cache, Db), objRequest, authenticate.UserMasterID, authenticate.TenantId);
 
                 string dateformat = DateTime.Now.ToString("yyyyMMddHHmmssffff");
                 string csvname = "DefaultReport" + "_" + dateformat + ".csv";
@@ -325,14 +304,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 Folderpath = Path.Combine(Folderpath, csvname);
                 URLFolderpath = URLFolderpath + @"/" + csvname;
-                CommonService.SaveFile(Folderpath, strcsv);
+                CommonService.SaveFile(Folderpath, strCSV);
 
-                StatusCode = (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
 
                 if (System.IO.File.Exists(Folderpath))
                 {
@@ -340,46 +319,46 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     float sizeInMB =  (fileInfo.Length / 1024f) / 1024f;                   
                     if (sizeInMB > 5)
                     {
-                        _objResponseModel.ResponseData = !string.IsNullOrEmpty(URLFolderpath) ? URLFolderpath + "@mail" : null;
+                        objResponseModel.ResponseData = !string.IsNullOrEmpty(URLFolderpath) ? URLFolderpath + "@mail" : null;
                     }
                     else
                     {
-                        _objResponseModel.ResponseData = URLFolderpath;
+                        objResponseModel.ResponseData = URLFolderpath;
                     }
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
+        /// <summary>
+        /// Download report search
+        /// </summary>
+        /// <param name="SchedulerID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("DownloadReportSearch")]
         public ResponseModel DownloadReportSearch(int SchedulerID)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
-            SettingsCaller _dbsearchMaster = new SettingsCaller();
-            string strcsv = string.Empty;
+            SettingsCaller dbSearchMaster = new SettingsCaller();
+            string strCSV = string.Empty;
             try
             {
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
 
-                var temp = SecurityService.DecryptStringAES(_token);
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                var temp = SecurityService.DecryptStringAES(token);
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
-                strcsv = _dbsearchMaster.DownloadReportSearch(new ReportService(_connectioSting), SchedulerID, authenticate.UserMasterID, authenticate.TenantId);
+                strCSV = dbSearchMaster.DownloadReportSearch(new ReportService(Cache, Db), SchedulerID, authenticate.UserMasterID, authenticate.TenantId);
 
                 string dateformat = DateTime.Now.ToString("yyyyMMddHHmmssffff");
                 string csvname = "Repost" + SchedulerID + "_" + dateformat + ".csv";
@@ -388,95 +367,92 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
                 var appRoot = appPathMatcher.Match(exePath).Value;
 
-                string Folderpath = Path.Combine(appRoot , "ReportDownload");
+                string folderPath = Path.Combine(appRoot , "ReportDownload");
                 string URLFolderpath = Path.Combine(rootPath, "ReportDownload");
 
-                if (!Directory.Exists(Folderpath))
+                if (!Directory.Exists(folderPath))
                 {
-                    Directory.CreateDirectory(Folderpath);
+                    Directory.CreateDirectory(folderPath);
                 }
 
-                Folderpath = Path.Combine(Folderpath , csvname);
+                folderPath = Path.Combine(folderPath , csvname);
                 URLFolderpath = URLFolderpath + @"/" + csvname ;
-                CommonService.SaveFile(Folderpath, strcsv);
+                CommonService.SaveFile(folderPath, strCSV);
 
-                StatusCode =  (int)EnumMaster.StatusCode.Success ;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode =  (int)EnumMaster.StatusCode.Success ;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                if (System.IO.File.Exists(Folderpath))
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                if (System.IO.File.Exists(folderPath))
                 {
-                    FileInfo fileInfo = new FileInfo(Folderpath);
+                    FileInfo fileInfo = new FileInfo(folderPath);
                     float sizeInMB = (fileInfo.Length / 1024f) / 1024f;
                     if (sizeInMB > 5)
                     {
-                        _objResponseModel.ResponseData = !string.IsNullOrEmpty(URLFolderpath) ? URLFolderpath + "@mail" : null;
+                        objResponseModel.ResponseData = !string.IsNullOrEmpty(URLFolderpath) ? URLFolderpath + "@mail" : null;
                     }
                     else
                     {
-                        _objResponseModel.ResponseData = URLFolderpath;
+                        objResponseModel.ResponseData = URLFolderpath;
                     }
                 }
-              //  _objResponseModel.ResponseData = !string.IsNullOrEmpty(URLFolderpath) ? URLFolderpath : null;
+              //  objResponseModel.ResponseData = !string.IsNullOrEmpty(URLFolderpath) ? URLFolderpath : null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
+        /// <summary>
+        /// Send report mail
+        /// </summary>
+        /// <param name="reportmailmodel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("SendReportMail")]
         public ResponseModel SendReportMail([FromBody] ReportMailModel reportmailmodel)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
-            TicketingCaller _ticketingCaller = new TicketingCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            TicketingCaller ticketingCaller = new TicketingCaller();
             MasterCaller masterCaller = new MasterCaller();
 
             try
             {
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
                 SettingsCaller _dbsearchMaster = new SettingsCaller();
 
-                bool IsSent = _dbsearchMaster.SendReportMail(new ReportService(_connectioSting), reportmailmodel.EmailID, reportmailmodel.FilePath, authenticate.TenantId, authenticate.UserMasterID);
+                bool IsSent = _dbsearchMaster.SendReportMail(new ReportService(Cache, Db), reportmailmodel.EmailID, reportmailmodel.FilePath, authenticate.TenantId, authenticate.UserMasterID);
 
                 if (IsSent)
                 {
-                    _objResponseModel.Status = true;
-                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
-                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
-                    _objResponseModel.ResponseData = "Mail sent successfully.";
+                    objResponseModel.Status = true;
+                    objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                    objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                    objResponseModel.ResponseData = "Mail sent successfully.";
                 }
                 else
                 {
-                    _objResponseModel.Status = false;
-                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                    _objResponseModel.ResponseData = "Mail sent failure.";
+                    objResponseModel.Status = false;
+                    objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                    objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                    objResponseModel.ResponseData = "Mail sent failure.";
                 }
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                _objResponseModel.ResponseData = "We had an error! Sorry about that.";
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         #endregion

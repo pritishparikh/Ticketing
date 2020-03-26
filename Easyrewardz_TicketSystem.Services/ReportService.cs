@@ -6,19 +6,25 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
-
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class ReportService : IReports
     {
+        #region variable
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
-        public ReportService(string _connectionString)
+        public ReportService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            Cache = cache;
         }
         #endregion
 
@@ -29,10 +35,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         public int DeleteReport(int tenantID, int ReportID)
         {
-            int deletecount = 0;
+            int deleteCount = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteReport", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantId", tenantID);
@@ -40,7 +46,7 @@ namespace Easyrewardz_TicketSystem.Services
 
 
                 cmd.CommandType = CommandType.StoredProcedure;
-                deletecount = cmd.ExecuteNonQuery();
+                deleteCount = cmd.ExecuteNonQuery();
             }
 
             catch (Exception ex)
@@ -48,15 +54,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
-            return deletecount;
+            
+            return deleteCount;
         }
 
 
@@ -68,7 +67,7 @@ namespace Easyrewardz_TicketSystem.Services
             int saveCount = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_SaveReport", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_Id", tenantID);
@@ -83,13 +82,6 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
 
             return saveCount;
         }
@@ -99,12 +91,12 @@ namespace Easyrewardz_TicketSystem.Services
         public int InsertReport(int tenantId, string ReportName, bool isReportActive, string TicketReportParams,
             bool IsDaily, bool IsDailyForMonth, bool IsWeekly, bool IsWeeklyForMonth, bool IsDailyForYear, bool IsWeeklyForYear, int createdBy)
         {
-            int InsertCount = 0;
+            int insertCount = 0;
 
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertReport", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantId", tenantId);
@@ -119,22 +111,15 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_IsWeeklyForYear", Convert.ToInt16(IsWeeklyForYear));
                 cmd.Parameters.AddWithValue("@_createdBy", createdBy);
                 cmd.CommandType = CommandType.StoredProcedure;
-                InsertCount = cmd.ExecuteNonQuery();
+                insertCount = cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
-            return InsertCount;
+            
+            return insertCount;
         }
 
 
@@ -149,7 +134,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
 
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetReportList", conn);
@@ -210,7 +195,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose(); 
             }
 
 
@@ -224,14 +209,14 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             List<SearchResponseReport> objSearchResult = new List<SearchResponseReport>();
 
-            List<string> CountList = new List<string>();
+            List<string> countList = new List<string>();
 
             int resultCount = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                 }
                 cmd.Connection = conn;
 
@@ -368,7 +353,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose(); 
             }
             return resultCount;
         }
@@ -378,9 +363,9 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
 
-            List<ScheduleMaster> ticketschedulemodal = new List<ScheduleMaster>();
+            List<ScheduleMaster> ticketScheduleModal = new List<ScheduleMaster>();
 
-            List<string> CountList = new List<string>();
+            List<string> countList = new List<string>();
             string csv = String.Empty;
 
             int resultCount = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
@@ -388,22 +373,22 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                 }
                 cmd.Connection = conn;
 
 
-                MySqlCommand sqlcmd = new MySqlCommand("", conn);
+                MySqlCommand sqlCmd = new MySqlCommand("", conn);
 
-                sqlcmd.CommandText = "SP_DownloadReportSearch";
+                sqlCmd.CommandText = "SP_DownloadReportSearch";
 
-                sqlcmd.Parameters.AddWithValue("Schedule_ID", SchedulerID);
+                sqlCmd.Parameters.AddWithValue("Schedule_ID", SchedulerID);
 
 
-                sqlcmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandType = CommandType.StoredProcedure;
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = sqlcmd;
+                da.SelectCommand = sqlCmd;
                 da.Fill(ds);
 
                 if (ds != null && ds.Tables != null)
@@ -411,7 +396,7 @@ namespace Easyrewardz_TicketSystem.Services
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
 
-                        ticketschedulemodal = ds.Tables[0].AsEnumerable().Select(r => new ScheduleMaster()
+                        ticketScheduleModal = ds.Tables[0].AsEnumerable().Select(r => new ScheduleMaster()
                         {
                             ScheduleID = r.Field<object>("ScheduleID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("ScheduleID")),
                             TenantID = r.Field<object>("TenantID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TenantID")),
@@ -446,11 +431,11 @@ namespace Easyrewardz_TicketSystem.Services
                             ScheduleFrom = r.Field<object>("ScheduleFrom") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("ScheduleFrom"))
                         }).ToList();
 
-                        if (ticketschedulemodal.Count > 0)
+                        if (ticketScheduleModal.Count > 0)
                         {
-                            conn.Close();
+                           
                             ReportSearchModel searchModel = new ReportSearchModel();
-                            searchModel.reportSearch = JsonConvert.DeserializeObject<ReportSearchData>(ticketschedulemodal[0].SearchInputParams);
+                            searchModel.reportSearch = JsonConvert.DeserializeObject<ReportSearchData>(ticketScheduleModal[0].SearchInputParams);
                             List<SearchResponseReport> searchresponsereport = new List<SearchResponseReport>();
                             searchModel.TenantID = TenantID;
                             searchModel.curentUserId = curentUserId;
@@ -470,7 +455,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose(); 
             }
             return csv;
         }
@@ -488,7 +473,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                 }
                 cmd.Connection = conn;
 
@@ -610,7 +595,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose(); 
             }
             return objSearchResult;
         }
@@ -747,7 +732,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                 }
                 cmd.Connection = conn;
                 MySqlCommand sqlcmd = new MySqlCommand("", conn);
@@ -814,7 +799,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose(); 
             }
             return csv;
         }
@@ -829,7 +814,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                 }
                 cmd.Connection = conn;
 
@@ -855,10 +840,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                conn.Close();
-            }
+            
             return result;
         }
 

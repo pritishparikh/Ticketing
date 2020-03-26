@@ -30,11 +30,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _UserRepository = User;
             return _UserRepository.AddUserProfiledetail(DesignationID, ReportTo, CreatedBy, TenantID, UserID, IsStoreUser);
         }
-        public int DeleteProfilePicture(IUser User,int tenantID,int userID,int isStoreUser)
-        {
-            _UserRepository = User;
-            return _UserRepository.DeleteProfilePicture(tenantID, userID, isStoreUser);
-        }
         public int Mappedcategory(IUser User, CustomUserModel customUserModel)
         {
             _UserRepository = User;
@@ -89,5 +84,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _UserRepository.validateUserExist(UserEmailID, UserMobile, TenantId);
         }
 
+        public int DeleteProfilePicture(IUser User, int tenantID, int userID, int isStoreUser)
+        {
+            _UserRepository = User;
+            return _UserRepository.DeleteProfilePicture(tenantID, userID, isStoreUser);
+        }
     }
 }

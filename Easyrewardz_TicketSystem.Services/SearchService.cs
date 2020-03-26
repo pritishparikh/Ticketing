@@ -8,16 +8,24 @@ using System.Text;
 using System.Linq;
 using Easyrewardz_TicketSystem.CustomModel;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class SearchService : ISearchTicket
     {
+        #region variable
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region DB connection
         MySqlConnection conn = new MySqlConnection();
-        public SearchService(string _connectionString)
+        public SearchService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            Cache = cache;
         }
         #endregion
 
@@ -27,77 +35,77 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
             List<SearchResponse> temp = new List<SearchResponse>(); //delete later
-            List<string> CountList = new List<string>();
+            List<string> countList = new List<string>();
 
             int rowStart = (searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
-                MySqlCommand sqlcmd = new MySqlCommand("SP_SearchTickets", conn);
-                sqlcmd.CommandType = CommandType.StoredProcedure;
+                MySqlCommand sqlCmd = new MySqlCommand("SP_SearchTickets", conn);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
 
-                sqlcmd.Parameters.AddWithValue("_isEscalated", Convert.ToInt32(searchparams.isEscalation));
-                sqlcmd.Parameters.AddWithValue("_isByStatus", Convert.ToInt32(searchparams.isByStatus));
-                sqlcmd.Parameters.AddWithValue("_isByFilter", Convert.ToInt32(searchparams.isByFilter));
-                sqlcmd.Parameters.AddWithValue("_isByDate", Convert.ToInt32(searchparams.ByDate));
-                sqlcmd.Parameters.AddWithValue("_isByCustomerType", Convert.ToInt32(searchparams.ByCustomerType));
-                sqlcmd.Parameters.AddWithValue("_isByticketType", Convert.ToInt32(searchparams.ByTicketType));
-                sqlcmd.Parameters.AddWithValue("_isByCategory", Convert.ToInt32(searchparams.ByCategory));
-                sqlcmd.Parameters.AddWithValue("_isByAll", Convert.ToInt32(searchparams.byAll));
-                sqlcmd.Parameters.AddWithValue("_tenantID", Convert.ToInt32(searchparams.tenantID));
-                sqlcmd.Parameters.AddWithValue("_createdDate", searchparams.creationDate);
-                sqlcmd.Parameters.AddWithValue("_lastUpdatedDate", searchparams.lastUpdatedDate);
-                sqlcmd.Parameters.AddWithValue("_SLADue", searchparams.SLADue);
-                sqlcmd.Parameters.AddWithValue("_ticketStatus", searchparams.ticketStatus);
-                sqlcmd.Parameters.AddWithValue("_customerMob", searchparams.customerMob);
-                sqlcmd.Parameters.AddWithValue("_customerMail", searchparams.customerEmail);
-                sqlcmd.Parameters.AddWithValue("_ticketID", searchparams.TicketID);
-                sqlcmd.Parameters.AddWithValue("_priority", searchparams.Priority);
-                sqlcmd.Parameters.AddWithValue("_channelOfPurchase", searchparams.chanelOfPurchase);
-                sqlcmd.Parameters.AddWithValue("_ticketActionType", searchparams.ticketActionType);
-                sqlcmd.Parameters.AddWithValue("_categoryName", searchparams.Category);
-                sqlcmd.Parameters.AddWithValue("_subCategoryName", searchparams.subCategory);
-                sqlcmd.Parameters.AddWithValue("_issueType", searchparams.issueType);
-                sqlcmd.Parameters.AddWithValue("_tikcetSource", searchparams.ticketSource);
-                sqlcmd.Parameters.AddWithValue("_claimID", searchparams.claimID);
-                sqlcmd.Parameters.AddWithValue("_ticketTitle", searchparams.ticketTitle);
-                sqlcmd.Parameters.AddWithValue("_invoiceSubOrderNo", searchparams.invoiceSubOrderNo);
-                sqlcmd.Parameters.AddWithValue("_assignedTo", searchparams.assignedTo);
-                sqlcmd.Parameters.AddWithValue("_didVisitStore", Convert.ToInt32(searchparams.didVisitStore));
-                sqlcmd.Parameters.AddWithValue("_itemID", Convert.ToInt32(searchparams.itemID));
-                sqlcmd.Parameters.AddWithValue("_purchaseStorecoseAddr", searchparams.purchaseStoreCodeAddress);
-                sqlcmd.Parameters.AddWithValue("_SLAstatus", searchparams.SLAstatus);
-                sqlcmd.Parameters.AddWithValue("_wantToVisitStore", Convert.ToInt32(searchparams.wantToVisitStore));
-                sqlcmd.Parameters.AddWithValue("_wantToVisitStoreCodeAddr", Convert.ToInt32(searchparams.wantToVisitStoreCodeAddress));
-                sqlcmd.Parameters.AddWithValue("_withClaim", Convert.ToInt32(searchparams.withClaim));
-                sqlcmd.Parameters.AddWithValue("_withTask", Convert.ToInt32(searchparams.withTask));
-                sqlcmd.Parameters.AddWithValue("_claimStatus", searchparams.claimStatus);
-                sqlcmd.Parameters.AddWithValue("_taskStatus", searchparams.taskStatus);
-                sqlcmd.Parameters.AddWithValue("_claimCategory", searchparams.claimCategory);
-                sqlcmd.Parameters.AddWithValue("_taskDept", searchparams.taskDept);
-                sqlcmd.Parameters.AddWithValue("_taskFunction", searchparams.taskFunction);
-                sqlcmd.Parameters.AddWithValue("_claimIssuetype", searchparams.claimIssuetype);
-                sqlcmd.Parameters.AddWithValue("_claimsubCategory", searchparams.claimSubcategory);
+                sqlCmd.Parameters.AddWithValue("_isEscalated", Convert.ToInt32(searchparams.isEscalation));
+                sqlCmd.Parameters.AddWithValue("_isByStatus", Convert.ToInt32(searchparams.isByStatus));
+                sqlCmd.Parameters.AddWithValue("_isByFilter", Convert.ToInt32(searchparams.isByFilter));
+                sqlCmd.Parameters.AddWithValue("_isByDate", Convert.ToInt32(searchparams.ByDate));
+                sqlCmd.Parameters.AddWithValue("_isByCustomerType", Convert.ToInt32(searchparams.ByCustomerType));
+                sqlCmd.Parameters.AddWithValue("_isByticketType", Convert.ToInt32(searchparams.ByTicketType));
+                sqlCmd.Parameters.AddWithValue("_isByCategory", Convert.ToInt32(searchparams.ByCategory));
+                sqlCmd.Parameters.AddWithValue("_isByAll", Convert.ToInt32(searchparams.byAll));
+                sqlCmd.Parameters.AddWithValue("_tenantID", Convert.ToInt32(searchparams.tenantID));
+                sqlCmd.Parameters.AddWithValue("_createdDate", searchparams.creationDate);
+                sqlCmd.Parameters.AddWithValue("_lastUpdatedDate", searchparams.lastUpdatedDate);
+                sqlCmd.Parameters.AddWithValue("_SLADue", searchparams.SLADue);
+                sqlCmd.Parameters.AddWithValue("_ticketStatus", searchparams.ticketStatus);
+                sqlCmd.Parameters.AddWithValue("_customerMob", searchparams.customerMob);
+                sqlCmd.Parameters.AddWithValue("_customerMail", searchparams.customerEmail);
+                sqlCmd.Parameters.AddWithValue("_ticketID", searchparams.TicketID);
+                sqlCmd.Parameters.AddWithValue("_priority", searchparams.Priority);
+                sqlCmd.Parameters.AddWithValue("_channelOfPurchase", searchparams.chanelOfPurchase);
+                sqlCmd.Parameters.AddWithValue("_ticketActionType", searchparams.ticketActionType);
+                sqlCmd.Parameters.AddWithValue("_categoryName", searchparams.Category);
+                sqlCmd.Parameters.AddWithValue("_subCategoryName", searchparams.subCategory);
+                sqlCmd.Parameters.AddWithValue("_issueType", searchparams.issueType);
+                sqlCmd.Parameters.AddWithValue("_tikcetSource", searchparams.ticketSource);
+                sqlCmd.Parameters.AddWithValue("_claimID", searchparams.claimID);
+                sqlCmd.Parameters.AddWithValue("_ticketTitle", searchparams.ticketTitle);
+                sqlCmd.Parameters.AddWithValue("_invoiceSubOrderNo", searchparams.invoiceSubOrderNo);
+                sqlCmd.Parameters.AddWithValue("_assignedTo", searchparams.assignedTo);
+                sqlCmd.Parameters.AddWithValue("_didVisitStore", Convert.ToInt32(searchparams.didVisitStore));
+                sqlCmd.Parameters.AddWithValue("_itemID", Convert.ToInt32(searchparams.itemID));
+                sqlCmd.Parameters.AddWithValue("_purchaseStorecoseAddr", searchparams.purchaseStoreCodeAddress);
+                sqlCmd.Parameters.AddWithValue("_SLAstatus", searchparams.SLAstatus);
+                sqlCmd.Parameters.AddWithValue("_wantToVisitStore", Convert.ToInt32(searchparams.wantToVisitStore));
+                sqlCmd.Parameters.AddWithValue("_wantToVisitStoreCodeAddr", Convert.ToInt32(searchparams.wantToVisitStoreCodeAddress));
+                sqlCmd.Parameters.AddWithValue("_withClaim", Convert.ToInt32(searchparams.withClaim));
+                sqlCmd.Parameters.AddWithValue("_withTask", Convert.ToInt32(searchparams.withTask));
+                sqlCmd.Parameters.AddWithValue("_claimStatus", searchparams.claimStatus);
+                sqlCmd.Parameters.AddWithValue("_taskStatus", searchparams.taskStatus);
+                sqlCmd.Parameters.AddWithValue("_claimCategory", searchparams.claimCategory);
+                sqlCmd.Parameters.AddWithValue("_taskDept", searchparams.taskDept);
+                sqlCmd.Parameters.AddWithValue("_taskFunction", searchparams.taskFunction);
+                sqlCmd.Parameters.AddWithValue("_claimIssuetype", searchparams.claimIssuetype);
+                sqlCmd.Parameters.AddWithValue("_claimsubCategory", searchparams.claimSubcategory);
 
                 if (!string.IsNullOrEmpty(searchparams.SLAstatus))
                 {
-                    sqlcmd.Parameters.AddWithValue("_SLAstatusResponse", Convert.ToInt32(searchparams.SLAstatus.Split('|')[0].Split('-')[0]));
-                    sqlcmd.Parameters.AddWithValue("_SLAstatusResponsetime", 1);
-                    sqlcmd.Parameters.AddWithValue("_SLAstatusResolution", Convert.ToInt32(searchparams.SLAstatus.Split('|')[1].Split('-')[0]));
-                    sqlcmd.Parameters.AddWithValue("_SLAstatusResoltiontime", 1);
+                    sqlCmd.Parameters.AddWithValue("_SLAstatusResponse", Convert.ToInt32(searchparams.SLAstatus.Split('|')[0].Split('-')[0]));
+                    sqlCmd.Parameters.AddWithValue("_SLAstatusResponsetime", 1);
+                    sqlCmd.Parameters.AddWithValue("_SLAstatusResolution", Convert.ToInt32(searchparams.SLAstatus.Split('|')[1].Split('-')[0]));
+                    sqlCmd.Parameters.AddWithValue("_SLAstatusResoltiontime", 1);
                 }
                 else
                 {
-                    sqlcmd.Parameters.AddWithValue("_SLAstatusResponse", 0);
-                    sqlcmd.Parameters.AddWithValue("_SLAstatusResponsetime", 0);
-                    sqlcmd.Parameters.AddWithValue("_SLAstatusResolution", 0);
-                    sqlcmd.Parameters.AddWithValue("_SLAstatusResoltiontime", 0);
+                    sqlCmd.Parameters.AddWithValue("_SLAstatusResponse", 0);
+                    sqlCmd.Parameters.AddWithValue("_SLAstatusResponsetime", 0);
+                    sqlCmd.Parameters.AddWithValue("_SLAstatusResolution", 0);
+                    sqlCmd.Parameters.AddWithValue("_SLAstatusResoltiontime", 0);
                 }
 
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = sqlcmd;
+                da.SelectCommand = sqlCmd;
                 da.Fill(ds);
 
                 if (ds.Tables.Count > 0)
@@ -174,7 +182,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose(); 
             }
             return objSearchResult;
             //return temp;   
@@ -189,7 +197,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
 
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand sqlcmd = new MySqlCommand("SP_TicketStatusCount", conn);
                 sqlcmd.CommandType = CommandType.StoredProcedure;
@@ -227,7 +235,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (ds != null)
                     ds.Dispose();
-                conn.Close();
+                
             }
 
             return ticketCount;
@@ -246,12 +254,12 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
             List<SearchResponse> temp = new List<SearchResponse>(); //delete later
-            List<string> CountList = new List<string>();
+            List<string> countList = new List<string>();
 
             //int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand sqlcmd = new MySqlCommand("SP_getTicketSearchOnLoad", conn);
                 sqlcmd.CommandType = CommandType.StoredProcedure;
@@ -319,7 +327,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
             return objSearchResult;
         }
@@ -337,14 +345,14 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
             List<SearchResponse> temp = new List<SearchResponse>(); //delete later
-            List<string> CountList = new List<string>();
+            List<string> countList = new List<string>();
 
             int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                 }
 
                 cmd.Connection = conn;
@@ -356,108 +364,108 @@ namespace Easyrewardz_TicketSystem.Services
                     4. SP_SearchTicketData_ByCategoryType
                     5. SP_SearchTicketData_ByAll                 
                  */
-                MySqlCommand sqlcmd = new MySqlCommand("", conn);
+                MySqlCommand sqlCmd = new MySqlCommand("", conn);
 
-                sqlcmd.Parameters.AddWithValue("HeaderStatus_Id", searchModel.HeaderStatusId);
+                sqlCmd.Parameters.AddWithValue("HeaderStatus_Id", searchModel.HeaderStatusId);
 
                 if (searchModel.ActiveTabId == 1)
                 {
-                    sqlcmd.CommandText = "SP_SearchTicketData_ByDate";
+                    sqlCmd.CommandText = "SP_SearchTicketData_ByDate";
 
-                    sqlcmd.Parameters.AddWithValue("Ticket_CreatedOn", string.IsNullOrEmpty(searchModel.searchDataByDate.Ticket_CreatedOn) ? "" : searchModel.searchDataByDate.Ticket_CreatedOn);
-                    sqlcmd.Parameters.AddWithValue("Ticket_ModifiedOn", string.IsNullOrEmpty(searchModel.searchDataByDate.Ticket_ModifiedOn) ? "" : searchModel.searchDataByDate.Ticket_ModifiedOn);
-                    sqlcmd.Parameters.AddWithValue("SLA_DueON", searchModel.searchDataByDate.SLA_DueON);
-                    sqlcmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByDate.Ticket_StatusID);
+                    sqlCmd.Parameters.AddWithValue("Ticket_CreatedOn", string.IsNullOrEmpty(searchModel.searchDataByDate.Ticket_CreatedOn) ? "" : searchModel.searchDataByDate.Ticket_CreatedOn);
+                    sqlCmd.Parameters.AddWithValue("Ticket_ModifiedOn", string.IsNullOrEmpty(searchModel.searchDataByDate.Ticket_ModifiedOn) ? "" : searchModel.searchDataByDate.Ticket_ModifiedOn);
+                    sqlCmd.Parameters.AddWithValue("SLA_DueON", searchModel.searchDataByDate.SLA_DueON);
+                    sqlCmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByDate.Ticket_StatusID);
                 }
                 else if (searchModel.ActiveTabId == 2)
                 {
-                    sqlcmd.CommandText = "SP_SearchTicketData_ByCustomerType";
+                    sqlCmd.CommandText = "SP_SearchTicketData_ByCustomerType";
 
-                    sqlcmd.Parameters.AddWithValue("CustomerMobileNo", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerMobileNo) ? "" : searchModel.searchDataByCustomerType.CustomerMobileNo);
-                    sqlcmd.Parameters.AddWithValue("CustomerEmailID", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerEmailID) ? "" : searchModel.searchDataByCustomerType.CustomerEmailID);
-                    sqlcmd.Parameters.AddWithValue("Ticket_ID", searchModel.searchDataByCustomerType.TicketID == null ? 0 : searchModel.searchDataByCustomerType.TicketID);
-                    sqlcmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByCustomerType.TicketStatusID);
+                    sqlCmd.Parameters.AddWithValue("CustomerMobileNo", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerMobileNo) ? "" : searchModel.searchDataByCustomerType.CustomerMobileNo);
+                    sqlCmd.Parameters.AddWithValue("CustomerEmailID", string.IsNullOrEmpty(searchModel.searchDataByCustomerType.CustomerEmailID) ? "" : searchModel.searchDataByCustomerType.CustomerEmailID);
+                    sqlCmd.Parameters.AddWithValue("Ticket_ID", searchModel.searchDataByCustomerType.TicketID == null ? 0 : searchModel.searchDataByCustomerType.TicketID);
+                    sqlCmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByCustomerType.TicketStatusID);
                 }
                 else if (searchModel.ActiveTabId == 3)
                 {
-                    sqlcmd.CommandText = "SP_SearchTicketData_ByTicketType";
+                    sqlCmd.CommandText = "SP_SearchTicketData_ByTicketType";
 
-                    sqlcmd.Parameters.AddWithValue("Priority_Id", searchModel.searchDataByTicketType.TicketPriorityID);
-                    sqlcmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByTicketType.TicketStatusID);
-                    sqlcmd.Parameters.AddWithValue("ChannelOfPurchaseIDs", string.IsNullOrEmpty(searchModel.searchDataByTicketType.ChannelOfPurchaseIds) ? "" : searchModel.searchDataByTicketType.ChannelOfPurchaseIds);
-                    sqlcmd.Parameters.AddWithValue("ActionTypeIds", searchModel.searchDataByTicketType.ActionTypes);
+                    sqlCmd.Parameters.AddWithValue("Priority_Id", searchModel.searchDataByTicketType.TicketPriorityID);
+                    sqlCmd.Parameters.AddWithValue("TicketStatusID", searchModel.searchDataByTicketType.TicketStatusID);
+                    sqlCmd.Parameters.AddWithValue("ChannelOfPurchaseIDs", string.IsNullOrEmpty(searchModel.searchDataByTicketType.ChannelOfPurchaseIds) ? "" : searchModel.searchDataByTicketType.ChannelOfPurchaseIds);
+                    sqlCmd.Parameters.AddWithValue("ActionTypeIds", searchModel.searchDataByTicketType.ActionTypes);
                 }
                 else if (searchModel.ActiveTabId == 4)
                 {
-                    sqlcmd.CommandText = "SP_SearchTicketData_ByCategory";
+                    sqlCmd.CommandText = "SP_SearchTicketData_ByCategory";
 
-                    sqlcmd.Parameters.AddWithValue("Category_Id", searchModel.searchDataByCategoryType.CategoryId);
-                    sqlcmd.Parameters.AddWithValue("SubCategory_Id", searchModel.searchDataByCategoryType.SubCategoryId);
-                    sqlcmd.Parameters.AddWithValue("IssueType_Id", searchModel.searchDataByCategoryType.IssueTypeId);
-                    sqlcmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByCategoryType.TicketStatusID);
+                    sqlCmd.Parameters.AddWithValue("Category_Id", searchModel.searchDataByCategoryType.CategoryId);
+                    sqlCmd.Parameters.AddWithValue("SubCategory_Id", searchModel.searchDataByCategoryType.SubCategoryId);
+                    sqlCmd.Parameters.AddWithValue("IssueType_Id", searchModel.searchDataByCategoryType.IssueTypeId);
+                    sqlCmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByCategoryType.TicketStatusID);
                 }
                 else if (searchModel.ActiveTabId == 5)
                 {
-                    sqlcmd.CommandText = "SP_SearchTicketData_ByAll";
+                    sqlCmd.CommandText = "SP_SearchTicketData_ByAll";
 
                     /*Column 1 (5)*/
-                    sqlcmd.Parameters.AddWithValue("Ticket_CreatedOn", string.IsNullOrEmpty(searchModel.searchDataByAll.CreatedDate) ? "" : searchModel.searchDataByAll.CreatedDate);
-                    sqlcmd.Parameters.AddWithValue("Ticket_ModifiedOn", string.IsNullOrEmpty(searchModel.searchDataByAll.ModifiedDate) ? "" : searchModel.searchDataByAll.ModifiedDate);
-                    sqlcmd.Parameters.AddWithValue("Category_Id", searchModel.searchDataByAll.CategoryId);
-                    sqlcmd.Parameters.AddWithValue("SubCategory_Id", searchModel.searchDataByAll.SubCategoryId);
-                    sqlcmd.Parameters.AddWithValue("IssueType_Id", searchModel.searchDataByAll.IssueTypeId);
+                    sqlCmd.Parameters.AddWithValue("Ticket_CreatedOn", string.IsNullOrEmpty(searchModel.searchDataByAll.CreatedDate) ? "" : searchModel.searchDataByAll.CreatedDate);
+                    sqlCmd.Parameters.AddWithValue("Ticket_ModifiedOn", string.IsNullOrEmpty(searchModel.searchDataByAll.ModifiedDate) ? "" : searchModel.searchDataByAll.ModifiedDate);
+                    sqlCmd.Parameters.AddWithValue("Category_Id", searchModel.searchDataByAll.CategoryId);
+                    sqlCmd.Parameters.AddWithValue("SubCategory_Id", searchModel.searchDataByAll.SubCategoryId);
+                    sqlCmd.Parameters.AddWithValue("IssueType_Id", searchModel.searchDataByAll.IssueTypeId);
 
                     /*Column 2 (5) */
-                    sqlcmd.Parameters.AddWithValue("TicketSourceType_ID", searchModel.searchDataByAll.TicketSourceTypeID);
-                    sqlcmd.Parameters.AddWithValue("TicketIdORTitle", string.IsNullOrEmpty(searchModel.searchDataByAll.TicketIdORTitle) ? "" : searchModel.searchDataByAll.TicketIdORTitle);
-                    sqlcmd.Parameters.AddWithValue("Priority_Id", searchModel.searchDataByAll.PriorityId);
-                    sqlcmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByAll.TicketSatutsID);
-                    sqlcmd.Parameters.AddWithValue("SLAStatus", string.IsNullOrEmpty(searchModel.searchDataByAll.SLAStatus) ? "" : searchModel.searchDataByAll.SLAStatus);
+                    sqlCmd.Parameters.AddWithValue("TicketSourceType_ID", searchModel.searchDataByAll.TicketSourceTypeID);
+                    sqlCmd.Parameters.AddWithValue("TicketIdORTitle", string.IsNullOrEmpty(searchModel.searchDataByAll.TicketIdORTitle) ? "" : searchModel.searchDataByAll.TicketIdORTitle);
+                    sqlCmd.Parameters.AddWithValue("Priority_Id", searchModel.searchDataByAll.PriorityId);
+                    sqlCmd.Parameters.AddWithValue("Ticket_StatusID", searchModel.searchDataByAll.TicketSatutsID);
+                    sqlCmd.Parameters.AddWithValue("SLAStatus", string.IsNullOrEmpty(searchModel.searchDataByAll.SLAStatus) ? "" : searchModel.searchDataByAll.SLAStatus);
 
                     /*Column 3 (5)*/
-                    sqlcmd.Parameters.AddWithValue("TicketClaim_ID", searchModel.searchDataByAll.ClaimId);
-                    sqlcmd.Parameters.AddWithValue("InvoiceNumberORSubOrderNo", string.IsNullOrEmpty(searchModel.searchDataByAll.InvoiceNumberORSubOrderNo) ? "" : searchModel.searchDataByAll.InvoiceNumberORSubOrderNo);
-                    sqlcmd.Parameters.AddWithValue("OrderItemId", searchModel.searchDataByAll.OrderItemId);
+                    sqlCmd.Parameters.AddWithValue("TicketClaim_ID", searchModel.searchDataByAll.ClaimId);
+                    sqlCmd.Parameters.AddWithValue("InvoiceNumberORSubOrderNo", string.IsNullOrEmpty(searchModel.searchDataByAll.InvoiceNumberORSubOrderNo) ? "" : searchModel.searchDataByAll.InvoiceNumberORSubOrderNo);
+                    sqlCmd.Parameters.AddWithValue("OrderItemId", searchModel.searchDataByAll.OrderItemId);
 
                     /*All for to load all the data*/
                     if (searchModel.searchDataByAll.IsVisitStore.ToLower() != "all")
-                        sqlcmd.Parameters.AddWithValue("IsVisitedStore", searchModel.searchDataByAll.IsVisitStore == "yes" ? 1 : 0);
+                        sqlCmd.Parameters.AddWithValue("IsVisitedStore", searchModel.searchDataByAll.IsVisitStore == "yes" ? 1 : 0);
                     else
-                        sqlcmd.Parameters.AddWithValue("IsVisitedStore", -1);
+                        sqlCmd.Parameters.AddWithValue("IsVisitedStore", -1);
 
                     if (searchModel.searchDataByAll.IsWantVistingStore.ToLower() != "all")
-                        sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", searchModel.searchDataByAll.IsWantVistingStore == "yes" ? 1 : 0);
+                        sqlCmd.Parameters.AddWithValue("IsWantToVisitStore", searchModel.searchDataByAll.IsWantVistingStore == "yes" ? 1 : 0);
                     else
-                        sqlcmd.Parameters.AddWithValue("IsWantToVisitStore", -1);
+                        sqlCmd.Parameters.AddWithValue("IsWantToVisitStore", -1);
 
                     /*Column 4 (5)*/
-                    sqlcmd.Parameters.AddWithValue("Customer_EmailID", searchModel.searchDataByAll.CustomerEmailID);
-                    sqlcmd.Parameters.AddWithValue("CustomerMobileNo", string.IsNullOrEmpty(searchModel.searchDataByAll.CustomerMobileNo) ? "" : searchModel.searchDataByAll.CustomerMobileNo);
-                    sqlcmd.Parameters.AddWithValue("OtherAgentAssignTo", string.IsNullOrEmpty(Convert.ToString(searchModel.searchDataByAll.AssignTo)) ? 0 : Convert.ToInt32(searchModel.searchDataByAll.AssignTo));
-                    sqlcmd.Parameters.AddWithValue("StoreCodeORAddress", searchModel.searchDataByAll.StoreCodeORAddress);
-                    sqlcmd.Parameters.AddWithValue("WantToStoreCodeORAddress", string.IsNullOrEmpty(searchModel.searchDataByAll.WantToStoreCodeORAddress) ? "" : searchModel.searchDataByAll.WantToStoreCodeORAddress);
+                    sqlCmd.Parameters.AddWithValue("Customer_EmailID", searchModel.searchDataByAll.CustomerEmailID);
+                    sqlCmd.Parameters.AddWithValue("CustomerMobileNo", string.IsNullOrEmpty(searchModel.searchDataByAll.CustomerMobileNo) ? "" : searchModel.searchDataByAll.CustomerMobileNo);
+                    sqlCmd.Parameters.AddWithValue("OtherAgentAssignTo", string.IsNullOrEmpty(Convert.ToString(searchModel.searchDataByAll.AssignTo)) ? 0 : Convert.ToInt32(searchModel.searchDataByAll.AssignTo));
+                    sqlCmd.Parameters.AddWithValue("StoreCodeORAddress", searchModel.searchDataByAll.StoreCodeORAddress);
+                    sqlCmd.Parameters.AddWithValue("WantToStoreCodeORAddress", string.IsNullOrEmpty(searchModel.searchDataByAll.WantToStoreCodeORAddress) ? "" : searchModel.searchDataByAll.WantToStoreCodeORAddress);
 
                     //Row - 2 and Column - 1  (5)
-                    sqlcmd.Parameters.AddWithValue("HaveClaim", searchModel.searchDataByAll.HaveClaim);
-                    sqlcmd.Parameters.AddWithValue("ClaimStatusId", searchModel.searchDataByAll.ClaimStatusId);
-                    sqlcmd.Parameters.AddWithValue("ClaimCategoryId", searchModel.searchDataByAll.ClaimCategoryId);
-                    sqlcmd.Parameters.AddWithValue("ClaimSubCategoryId", searchModel.searchDataByAll.ClaimSubCategoryId);
-                    sqlcmd.Parameters.AddWithValue("ClaimIssueTypeId", searchModel.searchDataByAll.ClaimIssueTypeId);
+                    sqlCmd.Parameters.AddWithValue("HaveClaim", searchModel.searchDataByAll.HaveClaim);
+                    sqlCmd.Parameters.AddWithValue("ClaimStatusId", searchModel.searchDataByAll.ClaimStatusId);
+                    sqlCmd.Parameters.AddWithValue("ClaimCategoryId", searchModel.searchDataByAll.ClaimCategoryId);
+                    sqlCmd.Parameters.AddWithValue("ClaimSubCategoryId", searchModel.searchDataByAll.ClaimSubCategoryId);
+                    sqlCmd.Parameters.AddWithValue("ClaimIssueTypeId", searchModel.searchDataByAll.ClaimIssueTypeId);
 
                     //Row - 2 and Column - 2  (4)
-                    sqlcmd.Parameters.AddWithValue("HaveTask", searchModel.searchDataByAll.HaveTask);
-                    sqlcmd.Parameters.AddWithValue("TaskStatus_Id", searchModel.searchDataByAll.TaskStatusId);
-                    sqlcmd.Parameters.AddWithValue("TaskDepartment_Id", searchModel.searchDataByAll.TaskDepartment_Id);
-                    sqlcmd.Parameters.AddWithValue("TaskFunction_Id", searchModel.searchDataByAll.TaskFunction_Id);
+                    sqlCmd.Parameters.AddWithValue("HaveTask", searchModel.searchDataByAll.HaveTask);
+                    sqlCmd.Parameters.AddWithValue("TaskStatus_Id", searchModel.searchDataByAll.TaskStatusId);
+                    sqlCmd.Parameters.AddWithValue("TaskDepartment_Id", searchModel.searchDataByAll.TaskDepartment_Id);
+                    sqlCmd.Parameters.AddWithValue("TaskFunction_Id", searchModel.searchDataByAll.TaskFunction_Id);
                 }
 
-                sqlcmd.Parameters.AddWithValue("Tenant_ID", searchModel.TenantID);
-                sqlcmd.Parameters.AddWithValue("Assignto_Id", searchModel.AssigntoId);
+                sqlCmd.Parameters.AddWithValue("Tenant_ID", searchModel.TenantID);
+                sqlCmd.Parameters.AddWithValue("Assignto_Id", searchModel.AssigntoId);
 
-                sqlcmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandType = CommandType.StoredProcedure;
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = sqlcmd;
+                da.SelectCommand = sqlCmd;
                 da.Fill(ds);
 
                 if (ds != null && ds.Tables != null)
@@ -515,7 +523,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
             return objSearchResult;
         }
@@ -539,7 +547,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetSaveSearchByID_UTSM", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@SearchParam_ID", SearchParamID);
@@ -584,118 +592,14 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
             return tktSearch;
         }
 
 
         #region Mapping
-
         public string setCreationdetails(string time, string ColName)
-        {
-            string timespan = string.Empty;
-            DateTime now = DateTime.Now;
-            TimeSpan diff = new TimeSpan();
-            string[] PriorityArr = null;
-            string spantext = "{0} Days {1} Hrs {2} Mins Ago";
-            try
-            {
-                if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
-                {
-                    diff = DateTime.Now - Convert.ToDateTime(time);
-                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
-
-                }
-                else if (ColName == "RespondTimeRemainingSpan")
-                {
-                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
-                    DateTime assigneddate = Convert.ToDateTime(time.Split(new char[] { '|' })[1]);
-
-
-                    switch (PriorityArr[1])
-                    {
-                        case "D":
-                            if (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
-                            {
-                                diff = (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
-                            }
-                            break;
-
-                        case "H":
-
-                            if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
-                            {
-                                diff = (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
-                            }
-
-
-                            break;
-
-                        case "M":
-
-                            if (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
-                            {
-                                diff = (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
-                            }
-
-                            break;
-
-                    }
-                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
-
-                }
-                else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
-                {
-                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
-                    DateTime assigneddate = Convert.ToDateTime(time.Split(new char[] { '|' })[1]);
-
-                    switch (PriorityArr[1])
-                    {
-                        case "D":
-                            if (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
-                            {
-                                diff = DateTime.Now - (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])));
-                            }
-                            break;
-
-                        case "H":
-                            if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
-                            {
-                                diff = DateTime.Now - (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])));
-                            }
-
-
-                            break;
-
-                        case "M":
-                            if (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
-                            {
-                                diff = DateTime.Now - (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])));
-                            }
-
-
-                            break;
-
-                    }
-
-                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
-                }
-            }
-            catch (Exception)
-            {
-
-            }
-            finally
-            {
-                if (PriorityArr != null && PriorityArr.Length > 0)
-                    Array.Clear(PriorityArr, 0, PriorityArr.Length);
-            }
-            return timespan;
-
-        }
-        /*
-        public string setCreationdetails1(string time, string ColName)
         {
             string timespan = string.Empty;
             DateTime now = DateTime.Now;
@@ -772,7 +676,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return timespan;
         }
-        */
+
         public string CalculateSpan(TimeSpan ts)
         {
             string span = string.Empty;

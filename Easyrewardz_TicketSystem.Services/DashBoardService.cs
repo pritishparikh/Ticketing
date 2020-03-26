@@ -1,6 +1,8 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using System;
@@ -15,13 +17,19 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class DashBoardService : IDashBoard
     {
+        #region variable
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         public CultureInfo culture = CultureInfo.InvariantCulture;
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
 
-        public DashBoardService(string _connectionString)
+        public DashBoardService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            Cache = cache;
         }
         #endregion
 
@@ -31,18 +39,18 @@ namespace Easyrewardz_TicketSystem.Services
         public DashBoardDataModel GetDashBoardCountData(string BrandID, string UserID, string fromdate, string todate, int TenantID)
         {
             DataSet ds = new DataSet();
-            DataSet Graphds = new DataSet();
+            DataSet graphds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             DashBoardDataModel dashBoarddata = new DashBoardDataModel();
             DateTime date = new DateTime();
             TimeSpan ts = new TimeSpan();
             // DashBoardGraphModel dashBoardGraphdata = new DashBoardGraphModel();
-            int TotalTickets = 0;
+            int totalTickets = 0;
             int respondedTickets = 0; int UnrespondedTickets = 0; int TotalResponseTime = 0;
             int resolvedTickets = 0; int UnresolvedTickets = 0;int TotalResolutionTime = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 #region DashBoard Data
@@ -114,7 +122,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                     if ((ds.Tables[9].Rows.Count > 0)) //Resolution SLA
                     {
-                        TotalTickets = ds.Tables[9].Rows[0]["TotalTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["TotalTickets"]) : 0;
+                        totalTickets = ds.Tables[9].Rows[0]["TotalTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["TotalTickets"]) : 0;
                         respondedTickets = ds.Tables[9].Rows[0]["RespondedTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["RespondedTickets"]) : 0;
                         resolvedTickets = ds.Tables[9].Rows[0]["ResolvedTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["ResolvedTickets"]) : 0;
 
@@ -123,7 +131,7 @@ namespace Easyrewardz_TicketSystem.Services
                         UnresolvedTickets = ds.Tables[9].Rows[0]["UnresolvedTickets"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["UnresolvedTickets"]) : 0;
                         TotalResolutionTime = ds.Tables[9].Rows[0]["TotalResolutionTime"] != System.DBNull.Value ? Convert.ToInt32(ds.Tables[9].Rows[0]["TotalResolutionTime"]) : 0;
 
-                        if (TotalTickets > 0)
+                        if (totalTickets > 0)
                         {
                             #region response SLA calculation
 
@@ -199,7 +207,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<OpenByPriorityModel> OpenPriorityTktList = new List<OpenByPriorityModel>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 #region DashBoardGraph Data
@@ -303,17 +311,18 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             List<SearchResponseDashBoard> objSearchResult = new List<SearchResponseDashBoard>();
 
-            List<string> CountList = new List<string>();
+            List<string> countList = new List<string>();
 
             int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
-                if (conn != null && conn.State == ConnectionState.Closed)
-                {
-                    conn.Open();
-                }
+                //if (conn != null && conn.State == ConnectionState.Closed)
+                //{
+                //    conn = Db.Connection;
+                //}
+                conn = Db.Connection;
                 cmd.Connection = conn;
-
+                conn.Open();
                 /*Based on active tab stored procedure will call
                     1. SP_SearchTicketData_ByDate
                     2. SP_SearchTicketData_ByCustomerType
@@ -489,10 +498,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (ds != null) ds.Dispose(); conn.Close();
-            }
+            
             return objSearchResult;
         }
 
@@ -534,7 +540,7 @@ namespace Easyrewardz_TicketSystem.Services
             int ShiftDuration = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 loggedInAcc.AgentId = UserID; 
@@ -615,7 +621,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
 
             return loggedInAcc;
@@ -626,7 +632,7 @@ namespace Easyrewardz_TicketSystem.Services
             int i = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_SaveSearchUTSM", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
@@ -641,13 +647,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return i;
         }
 
@@ -657,7 +657,7 @@ namespace Easyrewardz_TicketSystem.Services
             int i = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteSearchByID_UTSM", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@SearchParam_ID", SearchParamID);
@@ -669,13 +669,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return i;
         }
 
@@ -686,7 +680,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<UserTicketSearchMaster> listSavedSearch = new List<UserTicketSearchMaster>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetSearchUTSMList", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
@@ -714,7 +708,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (ds != null)
                     ds.Dispose();
-                conn.Close();
+                
             }
             return listSavedSearch;
         }
@@ -730,7 +724,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetSaveSearchByID_UTSM", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@SearchParam_ID", SearchParamID);
@@ -774,7 +768,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
             return dbsavedsearch;
         }
@@ -783,97 +777,71 @@ namespace Easyrewardz_TicketSystem.Services
         /// Creation Details Mapping
         /// </summary>
         #region Mapping
-
-
         public string setCreationdetails(string time, string ColName)
         {
             string timespan = string.Empty;
             DateTime now = DateTime.Now;
             TimeSpan diff = new TimeSpan();
             string[] PriorityArr = null;
-            string spantext = "{0} Days {1} Hrs {2} Mins Ago";
+
             try
             {
                 if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
                 {
-                    diff = DateTime.Now - Convert.ToDateTime(time);
-                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
-                  
+                    diff = now - Convert.ToDateTime(time);
+                    timespan = CalculateSpan(diff) + " ago";
+
                 }
                 else if (ColName == "RespondTimeRemainingSpan")
                 {
                     PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
-                    DateTime assigneddate = Convert.ToDateTime(time.Split(new char[] { '|' })[1]);
-                    
 
                     switch (PriorityArr[1])
                     {
                         case "D":
-                            if(assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
-                            {
-                                diff = (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
-                            }
+                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0]))) - now;
+
                             break;
 
                         case "H":
-
-                            if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
-                            {
-                                diff = (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
-                            }
-                           
+                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0]))) - now;
 
                             break;
 
                         case "M":
+                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0]))) - now;
 
-                            if (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
-                            {
-                                diff = (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
-                            }
-                           
                             break;
 
                     }
-                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
-                    
+                    timespan = CalculateSpan(diff);
                 }
                 else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
                 {
                     PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
-                    DateTime assigneddate = Convert.ToDateTime(time.Split(new char[] { '|' })[1]);
 
                     switch (PriorityArr[1])
                     {
                         case "D":
-                            if (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
-                            {
-                                diff = DateTime.Now - (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])));
-                            }
+                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0])));
+
                             break;
 
                         case "H":
-                            if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
-                            {
-                                diff = DateTime.Now - (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])));
-                            }
-                            
+                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0])));
 
                             break;
 
                         case "M":
-                            if(assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
-                            {
-                                diff = DateTime.Now - (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])));
-                            }
-                            
+                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0])));
 
                             break;
 
                     }
 
-                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
+                    timespan = CalculateSpan(diff);
                 }
+
             }
             catch (Exception)
             {
@@ -885,87 +853,7 @@ namespace Easyrewardz_TicketSystem.Services
                     Array.Clear(PriorityArr, 0, PriorityArr.Length);
             }
             return timespan;
-
         }
-
-        //public string setCreationdetails1(string time, string ColName)
-        //{
-        //    string timespan = string.Empty;
-        //    DateTime now = DateTime.Now;
-        //    TimeSpan diff = new TimeSpan();
-        //    string[] PriorityArr = null;
-           
-
-        //    try
-        //    {
-        //        if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
-        //        {
-        //            diff = now - Convert.ToDateTime(time);
-        //            timespan = CalculateSpan(diff) + " ago";
-
-        //        }
-        //        else if (ColName == "RespondTimeRemainingSpan")
-        //        {
-        //            PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
-
-        //            switch (PriorityArr[1])
-        //            {
-        //                case "D":
-        //                    diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0]))) - now;
-
-        //                    break;
-
-        //                case "H":
-        //                    diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0]))) - now;
-
-        //                    break;
-
-        //                case "M":
-        //                    diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0]))) - now;
-
-        //                    break;
-
-        //            }
-        //            timespan = CalculateSpan(diff);
-        //        }
-        //        else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
-        //        {
-        //            PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
-
-        //            switch (PriorityArr[1])
-        //            {
-        //                case "D":
-        //                    diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0])));
-
-        //                    break;
-
-        //                case "H":
-        //                    diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0])));
-
-        //                    break;
-
-        //                case "M":
-        //                    diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0])));
-
-        //                    break;
-
-        //            }
-
-        //            timespan = CalculateSpan(diff);
-        //        }
-
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //    }
-        //    finally
-        //    {
-        //        if (PriorityArr != null && PriorityArr.Length > 0)
-        //            Array.Clear(PriorityArr, 0, PriorityArr.Length);
-        //    }
-        //    return timespan;
-        //}
 
         public string CalculateSpan(TimeSpan ts)
         {

@@ -1,7 +1,9 @@
 ﻿using Easyrewardz_TicketSystem.DBContext;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -16,11 +18,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
 {
     public class PermissionRequirement : AuthenticationHandler<ModuleAuthenticationOptions>
     {
+
+        private readonly IDistributedCache Cache;
+        internal static TicketDBContext Db { get; set; }
+
         public PermissionRequirement(IOptionsMonitor<ModuleAuthenticationOptions> options,
-           ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
+           ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IDistributedCache cache, TicketDBContext db)
                : base(options, logger, encoder, clock)
         {
-
+            Db = db;
+            Cache = cache;
         }
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
@@ -28,7 +35,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
         }
         private AuthenticateResult Authenticate()
         {
-            ETSContext _DBContext = new ETSContext();
+            ETSContext _DBContext = new ETSContext(Cache,Db);
             string token = Context.Request.Headers["X-Authorized-Header"];
             int ModuleID = 1;
             if (token == null || ModuleID == 0) return AuthenticateResult.Fail("No Authorization provided");

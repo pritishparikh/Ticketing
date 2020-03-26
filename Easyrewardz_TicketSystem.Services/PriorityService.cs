@@ -1,5 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -10,12 +12,18 @@ namespace Easyrewardz_TicketSystem.Services
 {
   public class PriorityService :IPriority
     {
+        #region variable
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
 
-        public PriorityService(string _connectionString)
+        public PriorityService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            Cache = cache;
         }
 
         #endregion
@@ -33,7 +41,7 @@ namespace Easyrewardz_TicketSystem.Services
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd  = new MySqlCommand("SP_InsertPriority", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Priority_Name", PriorityName);
@@ -48,13 +56,6 @@ namespace Easyrewardz_TicketSystem.Services
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
 
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
             }
 
             return success;
@@ -71,7 +72,7 @@ namespace Easyrewardz_TicketSystem.Services
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_DeletePriority", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Priority_ID", PriorityID);
@@ -86,14 +87,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return success;
         }
         
@@ -111,7 +105,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetPriorityList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -136,13 +130,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return objPriority;
         }
 
@@ -160,7 +148,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_PriorityList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -193,13 +181,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return objPriority;
         }
 
@@ -214,7 +196,7 @@ namespace Easyrewardz_TicketSystem.Services
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_UpdatePriority", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Priority_ID", PriorityID);
@@ -231,14 +213,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return success;
         }
 
@@ -256,7 +231,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_UpdatePriorityOrder", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
@@ -272,10 +247,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 isUpdate = false;
             }
-            finally
-            {
-            }
-
+            
             return isUpdate;
         }
                

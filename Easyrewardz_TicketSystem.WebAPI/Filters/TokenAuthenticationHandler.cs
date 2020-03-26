@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -21,13 +22,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
     public class TokenAuthenticationHandler : AuthenticationHandler<TokenAuthenticationOptions>
     {
         private const string SchemeName = "TokenAuth";
-        private readonly string _radisCacheServerAddress;
+        private readonly IDistributedCache Cache;
 
         public TokenAuthenticationHandler(IOptionsMonitor<TokenAuthenticationOptions> options,
-            ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IConfiguration configuration)
+            ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IConfiguration configuration,IDistributedCache cache)
                 : base(options, logger, encoder, clock)
         {
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Cache = cache;
         }
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
@@ -60,7 +61,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                 //}
 
 
-                Authenticate authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                Authenticate authenticate = SecurityService.GetAuthenticateDataFromTokenCache(Cache, SecurityService.DecryptStringAES(token));
 
                 if (!string.IsNullOrEmpty(authenticate.Token))
                 {
@@ -100,7 +101,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
 
             // Declare the string used to hold  
             // the decrypted text.  
-            string plaintext = null;
+            string plainText = null;
 
             // Create an RijndaelManaged object  
             // with the specified key and IV.  
@@ -128,7 +129,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                             {
                                 // Read the decrypted bytes from the decrypting stream  
                                 // and place them in a string.  
-                                plaintext = srDecrypt.ReadToEnd();
+                                plainText = srDecrypt.ReadToEnd();
                             }
 
                         }
@@ -136,35 +137,35 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                 }
                 catch (Exception ex)
                 {
-                    plaintext = "keyError";
+                    plainText = "keyError";
                 }
             }
 
-            return plaintext;
+            return plainText;
         }
         private string validatetoken(string secreatetoken, string userId)
         {
             ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
             IDatabase db = redis.GetDatabase();
-            string UserFromRadisToken = db.StringGet(userId);
+            string userFromRadisToken = db.StringGet(userId);
 
-            string Newtoken = "";
+            string newToken = "";
             try
             {
-                if (UserFromRadisToken == secreatetoken)
+                if (userFromRadisToken == secreatetoken)
                 {
 
-                    string[] _splitstr = secreatetoken.Split('.');
-                    byte[] date = Convert.FromBase64String(_splitstr[1]);
-                    byte[] contactdata = Convert.FromBase64String(_splitstr[0]);
-                    string actualtoken_value = Encoding.ASCII.GetString(contactdata);
-                    string[] _splitactualvalue = actualtoken_value.Split("_");
-                    if (!string.IsNullOrEmpty(_splitactualvalue[0]) || !string.IsNullOrEmpty(_splitactualvalue[1]) || !string.IsNullOrEmpty(_splitactualvalue[2]))
+                    string[] splitStr = secreatetoken.Split('.');
+                    byte[] date = Convert.FromBase64String(splitStr[1]);
+                    byte[] contactData = Convert.FromBase64String(splitStr[0]);
+                    string actualtoken_value = Encoding.ASCII.GetString(contactData);
+                    string[] splitactualValue = actualtoken_value.Split("_");
+                    if (!string.IsNullOrEmpty(splitactualValue[0]) || !string.IsNullOrEmpty(splitactualValue[1]) || !string.IsNullOrEmpty(splitactualValue[2]))
                     {
                         DateTime when = DateTime.FromBinary(BitConverter.ToInt64(date, 0));
                         if (when < DateTime.UtcNow.AddHours(-24))
                         {
-                            Newtoken = generatetoken(_splitactualvalue[0], _splitactualvalue[1], _splitactualvalue[2], userId);
+                            newToken = generatetoken(splitactualValue[0], splitactualValue[1], splitactualValue[2], userId);
                         }
                         else
                         {
@@ -186,7 +187,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                 throw ex;
             }
 
-            return Newtoken;
+            return newToken;
         }
         private string generatetoken(string Programcode, string Domainname, string applicationid, string userid)
         {
@@ -196,11 +197,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                 string token = Convert.ToBase64String(bytes);
                 byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
                 byte[] key = Guid.NewGuid().ToByteArray();
-                string SecreateToken = token + "." + Convert.ToBase64String(time.Concat(key).ToArray());
+                string secreateToken = token + "." + Convert.ToBase64String(time.Concat(key).ToArray());
 
-                updatecache(userid, SecreateToken);
+                updatecache(userid, secreateToken);
 
-                return SecreateToken;
+                return secreateToken;
             }
             catch (Exception ex)
             {

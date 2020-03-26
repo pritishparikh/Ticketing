@@ -19,8 +19,8 @@ namespace Easyrewardz_TicketSystem.Model
         public DateTime CreatedDate { get; set; }
         public int? ModifyBy { get; set; }
         public DateTime? ModifyDate { get; set; }
-        public string Size { get; set; }
-        public string RequireSize { get; set; }
+        public int? Size { get; set; }
+        public int? RequireSize { get; set; }
         public decimal Discount { get; set; }
         public string ArticleNumber { get; set; }
         public string ArticleName { get; set; }

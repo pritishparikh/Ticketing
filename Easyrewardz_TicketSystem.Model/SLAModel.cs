@@ -40,6 +40,8 @@ namespace Easyrewardz_TicketSystem.Model
         public int SubCategoryID { get; set; }
         public string SubCategoryName { get; set; }
 
+
+
         public string isSLAActive { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedDate { get; set; }
@@ -70,6 +72,8 @@ namespace Easyrewardz_TicketSystem.Model
         public int SubCategoryID { get; set; }
         public string SubCategoryName { get; set; }
         public string BrandName { get; set; }
+
+
     }
 
 

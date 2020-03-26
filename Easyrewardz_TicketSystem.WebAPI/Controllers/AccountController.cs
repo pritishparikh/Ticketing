@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
-using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 using Easyrewardz_TicketSystem.Services;
-using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -29,21 +20,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     public class AccountController : ControllerBase
     {
         #region Variable
-        private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private IConfiguration Configuration;
+        private readonly IDistributedCache Cache;
+        internal static TicketDBContext Db { get; set; }
         #endregion
 
         #region Constructor
-        public AccountController(IConfiguration _iConfig)
+        public AccountController(IConfiguration _iConfig,TicketDBContext db,IDistributedCache cache)
         {
-            configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            Configuration = _iConfig;
+            Db = db;
+            Cache = cache;
         }
         #endregion
 
-        #region Custom Methos 
+        #region Custom Method
 
         #region Forgot password screen
         /// <summary>
@@ -56,61 +47,58 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [AllowAnonymous]
         public ResponseModel ForgetPassword(string EmailId)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
 
             try
             {
                 /////Validate User
-                securityCaller _securityCaller = new securityCaller();
-                Authenticate authenticate = _securityCaller.validateUserEmailId(new SecurityService(_connectioSting, _radisCacheServerAddress), EmailId);
+                securityCaller securityCaller = new securityCaller();
+                Authenticate authenticate = securityCaller.validateUserEmailId(new SecurityService(Cache,Db), EmailId);
                 if (authenticate.UserMasterID > 0)
                 {
                     MasterCaller masterCaller = new MasterCaller();
-                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
+                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(Cache, Db), authenticate.TenantId);
 
                     CommonService commonService = new CommonService();
                     string encryptedEmailId = commonService.Encrypt(EmailId);
-                    string url = configuration.GetValue<string>("websiteURL") + "/userforgotPassword?Id:" + encryptedEmailId;
+                    string url = Configuration.GetValue<string>("websiteURL") + "/userforgotPassword?Id:" + encryptedEmailId;
                    // string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url;
 
                     string content = "";
                     string subject = "";
 
-                    _securityCaller.GetForgetPassowrdMailContent(new SecurityService(_connectioSting), authenticate.TenantId, url, EmailId, out content, out subject);
+                    securityCaller.GetForgetPassowrdMailContent(new SecurityService(Cache,Db), authenticate.TenantId, url, EmailId, out content, out subject);
 
-                    bool isUpdate = _securityCaller.sendMail(new SecurityService(_connectioSting), sMTPDetails, EmailId, subject, content, authenticate.TenantId);
+                    bool isUpdate = securityCaller.sendMail(new SecurityService(Cache,Db), sMTPDetails, EmailId, subject, content, authenticate.TenantId);
 
                     if (isUpdate)
                     {
-                        _objResponseModel.Status = true;
-                        _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
-                        _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
-                        _objResponseModel.ResponseData = "Mail sent successfully";
+                        objResponseModel.Status = true;
+                        objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                        objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                        objResponseModel.ResponseData = "Mail sent successfully";
                     }
                     else
                     {
-                        _objResponseModel.Status = false;
-                        _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                        _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                        _objResponseModel.ResponseData = "Mail sent failure";
+                        objResponseModel.Status = false;
+                        objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                        objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                        objResponseModel.ResponseData = "Mail sent failure";
                     }
                 }
                 else
                 {
-                    _objResponseModel.Status = false;
-                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.RecordNotFound;
-                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.RecordNotFound);
-                    _objResponseModel.ResponseData = "Sorry User does not exist or active";
+                    objResponseModel.Status = false;
+                    objResponseModel.StatusCode = (int)EnumMaster.StatusCode.RecordNotFound;
+                    objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.RecordNotFound);
+                    objResponseModel.ResponseData = "Sorry User does not exist or active";
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                _objResponseModel.ResponseData = "We had an error! Sorry about that";
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         #endregion
@@ -126,40 +114,39 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [AllowAnonymous]
         public ResponseModel UpdatePassword(string cipherEmailId, string Password)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
 
             try
             {
-                securityCaller _newSecurityCaller = new securityCaller();
-               
+                securityCaller newSecurityCaller = new securityCaller();
+
                 CommonService commonService = new CommonService();
                 string encryptedEmailId = commonService.Decrypt(cipherEmailId);
-               
 
-                bool isUpdate = _newSecurityCaller.UpdatePassword(new SecurityService(_connectioSting), encryptedEmailId, Password);
+                bool isUpdate = newSecurityCaller.UpdatePassword(new SecurityService(Cache,Db), encryptedEmailId, Password);
 
                 if (isUpdate)
                 {
-                    _objResponseModel.Status = true;
-                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
-                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
-                    _objResponseModel.ResponseData = "Update password successfully";
+                    objResponseModel.Status = true;
+                    objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                    objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                    objResponseModel.ResponseData = "Update password successfully";
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                _objResponseModel.ResponseData = "Issue while update password";
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         #endregion
 
         #region Authenticate User
-
+        /// <summary>
+        /// Authenticate User
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("authenticateUser")]
         [HttpPost]
@@ -174,16 +161,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             try
             {
-                securityCaller _newSecurityCaller = new securityCaller();
+                securityCaller newSecurityCaller = new securityCaller();
                 AccountModal account = new AccountModal();
-                string Programcode = X_Authorized_Programcode.Replace(' ', '+');
-                string Domainname = X_Authorized_Domainname.Replace(' ', '+');
+                string programCode = X_Authorized_Programcode.Replace(' ', '+');
+                string domainName = X_Authorized_Domainname.Replace(' ', '+');
                 string userId = X_Authorized_userId.Replace(' ', '+');
                 string password = X_Authorized_password.Replace(' ', '+');
 
-                if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
+                if (!string.IsNullOrEmpty(programCode) && !string.IsNullOrEmpty(domainName) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
-                    account = _newSecurityCaller.validateUser(new SecurityService(_connectioSting, _radisCacheServerAddress), Programcode, Domainname, userId, password);
+                    account = newSecurityCaller.validateUser(new SecurityService(Cache,Db), programCode, domainName, userId, password);
 
                     if (!string.IsNullOrEmpty(account.Token))
                     {
@@ -210,37 +197,36 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                    
                 }
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                resp.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                resp.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                resp.ResponseData = "Message:" + Convert.ToString(_ex.Message) + "--- Inner Exception:" + Convert.ToString(_ex.InnerException)
-                   + "Other:" + "Authenticate controller, " + Convert.ToString(_ex.Data);
+                throw;
             }
-            finally
-            {
-                GC.Collect();
-            }
+           
             return resp;
         }
 
+        
+        /// <summary>
+        /// Logout User
+        /// </summary>
+        /// <returns></returns>
         [Route("Logout")]
         [HttpPost]
         public ResponseModel Logout()
         {
             ResponseModel resp = new ResponseModel();
 
-            string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-            _token = SecurityService.DecryptStringAES(_token);
+            string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+            token = SecurityService.DecryptStringAES(token);
 
-            RedisCacheService radisCacheService = new RedisCacheService(_radisCacheServerAddress);
-            if (!radisCacheService.Exists(_token))
-            {
-                radisCacheService.Remove(_token);
-            }
+            RedisCacheService radisCacheService = new RedisCacheService(Cache);
+            //if (!radisCacheService.Exists(token))
+            //{
+            //    radisCacheService.Remove(token);
+            //}
 
-            securityCaller _newSecurityCaller = new securityCaller();
-            _newSecurityCaller.Logout(new SecurityService(_connectioSting), _token);
+            securityCaller newSecurityCaller = new securityCaller();
+            newSecurityCaller.Logout(new SecurityService(Cache,Db), token);
 
             resp.Status = true;
             resp.StatusCode = (int)EnumMaster.StatusCode.Success;
@@ -249,7 +235,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return resp;
         }
+        
 
+        /// <summary>
+        /// Validate Program code 
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("validateprogramcode")]
         [HttpGet]
@@ -259,16 +250,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string X_Authorized_Domainname = Convert.ToString(Request.Headers["X-Authorized-Domainname"]);
 
             ResponseModel resp = new ResponseModel();
-            securityCaller newSecurityCaller = new securityCaller();
             try
             {
-                securityCaller _newSecurityCaller = new securityCaller();
-                string Programcode = X_Authorized_Programcode.Replace(' ', '+');
-                string Domainname = X_Authorized_Domainname.Replace(' ', '+');
+                securityCaller newSecurityCaller = new securityCaller();
+                string programCode = X_Authorized_Programcode.Replace(' ', '+');
+                string domainName = X_Authorized_Domainname.Replace(' ', '+');
 
-                if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname))
+                if (!string.IsNullOrEmpty(programCode) && !string.IsNullOrEmpty(domainName))
                 {
-                    bool isValid = newSecurityCaller.validateProgramCode(new SecurityService(_connectioSting, _radisCacheServerAddress), Programcode, Domainname);
+                    bool isValid = newSecurityCaller.validateProgramCode(new SecurityService(Cache,Db), programCode, domainName);
 
                     if (isValid)
                     {
@@ -292,17 +282,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     resp.Message = "In-valid Program code";
                 }
             }
-            catch (Exception _ex)
+            catch (Exception ex)
             {
-                resp.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                resp.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                resp.ResponseData = "Message:" + Convert.ToString(_ex.Message) + "--- Inner Exception:" + Convert.ToString(_ex.InnerException)
-                   + "Other:" + "Authenticate controller, " + Convert.ToString(_ex.Data);
-            }
-            finally
-            {
-                GC.Collect();
-            }
+                throw ex;
+            }           
             return resp;
         }
 

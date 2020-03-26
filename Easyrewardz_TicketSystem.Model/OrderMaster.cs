@@ -21,8 +21,8 @@ namespace Easyrewardz_TicketSystem.Model
         public int CustomerID { get; set; }
         public int PurchaseFromStoreId { get; set; }
         public decimal Discount { get; set; }
-        public string Size { get; set; }
-        public string RequireSize { get; set; }
+        public int Size { get; set; }
+        public int RequireSize { get; set; }
         public DateTime CreatedDate { get; set; }
         public int ModifiedBy { get; set; }
         public DateTime ModifiedDate { get; set; } 

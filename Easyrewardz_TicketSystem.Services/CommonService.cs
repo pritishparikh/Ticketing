@@ -1,13 +1,11 @@
 ﻿using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -159,15 +157,15 @@ namespace Easyrewardz_TicketSystem.Services
 
             Dictionary<string, string> tokenData = new Dictionary<string, string>();
 
-            string[] _splitstr = secreatetoken.Split('.');
-            byte[] date = Convert.FromBase64String(_splitstr[1]);
-            byte[] contactdata = Convert.FromBase64String(_splitstr[0]);
-            string actualtoken_value = Encoding.ASCII.GetString(contactdata);
-            string[] _splitactualvalue = actualtoken_value.Split("_");
+            string[] splitStr = secreatetoken.Split('.');
+            byte[] date = Convert.FromBase64String(splitStr[1]);
+            byte[] contactData = Convert.FromBase64String(splitStr[0]);
+            string actualtoken_value = Encoding.ASCII.GetString(contactData);
+            string[] splitactualValue = actualtoken_value.Split("_");
 
-            tokenData.Add("ProgramCode", _splitactualvalue[0]);
-            tokenData.Add("DomainName", _splitactualvalue[1]);
-            tokenData.Add("AppId", _splitactualvalue[2]);
+            tokenData.Add("ProgramCode", splitactualValue[0]);
+            tokenData.Add("DomainName", splitactualValue[1]);
+            tokenData.Add("AppId", splitactualValue[2]);
 
             return tokenData;
         }
@@ -349,19 +347,19 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public static string GeneratePassword()
         {
-            string Password = "";
+            string password = "";
             try
             {
 
                 string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                 string small_alphabets = "abcdefghijklmnopqrstuvwxyz";
                 string numbers = "1234567890";
-                string SpecialCharacters = "!@#$%^&*?_-";
+                string specialCharacters = "!@#$%^&*?_-";
 
                 string characters = "";
                 //if (rbType.SelectedItem.Value == "1")
                 {
-                    characters += alphabets + small_alphabets + numbers + SpecialCharacters;
+                    characters += alphabets + small_alphabets + numbers + specialCharacters;
                 }
 
                 for (int i = 0; i < 8; i++)
@@ -371,15 +369,15 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         int index = new Random().Next(0, characters.Length);
                         character = characters.ToCharArray()[index].ToString();
-                    } while (Password.IndexOf(character) != -1);
-                    Password += character;
+                    } while (password.IndexOf(character) != -1);
+                    password += character;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return Password;
+            return password;
         }
 
         public static void CreateLogFiles()
@@ -395,16 +393,18 @@ namespace Easyrewardz_TicketSystem.Services
             string sDay = DateTime.Now.Day.ToString();
             sErrorTime = sYear + sMonth + sDay;
         }
+        
+
         public static void ErrorLog(string sPathName, string sErrMsg)
         {
-           if( File.Exists(sPathName))
+            if( File.Exists(sPathName))
             {
                 StreamWriter sw = new StreamWriter(sPathName + sErrorTime, true);
                 sw.WriteLine(sLogFormat + sErrMsg);
                 sw.Flush();
                 sw.Close();
             }
-           else
+            else
             {
                 StreamWriter stwriter = File.CreateText(sPathName);
                 stwriter.WriteLine(sLogFormat + sErrMsg);

@@ -10,6 +10,8 @@ using System.Linq;
 using Easyrewardz_TicketSystem.DBContext;
 using Easyrewardz_TicketSystem.CustomModel;
 using System.Xml;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -17,13 +19,17 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        public TicketDBContext Db { get; set; }
+        private readonly IDistributedCache Cache;
         #endregion
+
         MySqlConnection conn = new MySqlConnection();
 
         #region Constructor
-        public UserServices(string _connectionString)
+        public UserServices(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            Cache = cache;
         }
         #endregion
 
@@ -34,14 +40,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="UserModel"></param>
         public int AddUserPersonaldetail(UserModel userModel)
         {
-            string password = CommonService.GeneratePassword();
-            CommonService commonService = new CommonService();
-            //string encryptedPassword = commonService.Encrypt(password);
-            string encryptedPassword = SecurityService.Encrypt(password);
             int UserID = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertUserPeronalDetails", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@User_Name", userModel.UserName);
@@ -52,7 +54,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", userModel.CreatedBy);
                 cmd.Parameters.AddWithValue("@Is_StoreUser", userModel.IsStoreUser);
                 cmd.Parameters.AddWithValue("@Tenant_ID", userModel.TenantID);
-                cmd.Parameters.AddWithValue("@Encrypted_Password", encryptedPassword);
                 cmd.CommandType = CommandType.StoredProcedure;
                 UserID = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -61,14 +62,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return UserID;
         }
         /// <summary>
@@ -80,7 +74,7 @@ namespace Easyrewardz_TicketSystem.Services
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertUserProfileDetails", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Designation_ID", DesignationID);
@@ -97,14 +91,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return success;
         }
         /// <summary>
@@ -118,7 +105,7 @@ namespace Easyrewardz_TicketSystem.Services
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteUserData", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@user_ID", userID);
@@ -133,14 +120,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return success;
         }
         /// <summary>
@@ -152,7 +132,7 @@ namespace Easyrewardz_TicketSystem.Services
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateUser", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@user_ID", customEditUserModel.UserID);
@@ -184,14 +164,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return success;
         }
         /// <summary>
@@ -208,7 +181,7 @@ namespace Easyrewardz_TicketSystem.Services
             CustomUserList customUserList = new CustomUserList();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetUserDetailById", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -224,15 +197,15 @@ namespace Easyrewardz_TicketSystem.Services
                     {
 
                         customUserList.UserId = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
-                        customUserList.RoleID= ds.Tables[0].Rows[i]["RoleID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["RoleID"]);
-                        customUserList.DesignationID= ds.Tables[0].Rows[i]["DesignationID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
-                        customUserList.ReporteeID= ds.Tables[0].Rows[i]["ReporteeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ReporteeID"]);
+                        customUserList.RoleID= Convert.ToInt32(ds.Tables[0].Rows[i]["RoleID"]);
+                        customUserList.DesignationID= Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
+                        customUserList.ReporteeID= Convert.ToInt32(ds.Tables[0].Rows[i]["ReporteeID"]);
                         customUserList.UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
                         customUserList.MobileNumber = ds.Tables[0].Rows[i]["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
                         customUserList.EmailID = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
-                        customUserList.IsActive = ds.Tables[0].Rows[i]["IsActive"]== DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        customUserList.Is_CopyEscalation = ds.Tables[0].Rows[i]["IsCopyEscalation"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsCopyEscalation"]);
-                        customUserList.Is_AssignEscalation = ds.Tables[0].Rows[i]["IsAssignEscalation"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsAssignEscalation"]);
+                        customUserList.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        customUserList.Is_CopyEscalation = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsCopyEscalation"]);
+                        customUserList.Is_AssignEscalation = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsAssignEscalation"]);
                         customUserList.FirstName = ds.Tables[0].Rows[i]["FirstName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
                         customUserList.LastName = ds.Tables[0].Rows[i]["LastName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["LastName"]);
                         customUserList.BrandIDs = ds.Tables[0].Rows[i]["BrandIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandIDs"]);
@@ -259,14 +232,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return customUserList;
         }
         /// <summary>
@@ -281,8 +247,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
+                conn = Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetUserFullName", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
@@ -300,9 +265,6 @@ namespace Easyrewardz_TicketSystem.Services
                         user.ReporteeID = Convert.ToInt32(ds.Tables[0].Rows[i]["ReporteeID"]);
                         user.RoleID= Convert.ToInt32(ds.Tables[0].Rows[i]["RoleID"]);
                         user.RoleName = Convert.ToString(ds.Tables[0].Rows[i]["RoleName"]);
-
-
-
                         users.Add(user);
                     }
                 }
@@ -312,13 +274,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
 
             return users;
         }
@@ -327,12 +283,16 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="CustomUserModel"></param>
         public int Mappedcategory(CustomUserModel customUserModel)
-        {         
+        {
+            string password = CommonService.GeneratePassword();
+            CommonService commonService = new CommonService();
+            //string encryptedPassword = commonService.Encrypt(password);
+            string encryptedPassword = SecurityService.Encrypt(password);
 
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertMappedUsercategory", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Brand_Ids", customUserModel.BrandIds);
@@ -349,6 +309,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", customUserModel.TenantID);
                 cmd.Parameters.AddWithValue("@EscalateAssignTo_Id", customUserModel.EscalateAssignToId);
                 cmd.Parameters.AddWithValue("@Is_StoreUser", customUserModel.IsStoreUser);
+                cmd.Parameters.AddWithValue("@Encrypted_Password", encryptedPassword);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -357,14 +318,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return success;
         }
         /// <summary>
@@ -380,7 +334,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetUserListData", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -429,14 +383,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return users;
         }
         /// <summary>
@@ -450,7 +397,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet Bulkds = new DataSet();
             List<string> csvLst = new List<string>();
             MySqlCommand cmd = null;
-            string SuccesFile = string.Empty; string ErroFile = string.Empty;
+            string succesFile = string.Empty; string ErroFile = string.Empty;
             try
             {
                 if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
@@ -460,7 +407,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         //check if user ulpoad or brandcategory mapping
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
-                        conn.Open();
+                        conn = Db.Connection;
 
 
                         string[] dtColumns = Array.ConvertAll(DataSetCSV.Tables[0].Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray(), d => d.ToLower());
@@ -490,8 +437,8 @@ namespace Easyrewardz_TicketSystem.Services
                         {
 
                             //for success file
-                            SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
-                            csvLst.Add(SuccesFile);
+                            succesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(succesFile);
 
                             //for error file
                             ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
@@ -514,10 +461,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     DataSetCSV.Dispose();
                 }
-                if (conn != null)
-                {
-                    conn.Close();
-                }
+                
             }
             return csvLst;
         }
@@ -532,7 +476,7 @@ namespace Easyrewardz_TicketSystem.Services
             int UserID = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateUserProfileDetails", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@User_ID", UpdateUserProfiledetailsModel.UserId);
@@ -551,14 +495,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return UserID;
         }
 
@@ -576,7 +513,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<UpdateUserProfiledetailsModel> UpdateUserProfiledetailsModel = new List<UpdateUserProfiledetailsModel>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetUserProfileDetails", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -606,13 +543,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return UpdateUserProfiledetailsModel;
         }
         /// <summary>
@@ -621,10 +552,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="UserModel"></param>
         public int EditUserPersonaldetail(UserModel userModel)
         {
-            int UserID = 0;
+            int userID = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_EditUserPeronalDetails", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@User_Name", userModel.UserName);
@@ -637,22 +568,15 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", userModel.TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", userModel.UserID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                UserID = Convert.ToInt32(cmd.ExecuteNonQuery());
+                userID = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
-            return UserID;
+            
+            return userID;
         }
 
         public CustomChangePassword SendMailforchangepassword(int userID, int TenantID, int IsStoreUser)
@@ -663,7 +587,7 @@ namespace Easyrewardz_TicketSystem.Services
             CustomChangePassword customChangePassword  = new CustomChangePassword();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetUserEmailandPassword", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -690,13 +614,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return customChangePassword;
         }
 
@@ -707,7 +625,7 @@ namespace Easyrewardz_TicketSystem.Services
             string message = "";
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("Sp_ValidateUserExists", conn);
                 cmd1.Parameters.AddWithValue("@User_EmailID", UserEmailID);
@@ -722,14 +640,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return message;
         }
 
@@ -738,7 +649,7 @@ namespace Easyrewardz_TicketSystem.Services
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteUserProfile", conn)
                 {
                     Connection = conn
@@ -755,14 +666,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return success;
         }
 

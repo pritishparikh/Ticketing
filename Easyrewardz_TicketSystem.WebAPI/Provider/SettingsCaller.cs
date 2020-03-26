@@ -178,16 +178,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-
         /// <summary>
         /// UpdateAlert
         /// </summary>
         public int UpdateAlert(IAlerts Alert, int tenantId, int ModifiedBy, AlertUpdateModel alertModel)
         {
             _Alerts = Alert;
-            //return _Alerts.UpdateAlert( tenantId, AlertID, AlertTypeName, isAlertActive, ModifiedBy);
             return _Alerts.UpdateAlert(tenantId, ModifiedBy, alertModel);
-
 
         }
 

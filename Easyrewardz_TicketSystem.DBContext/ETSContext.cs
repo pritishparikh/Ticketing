@@ -1,8 +1,8 @@
-﻿using Easyrewardz_TicketSystem.Model;
-using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Data;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Easyrewardz_TicketSystem.DBContext
 {
@@ -20,24 +20,29 @@ namespace Easyrewardz_TicketSystem.DBContext
         //#region Model
         //public virtual DbSet<TicketingDetails> DB_Ticketing { get; set; }
         //#endregion
-
+        #region variable
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
 
         MySqlConnection conn = new MySqlConnection();
-        public ETSContext()
+        public ETSContext(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = "server=192.168.11.19;userid=ticketing;password=Frv810FM#bBgI88;database=ticketing;";
+            //conn.ConnectionString = "server=192.168.11.19;userid=ticketing;password=Frv810FM#bBgI88;database=ticketing;";
+            Db = db;
+            Cache = cache;
         }
 
-        private MySqlHelper _connection;
+       
+        private MySqlHelper connection;
         //userDetails _user = new userDetails();
         public string SaveRecord(string ProgramCode, string Domainname, string applicationid, string sessionid, string userId, string password, string newToken)
         {
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
-                //MySqlCommand cmd1 = new MySqlCommand("sp_insertER_CurrentSession", conn);
                 MySqlCommand cmd1 = new MySqlCommand("prc_insertCurrentSession", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@UserName", userId);
@@ -51,14 +56,7 @@ namespace Easyrewardz_TicketSystem.DBContext
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return "";
         }
 
@@ -68,7 +66,7 @@ namespace Easyrewardz_TicketSystem.DBContext
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("prc_validateToken", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -87,13 +85,7 @@ namespace Easyrewardz_TicketSystem.DBContext
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return ds;
         }
 

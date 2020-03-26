@@ -5,6 +5,8 @@ using System.Text;
 using System.Xml;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -13,25 +15,27 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
         #endregion
 
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
-        public HierarchyService(string _connectionString)
+        public HierarchyService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            Cache = cache;
         }
         #endregion
         public int CreateHierarchy(CustomHierarchymodel customHierarchymodel)
         {
-            int Success = 0;
+            int success = 0;
             if(customHierarchymodel.DesignationID==0)
             {
                 try
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                     MySqlCommand cmd = new MySqlCommand("SP_CreateHierarchy", conn);
-                    cmd.Connection = conn;
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Designation_Name", customHierarchymodel.DesignationName);
                     cmd.Parameters.AddWithValue("@Reportto_ID", customHierarchymodel.ReportToDesignation);
@@ -39,28 +43,21 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd.Parameters.AddWithValue("@Tenant_ID", customHierarchymodel.TenantID);
                     cmd.Parameters.AddWithValue("@User_ID", customHierarchymodel.CreatedBy);
                     cmd.Parameters.AddWithValue("@Hierarchy_For", customHierarchymodel.HierarchyFor);
-                    Success = Convert.ToInt32(cmd.ExecuteScalar());
+                    success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
                 }
                 catch (Exception ex)
                 {
                     throw ex;
                 }
-                finally
-                {
-                    if (conn != null)
-                    {
-                        conn.Close();
-                    }
-                }
-
+                
             }
             if (customHierarchymodel.DesignationID > 0)
             {
 
                 try
                 {
-                    conn.Open();
+                    conn = Db.Connection;
                     MySqlCommand cmd = new MySqlCommand();
                     cmd.Connection = conn;
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -84,21 +81,15 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Parameters.AddWithValue("@Hierarchy_ID", customHierarchymodel.DesignationID);
                         cmd.Parameters.AddWithValue("@Tenant_ID", customHierarchymodel.TenantID);
                     }
-                    Success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                    success = Convert.ToInt32(cmd.ExecuteNonQuery());
                 }
                 catch (Exception ex)
                 {
                     throw ex;
                 }
-                finally
-                {
-                    if (conn != null)
-                    {
-                        conn.Close();
-                    }
-                }
+                
             }
-                return Success;
+                return success;
         }
 
         public List<CustomHierarchymodel> ListHierarchy(int TenantID, int HierarchyFor)
@@ -107,7 +98,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<CustomHierarchymodel> listHierarchy = new List<CustomHierarchymodel>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_ListHierarchy", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
@@ -140,23 +131,17 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return listHierarchy;
         }
 
         public List<string> BulkUploadHierarchy(int TenantID, int CreatedBy, int HierarchyFor, DataSet DataSetCSV)
         {
-            int insertcount = 0;
+            int insertCount = 0;
             XmlDocument xmlDoc = new XmlDocument();
             DataSet Bulkds = new DataSet();
             List<string> csvLst = new List<string>();
-            string SuccesFile = string.Empty; string ErroFile = string.Empty;
+            string succesFile = string.Empty; string ErroFile = string.Empty;
             try
             {
                 if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
@@ -166,7 +151,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
 
-                        conn.Open();
+                        conn = Db.Connection;
                         MySqlCommand cmd = new MySqlCommand("SP_BulkUploadHierarchy", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
@@ -183,8 +168,8 @@ namespace Easyrewardz_TicketSystem.Services
                         {
 
                             //for success file
-                            SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
-                            csvLst.Add(SuccesFile);
+                            succesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(succesFile);
 
                             //for error file
                             ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
@@ -208,10 +193,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     DataSetCSV.Dispose();
                 }
-                if (conn != null)
-                {
-                    conn.Close();
-                }
+               
             }
             return csvLst;
         }

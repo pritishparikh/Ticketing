@@ -1,6 +1,7 @@
-﻿using Easyrewardz_TicketSystem.CustomModel;
-using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,20 @@ using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-    public class AlertService : IAlerts
+    public class AlertService: IAlerts
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
         #endregion
+
         MySqlConnection conn = new MySqlConnection();
 
-        public AlertService(string _connectionString)
+        public AlertService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            Cache = cache;
         }
 
         /// <summary>
@@ -28,12 +33,13 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         public int InsertAlert(AlertInsertModel alertModel)
         {
-            int InsertAlertID = 0; int AlertConfigInsertCount = 0;
+            int insertAlertID = 0;
+            int alertConfigInsertCount = 0;
             DataSet ds = new DataSet();
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_InsertAlert", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -51,11 +57,11 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        InsertAlertID = ds.Tables[0].Rows[0]["AlertId"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["AlertId"]);
+                        insertAlertID = ds.Tables[0].Rows[0]["AlertId"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["AlertId"]);
 
                     }
 
-                    if (InsertAlertID > 0)
+                    if (insertAlertID > 0)
                     {
                         if (alertModel.CommunicationModeDetails.Count > 0)
                         {
@@ -63,7 +69,7 @@ namespace Easyrewardz_TicketSystem.Services
                             {
                                 MySqlCommand Targetcmd = new MySqlCommand("SP_InsertAlerMasterConfig", conn);
                                 Targetcmd.Connection = conn;
-                                Targetcmd.Parameters.AddWithValue("@_alertID", InsertAlertID);
+                                Targetcmd.Parameters.AddWithValue("@_alertID", insertAlertID);
                                 Targetcmd.Parameters.AddWithValue("@_commMode", alertModel.CommunicationModeDetails[i].Communication_Mode);
                                 Targetcmd.Parameters.AddWithValue("@_commFor", alertModel.CommunicationModeDetails[i].CommunicationFor);
                                 Targetcmd.Parameters.AddWithValue("@_content", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].Content) ? string.Empty : alertModel.CommunicationModeDetails[i].Content);
@@ -74,7 +80,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 Targetcmd.Parameters.AddWithValue("@_createdBy", alertModel.CreatedBy);
                                 Targetcmd.Parameters.AddWithValue("@_isactive", Convert.ToInt16(alertModel.isAlertActive));
                                 Targetcmd.CommandType = CommandType.StoredProcedure;
-                                AlertConfigInsertCount += Targetcmd.ExecuteNonQuery();
+                                alertConfigInsertCount += Targetcmd.ExecuteNonQuery();
                             }
                         }
                     }
@@ -85,15 +91,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
-            return AlertConfigInsertCount;
+            return alertConfigInsertCount;
         }
 
         /// <summary>
@@ -101,25 +99,25 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         public int UpdateAlert(int tenantId, int ModifiedBy, AlertUpdateModel alertModel)
         {
-            int updatecount = 0;
-            int AlertConfigUpdateCount = 0;
+            int updateCount = 0;
+            int alertConfigUpdateCount = 0;
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateAlert", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", tenantId);
                 cmd.Parameters.AddWithValue("@_alertID", alertModel.AlertId);
                 cmd.Parameters.AddWithValue("@_alertTypeName", alertModel.AlertTypeName);
                 cmd.Parameters.AddWithValue("@_isAlertActive", Convert.ToInt16(alertModel.isAlertActive));
-                cmd.Parameters.AddWithValue("@_modifiedBy", ModifiedBy); 
-               
+                cmd.Parameters.AddWithValue("@_modifiedBy", ModifiedBy);
+
 
                 cmd.CommandType = CommandType.StoredProcedure;
-                updatecount = cmd.ExecuteNonQuery();
+                updateCount = cmd.ExecuteNonQuery();
 
-                if (updatecount > 0)
+                if (updateCount > 0)
                 {
                     if (alertModel.CommunicationModeDetails.Count > 0)
                     {
@@ -139,7 +137,7 @@ namespace Easyrewardz_TicketSystem.Services
                             Targetcmd.Parameters.AddWithValue("@_isactive", Convert.ToInt16(alertModel.isAlertActive));
                             Targetcmd.Parameters.AddWithValue("@_alertTypeID", Convert.ToInt16(alertModel.CommunicationModeDetails[i].AlertTypeID));
                             Targetcmd.CommandType = CommandType.StoredProcedure;
-                            AlertConfigUpdateCount += Targetcmd.ExecuteNonQuery();
+                            alertConfigUpdateCount += Targetcmd.ExecuteNonQuery();
                         }
                     }
                 }
@@ -150,15 +148,9 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
 
-            return AlertConfigUpdateCount;
+            return alertConfigUpdateCount;
         }
 
         /// <summary>
@@ -166,11 +158,11 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         public int DeleteAlert(int tenantID, int AlertID)
         {
-            int deletecount = 0;
+            int deleteCount = 0;
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteAlert", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", tenantID);
@@ -178,21 +170,15 @@ namespace Easyrewardz_TicketSystem.Services
 
 
                 cmd.CommandType = CommandType.StoredProcedure;
-                deletecount = cmd.ExecuteNonQuery();
+                deleteCount = cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-            return deletecount;
+           
+            return deleteCount;
 
         }
 
@@ -207,7 +193,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
 
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_BindAlerts", conn);
@@ -238,12 +224,7 @@ namespace Easyrewardz_TicketSystem.Services
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (ds != null) ds.Dispose(); conn.Close();
-            }
-
-
+            
             return objAlertLst;
 
         }
@@ -251,21 +232,22 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Alert List
         /// </summary>
-        public List<AlertModel> GetAlertList(int tenantID, int alertID)
+        public List<AlertModel> GetAlertList(int tenantID,int alertID)
         {
+
             List<AlertModel> objAlertLst = new List<AlertModel>();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
-            
+
             try
             {
 
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
-                
+
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetAlertList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-          
+
                 cmd1.Parameters.AddWithValue("@_alertID", alertID);
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -352,7 +334,7 @@ namespace Easyrewardz_TicketSystem.Services
                             }
                         }
                     }
-                   
+
 
 
 
@@ -365,7 +347,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
 
 
@@ -375,7 +357,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         public int BulkUploadAlert(int TenantID, int CreatedBy, DataSet DataSetCSV)
         {
-            int uploadcount = 0;
+            int uploadCount = 0;
             XmlDocument xmlDoc = new XmlDocument();
 
             try
@@ -387,7 +369,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
 
-                        conn.Open();
+                        conn = Db.Connection;
                         MySqlCommand cmd = new MySqlCommand("", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
@@ -395,7 +377,7 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                         cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
                         cmd.CommandType = CommandType.StoredProcedure;
-                        uploadcount = cmd.ExecuteNonQuery();
+                        uploadCount = cmd.ExecuteNonQuery();
                     }
 
                 }
@@ -412,44 +394,34 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     DataSetCSV.Dispose();
                 }
-                if (conn != null)
-                {
-                    conn.Close();
-                }
+                
             }
-            return uploadcount;
+            return uploadCount;
         }
 
         public string ValidateAlert(int AlertID, int TenantID)
         {
-
-            string Message = "";
+            string message = "";
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("Sp_ValidateAlertExists", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@Alert_ID", AlertID);
 
                 cmd.CommandType = CommandType.StoredProcedure;
-                Message = Convert.ToString(cmd.ExecuteScalar());
-                conn.Close();
+                message = Convert.ToString(cmd.ExecuteScalar());
+                
             }
             catch (Exception ex)
             {
                 string messages = Convert.ToString(ex.InnerException);
                 throw ex;
-            } 
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
             }
-            return Message;
+            
+            return message;
         }
 
 

@@ -1,5 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -10,11 +12,17 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class MasterServices : IMasterInterface
     {
+        #region variable
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region
         MySqlConnection conn = new MySqlConnection();
-        public MasterServices(string _connectionString)
+        public MasterServices(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            Cache = cache;
         }
         #endregion
 
@@ -33,7 +41,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetChannelOfPurchaseList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -61,13 +69,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return objChannel;
         }
 
@@ -85,7 +87,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetDepartmentList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -110,13 +112,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return departmentMasters;
         }
         /// <summary>
@@ -133,7 +129,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getFunctionByDepartmentId", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -158,13 +154,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return funcationMasters;
         }
 
@@ -181,7 +171,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getPaymentModeMaster", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -204,14 +194,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return paymentModes;
         }
 
@@ -227,7 +210,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getTicketSourceMaster", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -249,14 +232,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return ticketSourceMasters;
         }
 
@@ -274,7 +250,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetStateList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -299,13 +275,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return stateMaster;
         }
 
@@ -370,7 +340,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetCityList", conn);
                 cmd1.Parameters.AddWithValue("@State_Id", StateId);
@@ -396,13 +366,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return cityMaster;
         }
 
@@ -419,7 +383,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetRegionList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -443,13 +407,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return regionMaster;
         }
 
@@ -466,7 +424,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreTypeList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -489,13 +447,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return storeTypeMaster;
         }
 
@@ -508,7 +460,7 @@ namespace Easyrewardz_TicketSystem.Services
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_AddDepartment", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Department_Name", DepartmentName);
@@ -522,14 +474,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return success;
         }
 
@@ -542,7 +487,7 @@ namespace Easyrewardz_TicketSystem.Services
             int success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_AddFunction", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Department_ID", DepartmentID);
@@ -557,14 +502,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return success;
         }
 
@@ -576,8 +514,8 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
 
-                conn.Open();
-                
+                conn = Db.Connection;
+
                 MySqlCommand cmd = new MySqlCommand("SP_GetStoreCodewithStoreName", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
@@ -601,13 +539,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return storeMaster;
         }
 
@@ -624,7 +556,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetLanguageList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
@@ -651,14 +583,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return languageModels;
         }
 
@@ -675,7 +600,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 CommonModel commonModel = new CommonModel();
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetCountryStateCity", conn);
@@ -706,14 +631,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+           
             return commonModels;
         }
 
@@ -726,7 +644,7 @@ namespace Easyrewardz_TicketSystem.Services
             int result = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_CreateDepartment", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@BrandID", createDepartmentModel.BrandID);
@@ -746,14 +664,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
+            
             return result;
         }
 

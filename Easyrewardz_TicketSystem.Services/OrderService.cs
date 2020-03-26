@@ -7,16 +7,24 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Linq;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class OrderService : IOrder
     {
+        #region variable
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
+
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
-        public OrderService(string _connectionString)
+        public OrderService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            Cache = cache;
         }
         #endregion
         /// <summary>
@@ -30,7 +38,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getOrderByNumber", conn);
                 cmd1.Parameters.AddWithValue("@objOrderNumber", OrderNumber);
@@ -39,7 +47,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlDataAdapter sd = new MySqlDataAdapter(cmd1);
                 DataTable dt = new DataTable();
                 sd.Fill(dt);
-                conn.Close();
+                
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     orderMasters.OrderMasterID = Convert.ToInt32(dt.Rows[0]["OrderMasterID"]);
@@ -50,13 +58,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return orderMasters;
         }
         /// <summary>
@@ -68,10 +70,10 @@ namespace Easyrewardz_TicketSystem.Services
         {
             MySqlCommand cmd = new MySqlCommand();
             int i = 0;
-            string OrderNumber="";
+            string orderNumber="";
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createOrder", conn);
                 cmd1.Parameters.AddWithValue("@TenantID", TenantId);
@@ -88,25 +90,19 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@CustomerID", orderMaster.CustomerID);
                 cmd1.Parameters.AddWithValue("@PurchaseFromStoreId", orderMaster.PurchaseFromStoreId);
                 cmd1.Parameters.AddWithValue("@Discount", orderMaster.Discount);
-                cmd1.Parameters.AddWithValue("@Size", string.IsNullOrEmpty(orderMaster.Size) ? "" :orderMaster.Size);
-                cmd1.Parameters.AddWithValue("@RequireSize", string.IsNullOrEmpty(orderMaster.RequireSize) ? "" :orderMaster.RequireSize);
+                cmd1.Parameters.AddWithValue("@Size", orderMaster.Size);
+                cmd1.Parameters.AddWithValue("@RequireSize", orderMaster.RequireSize);
                 cmd1.Parameters.AddWithValue("@CreatedBy", orderMaster.CreatedBy);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                OrderNumber = Convert.ToString(cmd1.ExecuteScalar());
+                orderNumber = Convert.ToString(cmd1.ExecuteScalar());
                 conn.Close();
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-            return OrderNumber;
+            
+            return orderNumber;
         }
         /// <summary>
         /// Get Order Detail with Item List
@@ -121,7 +117,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<CustomOrderMaster> objorderMaster = new List<CustomOrderMaster>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_OrderDetails", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -160,7 +156,7 @@ namespace Easyrewardz_TicketSystem.Services
                             ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
                             PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
                             Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
-                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("RequireSize"))
+                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("RequireSize"))
                         }).ToList();
                         customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                         customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
@@ -175,13 +171,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return objorderMaster;
         }
         /// <summary>
@@ -196,7 +186,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<CustomOrderDetailsByCustomer> objorderMaster = new List<CustomOrderDetailsByCustomer>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_OrderDetailsByCustomerID", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -247,13 +237,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return objorderMaster;
         }
         /// <summary>
@@ -269,7 +253,7 @@ namespace Easyrewardz_TicketSystem.Services
             CustomOrderDetailsByClaim customClaimMaster = new CustomOrderDetailsByClaim();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetOrderDetailByClaimID", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -341,13 +325,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return customClaimMaster;
         }
         /// <summary>
@@ -362,7 +340,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_SearchProduct", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Customer_ID", CustomerID);
@@ -388,13 +366,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return productlist;
         }
         /// <summary>
@@ -409,7 +381,7 @@ namespace Easyrewardz_TicketSystem.Services
             int Success = 0;
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_BulkTicketOrderAttachMapping", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Ticket_Id", TicketId);
@@ -417,20 +389,14 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
                 cmd.CommandType = CommandType.StoredProcedure;
                 Success = Convert.ToInt32(cmd.ExecuteScalar());
-                conn.Close();
+                
             }
             catch (Exception ex)
             {
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return Success;
         }
 
@@ -440,7 +406,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<CustomOrderMaster> objorderMaster = new List<CustomOrderMaster>();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_GetOrderDetailByTicketID", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -475,7 +441,7 @@ namespace Easyrewardz_TicketSystem.Services
                             ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
                             PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
                             Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
-                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty: Convert.ToString(x.Field<object>("RequireSize"))
+                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("RequireSize"))
                         }).ToList();
                         customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                         customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
@@ -490,13 +456,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return objorderMaster;
         }
     }

@@ -42,19 +42,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _SecurityRepository = security;
             CommonService commonService = new CommonService();
-            //string plainEmailId = string.Empty;
-            //try
-            //{
-            //    plainEmailId = commonService.Decrypt(cipherEmailId);
-            //}
-            //catch 
-            //{
-            //    plainEmailId = cipherEmailId;
-            //}
-           
-            //string encryptedPassword = commonService.Encrypt(Password);
+            string plainEmailId = commonService.Decrypt(cipherEmailId);
+            string encryptedPassword = commonService.Encrypt(Password);
 
-            return _SecurityRepository.UpdatePassword(cipherEmailId, Password);
+            return _SecurityRepository.UpdatePassword(plainEmailId, encryptedPassword);
         }
 
         /// <summary>

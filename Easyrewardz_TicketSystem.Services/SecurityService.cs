@@ -15,21 +15,25 @@ using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Easyrewardz_TicketSystem.CustomModel;
+using Microsoft.Extensions.Caching.Distributed;
+using Easyrewardz_TicketSystem.MySqlDBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class SecurityService : ISecurity
     {
         #region Variable Declartion 
-        private readonly string radisCacheServerAddress;
+       // private readonly string radisCacheServerAddress;
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
         #endregion 
 
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
-        public SecurityService(string _connectionString, string _radisCacheServerAddress = null)
+        public SecurityService(IDistributedCache cache,TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
-            radisCacheServerAddress = _radisCacheServerAddress;
+            Db = db;
+            Cache = cache;
         }
         #endregion
 
@@ -189,8 +193,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
+                conn = Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("prc_validateToken", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Security_Token", SecretToken);
@@ -205,16 +208,11 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (MySql.Data.MySqlClient.MySqlException)
             {
+                throw;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return ds;
         }
         #endregion
@@ -235,25 +233,18 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
+                conn = Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("SP_UpdatePassword", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@_EmailId", EmailId);
-                cmd1.Parameters.AddWithValue("@_Password", Password.Trim());
+                cmd1.Parameters.AddWithValue("@EmailId", EmailId);
+                cmd1.Parameters.AddWithValue("@Password", Password);
                 cmd1.ExecuteScalar();
                 isUpdated = true;
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
             return isUpdated;
         }
         #endregion
@@ -284,7 +275,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 CommonService commonService = new CommonService();
-                isSent = commonService.SendEmail(sMTPDetails, emailId, "EasyRewardz User Created", content, null, null, TenantId);
+                isSent = commonService.SendEmail(sMTPDetails, emailId, "Change Password", content, null, null, TenantId);
 
                 return isSent;
             }
@@ -326,9 +317,9 @@ namespace Easyrewardz_TicketSystem.Services
                     /*Valid User then generate token and save to the database */
 
                     ////Generate Token 
-                    string _token = generateAuthenticateToken(authenticate.ProgramCode, authenticate.Domain_Name, authenticate.AppID);
+                    string token = generateAuthenticateToken(authenticate.ProgramCode, authenticate.Domain_Name, authenticate.AppID);
 
-                    authenticate.Token = _token;
+                    authenticate.Token = token;
 
                     //Save User Token
                     SaveUserToken(authenticate);
@@ -336,13 +327,13 @@ namespace Easyrewardz_TicketSystem.Services
                     //Serialise Token & save token to Cache 
                     string jsonString = JsonConvert.SerializeObject(authenticate);
 
-                    RedisCacheService radisCacheService = new RedisCacheService(radisCacheServerAddress);
-                    radisCacheService.Set(authenticate.Token, jsonString);
+                    RedisCacheService radisCacheService = new RedisCacheService(Cache);
+                    radisCacheService.Set(Cache,authenticate.Token, jsonString);
 
                     accountModal.Message = "Valid user";
 
                     ////Double encryption: We are doing encryption of encrypted token 
-                    accountModal.Token = Encrypt(_token);
+                    accountModal.Token = Encrypt(token);
                     accountModal.IsValidUser = true;
                     accountModal.FirstName = authenticate.FirstName;
                     accountModal.LastName = authenticate.LastName;
@@ -360,11 +351,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw (ex);
             }
-            finally
-            {
-
-            }
-
+           
             return accountModal;
         }
 
@@ -374,8 +361,8 @@ namespace Easyrewardz_TicketSystem.Services
             Authenticate authenticate = new Authenticate();
             try
             {
+                conn = Db.Connection;
                 conn.Open();
-                cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_ValidateUserLogin", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Program_Code", Program_Code);
@@ -423,13 +410,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw (ex);
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return authenticate;
         }
 
@@ -468,8 +449,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
+                conn = Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createCurrentSession", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@UserMaster_ID", authenticate.UserMasterID);
@@ -479,17 +459,11 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Tenant_Id", authenticate.TenantId);
                 cmd1.ExecuteNonQuery();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (MySql.Data.MySqlClient.MySqlException)
             {
-
+                throw;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+           
             return authenticate;
         }
 
@@ -544,8 +518,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
+                conn = Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("SP_LogoutUser", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@token_data", token_data);
@@ -555,13 +528,6 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
         }
 
         #endregion
@@ -570,20 +536,39 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get data from token (Radish)
         /// </summary>
         /// <param name="_radisCacheServerAddress"></param>
-        /// <param name="_token"></param>
+        /// <param name="token"></param>
         /// <returns></returns>
-        public static Authenticate GetAuthenticateDataFromToken(string _radisCacheServerAddress, string _token)
+        public static Authenticate GetAuthenticateDataFromToken(string _radisCacheServerAddress, string token)
         {
             Authenticate authenticate = new Authenticate();
 
             try
             {
                 RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
-                if (cacheService.Exists(_token))
-                {
-                    string _data = cacheService.Get(_token);
-                    authenticate = JsonConvert.DeserializeObject<Authenticate>(_data);
-                }
+                //if (cacheService.Exists(token))
+                //{
+                //    string _data = cacheService.Get(token);
+                //    authenticate = JsonConvert.DeserializeObject<Authenticate>(_data);
+                //}
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return authenticate;
+        }
+
+        public static Authenticate GetAuthenticateDataFromTokenCache(IDistributedCache cache, string token)
+        {
+            Authenticate authenticate = new Authenticate();
+           
+            try
+            {
+               // var cach=cach.get
+                RedisCacheService cacheService = new RedisCacheService(cache);
+                string data = cacheService.Get(cache,token);
+                authenticate = JsonConvert.DeserializeObject<Authenticate>(data);
             }
             catch (Exception)
             {
@@ -607,8 +592,9 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand();
                 try
                 {
-                    conn.Open();
-                    cmd.Connection = conn;
+                    //conn.Open();
+                    //cmd.Connection = conn;
+                    conn = Db.Connection;
                     MySqlCommand cmd1 = new MySqlCommand("SP_valiedateEmailId", conn);
                     cmd1.CommandType = CommandType.StoredProcedure;
                     cmd1.Parameters.AddWithValue("@Email_Id", EmailId);
@@ -627,17 +613,11 @@ namespace Easyrewardz_TicketSystem.Services
                         }
                     }
                 }
-                catch (MySqlException ex)
+                catch (MySqlException)
                 {
-                    throw (ex);
+                    throw;
                 }
-                finally
-                {
-                    if (conn != null)
-                    {
-                        conn.Close();
-                    }
-                }
+              
                 return authenticate;
             }
             catch (Exception ex)
@@ -658,15 +638,14 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 DataSet ds = new DataSet();
-                MySqlCommand cmd = new MySqlCommand();
+               // MySqlCommand cmd = new MySqlCommand();
                 try
                 {
 
                     Programcode = DecryptStringAES(Programcode);
                     Domainname = DecryptStringAES(Domainname);
-
+                    conn = Db.Connection;
                     conn.Open();
-                    cmd.Connection = conn;
                     MySqlCommand cmd1 = new MySqlCommand("SP_validateProgramCode", conn);
                     cmd1.CommandType = CommandType.StoredProcedure;
                     cmd1.Parameters.AddWithValue("@Program_code", Programcode);
@@ -677,13 +656,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     throw (ex);
                 }
-                finally
-                {
-                    if (conn != null)
-                    {
-                        conn.Close();
-                    }
-                }
+               
                 return isValid;
 
             }
@@ -700,12 +673,12 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="UserID"></param>
         public bool ChangePassword(CustomChangePassword customChangePassword, int TenantId, int User_ID)
         {
-            bool Result = false;
+            bool result = false;
             int success = 0;
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("SP_ChangePassword", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_Password", customChangePassword.Password);
@@ -718,21 +691,15 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd.ExecuteScalar());
                 if (success == 1)
                 {
-                    Result = true;
+                    result = true;
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (MySql.Data.MySqlClient.MySqlException)
             {
-
+                throw;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-            return Result;
+           
+            return result;
         }
 
 
@@ -744,8 +711,7 @@ namespace Easyrewardz_TicketSystem.Services
             subject = "";
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
+                conn = Db.Connection;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetForgetPassowrdMailContent", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_TenantId", TenantId);
@@ -765,16 +731,11 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (MySql.Data.MySqlClient.MySqlException)
             {
+                throw;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
+            
         }
 
         #endregion

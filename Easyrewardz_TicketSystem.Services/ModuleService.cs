@@ -1,5 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.MySqlDBContext;
+using Microsoft.Extensions.Caching.Distributed;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -11,13 +13,18 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class ModuleService : IModules
     {
+        #region variable
+        private readonly IDistributedCache Cache;
+        public TicketDBContext Db { get; set; }
+        #endregion
 
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
 
-        public ModuleService(string _connectionString)
+        public ModuleService(IDistributedCache cache, TicketDBContext db)
         {
-            conn.ConnectionString = _connectionString;
+            Db = db;
+            Cache = cache;
         }
 
         #endregion
@@ -29,11 +36,11 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         public int UpdateModules(int tenantID, int ModuleID, string ModulesActive, string ModuleInactive, int ModifiedBy)
         {
-            int updatecount = 0;
+            int updateCount = 0;
 
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 MySqlCommand cmd = new MySqlCommand("Sp_UpdateModuleItems", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", tenantID);
@@ -44,23 +51,16 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_InactiveModuleItems", !string.IsNullOrEmpty(ModuleInactive) ? ModuleInactive : "" ); 
         
                 cmd.CommandType = CommandType.StoredProcedure;
-                updatecount = cmd.ExecuteNonQuery();
-                updatecount =Convert.ToInt32(cmd.ExecuteScalar());
+                updateCount = cmd.ExecuteNonQuery();
+                updateCount =Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception ex)
             {
                 string message = Convert.ToString(ex.InnerException);
                 throw ex;
             }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
-            return updatecount;
+            
+            return updateCount;
         }
 
 
@@ -77,7 +77,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetModuleItemList", conn);
@@ -114,7 +114,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
 
             return objModuleItemLst;
@@ -131,7 +131,7 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+                conn = Db.Connection;
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_ModuleList", conn);
@@ -168,7 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (ds != null) ds.Dispose();
             }
 
             return objModuleLst;
