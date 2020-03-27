@@ -9,7 +9,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string TicketIDs { get; set; }
         public string NotificationMessage { get; set; }
         public int TicketCount { get; set; }
-   
+        public int IsFollowUp { get; set; }
     }
 
     public class NotificationModel

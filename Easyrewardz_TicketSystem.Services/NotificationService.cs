@@ -54,6 +54,7 @@ namespace Easyrewardz_TicketSystem.Services
                             TicketCount = Convert.ToInt32(r.Field<object>("TicketCount")),
                             NotificationMessage = r.Field<object>("ActionName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ActionName")),
                             TicketIDs = r.Field<object>("TicketIDs") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TicketIDs")),
+                            IsFollowUp = r.Field<object>("IsFollowUp") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsFollowUp"))
 
                         }).ToList();
 
@@ -84,7 +85,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-        public int ReadNotification(int TenantID, int UserID, int TicketID)
+        public int ReadNotification(int TenantID, int UserID, int TicketID, int IsFollowUp)
         {
             int updatecount = 0;
             try
@@ -95,7 +96,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                 cmd.Parameters.AddWithValue("@_userID", UserID);
                 cmd.Parameters.AddWithValue("@_ticketId", TicketID);
-
+                cmd.Parameters.AddWithValue("@_IsFollowUp", IsFollowUp);
                 cmd.CommandType = CommandType.StoredProcedure;
                 updatecount = cmd.ExecuteNonQuery();
             }
