@@ -195,7 +195,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                objResponseModel.Message = statusMessage;
                objResponseModel.ResponseData = objDepartmentList;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -307,7 +307,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                objResponseModel.Message = statusMessage;
                objResponseModel.ResponseData = ticketSourceMasters;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -526,7 +526,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = objStoreTypeList;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
