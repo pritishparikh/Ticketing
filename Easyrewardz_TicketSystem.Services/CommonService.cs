@@ -29,13 +29,7 @@ namespace Easyrewardz_TicketSystem.Services
             bool isMailSent = false;
             try
             {
-                //SMTPDetails smtpDetails = new SMTPDetails();
                 
-                //smtpDetails.FromEmailId = "realtester2019@gmail.com";
-                //smtpDetails.Password = "Brain@2019";
-                //smtpDetails.SMTPServer = "smtp.gmail.com";
-                //smtpDetails.SMTPPort = "587";
-                //smtpDetails.IsBodyHtml = true;
 
                 SmtpClient smtpClient = new SmtpClient(smtpDetails.SMTPServer, Convert.ToInt32(smtpDetails.SMTPPort));
                 smtpClient.EnableSsl = smtpDetails.EnableSsl;

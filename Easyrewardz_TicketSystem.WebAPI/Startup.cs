@@ -160,52 +160,8 @@ namespace Easyrewardz_TicketSystem.WebAPI
                 FileProvider = new PhysicalFileProvider(ReportDownloadURL),
                 RequestPath = "/" + ReportDownload
             });
-            //         app.UseCors(
-            //    options => options.WithOrigins("*").AllowAnyMethod()
-            //);
+           
             app.UseMvc();
-        }
-
-
-        //public void ConfigureServices(IServiceCollection services)
-        //{
-        //    services.AddCors(options =>
-        //    {
-        //        options.AddPolicy("AllowAll",
-        //            builder =>
-        //            {
-        //                builder
-        //                .AllowAnyOrigin()
-        //                .AllowAnyMethod()
-        //                .AllowAnyHeader();
-        //            });
-        //    });
-
-        //    services.AddCors();
-        //    services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-        //    services.Configure<MvcOptions>(options =>
-        //    {
-        //        options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAll"));
-        //    });
-        //}
-
-        //// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        //public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        //{
-        //    if (env.IsDevelopment())
-        //    {
-        //        app.UseDeveloperExceptionPage();
-        //    }
-        //    else
-        //    {
-        //        app.UseHsts();
-        //    }
-
-        //    app.UseCors("AllowAll");
-        //    app.UseAuthentication();
-        //    //app.UseHttpsRedirection();
-        //    app.UseMvc();
-        //}
+        }       
     }
 }
