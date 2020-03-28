@@ -2,12 +2,11 @@
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using Newtonsoft.Json;
 
 
 namespace Easyrewardz_TicketSystem.Services
@@ -29,7 +28,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         public int DeleteReport(int tenantID, int ReportID)
         {
-            int deletecount = 0;
+            int deleteCount = 0;
             try
             {
                 conn.Open();
@@ -37,16 +36,14 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantId", tenantID);
                 cmd.Parameters.AddWithValue("@_reportId", ReportID);
-
-
                 cmd.CommandType = CommandType.StoredProcedure;
-                deletecount = cmd.ExecuteNonQuery();
+                deleteCount = cmd.ExecuteNonQuery();
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -56,7 +53,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return deletecount;
+            return deleteCount;
         }
 
 
@@ -78,10 +75,10 @@ namespace Easyrewardz_TicketSystem.Services
                 saveCount = cmd.ExecuteNonQuery();
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -99,9 +96,7 @@ namespace Easyrewardz_TicketSystem.Services
         public int InsertReport(int tenantId, string ReportName, bool isReportActive, string TicketReportParams,
             bool IsDaily, bool IsDailyForMonth, bool IsWeekly, bool IsWeeklyForMonth, bool IsDailyForYear, bool IsWeeklyForYear, int createdBy)
         {
-            int InsertCount = 0;
-
-
+            int insertCount = 0;
             try
             {
                 conn.Open();
@@ -119,12 +114,11 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_IsWeeklyForYear", Convert.ToInt16(IsWeeklyForYear));
                 cmd.Parameters.AddWithValue("@_createdBy", createdBy);
                 cmd.CommandType = CommandType.StoredProcedure;
-                InsertCount = cmd.ExecuteNonQuery();
+                insertCount = cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -134,7 +128,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return InsertCount;
+            return insertCount;
         }
 
 
@@ -177,7 +171,7 @@ namespace Easyrewardz_TicketSystem.Services
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
                             ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
                             ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),
-                            ScheduleTime = r.Field<object>("ScheduleTime") == "" ? default(DateTime?) : Convert.ToDateTime(r.Field<object>("ScheduleTime")),
+                            ScheduleTime = r.Field<object>("ScheduleTime") == System.DBNull.Value ? default(DateTime?) : Convert.ToDateTime(r.Field<object>("ScheduleTime")),
                             IsDaily = Convert.ToBoolean(r.Field<object>("IsDaily") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDaily"))),
                             NoOfDay = Convert.ToInt32(r.Field<object>("NoOfDay") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDay"))),
                             IsWeekly = Convert.ToBoolean(r.Field<object>("IsWeekly") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsWeekly"))),
@@ -203,10 +197,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+              
+                throw;
             }
             finally
             {
@@ -361,10 +355,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 //objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+              
+                throw;
             }
             finally
             {
@@ -382,8 +376,6 @@ namespace Easyrewardz_TicketSystem.Services
 
             List<string> CountList = new List<string>();
             string csv = String.Empty;
-
-            int resultCount = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -463,10 +455,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -483,7 +474,6 @@ namespace Easyrewardz_TicketSystem.Services
 
             List<string> CountList = new List<string>();
 
-            int resultCount = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -603,10 +593,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -620,7 +609,7 @@ namespace Easyrewardz_TicketSystem.Services
             string timespan = string.Empty;
             DateTime now = DateTime.Now;
             TimeSpan diff = new TimeSpan();
-            string[] PriorityArr = null;
+            string[] priorityArr = null;
 
             try
             {
@@ -632,22 +621,22 @@ namespace Easyrewardz_TicketSystem.Services
                 }
                 else if (ColName == "RespondTimeRemainingSpan")
                 {
-                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+                    priorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
 
-                    switch (PriorityArr[1])
+                    switch (priorityArr[1])
                     {
                         case "D":
-                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0]))) - now;
+                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(priorityArr[0]))) - now;
 
                             break;
 
                         case "H":
-                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0]))) - now;
+                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(priorityArr[0]))) - now;
 
                             break;
 
                         case "M":
-                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0]))) - now;
+                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(priorityArr[0]))) - now;
 
                             break;
 
@@ -656,22 +645,22 @@ namespace Easyrewardz_TicketSystem.Services
                 }
                 else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
                 {
-                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+                    priorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
 
-                    switch (PriorityArr[1])
+                    switch (priorityArr[1])
                     {
                         case "D":
-                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0])));
+                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(priorityArr[0])));
 
                             break;
 
                         case "H":
-                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0])));
+                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(priorityArr[0])));
 
                             break;
 
                         case "M":
-                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0])));
+                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(priorityArr[0])));
 
                             break;
 
@@ -683,12 +672,12 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception)
             {
-
+                throw;
             }
             finally
             {
-                if (PriorityArr != null && PriorityArr.Length > 0)
-                    Array.Clear(PriorityArr, 0, PriorityArr.Length);
+                if (priorityArr != null && priorityArr.Length > 0)
+                    Array.Clear(priorityArr, 0, priorityArr.Length);
             }
             return timespan;
         }
@@ -807,10 +796,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -850,10 +838,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {

@@ -4,13 +4,12 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-  public class PriorityService :IPriority
+    public class PriorityService :IPriority
     {
-        #region Cunstructor
+        #region Constructor
         MySqlConnection conn = new MySqlConnection();
 
         public PriorityService(string _connectionString)
@@ -34,8 +33,10 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd  = new MySqlCommand("SP_InsertPriority", conn);
-                cmd.Connection = conn;
+                MySqlCommand cmd = new MySqlCommand("SP_InsertPriority", conn)
+                {
+                    Connection = conn
+                };
                 cmd.Parameters.AddWithValue("@Priority_Name", PriorityName);
                 cmd.Parameters.AddWithValue("@Is_status", status);
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
@@ -45,9 +46,9 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -63,7 +64,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         ///  Delete Priority
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name=""></param>
         /// <returns></returns>
         public int DeletePriority(int PriorityID, int tenantID, int UserID,int PriorityFor)
         {
@@ -82,9 +83,9 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -96,11 +97,12 @@ namespace Easyrewardz_TicketSystem.Services
 
             return success;
         }
-        
+
         /// <summary>
         /// Get Priority List
         /// </summary>
         /// <param name="TenantID"></param>
+        /// <param name="PriorityFor"></param>
         /// <returns></returns>
         public List<Priority> GetPriorityList(int TenantID,int PriorityFor)
         {
@@ -131,10 +133,10 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -188,10 +190,10 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -227,9 +229,9 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -265,7 +267,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Priority_For", PriorityFor);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.ExecuteScalar();
-
                 isUpdate = true;
             }
             catch (Exception)
