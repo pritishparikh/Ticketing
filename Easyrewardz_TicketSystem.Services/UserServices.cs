@@ -1,14 +1,11 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Text;
 using System.Linq;
-using Easyrewardz_TicketSystem.DBContext;
-using Easyrewardz_TicketSystem.CustomModel;
 using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -21,9 +18,9 @@ namespace Easyrewardz_TicketSystem.Services
         MySqlConnection conn = new MySqlConnection();
 
         #region Constructor
-        public UserServices(string _connectionString)
+        public UserServices(string connectionString)
         {
-            conn.ConnectionString = _connectionString;
+            conn.ConnectionString = connectionString;
         }
         #endregion
 
@@ -57,9 +54,9 @@ namespace Easyrewardz_TicketSystem.Services
                 UserID = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -71,10 +68,16 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UserID;
         }
+
         /// <summary>
         /// AddUserProfiledetail
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="DesignationID"></param>
+        /// <param name="ReportTo"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="IsStoreUser"></param>
         public int AddUserProfiledetail(int DesignationID, int ReportTo, int CreatedBy, int TenantID, int UserID,int IsStoreUser)
         {
             int success = 0;
@@ -93,9 +96,9 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -107,6 +110,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             return success;
         }
+
         /// <summary>
         /// Delete User
         /// </summary>
@@ -129,9 +133,9 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -180,9 +184,9 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -204,7 +208,6 @@ namespace Easyrewardz_TicketSystem.Services
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
-            //CustomEditUserModel user = new CustomEditUserModel();
             CustomUserList customUserList = new CustomUserList();
             try
             {
@@ -254,10 +257,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -269,10 +271,12 @@ namespace Easyrewardz_TicketSystem.Services
 
             return customUserList;
         }
+
         /// <summary>
         /// GetUserList
         /// </summary>
         /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
         public List<User> GetUserList(int TenantID, int UserID)
         {
             DataSet ds = new DataSet();
@@ -307,11 +311,11 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
+
             finally
             {
                 if (conn != null)
@@ -353,10 +357,11 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
+
             finally
             {
                 if (conn != null)
@@ -424,11 +429,11 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
+
             finally
             {
                 if (conn != null)
@@ -442,8 +447,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Bulk Upload User 
         /// </summary>
-        /// <param name=""></param>
-        /// <param name=""></param>
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="UserFor"></param>
+        /// <param name="DataSetCSV"></param>
         public List<string> BulkUploadUser(int TenantID, int CreatedBy, int UserFor, DataSet DataSetCSV)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -503,11 +510,11 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
+
             finally
             {
                 if (DataSetCSV != null)
@@ -523,9 +530,9 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// 
+        /// Update User Profile Detail
         /// </summary>
-        /// <param name="userModel"></param>
+        /// <param name="UpdateUserProfiledetailsModel"></param>
         /// <returns></returns>
         public int UpdateUserProfileDetail(UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel)
         {
@@ -547,9 +554,9 @@ namespace Easyrewardz_TicketSystem.Services
                 UserID = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                throw ex;
+                throw ;
             }
             finally
             {
@@ -566,8 +573,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// GetUserProfileDetails
         /// </summary>
-        /// <param name="TenantID"></param>
-        /// <param name="IsStoreUser"></param>
+        /// <param name="UserMasterID"></param>
+        /// <param name="url"></param>
         /// <returns></returns>
         public List<UpdateUserProfiledetailsModel> GetUserProfileDetails(int UserMasterID,string url)
         {
@@ -601,11 +608,11 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
+
             finally
             {
                 if (conn != null)
@@ -640,10 +647,11 @@ namespace Easyrewardz_TicketSystem.Services
                 UserID = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
+
             finally
             {
                 if (conn != null)
@@ -655,6 +663,12 @@ namespace Easyrewardz_TicketSystem.Services
             return UserID;
         }
 
+        /// <summary>
+        /// Send Mail For Change Password
+        /// <param name="userID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="IsStoreUser"></param>
+        /// </summary>
         public CustomChangePassword SendMailforchangepassword(int userID, int TenantID, int IsStoreUser)
         {
 
@@ -685,10 +699,9 @@ namespace Easyrewardz_TicketSystem.Services
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -700,6 +713,13 @@ namespace Easyrewardz_TicketSystem.Services
             return customChangePassword;
         }
 
+
+        /// <summary>
+        /// Check If User Exist
+        /// <param name="UserEmailID"></param>
+        /// <param name="UserMobile"></param>
+        /// <param name="TenantId"></param>
+        /// </summary>
         public string validateUserExist(string UserEmailID, string UserMobile, int TenantId)
         {
 
@@ -718,9 +738,9 @@ namespace Easyrewardz_TicketSystem.Services
                 message = Convert.ToString(cmd1.ExecuteScalar());
                 conn.Close();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                throw;
             }
             finally
             {
@@ -733,6 +753,12 @@ namespace Easyrewardz_TicketSystem.Services
             return message;
         }
 
+        /// <summary>
+        /// Delete Profile Picture
+        /// <param name="tenantID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="isStoreUser"></param>
+        /// </summary>
         public int DeleteProfilePicture(int tenantID, int userID, int isStoreUser)
         {
             int success = 0;
@@ -751,9 +777,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                throw ex;
+                throw ;
             }
             finally
             {

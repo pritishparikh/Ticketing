@@ -2,11 +2,9 @@
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -23,6 +21,12 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
+        /// <summary>
+        ///Attach Store
+        /// <param name="AttachStore"></param>
+        /// <param name="TicketId"></param>
+        /// <param name="CreatedBy"></param>
+        /// </summary>
         public int AttachStore(string StoreId, int TicketId, int CreatedBy)
         {
             int Success = 0;
@@ -36,12 +40,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
                 cmd.CommandType = CommandType.StoredProcedure;
                 Success = Convert.ToInt32(cmd.ExecuteScalar());
-                conn.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -56,11 +58,13 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Create Store
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="StoreMaster"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
         public int CreateStore(StoreMaster storeMaster, int TenantID, int UserID)
         {
-            // MySqlCommand cmd = new MySqlCommand();
+          
             int storeId = 0;
             try
             {
@@ -87,9 +91,9 @@ namespace Easyrewardz_TicketSystem.Services
                 storeId = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -101,10 +105,14 @@ namespace Easyrewardz_TicketSystem.Services
 
             return storeId;
         }
+
+
         /// <summary>
         /// Delete Store 
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="StoreID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
         public int DeleteStore(int StoreID, int TenantID, int UserID)
         {
@@ -122,9 +130,9 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -140,7 +148,9 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Edit Store
         /// </summary>
-        /// <param name="searchText"></param>
+        /// <param name="storeMaster"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
         public int EditStore(StoreMaster storeMaster, int TenantID, int UserID)
         {
@@ -171,9 +181,9 @@ namespace Easyrewardz_TicketSystem.Services
                 Success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -183,10 +193,15 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-           
+
             return Success;
         }
 
+        /// <summary>
+        /// get StoreDetail By Storecode OR Pincode
+        /// </summary>
+        /// <param name="searchText"></param>
+        /// <param name="tenantID"></param>
         public List<StoreMaster> getStoreDetailByStorecodenPincode(string searchText, int tenantID)
         {
             List<StoreMaster> storeMaster = new List<StoreMaster>();
@@ -220,10 +235,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -231,13 +245,20 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return storeMaster;
         }
+
+
         /// <summary>
         /// Get list of the Stores
         /// </summary>
         /// <param name="searchText"></param>
+        ///  <param name="tenantID"></param>
         /// <returns></returns>
         public List<StoreMaster> getStores(string searchText, int tenantID)
         {
@@ -268,9 +289,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -278,10 +299,21 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return storeMaster;
         }
 
+        /// <summary>
+        /// Search Store
+        /// <param name="StateID"></param>
+        /// <param name="PinCode"></param>
+        /// <param name="Area"></param>
+        ///  <param name="IsCountry"></param>
+        /// </summary>
         public List<StoreMaster> SearchStore(int StateID, int PinCode, string Area, bool IsCountry)
         {
             List<StoreMaster> storeMaster = new List<StoreMaster>();
@@ -313,15 +345,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return storeMaster;
@@ -378,15 +414,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return storeMaster;
@@ -431,9 +471,9 @@ namespace Easyrewardz_TicketSystem.Services
                     } 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -441,12 +481,19 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return storeMaster;
         }
 
         /// <summary>
-        /// BulkUploadStore
+        /// Bulk Upload Store
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="DataSetCSV"></param>
         /// </summary>
 
         public List<string> BulkUploadStore(int TenantID, int CreatedBy, DataSet DataSetCSV)
@@ -500,10 +547,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -522,6 +568,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         /// <summary>
         /// Create Campaign Script
+        /// <param name="CampaignScript"></param>
         /// </summary>
         public int CreateCampaignScript(CampaignScript campaignScript)
         {
@@ -539,19 +586,23 @@ namespace Easyrewardz_TicketSystem.Services
 
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
-                conn.Close();
+                if (conn != null)
+                {
+                    conn.Close();
+                }
             }
             return result;
         }
 
         /// <summary>
-        /// Update Claim Attechment Setting
+        /// Update Claim Attachment Setting
+        /// <param name="ClaimAttechment"></param>
         /// </summary>
         public int UpdateClaimAttechmentSetting(ClaimAttechment claimAttechment)
         {

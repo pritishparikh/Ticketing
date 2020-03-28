@@ -1,20 +1,14 @@
-﻿using Easyrewardz_TicketSystem.DBContext;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
-using StackExchange.Redis;
+using Easyrewardz_TicketSystem.Model;
+using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Linq;
-using System.Data;
-using MySql.Data.MySqlClient;
-using System.IO;
-using Easyrewardz_TicketSystem.Model;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-using Newtonsoft.Json;
-using Easyrewardz_TicketSystem.CustomModel;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -205,14 +199,19 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return ds;
@@ -244,8 +243,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.ExecuteScalar();
                 isUpdated = true;
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
+                throw;
             }
             finally
             {
@@ -259,6 +259,15 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
 
         #region Send mail for forget password
+
+        /// <summary>
+        ///Send mail for forget password
+        /// <param name="sMTPDetails"></param>
+        /// <param name="emailId"></param>
+        /// <param name="subject"></param>
+        ///  <param name="content"></param>
+        ///   <param name="TenantId"></param>
+        /// </summary>
         public bool sendMailForForgotPassword(SMTPDetails sMTPDetails, string emailId, string subject, string content, int TenantId)
         {
             bool isSent = false;
@@ -269,7 +278,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 return isSent;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 isSent = false;
             }
@@ -278,6 +287,14 @@ namespace Easyrewardz_TicketSystem.Services
         }
         #endregion
         #region Send mail for Change password
+
+        /// <summary>
+        ///Send mail for Change password
+        /// <param name="sMTPDetails"></param>
+        /// <param name="emailId"></param>
+        ///  <param name="content"></param>
+        ///   <param name="TenantId"></param>
+        /// </summary>
         public bool sendMailForChangePassword(SMTPDetails sMTPDetails, string emailId, string content, int TenantId)
         {
             bool isSent = false;
@@ -288,7 +305,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 return isSent;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 isSent = false;
             }
@@ -356,9 +373,9 @@ namespace Easyrewardz_TicketSystem.Services
                     accountModal.IsValidUser = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw (ex);
+                throw;
             }
             finally
             {
@@ -368,9 +385,17 @@ namespace Easyrewardz_TicketSystem.Services
             return accountModal;
         }
 
+        /// <summary>
+        ///is Valid Login
+        /// <param name="Program_Code"></param>
+        /// <param name="Domain_Name"></param>
+        /// <param name="User_EmailID"></param>
+        /// <param name="User_Password"></param>
+        /// </summary>
         private Authenticate isValidLogin(string Program_Code, string Domain_Name, string User_EmailID, string User_Password)
         {
             MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
             Authenticate authenticate = new Authenticate();
             try
             {
@@ -383,7 +408,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@User_EmailID", User_EmailID);
                 cmd1.Parameters.AddWithValue("@User_Password", User_Password);
 
-                DataSet ds = new DataSet();
+               
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -419,15 +444,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw (ex);
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return authenticate;
@@ -452,16 +481,16 @@ namespace Easyrewardz_TicketSystem.Services
 
                 return SecreateToken;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                throw ex;
+                throw ;
             }
         }
 
         /// <summary>
         /// Save user token to current session
         /// </summary>
-        /// <param name="accountModal"></param>
+        /// <param name="authenticate"></param>
         /// <returns></returns>
         private Authenticate SaveUserToken(Authenticate authenticate)
         {
@@ -479,9 +508,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Tenant_Id", authenticate.TenantId);
                 cmd1.ExecuteNonQuery();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -551,9 +580,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@token_data", token_data);
                 cmd1.ExecuteNonQuery();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -600,9 +629,6 @@ namespace Easyrewardz_TicketSystem.Services
         public Authenticate validateUserEmailId(string EmailId)
         {
             Authenticate authenticate = new Authenticate();
-
-            try
-            {
                 DataSet ds = new DataSet();
                 MySqlCommand cmd = new MySqlCommand();
                 try
@@ -627,9 +653,9 @@ namespace Easyrewardz_TicketSystem.Services
                         }
                     }
                 }
-                catch (MySqlException ex)
+                catch (Exception)
                 {
-                    throw (ex);
+                    throw;
                 }
                 finally
                 {
@@ -637,13 +663,13 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         conn.Close();
                     }
+                    if (ds != null)
+                    {
+                        ds.Dispose();
+                    }
                 }
-                return authenticate;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
+            return authenticate;
+            
         }
 
         /// <summary>
@@ -655,8 +681,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
             bool isValid = false;
 
-            try
-            {
+          
                 DataSet ds = new DataSet();
                 MySqlCommand cmd = new MySqlCommand();
                 try
@@ -673,9 +698,9 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd1.Parameters.AddWithValue("@Domain_name", Domainname);
                     isValid = Convert.ToBoolean(cmd1.ExecuteScalar());
                 }
-                catch (MySqlException ex)
+                catch (Exception)
                 {
-                    throw (ex);
+                    throw;
                 }
                 finally
                 {
@@ -685,13 +710,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
                 return isValid;
-
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
         }
+
+
         /// <summary>
         /// Change Passsword
         /// </summary>
@@ -721,9 +742,9 @@ namespace Easyrewardz_TicketSystem.Services
                     Result = true;
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -735,7 +756,13 @@ namespace Easyrewardz_TicketSystem.Services
             return Result;
         }
 
-
+        /// <summary>
+        /// Change Passsword
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="url"></param>
+        /// <param name="emailid"></param>
+        /// <param name="content"></param>
         public void GetForgetPassowrdMailContent(int TenantId, string url, string emailid, out string content, out string subject)
         {
             DataSet ds = new DataSet();
@@ -765,8 +792,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
+                throw;
             }
             finally
             {

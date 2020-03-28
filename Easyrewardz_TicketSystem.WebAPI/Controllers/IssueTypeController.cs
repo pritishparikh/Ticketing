@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Easyrewardz_TicketSystem.CustomModel;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -21,16 +18,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly string connectioSting;
+        private readonly string radisCacheServerAddress;
         #endregion
 
         #region Cunstructor
-        public IssueTypeController(IConfiguration _iConfig)
+        public IssueTypeController(IConfiguration iConfig)
         {
-            configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            configuration = iConfig;
+            connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
 
@@ -45,19 +42,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel GetIssueTypeList(int SubCategoryID)
         {
             List<IssueType> objIssueTypeList = new List<IssueType>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
 
-                MasterCaller _newMasterBrand = new MasterCaller();
+                MasterCaller newMasterBrand = new MasterCaller();
 
-                objIssueTypeList = _newMasterBrand.GetIssueTypeList(new IssueTypeServices(_connectioSting), authenticate.TenantId , SubCategoryID);
+                objIssueTypeList = newMasterBrand.GetIssueTypeList(new IssueTypeServices(connectioSting), authenticate.TenantId , SubCategoryID);
 
                 StatusCode =
                 objIssueTypeList.Count == 0 ?
@@ -65,24 +62,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objIssueTypeList;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objIssueTypeList;
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
         /// <summary>
         /// Add Issue Type
@@ -95,64 +86,58 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel AddIssueType(int SubcategoryID, string IssuetypeName)
         {
 
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             int result = 0;
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                MasterCaller _newMasterCategory = new MasterCaller();
-                result = _newMasterCategory.AddIssueType(new IssueTypeServices(_connectioSting), SubcategoryID, IssuetypeName, authenticate.TenantId, authenticate.UserMasterID);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                MasterCaller newMasterCategory = new MasterCaller();
+                result = newMasterCategory.AddIssueType(new IssueTypeServices(connectioSting), SubcategoryID, IssuetypeName, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                result == 0 ?
                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = ex.Message;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
-        /// Get IssueTypeList
+        /// GetIssueTypeListByMultiSubCategoryID
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name="SubCategoryIDs"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetIssueTypeListByMultiSubCategoryID")]
         public ResponseModel GetIssueTypeListByMultiSubCategoryID(string SubCategoryIDs)
         {
             List<IssueType> objIssueTypeList = new List<IssueType>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
 
-                MasterCaller _newMasterBrand = new MasterCaller();
+                MasterCaller newMasterBrand = new MasterCaller();
 
-                objIssueTypeList = _newMasterBrand.IssueTypeListByMultiSubCategoryID(new IssueTypeServices(_connectioSting), authenticate.TenantId, SubCategoryIDs);
+                objIssueTypeList = newMasterBrand.IssueTypeListByMultiSubCategoryID(new IssueTypeServices(connectioSting), authenticate.TenantId, SubCategoryIDs);
 
                 StatusCode =
                 objIssueTypeList.Count == 0 ?
@@ -160,24 +145,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objIssueTypeList;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objIssueTypeList;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
         #endregion
     }

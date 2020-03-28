@@ -4,11 +4,10 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-   public class SubCategoryService : ISubCategories
+    public class SubCategoryService : ISubCategories
     {
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
@@ -24,6 +23,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get Sub Category By Category ID
         /// </summary>
         /// <param name="CategoryID"></param>
+        /// <param name="TypeId"></param>
         /// <returns></returns>
         public List<SubCategory> GetSubCategoryByCategoryID(int CategoryID,int TypeId)
         {
@@ -57,16 +57,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return objSubCategory;
@@ -95,10 +98,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", UserID);
                 subCategoryId = Convert.ToInt32(cmd.ExecuteScalar());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -111,6 +113,10 @@ namespace Easyrewardz_TicketSystem.Services
             return subCategoryId;
         }
 
+        /// <summary>
+        /// Get SubCategory By MultiCategoryID
+        /// <param name="CategoryIDs"></param>
+        /// </summary>
         public List<SubCategory> GetSubCategoryByMultiCategoryID(string CategoryIDs)
         {
             DataSet ds = new DataSet();
@@ -138,16 +144,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return objSubCategory;

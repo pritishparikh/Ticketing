@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -18,6 +17,13 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
         #endregion
+
+
+        /// <summary>
+        /// Get Template For Note
+        /// <param name="IssueTypeId"></param>
+        /// <param name="TenantID"></param>
+        /// </summary>
         public List<Template> getTemplateForNote(int IssueTypeId, int TenantID)
         {
 
@@ -49,10 +55,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -60,9 +65,19 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return objtemplate;
         }
+
+        /// <summary>
+        /// Get Template  Content
+        /// <param name="TemplateId"></param>
+        /// <param name="TenantId"></param>
+        /// </summary>
 
         public Template getTemplateContent(int TemplateId,int TenantId)
         {
@@ -94,16 +109,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return objtemplate;
@@ -114,6 +132,13 @@ namespace Easyrewardz_TicketSystem.Services
 
         /// <summary>
         /// InsertTemplate 
+        /// <param name="tenantId"></param>
+        /// <param name="TemplateName"></param>
+        /// <param name="TemplatSubject"></param>
+        /// <param name="TemplatBody"></param>
+        /// <param name="issueTypes"></param>
+        /// <param name="issueTypes"></param>
+        /// <param name="createdBy"></param>
         /// </summary>
         public int InsertTemplate(int tenantId, string TemplateName, string TemplatSubject, string TemplatBody, string issueTypes, bool isTemplateActive, int createdBy)
         {
@@ -139,10 +164,9 @@ namespace Easyrewardz_TicketSystem.Services
                 insertcount = cmd.ExecuteNonQuery();
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -157,7 +181,9 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        ///DeleteTemplate
+        ///Delete Template
+        /// <param name="tenantID"></param>
+        /// <param name="TemplateID"></param>
         /// </summary>
         public int DeleteTemplate(int tenantID, int TemplateID)
         {
@@ -175,10 +201,9 @@ namespace Easyrewardz_TicketSystem.Services
                 deletecount = Convert.ToInt32(cmd.ExecuteScalar());
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -188,12 +213,21 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
+
             return deletecount;
         }
 
 
         /// <summary>
         /// UpdateTemplate
+        /// <param name="tenantId"></param>
+        /// <param name="TemplateID"></param>
+        /// <param name="TemplateName"></param>
+        /// <param name="issueType"></param>
+        /// <param name="isTemplateActive"></param>
+        /// <param name="ModifiedBy"></param>
+        /// <param name="templateSubject"></param>
+        /// <param name="templateContent"></param>
         /// </summary>
         public int UpdateTemplate(int tenantId, int TemplateID, string TemplateName, string issueType, bool isTemplateActive, int ModifiedBy, string templateSubject, string templateContent)
         {
@@ -217,10 +251,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 updatecount = cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -234,9 +267,10 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// GetTemplates
+        /// Get Templates
+        /// <param name="tenantId"></param>
         /// </summary>
-        public  List<TemplateModel> GetTemplates(int tenantId)
+        public List<TemplateModel> GetTemplates(int tenantId)
         {
             List<TemplateModel> objTempLst = new List<TemplateModel>();
             DataSet ds = new DataSet();
@@ -282,21 +316,29 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
              }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return objTempLst;
         }
 
         /// <summary>
-        /// GetTemplates
+        /// Get Mail Parameter
+        /// <param name="tenantId"></param>
+        /// <param name="AlertID"></param>
         /// </summary>
         public List<MailParameterModel> GetMailParameter(int tenantId, int AlertID)
         {
@@ -333,14 +375,20 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return objTempLst;

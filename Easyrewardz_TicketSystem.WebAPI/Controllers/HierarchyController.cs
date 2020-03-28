@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
-using Easyrewardz_TicketSystem.CustomModel;
-using Easyrewardz_TicketSystem.WebAPI.Provider;
-using Easyrewardz_TicketSystem.Interface;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
-using System.Net.Http;
-using System.Net;
+using Easyrewardz_TicketSystem.WebAPI.Provider;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Data;
-using System.Xml;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -57,18 +50,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("CreateHierarchy")]
         public ResponseModel CreateHierarchy([FromBody] CustomHierarchymodel customHierarchymodel)
         {
-            HierarchyCaller _Hierarchy = new HierarchyCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            HierarchyCaller Hierarchy = new HierarchyCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 customHierarchymodel.TenantID = authenticate.TenantId;
                 customHierarchymodel.CreatedBy = authenticate.UserMasterID;
-                int result = _Hierarchy.CreateHierarchy(new HierarchyService(_connectionSting), customHierarchymodel);
+                int result = Hierarchy.CreateHierarchy(new HierarchyService(_connectionSting), customHierarchymodel);
                 if (customHierarchymodel.Deleteflag == 1)
                 {
                     if (result == 0)
@@ -104,22 +97,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 }
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -130,8 +118,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel ListHierarchy(int HierarchyFor=1)
         {
             List<CustomHierarchymodel> customHierarchymodels = new List<CustomHierarchymodel>();
-            HierarchyCaller _Hierarchy = new HierarchyCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            HierarchyCaller Hierarchy = new HierarchyCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
@@ -139,7 +127,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                customHierarchymodels = _Hierarchy.ListofHierarchy(new HierarchyService(_connectionSting), authenticate.TenantId, HierarchyFor);
+                customHierarchymodels = Hierarchy.ListofHierarchy(new HierarchyService(_connectionSting), authenticate.TenantId, HierarchyFor);
                 StatusCode =
                    customHierarchymodels.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -147,22 +135,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = customHierarchymodels;
+                objResponseModel.Status = true;
+               objResponseModel.StatusCode = StatusCode;
+               objResponseModel.Message = statusMessage;
+               objResponseModel.ResponseData = customHierarchymodels;
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -180,7 +163,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             int count = 0;
             HierarchyCaller _Hierarchy = new HierarchyCaller();
             SettingsCaller fileU = new SettingsCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
            string statusMessage = "";
             DataSet DataSetCSV = new DataSet();
@@ -262,22 +245,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = CSVlist.Count;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = CSVlist.Count;
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
 
 
         }

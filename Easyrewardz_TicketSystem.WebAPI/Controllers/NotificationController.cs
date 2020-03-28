@@ -7,9 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -20,16 +17,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     {
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectioSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly string connectioSting;
+        private readonly string radisCacheServerAddress;
         #endregion
 
         #region Constructor
-        public NotificationController(IConfiguration _iConfig)
+        public NotificationController(IConfiguration iConfig)
         {
-            configuration = _iConfig;
-            _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            configuration = iConfig;
+            connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
 
@@ -42,46 +39,42 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel GetNotifications()
         {
 
-            ResponseModel _objResponseModel = new ResponseModel();
-           NotificationModel _objresponseModel = new NotificationModel(); 
+            ResponseModel objResponseModel = new ResponseModel();
+           NotificationModel objresponseModel = new NotificationModel(); 
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
                 //Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 NotificationCaller _newNoti = new NotificationCaller();
 
-                _objresponseModel = _newNoti.GetNotification(new NotificationService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
-                StatusCode = _objresponseModel.TicketNotification.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                objresponseModel = _newNoti.GetNotification(new NotificationService(connectioSting), authenticate.TenantId, authenticate.UserMasterID);
+                StatusCode = objresponseModel.TicketNotification.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objresponseModel;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objresponseModel;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// ReadNotification
+        /// <param name="TicketID"></param>
+        /// <param name="IsFollowUp"></param> 
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -89,41 +82,35 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel ReadNotification(int TicketID,int IsFollowUp = 0)
         {
             int updatecount = 0;
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 NotificationCaller _newNoti = new NotificationCaller();
 
-                updatecount = _newNoti.ReadNotification(new NotificationService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, TicketID, IsFollowUp);
+                updatecount = _newNoti.ReadNotification(new NotificationService(connectioSting), authenticate.TenantId, authenticate.UserMasterID, TicketID, IsFollowUp);
 
                 StatusCode = updatecount > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServiceNotWorking;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = updatecount;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = updatecount;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         #endregion

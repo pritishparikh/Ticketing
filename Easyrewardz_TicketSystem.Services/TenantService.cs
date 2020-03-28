@@ -5,7 +5,6 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -21,6 +20,10 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
+        /// <summary>
+        /// Create Company
+        /// <param name="companyModel"></param>
+        /// </summary>
         public int InsertCompany(CompanyModel companyModel)
         {
 
@@ -64,22 +67,30 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
                 if (ds != null)
-                ds.Dispose();
-                conn.Close();
+                {
+                    ds.Dispose();
+                }
             }
 
             return OutTenantID;
 
         }
 
+        /// <summary>
+        /// Create Company
+        /// <param name="BillingDetails"></param>
+        /// </summary>
         public int BillingDetails_crud(BillingDetails BillingDetails)
         {
             
@@ -101,10 +112,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -112,6 +122,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                
             }
 
             return result;
@@ -119,6 +130,10 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
+        /// <summary>
+        /// OtherDetails
+        /// <param name="OtherDetails"></param>
+        /// </summary>
         public int OtherDetails(OtherDetailsModel OtherDetails)
         {
 
@@ -143,10 +158,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -154,6 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+               
             }
 
             return result;
@@ -161,10 +176,17 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
+        /// <summary>
+        /// Insert Plan Feature
+        /// <param name="PlanName"></param>
+        /// <param name="FeatureID"></param>
+        /// <param name="UserMasterID"></param>
+        ///  <param name="TenantId"></param>
+        /// </summary>
         public int InsertPlanFeature(string PlanName, string FeatureID, int UserMasterID,int TenantId)
         {
-            int _CreatedBy = UserMasterID;
-            int _ModifyBy = UserMasterID;
+            int CreatedBy = UserMasterID;
+            int ModifyBy = UserMasterID;
 
             int result = 0;
             try
@@ -174,16 +196,16 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_PlanName", PlanName);
                 cmd.Parameters.AddWithValue("@_FeatureID", FeatureID);
-                cmd.Parameters.AddWithValue("@_CreatedBy", _CreatedBy);
-                cmd.Parameters.AddWithValue("@_ModifyBy", _ModifyBy);
+                cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
+                cmd.Parameters.AddWithValue("@_ModifyBy", ModifyBy);
                 cmd.Parameters.AddWithValue("@_TenantId", TenantId);
                 cmd.CommandType = CommandType.StoredProcedure;
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
-            catch (Exception ex)
+            catch (Exception )
             {
 
-                throw ex;
+                throw ;
             }
             finally
             {
@@ -196,7 +218,13 @@ namespace Easyrewardz_TicketSystem.Services
             return result;
         }
 
-        public  List<GetPlanDetails> GetPlanDetails(int CustomPlanID, int TenantId)
+
+        /// <summary>
+        /// Get Plan Details
+        /// <param name="CustomPlanID"></param>
+        /// <param name="TenantId"></param>
+        /// </summary>
+        public List<GetPlanDetails> GetPlanDetails(int CustomPlanID, int TenantId)
         {
           
             DataSet ds = new DataSet();
@@ -224,10 +252,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -235,11 +262,19 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return GetPlanDetails;
         }
 
+        /// <summary>
+        /// Add Plan
+        /// <param name="TenantPlan"></param>
+        /// </summary>
         public int AddPlan(TenantPlan _tenantPlan)
         {
 
@@ -262,10 +297,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -279,14 +313,19 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        /// <summary>
+        /// Get Company Type
+        /// <param name=""></param>
+        /// </summary>
         public List<CompanyTypeModel> GetCompanyType()
         {
             List<CompanyTypeModel> lstCompanyType = null;
+            DataSet ds = new DataSet();
             try
             {
                 lstCompanyType = new List<CompanyTypeModel>();
                 conn.Open();
-                DataSet ds = new DataSet();
+               
                 MySqlCommand cmd = new MySqlCommand("SP_GetCompanyType", conn);
                 cmd.Connection = conn;               
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -305,16 +344,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -323,6 +365,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         /// <summary>
         /// Get Registered Tenant
+        /// <param name="TenantId"></param>
         /// </summary>
         /// <returns></returns>
         public List<CompanyModel> GetRegisteredTenant(int TenantId)
@@ -356,10 +399,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {

@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
-using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
+using System;
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using Easyrewardz_TicketSystem.DBContext;
-using Easyrewardz_TicketSystem.CustomModel;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-   public class StoreUserService:IStoreUser
+    public class StoreUserService:IStoreUser
     {
         MySqlConnection conn = new MySqlConnection();
         public StoreUserService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+
         /// <summary>
         /// AddStoreUserPersonaldetail
+        /// <param name="CustomStoreUserModel"></param>
         /// </summary>
         /// <param name="CustomStoreUserModel"></param>
         public int AddStoreUserPersonaldetail(CustomStoreUserModel storeUserModel)
@@ -45,9 +41,9 @@ namespace Easyrewardz_TicketSystem.Services
                 UserID = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -59,10 +55,11 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UserID;
         }
+
         /// <summary>
         /// AddStoreUserProfiledetail
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="customStoreUserModel"></param>
         public int AddStoreUserProfiledetail(CustomStoreUserModel customStoreUserModel)
         {
 
@@ -84,9 +81,9 @@ namespace Easyrewardz_TicketSystem.Services
                 Success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -98,6 +95,8 @@ namespace Easyrewardz_TicketSystem.Services
 
             return Success;
         }
+
+
         /// <summary>
         /// Edit Store User
         /// </summary>
@@ -136,9 +135,9 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -153,7 +152,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Store User Mapped Category
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="customStoreUser"></param>
         public int StoreUserMappedCategory(CustomStoreUser customStoreUser)
         {
 
@@ -178,9 +177,9 @@ namespace Easyrewardz_TicketSystem.Services
                 Success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {

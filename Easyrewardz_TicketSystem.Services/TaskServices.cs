@@ -1,5 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
-using Easyrewardz_TicketSystem.CustomModel;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
@@ -18,14 +18,16 @@ namespace Easyrewardz_TicketSystem.Services
         }
         #endregion
         /// <summary>
-        /// Add Customer Detail
+        /// Add Task Detail
         /// </summary>
-        /// <param name="customerMaster"></param>
+        /// <param name="taskMaster"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
         public int AddTaskDetails(TaskMaster taskMaster, int TenantID, int UserID)
         {
 
-            // MySqlCommand cmd = new MySqlCommand();
+          
             int taskId = 0;
             try
             {
@@ -45,9 +47,9 @@ namespace Easyrewardz_TicketSystem.Services
                 taskId = Convert.ToInt32(cmd1.ExecuteNonQuery());
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                throw;
             }
             finally
             {
@@ -57,18 +59,19 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
+
             return taskId;
         }
         /// <summary>
         /// GetTask By ID
         /// </summary>
-        /// <param name="customerMaster"></param>
+        /// <param name="taskID"></param>
         /// <returns></returns>
         public CustomTaskMasterDetails GetTaskbyId(int taskID)
         {
             DataSet ds = new DataSet();
             CustomTaskMasterDetails taskMaster = new CustomTaskMasterDetails();
-            //List<CustomTaskMasterDetails> listtaskMaster = new List<CustomTaskMasterDetails>();
+            
             try
             {
                 conn.Open();
@@ -102,9 +105,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }       
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -112,13 +115,17 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return taskMaster;
         }
         /// <summary>
         /// Get Task List
         /// </summary>
-        /// <param name="customerMaster"></param>
+        /// <param name="TicketId"></param>
         /// <returns></returns>
         public List<CustomTaskMasterDetails> GetTaskList(int TicketId)
         {
@@ -153,21 +160,29 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
-            {
+            catch(Exception)
 
+                    {
+                throw;
             }
-            finally
+
+             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return lsttask;
         }
+
+
         /// <summary>
-        /// Soft Delete Task 
+        ///  Delete Task 
         /// </summary>
         /// <param name="taskId"></param>
         /// <returns></returns>
@@ -184,9 +199,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmd1.ExecuteScalar());
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -197,10 +212,12 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return i;
         }
+
+
         /// <summary>
         /// Get Assigned To 
         /// </summary>
-        /// <param name="taskId"></param>
+        /// <param name="Function_ID"></param>
         /// <returns></returns>
         public List<CustomUserAssigned> GetAssignedTo(int Function_ID)
         {
@@ -227,15 +244,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return Assignedto;
@@ -245,6 +266,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// Add Comment 
         /// </summary>
         /// <param name="Id"></param> 1 for task comment, 2 for claim comment and 3 for ticket notes comment
+        /// <param name="Comment"></param> 
+        /// <param name="UserID"></param> 
         /// <returns></returns>
         public int AddComment(int CommentForId, int ID, string Comment, int UserID)
         {
@@ -263,9 +286,9 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd1.ExecuteNonQuery());
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-               
+                throw;
             }
             finally
             {
@@ -279,6 +302,10 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        /// <summary>
+        /// Get list of claims
+        /// <param name="TicketId"></param>
+        /// </summary>
         public List<CustomClaimMaster> GetClaimList(int TicketId)
         {
             DataSet ds = new DataSet();
@@ -300,7 +327,6 @@ namespace Easyrewardz_TicketSystem.Services
                         CustomClaimMaster taskMaster = new CustomClaimMaster();
                         taskMaster.TicketClaimID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
                         taskMaster.TaskStatus = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.ClaimStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
-                        //taskMaster.TaskStatus = Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
                         taskMaster.ClaimIssueType = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
                         taskMaster.Category = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
                         taskMaster.Creation_on = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
@@ -311,15 +337,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return lsttask;
@@ -328,7 +358,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get list of the task comment for the task
         /// </summary>
-        /// <param name="ClaimId"></param>
+        /// <param name="TaskId"></param>
         /// <returns></returns>
         public List<UserComment> GetTaskComment(int TaskId)
         {
@@ -356,9 +386,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -366,12 +396,17 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return lstClaimComment;
         }
 
         /// <summary>
         /// Add Comment ON task
+        /// <param name="TaskMaster"></param>
         /// </summary>
         /// <returns></returns>
         public int AddCommentOnTask(TaskMaster taskMaster)
@@ -393,9 +428,9 @@ namespace Easyrewardz_TicketSystem.Services
                 i = Convert.ToInt32(cmd1.ExecuteNonQuery());
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {

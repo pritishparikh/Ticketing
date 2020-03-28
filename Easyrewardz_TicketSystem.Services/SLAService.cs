@@ -1,14 +1,11 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Text;
 using System.Linq;
-using Easyrewardz_TicketSystem.DBContext;
-using Easyrewardz_TicketSystem.CustomModel;
 using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -26,7 +23,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// 
+        /// Get status of SLA 
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
@@ -61,16 +58,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -79,6 +79,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         /// <summary>
         /// Create SLA 
+        /// <param name="SLAModel"></param>
         /// </summary>
         public int InsertSLA(SLAModel SLA)
         {
@@ -147,16 +148,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -165,6 +169,11 @@ namespace Easyrewardz_TicketSystem.Services
 
         /// <summary>
         /// Update SLA
+        /// <param name="SLAID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="IssuetypeID"></param>
+        /// <param name="isActive"></param>
+        /// <param name="modifiedBy"></param>
         /// </summary>
         public int UpdateSLA(int SLAID, int tenantID, int IssuetypeID, bool isActive, int modifiedBy)
         {
@@ -184,10 +193,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 updatecount = cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -202,6 +210,8 @@ namespace Easyrewardz_TicketSystem.Services
 
         /// <summary>
         /// Delete SLA
+        /// <param name="tenantID"></param>
+        /// <param name="SLAID"></param>
         /// </summary>
         public int DeleteSLA(int tenantID, int SLAID)
         {
@@ -219,10 +229,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 deletecount = Convert.ToInt32(cmd.ExecuteScalar());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -237,6 +246,8 @@ namespace Easyrewardz_TicketSystem.Services
 
         /// <summary>
         /// GET SLA
+        /// <param name="tenantID"></param>
+        /// <param name="SLAFor"></param>
         /// </summary>
         public List<SLAResponseModel> SLAList(int tenantID, int SLAFor)
         {
@@ -246,13 +257,11 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
 
-                //int rowStart = (pageNo - 1) * PageSize;
                 conn.Open();
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetSLAList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                //cmd1.Parameters.AddWithValue("@_tenantID", 1);
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 cmd1.Parameters.AddWithValue("@_SLAFor", SLAFor);
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -314,14 +323,20 @@ namespace Easyrewardz_TicketSystem.Services
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
 
@@ -331,6 +346,8 @@ namespace Easyrewardz_TicketSystem.Services
 
         /// <summary>
         /// Bind issuetype 
+        /// <param name="tenantID"></param>
+        /// <param name="SearchText"></param>
         /// </summary>
         /// 
         public List<IssueTypeList> BindIssueTypeList(int tenantID, string SearchText)
@@ -375,14 +392,20 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
 
@@ -390,7 +413,10 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// BulkUploadSLA
+        /// Bulk Upload SLA
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param
+        /// <param name="DataSetCSV"></param
         /// </summary>
         /// 
         public int BulkUploadSLA(int TenantID, int CreatedBy, DataSet DataSetCSV)
@@ -425,26 +451,30 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
-                if (DataSetCSV != null)
-                {
-                    DataSetCSV.Dispose();
-                }
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (DataSetCSV != null)
+                {
+                    DataSetCSV.Dispose();
                 }
             }
             return uploadcount;
 
         }
 
+        /// <summary>
+        ///Search Issue Type 
+        /// <param name="tenantID"></param>
+        /// <param name="SearchText"></param>
+        /// </summary>
         public List<IssueTypeList> SearchIssueType(int tenantID, string SearchText)
         {
             List<IssueTypeList> objIssueTypeLst = new List<IssueTypeList>();
@@ -478,14 +508,20 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
 
@@ -552,14 +588,20 @@ namespace Easyrewardz_TicketSystem.Services
                     objSLADetail.sLATargetDetails = sLATargetDetails;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
-                if (ds != null) ds.Dispose(); conn.Close();
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return objSLADetail;
@@ -568,6 +610,9 @@ namespace Easyrewardz_TicketSystem.Services
 
         /// <summary>
         /// Update SLA 
+        /// <param name="SLADetail"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserId"></param>
         /// </summary>
         public bool UpdateSLADetails(SLADetail SLA, int TenantID, int UserId)
         {
@@ -610,10 +655,9 @@ namespace Easyrewardz_TicketSystem.Services
 
                 isUpdateDone = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -622,6 +666,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
+
 
             return isUpdateDone;
         }

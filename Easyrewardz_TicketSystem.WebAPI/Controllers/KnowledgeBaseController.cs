@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Easyrewardz_TicketSystem.CustomModel;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -24,16 +21,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         #region variable declaration
         private IConfiguration configuration;
-        private readonly string _connectionSting;
-        private readonly string _radisCacheServerAddress;
+        private readonly string connectionSting;
+        private readonly string radisCacheServerAddress;
         #endregion
 
         #region Cunstructor
-        public KnowledgeBaseController(IConfiguration _iConfig)
+        public KnowledgeBaseController(IConfiguration iConfig)
         {
-            configuration = _iConfig;
-            _connectionSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            configuration = iConfig;
+            connectionSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
 
@@ -47,42 +44,37 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("searchbycategory")]
-        public ResponseModel searchbycategory(int Type_ID, int Category_ID, int SubCategor_ID)
+        public ResponseModel SearchByCategory(int Type_ID, int Category_ID, int SubCategor_ID)
         {
 
-            List<KnowlegeBaseMaster> _objKnowlegeBaseMaster = new List<KnowlegeBaseMaster>();
-            KnowledgeCaller _KnowledgeCaller = new KnowledgeCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            List<KnowlegeBaseMaster> objKnowlegeBaseMaster = new List<KnowlegeBaseMaster>();
+            KnowledgeCaller KnowledgeCaller = new KnowledgeCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                _objKnowlegeBaseMaster = _KnowledgeCaller.SearchByCategory(new KnowlegeBaseService(_connectionSting), Type_ID, Category_ID, SubCategor_ID, authenticate.TenantId);
+                objKnowlegeBaseMaster = KnowledgeCaller.SearchByCategory(new KnowlegeBaseService(connectionSting), Type_ID, Category_ID, SubCategor_ID, authenticate.TenantId);
                 StatusCode =
-               _objKnowlegeBaseMaster == null ?
+               objKnowlegeBaseMaster == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objKnowlegeBaseMaster;
+               objResponseModel.Status = true;
+               objResponseModel.StatusCode = StatusCode;
+               objResponseModel.Message = statusMessage;
+               objResponseModel.ResponseData = objKnowlegeBaseMaster;
             }
-            catch (Exception _ex)
+            catch (Exception )
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
       
@@ -92,39 +84,34 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel AddKB([FromBody]KnowlegeBaseMaster knowlegeBaseMaster)
         {
 
-            KnowledgeCaller _KnowledgeCaller = new KnowledgeCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            KnowledgeCaller KnowledgeCaller = new KnowledgeCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 knowlegeBaseMaster.TenantID = authenticate.TenantId;
                 knowlegeBaseMaster.CreatedBy = authenticate.UserMasterID;
-                int result = _KnowledgeCaller.AddKB(new KnowlegeBaseService(_connectionSting), knowlegeBaseMaster);
+                int result = KnowledgeCaller.AddKB(new KnowlegeBaseService(connectionSting), knowlegeBaseMaster);
                 StatusCode =
                result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         [HttpPost]
@@ -132,39 +119,34 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel UpdateKB([FromBody]KnowlegeBaseMaster knowlegeBaseMaster)
         {
 
-            KnowledgeCaller _KnowledgeCaller = new KnowledgeCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            KnowledgeCaller KnowledgeCaller = new KnowledgeCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 knowlegeBaseMaster.TenantID = authenticate.TenantId;
                 knowlegeBaseMaster.ModifyBy = authenticate.UserMasterID;
-                int result = _KnowledgeCaller.UpdateKB(new KnowlegeBaseService(_connectionSting), knowlegeBaseMaster);
+                int result = KnowledgeCaller.UpdateKB(new KnowlegeBaseService(connectionSting), knowlegeBaseMaster);
                 StatusCode =
                result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         [HttpPost]
@@ -172,38 +154,33 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel DeleteKB(int KBID)
         {
 
-            KnowledgeCaller _KnowledgeCaller = new KnowledgeCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            KnowledgeCaller KnowledgeCaller = new KnowledgeCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 
-                int result = _KnowledgeCaller.DeleteKB(new KnowlegeBaseService(_connectionSting), KBID, authenticate.TenantId);
+                int result = KnowledgeCaller.DeleteKB(new KnowlegeBaseService(connectionSting), KBID, authenticate.TenantId);
                 StatusCode =
                result == 0 ?
                        (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+               objResponseModel.Status = true;
+               objResponseModel.StatusCode = StatusCode;
+               objResponseModel.Message = statusMessage;
+               objResponseModel.ResponseData = result;
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         [HttpPost]
@@ -211,41 +188,36 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel KBList()
         {
 
-            CustomKBList _objKnowlegeBaseMaster = new CustomKBList();
+            CustomKBList objKnowlegeBaseMaster = new CustomKBList();
            
-            KnowledgeCaller _KnowledgeCaller = new KnowledgeCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            KnowledgeCaller KnowledgeCaller = new KnowledgeCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                _objKnowlegeBaseMaster = _KnowledgeCaller.KBList(new KnowlegeBaseService(_connectionSting), authenticate.TenantId);
+                objKnowlegeBaseMaster = KnowledgeCaller.KBList(new KnowlegeBaseService(connectionSting), authenticate.TenantId);
                 
                 StatusCode =
-               _objKnowlegeBaseMaster == null ?
+               objKnowlegeBaseMaster == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objKnowlegeBaseMaster;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objKnowlegeBaseMaster;
             }
-            catch (Exception _ex)
+            catch (Exception )
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         [HttpPost]
@@ -253,41 +225,36 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel SearchKB(int Category_ID, int SubCategory_ID, int type_ID)
         {
 
-            CustomKBList _objKnowlegeBaseMaster = new CustomKBList();
+            CustomKBList objKnowlegeBaseMaster = new CustomKBList();
 
-            KnowledgeCaller _KnowledgeCaller = new KnowledgeCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            KnowledgeCaller KnowledgeCaller = new KnowledgeCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                _objKnowlegeBaseMaster = _KnowledgeCaller.SearchKB(new KnowlegeBaseService(_connectionSting), Category_ID, SubCategory_ID, type_ID, authenticate.TenantId);
+                objKnowlegeBaseMaster = KnowledgeCaller.SearchKB(new KnowlegeBaseService(connectionSting), Category_ID, SubCategory_ID, type_ID, authenticate.TenantId);
 
                 StatusCode =
-               _objKnowlegeBaseMaster == null ?
+               objKnowlegeBaseMaster == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objKnowlegeBaseMaster;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objKnowlegeBaseMaster;
             }
-            catch (Exception _ex)
+            catch (Exception )
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         [HttpPost]
@@ -296,38 +263,33 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
 
 
-            KnowledgeCaller _KnowledgeCaller = new KnowledgeCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            KnowledgeCaller KnowledgeCaller = new KnowledgeCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
                 knowlegeBaseMaster.TenantID = authenticate.TenantId;
-                int result = _KnowledgeCaller.RejectApproveKB(new KnowlegeBaseService(_connectionSting), knowlegeBaseMaster);
+                int result = KnowledgeCaller.RejectApproveKB(new KnowlegeBaseService(connectionSting), knowlegeBaseMaster);
                 StatusCode =
                result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception _ex)
+            catch (Exception )
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 

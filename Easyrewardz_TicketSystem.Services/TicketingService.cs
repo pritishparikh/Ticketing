@@ -1,13 +1,11 @@
-﻿using Easyrewardz_TicketSystem.DBContext;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using Easyrewardz_TicketSystem.CustomModel;
 using System.IO;
-using System.Text;
 using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -27,7 +25,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Auto Suggest Ticket Title
         /// </summary>
-        /// <param name="TikcketTitle"></param>
+        /// <param name="TicketTitle"></param>
         /// <param name="TenantId"></param>
         /// <returns></returns>
         public List<TicketTitleDetails> GetTicketList(string TikcketTitle, int TenantId)
@@ -35,7 +33,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<TicketTitleDetails> ticketing = new List<TicketTitleDetails>();
-            string _ticketTitle = string.Empty;
+            string ticketTitle = string.Empty;
             try
             {
                 conn.Open();
@@ -52,29 +50,25 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         TicketTitleDetails tktTitle = new TicketTitleDetails();
-                        _ticketTitle = string.IsNullOrEmpty(Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"])) ? string.Empty
+                        ticketTitle = string.IsNullOrEmpty(Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"])) ? string.Empty
                                         : Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"]);
 
-                        if (!string.IsNullOrEmpty(_ticketTitle))
+                        if (!string.IsNullOrEmpty(ticketTitle))
                         {
-                            tktTitle.TicketTitle = _ticketTitle.Length > 10 ? _ticketTitle.Substring(0, 10) : _ticketTitle;
-                            tktTitle.TicketTitleToolTip = _ticketTitle.Length > 10 ? _ticketTitle : string.Empty;
+                            tktTitle.TicketTitle = ticketTitle.Length > 10 ? ticketTitle.Substring(0, 10) : ticketTitle;
+                            tktTitle.TicketTitleToolTip = ticketTitle.Length > 10 ? ticketTitle : string.Empty;
                         }
 
                         ticketing.Add(tktTitle);
-
-                        //TicketingDetails ticketingDetails = new TicketingDetails();
-                        //ticketingDetails.TicketTitle = string.IsNullOrEmpty(Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"]));
-                        //ticketingDetails.
-                        //ticketing.Add(ticketingDetails);
+                      
                     }
 
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -86,6 +80,14 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return ticketing;
         }
+
+        /// <summary>
+        /// Create Tickets
+        /// <param name="TicketingDetails"></param>
+        /// <param name="TenantId"></param>
+        /// <param name="FolderPath"></param>
+        /// /// <param name="finalAttchment"></param>
+        /// </summary>
 
         public int addTicket(TicketingDetails ticketingDetails, int TenantId, string FolderPath, string finalAttchment)
         {
@@ -269,10 +271,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
-                var tessst = ex.ToString() + "\n" + ex.InnerException + "\n" + ex.StackTrace;
+                throw;
             }
             finally
             {
@@ -288,7 +289,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// GetDraft
         /// </summary>
-        /// <param name="TikcketTitle"></param>
+        /// <param name="UserID"></param>
+        /// <param name="TenantId"></param>
         /// <returns></returns>
         public List<CustomDraftDetails> GetDraft(int UserID, int TenantId)
         {
@@ -328,9 +330,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -341,6 +343,8 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return Draftlist;
         }
+
+
         /// <summary>
         /// Search ticket agent
         /// </summary>
@@ -380,9 +384,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -393,6 +397,8 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return listSearchagent;
         }
+
+
         /// <summary>
         /// List Saved Search
         /// </summary>
@@ -424,9 +430,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -437,6 +443,8 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return listSavedSearch;
         }
+
+
         /// <summary>
         /// Get Saved Search By ID
         /// </summary>
@@ -465,9 +473,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -478,6 +486,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return Savedsearch;
         }
+
 
         /// <summary>
         /// Soft Delete Saved Search
@@ -498,9 +507,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -512,13 +521,14 @@ namespace Easyrewardz_TicketSystem.Services
             return i;
         }
 
+
         /// <summary>
         /// Add Search
         /// </summary>
         /// <param name="UserID"></param>
         /// <param name="SearchSaveName"></param>
         /// <param name="parameter"></param>s
-        /// <returns></returns>
+        ///  <param name="parameter"></param>s
         public int AddSearch(int UserID, string SearchSaveName, string parameter, int TenantId)
         {
             int i = 0;
@@ -535,9 +545,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -556,7 +566,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TenantID"></param>
         /// <param name="AgentID"></param>
         /// <param name="Remark"></param>
-        /// <returns></returns>
+
         public int AssignTicket(string TicketID, int TenantID, int UserID, int AgentID, string Remark)
         {
             int i = 0;
@@ -573,9 +583,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -638,9 +648,9 @@ namespace Easyrewardz_TicketSystem.Services
                 i = cmd.ExecuteNonQuery();
                 scheduleID = Convert.ToInt32(cmd.Parameters["@Schedule_ID"].Value);
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -655,9 +665,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Auto Suggest Ticket Title
         /// </summary>
-        /// <param name="TikcketTitle"></param>
         /// <param name="TenantId"></param>
-        /// <returns></returns>
+        /// 
         public List<TicketNotes> getNotesByTicketId(int TicketId)
         {
             DataSet ds = new DataSet();
@@ -686,12 +695,25 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if(ds!=null)
+                {
+                    ds.Dispose();
+                }
             }
             return ticketNotes;
         }
+
+
         /// <summary>
         /// update ticket status
         /// </summary>
@@ -721,9 +743,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -734,22 +756,26 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return i;
         }
+
+
         /// <summary>
         /// Get Ticket Details By TicketId
         /// </summary>
         /// <param name="TicketID"></param>
         /// <param name="TenantId"></param>
+        /// <param name="url"></param>
         /// <returns></returns>
         public CustomTicketDetail getTicketDetailsByTicketId(int TicketID, int TenantID, string url)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
+            CustomTicketDetail ticketDetails = new CustomTicketDetail();
             try
             {
                 TicketingMailerQue ticketingMailerObj = new TicketingMailerQue();
                 conn.Open();
                 cmd.Connection = conn;
-                CustomTicketDetail ticketDetails = new CustomTicketDetail();
+                
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetTicketDetailByID", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Ticket_Id", TicketID);
@@ -837,19 +863,31 @@ namespace Easyrewardz_TicketSystem.Services
                         }
                     }
                 }
-                return ticketDetails;
+               
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return ticketDetails;
 
         }
         /// <summary>
         /// Get Ticket History
         /// </summary>
         /// <param name="TicketID"></param>
-        /// <param name=""></param>
         /// <returns></returns>
         public List<CustomTicketHistory> GetTicketHistory(int TicketID)
         {
@@ -879,9 +917,20 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return ListTicketHistory;
         }
@@ -939,9 +988,20 @@ namespace Easyrewardz_TicketSystem.Services
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (EmailDs != null)
+                {
+                    EmailDs.Dispose();
+                }
             }
 
             return IsMailSent;
@@ -970,9 +1030,20 @@ namespace Easyrewardz_TicketSystem.Services
                     CountByTicket.Claim = Convert.ToInt32(ds.Tables[0].Rows[3]["counts"]);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return CountByTicket;
         }
@@ -984,7 +1055,6 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             List<TicketMessage> ticketMessages = new List<TicketMessage>();
             List<CustomTicketMessage> TrailTicketMessagelist = new List<CustomTicketMessage>();
-
             List<MessageDetails> LatestTicketMessagelist = new List<MessageDetails>();
 
             #region old approach
@@ -1178,11 +1248,20 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-
-                throw ex;
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return ticketMessages;
@@ -1216,15 +1295,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return listSearchagent;
@@ -1260,10 +1343,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmdMail.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmdMail.ExecuteNonQuery());
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
-            }               
+                throw;
+            }
             finally
             {
                 if (conn != null)
@@ -1274,6 +1357,11 @@ namespace Easyrewardz_TicketSystem.Services
             return i;
         }
 
+        /// <summary>
+        /// Get ProgressBar Details
+        /// <param name="TicketID"></param>
+        /// <param name="TenantID"></param>
+        /// </summary>
         public ProgressBarDetail GetProgressBarDetails(int TicketID, int TenantID)
         {
             ProgressBarDetail progressBarDetail = new ProgressBarDetail();
@@ -1300,9 +1388,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -1310,9 +1398,14 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return progressBarDetail;
         }
+
 
         /// <summary>
         /// Set ticket Assignment for the followup
@@ -1322,7 +1415,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="UserID"></param>
         public void setticketassigforfollowup(int TicketID, string FollowUPUserID, int UserID)
         {
-            DataSet ds = new DataSet();
             try
             {
                 conn.Open();
@@ -1335,9 +1427,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmdMail.ExecuteScalar();
                 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -1346,8 +1438,9 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-           
+
         }
+
 
         /// <summary>
         /// Get ticket Ids which show in Follow up
@@ -1385,15 +1478,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -1409,7 +1506,6 @@ namespace Easyrewardz_TicketSystem.Services
         public bool ticketunassigfromfollowup(string TicketIDs, int UserID)
         {
             bool isUpdate = false;
-            DataSet ds = new DataSet();
             try
             {
                 conn.Open();
@@ -1421,9 +1517,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmdMail.ExecuteScalar();
                 isUpdate = true;
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                isUpdate = false;
+                throw;
             }
             finally
             {
@@ -1431,6 +1527,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+               
             }
             return isUpdate;
         }
@@ -1538,7 +1635,6 @@ namespace Easyrewardz_TicketSystem.Services
                 }
                 catch (IOException ioex)
                 {
-                    Console.WriteLine(ioex.Message);
                     ticketID = 0;
                 }
                 int a = 0;
@@ -1612,11 +1708,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
-                var tessst = ex.ToString() + "\n" + ex.InnerException + "\n" + ex.StackTrace;
-                ticketID = 0;
+                throw;
             }
             finally
             {
