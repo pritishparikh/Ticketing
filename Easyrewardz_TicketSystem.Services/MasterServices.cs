@@ -5,7 +5,6 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -25,7 +24,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<ChannelOfPurchase> GetChannelOfPurchaseList(int TenantID)
+        public List<ChannelOfPurchase> GetChannelOfPurchaseList(int tenantID)
         {
 
             DataSet ds = new DataSet();
@@ -38,7 +37,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetChannelOfPurchaseList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -51,16 +50,15 @@ namespace Easyrewardz_TicketSystem.Services
                         channel.TenantID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
                         channel.NameOfChannel = Convert.ToString(ds.Tables[0].Rows[i]["NameOfChannel"]);
                         channel.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
 
                         objChannel.Add(channel);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -77,7 +75,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<DepartmentMaster> GetDepartmentList(int TenantID)
+        public List<DepartmentMaster> GetDepartmentList(int tenantID)
         {
 
             DataSet ds = new DataSet();
@@ -90,7 +88,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetDepartmentList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -106,10 +104,10 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw ;
             }
             finally
             {
@@ -125,7 +123,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="DepartmentID"></param>
         /// <returns></returns>
-        public List<FuncationMaster> GetFunctionByDepartment(int DepartmentID, int TenantID)
+        public List<FuncationMaster> GetFunctionByDepartment(int departmentID, int tenantID)
         {
 
             DataSet ds = new DataSet();
@@ -138,8 +136,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getFunctionByDepartmentId", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Department_ID", DepartmentID);
-                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@Department_ID", departmentID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -154,10 +152,10 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -200,10 +198,10 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -246,9 +244,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -295,10 +293,10 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -312,7 +310,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         #region SMTP Information 
 
-        public SMTPDetails GetSMTPDetails(int TenantID)
+        public SMTPDetails GetSMTPDetails(int tenantID)
         {
             DataSet ds = new DataSet();
             SMTPDetails sMTPDetails = new SMTPDetails();
@@ -325,7 +323,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getSMTPDetails", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -340,9 +338,9 @@ namespace Easyrewardz_TicketSystem.Services
                     sMTPDetails.SMTPServer = Convert.ToString(ds.Tables[0].Rows[0]["SMTPHost"]);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw (ex);
+                throw;
             }
             finally
             {
@@ -362,7 +360,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get City List
         /// </summary>
         /// <returns></returns>
-        public List<CityMaster> GetCitylist(int StateId)
+        public List<CityMaster> GetCitylist(int stateID)
         {
 
             DataSet ds = new DataSet();
@@ -374,7 +372,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetCityList", conn);
-                cmd1.Parameters.AddWithValue("@State_Id", StateId);
+                cmd1.Parameters.AddWithValue("@State_Id", stateID);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
@@ -392,10 +390,10 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -439,10 +437,10 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -485,10 +483,10 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -504,7 +502,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Add Department
         /// </summary>
         /// <returns></returns>
-        public int AddDepartment(string DepartmentName, int TenantID, int CreatedBy)
+        public int AddDepartment(string departmentName, int tenantID, int createdBy)
         {
             int success = 0;
             try
@@ -512,16 +510,16 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_AddDepartment", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Department_Name", DepartmentName);
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
-                cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
+                cmd.Parameters.AddWithValue("@Department_Name", departmentName);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@Created_By", createdBy);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                throw ex;
+                throw ;
             }
             finally
             {
@@ -538,7 +536,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///Add function
         /// </summary>
         /// <returns></returns>
-        public int Addfunction(int DepartmentID, string FunctionName, int TenantID, int CreatedBy)
+        public int Addfunction(int departmentID, string functionName, int tenantID, int createdBy)
         {
             int success = 0;
             try
@@ -546,17 +544,17 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_AddFunction", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Department_ID", DepartmentID);
-                cmd.Parameters.AddWithValue("@Function_Name", FunctionName);
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
-                cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
+                cmd.Parameters.AddWithValue("@Department_ID", departmentID);
+                cmd.Parameters.AddWithValue("@Function_Name", functionName);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@Created_By", createdBy);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -569,7 +567,7 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
-        public List<StoreTypeMaster> GetStoreNameWithsStoreCode(int TenantID)
+        public List<StoreTypeMaster> GetStoreNameWithsStoreCode(int tenantID)
         {
             DataSet ds = new DataSet();
             List<StoreTypeMaster> storeMaster = new List<StoreTypeMaster>();
@@ -581,7 +579,7 @@ namespace Easyrewardz_TicketSystem.Services
                 
                 MySqlCommand cmd = new MySqlCommand("SP_GetStoreCodewithStoreName", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -597,10 +595,10 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -616,7 +614,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get Language List
         /// </summary>
         /// <returns></returns>
-        public List<LanguageModel> GetLanguageList(int TenantID)
+        public List<LanguageModel> GetLanguageList(int tenantID)
         {
 
             DataSet ds = new DataSet();
@@ -667,7 +665,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get CountryStateCity
         /// </summary>
         /// <returns></returns>
-        public List<CommonModel> GetCountryStateCityList(int TenantID,string Pincode)
+        public List<CommonModel> GetCountryStateCityList(int tenantID,string pinCode)
         {
 
             DataSet ds = new DataSet();
@@ -681,7 +679,7 @@ namespace Easyrewardz_TicketSystem.Services
                 CommonModel commonModel = new CommonModel();
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetCountryStateCity", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@_PinCode", Pincode);
+                cmd1.Parameters.AddWithValue("@_PinCode", pinCode);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -743,9 +741,9 @@ namespace Easyrewardz_TicketSystem.Services
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                throw ex;
+                throw ;
             }
             finally
             {
@@ -761,7 +759,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// GetLogedInEmail
         /// </summary>
         /// <returns></returns>
-        public CustomGetEmailID GetLogedInEmail(int UserID, int TenantID)
+        public CustomGetEmailID GetLogedInEmail(int userID, int tenantID)
         {
             DataSet ds = new DataSet();
             CustomGetEmailID customGetEmailID = new CustomGetEmailID(); 
@@ -770,8 +768,8 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("Sp_GetLogInEmailID", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@User_ID", UserID);
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@User_ID", userID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -786,10 +784,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string messages = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {

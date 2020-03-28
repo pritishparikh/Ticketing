@@ -5,14 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class ModuleService : IModules
     {
 
-        #region Cunstructor
+        #region Constructor
         MySqlConnection conn = new MySqlConnection();
 
         public ModuleService(string _connectionString)
@@ -27,9 +26,9 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// UpdateModules
         /// </summary>
-        public int UpdateModules(int tenantID, int ModuleID, string ModulesActive, string ModuleInactive, int ModifiedBy)
+        public int UpdateModules(int tenantID, int moduleID, string modulesActive, string moduleInactive, int modifiedBy)
         {
-            int updatecount = 0;
+            int updateCount = 0;
 
             try
             {
@@ -37,20 +36,20 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("Sp_UpdateModuleItems", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", tenantID);
-                cmd.Parameters.AddWithValue("@_ModuleID", ModuleID);
-                cmd.Parameters.AddWithValue("@_modifiedBy", ModifiedBy);
+                cmd.Parameters.AddWithValue("@_ModuleID", moduleID);
+                cmd.Parameters.AddWithValue("@_modifiedBy", modifiedBy);
 
-                cmd.Parameters.AddWithValue("@_ActiveModuleItems",!string.IsNullOrEmpty(ModulesActive)? ModulesActive: "");
-                cmd.Parameters.AddWithValue("@_InactiveModuleItems", !string.IsNullOrEmpty(ModuleInactive) ? ModuleInactive : "" ); 
+                cmd.Parameters.AddWithValue("@_ActiveModuleItems",!string.IsNullOrEmpty(modulesActive)? modulesActive: "");
+                cmd.Parameters.AddWithValue("@_InactiveModuleItems", !string.IsNullOrEmpty(moduleInactive) ? moduleInactive : "" ); 
         
                 cmd.CommandType = CommandType.StoredProcedure;
-                updatecount = cmd.ExecuteNonQuery();
-                updatecount =Convert.ToInt32(cmd.ExecuteScalar());
+                updateCount = cmd.ExecuteNonQuery();
+                updateCount = Convert.ToInt32(cmd.ExecuteScalar());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+               
+                throw;
             }
             finally
             {
@@ -60,7 +59,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return updatecount;
+            return updateCount;
         }
 
 
@@ -70,7 +69,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// GetModulesItemList
         /// </summary>
-        public List<ModuleItems> GetModulesItemList(int tenantID, int ModuleID)
+        public List<ModuleItems> GetModulesItemList(int tenantID, int moduleID)
         {
             List<ModuleItems> objModuleItemLst = new List<ModuleItems>();
             DataSet ds = new DataSet();
@@ -84,7 +83,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.CommandType = CommandType.StoredProcedure;
 
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
-                cmd1.Parameters.AddWithValue("@_moduleID", ModuleID);
+                cmd1.Parameters.AddWithValue("@_moduleID", moduleID);
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
@@ -96,7 +95,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         objModuleItemLst = ds.Tables[0].AsEnumerable().Select(r => new ModuleItems()
                         {
-                            ModuleID = ModuleID,
+                            ModuleID = moduleID,
                             ModuleItemID = r.Field<object>("ModuleItemID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("ModuleItemID")),
                             ModuleItemName   = r.Field<object>("ModuleItemName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModuleItemName")),
                             ModuleItemisActive = r.Field<object>("IsActive") == System.DBNull.Value ? false: Convert.ToBoolean(Convert.ToInt16(r.Field<object>("IsActive"))),
@@ -107,10 +106,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                
+                throw;
             }
             finally
             {
@@ -161,10 +160,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                
+                throw ;
             }
             finally
             {

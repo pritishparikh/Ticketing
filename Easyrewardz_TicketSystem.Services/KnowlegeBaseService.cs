@@ -24,7 +24,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///  <param name="SubCategory"></param>
         ///   <param name="type"></param>
         /// <returns></returns>
-        public List<KnowlegeBaseMaster> SearchByCategory(int type_ID, int Category_ID, int SubCategory_ID,int TenantId)
+        public List<KnowlegeBaseMaster> SearchByCategory(int type_ID, int category_ID, int subCategory_ID,int tenantId)
         {
             DataSet ds = new DataSet();
             List<KnowlegeBaseMaster> listknowledge = new List<KnowlegeBaseMaster>();
@@ -34,9 +34,9 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_SearchByTypeCategory", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@type_ID", type_ID);
-                cmd.Parameters.AddWithValue("@Category_ID", Category_ID);
-                cmd.Parameters.AddWithValue("@SubCategory_ID", SubCategory_ID);
-                cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
+                cmd.Parameters.AddWithValue("@Category_ID", category_ID);
+                cmd.Parameters.AddWithValue("@SubCategory_ID", subCategory_ID);
+                cmd.Parameters.AddWithValue("@Tenant_Id", tenantId);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -53,9 +53,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -67,7 +67,7 @@ namespace Easyrewardz_TicketSystem.Services
             return listknowledge;
         }
 
-        public CustomKBList SearchKB(int Category_ID, int SubCategory_ID, int type_ID, int TenantId)
+        public CustomKBList SearchKB(int category_ID, int subCategory_ID, int type_ID, int tenantId)
         {
 
             DataSet ds = new DataSet();
@@ -84,9 +84,9 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_SearchKB", conn);
 
                 cmd1.Parameters.AddWithValue("@type_ID", type_ID);
-                cmd1.Parameters.AddWithValue("@Category_ID", Category_ID);
-                cmd1.Parameters.AddWithValue("@SubCategory_ID", SubCategory_ID);
-                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.Parameters.AddWithValue("@Category_ID", category_ID);
+                cmd1.Parameters.AddWithValue("@SubCategory_ID", subCategory_ID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantId);
                 cmd1.CommandType = CommandType.StoredProcedure;
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -111,11 +111,7 @@ namespace Easyrewardz_TicketSystem.Services
                         approved.Description = ds.Tables[0].Rows[i]["Description"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Description"]);
                         approved.IsApproveStatus = ds.Tables[0].Rows[i]["IsApprove"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsApprove"]);
 
-
-
-
                         kBisApproveds.Add(approved);
-
                     }
 
                     customKBLists.Approved = kBisApproveds;
@@ -145,10 +141,10 @@ namespace Easyrewardz_TicketSystem.Services
                     customKBLists.NotApproved = kBisNotApproveds;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw ;
             }
             finally
             {
@@ -165,7 +161,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
 
             MySqlCommand cmd = new MySqlCommand();
-            int k = 0;
+            int success = 0;
             try
             {
                 conn.Open();
@@ -183,12 +179,12 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@IssueType_ID", knowlegeBaseMaster.IssueTypeID);
                 cmd1.Parameters.AddWithValue("@Created_By", knowlegeBaseMaster.CreatedBy);
 
-                k = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                success = Convert.ToInt32(cmd1.ExecuteNonQuery());
             }
-            catch (Exception ex)
+            catch (Exception )
             {
 
-                throw ex;
+                throw ;
             }
             finally
             {
@@ -198,7 +194,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return k;
+            return success;
 
         }
 
@@ -207,7 +203,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
 
             MySqlCommand cmd = new MySqlCommand();
-            int i = 0;
+            int success = 0;
             try
             {
                 conn.Open();
@@ -225,13 +221,13 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Modify_By", knowlegeBaseMaster.ModifyBy);
 
                 cmd1.CommandType = CommandType.StoredProcedure;
-                i = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                success = Convert.ToInt32(cmd1.ExecuteNonQuery());
                 conn.Close();
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                throw;
             }
             finally
             {
@@ -241,28 +237,28 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return i;
+            return success;
         }
 
 
-        public int DeleteKB(int KBID, int TenantId)
+        public int DeleteKB(int kBID, int tenantId)
         {
             MySqlCommand cmd = new MySqlCommand();
-            int k = 0;
+            int success = 0;
             try
             {
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_DeleteKnowlegeBase", conn);
-                cmd1.Parameters.AddWithValue("@KB_ID", KBID);
-                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.Parameters.AddWithValue("@KB_ID", kBID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantId);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                k = Convert.ToInt32(cmd1.ExecuteScalar());
+                success = Convert.ToInt32(cmd1.ExecuteScalar());
             }
-            catch (Exception ex)
+            catch (Exception )
             {
 
-                throw ex;
+                throw ;
             }
             finally
             {
@@ -272,11 +268,11 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return k;
+            return success;
         }
 
 
-        public CustomKBList KBList(int TenantId)
+        public CustomKBList KBList(int tenantID)
         {
             DataSet ds = new DataSet();
             CustomKBList customKBLists = new CustomKBList();
@@ -291,7 +287,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_KBList", conn);
 
-                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 cmd1.CommandType = CommandType.StoredProcedure;
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -350,10 +346,10 @@ namespace Easyrewardz_TicketSystem.Services
                     customKBLists.NotApproved = kBisNotApproveds;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw ;
             }
             finally
             {
@@ -370,7 +366,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
 
             MySqlCommand cmd = new MySqlCommand();
-            int i = 0;
+            int result  = 0;
             try
             {
 
@@ -385,16 +381,14 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@IssueType_ID", knowlegeBaseMaster.IssueTypeID);
                 cmd1.Parameters.AddWithValue("@Subject_", knowlegeBaseMaster.Subject);
                 cmd1.Parameters.AddWithValue("@Description_", knowlegeBaseMaster.Description);
-                
-
                 cmd1.CommandType = CommandType.StoredProcedure;
-                i = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                result = Convert.ToInt32(cmd1.ExecuteNonQuery());
                 conn.Close();
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                throw;
             }
             finally
             {
@@ -404,7 +398,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return i;
+            return result;
         }
 
     }

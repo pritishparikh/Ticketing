@@ -5,14 +5,13 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public class OrderService : IOrder
     {
-        #region Cunstructor
+        #region Constructor
         MySqlConnection conn = new MySqlConnection();
         public OrderService(string _connectionString)
         {
@@ -24,7 +23,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="OrderNumber"></param>
         /// <returns></returns>
-        public OrderMaster getOrderbyNumber(string OrderNumber, int TenantId)
+        public OrderMaster getOrderbyNumber(string orderNumber, int tenantID)
         {
             OrderMaster orderMasters = new OrderMaster();
             MySqlCommand cmd = new MySqlCommand();
@@ -33,8 +32,8 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getOrderByNumber", conn);
-                cmd1.Parameters.AddWithValue("@objOrderNumber", OrderNumber);
-                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantId);
+                cmd1.Parameters.AddWithValue("@objOrderNumber", orderNumber);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", tenantID);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter sd = new MySqlDataAdapter(cmd1);
                 DataTable dt = new DataTable();
@@ -46,9 +45,9 @@ namespace Easyrewardz_TicketSystem.Services
                     orderMasters.OrderNumber = Convert.ToString(dt.Rows[0]["OrderNumber"]);
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                throw;
             }
             finally
             {
@@ -64,7 +63,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="orderMaster"></param>
         /// <returns></returns>
-        public string addOrderDetails(OrderMaster orderMaster, int TenantId)
+        public string addOrderDetails(OrderMaster orderMaster, int tenantID)
         {
             MySqlCommand cmd = new MySqlCommand();
             int i = 0;
@@ -74,7 +73,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createOrder", conn);
-                cmd1.Parameters.AddWithValue("@TenantID", TenantId);
+                cmd1.Parameters.AddWithValue("@TenantID", tenantID);
                 cmd1.Parameters.AddWithValue("@ProductBarCode", orderMaster.ProductBarCode);
                 cmd1.Parameters.AddWithValue("@OrderNumber", orderMaster.OrderNumber);
                 cmd1.Parameters.AddWithValue("@BillID", orderMaster.BillID);
@@ -95,9 +94,9 @@ namespace Easyrewardz_TicketSystem.Services
                 OrderNumber = Convert.ToString(cmd1.ExecuteScalar());
                 conn.Close();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                throw;
             }
             finally
             {
@@ -114,7 +113,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="OrderNumber"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<CustomOrderMaster> getOrderListwithItemDetail(string OrderNumber, int CustomerID, int TenantID)
+        public List<CustomOrderMaster> getOrderListwithItemDetail(string orderNumber, int customerID, int tenantID)
         {
 
             DataSet ds = new DataSet();
@@ -125,9 +124,9 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_OrderDetails", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Order_ID", OrderNumber);
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
-                cmd.Parameters.AddWithValue("@Customer_ID", CustomerID);
+                cmd.Parameters.AddWithValue("@Order_ID", orderNumber);
+                cmd.Parameters.AddWithValue("@Tenant_ID", customerID);
+                cmd.Parameters.AddWithValue("@Customer_ID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
@@ -170,10 +169,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -190,7 +189,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="CustomerID"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<CustomOrderDetailsByCustomer> getOrderListByCustomerID(int CustomerID, int TenantID)
+        public List<CustomOrderDetailsByCustomer> getOrderListByCustomerID(int customerID, int tenantID)
         {
             DataSet ds = new DataSet();
             List<CustomOrderDetailsByCustomer> objorderMaster = new List<CustomOrderDetailsByCustomer>();
@@ -200,8 +199,8 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_OrderDetailsByCustomerID", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Customer_ID", CustomerID);
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Customer_ID", customerID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
@@ -263,7 +262,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ClaimID"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public CustomOrderDetailsByClaim getOrderListByClaimID(int CustomerID, int ClaimID, int TenantID)
+        public CustomOrderDetailsByClaim getOrderListByClaimID(int customerID, int claimID, int tenantID)
         {
             DataSet ds = new DataSet();
             CustomOrderDetailsByClaim customClaimMaster = new CustomOrderDetailsByClaim();
@@ -273,13 +272,12 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_GetOrderDetailByClaimID", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Claim_ID", ClaimID);
-                cmd.Parameters.AddWithValue("@Customer_ID", CustomerID);
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Claim_ID", claimID);
+                cmd.Parameters.AddWithValue("@Customer_ID", customerID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
-                // CustomOrderDetailsByClaim customClaimMaster = new CustomOrderDetailsByClaim();
                 if (ds != null && ds.Tables[0] != null)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -297,8 +295,6 @@ namespace Easyrewardz_TicketSystem.Services
                         customClaimMaster.MobileNumber = Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
                         customClaimMaster.EmailID = Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
                         customClaimMaster.Gender = Convert.ToInt32(ds.Tables[0].Rows[i]["GenderID"]);
-
-
                         customClaimMaster.OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
                         customClaimMaster.OrderNumber = Convert.ToString(ds.Tables[0].Rows[i]["OrderNumber"]);
                         customClaimMaster.InvoiceNumber = Convert.ToString(ds.Tables[0].Rows[i]["BillID"]);
@@ -336,10 +332,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -356,7 +352,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="CustomerID"></param>
         /// <param name="productName"></param>
         /// <returns></returns>
-        public List<CustomSearchProduct> SearchProduct(int CustomerID, string productName)
+        public List<CustomSearchProduct> SearchProduct(int customerID, string productName)
         {
             List<CustomSearchProduct> productlist = new List<CustomSearchProduct>();
             DataSet ds = new DataSet();
@@ -365,7 +361,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_SearchProduct", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Customer_ID", CustomerID);
+                cmd.Parameters.AddWithValue("@Customer_ID", customerID);
                 cmd.Parameters.AddWithValue("@product_Name", productName);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
@@ -384,9 +380,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -404,7 +400,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TicketId"></param>
         /// <param name="CreatedBy"></param>
         /// <returns></returns>
-        public int AttachOrder(string OrderID, int TicketId, int CreatedBy)
+        public int AttachOrder(string orderID, int ticketID, int createdBy)
         {
             int Success = 0;
             try
@@ -412,17 +408,17 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_BulkTicketOrderAttachMapping", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Ticket_Id", TicketId);
-                cmd.Parameters.AddWithValue("@OrderIDs", OrderID);
-                cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
+                cmd.Parameters.AddWithValue("@Ticket_Id", ticketID);
+                cmd.Parameters.AddWithValue("@OrderIDs", orderID);
+                cmd.Parameters.AddWithValue("@Created_By", createdBy);
                 cmd.CommandType = CommandType.StoredProcedure;
                 Success = Convert.ToInt32(cmd.ExecuteScalar());
                 conn.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -434,7 +430,7 @@ namespace Easyrewardz_TicketSystem.Services
             return Success;
         }
 
-        public List<CustomOrderMaster> getOrderDetailByTicketID(int TicketID, int TenantID)
+        public List<CustomOrderMaster> getOrderDetailByTicketID(int ticketID, int tenantID)
         {
             DataSet ds = new DataSet();
             List<CustomOrderMaster> objorderMaster = new List<CustomOrderMaster>();
@@ -444,8 +440,8 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_GetOrderDetailByTicketID", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Ticket_ID", TicketID);
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Ticket_ID", ticketID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
@@ -485,10 +481,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {

@@ -13,7 +13,7 @@ namespace Easyrewardz_TicketSystem.Services
     public class NotificationService : INotification
     {
 
-        #region Cunstructor
+        #region Constructor
         MySqlConnection conn = new MySqlConnection();
         public NotificationService(string _connectionString)
         {
@@ -23,9 +23,9 @@ namespace Easyrewardz_TicketSystem.Services
 
         #region Custom Methods
 
-        public NotificationModel GetNotification(int TenantID, int UserID)
+        public NotificationModel GetNotification(int tenantID, int userID)
         {
-            List<TicketNotificationModel> TicketNoti = new List<TicketNotificationModel>();
+            List<TicketNotificationModel> ticketNoti = new List<TicketNotificationModel>();
             NotificationModel objNotiLst = new NotificationModel();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -36,10 +36,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetNotifications", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@_tenantID", TenantID);
-                cmd1.Parameters.AddWithValue("@_userID", UserID);
-
-
+                cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
+                cmd1.Parameters.AddWithValue("@_userID", userID);
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
@@ -49,7 +47,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        TicketNoti = ds.Tables[0].AsEnumerable().Select(r => new TicketNotificationModel()
+                        ticketNoti = ds.Tables[0].AsEnumerable().Select(r => new TicketNotificationModel()
                         {
                             TicketCount = Convert.ToInt32(r.Field<object>("TicketCount")),
                             NotificationMessage = r.Field<object>("ActionName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ActionName")),
@@ -58,10 +56,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                         }).ToList();
 
-                        if(TicketNoti.Count > 0)
+                        if(ticketNoti.Count > 0)
                         {
-                            objNotiLst.NotiCount = TicketNoti.Where(x => x.TicketCount > 0).Select(x=> x.TicketCount).Sum();
-                            objNotiLst.TicketNotification = TicketNoti.Where(x => x.TicketCount > 0).ToList() ; 
+                            objNotiLst.NotiCount = ticketNoti.Where(x => x.TicketCount > 0).Select(x=> x.TicketCount).Sum();
+                            objNotiLst.TicketNotification = ticketNoti.Where(x => x.TicketCount > 0).ToList() ; 
                         }
                         
 
@@ -69,10 +67,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                
+                throw;
             }
             finally
             {
@@ -85,28 +83,28 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-        public int ReadNotification(int TenantID, int UserID, int TicketID, int IsFollowUp)
+        public int ReadNotification(int tenantID, int userID, int ticketID, int IsFollowUp)
         {
-            int updatecount = 0;
+            int updateCount = 0;
             try
             {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateOnReadNotifications", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@_tenantID", TenantID);
-                cmd.Parameters.AddWithValue("@_userID", UserID);
-                cmd.Parameters.AddWithValue("@_ticketId", TicketID);
+                cmd.Parameters.AddWithValue("@_tenantID", tenantID);
+                cmd.Parameters.AddWithValue("@_userID", userID);
+                cmd.Parameters.AddWithValue("@_ticketId", ticketID);
                 cmd.Parameters.AddWithValue("@_IsFollowUp", IsFollowUp);
                 cmd.CommandType = CommandType.StoredProcedure;
-                updatecount = cmd.ExecuteNonQuery();
+                updateCount = cmd.ExecuteNonQuery();
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                
+                throw;
             }
 
-            return updatecount;
+            return updateCount;
         }
 
 
