@@ -1,13 +1,12 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using System.Linq;
-using Easyrewardz_TicketSystem.CustomModel;
-using Newtonsoft.Json;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -20,14 +19,17 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
         #endregion
-
+        /// <summary>
+        /// Search Tickets
+        /// </summary>
+        /// <param name="SearchRequest"></param>
+        /// <returns></returns>
         public List<SearchResponse> SearchTickets(SearchRequest searchparams)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
-            List<SearchResponse> temp = new List<SearchResponse>(); //delete later
-            List<string> CountList = new List<string>();
+            List<string> countList = new List<string>();
 
             int rowStart = (searchparams.pageNo - 1) * searchparams.pageSize;
             try
@@ -118,10 +120,7 @@ namespace Easyrewardz_TicketSystem.Services
                             Priority = Convert.ToString(r.Field<object>("PriortyName")),
                             Assignee = Convert.ToString(r.Field<object>("AssignedName")),
                             CreatedOn = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedOn"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedOn")),
-
-
                             createdBy = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedByName"))) ? string.Empty : Convert.ToString(r.Field<object>("CreatedByName")),
-
                             createdago = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("CreatedDate"))) ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("CreatedDate")), "CreatedSpan"),
                             assignedTo = string.IsNullOrEmpty(Convert.ToString(r.Field<object>("AssignedName"))) ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
 
@@ -142,7 +141,6 @@ namespace Easyrewardz_TicketSystem.Services
 
                             TaskStatus = Convert.ToString(r.Field<object>("TaskDetails")),
                             ClaimStatus = Convert.ToString(r.Field<object>("ClaimDetails")),
-                            //TicketCommentCount = Convert.ToInt32(r.Field<object>("TicketComments")),
                             TicketCommentCount = (string.IsNullOrEmpty(Convert.ToString(r.Field<object>("TicketComments")))) ? 0 : Convert.ToInt32(r.Field<object>("TicketComments")),
                             isEscalation = Convert.ToInt32(r.Field<object>("IsEscalated"))
 
@@ -150,18 +148,6 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-                //temporary filter for react binding
-
-                //if(objSearchResult.Count > 0)
-                //temp.Add(objSearchResult.Select(x => x).FirstOrDefault());
-
-                //if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
-                //    temp[0].totalpages = temp.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(temp.Count / searchparams.pageSize)) : 1;
-
-                //********
-
-
-                //paging here
                 if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
                     objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
 
@@ -176,10 +162,13 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 if (ds != null) ds.Dispose(); conn.Close();
             }
-            return objSearchResult;
-            //return temp;   
+            return objSearchResult; 
         }
-
+        /// <summary>
+        /// Ticket Status Count
+        /// </summary>
+        /// <param name="SearchRequest"></param>
+        /// <returns></returns>
         public List<TicketStatusModel> TicketStatusCount(SearchRequest searchparams)
         {
             List<TicketStatusModel> ticketCount = new List<TicketStatusModel>();
@@ -245,8 +234,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
-            List<SearchResponse> temp = new List<SearchResponse>(); //delete later
-            List<string> CountList = new List<string>();
+            List<string> countList = new List<string>();
 
             //int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
@@ -325,7 +313,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Get tickets on the page load
+        /// Get Tickets On Search
         /// </summary>
         /// <param name="HeaderStatus_ID"></param>
         /// <param name="Tenant_ID"></param>
@@ -336,10 +324,8 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<SearchResponse> objSearchResult = new List<SearchResponse>();
-            List<SearchResponse> temp = new List<SearchResponse>(); //delete later
             List<string> CountList = new List<string>();
 
-            int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
