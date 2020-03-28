@@ -47,7 +47,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Date of Birth
         /// </summary>
-        public DateTime DateOfBirth { get; set; }
+        public DateTime?  DateOfBirth { get; set; }
 
         /// <summary>
         /// Alternate Email Id
