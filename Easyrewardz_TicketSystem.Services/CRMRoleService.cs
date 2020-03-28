@@ -5,12 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-   public  class CRMRoleService : ICRMRole
+    public  class CRMRoleService : ICRMRole
     {
 
         #region variable
@@ -27,8 +26,15 @@ namespace Easyrewardz_TicketSystem.Services
 
         #region CustomMethods
         /// <summary>
-        /// Create CRM Role
+        /// Insert & Update CRMRole
         /// </summary>
+        /// <param name="CRMRoleID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="RoleName"></param>
+        /// <param name="RoleisActive"></param>
+        /// <param name="UserID"></param>
+        /// <param name="ModulesEnabled"></param>
+        /// <param name="ModulesDisabled"></param>
         public int InsertUpdateCRMRole(int CRMRoleID,int tenantID, string RoleName, bool RoleisActive, int UserID, string ModulesEnabled, string ModulesDisabled)
         {
 
@@ -58,10 +64,9 @@ namespace Easyrewardz_TicketSystem.Services
                 count = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -74,10 +79,12 @@ namespace Easyrewardz_TicketSystem.Services
             return count;
         }
 
-     
+
         /// <summary>
-        /// Delete CRM Role
+        /// Delete CRMRole
         /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="CRMRoleID"></param>
         public int DeleteCRMRole(int tenantID, int CRMRoleID)
         {
             int deletecount = 0;
@@ -93,10 +100,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 deletecount = Convert.ToInt32(cmd.ExecuteScalar());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -112,6 +118,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get CRM Role List
         /// </summary>
+        /// <param name="tenantID"></param>
         public List<CRMRoleModel> GetCRMRoleList(int tenantID)
         {
             List<CRMRoleModel> objCRMLst = new List<CRMRoleModel>();
@@ -167,10 +174,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -179,6 +185,10 @@ namespace Easyrewardz_TicketSystem.Services
             return objCRMLst;
         }
 
+        /// <summary>
+        /// Get CRM Role Dropdown
+        /// </summary>
+        /// <param name="tenantID"></param>
         public List<CRMRoleModel> GetCRMRoleDropdown(int tenantID)
         {
 
@@ -207,10 +217,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -223,6 +232,11 @@ namespace Easyrewardz_TicketSystem.Services
             return objCRMLst;
         }
 
+        /// <summary>
+        /// Get CRM Role By UserID
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="UserID"></param>
         public CRMRoleModel GetCRMRoleByUserID(int tenantID, int UserID)
         {
             CRMRoleModel cRMRoleModel = new CRMRoleModel();
@@ -280,9 +294,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -297,10 +311,13 @@ namespace Easyrewardz_TicketSystem.Services
             return cRMRoleModel;
         }
 
-        // <summary>
-        /// BulkUploadCRMRole
+        /// <summary>
+        /// Bulk Upload CRM Role
         /// </summary>
-        /// 
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="RoleFor"></param>
+        /// <param name="DataSetCSV"></param>
         public List<string> BulkUploadCRMRole(int TenantID, int CreatedBy, int RoleFor, DataSet DataSetCSV)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -353,10 +370,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {

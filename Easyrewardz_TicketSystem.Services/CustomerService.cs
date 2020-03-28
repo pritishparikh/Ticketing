@@ -4,7 +4,6 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -23,6 +22,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get Customer By Id
         /// </summary>
         /// <param name="CustomerID"></param>  
+        /// <param name="TenantId"></param>  
         /// <returns></returns>
         public CustomerMaster getCustomerbyId(int CustomerID,int TenantId)
         {
@@ -37,8 +37,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Customer_ID", CustomerID);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
@@ -55,9 +57,9 @@ namespace Easyrewardz_TicketSystem.Services
                     customerMaster.DOB = customerMaster.DateOfBirth.ToString("dd/MM/yyyy");
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                throw;
             }
             finally
             {
@@ -73,8 +75,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Customer BY Email and PhoneNo
         /// </summary>
-        /// <param name="Email"></param>
-        /// <param name="Phoneno"></param>
+        /// <param name="searchText"></param>
+        /// <param name="TenantId"></param>
         /// <returns></returns>
         public List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText, int TenantId)
         {
@@ -97,18 +99,20 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        CustomerMaster customer = new CustomerMaster();
-                        customer.CustomerName = Convert.ToString(dt.Rows[i]["CustomerName"]);
-                        customer.CustomerID = Convert.ToInt32(dt.Rows[i]["CustomerID"]);
+                        CustomerMaster customer = new CustomerMaster
+                        {
+                            CustomerName = Convert.ToString(dt.Rows[i]["CustomerName"]),
+                            CustomerID = Convert.ToInt32(dt.Rows[i]["CustomerID"])
+                        };
 
                         customerMasters.Add(customer);
                     }
                 }
                 conn.Close();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                throw;
             }
             finally
             {
@@ -124,6 +128,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Add Customer Detail
         /// </summary>
         /// <param name="customerMaster"></param>
+        /// <param name="TenantId"></param>
         /// <returns></returns>
         public int addCustomerDetails(CustomerMaster customerMaster,int TenantId)
         {
@@ -150,9 +155,9 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Close();
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                throw;
             }
             finally
             {
@@ -167,9 +172,10 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        /// Update Customer
+        /// Update Customer Details
         /// </summary>
         /// <param name="customerMaster"></param>
+        /// <param name="TenantId"></param>
         /// <returns></returns>
         public int updateCustomerDetails(CustomerMaster customerMaster,int TenantId)
         {
@@ -194,9 +200,9 @@ namespace Easyrewardz_TicketSystem.Services
                 i = cmd1.ExecuteNonQuery();
                 conn.Close();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                throw;
             }
             finally
             {
@@ -234,9 +240,9 @@ namespace Easyrewardz_TicketSystem.Services
                 message = Convert.ToString(cmd1.ExecuteScalar());
                 conn.Close();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                throw;
             }
             finally
             {

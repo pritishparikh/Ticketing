@@ -5,7 +5,6 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -18,8 +17,9 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Get Designation List
+        /// Get Designations
         /// </summary>
+        /// <param name="TenantID"></param>
         /// <returns></returns>
         public List<DesignationMaster> GetDesignations(int TenantID)
         {
@@ -33,8 +33,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getDesignationMaster", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
@@ -48,10 +50,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -64,6 +65,13 @@ namespace Easyrewardz_TicketSystem.Services
             return designationMasters;
         }
 
+        /// <summary>
+        /// Get Reportee Designation
+        /// </summary>
+        /// <param name="DesignationID"></param>
+        /// <param name="HierarchyFor"></param>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         public List<DesignationMaster> GetReporteeDesignation(int DesignationID, int HierarchyFor, int TenantID)
         {
             DataSet ds = new DataSet();
@@ -76,8 +84,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetReporteeDesignation", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
                 cmd1.Parameters.AddWithValue("@Designation_ID", DesignationID);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd1.Parameters.AddWithValue("@Hierarchy_For", HierarchyFor);        
@@ -93,10 +103,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -109,6 +118,13 @@ namespace Easyrewardz_TicketSystem.Services
             return designationMasters;
         }
 
+        /// <summary>
+        /// Get Report To User
+        /// </summary>
+        /// <param name="DesignationID"></param>
+        /// <param name="IsStoreUser"></param>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         public List<CustomSearchTicketAgent> GetReportToUser(int DesignationID, int IsStoreUser, int TenantID)
         {
             DataSet ds = new DataSet();
@@ -121,8 +137,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetUserBasedonReportee", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
                 cmd1.Parameters.AddWithValue("@Designation_ID", DesignationID);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd1.Parameters.AddWithValue("@Is_StoreUser", IsStoreUser);
@@ -138,10 +156,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {

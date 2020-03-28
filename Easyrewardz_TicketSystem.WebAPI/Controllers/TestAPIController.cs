@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Easyrewardz_TicketSystem.CustomModel;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -21,7 +16,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("values")]
-        public ResponseModel values()
+        public ResponseModel Values()
         {
             int StatusCode = (int)EnumMaster.StatusCode.Success;
             string statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

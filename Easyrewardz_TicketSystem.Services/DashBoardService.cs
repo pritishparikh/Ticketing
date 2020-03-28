@@ -9,7 +9,6 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -26,8 +25,14 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
 
         /// <summary>
-        /// Load Dashboard Data 
+        /// Get DashBoard Count Data
         /// </summary>
+        /// <param name="BrandID"></param>  
+        /// <param name="UserID"></param>  
+        /// <param name="fromdate"></param>  
+        /// <param name="todate"></param>  
+        /// <param name="TenantID"></param>  
+        /// <returns></returns>
         public DashBoardDataModel GetDashBoardCountData(string BrandID, string UserID, string fromdate, string todate, int TenantID)
         {
             DataSet ds = new DataSet();
@@ -178,16 +183,22 @@ namespace Easyrewardz_TicketSystem.Services
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             return dashBoarddata;
         }
 
         /// <summary>
-        /// Load Dashboard Graph Data
+        /// Get DashBoard Graph data
         /// </summary>
+        /// <param name="BrandID"></param>  
+        /// <param name="UserID"></param>  
+        /// <param name="fromdate"></param>  
+        /// <param name="todate"></param>  
+        /// <param name="TenantID"></param>  
+        /// <returns></returns>
         public DashBoardGraphModel GetDashBoardGraphdata(string BrandID, string UserID, string fromdate, string todate, int TenantID)
         {
 
@@ -287,16 +298,18 @@ namespace Easyrewardz_TicketSystem.Services
                 #endregion
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             return dashBoardGraphdata;
         }
 
         /// <summary>
-        /// Get tickets on the dashboard
+        /// Get Dashboard Tickets On Search
         /// </summary>
+        /// <param name="searchModel"></param>  
+        /// <returns></returns>
         public List<SearchResponseDashBoard> GetDashboardTicketsOnSearch(SearchModelDashBoard searchModel)
         {
             DataSet ds = new DataSet();
@@ -304,8 +317,6 @@ namespace Easyrewardz_TicketSystem.Services
             List<SearchResponseDashBoard> objSearchResult = new List<SearchResponseDashBoard>();
 
             List<string> CountList = new List<string>();
-
-            int rowStart = 0; // searchparams.pageNo - 1) * searchparams.pageSize;
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -432,8 +443,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 sqlcmd.CommandType = CommandType.StoredProcedure;
 
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = sqlcmd;
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = sqlcmd
+                };
                 da.Fill(ds);
 
                 if (ds != null && ds.Tables != null)
@@ -452,19 +465,19 @@ namespace Easyrewardz_TicketSystem.Services
                             Assignee = r.Field<object>("AssignedName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
                             CreatedOn = r.Field<object>("CreatedOn") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedOn")),
                             createdBy = r.Field<object>("CreatedByName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedByName")),
-                            createdago = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("CreatedDate")), "CreatedSpan"),
+                            createdago = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(r.Field<object>("CreatedDate")), "CreatedSpan"),
                             assignedTo = r.Field<object>("AssignedName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AssignedName")),
-                            assignedago = r.Field<object>("AssignedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("AssignedDate")), "AssignedSpan"),
+                            assignedago = r.Field<object>("AssignedDate") == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(r.Field<object>("AssignedDate")), "AssignedSpan"),
                             updatedBy = r.Field<object>("ModifyByName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModifyByName")),
-                            updatedago = r.Field<object>("ModifiedDate") == System.DBNull.Value ? string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("ModifiedDate")), "ModifiedSpan"),
+                            updatedago = r.Field<object>("ModifiedDate") == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(r.Field<object>("ModifiedDate")), "ModifiedSpan"),
 
                             responseTimeRemainingBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityRespond") == System.DBNull.Value) ?
-                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
+                            string.Empty : SetCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "RespondTimeRemainingSpan"),
                             responseOverdueBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityRespond") == System.DBNull.Value) ?
-                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
+                            string.Empty : SetCreationdetails(Convert.ToString(r.Field<object>("PriorityRespond")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResponseOverDueSpan"),
 
                             resolutionOverdueBy = (r.Field<object>("AssignedDate") == System.DBNull.Value || r.Field<object>("PriorityResolve") == System.DBNull.Value) ?
-                            string.Empty : setCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
+                            string.Empty : SetCreationdetails(Convert.ToString(r.Field<object>("PriorityResolve")) + "|" + Convert.ToString(r.Field<object>("AssignedDate")), "ResolutionOverDueSpan"),
 
                             TaskStatus = r.Field<object>("TaskDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TaskDetails")),
                             ClaimStatus = r.Field<object>("ClaimDetails") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ClaimDetails")),
@@ -484,10 +497,9 @@ namespace Easyrewardz_TicketSystem.Services
 
                 //objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -497,8 +509,10 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Export DashBoard search result to CSV
+        /// DashBoard Search Data To CSV
         /// </summary>
+        /// <param name="searchModel"></param>  
+        /// <returns></returns>
         public string DashBoardSearchDataToCSV(SearchModelDashBoard searchModel)
         {
             List<SearchResponseDashBoard> objSearchResult = new List<SearchResponseDashBoard>();
@@ -513,15 +527,21 @@ namespace Easyrewardz_TicketSystem.Services
                     csv = CommonService.ListToCSV(objSearchResult, "");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
 
             return csv;
         }
 
+        /// <summary>
+        /// Get Loggin Account Info
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="ProfilePicPath"></param>
+        /// <returns></returns>
         public LoggedInAgentModel GetLogginAccountInfo(int tenantID, int UserID,string ProfilePicPath)
         {
             DataSet ds = new DataSet();
@@ -546,8 +566,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("_tenantID", tenantID);
                 cmd1.Parameters.AddWithValue("_userID", UserID);
 
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
                 da.Fill(ds);
 
                 if (ds != null && ds.Tables.Count > 0)
@@ -608,10 +630,9 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -621,6 +642,14 @@ namespace Easyrewardz_TicketSystem.Services
             return loggedInAcc;
         }
 
+        /// <summary>
+        /// Add DashBoard Search
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="SearchSaveName"></param>
+        /// <param name="parameter"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
         public int AddDashBoardSearch(int UserID, string SearchSaveName, string parameter, int TenantId)
         {
             int i = 0;
@@ -637,9 +666,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -651,7 +680,12 @@ namespace Easyrewardz_TicketSystem.Services
             return i;
         }
 
-
+        /// <summary>
+        /// Delete DashBoard Saved Search
+        /// </summary>
+        /// <param name="SearchParamID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public int DeleteDashBoardSavedSearch(int SearchParamID, int UserID)
         {
             int i = 0;
@@ -665,9 +699,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -679,6 +713,11 @@ namespace Easyrewardz_TicketSystem.Services
             return i;
         }
 
+        /// <summary>
+        /// List Saved DashBoard Search
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public List<UserTicketSearchMaster> ListSavedDashBoardSearch(int UserID)
         {
 
@@ -706,9 +745,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -719,6 +758,13 @@ namespace Easyrewardz_TicketSystem.Services
             return listSavedSearch;
         }
 
+        /// <summary>
+        /// Get DashBoard Tickets On Saved Search
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="SearchParamID"></param>
+        /// <returns></returns>
         public DashBoardSavedSearch GetDashBoardTicketsOnSavedSearch(int TenantID, int UserID, int SearchParamID)
         {
             string jsonSearchParams = string.Empty;
@@ -737,8 +783,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd.Parameters.AddWithValue("@searchFor", 1);
                 cmd.CommandType = CommandType.StoredProcedure;
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd;
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
@@ -767,10 +815,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                //throw ex;
+                throw;
             }
             finally
             {
@@ -779,13 +826,16 @@ namespace Easyrewardz_TicketSystem.Services
             return dbsavedsearch;
         }
 
-        /// <summary>
-        /// Creation Details Mapping
-        /// </summary>
+
         #region Mapping
 
-
-        public string setCreationdetails(string time, string ColName)
+        /// <summary>
+        /// set Creation details
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="ColName"></param>
+        /// <returns></returns>
+        public string SetCreationdetails(string time, string ColName)
         {
             string timespan = string.Empty;
             DateTime now = DateTime.Now;
@@ -877,7 +927,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -894,7 +944,7 @@ namespace Easyrewardz_TicketSystem.Services
         //    DateTime now = DateTime.Now;
         //    TimeSpan diff = new TimeSpan();
         //    string[] PriorityArr = null;
-           
+
 
         //    try
         //    {
@@ -967,6 +1017,11 @@ namespace Easyrewardz_TicketSystem.Services
         //    return timespan;
         //}
 
+        /// <summary>
+        /// Calculate Span
+        /// </summary>
+        /// <param name="ts"></param>
+        /// <returns></returns>
         public string CalculateSpan(TimeSpan ts)
         {
             string span = string.Empty;

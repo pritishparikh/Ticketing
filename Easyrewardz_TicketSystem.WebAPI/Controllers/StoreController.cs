@@ -1,5 +1,4 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
-using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
@@ -12,9 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -53,65 +50,58 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("searchStoreDetail")]
-        public ResponseModel searchStoreDetail(string SearchText)
+        public ResponseModel SearchStoreDetail(string SearchText)
         {
             List<StoreMaster> objstoreList = new List<StoreMaster>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                StoreCaller _newStore = new StoreCaller();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                StoreCaller newStore = new StoreCaller();
 
-                objstoreList = _newStore.getStoreDetailbyNameAndPincode(new StoreService(_connectionString), SearchText, authenticate.TenantId);
+                objstoreList = newStore.getStoreDetailbyNameAndPincode(new StoreService(_connectionString), SearchText, authenticate.TenantId);
                 StatusCode =
                 objstoreList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objstoreList;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objstoreList;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
-        /// Search Store
+        /// Get Stores on basis of text
         /// </summary>
-        /// <param name="store"></param>
         /// <param name="searchText"></param>
-        /// <param name="tenantID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("getStores")]
-        public ResponseModel getStores(string searchText)
+        public ResponseModel GetStores(string searchText)
         {
             List<StoreMaster> storeMasters = new List<StoreMaster>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                StoreCaller _newMasterBrand = new StoreCaller();
+                StoreCaller newMasterBrand = new StoreCaller();
 
-                storeMasters = _newMasterBrand.getStores(new StoreService(_connectionString), searchText, authenticate.TenantId);
+                storeMasters = newMasterBrand.getStores(new StoreService(_connectionString), searchText, authenticate.TenantId);
 
                 StatusCode =
                 storeMasters.Count == 0 ?
@@ -119,104 +109,89 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = storeMasters;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = storeMasters;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// Add Store
         /// </summary>
-        /// <param name="TaskMaster"></param>
+        /// <param name="storeMaster"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("createstore")]
-        public ResponseModel createstore([FromBody]StoreMaster storeMaster)
+        public ResponseModel Createstore([FromBody]StoreMaster storeMaster)
         {
-            StoreCaller _newStore = new StoreCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            StoreCaller newStore = new StoreCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _newStore.AddStore(new StoreService(_connectionString), storeMaster, authenticate.TenantId, authenticate.UserMasterID);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                int result = newStore.AddStore(new StoreService(_connectionString), storeMaster, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = false;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// Edit Store
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="storeMaster"></param>
+        /// <param name="StoreID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("editstore")]
-        public ResponseModel editstore([FromBody]StoreMaster storeMaster, int StoreID)
+        public ResponseModel Editstore([FromBody]StoreMaster storeMaster, int StoreID)
         {
-            StoreCaller _newStore = new StoreCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            StoreCaller newStore = new StoreCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _newStore.EditStore(new StoreService(_connectionString), storeMaster, authenticate.TenantId, authenticate.UserMasterID);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                int result = newStore.EditStore(new StoreService(_connectionString), storeMaster, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -226,37 +201,32 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("deleteStore")]
-        public ResponseModel deleteStore(int StoreID)
+        public ResponseModel DeleteStore(int StoreID)
         {
-            StoreCaller _newStore = new StoreCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            StoreCaller newStore = new StoreCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                int result = _newStore.DeleteStore(new StoreService(_connectionString), StoreID, authenticate.TenantId, authenticate.UserMasterID);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                int result = newStore.DeleteStore(new StoreService(_connectionString), StoreID, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -269,122 +239,108 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel StoreList()
         {
             List<CustomStoreList> objstoreList = new List<CustomStoreList>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                StoreCaller _newStore = new StoreCaller();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                StoreCaller newStore = new StoreCaller();
 
-                objstoreList = _newStore.StoreList(new StoreService(_connectionString), authenticate.TenantId);
+                objstoreList = newStore.StoreList(new StoreService(_connectionString), authenticate.TenantId);
                 StatusCode =
                 objstoreList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objstoreList;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objstoreList;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// Search Store
         /// </summary>
-        /// <param name="Storename"></param>
-        /// <param name="Storecode"></param>
-        /// <param name="Pincode"></param>
+        /// <param name="StateID"></param>
+        /// <param name="PinCode"></param>
+        /// <param name="Area"></param>
+        /// <param name="IsCountry"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("searchStore")]
-        public ResponseModel searchStore(int StateID, int PinCode, string Area, bool IsCountry)
+        public ResponseModel SearchStore(int StateID, int PinCode, string Area, bool IsCountry)
         {
             List<StoreMaster> objstoreList = new List<StoreMaster>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                StoreCaller _newStore = new StoreCaller();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                StoreCaller newStore = new StoreCaller();
 
-                objstoreList = _newStore.SearchStore(new StoreService(_connectionString), StateID, PinCode, Area, IsCountry);
+                objstoreList = newStore.SearchStore(new StoreService(_connectionString), StateID, PinCode, Area, IsCountry);
                 StatusCode =
                 objstoreList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objstoreList;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objstoreList;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// attach store
         /// </summary>
-        /// <param name="OrderitemID"></param>
+        /// <param name="StoreId"></param>
         /// <param name="TicketId"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("attachstore")]
-        public ResponseModel attachstore(string StoreId, int TicketId)
+        public ResponseModel Attachstore(string StoreId, int TicketId)
         {
-            StoreCaller _newStore = new StoreCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            StoreCaller newStore = new StoreCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                int result = _newStore.AttachStore(new StoreService(_connectionString), StoreId, TicketId, authenticate.UserMasterID);
+                int result = newStore.AttachStore(new StoreService(_connectionString), StoreId, TicketId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
@@ -395,21 +351,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getSelectedStores")]
-        public ResponseModel getSelectedStores(int TicketID)
+        public ResponseModel GetSelectedStores(int TicketID)
         {
             List<StoreMaster> storeMasters = new List<StoreMaster>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                StoreCaller _newMasterStore = new StoreCaller();
+                StoreCaller newMasterStore = new StoreCaller();
 
-                storeMasters = _newMasterStore.getSelectedStores(new StoreService(_connectionString), TicketID);
+                storeMasters = newMasterStore.getSelectedStores(new StoreService(_connectionString), TicketID);
 
                 StatusCode =
                 storeMasters.Count == 0 ?
@@ -417,36 +373,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = storeMasters;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = storeMasters;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// Bulk Upload Store
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="File"></param>
+        /// <param name="StoreFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadStore")]
         public ResponseModel BulkUploadStore(IFormFile File,int StoreFor = 1)
         {
-            StoreCaller _newMasterStore = new StoreCaller();
+            StoreCaller newMasterStore = new StoreCaller();
 
             string DownloadFilePath = string.Empty;
             string BulkUploadFilesPath = string.Empty;
@@ -455,8 +406,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             int count = 0;
 
             List<string> CSVlist = new List<string>();
-            SettingsCaller _newFile = new SettingsCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            SettingsCaller newFile = new SettingsCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             DataSet DataSetCSV = new DataSet();
@@ -508,9 +459,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     }
                 }
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 #region FilePath
                 BulkUploadFilesPath = appRoot + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor);
@@ -562,7 +513,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 #endregion
 
                 DataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + finalAttchment);
-                CSVlist = _newMasterStore.StoreBulkUpload(new StoreService(_connectionString), authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
+                CSVlist = newMasterStore.StoreBulkUpload(new StoreService(_connectionString), authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
 
                 #region Create Error and Succes files and  Insert in FileUploadLog
                 
@@ -572,7 +523,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 if (!string.IsNullOrEmpty(CSVlist[1]))
                     errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Store\\Error" + "\\" + "StoreErrorFile.csv", CSVlist[1]);
 
-                count = _newFile.CreateFileUploadLog(new FileUploadService(_connectionString), authenticate.TenantId, "StoreBulkUpload.csv", errorfilesaved,
+                count = newFile.CreateFileUploadLog(new FileUploadService(_connectionString), authenticate.TenantId, "StoreBulkUpload.csv", errorfilesaved,
                                    "StoreErrorFile.csv", "StoreSuccessFile.csv", authenticate.UserMasterID, "Store",
                                    DownloadFilePath + "\\Store\\Error" + "\\" + "StoreErrorFile.csv",
                                    DownloadFilePath + "\\Store\\ Success" + "\\" + "StoreSuccessFile.csv", 1
@@ -581,22 +532,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = count;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = count;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
 
 
         }

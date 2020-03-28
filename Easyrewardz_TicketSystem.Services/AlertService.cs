@@ -1,12 +1,10 @@
-﻿using Easyrewardz_TicketSystem.CustomModel;
-using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -26,6 +24,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Create Alert 
         /// </summary>
+        /// <param name="alertModel"></param>
+        /// <returns></returns>
         public int InsertAlert(AlertInsertModel alertModel)
         {
             int InsertAlertID = 0; int AlertConfigInsertCount = 0;
@@ -80,10 +80,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -97,8 +96,12 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Update Alert
+        /// Update Alert 
         /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="ModifiedBy"></param>
+        /// <param name="alertModel"></param>
+        /// <returns></returns>
         public int UpdateAlert(int tenantId, int ModifiedBy, AlertUpdateModel alertModel)
         {
             int updatecount = 0;
@@ -145,10 +148,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             }
             finally
             {
@@ -162,8 +164,11 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Delete Alert
+        /// Delete Alert 
         /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="AlertID"></param>
+        /// <returns></returns>
         public int DeleteAlert(int tenantID, int AlertID)
         {
             int deletecount = 0;
@@ -180,10 +185,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 deletecount = cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+
+                throw;
             }
             finally
             {
@@ -197,8 +202,10 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Get Alert List
+        /// Bind Alert 
         /// </summary>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
         public List<AlertList> BindAlerts(int tenantID)
         {
             List<AlertList> objAlertLst = new List<AlertList>();
@@ -233,10 +240,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+
+                throw;
             }
             finally
             {
@@ -251,6 +258,9 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Alert List
         /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="alertID"></param>
+        /// <returns></returns>
         public List<AlertModel> GetAlertList(int tenantID, int alertID)
         {
             List<AlertModel> objAlertLst = new List<AlertModel>();
@@ -358,10 +368,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+
+                throw;
             }
             finally
             {
@@ -373,6 +383,13 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        /// <summary>
+        /// Bulk Upload Alert
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="DataSetCSV"></param>
+        /// <returns></returns>
         public int BulkUploadAlert(int TenantID, int CreatedBy, DataSet DataSetCSV)
         {
             int uploadcount = 0;
@@ -401,10 +418,10 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+
+                throw;
             }
             finally
             {
@@ -420,6 +437,12 @@ namespace Easyrewardz_TicketSystem.Services
             return uploadcount;
         }
 
+        /// <summary>
+        /// Validate Alert
+        /// </summary>
+        /// <param name="AlertID"></param>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         public string ValidateAlert(int AlertID, int TenantID)
         {
 
@@ -437,10 +460,9 @@ namespace Easyrewardz_TicketSystem.Services
                 Message = Convert.ToString(cmd.ExecuteScalar());
                 conn.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string messages = Convert.ToString(ex.InnerException);
-                throw ex;
+                throw;
             } 
             finally
             {

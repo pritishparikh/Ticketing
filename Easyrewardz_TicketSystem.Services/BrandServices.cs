@@ -4,10 +4,6 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Text;
-using System.Linq;
-using Easyrewardz_TicketSystem.DBContext;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -20,6 +16,11 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
+        /// <summary>
+        /// Get Brand List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         public List<Brand> GetBrandList(int TenantID)
         {
 
@@ -52,10 +53,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -68,6 +68,11 @@ namespace Easyrewardz_TicketSystem.Services
             return brands;
         }
 
+        /// <summary>
+        /// Update Brand
+        /// </summary>
+        /// <param name="brand"></param>
+        /// <returns></returns>
         public int UpdateBrand(Brand brand)
         {
 
@@ -90,9 +95,9 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Close();
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-                //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
+                throw;
             }
             finally
             {
@@ -105,6 +110,12 @@ namespace Easyrewardz_TicketSystem.Services
             return i;
         }
 
+        /// <summary>
+        /// Delete Brand
+        /// </summary>
+        /// <param name="BrandID"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
         public int DeleteBrand(int BrandID, int TenantId)
         {
             MySqlCommand cmd = new MySqlCommand();
@@ -119,10 +130,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.CommandType = CommandType.StoredProcedure;
                 k = Convert.ToInt32(cmd1.ExecuteScalar());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -135,6 +145,11 @@ namespace Easyrewardz_TicketSystem.Services
             return k;
         }
 
+        /// <summary>
+        /// Brand List
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
         public List<Brand> BrandList(int TenantId)
         {
             List<Brand> brands = new List<Brand>();
@@ -175,10 +190,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -191,6 +205,12 @@ namespace Easyrewardz_TicketSystem.Services
             return brands;
         }
 
+        /// <summary>
+        /// Add Brand
+        /// </summary>
+        /// <param name="brand"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
         public int AddBrand(Brand brand, int TenantId)
         {
 
@@ -210,10 +230,9 @@ namespace Easyrewardz_TicketSystem.Services
 
                 success = Convert.ToInt32(cmd1.ExecuteScalar());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {

@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Easyrewardz_TicketSystem.CustomModel;
-using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using static System.Net.Mime.MediaTypeNames;
-using System.Net;
-using System.Web;
-using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -53,51 +46,46 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("gettitlesuggestions")]
-        public ResponseModel gettitlesuggestions(string TikcketTitle)
+        public ResponseModel Gettitlesuggestions(string TikcketTitle)
         {
             List<TicketTitleDetails> objTicketList = new List<TicketTitleDetails>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                TicketingCaller _newTicket = new TicketingCaller();
+                TicketingCaller newTicket = new TicketingCaller();
 
-                objTicketList = _newTicket.GetAutoSuggestTicketList(new TicketingService(_connectioSting), TikcketTitle, authenticate.TenantId);
+                objTicketList = newTicket.GetAutoSuggestTicketList(new TicketingService(_connectioSting), TikcketTitle, authenticate.TenantId);
                 StatusCode =
                 objTicketList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objTicketList;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objTicketList;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// Create Ticket
         /// </summary>
         /// <param name="ticketingDetails"></param>
+        /// <param name="File"></param>
         /// <returns></returns>
-
         [HttpPost]
         [Route("createTicket")]
-        public ResponseModel createTicket(IFormFile File)
+        public ResponseModel CreateTicket(IFormFile File)
         {
             TicketingDetails ticketingDetails = new TicketingDetails();
             var files = Request.Form.Files;
@@ -105,7 +93,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string fileName = "";
             string finalAttchment = "";
             string ResponseMessage = "";
-            string ErrorResponseMessage = "";
 
             if (files.Count > 0)
             {
@@ -120,16 +107,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
             List<TicketingDetails> objTicketList = new List<TicketingDetails>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                TicketingCaller _newTicket = new TicketingCaller();
+                TicketingCaller newTicket = new TicketingCaller();
 
                 ticketingDetails.TenantID = authenticate.TenantId;
                 ticketingDetails.CreatedBy = authenticate.UserMasterID; ///Created  By from the token
@@ -141,7 +128,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 var appRoot = appPathMatcher.Match(exePath).Value;
                 string Folderpath = appRoot + "\\" + _ticketAttachmentFolderName;
 
-                int result = _newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
+                int result = newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
 
                 if(ticketingDetails.StatusID == 100)
                 {
@@ -181,72 +168,69 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = ResponseMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = ResponseMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                if (ticketingDetails.StatusID == 100)
-                {
-                    ErrorResponseMessage = "Draft not created.";
-                }
-                else
-                {
-                    ErrorResponseMessage = "Ticket not created.";
-                }
+                //if (ticketingDetails.StatusID == 100)
+                //{
+                //    ErrorResponseMessage = "Draft not created.";
+                //}
+                //else
+                //{
+                //    ErrorResponseMessage = "Ticket not created.";
+                //}
 
-                _objResponseModel.Status = false;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = ErrorResponseMessage;
-                _objResponseModel.ResponseData = null;
+                //objResponseModel.Status = false;
+                //objResponseModel.StatusCode = StatusCode;
+                //objResponseModel.Message = ErrorResponseMessage;
+                //objResponseModel.ResponseData = null;
+
+                throw;
 
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
+
         /// <summary>
         /// Get Draft Details
         /// </summary>
         /// <param name="ticketingDetails"></param>
         /// <returns></returns>
-
         [HttpPost]
         [Route("GetDraftDetails")]
         public ResponseModel GetDraftDetails()
         {
             List<CustomDraftDetails> objDraftDetails = new List<CustomDraftDetails>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 int UserID = authenticate.UserMasterID;
-                objDraftDetails = _TicketCaller.GetDraft(new TicketingService(_connectioSting), UserID, authenticate.TenantId);
+                objDraftDetails = TicketCaller.GetDraft(new TicketingService(_connectioSting), UserID, authenticate.TenantId);
                 StatusCode =
                 objDraftDetails.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objDraftDetails;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objDraftDetails;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -259,84 +243,73 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("searchAgent")]
-        public ResponseModel searchAgent(string FirstName, string LastName, string Email, int DesignationID)
+        public ResponseModel SearchAgent(string FirstName, string LastName, string Email, int DesignationID)
         {
             List<CustomSearchTicketAgent> objSearchagent = new List<CustomSearchTicketAgent>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                objSearchagent = _TicketCaller.SearchAgent(new TicketingService(_connectioSting), FirstName, LastName, Email, DesignationID, authenticate.TenantId);
+                objSearchagent = TicketCaller.SearchAgent(new TicketingService(_connectioSting), FirstName, LastName, Email, DesignationID, authenticate.TenantId);
                 StatusCode =
                 objSearchagent.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objSearchagent;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objSearchagent;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// List of Saved Search
         /// </summary>
-        /// <param name="UserID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("listSavedSearch")]
-        public ResponseModel listSavedSearch()
+        public ResponseModel ListSavedSearch()
         {
             List<UserTicketSearchMaster> objSavedSearch = new List<UserTicketSearchMaster>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 int UserID = authenticate.UserMasterID;
 
-                objSavedSearch = _TicketCaller.ListSavedSearch(new TicketingService(_connectioSting), UserID);
+                objSavedSearch = TicketCaller.ListSavedSearch(new TicketingService(_connectioSting), UserID);
                 StatusCode =
                 objSavedSearch.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objSavedSearch;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objSavedSearch;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -346,237 +319,206 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getsavedsearchbyid")]
-        public ResponseModel getsavedsearchbyid(int SearchParamID)
+        public ResponseModel Getsavedsearchbyid(int SearchParamID)
         {
             UserTicketSearchMaster objSavedSearchbyID = new UserTicketSearchMaster();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                objSavedSearchbyID = _TicketCaller.SavedSearchByID(new TicketingService(_connectioSting), SearchParamID);
+                objSavedSearchbyID = TicketCaller.SavedSearchByID(new TicketingService(_connectioSting), SearchParamID);
                 StatusCode =
                objSavedSearchbyID == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objSavedSearchbyID;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objSavedSearchbyID;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// Delete Saved Searcht
         /// </summary>
-        /// <param name="ticketingDetails"></param>
+        /// <param name="SearchParamID"></param>
         /// <returns></returns>
 
         [HttpPost]
         [Route("deletesavedsearch")]
-        public ResponseModel deletesavedsearch(int SearchParamID)
+        public ResponseModel Deletesavedsearch(int SearchParamID)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 int UserID = authenticate.UserMasterID;
 
-                int result = _TicketCaller.DeleteSavedSearch(new TicketingService(_connectioSting), SearchParamID, UserID);
+                int result = TicketCaller.DeleteSavedSearch(new TicketingService(_connectioSting), SearchParamID, UserID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
-
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
         /// <summary>
         /// save search
         /// </summary>
-        /// <param name="UserID"></param>
-        /// /// <param name="SearchSaveName"></param>
-        /// /// <param name="parameter"></param>
+        /// <param name="SearchSaveName"></param>
+        /// <param name="parameter"></param>
         /// <returns></returns>
-
         [HttpPost]
         [Route("savesearch")]
-
-        public ResponseModel savesearch(string SearchSaveName, string parameter)
+        public ResponseModel Savesearch(string SearchSaveName, string parameter)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                int result = _TicketCaller.SaveSearch(new TicketingService(_connectioSting), authenticate.UserMasterID, SearchSaveName, parameter, authenticate.TenantId);
+                int result = TicketCaller.SaveSearch(new TicketingService(_connectioSting), authenticate.UserMasterID, SearchSaveName, parameter, authenticate.TenantId);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
-
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
+
         /// <summary>
         /// Assign Tickets to Agent(User)
         /// </summary>
-        /// <param name="UserID"></param>
-        /// /// <param name="SearchSaveName"></param>
-        /// /// <param name="parameter"></param>
+        /// <param name="TicketID"></param>
+        /// <param name="AgentID"></param>
+        /// <param name="Remark"></param>
         /// <returns></returns>
-
         [HttpPost]
         [Route("AssignTickets")]
-
         public ResponseModel AssignTickets(string TicketID, int AgentID, string Remark)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                int result = _TicketCaller.AssignTicket(new TicketingService(_connectioSting), TicketID, authenticate.TenantId, authenticate.UserMasterID, AgentID, Remark);
+                int result = TicketCaller.AssignTicket(new TicketingService(_connectioSting), TicketID, authenticate.TenantId, authenticate.UserMasterID, AgentID, Remark);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
-
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// Schedule
         /// </summary>
-        /// <param name="UserID"></param>
-        /// /// <param name="SearchSaveName"></param>
-        /// /// <param name="parameter"></param>
+        /// <param name="scheduleMaster"></param>
         /// <returns></returns>
-
         [HttpPost]
         [Route("Schedule")]
         public ResponseModel Schedule([FromBody]ScheduleMaster scheduleMaster)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                int result = _TicketCaller.Schedule(new TicketingService(_connectioSting), scheduleMaster, authenticate.TenantId, authenticate.UserMasterID);
+                int result = TicketCaller.Schedule(new TicketingService(_connectioSting), scheduleMaster, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                 result >= 0 ?
                        (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
-
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// Export ToCSV
         /// </summary>
-        /// <param name="UserID"></param>
-        /// /// <param name="SearchSaveName"></param>
-        /// /// <param name="parameter"></param>
+        /// <param name="searchparams"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("ExportToCSV")]
         public IActionResult ExportToCSV([FromBody] SearchRequest searchparams)
         {
             List<SearchResponse> _searchResult = null;
-            // string[] _searchResult = null;
             ResponseModel _objResponseModel = new ResponseModel();
             SearchCaller _newsearchMaster = new SearchCaller();
             try
@@ -585,7 +527,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string csv = ExportSearch(_searchResult);
                 return File(new System.Text.UTF8Encoding().GetBytes(csv), "text/csv", "ABC.csv");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return RedirectToAction("", "");
             }
@@ -597,223 +539,216 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return CommonService.ListToCSV(objData, "");
         }
 
+        /// <summary>
+        /// Ge tNotes By Ticket Id
+        /// </summary>
+        /// <param name="TicketId"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("getNotesByTicketId")]
-        public ResponseModel getNotesByTicketId(int TicketId)
+        public ResponseModel GetNotesByTicketId(int TicketId)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                List<TicketNotes> result = _TicketCaller.getNotesByTicketId(new TicketingService(_connectioSting), TicketId);
+                List<TicketNotes> result = TicketCaller.getNotesByTicketId(new TicketingService(_connectioSting), TicketId);
                 StatusCode =
                 result.Count == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
-
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
-        /// getTicketDetailsByTicketId
+        /// Get Ticket Details By Ticket Id
         /// </summary>
         /// <param name="ticketID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("getTicketDetailsByTicketId")]
-        public ResponseModel getTicketDetailsByTicketId(int ticketID)
+        public ResponseModel GetTicketDetailsByTicketId(int ticketID)
         {
             CustomTicketDetail objTicketDetail = new CustomTicketDetail();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 string url = configuration.GetValue<string>("APIURL") + _ticketAttachmentFolderName;
-                objTicketDetail = _TicketCaller.getTicketDetailsByTicketId(new TicketingService(_connectioSting), ticketID, authenticate.TenantId, url);
+                objTicketDetail = TicketCaller.getTicketDetailsByTicketId(new TicketingService(_connectioSting), ticketID, authenticate.TenantId, url);
                 StatusCode =
                objTicketDetail == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objTicketDetail;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objTicketDetail;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
-        /// submitticket
+        /// Update ticket status
         /// </summary>
-        /// <param name="status"></param>
-        /// <param name="TicketID"></param>
+        /// <param name="customTicketSolvedModel"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("Updateticketstatus")]
         public ResponseModel Updateticketstatus([FromBody]CustomTicketSolvedModel customTicketSolvedModel)
         {
-            TicketingCaller _TicketCaller = new TicketingCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            TicketingCaller TicketCaller = new TicketingCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                int result = _TicketCaller.submitticket(new TicketingService(_connectioSting), customTicketSolvedModel, authenticate.UserMasterID, authenticate.TenantId);
+                int result = TicketCaller.submitticket(new TicketingService(_connectioSting), customTicketSolvedModel, authenticate.UserMasterID, authenticate.TenantId);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
+        /// <summary>
+        /// Send Mail
+        /// </summary>
+        /// <param name="EmailID"></param>
+        /// <param name="Mailcc"></param>
+        /// <param name="Mailbcc"></param>
+        /// <param name="Mailsubject"></param>
+        /// <param name="MailBody"></param>
+        /// <param name="informStore"></param>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("SendMail")]
         public ResponseModel SendMail(string EmailID, string Mailcc, string Mailbcc, string Mailsubject, string MailBody, bool informStore, string storeID)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
-            TicketingCaller _ticketingCaller = new TicketingCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            TicketingCaller ticketingCaller = new TicketingCaller();
             MasterCaller masterCaller = new MasterCaller();
 
             try
             {
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
 
                 CommonService commonService = new CommonService();
 
-                bool isUpdate = _ticketingCaller.SendMail(new TicketingService(_connectioSting), sMTPDetails, EmailID, Mailcc, Mailbcc, Mailsubject, MailBody, informStore, storeID, authenticate.TenantId);
+                bool isUpdate = ticketingCaller.SendMail(new TicketingService(_connectioSting), sMTPDetails, EmailID, Mailcc, Mailbcc, Mailsubject, MailBody, informStore, storeID, authenticate.TenantId);
 
                 if (isUpdate)
                 {
-                    _objResponseModel.Status = true;
-                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
-                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
-                    _objResponseModel.ResponseData = "Mail sent successfully.";
+                    objResponseModel.Status = true;
+                    objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                    objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                    objResponseModel.ResponseData = "Mail sent successfully.";
                 }
                 else
                 {
-                    _objResponseModel.Status = false;
-                    _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                    _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                    _objResponseModel.ResponseData = "Mail sent failure.";
+                    objResponseModel.Status = false;
+                    objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                    objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                    objResponseModel.ResponseData = "Mail sent failure.";
                 }
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                _objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
-                _objResponseModel.ResponseData = "We had an error! Sorry about that.";
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
-        /// gettickethistory
+        /// Get ticket history
         /// </summary>
         /// <param name="ticketID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("gettickethistory")]
-        public ResponseModel gettickethistory(int ticketID)
+        public ResponseModel Gettickethistory(int ticketID)
         {
 
 
             List<CustomTicketHistory> objTicketHistory = new List<CustomTicketHistory>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                objTicketHistory = _TicketCaller.getTickethistory(new TicketingService(_connectioSting), ticketID);
+                objTicketHistory = TicketCaller.getTickethistory(new TicketingService(_connectioSting), ticketID);
                 StatusCode =
                objTicketHistory == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objTicketHistory;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objTicketHistory;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -821,43 +756,37 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <param name="ticketID"></param>
         /// <returns></returns>
-
         [HttpPost]
         [Route("GetCountByticketID")]
         public ResponseModel GetCountByticketID(int ticketID)
         {
             CustomCountByTicket objCountByTicket = new CustomCountByTicket();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-                objCountByTicket = _TicketCaller.GetCounts(new TicketingService(_connectioSting), ticketID);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                objCountByTicket = TicketCaller.GetCounts(new TicketingService(_connectioSting), ticketID);
                 StatusCode =
                objCountByTicket == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objCountByTicket;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objCountByTicket;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -867,94 +796,82 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getticketmessage")]
-        public ResponseModel getticketmessage(int ticketID)
+        public ResponseModel Getticketmessage(int ticketID)
         {
             List<TicketMessage> objTicketMessage = new List<TicketMessage>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 string url = configuration.GetValue<string>("APIURL") + _ticketAttachmentFolderName;
-                objTicketMessage = _TicketCaller.TicketMessage(new TicketingService(_connectioSting), ticketID, authenticate.TenantId, url);
+                objTicketMessage = TicketCaller.TicketMessage(new TicketingService(_connectioSting), ticketID, authenticate.TenantId, url);
                 StatusCode =
                objTicketMessage == null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objTicketMessage;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objTicketMessage;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// get agent list
         /// </summary>
-        /// <param name="FirstName"></param>
-
+        /// <param name="TicketID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("getagentlist")]
-        public ResponseModel getagentlist(int TicketID)
+        public ResponseModel Getagentlist(int TicketID)
         {
             List<CustomSearchTicketAgent> objSearchagent = new List<CustomSearchTicketAgent>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                objSearchagent = _TicketCaller.AgentList(new TicketingService(_connectioSting), authenticate.TenantId, TicketID);
+                objSearchagent = TicketCaller.AgentList(new TicketingService(_connectioSting), authenticate.TenantId, TicketID);
                 StatusCode =
                 objSearchagent.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objSearchagent;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objSearchagent;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
         /// Message Comment
         /// </summary>
-        /// <param name="TicketingMailerQue"></param>
+        /// <param name="File"></param>
         /// <returns></returns>
-
         [HttpPost]
         [Route("MessageComment")]
         public ResponseModel MessageComment(IFormFile File)
@@ -983,21 +900,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             var appRoot = appPathMatcher.Match(exePath).Value;
             string Folderpath = appRoot + "\\" + _ticketAttachmentFolderName;
 
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
                 ticketingMailerQue.TenantID = authenticate.TenantId;
                 ticketingMailerQue.CreatedBy = authenticate.UserMasterID;
 
-                int result = _TicketCaller.CommentticketDetail(new TicketingService(_connectioSting), ticketingMailerQue, finalAttchment);
+                int result = TicketCaller.CommentticketDetail(new TicketingService(_connectioSting), ticketingMailerQue, finalAttchment);
                 if (result > 0)
                 {
                     if (files.Count > 0)
@@ -1028,20 +945,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
-
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -1051,153 +964,152 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getprogressbardetail")]
-        public ResponseModel getprogressbardetail(int TicketID)
+        public ResponseModel Getprogressbardetail(int TicketID)
         {
             ProgressBarDetail objProgressBarDetail = new ProgressBarDetail();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                TicketingCaller _Ticket = new TicketingCaller();
+                TicketingCaller Ticket = new TicketingCaller();
 
-                objProgressBarDetail = _Ticket.GetProgressBarDetails(new TicketingService(_connectioSting), TicketID, authenticate.TenantId);
+                objProgressBarDetail = Ticket.GetProgressBarDetails(new TicketingService(_connectioSting), TicketID, authenticate.TenantId);
                 StatusCode =
                 objProgressBarDetail == null ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objProgressBarDetail;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objProgressBarDetail;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
+        /// <summary>
+        /// Ticke tassig for followup
+        /// </summary>
+        /// <param name="TicketID"></param>
+        /// <param name="FollowUPUserID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ticketassigforfollowup")]
-        public ResponseModel ticketassigforfollowup(int TicketID, string FollowUPUserID)
+        public ResponseModel Ticketassigforfollowup(int TicketID, string FollowUPUserID)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
                 int UserID = authenticate.UserMasterID;
-                _TicketCaller.setticketassigforfollowup(new TicketingService(_connectioSting), TicketID, FollowUPUserID, authenticate.UserMasterID);
+                TicketCaller.setticketassigforfollowup(new TicketingService(_connectioSting), TicketID, FollowUPUserID, authenticate.UserMasterID);
                 //StatusCode =
                 //objDraftDetails.Count == 0 ?
                 //     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 //statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
-        
+
+        /// <summary>
+        /// Get tickets for followup
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("getticketsforfollowup")]
-        public ResponseModel getticketsforfollowup()
+        public ResponseModel Getticketsforfollowup()
         {
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 int UserID = authenticate.UserMasterID;
-                string ticketIds = _TicketCaller.getticketsforfollowup(new TicketingService(_connectioSting), authenticate.UserMasterID);
+                string ticketIds = TicketCaller.getticketsforfollowup(new TicketingService(_connectioSting), authenticate.UserMasterID);
                 StatusCode =
                 string.IsNullOrEmpty(ticketIds) ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = ticketIds;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = ticketIds;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
+        /// <summary>
+        /// Ticket unassig from followup
+        /// </summary>
+        /// <param name="TicketIDs"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ticketunassigfromfollowup")]
-        public ResponseModel ticketunassigfromfollowup(string TicketIDs)
+        public ResponseModel Ticketunassigfromfollowup(string TicketIDs)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                TicketingCaller _TicketCaller = new TicketingCaller();
+                TicketingCaller TicketCaller = new TicketingCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 int UserID = authenticate.UserMasterID;
-                bool isUpdate = _TicketCaller.ticketunassigfromfollowup(new TicketingService(_connectioSting), TicketIDs, authenticate.UserMasterID);
+                bool isUpdate = TicketCaller.ticketunassigfromfollowup(new TicketingService(_connectioSting), TicketIDs, authenticate.UserMasterID);
                 StatusCode =
                 isUpdate ?
                      (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
+        /// <summary>
+        /// Update Draft Ticket
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateDraftTicket")]
         public ResponseModel UpdateDraftTicket()
@@ -1222,16 +1134,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
             List<TicketingDetails> objTicketList = new List<TicketingDetails>();
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                TicketingCaller _newTicket = new TicketingCaller();
+                TicketingCaller newTicket = new TicketingCaller();
 
                 ticketingDetails.TenantID = authenticate.TenantId;
                 ticketingDetails.CreatedBy = authenticate.UserMasterID; ///Created  By from the token
@@ -1243,7 +1155,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 var appRoot = appPathMatcher.Match(exePath).Value;
                 string Folderpath = appRoot + "\\" + _ticketAttachmentFolderName;
 
-                int result = _newTicket.UpdateDraftTicket(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
+                int result = newTicket.UpdateDraftTicket(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
 
                 if (result > 0)
                 {
@@ -1285,20 +1197,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = "Ticket updated successfully.";
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = "Ticket updated successfully.";
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _objResponseModel.Status = false;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = "Ticket not created.";
-                _objResponseModel.ResponseData = null;
-
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         #endregion

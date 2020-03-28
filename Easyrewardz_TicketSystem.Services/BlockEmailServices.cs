@@ -4,11 +4,10 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-   public class BlockEmailServices : IBlockEmail
+    public class BlockEmailServices : IBlockEmail
     {
         MySqlConnection conn = new MySqlConnection();
 
@@ -17,6 +16,13 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
+        /// <summary>
+        /// Delete Blocked Email
+        /// </summary>
+        /// <param name="blockEmailID"></param>
+        /// <param name="UserMasterID"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
         public int DeleteBlockEmail(int blockEmailID, int UserMasterID, int TenantId)
         {
             int success = 0;
@@ -31,10 +37,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -47,6 +52,11 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
+        /// <summary>
+        /// Insert Block Email
+        /// </summary>
+        /// <param name="blockEmailMaster"></param>
+        /// <returns></returns>
         public int InsertBlockEmail(BlockEmailMaster blockEmailMaster)
         {
             int success = 0;
@@ -62,9 +72,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = cmd.ExecuteNonQuery();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {
@@ -76,6 +86,11 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
+        /// <summary>
+        /// List of Block Email
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
         public List<BlockEmailMaster> ListBlockEmail(int TenantId)
         {
             DataSet ds = new DataSet();
@@ -109,10 +124,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -125,6 +139,11 @@ namespace Easyrewardz_TicketSystem.Services
             return listBlockEmail;
         }
 
+        /// <summary>
+        /// Update the Block Email
+        /// </summary>
+        /// <param name="blockEmailMaster"></param>
+        /// <returns></returns>
         public int UpdateBlockEmail(BlockEmailMaster blockEmailMaster)
         {
             int success = 0;
@@ -141,9 +160,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = cmd.ExecuteNonQuery();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (Exception)
             {
-
+                throw;
             }
             finally
             {

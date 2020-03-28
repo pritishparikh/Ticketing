@@ -1,17 +1,13 @@
 ﻿using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -19,6 +15,7 @@ namespace Easyrewardz_TicketSystem.Services
     {
         public static string sLogFormat;
         public static string sErrorTime;
+
         /// <summary>
         /// Send Email
         /// </summary>
@@ -84,9 +81,9 @@ namespace Easyrewardz_TicketSystem.Services
 
                 isMailSent = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //throw ex;
+                throw;
             }
             return isMailSent;
         }
@@ -113,9 +110,9 @@ namespace Easyrewardz_TicketSystem.Services
                 return finaltoken;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -140,9 +137,9 @@ namespace Easyrewardz_TicketSystem.Services
                 var finalDecrptToken = UTF8Encoding.UTF8.GetString(resultArray);
                 return finalDecrptToken;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -151,7 +148,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="secreatetoken"></param>
         /// <returns></returns>
-        public Dictionary<string, string> getTokenData(string secreatetoken)
+        public Dictionary<string, string> GetTokenData(string secreatetoken)
         {
             ///As we have double encrypt token
             //1. De-Encrypt
@@ -159,18 +156,19 @@ namespace Easyrewardz_TicketSystem.Services
 
             Dictionary<string, string> tokenData = new Dictionary<string, string>();
 
-            string[] _splitstr = secreatetoken.Split('.');
-            byte[] date = Convert.FromBase64String(_splitstr[1]);
-            byte[] contactdata = Convert.FromBase64String(_splitstr[0]);
+            string[] splitstr = secreatetoken.Split('.');
+            byte[] date = Convert.FromBase64String(splitstr[1]);
+            byte[] contactdata = Convert.FromBase64String(splitstr[0]);
             string actualtoken_value = Encoding.ASCII.GetString(contactdata);
-            string[] _splitactualvalue = actualtoken_value.Split("_");
+            string[] splitactualvalue = actualtoken_value.Split("_");
 
-            tokenData.Add("ProgramCode", _splitactualvalue[0]);
-            tokenData.Add("DomainName", _splitactualvalue[1]);
-            tokenData.Add("AppId", _splitactualvalue[2]);
+            tokenData.Add("ProgramCode", splitactualvalue[0]);
+            tokenData.Add("DomainName", splitactualvalue[1]);
+            tokenData.Add("AppId", splitactualvalue[2]);
 
             return tokenData;
         }
+
         /// <summary>
         /// Export List as CSV
         /// </summary>
@@ -251,9 +249,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// Convert CSV to datatable
         /// </summary>
         /// <typeparam name="T"></typeparam>
-
-
-
         public static DataSet csvToDataSet(string FilePath)
         {
             DataTable dtCsv = new DataTable();
@@ -302,7 +297,7 @@ namespace Easyrewardz_TicketSystem.Services
                     dsCsv.Tables.Add(dtCsv);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -311,6 +306,11 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        /// <summary>
+        /// DataTable To Csv
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
         public static string DataTableToCsv(DataTable table)
         {
             StringBuilder sb = new StringBuilder();
@@ -328,6 +328,12 @@ namespace Easyrewardz_TicketSystem.Services
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Save File
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <param name="FileContent"></param>
+        /// <returns></returns>
         public static bool SaveFile(string filepath, string FileContent)
         {
 
@@ -343,6 +349,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         #region Generate random password
+
         /// <summary>
         /// Generating random password
         /// </summary>
@@ -375,13 +382,17 @@ namespace Easyrewardz_TicketSystem.Services
                     Password += character;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             return Password;
         }
 
+        /// <summary>
+        /// Create Log Files
+        /// </summary>
+        /// <returns></returns>
         public static void CreateLogFiles()
         {
             //sLogFormat used to create log files format :
@@ -395,6 +406,13 @@ namespace Easyrewardz_TicketSystem.Services
             string sDay = DateTime.Now.Day.ToString();
             sErrorTime = sYear + sMonth + sDay;
         }
+
+        /// <summary>
+        /// Error Log
+        /// </summary>
+        /// <param name="sPathName"></param>
+        /// <param name="sErrMsg"></param>
+        /// <returns></returns>
         public static void ErrorLog(string sPathName, string sErrMsg)
         {
            if( File.Exists(sPathName))

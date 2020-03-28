@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Easyrewardz_TicketSystem.CustomModel;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -32,92 +29,92 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
                 _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
             }
-            #endregion
+        #endregion
 
         #region Custom Methods
+
+        /// <summary>
+        /// Get Lis tOf Template For Note
+        /// </summary>
+        /// <param name="IssueTypeID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("getListOfTemplateForNote")]
-        public ResponseModel getListOfTemplateForNote(int IssueTypeID)
+        public ResponseModel GetListOfTemplateForNote(int IssueTypeID)
         {
 
-            List<Template> _objTemplate = new List<Template>();
-            TemplateCaller _templatecaller = new TemplateCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            List<Template> objTemplate = new List<Template>();
+            TemplateCaller templatecaller = new TemplateCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
 
-                _objTemplate = _templatecaller.GetTemplateForNote(new TemplateService(_connectioSting), IssueTypeID, authenticate.TenantId);
+                objTemplate = templatecaller.GetTemplateForNote(new TemplateService(_connectioSting), IssueTypeID, authenticate.TenantId);
                 StatusCode =
-                   _objTemplate.Count == 0 ?
+                   objTemplate.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objTemplate;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objTemplate;
 
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Get Template Content
+        /// </summary>
+        /// <param name="TemplateId"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("getTemplateContent")]
-        public ResponseModel getTemplateContent(int TemplateId)
+        public ResponseModel GetTemplateContent(int TemplateId)
         {
-            Template _objTemplate = new Template();
-            TemplateCaller _templatecaller = new TemplateCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            Template objTemplate = new Template();
+            TemplateCaller templatecaller = new TemplateCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                _objTemplate = _templatecaller.GetTemplateContent(new TemplateService(_connectioSting), TemplateId, authenticate.TenantId);
+                objTemplate = templatecaller.GetTemplateContent(new TemplateService(_connectioSting), TemplateId, authenticate.TenantId);
                 StatusCode =
-                   _objTemplate == null  ?
+                   objTemplate == null  ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objTemplate;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objTemplate;
 
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
@@ -127,26 +124,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Create Template
         /// </summary>
+        /// <param name="TemplateName"></param>
+        /// <param name="TemplateSubject"></param>
+        /// <param name="TemplateBody"></param>
+        /// <param name="issueTypes"></param>
+        /// <param name="isTemplateActive"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("CreateTemplate")]
         public ResponseModel CreateTemplate(string TemplateName, string TemplateSubject, string TemplateBody, string issueTypes, bool isTemplateActive)
         {
             int insertcount = 0;
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newTemplate = new SettingsCaller();
+                SettingsCaller newTemplate = new SettingsCaller();
 
               
-                insertcount = _newTemplate.InsertTemplate(new TemplateService(_connectioSting), authenticate.TenantId,TemplateName, TemplateSubject,
+                insertcount = newTemplate.InsertTemplate(new TemplateService(_connectioSting), authenticate.TenantId,TemplateName, TemplateSubject,
                     TemplateBody, issueTypes, isTemplateActive,authenticate.UserMasterID);
 
                 StatusCode =
@@ -155,50 +157,50 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = insertcount;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = insertcount;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
         /// <summary>
         /// Update Template
         /// </summary>
+        /// <param name="TemplateID"></param>
+        /// <param name="TemplateName"></param>
+        /// <param name="issueType"></param>
+        /// <param name="isTemplateActive"></param>
+        /// <param name="templateSubject"></param>
+        /// <param name="templateContent"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("ModifyTemplate")]
         public ResponseModel ModifyTemplate(int TemplateID, string TemplateName, string issueType, bool isTemplateActive, string templateSubject, string templateContent)
         {
             int updatecount = 0;
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newTemplate = new SettingsCaller();
+                SettingsCaller newTemplate = new SettingsCaller();
 
 
-                updatecount = _newTemplate.UpdateTemplate(new TemplateService(_connectioSting), authenticate.TenantId, TemplateID, TemplateName, issueType, isTemplateActive,
+                updatecount = newTemplate.UpdateTemplate(new TemplateService(_connectioSting), authenticate.TenantId, TemplateID, TemplateName, issueType, isTemplateActive,
                 authenticate.UserMasterID, templateSubject, templateContent);
 
                 StatusCode =
@@ -207,48 +209,43 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = updatecount;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = updatecount;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
         /// <summary>
         /// Delete Template
         /// </summary>
+        /// <param name="TemplateID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("DeleteTemplate")]
         public ResponseModel DeleteTemplate(int TemplateID)
         {
             int Deletecount = 0;
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newTemplate = new SettingsCaller();
-                Deletecount = _newTemplate.DeleteTemplate(new TemplateService(_connectioSting), authenticate.TenantId, TemplateID );
+                SettingsCaller newTemplate = new SettingsCaller();
+                Deletecount = newTemplate.DeleteTemplate(new TemplateService(_connectioSting), authenticate.TenantId, TemplateID );
 
                 StatusCode =
                 Deletecount == 0 ?
@@ -256,117 +253,102 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = Deletecount;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Deletecount;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
         /// <summary>
-        /// View  Template
+        /// Get  Template
         /// </summary>
         /// <returns></returns>
         [HttpPost]
         [Route("GetTemplate")]
-
         public ResponseModel GetTemplate()
         {
 
-            ResponseModel _objResponseModel = new ResponseModel();
-            List<TemplateModel> _objresponseModel = new List<TemplateModel>();
+            ResponseModel objResponseModel = new ResponseModel();
+            List<TemplateModel> objresponseModel = new List<TemplateModel>();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newTemplate = new SettingsCaller();
-                _objresponseModel = _newTemplate.GetTemplates(new TemplateService(_connectioSting), authenticate.TenantId);
+                SettingsCaller newTemplate = new SettingsCaller();
+                objresponseModel = newTemplate.GetTemplates(new TemplateService(_connectioSting), authenticate.TenantId);
 
-                StatusCode = _objresponseModel.Count > 0 ? (int)EnumMaster.StatusCode.Success  : (int)EnumMaster.StatusCode.RecordNotFound; ;
+                StatusCode = objresponseModel.Count > 0 ? (int)EnumMaster.StatusCode.Success  : (int)EnumMaster.StatusCode.RecordNotFound; ;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objresponseModel;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objresponseModel;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Get Mail Parameter
+        /// </summary>
+        /// <param name="AlertID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetMailParameter")]
         public ResponseModel GetMailParameter(int AlertID)
         {
 
-            ResponseModel _objResponseModel = new ResponseModel();
-            List<MailParameterModel> _objMailParameterModel = new List<MailParameterModel>();
+            ResponseModel objResponseModel = new ResponseModel();
+            List<MailParameterModel> objMailParameterModel = new List<MailParameterModel>();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newTemplate = new SettingsCaller();
-                _objMailParameterModel = _newTemplate.GetMailParameter(new TemplateService(_connectioSting), authenticate.TenantId, AlertID);
+                SettingsCaller newTemplate = new SettingsCaller();
+                objMailParameterModel = newTemplate.GetMailParameter(new TemplateService(_connectioSting), authenticate.TenantId, AlertID);
 
-                StatusCode = _objMailParameterModel.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound; ;
+                StatusCode = objMailParameterModel.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound; ;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objMailParameterModel;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objMailParameterModel;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
         #endregion
 
