@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Easyrewardz_TicketSystem.CustomModel;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -25,7 +22,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         private readonly string _radisCacheServerAddress;
         #endregion
 
-        #region Cunstructor
+        #region Constructor
         public FeatureController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
@@ -46,223 +43,207 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("GetFeaturePlanList")]
         public ResponseModel GetFeaturePlanList()
         {
-            ResponseModel _objResponseModel = new ResponseModel();
+            ResponseModel objResponseModel = new ResponseModel();
             FeaturePlanModel feature = new FeaturePlanModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 FeaturePlanCaller fcaller = new FeaturePlanCaller();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 feature = fcaller.GetFeaturePlan(new FeaturePlanService(_connectioSting),authenticate.TenantId);
 
-                StatusCode = feature == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = feature;
+                statusCode = feature == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = feature;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
         #endregion
 
-        #region Add Feature 
+        /// <summary>
+        ///AddFeature
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddFeature")]
         [AllowAnonymous]
         public ResponseModel AddFeature([FromBody] FeaturesModel objFeatures)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
-            string Result =string.Empty;
-           // FeaturePlanModel feature = new FeaturePlanModel();
-            int StatusCode = 0;
-            //int Result =0;
+            ResponseModel objResponseModel = new ResponseModel();
+            string result =string.Empty;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 FeaturePlanCaller fcaller = new FeaturePlanCaller();
                // authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 objFeatures.UserID = 6;
-                Result = fcaller.AddFeature(new FeaturePlanService(_connectioSting),objFeatures);
+                result = fcaller.AddFeature(new FeaturePlanService(_connectioSting),objFeatures);
 
-                StatusCode = Result !=""  ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode = result != ""  ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = Result;
-                _objResponseModel.ResponseData = Result;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
         #endregion
 
         #region Delete Feature 
+        /// <summary>
+        /// Delete Future
+        /// </summary>
+        /// <param name="FeatureID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("DeleteFeature")]
         [AllowAnonymous]
         public ResponseModel DeleteFeature(int FeatureID)
         {
-            ResponseModel _objResponseModel = new ResponseModel();
-            int Result = 0;
-            // FeaturePlanModel feature = new FeaturePlanModel();
-            int StatusCode = 0;
-            //int Result =0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int result = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 FeaturePlanCaller fcaller = new FeaturePlanCaller();
                 // authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 int UserID = 6;
-               
-                Result = fcaller.DeleteFeature(new FeaturePlanService(_connectioSting), UserID, FeatureID);
 
-                StatusCode = Result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                result = fcaller.DeleteFeature(new FeaturePlanService(_connectioSting), UserID, FeatureID);
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = Result;
+                statusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
         #endregion
 
         #region Add Plan
+        /// <summary>
+        /// Add new plan
+        /// </summary>
+        /// <param name="planModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddPlan")]
         public ResponseModel AddPlan([FromBody] PlanModel planModel)
         {
-            FeaturePlanCaller _newfeaturePlanCaller = new FeaturePlanCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            FeaturePlanCaller newfeaturePlanCaller = new FeaturePlanCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
 
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 planModel.CreatedBy = authenticate.UserMasterID;
 
-                int result = _newfeaturePlanCaller.AddPlan(new FeaturePlanService(_connectioSting), planModel);
+                int result = newfeaturePlanCaller.AddPlan(new FeaturePlanService(_connectioSting), planModel);
 
-                StatusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode = result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         #endregion
-
+        /// <summary>
+        /// Get plan on edit
+        /// </summary>
+        /// <returns></returns>
         #region GetPlanOnEdit
         [HttpPost]
         [Route("GetPlanOnEdit")]
         public ResponseModel GetPlanOnEdit()
         {
             List<PlanModel> objplanModels = new List<PlanModel>();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel  objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                FeaturePlanCaller _newFeaturePlanCaller = new FeaturePlanCaller();
+                FeaturePlanCaller newFeaturePlanCaller = new FeaturePlanCaller();
 
-                objplanModels = _newFeaturePlanCaller.GetPlanOnEdit(new FeaturePlanService(_connectioSting), authenticate.TenantId);
+                objplanModels = newFeaturePlanCaller.GetPlanOnEdit(new FeaturePlanService(_connectioSting), authenticate.TenantId);
 
-                StatusCode =
+                statusCode =
                 objplanModels.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = objplanModels;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objplanModels;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         #endregion
 
-        #endregion
 
     }
 }

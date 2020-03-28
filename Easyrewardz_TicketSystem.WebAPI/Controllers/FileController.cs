@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -29,7 +27,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Constructor
 
         /// <summary>
-        /// Brand Controller
+        /// File Controller
         /// </summary>
         /// <param name="_iConfig"></param>
         public FileController(IConfiguration _iConfig)
@@ -52,43 +50,33 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel GetFileUploadLogs()
         {
 
-            ResponseModel _objResponseModel = new ResponseModel();
-            List<FileUploadLogs> _objresponseModel = new List<FileUploadLogs>();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            List<FileUploadLogs> objresponseModel = new List<FileUploadLogs>();
+            int statusCode = 0;
             string statusMessage = "";
             int fileuploadFor = 0;
             try
             {
                 //Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
-                SettingsCaller _newAlert = new SettingsCaller();
-
-                _objresponseModel = _newAlert.GetFileUploadLogs(new FileUploadService(_connectioSting), authenticate.TenantId, fileuploadFor);
-                StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objresponseModel;
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                SettingsCaller newAlert = new SettingsCaller();
+                objresponseModel = newAlert.GetFileUploadLogs(new FileUploadService(_connectioSting), authenticate.TenantId, fileuploadFor);
+                statusCode = objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objresponseModel;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         #endregion

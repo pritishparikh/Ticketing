@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Easyrewardz_TicketSystem.CustomModel;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -45,46 +42,40 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get designation list for the Designation dropdown
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name=""></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetDesignationList")]
         public ResponseModel GetDesignationList()
         {
             List<DesignationMaster> designationMasters = new List<DesignationMaster>();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 DesignationCaller designationCaller = new DesignationCaller();
                 designationMasters = designationCaller.GetDesignations(new DesignationService(_connectioSting), authenticate.TenantId);
 
-                StatusCode =
+                statusCode =
                 designationMasters.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = designationMasters;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = designationMasters;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -97,39 +88,33 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel GetReporteeDesignation(int DesignationID, int HierarchyFor=1)
         {
             List<DesignationMaster> designationMasters = new List<DesignationMaster>();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 DesignationCaller designationCaller = new DesignationCaller();
                 designationMasters = designationCaller.GetReporteeDesignation(new DesignationService(_connectioSting), DesignationID, HierarchyFor,authenticate.TenantId);
 
-                StatusCode =
+                statusCode =
                 designationMasters.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = designationMasters;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = designationMasters;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
         /// <summary>
         /// GetReportTo user based reportee Designation
@@ -141,39 +126,33 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel GetReportTo(int DesignationID, int IsStoreUser=1)
         {
             List<CustomSearchTicketAgent> designationMasters = new List<CustomSearchTicketAgent>();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 DesignationCaller designationCaller = new DesignationCaller();
                 designationMasters = designationCaller.GetReportToUser(new DesignationService(_connectioSting), DesignationID , IsStoreUser, authenticate.TenantId);
 
-                StatusCode =
+                statusCode =
                 designationMasters.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = designationMasters;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = designationMasters;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
         }
         #endregion
     }

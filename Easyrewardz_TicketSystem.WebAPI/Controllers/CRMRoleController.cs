@@ -11,10 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -53,52 +50,42 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel CreateUpdateCRMRole(int CRMRoleID, string RoleName, bool RoleisActive,string ModulesEnabled,string ModulesDisabled)
         {
             int count = 0;
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-               string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-
-
+               string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newCRM = new SettingsCaller();
-
-                   count = _newCRM.InsertUpdateCRMRole(new CRMRoleService(_connectioSting), CRMRoleID, authenticate.TenantId, RoleName, RoleisActive, authenticate.UserMasterID, ModulesEnabled, ModulesDisabled);
+                SettingsCaller newCRM = new SettingsCaller();
+                   count = newCRM.InsertUpdateCRMRole(new CRMRoleService(_connectioSting), CRMRoleID, authenticate.TenantId, RoleName, RoleisActive, authenticate.UserMasterID, ModulesEnabled, ModulesDisabled);
 
                 if(CRMRoleID.Equals(0))
                 {
-                    StatusCode = count == 0 ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
+                    statusCode = count == 0 ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
                 }
                 else
                 {
-                    StatusCode = count == 0 ? (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
+                    statusCode = count == 0 ? (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
                 }
                
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = count;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = count;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -109,43 +96,37 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("DeleteCRMRole")]
         public ResponseModel CRMRol(int CRMRoleID)
         {
-            int Deletecount = 0;
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int deleteCount = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newCRM = new SettingsCaller();
-                Deletecount = _newCRM.DeleteCRMRole(new CRMRoleService(_connectioSting), authenticate.TenantId, CRMRoleID);
+                SettingsCaller newCRM = new SettingsCaller();
+                deleteCount = newCRM.DeleteCRMRole(new CRMRoleService(_connectioSting), authenticate.TenantId, CRMRoleID);
 
-                StatusCode =
-                Deletecount == 0 ? (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
+                statusCode =
+                deleteCount == 0 ? (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode); 
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode); 
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = Deletecount;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = deleteCount;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
@@ -158,42 +139,36 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel GetCRMRoles()
         {
           
-            ResponseModel _objResponseModel = new ResponseModel();
-            List<CRMRoleModel> _objresponseModel = new List<CRMRoleModel>();
-           int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            List<CRMRoleModel> listCRMRole = new List<CRMRoleModel>();
+           int statusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newCRM = new SettingsCaller();
-                _objresponseModel = _newCRM.CRMRoleList(new CRMRoleService(_connectioSting), authenticate.TenantId);
+                SettingsCaller newCRM = new SettingsCaller();
+                listCRMRole = newCRM.CRMRoleList(new CRMRoleService(_connectioSting), authenticate.TenantId);
 
-                StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode = listCRMRole.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objresponseModel;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = listCRMRole;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
@@ -206,42 +181,36 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel GetRolesByUserID()
         {
 
-            ResponseModel _objResponseModel = new ResponseModel();
-            CRMRoleModel _objresponseModel = new CRMRoleModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            CRMRoleModel  objCRMRoleModel = new CRMRoleModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newCRM = new SettingsCaller();
-                _objresponseModel = _newCRM.GetCRMRoleByUserID(new CRMRoleService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
+                SettingsCaller newCRM = new SettingsCaller();
+                objCRMRoleModel = newCRM.GetCRMRoleByUserID(new CRMRoleService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
 
-                StatusCode = _objresponseModel == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode = objCRMRoleModel == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objresponseModel;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objCRMRoleModel;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
         /// <summary>
@@ -253,42 +222,36 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel GetCRMRoleDropdown()
         {
 
-            ResponseModel _objResponseModel = new ResponseModel();
-            List<CRMRoleModel> _objresponseModel = new List<CRMRoleModel>();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            List<CRMRoleModel> objCRMRoleModel = new List<CRMRoleModel>();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                SettingsCaller _newCRM = new SettingsCaller();
-                _objresponseModel = _newCRM.CRMRoleDropdown(new CRMRoleService(_connectioSting), authenticate.TenantId);
+                SettingsCaller newCRM = new SettingsCaller();
+                objCRMRoleModel = newCRM.CRMRoleDropdown(new CRMRoleService(_connectioSting), authenticate.TenantId);
 
-                StatusCode = _objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode = objCRMRoleModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = _objresponseModel;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objCRMRoleModel;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
 
 
@@ -300,17 +263,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("BulkUploadCRMRole")]
         public ResponseModel BulkUploadCRMRole(IFormFile File,int RoleFor=1)
         {
-            string DownloadFilePath = string.Empty;
-            string BulkUploadFilesPath = string.Empty;
-            bool errorfilesaved = false;
-            bool successfilesaved = false;
+            string downloadFilePath = string.Empty;
+            string bulkUploadFilesPath = string.Empty;
+            bool errorFileSaved = false;
+            bool successFileSaved = false;
             int count = 0;
             List<string> CSVlist = new List<string>();
-            SettingsCaller _newCRM = new SettingsCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            SettingsCaller newCRM = new SettingsCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
-            DataSet DataSetCSV = new DataSet();
+            DataSet dataSetCSV = new DataSet();
             string fileName = "";
             string finalAttchment = "";
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
@@ -319,9 +282,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 var files = Request.Form.Files;
 
@@ -363,46 +326,41 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     }
                 }
                 #region FilePath
-                BulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor);
-                DownloadFilePath = rootPath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor);
+                bulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor);
+                downloadFilePath = rootPath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor);
 
                 #endregion
-                DataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + finalAttchment);
-                CSVlist = _newCRM.CRMRoleBulkUpload(new CRMRoleService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, RoleFor, DataSetCSV);
+                dataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + finalAttchment);
+                CSVlist = newCRM.CRMRoleBulkUpload(new CRMRoleService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, RoleFor, dataSetCSV);
 
                 #region Create Error and Succes files and  Insert in FileUploadLog
                 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
-                    successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\CRMRole\\ Success" + "\\" + "CRMRoleSuccessFile.csv", CSVlist[0]);
+                    successFileSaved = CommonService.SaveFile(downloadFilePath + "\\CRMRole\\ Success" + "\\" + "CRMRoleSuccessFile.csv", CSVlist[0]);
 
                 if (!string.IsNullOrEmpty(CSVlist[1]))
-                    errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\CRMRole\\Error" + "\\" + "CRMRoleErrorFile.csv", CSVlist[1]);
+                    errorFileSaved = CommonService.SaveFile(downloadFilePath + "\\CRMRole\\Error" + "\\" + "CRMRoleErrorFile.csv", CSVlist[1]);
 
-                count = _newCRM.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, "CRMRolesBulk.csv", errorfilesaved,
+                count = newCRM.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, "CRMRolesBulk.csv", errorFileSaved,
                                    "HierarchyErrorFile.csv", "HierarchySuccessFile.csv", authenticate.UserMasterID, "CRMRole",
-                                   DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "CRMRoleErrorFile.csv",
-                                   DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "CRMRoleSuccessFile.csv", RoleFor
+                                   downloadFilePath + "\\Hierarchy\\Error" + "\\" + "CRMRoleErrorFile.csv",
+                                   downloadFilePath + "\\Hierarchy\\ Success" + "\\" + "CRMRoleSuccessFile.csv", RoleFor
                                    );
                 #endregion
 
-                StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = CSVlist.Count;
+                statusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = CSVlist.Count;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
 
         }
 
