@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Easyrewardz_TicketSystem.CustomModel;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -55,9 +52,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 BlockEmailCaller blockEmailCaller = new BlockEmailCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 blockEmailMaster.CreatedBy = authenticate.UserMasterID;
                 blockEmailMaster.TenantID = authenticate.TenantId;
 
@@ -72,12 +69,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                objResponseModel.Status = true;
-                objResponseModel.StatusCode = statusCode;
-                objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = null;
+                throw;
 
             }
             return objResponseModel;
@@ -98,9 +92,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 BlockEmailCaller blockEmailCaller = new BlockEmailCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 blockEmailMaster.CreatedBy = authenticate.UserMasterID;
                 blockEmailMaster.TenantID = authenticate.TenantId;
 
@@ -115,12 +109,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                objResponseModel.Status = true;
-                objResponseModel.StatusCode = statusCode;
-                objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = null;
+                throw;
 
             }
             return objResponseModel;
@@ -141,9 +132,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 BlockEmailCaller blockEmailCaller = new BlockEmailCaller();
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 int result = blockEmailCaller.DeleteBlockEmail(new BlockEmailServices(_connectioString), blockEmailID, authenticate.UserMasterID, authenticate.TenantId);
                 statusCode =
@@ -156,12 +147,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                objResponseModel.Status = true;
-                objResponseModel.StatusCode = statusCode;
-                objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = null;
+                throw;
 
             }
             return objResponseModel;
@@ -176,44 +164,38 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel ListEmailBlock()
         {
             List<BlockEmailMaster> listblockEmailMasters = new List<BlockEmailMaster>();
-            ResponseModel _objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 BlockEmailCaller blockEmailCaller = new BlockEmailCaller();
 
                 listblockEmailMasters = blockEmailCaller.GetBlockEmail(new BlockEmailServices(_connectioString), authenticate.TenantId);
 
-                StatusCode =
+                statusCode =
                 listblockEmailMasters.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = listblockEmailMasters;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = listblockEmailMasters;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = null;
+                throw;
             }
 
-            return _objResponseModel;
+            return objResponseModel;
         }
         #endregion
     }
