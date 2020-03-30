@@ -320,12 +320,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadSLA")]
-        public ResponseModel BulkUploadSLA()
+        public ResponseModel BulkUploadSLA(int SLAFor)
         {
 
 
-            SettingsCaller _newSLA = new SettingsCaller();
-            ResponseModel _objResponseModel = new ResponseModel();
+            string DownloadFilePath = string.Empty;
+            string BulkUploadFilesPath = string.Empty;
+            bool errorfilesaved = false;
+            bool successfilesaved = false;
+            int count = 0;
+            List<string> CSVlist = new List<string>();
+            SettingsCaller newSLA = new SettingsCaller();
+            ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             string fileName = "";
@@ -382,26 +388,49 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     }
                 }
 
+                
+                BulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)SLAFor);
+                DownloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)SLAFor);
+
+              
+
                 DataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + filesName[0]);
+                CSVlist = newSLA.SLABulkUpload(new SLAServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, SLAFor, DataSetCSV);
 
                 #endregion
 
-                // DataSetCSV = CommonService.csvToDataSet("D:\\TP\\hierarchymaster.csv");
-                int result = _newSLA.SLABulkUpload(new SLAServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
 
-                StatusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                #region Create Error and Succes files
+
+                
+                successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Success" + "\\" + "SLAErrorFile.csv", CSVlist[0]);
+                errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Error" + "\\" + "SLASuccessFile.csv", CSVlist[0]);
+
+                #endregion
+
+                #region Insert in FileUploadLog
+
+               
+                count = newSLA.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorfilesaved,
+                                   "SLAErrorFile.csv", "SLASuccessFile.csv", authenticate.UserMasterID, "SLA",
+                                   DownloadFilePath + "\\SLA\\Error" + "\\" + "StoreErrorFile.csv",
+                                   DownloadFilePath + "\\SLA\\ Success" + "\\" + "StoreSuccessFile.csv", 1
+                                   );
+                #endregion
+
+                StatusCode = successfilesaved  ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-                _objResponseModel.Status = true;
-                _objResponseModel.StatusCode = StatusCode;
-                _objResponseModel.Message = statusMessage;
-                _objResponseModel.ResponseData = result;
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = count;
 
             }
             catch (Exception)
             {
                 throw;
             }
-            return _objResponseModel;
+            return objResponseModel;
 
 
         }

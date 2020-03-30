@@ -26,7 +26,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<IssueTypeList> BindIssueTypeList(int tenantID, string SearchText);
         List<IssueTypeList> SearchIssueType(int tenantID, string SearchText);
 
-        int BulkUploadSLA(int TenantID, int CreatedBy, DataSet DataSetCSV);
+        List<string> BulkUploadSLA(int TenantID, int CreatedBy, int SLAFor,DataSet DataSetCSV);
 
         SLADetail GetSLADetail(int tenantID, int SLAFor);
 

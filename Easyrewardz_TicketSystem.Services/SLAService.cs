@@ -419,10 +419,13 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="DataSetCSV"></param
         /// </summary>
         /// 
-        public int BulkUploadSLA(int TenantID, int CreatedBy, DataSet DataSetCSV)
+        public List<string> BulkUploadSLA(int TenantID, int CreatedBy, int SLAFor, DataSet DataSetCSV)
         {
             int uploadcount = 0;
             XmlDocument xmlDoc = new XmlDocument();
+            DataSet Bulkds = new DataSet();
+            List<string> csvLst = new List<string>();
+            string SuccesFile = string.Empty; string ErroFile = string.Empty;
 
             try
             {
@@ -432,20 +435,44 @@ namespace Easyrewardz_TicketSystem.Services
                     {
 
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
-
                         conn.Open();
-                        MySqlCommand cmd = new MySqlCommand("", conn);
+                        MySqlCommand cmd = new MySqlCommand("SP_BulkUploadSLAMaster", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
                         cmd.Parameters.AddWithValue("@_node", Xpath);
-
+                        cmd.Parameters.AddWithValue("@_SLAFor", SLAFor);
                         cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                         cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
 
 
 
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        uploadcount = cmd.ExecuteNonQuery();
+                        MySqlDataAdapter da = new MySqlDataAdapter();
+                        da.SelectCommand = cmd;
+                        da.Fill(Bulkds);
+
+                        if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
+                        {
+
+                            //for success file
+                            if (Bulkds.Tables[0].Rows.Count > 0)
+                            {
+                                SuccesFile = CommonService.DataTableToCsv(Bulkds.Tables[0]);
+                                csvLst.Add(SuccesFile);
+
+                                uploadcount = UploadSLATarget(Bulkds.Tables[0], TenantID, CreatedBy); //upload SLA Target
+
+
+                            }
+
+                            //for error file
+                            if (Bulkds.Tables[1].Rows.Count > 0)
+                            {
+                                ErroFile = CommonService.DataTableToCsv(Bulkds.Tables[1]);
+                                csvLst.Add(ErroFile);
+
+                            }
+
+                        }
                     }
 
                 }
@@ -466,10 +493,68 @@ namespace Easyrewardz_TicketSystem.Services
                     DataSetCSV.Dispose();
                 }
             }
-            return uploadcount;
+            return csvLst;
 
         }
 
+
+        public int UploadSLATarget(DataTable dt, int tenantID, int createdBy)
+        {
+
+            DataTable dtSLA = new DataTable();
+            DataSet dsSLA = new DataSet();
+            string SLATarget = ""; int SLATargetInserCount = 0;
+            XmlDocument xmlDoc = new XmlDocument();
+
+            #region created SLATarget dt
+
+            dtSLA.Columns.Add("SLAID");
+            dtSLA.Columns.Add("Priority");
+            dtSLA.Columns.Add("SLABreach");
+            dtSLA.Columns.Add("RespondValue");
+            dtSLA.Columns.Add("RespondDuration");
+            dtSLA.Columns.Add("ResolutionValue");
+            dtSLA.Columns.Add("ResolutionDuration");
+
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                for (int k = 0; k < dt.Columns.Count; k++)
+                {
+                    SLATarget = dt.Rows[i][k].ToString();
+                    var ArrSLA = SLATarget.Split(new char['|'], StringSplitOptions.RemoveEmptyEntries);
+                    DataRow dr = dtSLA.NewRow();
+                    for (int j = 0; j < ArrSLA.Length; j++)
+                    {
+                        dr[j] = ArrSLA[j].ToString().Trim();
+
+                    }
+                    dtSLA.Rows.Add(dr); //add other rows  
+
+                }
+
+            }
+
+            dsSLA.Tables.Add(dtSLA);
+            #endregion
+
+            #region insert SLATarget
+
+            xmlDoc.LoadXml(dsSLA.GetXml());
+
+            MySqlCommand cmd = new MySqlCommand("SP_BulkUploadSLATargetMaster", conn);
+            cmd.Connection = conn;
+            cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
+            cmd.Parameters.AddWithValue("@_node", Xpath);
+            cmd.Parameters.AddWithValue("@_tenantID", tenantID);
+            cmd.Parameters.AddWithValue("@_createdBy", createdBy);
+            cmd.CommandType = CommandType.StoredProcedure;
+            SLATargetInserCount = cmd.ExecuteNonQuery();
+
+            #endregion
+
+            return SLATargetInserCount;
+        }
         /// <summary>
         ///Search Issue Type 
         /// <param name="tenantID"></param>
