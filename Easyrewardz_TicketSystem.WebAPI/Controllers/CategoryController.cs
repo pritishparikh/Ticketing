@@ -353,7 +353,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadCategory")]
-        public ResponseModel BulkUploadCategory(IFormFile File, int CategoryFor=1)
+        public ResponseModel BulkUploadCategory( int CategoryFor=1)
         {
             string downloadFilePath = string.Empty;
             string bulkUploadFilesPath = string.Empty;
@@ -436,7 +436,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 if (!string.IsNullOrEmpty(CSVlist[1]))
                     successFileSaved = CommonService.SaveFile(downloadFilePath + "\\Category\\Success" + "\\" + "CategorySuccessFile.csv", CSVlist[1]);
 
-                count = fileU.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, "Categorymaster.csv", errorFileSaved,
+                count = fileU.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorFileSaved,
                                    "CategoryErrorFile.csv", "CategorySuccessFile.csv", authenticate.UserMasterID, "Category",
                                    downloadFilePath + "\\Category\\Error" + "\\" + "CategoryErrorFile.csv",
                                    downloadFilePath + "\\Category\\ Success" + "\\" + "CategorySuccessFile.csv", CategoryFor
