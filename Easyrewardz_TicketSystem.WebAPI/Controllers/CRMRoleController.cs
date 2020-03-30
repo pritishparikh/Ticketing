@@ -17,7 +17,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+   // [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class CRMRoleController: ControllerBase
     {
         #region variable declaration
@@ -261,7 +261,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadCRMRole")]
-        public ResponseModel BulkUploadCRMRole(IFormFile File,int RoleFor=1)
+        public ResponseModel BulkUploadCRMRole(int RoleFor=1)
         {
             string downloadFilePath = string.Empty;
             string bulkUploadFilesPath = string.Empty;
@@ -303,6 +303,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
                 var appRoot = appPathMatcher.Match(exePath).Value;
                 string Folderpath = appRoot + "\\" + _UploadedBulkFile;
+
+                #region old approach
+                /*
                 if (files.Count > 0)
                 {
                     filesName = finalAttchment.Split(",");
@@ -325,9 +328,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                         }
                     }
                 }
+                */
+                #endregion
                 #region FilePath
-                bulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor);
-                downloadFilePath = rootPath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor);
+                bulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor);
+                downloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor);
 
                 #endregion
                 dataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + finalAttchment);
@@ -341,10 +346,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 if (!string.IsNullOrEmpty(CSVlist[1]))
                     errorFileSaved = CommonService.SaveFile(downloadFilePath + "\\CRMRole\\Error" + "\\" + "CRMRoleErrorFile.csv", CSVlist[1]);
 
-                count = newCRM.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, "CRMRolesBulk.csv", errorFileSaved,
-                                   "HierarchyErrorFile.csv", "HierarchySuccessFile.csv", authenticate.UserMasterID, "CRMRole",
-                                   downloadFilePath + "\\Hierarchy\\Error" + "\\" + "CRMRoleErrorFile.csv",
-                                   downloadFilePath + "\\Hierarchy\\ Success" + "\\" + "CRMRoleSuccessFile.csv", RoleFor
+                count = newCRM.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorFileSaved,
+                                   "CRMRoleErrorFile.csv", "CRMRoleSuccessFile.csv", authenticate.UserMasterID, "CRMRole",
+                                   downloadFilePath + "\\CRMRole\\Error" + "\\" + "CRMRoleErrorFile.csv",
+                                   downloadFilePath + "\\CRMRole\\ Success" + "\\" + "CRMRoleSuccessFile.csv", RoleFor
                                    );
                 #endregion
 

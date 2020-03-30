@@ -350,10 +350,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
                         {
-
-                            if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
-                            {
-
+                            
                                 //for success file
                                 SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
                                 csvLst.Add(SuccesFile);
@@ -361,8 +358,6 @@ namespace Easyrewardz_TicketSystem.Services
                                 //for error file
                                 ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
                                 csvLst.Add(ErroFile);
-
-                            }
 
                         }
                     }
