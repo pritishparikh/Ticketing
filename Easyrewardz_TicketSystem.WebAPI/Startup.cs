@@ -124,6 +124,25 @@ namespace Easyrewardz_TicketSystem.WebAPI
                 RequestPath = "/" + Resources
             });
 
+            string Images = "Resources/Images";
+            string ImagesURL = Path.Combine(CurrentDirectory, Images);
+            if (!Directory.Exists(ImagesURL))
+            {
+                Directory.CreateDirectory(ImagesURL);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(ImagesURL),
+                RequestPath = "/" + Images
+            });
+            //Enable directory browsing
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(ImagesURL),
+                RequestPath = "/" + Images
+            });
+
             string TicketAttachment = "TicketAttachment";
             string TicketAttachmentURL = Path.Combine(CurrentDirectory, TicketAttachment);
             if (!Directory.Exists(TicketAttachmentURL))
