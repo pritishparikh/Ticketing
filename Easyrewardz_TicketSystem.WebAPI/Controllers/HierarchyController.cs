@@ -154,7 +154,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
            [HttpPost]
         [Route("BulkUploadHierarchy")]
-        public ResponseModel BulkUploadHierarchy(IFormFile File,int HierarchyFor=1)
+        public ResponseModel BulkUploadHierarchy(int HierarchyFor=1)
         {
             string DownloadFilePath = string.Empty;
             string BulkUploadFilesPath = string.Empty;
@@ -192,6 +192,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
                 var appRoot = appPathMatcher.Match(exePath).Value;
                 string Folderpath = appRoot + "\\" + _UploadedBulkFile;
+
+               
                 if (files.Count > 0)
                 {
                     string[] filesName = finalAttchment.Split(",");
@@ -214,13 +216,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                         }
                     }
                 }
+
+               
+
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
                 #region FilePath
-                BulkUploadFilesPath = appRoot + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
-                DownloadFilePath = appRoot + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
+                BulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
+                DownloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
 
                 #endregion             
 
@@ -236,7 +241,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 if (!string.IsNullOrEmpty(CSVlist[1]))
                     errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv", CSVlist[1]);
 
-                count = fileU.CreateFileUploadLog(new FileUploadService(_connectionSting), authenticate.TenantId, "hierarchymaster.csv", errorfilesaved,
+                count = fileU.CreateFileUploadLog(new FileUploadService(_connectionSting), authenticate.TenantId, finalAttchment, errorfilesaved,
                                    "HierarchyErrorFile.csv", "HierarchySuccessFile.csv", authenticate.UserMasterID, "Hierarchy",
                                    DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv",
                                    DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", HierarchyFor

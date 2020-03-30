@@ -304,8 +304,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 var appRoot = appPathMatcher.Match(exePath).Value;
                 string Folderpath = appRoot + "\\" + _UploadedBulkFile;
 
-                #region old approach
-                /*
+               
                 if (files.Count > 0)
                 {
                     filesName = finalAttchment.Split(",");
@@ -328,8 +327,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                         }
                     }
                 }
-                */
-                #endregion
+               
                 #region FilePath
                 bulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor);
                 downloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor);
