@@ -395,7 +395,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadStore")]
-        public ResponseModel BulkUploadStore(IFormFile File,int StoreFor = 1)
+        public ResponseModel BulkUploadStore(int StoreFor = 1)
         {
             StoreCaller newMasterStore = new StoreCaller();
 
@@ -459,6 +459,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     }
                 }
 
+
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
@@ -480,11 +481,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 //    finalAttchment = fileName.TrimEnd(',');
                 //}
 
-                ////var exePath = Path.GetDirectoryName(System.Reflection
-                ////     .Assembly.GetExecutingAssembly().CodeBase);
-                ////Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
-                ////var appRoot = appPathMatcher.Match(exePath).Value;
-                ////string Folderpath = appRoot + "\\" + "BulkUpload\\CRMRole";
+               
 
 
 
@@ -523,14 +520,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 if (!string.IsNullOrEmpty(CSVlist[1]))
                     errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Store\\Error" + "\\" + "StoreErrorFile.csv", CSVlist[1]);
 
-                count = newFile.CreateFileUploadLog(new FileUploadService(_connectionString), authenticate.TenantId, "StoreBulkUpload.csv", errorfilesaved,
+                count = newFile.CreateFileUploadLog(new FileUploadService(_connectionString), authenticate.TenantId, finalAttchment, errorfilesaved,
                                    "StoreErrorFile.csv", "StoreSuccessFile.csv", authenticate.UserMasterID, "Store",
                                    DownloadFilePath + "\\Store\\Error" + "\\" + "StoreErrorFile.csv",
                                    DownloadFilePath + "\\Store\\ Success" + "\\" + "StoreSuccessFile.csv", 1
                                    );
                 #endregion
 
-                StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                StatusCode = successfilesaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
@@ -538,7 +535,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objResponseModel.ResponseData = count;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
