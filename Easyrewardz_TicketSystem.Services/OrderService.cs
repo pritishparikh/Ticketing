@@ -66,7 +66,6 @@ namespace Easyrewardz_TicketSystem.Services
         public string addOrderDetails(OrderMaster orderMaster, int tenantID)
         {
             MySqlCommand cmd = new MySqlCommand();
-            int i = 0;
             string OrderNumber="";
             try
             {
