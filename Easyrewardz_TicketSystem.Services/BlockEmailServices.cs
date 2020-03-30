@@ -168,7 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", blockEmailMaster.CreatedBy);
                 cmd.Parameters.AddWithValue("@Tenant_Id", blockEmailMaster.TenantID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                success = cmd.ExecuteNonQuery();
+                success = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception)
             {

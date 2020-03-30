@@ -154,7 +154,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", junkWordsMaster.CreatedBy);
                 cmd.Parameters.AddWithValue("@Tenant_Id", junkWordsMaster.TenantID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                success = cmd.ExecuteNonQuery();
+                success =Convert.ToInt32( cmd.ExecuteScalar());
             }
             catch (Exception)
             {

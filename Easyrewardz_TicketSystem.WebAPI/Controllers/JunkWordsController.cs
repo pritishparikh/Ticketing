@@ -102,7 +102,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 int result = junkWordsCaller.UpdateJunkWords(new JunkWordsService(_connectioString), junkWordsMaster);
                 statusCode =
                 result == 0 ?
-                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                       (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
                 objResponseModel.Status = true;

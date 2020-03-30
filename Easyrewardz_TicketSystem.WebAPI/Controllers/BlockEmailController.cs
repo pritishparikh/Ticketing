@@ -101,7 +101,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 int result = blockEmailCaller.UpdateBlockEmail(new BlockEmailServices(_connectioString), blockEmailMaster);
                 statusCode =
                 result == 0 ?
-                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                       (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
                 objResponseModel.Status = true;
