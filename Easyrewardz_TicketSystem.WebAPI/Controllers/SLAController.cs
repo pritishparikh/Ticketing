@@ -364,7 +364,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                      .Assembly.GetExecutingAssembly().CodeBase);
                 Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
                 var appRoot = appPathMatcher.Match(exePath).Value;
-                string Folderpath = appRoot + "\\" + "BulkUpload\\SLA";
+                string Folderpath = appRoot ;
 
 
 

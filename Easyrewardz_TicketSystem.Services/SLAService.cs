@@ -421,7 +421,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// 
         public List<string> BulkUploadSLA(int TenantID, int CreatedBy, int SLAFor, DataSet DataSetCSV)
         {
-            int uploadcount = 0;
+            
             XmlDocument xmlDoc = new XmlDocument();
             DataSet Bulkds = new DataSet();
             List<string> csvLst = new List<string>();
@@ -459,7 +459,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 SuccesFile = CommonService.DataTableToCsv(Bulkds.Tables[0]);
                                 csvLst.Add(SuccesFile);
 
-                                uploadcount = UploadSLATarget(Bulkds.Tables[0], TenantID, CreatedBy); //upload SLA Target
+                                //uploadcount = UploadSLATarget(Bulkds.Tables[0], TenantID, CreatedBy); //upload SLA Target
 
 
                             }
@@ -555,6 +555,8 @@ namespace Easyrewardz_TicketSystem.Services
 
             return SLATargetInserCount;
         }
+
+
         /// <summary>
         ///Search Issue Type 
         /// <param name="tenantID"></param>
