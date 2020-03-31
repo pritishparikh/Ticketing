@@ -418,7 +418,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             DataSet DataSetCSV = new DataSet();
             string[] filesName = null;
             List<string> CSVlist = new List<string>();
-            string successfilename = string.Empty, errorfilename = string.Empty; string errorfilepath = string.Empty; string successfilepath = string.Empty;
+            string successfilename = string.Empty, errorfilename = string.Empty; string errorfilepath = string.Empty; string successfilepath = string.Empty; 
 
 
             try
