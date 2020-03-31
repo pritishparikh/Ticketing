@@ -403,7 +403,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadUser")]
-        public ResponseModel BulkUploadUser(int UserFor)
+        public ResponseModel BulkUploadUser(int UserFor=1)
         {
             string DownloadFilePath = string.Empty; 
             string BulkUploadFilesPath = string.Empty;
