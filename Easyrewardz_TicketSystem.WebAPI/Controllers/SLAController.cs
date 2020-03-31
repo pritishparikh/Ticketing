@@ -320,7 +320,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadSLA")]
-        public ResponseModel BulkUploadSLA(int SLAFor)
+        public ResponseModel BulkUploadSLA(int SLAFor=1)
         {
 
 
