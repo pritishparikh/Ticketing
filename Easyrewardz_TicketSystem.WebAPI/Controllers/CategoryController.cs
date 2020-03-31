@@ -391,7 +391,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                      .Assembly.GetExecutingAssembly().CodeBase);
                 Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
                 var appRoot = appPathMatcher.Match(exePath).Value;
-                string folderpath = appRoot + "\\" + _UploadedBulkFile;
+                string folderpath = appRoot ;
                 if (files.Count > 0)
                 {
                     filesName = finalAttchment.Split(",");
@@ -420,8 +420,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 #region FilePath
-                bulkUploadFilesPath = appRoot + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
-                downloadFilePath = appRoot + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
+                bulkUploadFilesPath = folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
+                downloadFilePath = folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
 
                 #endregion
 
@@ -429,12 +429,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 CSVlist = masterCaller.CategoryBulkUpload(new CategoryServices(_connectioSting),
                   authenticate.TenantId, authenticate.UserMasterID, CategoryFor, dataSetCSV);
                 #region Create Error and Succes files and  Insert in FileUploadLog
-                
-                if (!string.IsNullOrEmpty(CSVlist[0])) 
+
+                if (!string.IsNullOrEmpty(CSVlist[0]))
+                    successFileSaved = CommonService.SaveFile(downloadFilePath + "\\Category\\Success" + "\\" + "CategorySuccessFile.csv", CSVlist[1]);
+
+                if (!string.IsNullOrEmpty(CSVlist[1])) 
                      errorFileSaved = CommonService.SaveFile(downloadFilePath + "\\Category\\ Error" + "\\" + "CategoryErrorFile.csv", CSVlist[0]);
 
-                if (!string.IsNullOrEmpty(CSVlist[1]))
-                    successFileSaved = CommonService.SaveFile(downloadFilePath + "\\Category\\Success" + "\\" + "CategorySuccessFile.csv", CSVlist[1]);
+               
 
                 count = fileU.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorFileSaved,
                                    "CategoryErrorFile.csv", "CategorySuccessFile.csv", authenticate.UserMasterID, "Category",
@@ -442,7 +444,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                                    downloadFilePath + "\\Category\\ Success" + "\\" + "CategorySuccessFile.csv", CategoryFor
                                    );
                 #endregion
-                statusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusCode = successFileSaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;

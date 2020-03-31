@@ -438,7 +438,7 @@ namespace Easyrewardz_TicketSystem.Services
             XmlDocument xmlDoc = new XmlDocument();
             DataSet Bulkds = new DataSet();
             List<string> csvLst = new List<string>();
-            string SuccesFile = string.Empty; string ErroFile = string.Empty;
+            string SuccessFile = string.Empty; string ErrorFile = string.Empty;
             try
             {
                 if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
@@ -452,8 +452,7 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
                         cmd.Parameters.AddWithValue("@_node", Xpath);
-                        //cmd.Parameters.AddWithValue("@_CategoryFor", CategoryFor);
-                        //cmd.Parameters.AddWithValue("@_tenantID", TenantID);
+                      
                         cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
                         cmd.CommandType = CommandType.StoredProcedure;
                         MySqlDataAdapter da = new MySqlDataAdapter();
@@ -463,12 +462,14 @@ namespace Easyrewardz_TicketSystem.Services
                         if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
                         {
 
-                            //for error file
-                            ErroFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
-                            csvLst.Add(ErroFile);
                             //for success file
-                            SuccesFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
-                            csvLst.Add(SuccesFile);
+                            SuccessFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            csvLst.Add(SuccessFile);
+
+                            //for error file
+                            ErrorFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(ErrorFile);
+                           
 
                         }
                     }
