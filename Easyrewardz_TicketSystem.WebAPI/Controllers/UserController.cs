@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
- [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+   // [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class UserController : ControllerBase
     {
         #region  Variable Declaration
@@ -424,13 +425,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 var files = Request.Form.Files;
 
+                if (files.Count > 0)
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
+                    }
+                    finalAttchment = fileName.TrimEnd(',');
+                }
+                var Keys = Request.Form;
+
+                var exePath = Path.GetDirectoryName(System.Reflection
+                     .Assembly.GetExecutingAssembly().CodeBase);
+                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                var appRoot = appPathMatcher.Match(exePath).Value;
+                string Folderpath = appRoot  ;
+
+
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 #region FilePath
-                BulkUploadFilesPath = rootPath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor);
-                DownloadFilePath = rootPath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor);
+               
+                BulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor);
+                DownloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor);
 
                 #endregion
 
@@ -445,14 +464,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     finalAttchment = fileName.TrimEnd(',');
                 }
 
-                //var exePath = Path.GetDirectoryName(System.Reflection
-                //     .Assembly.GetExecutingAssembly().CodeBase);
-                //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
-                //var appRoot = appPathMatcher.Match(exePath).Value;
-                //string Folderpath = appRoot + "\\" + "UploadFiles"+"\\"+ CommonFunction.GetEnumDescription((EnumMaster.FIleUpload)HierarchyFor);
-
-
-
                 if (files.Count > 0)
                 {
                     filesName = finalAttchment.Split(",");
@@ -463,7 +474,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                             files[i].CopyTo(ms);
                             var fileBytes = ms.ToArray();
                             MemoryStream msfile = new MemoryStream(fileBytes);
-                            FileStream docFile = new FileStream(BulkUploadFilesPath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                            FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
                             msfile.WriteTo(docFile);
                             docFile.Close();
                             ms.Close();
@@ -477,7 +488,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 #endregion
 
-                DataSetCSV = CommonService.csvToDataSet(BulkUploadFilesPath + "\\" + filesName[0]);
+                DataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + filesName[0]);
                 //DataSetCSV = CommonService.csvToDataSet("D:\\TP\\UserBulk.csv");
                 CSVlist = userCaller.UserBulkUpload(new UserServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, UserFor, DataSetCSV);
 
