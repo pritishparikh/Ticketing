@@ -445,7 +445,7 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
 
 
-
+                        cmd.CommandType = CommandType.StoredProcedure;
                         MySqlDataAdapter da = new MySqlDataAdapter();
                         da.SelectCommand = cmd;
                         da.Fill(Bulkds);
@@ -460,7 +460,6 @@ namespace Easyrewardz_TicketSystem.Services
                                 csvLst.Add(SuccesFile);
 
                                 //uploadcount = UploadSLATarget(Bulkds.Tables[0], TenantID, CreatedBy); //upload SLA Target
-
 
                             }
 
@@ -478,7 +477,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
