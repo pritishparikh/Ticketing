@@ -124,8 +124,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Order_ID", orderNumber);
-                cmd.Parameters.AddWithValue("@Tenant_ID", customerID);
-                cmd.Parameters.AddWithValue("@Customer_ID", tenantID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@Customer_ID", customerID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
