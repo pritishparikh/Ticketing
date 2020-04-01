@@ -31,5 +31,8 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int UpdateClaimAttechmentSetting(ClaimAttechment claimAttechment);
 
+
+        List<StoreCodeModel> getStoreByBrandID(string BrandID,int tenantID);
+
     }
 }

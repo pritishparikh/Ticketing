@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -623,6 +624,64 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Close();
             }
             return result;
+        }
+
+
+        /// <summary>
+        /// Get list of Stores bY brandIDs
+        /// </summary>
+        /// <param name="TicketId">Id of the Ticket</param>
+        /// <returns></returns>
+        public List<StoreCodeModel> getStoreByBrandID(string BrandIDs, int tenantID)
+        {
+            List<StoreCodeModel> storeMaster = new List<StoreCodeModel>();
+            DataSet ds = new DataSet();
+          
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreDetailsByBrandID", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@tenantID", tenantID);
+                cmd.Parameters.AddWithValue("@BrandIds", BrandIDs);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    
+                        StoreCodeModel store = new StoreCodeModel();
+
+                           storeMaster = ds.Tables[0].AsEnumerable().Select(r => new StoreCodeModel()
+                           {
+                            StoreID = Convert.ToInt32(r.Field<object>("StoreID")),
+                            BrandID = Convert.ToInt32(r.Field<object>("BrandID")),
+                            StoreName = r.Field<object>("StoreName") == System.DBNull.Value ? string.Empty : Convert.ToString(Convert.ToInt16(r.Field<object>("StoreName"))),
+                            StoreCode = r.Field<object>("StoreCode") == System.DBNull.Value ? string.Empty : Convert.ToString(Convert.ToInt16(r.Field<object>("StoreCode")))
+
+                           }).ToList();
+
+                    
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return storeMaster;
         }
 
         #endregion

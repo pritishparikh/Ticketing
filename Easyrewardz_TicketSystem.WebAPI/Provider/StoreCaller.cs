@@ -76,5 +76,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _storeRepository = Store;
             return _storeRepository.UpdateClaimAttechmentSetting(claimAttechment);
         }
+
+
+        public List<StoreCodeModel> getStoreByBrandID(IStore Store, string BrandIDs, int tenantID)
+        {
+            _storeRepository = Store;
+            return _storeRepository.getStoreByBrandID(BrandIDs,  tenantID);
+        }
     }
 }
