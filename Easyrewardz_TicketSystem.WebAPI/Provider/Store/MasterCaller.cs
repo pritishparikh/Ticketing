@@ -31,12 +31,28 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _categoryList.AddClaimCategory(CategoryName, BrandID, TenantID, UserID);
         }
 
-        public List<SubCategory> GetClaimSubCategoryByCategoryID(ISubCategories _SubCategory, int CategoryID, int TypeId)
+        public List<SubCategory> GetClaimSubCategoryByCategoryID(ICategory _category, int CategoryID, int TypeId)
         {
-            _subCategoryList = _SubCategory;
-            return _subCategoryList.GetSubCategoryByCategoryID(CategoryID, TypeId);
+            _categoryList = _category;
+            return _categoryList.GetClaimSubCategoryByCategoryID(CategoryID, TypeId);
         }
 
+        public int AddClaimSubCategory(ICategory _category, int CategoryID, string category, int TenantID, int UserID)
+        {
+            _categoryList = _category;
+            return _categoryList.AddClaimSubCategory(CategoryID, category, TenantID, UserID);
+        }
+
+        public List<IssueType> GetClaimIssueTypeList(ICategory _category, int TenantID, int SubCategoryID)
+        {
+            _categoryList = _category;
+            return _categoryList.GetClaimIssueTypeList(TenantID, SubCategoryID);
+        }
+        public int AddClaimIssueType(ICategory _category, int SubcategoryID, string IssuetypeName, int TenantID, int UserID)
+        {
+            _categoryList = _category;
+            return _categoryList.AddClaimIssueType(SubcategoryID, IssuetypeName, TenantID, UserID);
+        }
 
         public int CreateClaimCategorybrandmapping(ICategory _category, CustomCreateCategory customCreateCategory)
         {

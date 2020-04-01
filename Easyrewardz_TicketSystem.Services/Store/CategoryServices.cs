@@ -170,6 +170,202 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
+        /// <summary>
+        /// Get Sub Category By Category ID
+        /// </summary>
+        /// <param name="CategoryID"></param>
+        /// <param name="TypeId"></param>
+        /// <returns></returns>
+        public List<SubCategory> GetClaimSubCategoryByCategoryID(int CategoryID, int TypeId)
+        {
+
+            DataSet ds = new DataSet();
+            List<SubCategory> objSubCategory = new List<SubCategory>();
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetClaimSubCategoriesByCategoryId", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Category_ID", CategoryID);
+                cmd.Parameters.AddWithValue("@Type_Id", TypeId);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        SubCategory SubCat = new SubCategory
+                        {
+                            SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]),
+                            CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]),
+                            SubCategoryName = Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]),
+                            IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"])
+                        };
+
+                        objSubCategory.Add(SubCat);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objSubCategory;
+        }
+
+        /// <summary>
+        /// Add Claim Sub Category
+        /// </summary>
+        /// <param name="CategoryID">ID of the category </param>
+        /// <param name="SubCategoryName">Name of the Sub-category</param>
+        /// <param name="TenantID">Id of the Tenant</param>
+        /// <param name="UserID">Id of the User</param>
+        /// <returns></returns>
+        public int AddClaimSubCategory(int CategoryID, string SubCategoryName, int TenantID, int UserID)
+        {
+            int subCategoryId = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_InsertClaimSubCategory", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Category_ID", CategoryID);
+                cmd.Parameters.AddWithValue("@SubCategory_Name", SubCategoryName);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Created_By", UserID);
+                subCategoryId = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return subCategoryId;
+        }
+
+
+        /// <summary>
+        /// Get Claim Issue Type List
+        /// </summary>
+        /// <param name="TenantID">Tenant Id</param>
+        /// <param name="SubCategoryID">SubCategory ID</param>
+        /// <returns></returns>
+        public List<IssueType> GetClaimIssueTypeList(int TenantID, int SubCategoryID)
+        {
+            DataSet ds = new DataSet();
+            List<IssueType> objIssueType = new List<IssueType>();
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetClaimIssueTypeList", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@SubCategory_ID", SubCategoryID);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        IssueType issueType = new IssueType
+                        {
+                            IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]),
+                            TenantID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]),
+                            IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]),
+                            SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]),
+                            IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"])
+                        };
+                        objIssueType.Add(issueType);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return objIssueType;
+        }
+
+        /// <summary>
+        /// Add Claim Issue Type
+        /// </summary>
+        /// <param name="SubcategoryID"></param>
+        /// <param name="IssuetypeName"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public int AddClaimIssueType(int SubcategoryID, string IssuetypeName, int TenantID, int UserID)
+        {
+            int Success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_InsertClaimIssueType", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@SubCategory_ID", SubcategoryID);
+                cmd.Parameters.AddWithValue("@Issuetype_Name", IssuetypeName);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Created_By", UserID);
+                Success = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return Success;
+        }
+
 
         /// <summary>
         /// Create Category BrandMapping/update /soft delete 
@@ -184,9 +380,11 @@ namespace Easyrewardz_TicketSystem.Services
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("SP_CreateClaimCategoryBrandMapping", conn);
-                    cmd.Connection = conn;
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    MySqlCommand cmd = new MySqlCommand("SP_CreateClaimCategoryBrandMapping", conn)
+                    {
+                        Connection = conn,
+                        CommandType = CommandType.StoredProcedure
+                    };
                     cmd.Parameters.AddWithValue("@Braind_ID", customCreateCategory.BraindID);
                     cmd.Parameters.AddWithValue("@Category_ID", customCreateCategory.CategoryID);
                     cmd.Parameters.AddWithValue("@SubCategory_ID", customCreateCategory.SubCategoryID);
@@ -212,9 +410,10 @@ namespace Easyrewardz_TicketSystem.Services
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("SP_UpdateCategoryBrandMapping", conn);
-                    cmd.Connection = conn;
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    MySqlCommand cmd = new MySqlCommand("SP_UpdateCategoryBrandMapping", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
                     cmd.Parameters.AddWithValue("@BrandCategoryMapping_ID", customCreateCategory.BrandCategoryMappingID);
                     cmd.Parameters.AddWithValue("@Braind_ID", customCreateCategory.BraindID);
                     cmd.Parameters.AddWithValue("@Category_ID", customCreateCategory.CategoryID);
@@ -250,12 +449,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int DeleteClaimCategory(int CategoryID, int TenantId)
         {
-            MySqlCommand cmd = new MySqlCommand();
             int k = 0;
             try
             {
                 conn.Open();
-                cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_DeleteClaimCategory", conn);
                 cmd1.Parameters.AddWithValue("@Category_ID", CategoryID);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);

@@ -36,7 +36,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         #endregion
 
 
-
         #region Custom Methods
         /// <summary>
         /// Claim Category List
@@ -49,7 +48,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             List<CustomCreateCategory> objcategory = new List<CustomCreateCategory>();
             ResponseModel objResponseModel = new ResponseModel();
-
+            int StatusCode = 0;
+            string statusMessage = "";
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
@@ -59,6 +59,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 MasterCaller newMasterCategory = new MasterCaller();
 
                 objcategory = newMasterCategory.ClaimCategoryList(new CategoryServices(_connectioSting), authenticate.TenantId);
+
+
+                StatusCode =
+               objcategory.Count == 0 ?
+                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objcategory;
             }
             catch (Exception)
             {
@@ -78,6 +91,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             List<Category> objCategoryList = new List<Category>();
             ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
             try
             {
                 if (BrandID == 0)
@@ -92,6 +107,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 MasterCaller newMasterCategory = new MasterCaller();
                 objCategoryList = newMasterCategory.GetClaimCategoryList(new CategoryServices(_connectioSting), authenticate.TenantId, BrandID);
 
+                StatusCode =
+              objCategoryList.Count == 0 ?
+                   (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objCategoryList;
             }
             catch (Exception)
             {
@@ -133,10 +159,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 result = newMasterCategory.AddClaimCategory(new CategoryServices(_connectioSting), CategoryName, BrandID, authenticate.TenantId, authenticate.UserMasterID);
                 statusCode =
                result == 0 ?
-                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                      (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                objResponseModel.Status = true;
+                objResponseModel.Status = result == 0 ? false : true;
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = result;
@@ -149,13 +175,181 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+
+        /// <summary>
+        /// Get Claim SubCategory By CategoryID
+        /// </summary>
+        /// <param name="CategoryID"></param>
+        /// <param name="TypeId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetClaimSubCategoryByCategoryID")]
+        public ResponseModel GetClaimSubCategoryByCategoryID(int CategoryID, int TypeId = 0)
+        {
+            List<SubCategory> objSubCategory = new List<SubCategory>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                MasterCaller newMasterSubCat = new MasterCaller();
+
+                objSubCategory = newMasterSubCat.GetClaimSubCategoryByCategoryID(new CategoryServices(_connectioSting), CategoryID, TypeId);
+
+                StatusCode =
+                objSubCategory.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objSubCategory;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Add Claim Sub Category
+        /// </summary>
+        /// <param name="categoryID"></param>
+        ///  <param name="SubcategoryName"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddClaimSubCategory")]
+        public ResponseModel AddClaimSubCategory(int CategoryID, string SubcategoryName)
+        {
+
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            int result = 0;
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                MasterCaller newMasterCategory = new MasterCaller();
+                result = newMasterCategory.AddClaimSubCategory(new CategoryServices(_connectioSting), CategoryID, SubcategoryName, authenticate.TenantId, authenticate.UserMasterID);
+                StatusCode =
+               result == 0 ?
+                      (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = result == 0 ? false : true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Get Claim IssueType List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetClaimIssueTypeList")]
+        public ResponseModel GetClaimIssueTypeList(int SubCategoryID)
+        {
+            List<IssueType> objIssueTypeList = new List<IssueType>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                MasterCaller newMasterBrand = new MasterCaller();
+
+                objIssueTypeList = newMasterBrand.GetClaimIssueTypeList(new CategoryServices(_connectioSting), authenticate.TenantId, SubCategoryID);
+
+                StatusCode =
+                objIssueTypeList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objIssueTypeList;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Add Claim Issue Type
+        /// </summary>
+        /// <param name="SubcategoryID"></param>
+        /// <param name="IssuetypeName"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddClaimIssueType")]
+        public ResponseModel AddClaimIssueType(int SubcategoryID, string IssuetypeName)
+        {
+
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            int result = 0;
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                MasterCaller newMasterCategory = new MasterCaller();
+                result = newMasterCategory.AddClaimIssueType(new CategoryServices(_connectioSting), SubcategoryID, IssuetypeName, authenticate.TenantId, authenticate.UserMasterID);
+                StatusCode =
+               result == 0 ?
+                      (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = result == 0 ? false : true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
         /// <summary>
         /// Create Categorybrand mapping
         /// </summary>
         /// <param name="CustomCreateCategory"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("CreateCategorybrandmapping")]
+        [Route("CreateClaimCategorybrandmapping")]
         public ResponseModel CreateClaimCategorybrandmapping([FromBody] CustomCreateCategory customCreateCategory)
         {
             ResponseModel objResponseModel = new ResponseModel();
