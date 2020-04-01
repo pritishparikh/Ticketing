@@ -8,7 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.18" />
   </ItemGroup>
 
@@ -17,6 +17,12 @@
     <ProjectReference Include="..\Easyrewardz_TicketSystem.DBContext\Easyrewardz_TicketSystem.DBContext.csproj" />
     <ProjectReference Include="..\Easyrewardz_TicketSystem.Interface\Easyrewardz_TicketSystem.Interface.csproj" />
     <ProjectReference Include="..\Easyrewardz_TicketSystem.Services\Easyrewardz_TicketSystem.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Store\Data\" />
+    <Folder Include="Areas\Store\Models\" />
+    <Folder Include="Areas\Store\Views\" />
   </ItemGroup>
 
 </Project>

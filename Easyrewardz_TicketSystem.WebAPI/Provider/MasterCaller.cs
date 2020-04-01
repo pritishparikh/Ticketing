@@ -137,12 +137,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region Store Category
 
-        public List<Category> ClaimCategoryList(ICategory _category, int TenantID)
+        public List<CustomCreateCategory> ClaimCategoryList(ICategory _category, int TenantID)
         {
             _categoryList = _category;
             return _categoryList.ClaimCategoryList(TenantID);
         }
 
+        
         public List<Category> GetClaimCategoryList(ICategory _category, int TenantID, int BrandID)
         {
             _categoryList = _category;
@@ -156,6 +157,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _categoryList.AddClaimCategory(CategoryName, BrandID, TenantID, UserID);
         }
 
+
+
+
+        public int CreateClaimCategorybrandmapping(ICategory _category, CustomCreateCategory customCreateCategory)
+        {
+            _categoryList = _category;
+            return _categoryList.CreateClaimCategorybrandmapping(customCreateCategory);
+        }
+
+        public int DeleteClaimCategory(ICategory _category, int CategoryID, int TenantId)
+        {
+            _categoryList = _category;
+            return _categoryList.DeleteClaimCategory(CategoryID, TenantId);
+        }
         #endregion
 
 

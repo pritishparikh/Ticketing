@@ -10,7 +10,7 @@ namespace Easyrewardz_TicketSystem.Interface
     /// <summary>
     /// Interface for the Category
     /// </summary>
-    public interface ICategory
+    public partial interface ICategory
     {
         List<Category> GetCategoryList(int TenantID,int BrandID);
 
@@ -32,14 +32,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int CreateClaimCategory(ClaimCategory claimCategory);
 
-        #region Store Category
-
-        List<Category> ClaimCategoryList(int TenantId);
-
-        List<Category> GetClaimCategoryList(int TenantID, int BrandID);
-
-        int AddClaimCategory(string CategoryName, int BrandID, int TenantID, int UserID);
-
-        #endregion
+       
     }
 }
