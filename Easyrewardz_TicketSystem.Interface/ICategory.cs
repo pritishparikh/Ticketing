@@ -31,5 +31,15 @@ namespace Easyrewardz_TicketSystem.Interface
         List<string> BulkUploadCategory(int TenantID, int CreatedBy,int CategoryFor, DataSet DataSetCSV);
 
         int CreateClaimCategory(ClaimCategory claimCategory);
+
+        #region Store Category
+
+        List<Category> ClaimCategoryList(int TenantId);
+
+        List<Category> GetClaimCategoryList(int TenantID, int BrandID);
+
+        int AddClaimCategory(string CategoryName, int BrandID, int TenantID, int UserID);
+
+        #endregion
     }
 }

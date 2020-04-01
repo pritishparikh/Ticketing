@@ -534,5 +534,167 @@ namespace Easyrewardz_TicketSystem.Services
 
             return result;
         }
+
+
+
+        #region Store Category
+
+        /// <summary>
+        /// Claim Category List
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
+        public List<Category> ClaimCategoryList(int TenantId)
+        {
+            List<Category> categories = new List<Category>();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_ClaimCategoryList", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantId);
+               
+                DataTable dt = new DataTable();
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        Category category = new Category
+                        {
+                            CategoryID = Convert.ToInt32(dt.Rows[i]["CategoryID"]),
+                            TenantID = Convert.ToInt32(dt.Rows[i]["TenantID"]),
+                            CategoryName = Convert.ToString(dt.Rows[i]["CategoryName"]),
+                            CreatedDate = Convert.ToDateTime(dt.Rows[i]["CreatedDate"]),
+                            ModifyDate = Convert.ToDateTime(dt.Rows[i]["ModifiedDate"]),
+                            Status = Convert.ToString(dt.Rows[i]["Status"])
+                        };
+
+                        categories.Add(category);
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return categories;
+        }
+
+
+        /// <summary>
+        /// Get Claim Category List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="BrandID"></param>
+        /// <returns></returns>
+        public List<Category> GetClaimCategoryList(int TenantID, int BrandID)
+        {
+
+            DataSet ds = new DataSet();
+            List<Category> categoryList = new List<Category>();
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetClaimCategoryList", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd.Parameters.AddWithValue("@Brand_ID", BrandID);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null)
+                {
+                    if (ds.Tables[0] != null)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            Category category = new Category
+                            {
+                                CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]),
+                                CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]),
+                                IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"])
+                            };
+
+                            categoryList.Add(category);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return categoryList;
+        }
+
+
+        /// <summary>
+        /// Add Claim Category
+        /// </summary>
+        /// <param name="CategoryName"></param>
+        /// <param name="BrandID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public int AddClaimCategory(string CategoryName, int BrandID, int TenantID, int UserID)
+        {
+            int Success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_InsertClaimCategory", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Category_Name", CategoryName);
+                cmd.Parameters.AddWithValue("@Brand_ID", BrandID);
+                cmd.Parameters.AddWithValue("@Created_By", UserID);
+                
+                Success = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return Success;
+
+        }
+        #endregion
     }
 }

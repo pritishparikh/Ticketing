@@ -134,6 +134,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _categoryList.BulkUploadCategory(TenantID, CreatedBy, CategoryFor, DataSetCSV);
         }
 
+
+        #region Store Category
+
+        public List<Category> ClaimCategoryList(ICategory _category, int TenantID)
+        {
+            _categoryList = _category;
+            return _categoryList.ClaimCategoryList(TenantID);
+        }
+
+        public List<Category> GetClaimCategoryList(ICategory _category, int TenantID, int BrandID)
+        {
+            _categoryList = _category;
+            return _categoryList.GetClaimCategoryList(TenantID, BrandID);
+        }
+
+
+        public int AddClaimCategory(ICategory _category, string CategoryName, int BrandID, int TenantID, int UserID)
+        {
+            _categoryList = _category;
+            return _categoryList.AddClaimCategory(CategoryName, BrandID, TenantID, UserID);
+        }
+
+        #endregion
+
+
         #endregion
 
         #region Methods for the Subcategories
