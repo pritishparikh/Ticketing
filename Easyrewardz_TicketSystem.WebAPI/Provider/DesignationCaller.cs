@@ -22,10 +22,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="customer"></param>
         /// <param name="customerMaster"></param>
         /// <returns></returns>
-        public List<DesignationMaster> GetDesignations(IDesignation designation, int TenantId)
+        public List<DesignationMaster> GetDesignations(IDesignation designation, int TenantId, int hierarchyFor)
         {
             _designationRepository = designation;
-            return _designationRepository.GetDesignations(TenantId);
+            return _designationRepository.GetDesignations(TenantId, hierarchyFor);
         }
 
         public List<DesignationMaster> GetReporteeDesignation(IDesignation designation, int DesignationID, int HierarchyFor, int TenantID)

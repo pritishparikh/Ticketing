@@ -46,7 +46,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetDesignationList")]
-        public ResponseModel GetDesignationList()
+        public ResponseModel GetDesignationList(int hierarchyFor = 1)
         {
             List<DesignationMaster> designationMasters = new List<DesignationMaster>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -58,7 +58,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 DesignationCaller designationCaller = new DesignationCaller();
-                designationMasters = designationCaller.GetDesignations(new DesignationService(_connectioSting), authenticate.TenantId);
+                designationMasters = designationCaller.GetDesignations(new DesignationService(_connectioSting), authenticate.TenantId, hierarchyFor);
 
                 statusCode =
                 designationMasters.Count == 0 ?
