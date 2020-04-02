@@ -14,7 +14,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
-    public class CategoryController : Controller
+    public class CategoryController : ControllerBase
     {
         #region variable declaration
         private IConfiguration configuration;
