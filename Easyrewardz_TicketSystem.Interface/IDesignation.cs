@@ -8,7 +8,7 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public interface IDesignation
     {
-        List<DesignationMaster> GetDesignations(int TenantID, int hierarchyFor);
+        List<DesignationMaster> GetDesignations(int TenantID);
         List<DesignationMaster> GetReporteeDesignation(int DesignationID,int HierarchyFor, int TenantID);
         List<CustomSearchTicketAgent> GetReportToUser(int DesignationID, int IsStoreUser, int TenantID);
     }

@@ -21,7 +21,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<DesignationMaster> GetDesignations(int TenantID,int hierarchyFor)
+        public List<DesignationMaster> GetDesignations(int TenantID)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -38,7 +38,6 @@ namespace Easyrewardz_TicketSystem.Services
                     SelectCommand = cmd1
                 };
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
-                cmd1.Parameters.AddWithValue("@hierarchy_For", hierarchyFor);
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
