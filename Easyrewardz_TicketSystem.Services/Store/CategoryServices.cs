@@ -48,7 +48,8 @@ namespace Easyrewardz_TicketSystem.Services
                             SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]),
                             IssueTypeID = ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]),
                             IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]),
-                            StatusName = ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsActive"])
+                            StatusName = ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsActive"]),
+                            Status = ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? false : Convert.ToString(ds.Tables[0].Rows[i]["IsActive"]).Equals("Active") ? true : false
                         };
                         listCategoryMapping.Add(CreateCategory);
                     }
@@ -410,7 +411,7 @@ namespace Easyrewardz_TicketSystem.Services
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("SP_UpdateCategoryBrandMapping", conn)
+                    MySqlCommand cmd = new MySqlCommand("SP_UpdateClaimCategoryBrandMapping", conn)
                     {
                         CommandType = CommandType.StoredProcedure
                     };
