@@ -8,7 +8,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
     public partial class MasterCaller
     {
-      
+        private IItem _IItem;
+
         #region Store Category
 
         public List<CustomCreateCategory> ClaimCategoryList(ICategory _category, int TenantID)
@@ -48,6 +49,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _categoryList = _category;
             return _categoryList.GetClaimIssueTypeList(TenantID, SubCategoryID);
         }
+
         public int AddClaimIssueType(ICategory _category, int SubcategoryID, string IssuetypeName, int TenantID, int UserID)
         {
             _categoryList = _category;
@@ -67,5 +69,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
         #endregion
 
-      }
+        #region Store Item 
+
+        public List<string> ItemBulkUpload(IItem Item, int TenantID, int CreatedBy, int CategoryFor, DataSet DataSetCSV)
+        {
+            _IItem = Item;
+            return _IItem.ItemBulkUpload(TenantID, CreatedBy, CategoryFor, DataSetCSV);
+        }
+
+        #endregion
+
+    }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Easyrewardz_TicketSystem.Model.StoreModal
+namespace Easyrewardz_TicketSystem.Model
 {
    public class StoreCRMRoleModel
     {

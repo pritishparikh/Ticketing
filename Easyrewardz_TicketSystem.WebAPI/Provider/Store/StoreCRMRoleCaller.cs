@@ -1,5 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface.Store;
-using Easyrewardz_TicketSystem.Model.StoreModal;
+﻿using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.Model;
 using System.Collections.Generic;
 using System.Data;
 

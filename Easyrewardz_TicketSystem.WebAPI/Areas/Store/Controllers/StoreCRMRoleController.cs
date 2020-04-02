@@ -1,8 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
-using Easyrewardz_TicketSystem.Model.StoreModal;
 using Easyrewardz_TicketSystem.Services;
-using Easyrewardz_TicketSystem.Services.Store;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Easyrewardz_TicketSystem.WebAPI.Provider.Store;
