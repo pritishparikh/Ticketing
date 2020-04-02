@@ -8,9 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Text.RegularExpressions;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -300,7 +297,44 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         //}
-        #endregion
-    }
+        /// <summary>
+        /// Get designation list for the Designation dropdown
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreDesignationList")]
+        public ResponseModel GetStoreDesignationList()
+        {
+            List<DesignationMaster> designationMasters = new List<DesignationMaster>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                StoreHierarchyCaller storeHierarchyCaller = new StoreHierarchyCaller();
+                designationMasters = storeHierarchyCaller.GetDesignations(new StoreHierarchyService(_connectionSting), authenticate.TenantId);
+
+                statusCode =
+                designationMasters.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = designationMasters;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+            #endregion
+        }
 
 }

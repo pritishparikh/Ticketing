@@ -1,5 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.Model;
 using System.Collections.Generic;
 using System.Data;
 
@@ -65,5 +66,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         //    _HierarchyRepository = Hierarchy;
         //    return _HierarchyRepository.BulkUploadStoreHierarchy(TenantID, CreatedBy, DataSetCSV);
         //}
+        public List<DesignationMaster> GetDesignations(IStoreHierarchy  hierarchy, int TenantId)
+        {
+            _HierarchyRepository = hierarchy;
+            return _HierarchyRepository.GetDesignations(TenantId);
+        }
     }
 }

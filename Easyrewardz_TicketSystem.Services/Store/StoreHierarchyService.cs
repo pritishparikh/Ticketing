@@ -1,5 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -87,6 +88,50 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return success;
+        }
+
+        public List<DesignationMaster> GetDesignations(int TenantID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<DesignationMaster> designationMasters = new List<DesignationMaster>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        DesignationMaster designationMaster = new DesignationMaster();
+                        designationMaster.DesignationID = Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
+                        designationMaster.DesignationName = Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
+                        designationMasters.Add(designationMaster);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return designationMasters;
         }
 
         public List<CustomHierarchymodel> ListStoreHierarchy(int TenantID)
