@@ -299,15 +299,15 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         StoreID = Convert.ToInt32(r.Field<object>("StoreID")),
                         BrandID = Convert.ToInt32(r.Field<object>("BrandID")),
-                        StoreName = r.Field<object>("StoreName") == System.DBNull.Value ? string.Empty : Convert.ToString(Convert.ToInt16(r.Field<object>("StoreName"))),
-                        StoreCode = r.Field<object>("StoreCode") == System.DBNull.Value ? string.Empty : Convert.ToString(Convert.ToInt16(r.Field<object>("StoreCode")))
+                        StoreName = r.Field<object>("StoreName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("StoreName")),
+                        StoreCode = r.Field<object>("StoreCode") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("StoreCode"))
 
                     }).ToList();
 
 
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
