@@ -98,6 +98,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
+
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getStoreDesignationMaster", conn);
