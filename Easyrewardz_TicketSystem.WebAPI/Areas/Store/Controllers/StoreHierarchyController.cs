@@ -129,7 +129,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 int result = storeHierarchyCaller.DeleteStoreHierarchy(new StoreHierarchyService(_connectionSting), designationID, authenticate.UserMasterID, authenticate.TenantId);
                 statusCode =
                  result == 0 ?
-                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                        (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
