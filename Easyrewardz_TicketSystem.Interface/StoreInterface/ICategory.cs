@@ -31,5 +31,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int DeleteClaimCategory(int CategoryID, int TenantId);
 
+        List<string> BulkUploadClaimCategory(int TenantID, int CreatedBy, int CategoryFor, DataSet DataSetCSV);
+
     }
 }

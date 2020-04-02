@@ -67,6 +67,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _categoryList = _category;
             return _categoryList.DeleteClaimCategory(CategoryID, TenantId);
         }
+
+        public List<string> ClaimCategoryBulkUpload(ICategory Category, int TenantID, int CreatedBy, int CategoryFor, DataSet DataSetCSV)
+        {
+            _categoryList = Category;
+            return _categoryList.BulkUploadClaimCategory(TenantID, CreatedBy, CategoryFor, DataSetCSV);
+        }
+
         #endregion
 
         #region Store Item 
@@ -77,6 +84,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _IItem.ItemBulkUpload(TenantID, CreatedBy, CategoryFor, DataSetCSV);
         }
 
+        public List<ItemModel> GetItemList(IItem Item, int TenantID)
+        {
+            _IItem = Item;
+            return _IItem.GetItemList(TenantID);
+        }
         #endregion
 
     }
