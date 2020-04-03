@@ -350,7 +350,7 @@ namespace Easyrewardz_TicketSystem.Services
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (Exception)
+            catch (Exception )
             {
                 throw;
             }
@@ -394,6 +394,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         objDeptLst = ds.Tables[0].AsEnumerable().Select(r => new DepartmentListingModel()
                         {
+                            DepartmentBrandMappingID = Convert.ToInt32(r.Field<object>("DepartmentBrandMappingID")),
                             BrandID = Convert.ToInt32(r.Field<object>("BrandID")),
                             BrandName = r.Field<object>("BrandName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("BrandName")),
 

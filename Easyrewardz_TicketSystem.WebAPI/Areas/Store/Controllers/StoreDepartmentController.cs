@@ -15,7 +15,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class StoreDepartmentController : ControllerBase
     {
 
@@ -346,7 +346,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
-            int tid = 1;
+           
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
@@ -356,8 +356,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 createDepartmentModel.CreatedBy = authenticate.UserMasterID;
-                //createDepartmentModel.TenantID = authenticate.TenantId;
-                createDepartmentModel.TenantID = tid;
+                createDepartmentModel.TenantID = authenticate.TenantId;
 
                 int result = newCreatDept.CreateStoreDepartment(new StoreDepartmentService(_connectioSting), createDepartmentModel);
 
