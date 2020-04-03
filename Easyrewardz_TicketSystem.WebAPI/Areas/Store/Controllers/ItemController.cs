@@ -56,7 +56,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             int count = 0;
 
             MasterCaller masterCaller = new MasterCaller();
-            SettingsCaller fileU = new SettingsCaller();
+            StoreFileUploadCaller fileU = new StoreFileUploadCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
             string statusMessage = "";
@@ -148,7 +148,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
 
-                count = fileU.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorFileSaved,
+                count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorFileSaved,
                                    "CategoryErrorFile.csv", "CategorySuccessFile.csv", authenticate.UserMasterID, "Item",
                                    downloadFilePath + "\\Item\\Error" + "\\" + "ItemErrorFile.csv",
                                    downloadFilePath + "\\Item\\Success" + "\\" + "ItemSuccessFile.csv", ItemFor
