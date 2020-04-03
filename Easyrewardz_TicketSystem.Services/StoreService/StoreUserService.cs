@@ -33,7 +33,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Last_Name", storeUserModel.LastName);
                 cmd.Parameters.AddWithValue("@Email_ID", storeUserModel.EmailID);
                 cmd.Parameters.AddWithValue("@Created_By", storeUserModel.CreatedBy);
-                cmd.Parameters.AddWithValue("@Is_StoreUser", storeUserModel.IsStoreUser);
+                //cmd.Parameters.AddWithValue("@Is_StoreUser", storeUserModel.IsStoreUser);
                 cmd.Parameters.AddWithValue("@Tenant_ID", storeUserModel.TenantID);
                 cmd.Parameters.AddWithValue("@Brand_IDs", storeUserModel.BrandIDs);
                 cmd.Parameters.AddWithValue("@Store_IDs", storeUserModel.StoreIDs);
