@@ -535,7 +535,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objResponseModel.ResponseData = count;
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw;
             }

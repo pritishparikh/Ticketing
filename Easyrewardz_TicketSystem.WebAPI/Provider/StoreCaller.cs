@@ -78,10 +78,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
 
-        public List<StoreCodeModel> getStoreByBrandID(IStore Store, string BrandIDs, int tenantID)
-        {
-            _storeRepository = Store;
-            return _storeRepository.getStoreByBrandID(BrandIDs,  tenantID);
-        }
+       
     }
 }
