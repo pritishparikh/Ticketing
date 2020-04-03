@@ -138,7 +138,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@Created_By", createdBy);
                 cmd.CommandType = CommandType.StoredProcedure;
-                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
             catch (Exception)
@@ -173,7 +173,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@Created_By", createdBy);
                 cmd.CommandType = CommandType.StoredProcedure;
-                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
             catch (Exception)
@@ -206,8 +206,9 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteDepartmentBrandMapping", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Store_ID", tenantID);
-                cmd.Parameters.AddWithValue("@tenant_ID", DepartmentBrandMappingID);
+                cmd.Parameters.AddWithValue("@_tenantID", tenantID);
+                cmd.Parameters.AddWithValue("@_DeptBrandMappingID", DepartmentBrandMappingID);
+                cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
@@ -285,7 +286,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_GetStoreDetailsByBrandID", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@tenantID", tenantID);
-                cmd.Parameters.AddWithValue("@BrandIds", string.IsNullOrEmpty(BrandIDs) ?"" : BrandIDs.TrimEnd(','));
+                cmd.Parameters.AddWithValue("@BrandIds", string.IsNullOrEmpty(BrandIDs) ? "" : BrandIDs.TrimEnd(','));
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 da.SelectCommand = cmd;
@@ -337,8 +338,8 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_CreateDepartment", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@_BrandID", createDepartmentModel.BrandID);
-                cmd.Parameters.AddWithValue("@_StoreID", createDepartmentModel.StoreID);
+                cmd.Parameters.AddWithValue("@Brand_ID", string.IsNullOrEmpty(createDepartmentModel.BrandID)? "" : createDepartmentModel.BrandID.TrimEnd(','));
+                cmd.Parameters.AddWithValue("@_StoreID", string.IsNullOrEmpty(createDepartmentModel.StoreID) ? "" : createDepartmentModel.StoreID.TrimEnd(','));
                 cmd.Parameters.AddWithValue("@_DepartmentID", createDepartmentModel.DepartmentID);
                 cmd.Parameters.AddWithValue("@_FunctionID", createDepartmentModel.FunctionID);
                 cmd.Parameters.AddWithValue("@_Status", Convert.ToInt16(createDepartmentModel.Status));
@@ -350,7 +351,7 @@ namespace Easyrewardz_TicketSystem.Services
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
-            catch (Exception)
+            catch (Exception )
             {
                 throw;
             }
@@ -365,5 +366,69 @@ namespace Easyrewardz_TicketSystem.Services
             return result;
         }
 
+        /// <summary>
+        /// Get DepartmentMapping Listing
+        /// <param name="TenantID"></param>
+        /// </summary>
+        /// <returns></returns>
+        public List<DepartmentListingModel> GetBrandDepartmentMappingList(int TenantID)
+        {
+            List<DepartmentListingModel> objDeptLst = new List<DepartmentListingModel>();
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetDepartmentMappingList", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_tenantId", TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objDeptLst = ds.Tables[0].AsEnumerable().Select(r => new DepartmentListingModel()
+                        {
+                            DepartmentBrandMappingID = Convert.ToInt32(r.Field<object>("DepartmentBrandMappingID")),
+                            BrandID = Convert.ToInt32(r.Field<object>("BrandID")),
+                            BrandName = r.Field<object>("BrandName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("BrandName")),
+
+                            StoreID = Convert.ToInt32(r.Field<object>("StoreID")),
+                            StoreCode = r.Field<object>("StoreCode") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("StoreCode")),
+
+                            DepartmentID = Convert.ToInt32(r.Field<object>("DepartmentID")),
+                            DepartmentName = r.Field<object>("DepartmentName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("DepartmentName")),
+
+                            FunctionID = Convert.ToInt32(r.Field<object>("FunctionID")),
+                            FunctionName = r.Field<object>("FuncationName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("FuncationName")),
+
+                            Status = r.Field<object>("IsActive") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("IsActive")),
+                            CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
+                            CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
+                            ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
+                            ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
+                        }).ToList();
+                    }
+
+
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
+            return objDeptLst;
+
+        }
     }
 }

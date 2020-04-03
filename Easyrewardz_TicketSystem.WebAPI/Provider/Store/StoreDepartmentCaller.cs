@@ -67,7 +67,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return ImasterDepartment.CreateDepartment(createDepartmentModel);
         }
 
-
+        public List<DepartmentListingModel> GetBrandDepartmenMappingtList(IStoreDepartment dept, int TenantID)
+        {
+            ImasterDepartment = dept;
+            return ImasterDepartment.GetBrandDepartmentMappingList(TenantID);
+        }
         #endregion
     }
 }

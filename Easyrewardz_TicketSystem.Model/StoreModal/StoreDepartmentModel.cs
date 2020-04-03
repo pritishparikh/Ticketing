@@ -22,6 +22,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
 
     public class DepartmentListingModel
     {
+        public int DepartmentBrandMappingID { get; set; }
         public int BrandID { get; set; }
 
         public string BrandName { get; set; }
