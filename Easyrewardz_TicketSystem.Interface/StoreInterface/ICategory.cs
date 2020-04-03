@@ -1,8 +1,6 @@
-﻿using Easyrewardz_TicketSystem.Model;
-using Easyrewardz_TicketSystem.CustomModel;
-using System;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Model;
 using System.Collections.Generic;
-using System.Text;
 using System.Data;
 
 namespace Easyrewardz_TicketSystem.Interface

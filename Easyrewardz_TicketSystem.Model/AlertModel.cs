@@ -39,6 +39,9 @@ namespace Easyrewardz_TicketSystem.Model
         public string SMSContent { get; set; }
         public string NotificationContent { get; set; }
 
+        public bool IsEmailTicketing { get; set; }
+        public bool IsNotificationTicketing { get; set; }
+        public bool IsCommunicationModeEnabled { get; set; }
         // public CommunicationModeBy ModeOfCommunication { get; set; }
     }
 
@@ -52,6 +55,7 @@ namespace Easyrewardz_TicketSystem.Model
     public class AlertInsertModel
     {
         public int? TenantId { get; set; }
+        public int? AlertID { get; set; }
         public string AlertTypeName { get; set; }
         public int? CreatedBy { get; set; }
         public bool isAlertActive { get; set; }
@@ -79,7 +83,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string CCEmailID { get; set; }
         public string BCCEmailID { get; set; }
         public string Subject { get; set; }
-
+        public bool IsAlertActive { get; set; }
 
     }
 
