@@ -337,8 +337,8 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_CreateDepartment", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@_BrandID", createDepartmentModel.BrandID);
-                cmd.Parameters.AddWithValue("@_StoreID", createDepartmentModel.StoreID);
+                cmd.Parameters.AddWithValue("@_BrandID", string.IsNullOrEmpty(createDepartmentModel.BrandID)? "" : createDepartmentModel.BrandID.TrimEnd(','));
+                cmd.Parameters.AddWithValue("@_StoreID", string.IsNullOrEmpty(createDepartmentModel.StoreID) ? "" : createDepartmentModel.StoreID.TrimEnd(','));
                 cmd.Parameters.AddWithValue("@_DepartmentID", createDepartmentModel.DepartmentID);
                 cmd.Parameters.AddWithValue("@_FunctionID", createDepartmentModel.FunctionID);
                 cmd.Parameters.AddWithValue("@_Status", Convert.ToInt16(createDepartmentModel.Status));
