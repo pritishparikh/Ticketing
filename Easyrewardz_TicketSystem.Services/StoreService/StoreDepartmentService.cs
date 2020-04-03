@@ -208,6 +208,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Store_ID", tenantID);
                 cmd.Parameters.AddWithValue("@tenant_ID", DepartmentBrandMappingID);
+                cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
