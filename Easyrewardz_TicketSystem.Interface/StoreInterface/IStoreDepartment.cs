@@ -49,5 +49,8 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         /// </summary>
         /// <returns></returns>
         int CreateDepartment(CreateStoreDepartmentModel createDepartmentModel);
+
+
+        List<DepartmentListingModel> GetBrandDepartmentMappingList(int TenantID);
     }
 }

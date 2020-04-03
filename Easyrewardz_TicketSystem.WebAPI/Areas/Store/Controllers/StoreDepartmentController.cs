@@ -379,6 +379,48 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get DeparmentBrandMapping List 
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetDeparmentBrandMappingList")]
+        public ResponseModel GetDeparmentBrandMappingList()
+        {
+
+            List<DepartmentListingModel> objDepartmentList = new List<DepartmentListingModel>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                StoreDepartmentCaller newMasterBrand = new StoreDepartmentCaller();
+
+                objDepartmentList = newMasterBrand.GetBrandDepartmenMappingtList(new StoreDepartmentService(_connectioSting), authenticate.TenantId);
+
+                StatusCode =
+                objDepartmentList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objDepartmentList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
         #endregion
     }
 }
