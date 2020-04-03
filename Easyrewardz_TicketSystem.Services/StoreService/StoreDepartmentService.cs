@@ -206,8 +206,8 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteDepartmentBrandMapping", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Store_ID", tenantID);
-                cmd.Parameters.AddWithValue("@tenant_ID", DepartmentBrandMappingID);
+                cmd.Parameters.AddWithValue("@_tenantID", tenantID);
+                cmd.Parameters.AddWithValue("@_DeptBrandMappingID", DepartmentBrandMappingID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteScalar());
 
