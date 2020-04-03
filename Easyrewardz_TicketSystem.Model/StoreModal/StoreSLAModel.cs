@@ -7,6 +7,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
     public class StoreSLAModel
     {
         public int TenantID { get; set; }
+        public int SlaID { get; set; }
         public string FunctionID { get; set; }
         public int CreatedBy { get; set; }
         public bool isSLAActive { get; set; }
@@ -15,6 +16,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
 
     public class SLATargetModel
     {
+        public int SLATargetID { get; set; }
         public int PriorityID { get; set; }
         public int SLABreachPercent { get; set; }
         public int PriorityResolutionValue { get; set; }
@@ -41,7 +43,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string CreatedDate { get; set; }
         public string ModifiedBy { get; set; }
         public string ModifiedDate { get; set; }
-        public double totalpages { get; set; }
+    
 
         public List<StoreSLATargetResponseModel> SLATarget { get; set; }
     }
@@ -51,8 +53,9 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public int SLATargetID { get; set; }
         public int PriorityID { get; set; }
         public string PriorityName { get; set; }
-        public string SLABreachPercent { get; set; }
-        public string PriorityResolution { get; set; }
+        public int SLABreachPercent { get; set; }
+        public int PriorityResolution { get; set; }
+        public string PriorityResolutionDuration { get; set; }
 
     }
 

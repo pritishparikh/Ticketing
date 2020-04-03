@@ -90,7 +90,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CreateStoreSLA")]
-        public ResponseModel CreateSLA([FromBody]StoreSLAModel insertSLA)
+        public ResponseModel CreateStoreSLA([FromBody]StoreSLAModel insertSLA)
         {
             int insertcount = 0;
             ResponseModel _objResponseModel = new ResponseModel();
@@ -119,6 +119,52 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 _objResponseModel.StatusCode = StatusCode;
                 _objResponseModel.Message = statusMessage;
                 _objResponseModel.ResponseData = insertcount;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _objResponseModel;
+        }
+
+        /// <summary>
+        /// Create SLA
+        /// </summary>
+        /// <param name="insertSLA"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateStoreSLA")]
+        public ResponseModel UpdateStoreSLA([FromBody]StoreSLAModel insertSLA)
+        {
+            int updatecount = 0;
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                StoreSLACaller _newSLA = new StoreSLACaller();
+
+                insertSLA.TenantID = authenticate.TenantId;
+                insertSLA.CreatedBy = authenticate.UserMasterID;
+                updatecount = _newSLA.UpdateStoreSLA(new StoreSLAService(_connectioSting), insertSLA);
+
+                StatusCode =
+                updatecount == 0 ?
+                     (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = updatecount;
 
             }
             catch (Exception)
@@ -216,6 +262,40 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             return _objResponseModel;
         }
+
+        /// <summary>
+        /// Get Store SLA Detail
+        /// </summary>
+        /// <param name="SLAId"></param>
+        /// <returns></returns>
+        //[HttpPost]
+        //[Route("GetStoreSLADetail")]
+        //public ResponseModel GetSLADetail(int SLAId)
+        //{
+            //ResponseModel _objResponseModel = new ResponseModel();
+            //int StatusCode = 0;
+            //string statusMessage = "";
+            //StoreSLAResponseModel _objresponseModel = new StoreSLAResponseModel();
+            //try
+            //{
+            //    string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+            //    Authenticate authenticate = new Authenticate();
+            //    authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+            //    StoreSLACaller _newSLA = new StoreSLACaller();
+            //    _objresponseModel = _newSLA.GetStoreSLADetail(new StoreSLAService(_connectioSting), authenticate.TenantId, SLAId);
+            //    StatusCode = (int)EnumMaster.StatusCode.Success;
+            //    statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+            //    _objResponseModel.Status = true;
+            //    _objResponseModel.StatusCode = StatusCode;
+            //    _objResponseModel.Message = statusMessage;
+            //    _objResponseModel.ResponseData = _objresponseModel;
+            //}
+            //catch (Exception)
+            //{
+            //    throw;
+            //}
+            //return _objResponseModel;
+        //}
 
         #endregion
     }

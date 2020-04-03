@@ -17,5 +17,7 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         int DeleteStoreSLA(int tenantID, int SLAID);
 
         List<StoreSLAResponseModel> StoreSLAList(int tenantID);
+
+      //  StoreSLAResponseModel GetStoreSLADetail(int TenantID, int SLAID);
     }
 }
