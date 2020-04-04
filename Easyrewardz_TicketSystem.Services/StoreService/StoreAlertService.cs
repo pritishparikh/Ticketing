@@ -36,7 +36,7 @@ namespace Easyrewardz_TicketSystem.Services
                     if (alertModel.CommunicationModeDetails.Count > 0)
                     {
                         conn.Open();
-
+                        int DeleteAlertConfig = 1;
                         for (int i = 0; i < alertModel.CommunicationModeDetails.Count; i++)
                         {
                             MySqlCommand Targetcmd = new MySqlCommand("SP_InsertStoreAlertMasterConfig", conn)
@@ -54,8 +54,11 @@ namespace Easyrewardz_TicketSystem.Services
                             Targetcmd.Parameters.AddWithValue("@_emailSubject", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].Subject) ? string.Empty : alertModel.CommunicationModeDetails[i].Subject);
                             Targetcmd.Parameters.AddWithValue("@_createdBy", alertModel.CreatedBy);
                             Targetcmd.Parameters.AddWithValue("@_isactive", Convert.ToInt16(alertModel.isAlertActive));
-                            
+                            Targetcmd.Parameters.AddWithValue("@_DeleteAlertConfig", DeleteAlertConfig);
+
                             AlertConfigInsertCount += Targetcmd.ExecuteNonQuery();
+
+                            DeleteAlertConfig = 0;
                         }
                     }
                 }
