@@ -28,11 +28,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider.Store
             return _SLA.UpdateStoreSLA(SLAm);
         }
 
-        //public int UpdateSLA(IStoreSLA SLA, int tenantID, int SLAID, int IssuetypeID, bool isActive, int modifiedBy)
-        //{
-        //    _SLA = SLA;
-        //    return _SLA.UpdateSLA(SLAID, tenantID, IssuetypeID, isActive, modifiedBy);
-        //}
+      
 
         public int DeleteStoreSLA(IStoreSLA SLA, int tenantID, int SLAID)
         {
@@ -53,7 +49,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider.Store
             return _SLA.BindFunctionList(tenantID, SearchText);
         }
 
-
+        //public StoreSLAResponseModel GetStoreSLADetail(IStoreSLA SLA, int TenantID, int SLAID)
+        //{
+        //    _SLA = SLA;
+        //    return _SLA.GetStoreSLADetail(TenantID, SLAID);
+        //}
         //public List<string> SLABulkUpload(IStoreSLA SLA, int TenantID, int CreatedBy, int SLAFor, DataSet DataSetCSV)
         //{
         //    _SLA = SLA;
