@@ -111,8 +111,8 @@ namespace Easyrewardz_TicketSystem.Services
                             Targetcmd.Parameters.AddWithValue("@_bccemail", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].BCCEmailID) ? string.Empty : alertModel.CommunicationModeDetails[i].BCCEmailID);
                             Targetcmd.Parameters.AddWithValue("@_emailSubject", string.IsNullOrEmpty(alertModel.CommunicationModeDetails[i].Subject) ? string.Empty : alertModel.CommunicationModeDetails[i].Subject);
                             Targetcmd.Parameters.AddWithValue("@_modifiedBy", alertModel.CreatedBy);
-                            Targetcmd.Parameters.AddWithValue("@_isactive", Convert.ToInt16(alertModel.CommunicationModeDetails[i].IsAlertActive));
-                            Targetcmd.Parameters.AddWithValue("@_alertTypeID", Convert.ToInt16(alertModel.isAlertActive));
+                            Targetcmd.Parameters.AddWithValue("@_isactive", Convert.ToInt16(alertModel.isAlertActive));
+                            Targetcmd.Parameters.AddWithValue("@_alertTypeID", Convert.ToInt32(alertModel.CommunicationModeDetails[i].AlertTypeID));
                             Targetcmd.Parameters.AddWithValue("@_DeleteAlertConfig", DeleteAlertConfig);
                             AlertConfigUpdateCount += Targetcmd.ExecuteNonQuery();
 
