@@ -5476,11 +5476,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Ticketing Project\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj",
+      "projectUniqueName": "D:\\Ticketing Project\\StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj",
       "projectName": "Easyrewardz_TicketSystem.DBContext",
-      "projectPath": "D:\\Ticketing Project\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj",
+      "projectPath": "D:\\Ticketing Project\\StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj",
       "packagesPath": "C:\\Users\\chetan.poojari\\.nuget\\packages\\",
-      "outputPath": "D:\\Ticketing Project\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\obj\\",
+      "outputPath": "D:\\Ticketing Project\\StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -5499,8 +5499,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "D:\\Ticketing Project\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
-              "projectPath": "D:\\Ticketing Project\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
+            "D:\\Ticketing Project\\StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
+              "projectPath": "D:\\Ticketing Project\\StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
             }
           }
         }

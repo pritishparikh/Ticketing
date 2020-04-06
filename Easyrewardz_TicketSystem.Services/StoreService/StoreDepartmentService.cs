@@ -241,8 +241,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
 
                 cmd.Parameters.AddWithValue("@BrandID", updateDepartmentModel.DepartmentBrandID);
-                cmd.Parameters.AddWithValue("@BrandID", updateDepartmentModel.BrandID);
-                cmd.Parameters.AddWithValue("@StoreID", updateDepartmentModel.StoreID);
+                cmd.Parameters.AddWithValue("@BrandID", Convert.ToInt32(updateDepartmentModel.BrandID));
+                cmd.Parameters.AddWithValue("@StoreID", Convert.ToInt32(updateDepartmentModel.StoreID));
                 cmd.Parameters.AddWithValue("@DepartmentID", updateDepartmentModel.DepartmentID);
                 cmd.Parameters.AddWithValue("@FunctionID", updateDepartmentModel.FunctionID);
                 cmd.Parameters.AddWithValue("@Status", Convert.ToInt16(updateDepartmentModel.Status));

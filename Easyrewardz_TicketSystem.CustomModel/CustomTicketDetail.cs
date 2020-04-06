@@ -178,8 +178,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string OrderItemID { get; set; }
         public List<Store> stores { get; set; }
         public List<Product> products { get; set; }
-        public List<Attachment> attachment  { get; set; }
-        public TicketingMailerQue ticketingMailerQue  { get; set; }
+        public List<Attachment> attachment { get; set; }
+        public TicketingMailerQue ticketingMailerQue { get; set; }
 
     }
     public class Store

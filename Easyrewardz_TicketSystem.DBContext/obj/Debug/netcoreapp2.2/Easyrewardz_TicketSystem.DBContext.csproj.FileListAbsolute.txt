@@ -94,3 +94,15 @@ D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.DBContext\obj\Debug\netc
 D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.DBContext\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.csproj.CopyComplete
 D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.DBContext\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
 D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.DBContext\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
+D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.DBContext\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.deps.json
+D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.DBContext\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
+D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.DBContext\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
+D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.DBContext\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.DBContext\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.DBContext\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.csprojAssemblyReference.cache
+D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.DBContext\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.csproj.CoreCompileInputs.cache
+D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.DBContext\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.AssemblyInfoInputs.cache
+D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.DBContext\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.AssemblyInfo.cs
+D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.DBContext\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.csproj.CopyComplete
+D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.DBContext\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
+D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.DBContext\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb

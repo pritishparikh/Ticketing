@@ -63,7 +63,7 @@ namespace Easyrewardz_TicketSystem.Services
                 count = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
