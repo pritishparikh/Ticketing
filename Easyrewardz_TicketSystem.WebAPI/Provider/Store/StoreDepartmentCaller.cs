@@ -49,10 +49,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
 
-        public int UpdateDepartmentMapping(IStoreDepartment dept, int TenantID, int DepartmentBrandID, int BrandID, int StoreID, int DepartmentID, int FunctionID, bool Status, int CreatedBy)
+        public int UpdateDepartmentMapping(IStoreDepartment dept, CreateStoreDepartmentModel updateDepartmentModel)
         {
             ImasterDepartment = dept;
-            return ImasterDepartment.UpdateDepartmentMapping(TenantID, DepartmentBrandID, BrandID, StoreID, DepartmentID, FunctionID, Status, CreatedBy);
+            return ImasterDepartment.UpdateDepartmentMapping(updateDepartmentModel);
         }
 
         public List<StoreCodeModel> getStoreByBrandID(IStoreDepartment Store, string BrandIDs, int tenantID)
