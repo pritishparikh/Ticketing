@@ -377,14 +377,14 @@ namespace Easyrewardz_TicketSystem.Services
 
         #region ON EDIT CLICK
 
-        /*
+        
         /// <summary>
         /// Get Store SLA details for Edit using SLAID
         /// </summary>
         /// <param name="tenantID"></param>
         /// <param name="SLAID"></param>
         /// <returns></returns>
-        public StoreSLAResponseModel GetSLADetail(int tenantID, int SLAID)
+        public StoreSLAResponseModel GetStoreSLADetail(int tenantID, int SLAID)
         {
             StoreSLAResponseModel objSLADetail = new StoreSLAResponseModel();
             DataSet ds = new DataSet();
@@ -396,7 +396,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreSLADetailsBySLAID", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 cmd1.Parameters.AddWithValue("@SLA_ID", SLAID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
@@ -406,7 +406,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        objSLADetail.SLAID = Convert.ToInt16(ds.Tables[0].Rows[0]["SLAID"]);
+                        objSLADetail.SLAID = Convert.ToInt16(ds.Tables[0].Rows[0]["SlaID"]);
 
                         objSLADetail.FunctionID = Convert.ToInt16(ds.Tables[0].Rows[0]["FunctionID"]);
                         objSLADetail.FunctionName = Convert.ToString(ds.Tables[0].Rows[0]["FunctionName"]);
@@ -420,7 +420,7 @@ namespace Easyrewardz_TicketSystem.Services
                         objSLADetail.StoreID = Convert.ToInt16(ds.Tables[0].Rows[0]["StoreID"]);
                         objSLADetail.StoreName = Convert.ToString(ds.Tables[0].Rows[0]["StoreName"]);
 
-                        objSLADetail.isSLAActive = Convert.ToString(ds.Tables[0].Rows[0]["SubCategoryName"]);
+                        objSLADetail.isSLAActive = Convert.ToString(ds.Tables[0].Rows[0]["SLAStatus"]);
 
                     }
 
@@ -436,7 +436,7 @@ namespace Easyrewardz_TicketSystem.Services
                             sLATargetDetail.PriorityID = Convert.ToInt32(ds.Tables[1].Rows[i]["PriorityID"]);
                             sLATargetDetail.PriorityName = Convert.ToString(ds.Tables[1].Rows[i]["PriortyName"]);
                         
-                            sLATargetDetail.SLABreachPercent = Convert.ToInt32(ds.Tables[1].Rows[i]["SLABreachPercent"]);
+                            sLATargetDetail.SLABreachPercent = Convert.ToString(ds.Tables[1].Rows[i]["SLABreachPercent"]);
                             sLATargetDetail.PriorityResolution = Convert.ToInt32(ds.Tables[1].Rows[i]["PriorityResolution"]);
                             sLATargetDetail.PriorityResolutionDuration = Convert.ToString(ds.Tables[1].Rows[i]["PriorityResolutionDuration"]);
 
@@ -467,7 +467,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
-        */
+        
 
         #endregion
     }

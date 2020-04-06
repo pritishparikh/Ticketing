@@ -18,6 +18,6 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
 
         List<StoreSLAResponseModel> StoreSLAList(int tenantID);
 
-      //  StoreSLAResponseModel GetStoreSLADetail(int TenantID, int SLAID);
+        StoreSLAResponseModel GetStoreSLADetail(int TenantID, int SLAID);
     }
 }
