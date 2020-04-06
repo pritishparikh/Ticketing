@@ -342,7 +342,7 @@ namespace Easyrewardz_TicketSystem.Services
                                         SLATargetID = Convert.ToInt32(r.Field<object>("SLATargetID")),
                                         PriorityID = Convert.ToInt32(r.Field<object>("PriorityID")),
                                         PriorityName = r.Field<object>("PriortyName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriortyName")),
-                                        SLABreachPercent = r.Field<object>("PriorityBreach") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("PriorityBreach")),
+                                        SLABreachPercent = r.Field<object>("PriorityBreach") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriorityBreach")),
                                         PriorityResolution = r.Field<object>("PriorityResolve") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("PriorityResolve")),
                                         PriorityResolutionDuration = r.Field<object>("PriorityResolutionDuration") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriorityResolutionDuration")),
                                     }).ToList();
@@ -354,7 +354,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
