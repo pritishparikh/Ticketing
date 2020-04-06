@@ -240,14 +240,14 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateDepartmentMapping", conn);
                 cmd.Connection = conn;
 
-                cmd.Parameters.AddWithValue("@BrandID", updateDepartmentModel.DepartmentBrandID);
-                cmd.Parameters.AddWithValue("@BrandID", Convert.ToInt32(updateDepartmentModel.BrandID)); 
-                cmd.Parameters.AddWithValue("@StoreID", Convert.ToInt32(updateDepartmentModel.StoreID)); 
-                cmd.Parameters.AddWithValue("@DepartmentID", updateDepartmentModel.DepartmentID);
-                cmd.Parameters.AddWithValue("@FunctionID", updateDepartmentModel.FunctionID);
-                cmd.Parameters.AddWithValue("@Status", Convert.ToInt16(updateDepartmentModel.Status));
-                cmd.Parameters.AddWithValue("@TenantID", updateDepartmentModel.TenantID);
-                cmd.Parameters.AddWithValue("@UserID", updateDepartmentModel.CreatedBy);
+                cmd.Parameters.AddWithValue("@_DepartmentBrandID", updateDepartmentModel.DepartmentBrandID);
+                cmd.Parameters.AddWithValue("@_BrandID", Convert.ToInt32(updateDepartmentModel.BrandID)); 
+                cmd.Parameters.AddWithValue("@_StoreID", Convert.ToInt32(updateDepartmentModel.StoreID)); 
+                cmd.Parameters.AddWithValue("@_DepartmentID", updateDepartmentModel.DepartmentID);
+                cmd.Parameters.AddWithValue("@_FunctionID", updateDepartmentModel.FunctionID);
+                cmd.Parameters.AddWithValue("@_Status", Convert.ToInt16(updateDepartmentModel.Status));
+                cmd.Parameters.AddWithValue("@_TenantID", updateDepartmentModel.TenantID);
+                cmd.Parameters.AddWithValue("@_CreatedBy", updateDepartmentModel.CreatedBy);
 
 
                 cmd.CommandType = CommandType.StoredProcedure;
