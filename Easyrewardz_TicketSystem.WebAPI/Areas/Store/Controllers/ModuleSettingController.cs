@@ -10,7 +10,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClaimAttachmentSettingController : ControllerBase
+    public class ModuleSettingController : ControllerBase
     {
         #region variable declaration
         private IConfiguration configuration;
@@ -19,7 +19,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         #endregion
 
         #region Constructor
-        public ClaimAttachmentSettingController(IConfiguration _iConfig)
+        public ModuleSettingController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
