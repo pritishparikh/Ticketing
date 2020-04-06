@@ -1,6 +1,8 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,9 +13,15 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
+        CustomResponse ApiResponse = null;
+        string apiResponse = string.Empty;
+        string apisecurityToken = string.Empty;
+        string apiURL = string.Empty;
         public CustomerService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
+            apisecurityToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9ncmFtQ29kZSI6IkJhdGEiLCJVc2VySUQiOiIzIiwiQXBwSUQiOiI3IiwiRGF5IjoiMjgiLCJNb250aCI6IjMiLCJZZWFyIjoiMjAyMSIsIlJvbGUiOiJBZG1pbiIsImlzcyI6IkF1dGhTZWN1cml0eUlzc3VlciIsImF1ZCI6IkF1dGhTZWN1cml0eUF1ZGllbmNlIn0.0XeF7V5LWfQn0NlSlG7Rb-Qq1hUCtUYRDg6dMGIMvg0";
+            apiURL = "http://searchapi.ercx.co/api/Search/CustomerDetails";
         }
         #endregion
 
@@ -78,7 +86,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="searchText"></param>
         /// <param name="TenantId"></param>
         /// <returns></returns>
-        public List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText, int TenantId)
+        public List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText, int TenantId, int UserID)
         {
             List<CustomerMaster> customerMasters = new List<CustomerMaster>();
 
@@ -108,7 +116,14 @@ namespace Easyrewardz_TicketSystem.Services
                         customerMasters.Add(customer);
                     }
                 }
-                conn.Close();
+                else
+                {
+                    //get data from API
+                    customerMasters= GetCustomerByAPI(searchText, TenantId, UserID);
+                }
+
+
+                
             }
             catch (Exception)
             {
@@ -137,7 +152,10 @@ namespace Easyrewardz_TicketSystem.Services
             int i = 0;
             try
             {
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_createCustomer", conn);
                 cmd1.Parameters.AddWithValue("@TenantID", TenantId);
@@ -253,6 +271,84 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return message;
+        }
+
+        public List<CustomerMaster> GetCustomerByAPI(string searchText, int TenantId,int UserID)
+        {
+            List<CustomerMaster> customerMasters = new List<CustomerMaster>();
+            CustomSearchCustomer apiSearchCustomer = new CustomSearchCustomer();
+            List < CustomCustomerDetails> customCustomerDetails = new List<CustomCustomerDetails>();
+
+           
+            int InsertedCustID = 0;
+            try
+            {
+                apiSearchCustomer.programCode = "Bata";
+                apiSearchCustomer.mobileNumber = searchText;
+                apiSearchCustomer.customerName = "";
+                apiSearchCustomer.email = "";
+                apiSearchCustomer.securityToken = apisecurityToken;
+                apiSearchCustomer.userID = 3;
+                apiSearchCustomer.appID = 7;
+
+                string apiReq = JsonConvert.SerializeObject(apiSearchCustomer);
+                apiResponse = CommonService.SendApiRequest(apiURL, apiReq);
+
+                if (!string.IsNullOrEmpty(apiResponse))
+                {
+                    ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+
+                    if (ApiResponse != null)
+                    {
+                        customCustomerDetails = JsonConvert.DeserializeObject<List<CustomCustomerDetails>>(Convert.ToString((ApiResponse.Responce)));
+                        if (customCustomerDetails != null )
+                        {
+                            if(customCustomerDetails.Count > 0)
+                            {
+
+                                for(int k =0; k< customCustomerDetails.Count; k++ )
+                                {
+                                    CustomerMaster customerDetails = new CustomerMaster();
+                                    customerDetails.TenantID = TenantId;
+                                    customerDetails.CustomerName = customCustomerDetails[k].CustomerName;
+                                    customerDetails.CreatedBy = UserID;
+                                    customerDetails.CustomerPhoneNumber = customCustomerDetails[k].MobileNumber;
+                                    customerDetails.CustomerEmailId = customCustomerDetails[k].Email;
+                                    customerDetails.GenderID = customCustomerDetails[k].Gender.ToLower().Equals("male") ? 1 : 2;
+                                    customerDetails.AltEmailID = customCustomerDetails[k].Email;
+                                    customerDetails.AltNumber = customCustomerDetails[k].MobileNumber;
+                                    customerDetails.IsActive = Convert.ToInt16(true);
+                                    
+                                   
+                                    
+
+                                    //call add customer
+                                    InsertedCustID = addCustomerDetails(customerDetails, TenantId);
+                                    if (InsertedCustID > 0)
+                                    {
+                                        customerDetails.CustomerID = InsertedCustID;
+                                    }
+
+                                    customerMasters.Add(customerDetails);
+                                }
+                            }
+                            
+
+                            
+                        }
+                        
+                    }
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return customerMasters;
         }
     }
 }
