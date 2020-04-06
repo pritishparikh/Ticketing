@@ -50,7 +50,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
 
     public class StoreSLATargetResponseModel
     {
-        public int SLATargetID { get; set; }
+        public int SLATargetID { get; set; } 
         public int PriorityID { get; set; }
         public string PriorityName { get; set; }
         public string SLABreachPercent { get; set; }
