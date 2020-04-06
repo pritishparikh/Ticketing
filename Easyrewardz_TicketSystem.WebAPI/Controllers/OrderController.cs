@@ -13,7 +13,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+   //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class OrderController : ControllerBase
     {
         #region variable declaration
@@ -129,7 +129,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                objorderMaster = ordercaller.GetOrderItemList(new OrderService(connectioSting), OrderNumber, CustomerID, authenticate.TenantId);
+                objorderMaster = ordercaller.GetOrderItemList(new OrderService(connectioSting), OrderNumber, CustomerID, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                    objorderMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
