@@ -212,7 +212,7 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -231,7 +231,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Update Department Mapping
         /// </summary>
         /// <returns></returns>
-        public int UpdateDepartmentMapping(int TenantID, int DepartmentBrandID, int BrandID, int StoreID, int DepartmentID, int FunctionID, bool Status, int CreatedBy)
+        public int UpdateDepartmentMapping(CreateStoreDepartmentModel updateDepartmentModel)
         {
             int result = 0;
             try
@@ -240,14 +240,14 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateDepartmentMapping", conn);
                 cmd.Connection = conn;
 
-                cmd.Parameters.AddWithValue("@BrandID", DepartmentBrandID);
-                cmd.Parameters.AddWithValue("@BrandID", BrandID);
-                cmd.Parameters.AddWithValue("@StoreID", StoreID);
-                cmd.Parameters.AddWithValue("@DepartmentID", DepartmentID);
-                cmd.Parameters.AddWithValue("@FunctionID", FunctionID);
-                cmd.Parameters.AddWithValue("@Status", Convert.ToInt16(Status));
-                cmd.Parameters.AddWithValue("@TenantID", TenantID);
-                cmd.Parameters.AddWithValue("@UserID", CreatedBy);
+                cmd.Parameters.AddWithValue("@BrandID", updateDepartmentModel.DepartmentBrandID);
+                cmd.Parameters.AddWithValue("@BrandID", updateDepartmentModel.BrandID);
+                cmd.Parameters.AddWithValue("@StoreID", updateDepartmentModel.StoreID);
+                cmd.Parameters.AddWithValue("@DepartmentID", updateDepartmentModel.DepartmentID);
+                cmd.Parameters.AddWithValue("@FunctionID", updateDepartmentModel.FunctionID);
+                cmd.Parameters.AddWithValue("@Status", Convert.ToInt16(updateDepartmentModel.Status));
+                cmd.Parameters.AddWithValue("@TenantID", updateDepartmentModel.TenantID);
+                cmd.Parameters.AddWithValue("@UserID", updateDepartmentModel.CreatedBy);
 
 
                 cmd.CommandType = CommandType.StoredProcedure;

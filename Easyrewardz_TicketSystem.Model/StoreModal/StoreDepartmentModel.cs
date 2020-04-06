@@ -58,13 +58,15 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
 
     public class CreateStoreDepartmentModel
     {
+        public int DepartmentBrandID { get; set; }
+
         public string BrandID { get; set; }
 
         public string StoreID { get; set; }
 
-        public string DepartmentID { get; set; }
+        public int DepartmentID { get; set; }
 
-        public string FunctionID { get; set; }
+        public int FunctionID { get; set; }
 
         public bool Status { get; set; }
 

@@ -40,7 +40,7 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
 
         int DeleteDepartmentMapping(int tenantID, int DepartmentBrandMappingID);
 
-        int UpdateDepartmentMapping(int TenantID, int DepartmentBrandID, int BrandID, int StoreID, int DepartmentID, int FunctionID, bool Status, int CreatedBy);
+        int UpdateDepartmentMapping(CreateStoreDepartmentModel updateDepartmentModel);
 
         List<StoreCodeModel> getStoreByBrandID(string BrandIDs, int tenantID);
 

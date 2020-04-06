@@ -139,7 +139,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateBrandDepartmentMapping")]
-        public ResponseModel UpdateBrandDepartmentMapping(int DepartmentBrandID, int BrandID, int StoreID, int DepartmentID, int FunctionID, bool Status)
+        public ResponseModel UpdateBrandDepartmentMapping([FromBody] CreateStoreDepartmentModel updateDepartmentModel)
         {
 
             ResponseModel objResponseModel = new ResponseModel();
@@ -154,9 +154,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
 
-
-                UpdateCount = newDept.UpdateDepartmentMapping(new StoreDepartmentService(_connectioSting), authenticate.TenantId,
-                    DepartmentBrandID, BrandID, StoreID, DepartmentID, FunctionID, Status, authenticate.UserMasterID);
+                updateDepartmentModel.TenantID = authenticate.TenantId;
+                updateDepartmentModel.CreatedBy = authenticate.UserMasterID;
+                UpdateCount = newDept.UpdateDepartmentMapping(new StoreDepartmentService(_connectioSting), updateDepartmentModel);
                 statusCode =
                 UpdateCount == 0 ?
                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
