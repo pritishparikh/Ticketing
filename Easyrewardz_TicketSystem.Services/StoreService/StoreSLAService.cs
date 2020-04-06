@@ -339,7 +339,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 objSLALst[i].SLATarget = ds.Tables[1].AsEnumerable().Where(r => r.Field<object>("SlaID") != System.DBNull.Value &&
                                     objSLALst[i].SLAID == Convert.ToInt32(r.Field<object>("SlaID"))).Select(r => new StoreSLATargetResponseModel()
                                     {
-                                        SLATargetID = Convert.ToInt32(r.Field<object>("SLATargetID")),
+                                        SLATargetID = Convert.ToInt32(r.Field<object>("SLATargetID")),  
                                         PriorityID = Convert.ToInt32(r.Field<object>("PriorityID")),
                                         PriorityName = r.Field<object>("PriortyName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriortyName")),
                                         SLABreachPercent = r.Field<object>("PriorityBreach") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("PriorityBreach")),

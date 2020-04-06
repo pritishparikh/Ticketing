@@ -54,7 +54,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public int PriorityID { get; set; }
         public string PriorityName { get; set; }
         public string SLABreachPercent { get; set; }
-        public int PriorityResolution { get; set; }
+        public int PriorityResolution { get; set; } 
         public string PriorityResolutionDuration { get; set; }
 
     }
