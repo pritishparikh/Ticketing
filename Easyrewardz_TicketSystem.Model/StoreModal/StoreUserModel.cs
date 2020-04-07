@@ -12,8 +12,7 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class StoreUserPersonalDetails
     {
-        //public int BrandID { get; set; }
-        //public int StoreID { get; set; }
+       
         public int UserID { get; set; }
         public int TenantID { get; set; }
        public bool IsStoreUser { get; set; }
