@@ -49,11 +49,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider.Store
             return _SLA.BindFunctionList(tenantID, SearchText);
         }
 
-        //public StoreSLAResponseModel GetStoreSLADetail(IStoreSLA SLA, int TenantID, int SLAID)
-        //{
-        //    _SLA = SLA;
-        //    return _SLA.GetStoreSLADetail(TenantID, SLAID);
-        //}
+        public StoreSLAResponseModel GetStoreSLADetail(IStoreSLA SLA, int TenantID, int SLAID)
+        {
+            _SLA = SLA;
+            return _SLA.GetStoreSLADetail(TenantID, SLAID);
+        }
         //public List<string> SLABulkUpload(IStoreSLA SLA, int TenantID, int CreatedBy, int SLAFor, DataSet DataSetCSV)
         //{
         //    _SLA = SLA;

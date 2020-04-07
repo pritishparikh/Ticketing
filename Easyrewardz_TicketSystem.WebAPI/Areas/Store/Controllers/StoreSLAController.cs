@@ -268,34 +268,34 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// </summary>
         /// <param name="SLAId"></param>
         /// <returns></returns>
-        //[HttpPost]
-        //[Route("GetStoreSLADetail")]
-        //public ResponseModel GetSLADetail(int SLAId)
-        //{
-            //ResponseModel _objResponseModel = new ResponseModel();
-            //int StatusCode = 0;
-            //string statusMessage = "";
-            //StoreSLAResponseModel _objresponseModel = new StoreSLAResponseModel();
-            //try
-            //{
-            //    string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-            //    Authenticate authenticate = new Authenticate();
-            //    authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-            //    StoreSLACaller _newSLA = new StoreSLACaller();
-            //    _objresponseModel = _newSLA.GetStoreSLADetail(new StoreSLAService(_connectioSting), authenticate.TenantId, SLAId);
-            //    StatusCode = (int)EnumMaster.StatusCode.Success;
-            //    statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-            //    _objResponseModel.Status = true;
-            //    _objResponseModel.StatusCode = StatusCode;
-            //    _objResponseModel.Message = statusMessage;
-            //    _objResponseModel.ResponseData = _objresponseModel;
-            //}
-            //catch (Exception)
-            //{
-            //    throw;
-            //}
-            //return _objResponseModel;
-        //}
+        [HttpPost]
+        [Route("GetStoreSLADetail")]
+        public ResponseModel GetSLADetail(int SLAId)
+        {
+            ResponseModel _objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            StoreSLAResponseModel _objresponseModel = new StoreSLAResponseModel();
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                StoreSLACaller _newSLA = new StoreSLACaller();
+                _objresponseModel = _newSLA.GetStoreSLADetail(new StoreSLAService(_connectioSting), authenticate.TenantId, SLAId);
+                StatusCode = (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                _objResponseModel.Status = true;
+                _objResponseModel.StatusCode = StatusCode;
+                _objResponseModel.Message = statusMessage;
+                _objResponseModel.ResponseData = _objresponseModel;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return _objResponseModel;
+        }
 
         #endregion
     }
