@@ -53,6 +53,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
 
 
+        public List<StoreUserDepartmentList> GetDepartmentByBrandStore(IStoreUser Users,int BrandID, int storeID)
+        {
+            _StoreUserRepository = Users;
+            return _StoreUserRepository.BindDepartmentByBrandStore(BrandID, storeID);
+        }
+
         #region Claim CategoryMapping
 
         public List<StoreClaimCategoryModel> GetClaimCategoryListByBrandID(IStoreUser Users, int tenantID, string BrandIDs)

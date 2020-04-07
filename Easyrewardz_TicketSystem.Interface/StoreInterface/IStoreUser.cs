@@ -1,5 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.Interface
@@ -15,6 +16,9 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int AddStoreUserProfileDetails(int tenantID,int userID, int BrandID, int storeID, int departmentId, string functionIDs, int designationID, int reporteeID, int CreatedBy);
 
+
+
+        List<StoreUserDepartmentList> BindDepartmentByBrandStore(int BrandID, int storeID);
 
         #region Claim Category mapping
 

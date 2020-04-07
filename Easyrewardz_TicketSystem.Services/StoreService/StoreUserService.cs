@@ -287,6 +287,62 @@ namespace Easyrewardz_TicketSystem.Services
 
 
 
+        /// <summary>
+        /// Get  Department List by  brandID and store ID
+        /// </summary>
+        /// <param name="BrandID"></param>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
+
+        public List<StoreUserDepartmentList> BindDepartmentByBrandStore(int BrandID, int storeID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<StoreUserDepartmentList> departmentMasters = new List<StoreUserDepartmentList>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("GetStoreDepartmentByBrandStore", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_brandID", BrandID);
+                cmd1.Parameters.AddWithValue("@_storeID", storeID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreUserDepartmentList department = new StoreUserDepartmentList();
+                        department.DepartmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["DepartmentID"]);
+                        department.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+                        department.BrandID = Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
+                        department.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
+                        department.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        departmentMasters.Add(department);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+
+                if (ds != null)
+                    ds.Dispose();
+            }
+            return departmentMasters;
+        }
+
         #region Claim CategoryMapping
 
         /// <summary>

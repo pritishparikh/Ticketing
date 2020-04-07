@@ -53,6 +53,16 @@ namespace Easyrewardz_TicketSystem.Model
         public string FunctionName { get; set; }
     }
 
+
+    public class StoreUserDepartmentList
+    {
+        public int DepartmentID { get; set; }
+        public string DepartmentName { get; set; }
+        public int BrandID { get; set; }
+        public int StoreID { get; set; }
+        public bool IsActive { get; set; }
+    }
+
     #region Claim Category mapping
 
     public class StoreClaimCategoryModel

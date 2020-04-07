@@ -1,4 +1,5 @@
 ﻿using Easyrewardz_TicketSystem.Interface.StoreInterface;
+using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Model.StoreModal;
 using MySql.Data.MySqlClient;
 using System;
@@ -54,6 +55,7 @@ namespace Easyrewardz_TicketSystem.Services
                         StoreDepartmentModel department = new StoreDepartmentModel();
                         department.DepartmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["DepartmentID"]);
                         department.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+                       
                         department.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
                         departmentMasters.Add(department);
                     }
@@ -212,7 +214,7 @@ namespace Easyrewardz_TicketSystem.Services
                 success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw;
             }
@@ -308,7 +310,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw;
             }

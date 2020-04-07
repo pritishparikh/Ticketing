@@ -208,7 +208,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
 
-        #region Create Campaign Script
+        /// <summary>
+        /// Get  Department List by  brandID and store ID
+        /// </summary>
+        /// <param name="BrandID"></param>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("BindDepartmentByBrandAndStore")]
+        public ResponseModel BindDepartmentByBrandAndStore(int BrandID, int storeID)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<StoreUserDepartmentList> objDepartmentModel = new List<StoreUserDepartmentList>();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                objDepartmentModel = userCaller.GetDepartmentByBrandStore(new StoreUserService(_connectioSting), BrandID, storeID);
+
+                StatusCode =
+               objDepartmentModel.Count == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objDepartmentModel;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+        #region Bind Claim 
 
         /// <summary>
         /// Get Claim Category List by muliptle brandID
