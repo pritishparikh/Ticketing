@@ -313,7 +313,7 @@ namespace Easyrewardz_TicketSystem.Services
             int result = 0;
             try
             {
-                if (Campaignscript.CampaignNameID > 0)
+                if (Campaignscript.CampaignNameID.Length > 0)
                 {
                     if (Campaignscript.CampaignScript.Length > 0)
                     {
@@ -362,7 +362,7 @@ namespace Easyrewardz_TicketSystem.Services
             int result = 0;
             try
             {
-                if (Campaignscript.CampaignNameID > 0)
+                if (Campaignscript.CampaignID > 0)
                 {
                     if (Campaignscript.CampaignScript.Length > 0)
                     {

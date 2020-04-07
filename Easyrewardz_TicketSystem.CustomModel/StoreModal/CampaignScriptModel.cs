@@ -29,7 +29,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
     public class CampaignScriptRequest
     {
         public int CampaignID { get; set; }
-        public int CampaignNameID { get; set; }
+        public string CampaignNameID { get; set; }
         public string CampaignScript { get; set; }
         public bool Status { get; set; }
     }
