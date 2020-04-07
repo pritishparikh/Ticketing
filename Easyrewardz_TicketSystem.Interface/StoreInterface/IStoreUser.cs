@@ -29,7 +29,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<DesignationMaster> BindStoreReporteeDesignation(int DesignationID, int TenantID);
 
 
-        List<CustomSearchTicketAgent> BindStoreReportToUser(int DesignationID, bool IsStoreUser, int TenantID);
+        List<CustomSearchTicketAgent> BindStoreReportToUser(int DesignationID, bool IsStoreUser, int TenantID); 
 
         #endregion
 

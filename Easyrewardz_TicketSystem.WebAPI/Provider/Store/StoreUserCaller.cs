@@ -66,7 +66,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public List<StoreUserDepartmentList> GetDepartmentByBrandStore(IStoreUser Users,int BrandID, int storeID)
         {
             _StoreUserRepository = Users;
-            return _StoreUserRepository.BindDepartmentByBrandStore(BrandID, storeID);
+            return _StoreUserRepository.BindDepartmentByBrandStore(BrandID, storeID);  
         }
 
 

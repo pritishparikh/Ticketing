@@ -236,7 +236,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 StatusCode =
                deletecount == 0 ?
                       (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode); 
 
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;

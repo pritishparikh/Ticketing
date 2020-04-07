@@ -306,7 +306,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@Modify_by", ModifiedBy);
                 cmd.Parameters.AddWithValue("@Is_StoreUser", Convert.ToInt16(IsStoreUser));
-                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure; 
                 success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }

@@ -93,7 +93,7 @@ namespace Easyrewardz_TicketSystem.Model
     }
 
 
-    public class StoreClaimCategory
+    public class StoreClaimCategory 
     {
         public string BrandIDs { get; set; }
         public string CategoryIds { get; set; }
