@@ -246,7 +246,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
 
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetCRMRoleDetailsByUserID", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreCRMRoleDetailsByUserID", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 cmd1.Parameters.AddWithValue("@_userID", UserID);
