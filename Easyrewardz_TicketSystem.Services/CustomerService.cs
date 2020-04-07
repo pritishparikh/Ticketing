@@ -39,7 +39,11 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             try
             {
-                conn.Open();
+
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_getCustomerDetailsById", conn);
                 cmd1.Parameters.AddWithValue("@Customer_ID", CustomerID);
@@ -343,7 +347,7 @@ namespace Easyrewardz_TicketSystem.Services
 
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw;
             }

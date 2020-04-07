@@ -59,10 +59,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _orderRepository.getOrderDetailByTicketID(TicketID, TenantID);
 
         }
-        public List<CustomOrderDetailsByCustomer> GetOrderDetailsByCustomerID(IOrder _orderMaster, int CustomerID, int TenantID)
+        public List<CustomOrderDetailsByCustomer> GetOrderDetailsByCustomerID(IOrder _orderMaster, int CustomerID, int TenantID,int CreatedBy)
         {
             _orderRepository = _orderMaster;
-            return _orderRepository.getOrderListByCustomerID(CustomerID, TenantID);
+            return _orderRepository.getOrderListByCustomerID(CustomerID, TenantID, CreatedBy);
 
         }
 
