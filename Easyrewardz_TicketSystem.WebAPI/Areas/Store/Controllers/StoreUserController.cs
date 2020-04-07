@@ -1,5 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -43,7 +45,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="CustomStoreUserModel"></param>
         [HttpPost]
         [Route("AddStoreUserPersonalDetail")]
-        public ResponseModel AddStoreUserPersonalDetail([FromBody] CustomStoreUserModel storeUser)
+        public ResponseModel AddStoreUserPersonalDetail([FromBody] StoreUserPersonalDetails storeUser)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -57,7 +59,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 StoreUserCaller userCaller = new StoreUserCaller();
                 storeUser.CreatedBy = authenticate.UserMasterID;
                 storeUser.TenantID = authenticate.TenantId;
-                int Result = userCaller.StoreUserPersonaldetail(new StoreUserService(_connectioSting), storeUser);
+                int Result = userCaller.CreateStoreUserPersonaldetail(new StoreUserService(_connectioSting), storeUser);
 
                 StatusCode =
                Result == 0 ?
@@ -85,7 +87,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="storeUser"></param>
         [HttpPost]
         [Route("AddStoreUserProfileDetail")]
-        public ResponseModel AddStoreUserProfileDetail([FromBody] CustomStoreUserModel storeUser)
+        public ResponseModel AddStoreUserProfileDetail(int userID, int BrandID, int storeID, int departmentId, string functionIDs, int designationID, int reporteeID)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -97,13 +99,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
-                storeUser.CreatedBy = authenticate.UserMasterID;
-                storeUser.TenantID = authenticate.TenantId;
-                int Result = userCaller.StoreUserProfiledetail(new StoreUserService(_connectioSting), storeUser);
+              
+                int Result = userCaller.CreateStoreUserProfiledetail(new StoreUserService(_connectioSting), authenticate.TenantId,
+                     userID,  BrandID,  storeID,  departmentId,  functionIDs,  designationID,  reporteeID, authenticate.UserMasterID);
 
                 StatusCode =
                Result == 0 ?
-                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                      (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
                 objResponseModel.Status = true;
@@ -204,6 +206,148 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+
+
+        #region Create Campaign Script
+
+        /// <summary>
+        /// Get Claim Category List by muliptle brandID
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="BrandID"></param>
+        /// <returns></returns>
+        /// 
+        [HttpPost]
+        [Route("BindStoreClaimCategory")]
+        public ResponseModel BindStoreClaimCategory(string BrandIds)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<StoreClaimCategoryModel> objClaimModel = new List<StoreClaimCategoryModel>();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                 objClaimModel = userCaller.GetClaimCategoryListByBrandID(new StoreUserService(_connectioSting), authenticate.TenantId, BrandIds);
+
+                StatusCode =
+               objClaimModel.Count == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objClaimModel;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Get Claim sub Category List by muliptle CategoryID
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="BrandID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("BindStoreClaimSubCategory")]
+        public ResponseModel BindStoreClaimSubCategory(string CategoryIDs)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<StoreClaimSubCategoryModel> objClaimModel = new List<StoreClaimSubCategoryModel>();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                objClaimModel = userCaller.GetClaimSubCategoryByCategoryID(new StoreUserService(_connectioSting), authenticate.TenantId, CategoryIDs);
+
+                StatusCode =
+               objClaimModel.Count == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objClaimModel;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Get Claim Issue Type List by multiple subcat Id
+        /// </summary>
+        /// <param name="TenantID">Tenant Id</param>
+        /// <param name="SubCategoryID">SubCategory ID</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("BindStoreClaimIssueType")]
+        public ResponseModel BindStoreClaimIssueType(string subCategoryIDs)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<StoreClaimIssueTypeModel> objClaimModel = new List<StoreClaimIssueTypeModel>();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                objClaimModel = userCaller.GetClaimIssueTypeListBySubCategoryID(new StoreUserService(_connectioSting), authenticate.TenantId, subCategoryIDs);
+
+                StatusCode =
+               objClaimModel.Count == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objClaimModel;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+
+        #endregion
+
 
         #region Create Campaign Script
 
