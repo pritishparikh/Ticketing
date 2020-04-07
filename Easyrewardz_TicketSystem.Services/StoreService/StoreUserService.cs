@@ -286,6 +286,8 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
+        #region Profile Mapping
+
 
         /// <summary>
         /// Get  Department List by  brandID and store ID
@@ -293,7 +295,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="BrandID"></param>
         /// <param name="storeID"></param>
         /// <returns></returns>
-
         public List<StoreUserDepartmentList> BindDepartmentByBrandStore(int BrandID, int storeID)
         {
             DataSet ds = new DataSet();
@@ -342,6 +343,119 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return departmentMasters;
         }
+
+
+
+        /// <summary>
+        /// Get Reportee Designation
+        /// </summary>
+        /// <param name="DesignationID"></param>
+        /// <param name="HierarchyFor"></param>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        public List<DesignationMaster> BindStoreReporteeDesignation(int DesignationID, int TenantID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<DesignationMaster> designationMasters = new List<DesignationMaster>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreReporteeDesignation", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
+                cmd1.Parameters.AddWithValue("@Designation_ID", DesignationID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+               
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        DesignationMaster designationMaster = new DesignationMaster();
+                        designationMaster.DesignationID = Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
+                        designationMaster.DesignationName = Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
+                        designationMasters.Add(designationMaster);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return designationMasters;
+        }
+
+
+        /// <summary>
+        /// Get Store Report To User
+        /// </summary>
+        /// <param name="DesignationID"></param>
+        /// <param name="IsStoreUser"></param>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        public List<CustomSearchTicketAgent> BindStoreReportToUser(int DesignationID,bool IsStoreUser,  int TenantID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<CustomSearchTicketAgent> Users = new List<CustomSearchTicketAgent>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetUserBasedonReportee", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
+                cmd1.Parameters.AddWithValue("@Designation_ID", DesignationID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@Is_StoreUser", Convert.ToInt16(IsStoreUser));
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomSearchTicketAgent customSearchTicketAgent = new CustomSearchTicketAgent();
+                        customSearchTicketAgent.User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        customSearchTicketAgent.AgentName = Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
+                        Users.Add(customSearchTicketAgent);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return Users;
+        }
+
+
+        #endregion
+
 
         #region Claim CategoryMapping
 

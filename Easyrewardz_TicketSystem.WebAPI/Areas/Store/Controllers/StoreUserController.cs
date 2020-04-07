@@ -208,6 +208,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
 
+
+        #region Profile Mapping
+
         /// <summary>
         /// Get  Department List by  brandID and store ID
         /// </summary>
@@ -251,6 +254,98 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+
+
+        /// <summary>
+        /// Get  reportee designation on designation id
+        /// </summary>
+        /// <param name="DesignationID"></param>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("BindStoreReporteeDesignation")]
+        public ResponseModel BindStoreReporteeDesignation(int DesignationID)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<DesignationMaster> objdesignationModel = new List<DesignationMaster>();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                objdesignationModel = userCaller.GetStoreReporteeDesignation(new StoreUserService(_connectioSting), DesignationID, authenticate.TenantId);
+
+                StatusCode =
+               objdesignationModel.Count == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objdesignationModel;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+        // <summary>
+        /// Get Store Report To User
+        /// </summary>
+        /// <param name="DesignationID"></param>
+        /// <param name="IsStoreUser"></param>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("BindStoreReportToUser")]
+        public ResponseModel BindStoreReportToUser(int DesignationID, bool IsStoreUser)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<CustomSearchTicketAgent> objuserModel = new List<CustomSearchTicketAgent>();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                objuserModel = userCaller.GetStoreReportToUser(new StoreUserService(_connectioSting), DesignationID, IsStoreUser, authenticate.TenantId);
+
+                StatusCode =
+               objuserModel.Count == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objuserModel;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+        #endregion
 
         #region Bind Claim 
 

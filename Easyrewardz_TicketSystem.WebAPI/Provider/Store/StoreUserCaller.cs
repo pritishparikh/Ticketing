@@ -51,13 +51,30 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
 
-
+        #region Profile Mapping
 
         public List<StoreUserDepartmentList> GetDepartmentByBrandStore(IStoreUser Users,int BrandID, int storeID)
         {
             _StoreUserRepository = Users;
             return _StoreUserRepository.BindDepartmentByBrandStore(BrandID, storeID);
         }
+
+
+        public List<DesignationMaster> GetStoreReporteeDesignation(IStoreUser Users, int DesignationID,  int TenantID)
+        {
+            _StoreUserRepository = Users;
+            return _StoreUserRepository.BindStoreReporteeDesignation(DesignationID,  TenantID);
+        }
+
+        public List<CustomSearchTicketAgent> GetStoreReportToUser(IStoreUser Users, int DesignationID, bool IsStoreUser,int TenantID)
+        {
+            _StoreUserRepository = Users;
+            return _StoreUserRepository.BindStoreReportToUser(DesignationID, IsStoreUser,TenantID);
+        }
+
+
+        #endregion
+
 
         #region Claim CategoryMapping
 
