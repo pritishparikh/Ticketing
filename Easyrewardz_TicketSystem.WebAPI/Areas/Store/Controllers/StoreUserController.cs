@@ -128,8 +128,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <param name="storeUser"></param>
         [HttpPost]
-        [Route("StoreUserMappingCategory")]
-        public ResponseModel StoreUserMappingCategory([FromBody] CustomStoreUser storeUser)
+        [Route("AddStoreUserMappingCategory")]
+        public ResponseModel StoreUserMappingCategory([FromBody] StoreClaimCategory storeUser)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -143,7 +143,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 StoreUserCaller userCaller = new StoreUserCaller();
                 storeUser.CreatedBy = authenticate.UserMasterID;
                 storeUser.TenantID = authenticate.TenantId;
-                int Result = userCaller.StoreUserMapping(new StoreUserService(_connectioSting), storeUser);
+                int Result = userCaller.CreateStoreUserMapping(new StoreUserService(_connectioSting), storeUser);
 
                 StatusCode =
                Result == 0 ?
@@ -207,6 +207,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
+
+        /// <summary>
+        /// Delete Store User
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="IsStoreUser"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("DeleteStoreUser")]
+        public ResponseModel DeleteStoreUser(int UserId, bool IsStoreUser)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+
+            int StatusCode = 0;
+            int deletecount = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                deletecount = userCaller.DeleteStoreUser(new StoreUserService(_connectioSting),authenticate.TenantId, UserId, IsStoreUser,authenticate.UserMasterID);
+
+                StatusCode =
+               deletecount == 0 ?
+                      (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = deletecount;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
 
 
         #region Profile Mapping

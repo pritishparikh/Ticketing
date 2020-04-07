@@ -93,5 +93,20 @@ namespace Easyrewardz_TicketSystem.Model
     }
 
 
+    public class StoreClaimCategory
+    {
+        public string BrandIDs { get; set; }
+        public string CategoryIds { get; set; }
+        public string SubCategoryIds { get; set; }
+        public string IssuetypeIds { get; set; }
+        public bool isClaimApprover { get; set; }
+        public int CRMRoleID { get; set; }
+        public bool isActive { get; set; }
+        public int CreatedBy { get; set; }
+        public bool IsStoreUser { get; set; }
+        public int UserID { get; set; }
+        public int TenantID { get; set; }
+    }
+
     #endregion
 }

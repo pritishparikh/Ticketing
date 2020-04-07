@@ -242,11 +242,13 @@ namespace Easyrewardz_TicketSystem.Services
 
             return success;
         }
+
+
         /// <summary>
         /// Store User Mapped Category
         /// </summary>
         /// <param name="customStoreUser"></param>
-        public int StoreUserMappedCategory(CustomStoreUser customStoreUser)
+        public int AddStoreUserMappedCategory(StoreClaimCategory customStoreUser)
         {
 
             int Success = 0;
@@ -264,8 +266,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", customStoreUser.TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", customStoreUser.UserID);
                 cmd.Parameters.AddWithValue("@CRMRole_ID", customStoreUser.CRMRoleID);
-                cmd.Parameters.AddWithValue("@ClaimApprover_ID", customStoreUser.ClaimApproverID);
-                cmd.Parameters.AddWithValue("@Is_Active", customStoreUser.Status);
+                cmd.Parameters.AddWithValue("@isClaimApprover", Convert.ToInt16(customStoreUser.isClaimApprover));
+                cmd.Parameters.AddWithValue("@Is_Active", Convert.ToInt16(customStoreUser.isActive));
                 cmd.CommandType = CommandType.StoredProcedure;
                 Success = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -285,6 +287,43 @@ namespace Easyrewardz_TicketSystem.Services
             return Success;
         }
 
+
+        /// <summary>
+        /// Delete User
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="Modifyby"></param>
+        /// <param name="IsStoreUser"></param>
+        public int DeleteStoreUser(int tenantID, int UserId, bool IsStoreUser, int ModifiedBy)
+        {
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_DeleteStoreUserDetails", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@user_ID", UserId);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@Modify_by", ModifiedBy);
+                cmd.Parameters.AddWithValue("@Is_StoreUser", Convert.ToInt16(IsStoreUser));
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd.ExecuteScalar());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return success;
+        }
 
         #region Profile Mapping
 
