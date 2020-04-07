@@ -185,6 +185,7 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             CampaignID = Convert.ToInt32(r.Field<object>("CampaignID")),
                             CampaignName = r.Field<object>("CampaignName") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CampaignName")),
+                            CampaignNameID = Convert.ToInt32(r.Field<object>("CampaignNameID")),
                             CampaignScriptLess = r.Field<object>("CampaignScript") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CampaignScript")).Length < 15 ? Convert.ToString(r.Field<object>("CampaignScript")) : Convert.ToString(r.Field<object>("CampaignScript")).Substring(0, 15),
                             CampaignScript = r.Field<object>("CampaignScript") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CampaignScript")),
                             CreatedBy = r.Field<object>("createdBy") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("createdBy")),

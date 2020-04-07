@@ -11,7 +11,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
     {
        public int CampaignID { get; set; }
        public string CampaignName { get; set; }
-       public string CampaignScriptLess { get; set; }
+        public int CampaignNameID { get; set; }
+        public string CampaignScriptLess { get; set; }
        public string CampaignScript { get; set; }
        public string CreatedBy { get; set; }
        public string CreatedOn { get; set; }
