@@ -105,7 +105,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_InsertSLAMaster", conn);
+                MySqlCommand cmd = new MySqlCommand("SP_InsertStoreSLAMaster", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@_tenantID", SLA.TenantID);
