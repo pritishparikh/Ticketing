@@ -87,5 +87,8 @@ namespace Easyrewardz_TicketSystem.Model
         public string CreatedName { get; set; }
 
         public string ModifyName { get; set; }
+        public bool IsFromTicket { get; set; } = false;
+
+        public int TicketID { get; set; }
     }
 }
