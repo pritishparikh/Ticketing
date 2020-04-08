@@ -17,63 +17,21 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
-        /// <summary>
-        /// AddStoreUserPersonaldetail
-        /// <param name="CustomStoreUserModel"></param>
-        /// </summary>
-        /// <param name="CustomStoreUserModel"></param>
-        public int AddStoreUserPersonaldetail(CustomStoreUserModel storeUserModel)
-        {
-            int UserID = 0;
-            try
-            {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_InserStoreUserPersonalDetail", conn);
-                cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@User_Name", storeUserModel.UserName);
-                cmd.Parameters.AddWithValue("@Mobile_No", storeUserModel.MobileNo);
-                cmd.Parameters.AddWithValue("@First_Name", storeUserModel.FirstName);
-                cmd.Parameters.AddWithValue("@Last_Name", storeUserModel.LastName);
-                cmd.Parameters.AddWithValue("@Email_ID", storeUserModel.EmailID);
-                cmd.Parameters.AddWithValue("@Created_By", storeUserModel.CreatedBy);
-                //cmd.Parameters.AddWithValue("@Is_StoreUser", storeUserModel.IsStoreUser);
-                cmd.Parameters.AddWithValue("@Tenant_ID", storeUserModel.TenantID);
-                cmd.Parameters.AddWithValue("@Brand_IDs", storeUserModel.BrandIDs);
-                cmd.Parameters.AddWithValue("@Store_IDs", storeUserModel.StoreIDs);
-                cmd.CommandType = CommandType.StoredProcedure;
-                UserID = Convert.ToInt32(cmd.ExecuteScalar());
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
-            return UserID;
-        }
-
 
 
         /// <summary>
         /// AddStoreUserPersonaldetail
-        /// <param name="CustomStoreUserModel"></param>
+        /// <param name="StoreUserPersonalDetails"></param>
         /// </summary>
-        /// <param name="CustomStoreUserModel"></param>
+        
         /// 
-         public int AddStoreUserPersonalDetail(StoreUserPersonalDetails personalDetails)
+        public int AddStoreUserPersonalDetails(StoreUserPersonalDetails personalDetails)
         {
             int UserID = 0;
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_InserStoreUserPersonalDetail", conn);
+                MySqlCommand cmd = new MySqlCommand("SP_InsertStoreUserPersonalDetails", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@User_Name", personalDetails.UserName);
                 cmd.Parameters.AddWithValue("@Mobile_No", personalDetails.MobileNo);
@@ -88,7 +46,7 @@ namespace Easyrewardz_TicketSystem.Services
                 UserID = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
