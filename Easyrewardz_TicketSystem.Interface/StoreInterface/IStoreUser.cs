@@ -14,7 +14,7 @@ namespace Easyrewardz_TicketSystem.Interface
         
         //int EditStoreUser(CustomStoreUserEdit customStoreUserEdit);
 
-        int AddStoreUserPersonalDetail(StoreUserPersonalDetails personalDetails);
+        int AddStoreUserPersonalDetails(StoreUserPersonalDetails personalDetails);
 
         int AddStoreUserProfileDetails(int tenantID,int userID, int BrandID, int storeID, int departmentId, string functionIDs, int designationID, int reporteeID, int CreatedBy);
 
