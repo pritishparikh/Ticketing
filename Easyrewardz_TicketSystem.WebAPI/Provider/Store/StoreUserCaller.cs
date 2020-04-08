@@ -61,6 +61,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _StoreUserRepository.DeleteStoreUser( tenantID,  UserId,  IsStoreUser,  ModifiedBy);
         }
 
+        public List<StoreUserListing> GetStoreUserList(IStoreUser Users, int tenantID)
+        {
+            _StoreUserRepository = Users;
+            return _StoreUserRepository.GetStoreUserList(tenantID);
+        }
+
         #region Profile Mapping
 
         public List<StoreUserDepartmentList> GetDepartmentByBrandStore(IStoreUser Users,int BrandID, int storeID)

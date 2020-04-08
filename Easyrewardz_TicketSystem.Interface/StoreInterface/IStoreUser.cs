@@ -22,6 +22,8 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int DeleteStoreUser(int tenantID, int UserId, bool IsStoreUser, int ModifiedBy);
 
+        List<StoreUserListing> GetStoreUserList(int tenantID);
+
         #region Profile Mapping
 
         List<StoreUserDepartmentList> BindDepartmentByBrandStore(int BrandID, int storeID);
