@@ -11,12 +11,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #region Variable
         public IStoreTask _TaskRepository;
         #endregion
-        /// <summary>
-        /// Add Task
-        /// </summary>
-        /// <param name=""></param>
-        /// <param name=""></param>
-        /// <returns></returns>
+        
         public int AddTask(IStoreTask task, TaskMaster taskMaster, int TenantID, int UserID)
         {
             _TaskRepository = task;
@@ -26,6 +21,26 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _TaskRepository = task;
             return _TaskRepository.GetTaskList(tabFor, tenantID, userID);
+        }
+        public StoreTaskMaster GetStoreTaskByID(IStoreTask task, int TaskID, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetStoreTaskByID(TaskID, TenantID, UserID);
+        }
+        public int AddStoreTaskComment(IStoreTask task, StoreTaskComment TaskComment, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.AddStoreTaskComment(TaskComment, TenantID, UserID);
+        }
+        public List<TaskCommentModel> GetCommentOnTask(IStoreTask task, int TaskID, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetCommentOnTask(TaskID, TenantID, UserID);
+        }
+        public List<CustomTaskHistory> GetTaskHistory(IStoreTask task, int TaskID, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetTaskHistory(TaskID, TenantID, UserID);
         }
     }
 }
