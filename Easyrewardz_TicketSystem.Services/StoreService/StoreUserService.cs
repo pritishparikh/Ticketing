@@ -130,7 +130,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_reporteeID", reporteeID);
                 cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
                 cmd.CommandType = CommandType.StoredProcedure;
-                Success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                Success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
             catch (Exception)
