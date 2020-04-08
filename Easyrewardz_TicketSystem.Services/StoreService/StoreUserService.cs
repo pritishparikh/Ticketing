@@ -803,7 +803,7 @@ namespace Easyrewardz_TicketSystem.Services
                     CommandType = CommandType.StoredProcedure
                 };
                 cmd.Parameters.AddWithValue("@_tenantID", TenantID);
-                cmd.Parameters.AddWithValue("@_subcategoryIds", string.IsNullOrEmpty(SubCategoryIDs) ? "" : SubCategoryIDs);
+                cmd.Parameters.AddWithValue("@_subcategoryIds", string.IsNullOrEmpty(SubCategoryIDs) ? "" : SubCategoryIDs.TrimEnd(','));
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
@@ -818,8 +818,8 @@ namespace Easyrewardz_TicketSystem.Services
                             StoreClaimIssueTypeModel issuetype = new StoreClaimIssueTypeModel
                             {
                                 SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]),
-                                IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]),
-                                IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]),
+                                IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]),
+                                IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]),
                                 IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"])
                             };
 
