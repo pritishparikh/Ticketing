@@ -327,6 +327,60 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
+        /// Update Store User
+        /// </summary>
+        /// <param name="StoreUserListing"></param>
+        //public int UpdateStoreUser(StoreUserListing customStoreUserEdit)
+        //{
+        //    int success = 0;
+        //    try
+        //    {
+        //        conn.Open();
+        //        MySqlCommand cmd = new MySqlCommand("SP_UpdateStoreUser", conn);
+        //        cmd.Connection = conn;
+        //        cmd.Parameters.AddWithValue("@User_ID", customStoreUserEdit.UserID);
+        //        cmd.Parameters.AddWithValue("@StoreBrand_IDs", customStoreUserEdit.StoreBrandIDs);
+        //        cmd.Parameters.AddWithValue("@Store_IDs", customStoreUserEdit.StoreIDs);
+        //        cmd.Parameters.AddWithValue("@Department_ID", customStoreUserEdit.DepartmentID);
+        //        cmd.Parameters.AddWithValue("@Function_ID", customStoreUserEdit.FunctionID);
+        //        cmd.Parameters.AddWithValue("@Designation_ID", customStoreUserEdit.DesignationID);
+        //        cmd.Parameters.AddWithValue("@Reportee_ID", customStoreUserEdit.ReporteeID);
+        //        cmd.Parameters.AddWithValue("@User_Name", customStoreUserEdit.UserName);
+        //        cmd.Parameters.AddWithValue("@Email_ID", customStoreUserEdit.EmailID);
+        //        cmd.Parameters.AddWithValue("@Mobile_No", customStoreUserEdit.MobileNo);
+        //        cmd.Parameters.AddWithValue("@First_Name", customStoreUserEdit.FirstName);
+        //        cmd.Parameters.AddWithValue("@Last_Name", customStoreUserEdit.LastName);
+        //        cmd.Parameters.AddWithValue("@Brand_Ids", customStoreUserEdit.BrandIds);
+        //        cmd.Parameters.AddWithValue("@Category_Ids", customStoreUserEdit.CategoryIds);
+        //        cmd.Parameters.AddWithValue("@SubCategory_Ids", customStoreUserEdit.SubCategoryIds);
+        //        cmd.Parameters.AddWithValue("@Issuetype_Ids", customStoreUserEdit.IssuetypeIds);
+        //        cmd.Parameters.AddWithValue("@CRMRole_ID", customStoreUserEdit.CRMRoleID);
+        //        cmd.Parameters.AddWithValue("@Is_ClaimApprove", customStoreUserEdit.IsClaimApprove);
+        //        cmd.Parameters.AddWithValue("@Is_Active", customStoreUserEdit.IsActive);
+        //        cmd.Parameters.AddWithValue("@Created_By", customStoreUserEdit.CreatedBy);
+        //        cmd.Parameters.AddWithValue("@Tenant_ID", customStoreUserEdit.TenantID);
+        //        cmd.Parameters.AddWithValue("@Is_StoreUser", customStoreUserEdit.IsStoreUser);
+        //        cmd.CommandType = CommandType.StoredProcedure;
+        //        success = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //    finally
+        //    {
+        //        if (conn != null)
+        //        {
+        //            conn.Close();
+        //        }
+        //    }
+
+        //    return success;
+        //}
+
+
+        /// <summary>
         /// Get  Store User List
         /// </summary>
         /// <param name="tenantID"></param>
@@ -562,7 +616,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetUserBasedonReportee", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreUserBasedonReportee", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
