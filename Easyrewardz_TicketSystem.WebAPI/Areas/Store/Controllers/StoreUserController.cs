@@ -92,6 +92,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
+            int Result = 0;
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
@@ -100,14 +101,22 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StoreUserCaller userCaller = new StoreUserCaller();
               
-                int Result = userCaller.CreateStoreUserProfiledetail(new StoreUserService(_connectioSting), authenticate.TenantId,
-                     userID,  BrandID,  storeID,  departmentId,  functionIDs,  designationID,  reporteeID, authenticate.UserMasterID);
+                if(userID > 0)
+                {
+                    Result = userCaller.CreateStoreUserProfiledetail(new StoreUserService(_connectioSting), authenticate.TenantId,
+                     userID, BrandID, storeID, departmentId, functionIDs, designationID, reporteeID, authenticate.UserMasterID);
 
-                StatusCode =
-               Result == 0 ?
-                      (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
+                    StatusCode =
+                   Result == 0 ?
+                          (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
+                    
+                }
+                else
+                {
+                    Result= (int)EnumMaster.StatusCode.RecordNotFound;
+                }
+
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
@@ -134,6 +143,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
+            int Result = 0;
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
@@ -143,11 +153,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 StoreUserCaller userCaller = new StoreUserCaller();
                 storeUser.CreatedBy = authenticate.UserMasterID;
                 storeUser.TenantID = authenticate.TenantId;
-                int Result = userCaller.CreateStoreUserMapping(new StoreUserService(_connectioSting), storeUser);
 
-                StatusCode =
-               Result == 0 ?
-                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                if(storeUser.UserID > 0)
+                {
+                    Result = userCaller.CreateStoreUserMapping(new StoreUserService(_connectioSting), storeUser);
+
+                    StatusCode = Result == 0 ?(int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                }
+                else
+                {
+                    Result = (int)EnumMaster.StatusCode.RecordNotFound;
+                }
+
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
                 objResponseModel.Status = true;
