@@ -74,6 +74,7 @@ namespace Easyrewardz_TicketSystem.Services
             CustomKBList customKBLists = new CustomKBList();
             List<KBisApproved> kBisApproveds = new List<KBisApproved>();
             List<KBisNotApproved> kBisNotApproveds = new List<KBisNotApproved>();
+            List<SimilarTicket> listSimilarTicket = new List<SimilarTicket>();
 
             MySqlCommand cmd = new MySqlCommand();
 
@@ -140,6 +141,29 @@ namespace Easyrewardz_TicketSystem.Services
 
                     customKBLists.NotApproved = kBisNotApproveds;
                 }
+
+                if (ds != null && ds.Tables[2] != null)
+                {
+                    for (int i = 0; i < ds.Tables[2].Rows.Count; i++)
+                    {
+                        SimilarTicket similarTicket = new SimilarTicket();
+                        similarTicket.KBID = Convert.ToInt32(ds.Tables[2].Rows[i]["KBID"]);
+                        similarTicket.KBCODE = ds.Tables[2].Rows[i]["KBCODE"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[i]["KBCODE"]);
+                        similarTicket.CategoryID = ds.Tables[2].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[i]["CategoryID"]);
+                        similarTicket.SubCategoryID = ds.Tables[2].Rows[i]["SubCategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[i]["SubCategoryID"]);
+                        similarTicket.IssueTypeID = ds.Tables[2].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[i]["IssueTypeID"]);
+                        similarTicket.CategoryName = ds.Tables[2].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[i]["CategoryName"]);
+                        similarTicket.SubCategoryName = ds.Tables[2].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[i]["SubCategoryName"]);
+                        similarTicket.IssueTypeName = ds.Tables[2].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[i]["IssueTypeName"]);
+                        similarTicket.Subject = ds.Tables[2].Rows[i]["Subject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[i]["Subject"]);
+                        similarTicket.Description = ds.Tables[2].Rows[i]["Description"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[i]["Description"]);
+                        similarTicket.IsApproveStatus = ds.Tables[2].Rows[i]["IsApprove"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[i]["IsApprove"]);
+                        similarTicket.TicketID= ds.Tables[2].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[i]["TicketID"]);
+                        listSimilarTicket.Add(similarTicket);
+                    }
+
+                    customKBLists.SimilarTickets = listSimilarTicket;
+                }
             }
             catch (Exception)
             {
@@ -178,6 +202,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Is_Active", knowlegeBaseMaster.IsActive);
                 cmd1.Parameters.AddWithValue("@IssueType_ID", knowlegeBaseMaster.IssueTypeID);
                 cmd1.Parameters.AddWithValue("@Created_By", knowlegeBaseMaster.CreatedBy);
+                cmd1.Parameters.AddWithValue("@IsFrom_Ticket", knowlegeBaseMaster.IsFromTicket);
+                cmd1.Parameters.AddWithValue("@Ticket_ID", knowlegeBaseMaster.TicketID);
 
                 success = Convert.ToInt32(cmd1.ExecuteNonQuery());
             }
