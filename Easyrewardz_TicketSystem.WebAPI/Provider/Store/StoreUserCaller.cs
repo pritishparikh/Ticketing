@@ -45,7 +45,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public int CreateStoreUserPersonaldetail(IStoreUser Users, StoreUserPersonalDetails personalDetails)
         {
             _StoreUserRepository = Users;
-            return _StoreUserRepository.AddStoreUserPersonalDetail(personalDetails);
+            return _StoreUserRepository.AddStoreUserPersonalDetails(personalDetails);
         }
 
         public int CreateStoreUserProfiledetail(IStoreUser Users,int tenantID, int userID, int BrandID, int storeID, int departmentId, string functionIDs, int designationID, int reporteeID, int CreatedBy)
