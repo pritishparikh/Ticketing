@@ -24,6 +24,8 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<StoreUserListing> GetStoreUserList(int tenantID);
 
+        StoreUserListing GetStoreUserOnUserID(int tenantID, int UserID);
+
         int UpdateStoreUser(StoreUserDetailsModel userdetails);
 
         #region Profile Mapping

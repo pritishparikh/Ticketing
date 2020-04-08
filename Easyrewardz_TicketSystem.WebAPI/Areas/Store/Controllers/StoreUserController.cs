@@ -307,6 +307,50 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
             }
+            catch (Exception )
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Get  Store User List on USerID
+        /// </summary>
+        /// <param name="tenantID"></param>
+
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreUserDetailsByUserID")]
+        public ResponseModel GetStoreUserDetailsByUserID(int UserID)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            StoreUserListing objUser = new StoreUserListing();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                objUser = userCaller.GetStoreUserOnUserID(new StoreUserService(_connectioSting), authenticate.TenantId, UserID);
+
+                StatusCode = objUser == null?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objUser;
+
+
+            }
             catch (Exception)
             {
                 throw;
