@@ -815,7 +815,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            StoreClaimIssueTypeModel issuetype = new StoreClaimIssueTypeModel
+                            StoreClaimIssueTypeModel issuetype = new StoreClaimIssueTypeModel 
                             {
                                 SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]),
                                 IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]),
