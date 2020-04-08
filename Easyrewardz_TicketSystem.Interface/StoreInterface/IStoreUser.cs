@@ -12,7 +12,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
 
         
-        int EditStoreUser(CustomStoreUserEdit customStoreUserEdit);
+        //int EditStoreUser(CustomStoreUserEdit customStoreUserEdit);
 
         int AddStoreUserPersonalDetail(StoreUserPersonalDetails personalDetails);
 
@@ -23,6 +23,8 @@ namespace Easyrewardz_TicketSystem.Interface
         int DeleteStoreUser(int tenantID, int UserId, bool IsStoreUser, int ModifiedBy);
 
         List<StoreUserListing> GetStoreUserList(int tenantID);
+
+        int UpdateStoreUser(StoreUserDetailsModel userdetails);
 
         #region Profile Mapping
 

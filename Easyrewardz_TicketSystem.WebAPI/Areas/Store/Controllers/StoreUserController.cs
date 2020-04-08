@@ -170,8 +170,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <param name="editStoreUser"></param>
         [HttpPost]
-        [Route("EditStoreUser")] 
-        public ResponseModel EditStoreUser([FromBody] CustomStoreUserEdit editStoreUser)
+        [Route("ModifyStoreUser")] 
+        public ResponseModel ModifyStoreUser([FromBody] StoreUserDetailsModel editStoreUser)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -185,7 +185,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 StoreUserCaller userCaller = new StoreUserCaller();
                 editStoreUser.CreatedBy = authenticate.UserMasterID;
                 editStoreUser.TenantID = authenticate.TenantId;
-                int Result = userCaller.EditStoreUser(new StoreUserService(_connectioSting), editStoreUser);
+                int Result = userCaller.ModifyStoreUser(new StoreUserService(_connectioSting), editStoreUser);
 
                 StatusCode =
                Result == 0 ?

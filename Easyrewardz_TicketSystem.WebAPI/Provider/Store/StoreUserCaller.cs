@@ -34,11 +34,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _StoreUserRepository.AddStoreUserMappedCategory(storeUser);
         }
 
-        public int EditStoreUser(IStoreUser Users, CustomStoreUserEdit storeUser)
-        {
-            _StoreUserRepository = Users;
-            return _StoreUserRepository.EditStoreUser(storeUser);
-        }
+      //  public int EditStoreUser(IStoreUser Users, CustomStoreUserEdit storeUser)
+        //{
+        //    _StoreUserRepository = Users;
+        //    return _StoreUserRepository.EditStoreUser(storeUser);
+        //}
 
         
 
@@ -59,6 +59,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _StoreUserRepository = Users;
             return _StoreUserRepository.DeleteStoreUser( tenantID,  UserId,  IsStoreUser,  ModifiedBy);
+        }
+
+        public int ModifyStoreUser(IStoreUser Users, StoreUserDetailsModel userdetails)
+        {
+            _StoreUserRepository = Users;
+            return _StoreUserRepository.UpdateStoreUser(userdetails);
         }
 
         public List<StoreUserListing> GetStoreUserList(IStoreUser Users, int tenantID)
