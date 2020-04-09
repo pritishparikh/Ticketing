@@ -138,7 +138,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="storeUser"></param>
         [HttpPost]
         [Route("AddStoreUserMappingCategory")]
-        public ResponseModel StoreUserMappingCategory([FromBody] StoreClaimCategory storeUser)
+        public ResponseModel AddStoreUserMappingCategory([FromBody] StoreClaimCategory storeUser)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
