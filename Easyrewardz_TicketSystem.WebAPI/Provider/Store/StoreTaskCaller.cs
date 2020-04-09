@@ -17,7 +17,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _TaskRepository = task;
             return _TaskRepository.AddTaskDetails(taskMaster, TenantID, UserID);
         }
-        public List<CustomStoreTaskDetails> gettaskList(IStoreTask task, int tabFor,int tenantID,int userID)
+        public List<CustomStoreTaskDetails> GettaskList(IStoreTask task, int tabFor,int tenantID,int userID)
         {
             _TaskRepository = task;
             return _TaskRepository.GetTaskList(tabFor, tenantID, userID);
@@ -41,6 +41,27 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _TaskRepository = task;
             return _TaskRepository.GetTaskHistory(TaskID, TenantID, UserID);
+        }
+
+        public List<StoreCampaign> GetStoreCampaignCustomer(IStoreTask task, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetStoreCampaignCustomer(TenantID, UserID);
+        }
+        public CampaignStatusResponse GetCampaignStatusResponse(IStoreTask task, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetCampaignStatusResponse(TenantID, UserID);
+        }
+        public int UpdateCampaignStatusResponse(IStoreTask task, StoreCampaignCustomerRequest objRequest, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.UpdateCampaignStatusResponse(objRequest, TenantID, UserID);
+        }
+        public int CloseCampaign(IStoreTask task, int CampaignTypeID, int IsClosed, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.CloseCampaign(CampaignTypeID, IsClosed, TenantID, UserID);
         }
     }
 }

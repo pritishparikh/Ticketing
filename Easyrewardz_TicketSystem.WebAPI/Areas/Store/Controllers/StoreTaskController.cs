@@ -86,7 +86,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                objtaskMaster = taskcaller.gettaskList(new StoreTaskService(_connectionSting), tabFor, authenticate.TenantId, authenticate.UserMasterID);
+                objtaskMaster = taskcaller.GettaskList(new StoreTaskService(_connectionSting), tabFor, authenticate.TenantId, authenticate.UserMasterID);
                 statusCode =
                    objtaskMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -252,6 +252,171 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             }
             return objResponseModel;
         }
+
+
+        #region Campaign
+
+        /// <summary>
+        /// Get Store Campaign Customer
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreCampaignCustomer")]
+        public ResponseModel GetStoreCampaignCustomer()
+        {
+            List<StoreCampaign> objList = new List<StoreCampaign>();
+            StoreTaskCaller taskcaller = new StoreTaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                objList = taskcaller.GetStoreCampaignCustomer(new StoreTaskService(_connectionSting), authenticate.TenantId, authenticate.UserMasterID);
+                statusCode =
+                   objList.Count == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Campaign Status Response
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetCampaignStatusResponse")]
+        public ResponseModel GetCampaignStatusResponse()
+        {
+            CampaignStatusResponse obj = new CampaignStatusResponse();
+            StoreTaskCaller taskcaller = new StoreTaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                obj = taskcaller.GetCampaignStatusResponse(new StoreTaskService(_connectionSting), authenticate.TenantId, authenticate.UserMasterID);
+                statusCode =
+                   obj.CampaignResponseList.Count == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = obj;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Update Campaign Status Response
+        /// </summary>
+        /// <param name="objRequest"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateCampaignStatusResponse")]
+        public ResponseModel UpdateCampaignStatusResponse([FromBody]StoreCampaignCustomerRequest objRequest)
+        {
+            int result = 0;
+            StoreTaskCaller taskcaller = new StoreTaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                result = taskcaller.UpdateCampaignStatusResponse(new StoreTaskService(_connectionSting), objRequest, authenticate.TenantId, authenticate.UserMasterID);
+                statusCode =
+                   result == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Close Campaign
+        /// </summary>
+        /// <param name="CampaignTypeID"></param>
+        /// <param name="IsClosed"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CloseCampaign")]
+        public ResponseModel CloseCampaign(int CampaignTypeID, int IsClosed)
+        {
+            int result = 0;
+            StoreTaskCaller taskcaller = new StoreTaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                result = taskcaller.CloseCampaign(new StoreTaskService(_connectionSting), CampaignTypeID, IsClosed, authenticate.TenantId, authenticate.UserMasterID);
+                statusCode =
+                   result == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        #endregion
+
         #endregion
     }
 }

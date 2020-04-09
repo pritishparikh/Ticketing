@@ -116,4 +116,57 @@ namespace Easyrewardz_TicketSystem.Model
         public string DateandTime { get; set; }
     }
 
+    public class StoreCampaign
+    {
+        public int CampaignTypeID { get; set; }
+        public string CampaignName { get; set; }
+        public string CampaignScript { get; set; }
+        public string CampaignScriptLess { get; set; }
+        public int ContactCount { get; set; }
+        public string CampaignEndDate { get; set; }
+        public List<StoreCampaignCustomer> StoreCampaignCustomerList { get; set; }
+    }
+
+    public class StoreCampaignCustomer
+    {
+        public int CampaignCustomerID { get; set; }
+        public int CustomerID { get; set; }
+        public string CampaignTypeDate { get; set; }
+        public int CampaignTypeID { get; set; }
+        public int CampaignStatus { get; set; }
+        public int Response { get; set; }
+        public string CallReScheduledTo { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerPhoneNumber { get; set; }
+        public string CustomerEmailId { get; set; }
+    }
+
+    public class CampaignStatusResponse
+    {
+        public List<CampaignStatus> CampaignStatusList { get; set; }
+        public List<CampaignResponse> CampaignResponseList { get; set; }
+    }
+
+    public class CampaignStatus
+    {
+        public int StatusID { get; set; }
+        public string StatusName { get; set; }
+        public int StatusNameID { get; set; }
+    }
+
+    public class CampaignResponse
+    {
+        public int ResponseID { get; set; }
+        public string Response { get; set; }
+        public int StatusNameID { get; set; }
+    }
+
+    public class StoreCampaignCustomerRequest
+    {
+        public int CampaignCustomerID { get; set; }
+        public int StatusNameID { get; set; }
+        public int ResponseID { get; set; }
+        public string CallReScheduledTo { get; set; }
+        public DateTime CallReScheduledToDate { get; set; }
+    }
 }
