@@ -141,7 +141,7 @@ namespace Easyrewardz_TicketSystem.Services
             CustomerMaster customerMaster = new CustomerMaster();
             try
             {
-
+                orderNumber = string.IsNullOrEmpty(orderNumber) ? "" : orderNumber;
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
                     conn.Open();
@@ -590,7 +590,7 @@ namespace Easyrewardz_TicketSystem.Services
                 objOrderSearch.mobileNumber = MobNo;
                 objOrderSearch.invoiceNumber = orderNumber;
                 objOrderSearch.securityToken = apisecurityToken;
-                objOrderSearch.userID = customerID;// 3;
+                objOrderSearch.userID =  3;
                 objOrderSearch.appID = 7;
 
                 string apiReq = JsonConvert.SerializeObject(objOrderSearch);
@@ -647,7 +647,7 @@ namespace Easyrewardz_TicketSystem.Services
                                             orderDetails.StoreCode = objOrderDetails[k].StoreCode;
                                             orderDetails.StoreAddress = objOrderDetails[k].StoreAddress;
                                             orderDetails.Discount = OrderReq.Discount;
-                                            orderDetails.OrderItems = GetItemdetailsfromAPI(InsertOrderNo, InsertOrderID, objOrderDetails[k], CreatedBy);
+                                            orderDetails.OrderItems = GetItemdetailsfromAPI(InsertOrderNo, InsertOrderID, MobNo, objOrderDetails[k], CreatedBy);
                                             orderDetails.ItemCount = orderDetails.OrderItems.Count();
                                             orderDetails.ItemPrice = orderDetails.OrderItems.Sum(item => item.ItemPrice);
                                             orderDetails.PricePaid = orderDetails.OrderItems.Sum(item => item.PricePaid);
@@ -674,32 +674,35 @@ namespace Easyrewardz_TicketSystem.Services
             return objorderMaster;
         }
 
-        public List<OrderItem> GetItemdetailsfromAPI(string orderno,int OrderMasterId, CustomOrderDetails Orders, int CreatedBy)
+        public List<OrderItem> GetItemdetailsfromAPI(string orderno,int OrderMasterId,string MobileNo, CustomOrderDetails Orders, int CreatedBy)
         {
-            CustomItemSearch objItemSearch = new CustomItemSearch();
-            List<CustomItemDetails> objItemDetails = new List<CustomItemDetails>();
+            //CustomItemSearch objItemSearch = new CustomItemSearch();
+            CustomBillItemSearch objItemSearch = new CustomBillItemSearch();
+            //List<CustomItemDetails> objItemDetails = new List<CustomItemDetails>();
+            List<CustomBillItemDetails> objItemDetails = new List<CustomBillItemDetails>();
             List<OrderItem> objOrderItems = new List<OrderItem>();
             int InsertedItemID = 0;
             try
             {
 
-                objItemSearch.programCode = "bata";
-                objItemSearch.invoiceNumber = orderno;
-                objItemSearch.storeCode ="";// Orders.StoreCode;
-                objItemSearch.invoiceDate = "";// Orders.InvoiceDate;
+                objItemSearch.ProgramCode = "Bata";
+                objItemSearch.InvoiceNumber = orderno;
+                objItemSearch.StoreCode = Orders.StoreCode;
+                objItemSearch.MemberId = MobileNo;
+                objItemSearch.InvoiceDate = DateTime.ParseExact(Orders.InvoiceDate, "M/d/yy h:mm:ss tt", culture).ToString("yyyy-MM-dd");
                 objItemSearch.securityToken = apisecurityToken;
                 objItemSearch.userID = 3;
                 objItemSearch.appID = 7;
 
                 string apiReq = JsonConvert.SerializeObject(objItemSearch);
-                apiResponse = CommonService.SendApiRequest(apiURL + "ItemDetails", apiReq);
+                apiResponse = CommonService.SendApiRequest(apiURL + "BillItemDetails", apiReq);
 
                 if (!string.IsNullOrEmpty(apiResponse))
                 {
                     ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
                     if (ApiResponse != null)
                     {
-                        objItemDetails = JsonConvert.DeserializeObject<List<CustomItemDetails>>(Convert.ToString((ApiResponse.Responce)));
+                        objItemDetails = JsonConvert.DeserializeObject<List<CustomBillItemDetails>>(Convert.ToString((ApiResponse.Responce)));
 
                         if (objItemDetails != null && objItemDetails.Count > 0)
                         {
@@ -716,10 +719,10 @@ namespace Easyrewardz_TicketSystem.Services
                                 cmd.Parameters.AddWithValue("@_InvoiceNo", Orders.InvoiceNumber);
                                 cmd.Parameters.AddWithValue("@_InvoiceDate", DateTime.ParseExact(Orders.InvoiceDate, "M/d/yy h:mm:ss tt", culture));
                                 cmd.Parameters.AddWithValue("@_ItemCount", Orders.ItemCount);
-                                cmd.Parameters.AddWithValue("@_PricePaid", string.IsNullOrEmpty(objItemDetails[k].PricePaid) ? 0: Convert.ToDecimal(objItemDetails[k].PricePaid));
-                                cmd.Parameters.AddWithValue("@_SKUNumber", objItemDetails[k].ArticleNumber);
-                                cmd.Parameters.AddWithValue("@_SKUName", objItemDetails[k].ArticleSize);
-                                cmd.Parameters.AddWithValue("@_ItemPrice", string.IsNullOrEmpty(objItemDetails[k].ArticleMrp) ? 0 : Convert.ToDecimal(objItemDetails[k].ArticleMrp));
+                                cmd.Parameters.AddWithValue("@_PricePaid", string.IsNullOrEmpty(objItemDetails[k].PaidAmount) ? 0: Convert.ToDecimal(objItemDetails[k].PaidAmount));
+                                cmd.Parameters.AddWithValue("@_SKUNumber", objItemDetails[k].ArticleCode);
+                                cmd.Parameters.AddWithValue("@_SKUName", objItemDetails[k].Name);
+                                cmd.Parameters.AddWithValue("@_ItemPrice", string.IsNullOrEmpty(objItemDetails[k].Rate) ? 0 : Convert.ToDecimal(objItemDetails[k].Rate));
                                 cmd.Parameters.AddWithValue("@_Discount", string.IsNullOrEmpty(objItemDetails[k].Discount) ? 0 : Convert.ToDecimal(objItemDetails[k].Discount));
                                 cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
 
@@ -730,11 +733,11 @@ namespace Easyrewardz_TicketSystem.Services
                                 {
                                     OrderItemID = InsertedItemID,
                                     OrderMasterID = OrderMasterId,
-                                    ArticleNumber = objItemDetails[k].ArticleNumber,
-                                    ArticleName = objItemDetails[k].ArticleSize, // we are getting skuname in ArticleSize (API issue)
-                                    ItemPrice = string.IsNullOrEmpty(objItemDetails[k].ArticleMrp) ? 0 : Convert.ToDecimal(objItemDetails[k].ArticleMrp),
-                                  
-                                    PricePaid = string.IsNullOrEmpty(objItemDetails[k].PricePaid) ? 0 : Convert.ToDecimal(objItemDetails[k].PricePaid),
+                                    ArticleNumber = objItemDetails[k].ArticleCode,
+                                    ArticleName = objItemDetails[k].Name, // 
+                                    ItemPrice = string.IsNullOrEmpty(objItemDetails[k].Rate) ? 0 : Convert.ToDecimal(objItemDetails[k].Rate),
+                                    ItemCount= Orders.ItemCount,
+                                    PricePaid = string.IsNullOrEmpty(objItemDetails[k].PaidAmount) ? 0 : Convert.ToDecimal(objItemDetails[k].PaidAmount),
                                    
                                     Discount = string.IsNullOrEmpty(objItemDetails[k].Discount) ? 0 : Convert.ToDecimal(objItemDetails[k].Discount), 
                                     RequireSize = ""
