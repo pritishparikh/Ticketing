@@ -863,6 +863,7 @@ namespace Easyrewardz_TicketSystem.Services
                                     ItemCount = objItemDetails.Count,
                                     PricePaid = string.IsNullOrEmpty(objItemDetails[k].PaidAmount) ? 0 : Convert.ToDecimal(objItemDetails[k].PaidAmount),
                                     InvoiceNo = orderno,
+                                    InvoiceNumber= orderno,
                                     Discount = string.IsNullOrEmpty(objItemDetails[k].Discount) ? 0 : Convert.ToDecimal(objItemDetails[k].Discount),
                                     RequireSize = ""
                                 });
