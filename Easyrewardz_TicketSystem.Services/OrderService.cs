@@ -81,7 +81,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public OrderMaster addOrderDetails(OrderMaster orderMaster, int tenantID)
         {
-            MySqlCommand cmd = new MySqlCommand();
+            
             OrderMaster orderDetails = new OrderMaster();
             DataSet ds = new DataSet();
           //  string OrderNumber="";
@@ -92,26 +92,27 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Open();
                 }
+               
+                MySqlCommand cmd = new MySqlCommand("SP_createOrder", conn);
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_createOrder", conn);
-                cmd1.Parameters.AddWithValue("@TenantID", tenantID);
-                cmd1.Parameters.AddWithValue("@ProductBarCode", orderMaster.ProductBarCode);
-                cmd1.Parameters.AddWithValue("@OrderNumber", orderMaster.OrderNumber);
-                cmd1.Parameters.AddWithValue("@BillID", orderMaster.BillID);
-                cmd1.Parameters.AddWithValue("@TicketSourceID", orderMaster.TicketSourceID);
-                cmd1.Parameters.AddWithValue("@ModeOfPaymentID", orderMaster.ModeOfPaymentID);
-                cmd1.Parameters.AddWithValue("@TransactionDate", orderMaster.TransactionDate);
-               // cmd1.Parameters.AddWithValue("@InvoiceNumber", orderMaster.InvoiceNumber);
-                cmd1.Parameters.AddWithValue("@InvoiceDate", orderMaster.InvoiceDate);
-                cmd1.Parameters.AddWithValue("@OrderPrice", orderMaster.OrderPrice);
-                cmd1.Parameters.AddWithValue("@PricePaid", orderMaster.PricePaid);
-                cmd1.Parameters.AddWithValue("@CustomerID", orderMaster.CustomerID);
-                cmd1.Parameters.AddWithValue("@PurchaseFromStoreId", orderMaster.PurchaseFromStoreId);
-                cmd1.Parameters.AddWithValue("@Discount", orderMaster.Discount);
-                cmd1.Parameters.AddWithValue("@Size", string.IsNullOrEmpty(orderMaster.Size) ? "" :orderMaster.Size);
-                cmd1.Parameters.AddWithValue("@RequireSize", string.IsNullOrEmpty(orderMaster.RequireSize) ? "" :orderMaster.RequireSize);
-                cmd1.Parameters.AddWithValue("@CreatedBy", orderMaster.CreatedBy);
-                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@TenantID", tenantID);
+                cmd.Parameters.AddWithValue("@ProductBarCode", orderMaster.ProductBarCode);
+                cmd.Parameters.AddWithValue("@OrderNumber", orderMaster.OrderNumber);
+                cmd.Parameters.AddWithValue("@BillID", orderMaster.BillID);
+                cmd.Parameters.AddWithValue("@TicketSourceID", orderMaster.TicketSourceID);
+                cmd.Parameters.AddWithValue("@ModeOfPaymentID", orderMaster.ModeOfPaymentID);
+                cmd.Parameters.AddWithValue("@TransactionDate", orderMaster.TransactionDate);
+                cmd.Parameters.AddWithValue("@InvoiceDate", orderMaster.InvoiceDate);
+                cmd.Parameters.AddWithValue("@OrderPrice", orderMaster.OrderPrice);
+                cmd.Parameters.AddWithValue("@PricePaid", orderMaster.PricePaid);
+                cmd.Parameters.AddWithValue("@CustomerID", orderMaster.CustomerID);
+                cmd.Parameters.AddWithValue("@PurchaseFromStoreId", orderMaster.PurchaseFromStoreId);
+                cmd.Parameters.AddWithValue("@Discount", orderMaster.Discount);
+                cmd.Parameters.AddWithValue("@Size", string.IsNullOrEmpty(orderMaster.Size) ? "" :orderMaster.Size);
+                cmd.Parameters.AddWithValue("@RequireSize", string.IsNullOrEmpty(orderMaster.RequireSize) ? "" :orderMaster.RequireSize);
+                cmd.Parameters.AddWithValue("@CreatedBy", orderMaster.CreatedBy);
+                
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -127,7 +128,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
              }
-            catch (Exception)
+            catch (Exception )
             {
                 throw;
             }
