@@ -34,11 +34,24 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="order"></param>
         /// <param name="orderMaster"></param>
         /// <returns></returns>
-        public string addOrder(IOrder order, OrderMaster orderMaster, int TenantId)
+        public OrderMaster addOrder(IOrder order, OrderMaster orderMaster, int TenantId)
         {
             _orderRepository = order;
             return _orderRepository.addOrderDetails(orderMaster, TenantId);
         }
+
+        /// <summary>
+        /// Add Order item Detail
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="Orderitem"></param>
+        /// <returns></returns>
+        public string AddOrderItem(IOrder order, List<OrderItem> itemMaster, int TenantId,int CreatedBy)
+        {
+            _orderRepository = order;
+            return _orderRepository.AddOrderItemDetails(itemMaster, TenantId, CreatedBy);
+        }
+
 
         /// <summary>
         /// Get Order  list

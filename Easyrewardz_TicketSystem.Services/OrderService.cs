@@ -79,10 +79,12 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="orderMaster"></param>
         /// <returns></returns>
-        public string addOrderDetails(OrderMaster orderMaster, int tenantID)
+        public OrderMaster addOrderDetails(OrderMaster orderMaster, int tenantID)
         {
             MySqlCommand cmd = new MySqlCommand();
-            string OrderNumber="";
+            OrderMaster orderDetails = new OrderMaster();
+            DataSet ds = new DataSet();
+          //  string OrderNumber="";
             try
             {
 
@@ -110,9 +112,21 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@RequireSize", string.IsNullOrEmpty(orderMaster.RequireSize) ? "" :orderMaster.RequireSize);
                 cmd1.Parameters.AddWithValue("@CreatedBy", orderMaster.CreatedBy);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                OrderNumber = Convert.ToString(cmd1.ExecuteScalar());
-                conn.Close();
-            }
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        orderDetails.OrderMasterID= ds.Tables[0].Rows[0]["OrderMaster_ID"] == DBNull.Value ? 0: Convert.ToInt32(ds.Tables[0].Rows[0]["OrderMaster_ID"]);
+                        orderDetails.OrderNumber= ds.Tables[0].Rows[0]["OrderNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["OrderNumber"]);
+                    }
+
+                }
+             }
             catch (Exception)
             {
                 throw;
@@ -124,8 +138,72 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return OrderNumber;
+            return orderMaster;
         }
+
+        /// <summary>
+        /// Add Order item Detail
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="Orderitem"></param>
+        /// <returns></returns>
+       public string AddOrderItemDetails(List<OrderItem> itemMaster, int TenantId,int CreatedBy )
+        {
+            string OrderItemIDs = string.Empty;
+            List<int> itemOrderIDList = new List<int>();
+            int InsertedItemID = 0;
+            try
+            {
+
+                if(itemMaster.Count > 0)
+                {
+                    if (conn != null && conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+
+                    for(int k=0;k< itemMaster.Count; k++)
+                    {
+                        MySqlCommand cmd = new MySqlCommand("SP_InsertOrderItem", conn);
+                        cmd.Connection = conn;
+                        cmd.Parameters.AddWithValue("@_OrderMasterID", itemMaster[k].OrderMasterID);
+                        cmd.Parameters.AddWithValue("@_InvoiceNo", itemMaster[k].InvoiceNo);
+                        cmd.Parameters.AddWithValue("@_InvoiceDate", itemMaster[k].InvoiceDate);
+                        cmd.Parameters.AddWithValue("@_ItemCount", itemMaster[k].ItemCount);
+                        cmd.Parameters.AddWithValue("@_PricePaid", itemMaster[k].PricePaid);
+                        cmd.Parameters.AddWithValue("@_SKUNumber", itemMaster[k].ArticleNumber);
+                        cmd.Parameters.AddWithValue("@_SKUName", itemMaster[k].ArticleName);
+                        cmd.Parameters.AddWithValue("@_ItemPrice", itemMaster[k].ItemPrice);
+                        cmd.Parameters.AddWithValue("@_Discount", itemMaster[k].Discount);
+                        cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
+
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        InsertedItemID = Convert.ToInt32(cmd.ExecuteScalar());
+
+                        if (InsertedItemID > 0)
+                            itemOrderIDList.Add(InsertedItemID);
+                    }
+                  
+                }
+                
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+
+            }
+
+            return itemOrderIDList.Count >0 ? string.Join(',', itemOrderIDList) : "" ;
+        }
+
         /// <summary>
         /// Get Order Detail with Item List
         /// </summary>
@@ -285,6 +363,8 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             OrderItemID = x.Field<object>("OrderItemID") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<int>("OrderItemID")),
                             OrderMasterID = x.Field<object>("OrderMasterID") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<int>("OrderMasterID")),
+                            ItemName= x.Field<object>("ItemName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<int>("ItemName")),
+                            InvoiceNo = x.Field<object>("InvoiceNo") == DBNull.Value ?string.Empty : Convert.ToString(x.Field<int>("InvoiceNo")),
                             ArticleNumber = x.Field<object>("SKUNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUNumber")),
                             ArticleName = x.Field<object>("SKUName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUName")),
                             ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
@@ -786,12 +866,13 @@ namespace Easyrewardz_TicketSystem.Services
                                 {
                                     OrderItemID = 0,
                                     OrderMasterID = 0,
+                                    ItemName= objItemDetails[k].Name,
                                     ArticleNumber = objItemDetails[k].ArticleCode,
                                     ArticleName = objItemDetails[k].Name, // 
                                     ItemPrice = string.IsNullOrEmpty(objItemDetails[k].Rate) ? 0 : Convert.ToDecimal(objItemDetails[k].Rate),
                                     ItemCount = objItemDetails.Count,
                                     PricePaid = string.IsNullOrEmpty(objItemDetails[k].PaidAmount) ? 0 : Convert.ToDecimal(objItemDetails[k].PaidAmount),
-
+                                    InvoiceNo = orderno,
                                     Discount = string.IsNullOrEmpty(objItemDetails[k].Discount) ? 0 : Convert.ToDecimal(objItemDetails[k].Discount),
                                     RequireSize = ""
                                 });
@@ -912,7 +993,7 @@ namespace Easyrewardz_TicketSystem.Services
         //    return objorderMaster;
         //}
 
-        //public List<OrderItem> GetItemdetailsfromAPIOLD(string orderno,int OrderMasterId,string MobileNo, CustomOrderDetails Orders, int CreatedBy)
+        //public List<OrderItem> GetItemdetailsfromAPIOLD(string orderno, int OrderMasterId, string MobileNo, CustomOrderDetails Orders, int CreatedBy)
         //{
         //    //CustomItemSearch objItemSearch = new CustomItemSearch();
         //    CustomBillItemSearch objItemSearch = new CustomBillItemSearch();
@@ -957,7 +1038,7 @@ namespace Easyrewardz_TicketSystem.Services
         //                        cmd.Parameters.AddWithValue("@_InvoiceNo", Orders.InvoiceNumber);
         //                        cmd.Parameters.AddWithValue("@_InvoiceDate", DateTime.ParseExact(Orders.InvoiceDate, "M/d/yy h:mm:ss tt", culture));
         //                        cmd.Parameters.AddWithValue("@_ItemCount", Orders.ItemCount);
-        //                        cmd.Parameters.AddWithValue("@_PricePaid", string.IsNullOrEmpty(objItemDetails[k].PaidAmount) ? 0: Convert.ToDecimal(objItemDetails[k].PaidAmount));
+        //                        cmd.Parameters.AddWithValue("@_PricePaid", string.IsNullOrEmpty(objItemDetails[k].PaidAmount) ? 0 : Convert.ToDecimal(objItemDetails[k].PaidAmount));
         //                        cmd.Parameters.AddWithValue("@_SKUNumber", objItemDetails[k].ArticleCode);
         //                        cmd.Parameters.AddWithValue("@_SKUName", objItemDetails[k].Name);
         //                        cmd.Parameters.AddWithValue("@_ItemPrice", string.IsNullOrEmpty(objItemDetails[k].Rate) ? 0 : Convert.ToDecimal(objItemDetails[k].Rate));
@@ -974,10 +1055,10 @@ namespace Easyrewardz_TicketSystem.Services
         //                            ArticleNumber = objItemDetails[k].ArticleCode,
         //                            ArticleName = objItemDetails[k].Name, // 
         //                            ItemPrice = string.IsNullOrEmpty(objItemDetails[k].Rate) ? 0 : Convert.ToDecimal(objItemDetails[k].Rate),
-        //                            ItemCount= Orders.ItemCount,
+        //                            ItemCount = Orders.ItemCount,
         //                            PricePaid = string.IsNullOrEmpty(objItemDetails[k].PaidAmount) ? 0 : Convert.ToDecimal(objItemDetails[k].PaidAmount),
 
-        //                            Discount = string.IsNullOrEmpty(objItemDetails[k].Discount) ? 0 : Convert.ToDecimal(objItemDetails[k].Discount), 
+        //                            Discount = string.IsNullOrEmpty(objItemDetails[k].Discount) ? 0 : Convert.ToDecimal(objItemDetails[k].Discount),
         //                            RequireSize = ""
         //                        });
 
@@ -988,7 +1069,7 @@ namespace Easyrewardz_TicketSystem.Services
         //            }
         //        }
         //    }
-        //    catch (Exception )
+        //    catch (Exception)
         //    {
         //        throw;
         //    }

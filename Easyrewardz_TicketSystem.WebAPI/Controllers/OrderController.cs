@@ -82,6 +82,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             OrderCaller ordercaller = new OrderCaller();
             ResponseModel objResponseModel = new ResponseModel();
+            OrderMaster orderDetails = new OrderMaster();
             int StatusCode = 0;
             string statusMessage = "";
             try
@@ -90,16 +91,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 orderMaster.CreatedBy = authenticate.UserMasterID;
-                string OrderNumber = ordercaller.addOrder(new OrderService(connectioSting), orderMaster, authenticate.TenantId);
+                orderDetails = ordercaller.addOrder(new OrderService(connectioSting), orderMaster, authenticate.TenantId);
               
                 StatusCode =
-               string.IsNullOrEmpty (OrderNumber) ?
+               orderDetails==null ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = OrderNumber;
+                objResponseModel.ResponseData = orderDetails;
             }
             catch (Exception)
             {
@@ -107,6 +108,46 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return objResponseModel;
         }
+
+
+
+        /// <summary>
+        /// Add Order Details
+        /// </summary>
+        /// <param name="OrderItem"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("InsertOrderItems")]
+        public ResponseModel InsertOrderItems([FromBody]List<OrderItem> itemMaster)
+        {
+            OrderCaller ordercaller = new OrderCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+               
+                string itemOrderNos = ordercaller.AddOrderItem(new OrderService(connectioSting), itemMaster, authenticate.TenantId,authenticate.UserMasterID);
+
+                StatusCode =
+               string.IsNullOrEmpty(itemOrderNos) ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = itemOrderNos;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
 
         /// <summary>
         /// Get Orderdetail list 
