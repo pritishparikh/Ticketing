@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -92,6 +95,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
+            int Result = 0;
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
@@ -100,14 +104,22 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StoreUserCaller userCaller = new StoreUserCaller();
               
-                int Result = userCaller.CreateStoreUserProfiledetail(new StoreUserService(_connectioSting), authenticate.TenantId,
-                     userID,  BrandID,  storeID,  departmentId,  functionIDs,  designationID,  reporteeID, authenticate.UserMasterID);
+                if(userID > 0)
+                {
+                    Result = userCaller.CreateStoreUserProfiledetail(new StoreUserService(_connectioSting), authenticate.TenantId,
+                     userID, BrandID, storeID, departmentId, functionIDs, designationID, reporteeID, authenticate.UserMasterID);
 
-                StatusCode =
-               Result == 0 ?
-                      (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
+                    StatusCode =
+                   Result == 0 ?
+                          (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
+                    
+                }
+                else
+                {
+                    Result= (int)EnumMaster.StatusCode.RecordNotFound;
+                }
+
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
@@ -129,11 +141,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="storeUser"></param>
         [HttpPost]
         [Route("AddStoreUserMappingCategory")]
-        public ResponseModel StoreUserMappingCategory([FromBody] StoreClaimCategory storeUser)
+        public ResponseModel AddStoreUserMappingCategory([FromBody] StoreClaimCategory storeUser)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
+            int Result = 0;
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
@@ -143,11 +156,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 StoreUserCaller userCaller = new StoreUserCaller();
                 storeUser.CreatedBy = authenticate.UserMasterID;
                 storeUser.TenantID = authenticate.TenantId;
-                int Result = userCaller.CreateStoreUserMapping(new StoreUserService(_connectioSting), storeUser);
 
-                StatusCode =
-               Result == 0 ?
-                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                if(storeUser.UserID > 0)
+                {
+                    Result = userCaller.CreateStoreUserMapping(new StoreUserService(_connectioSting), storeUser);
+
+                    StatusCode = Result == 0 ?(int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                }
+                else
+                {
+                    Result = (int)EnumMaster.StatusCode.RecordNotFound;
+                }
+
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
                 objResponseModel.Status = true;
@@ -280,6 +300,50 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StatusCode =
                objUser.Count == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objUser;
+
+
+            }
+            catch (Exception )
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Get  Store User List on USerID
+        /// </summary>
+        /// <param name="tenantID"></param>
+
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreUserDetailsByUserID")]
+        public ResponseModel GetStoreUserDetailsByUserID(int UserID)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            StoreUserListing objUser = new StoreUserListing();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                objUser = userCaller.GetStoreUserOnUserID(new StoreUserService(_connectioSting), authenticate.TenantId, UserID);
+
+                StatusCode = objUser == null?
                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
@@ -668,6 +732,169 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
         #endregion
+
+        /// <summary>
+        /// Bulk Upload User
+        /// </summary>
+        /// <param name="UserFor"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("BulkUploadStoreUser")]
+        public ResponseModel BulkUploadStoreUser(int UserFor = 3)
+        {
+            string DownloadFilePath = string.Empty;
+            string BulkUploadFilesPath = string.Empty;
+            bool errorfilesaved = false; bool successfilesaved = false;
+            int count = 0;
+            StoreCaller userCaller = new StoreCaller();
+            StoreFileUploadCaller fileU = new StoreFileUploadCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = ""; string fileName = ""; string finalAttchment = "";
+            string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
+            DataSet DataSetCSV = new DataSet();
+            string[] filesName = null;
+            List<string> CSVlist = new List<string>();
+            string successfilename = string.Empty, errorfilename = string.Empty; string errorfilepath = string.Empty; string successfilepath = string.Empty;
+
+
+            try
+            {
+                var files = Request.Form.Files;
+
+                if (files.Count > 0)
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
+                    }
+                    finalAttchment = fileName.TrimEnd(',');
+                }
+                var Keys = Request.Form;
+
+                var exePath = Path.GetDirectoryName(System.Reflection
+                     .Assembly.GetExecutingAssembly().CodeBase);
+                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                var appRoot = appPathMatcher.Match(exePath).Value;
+                string Folderpath = appRoot;
+
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                #region FilePath
+
+                BulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor);
+                DownloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor);
+
+                #endregion
+
+                #region Read from Form
+
+                if (files.Count > 0)
+                {
+                    BulkUploadFilesPath = BulkUploadFilesPath + "\\User\\";
+
+                    if (!Directory.Exists(BulkUploadFilesPath))
+                    {
+                        Directory.CreateDirectory(BulkUploadFilesPath);
+                    }
+
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
+                    }
+                    finalAttchment = fileName.TrimEnd(',');
+                }
+
+                if (files.Count > 0)
+                {
+                    filesName = finalAttchment.Split(",");
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            files[i].CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                            MemoryStream msfile = new MemoryStream(fileBytes);
+                            FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                            msfile.WriteTo(docFile);
+                            docFile.Close();
+                            ms.Close();
+                            msfile.Close();
+
+                        }
+                    }
+                }
+                #endregion
+
+                DataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + filesName[0]);
+                //DataSetCSV = CommonService.csvToDataSet("D:\\TP\\UserBulk.csv");
+                CSVlist = userCaller.UserBulkUpload(new StoreService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, UserFor, DataSetCSV);
+
+
+                #region Create Error and Succes files and  Insert in FileUploadLog
+
+                if (!string.IsNullOrEmpty(CSVlist[0]))
+                {
+                    if (CSVlist[0].ToLower().Contains("username"))
+                    {
+                        successfilename = "UserSuccessFile.csv";
+                        successfilepath = DownloadFilePath + "\\User\\ Success" + "\\" + successfilename;
+                        successfilesaved = CommonService.SaveFile(successfilepath, CSVlist[0]);
+
+                    }
+                    else
+                    {
+                        successfilename = "MappedCategorySuccessFile.csv";
+                        successfilepath = DownloadFilePath + "\\MappedCategory\\ Success" + "\\" + successfilename;
+                        successfilesaved = CommonService.SaveFile(successfilepath, CSVlist[0]);
+
+                    }
+                }
+                if (!string.IsNullOrEmpty(CSVlist[1]))
+                {
+                    if (CSVlist[1].ToLower().Contains("username"))
+                    {
+                        errorfilename = "UserErrorFile.csv";
+                        errorfilepath = DownloadFilePath + "\\User\\ Error" + "\\" + errorfilename;
+                        errorfilesaved = CommonService.SaveFile(errorfilepath, CSVlist[0]);
+                    }
+                    else
+                    {
+                        errorfilename = "MappedCategoryErrorFile.csv";
+                        errorfilepath = DownloadFilePath + "\\MappedCategory\\ Error" + "\\" + errorfilename;
+                        errorfilesaved = CommonService.SaveFile(errorfilepath, CSVlist[0]);
+
+                    }
+
+                }
+
+
+                if (!string.IsNullOrEmpty(CSVlist[1]))
+                    errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\User\\Error" + "\\" + "UserErrorFile.csv", CSVlist[1]);
+
+                count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, filesName[0], successfilesaved,
+                                   errorfilename, successfilename, authenticate.UserMasterID, "User", errorfilepath, successfilepath, UserFor);
+                #endregion
+
+                StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = count;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+
+
+        }
 
         #endregion
     }

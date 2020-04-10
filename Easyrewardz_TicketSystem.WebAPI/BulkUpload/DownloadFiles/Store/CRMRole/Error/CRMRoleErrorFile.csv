@@ -1,0 +1,3 @@
+RoleName,Status,EnabledModules,DisabledModules
+Store Lead,Active,Dashboard|Tasks|Settings,Claim|Notification|Reports
+Store Agent,Active,Settings|Notification|Reports,Dashboard|Tasks|Claim

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -431,6 +432,78 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objDeptLst;
 
+        }
+
+        /// <summary>
+        /// Bulk Upload Department
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="CategoryFor"></param>
+        /// <param name="DataSetCSV"></param>
+        /// <returns></returns>
+        public List<string> DepartmentBulkUpload(int TenantID, int CreatedBy, int CategoryFor, DataSet DataSetCSV)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            DataSet Bulkds = new DataSet();
+            List<string> csvLst = new List<string>();
+            string SuccessFile = string.Empty; string ErrorFile = string.Empty;
+            try
+            {
+                if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
+                {
+                    if (DataSetCSV.Tables[0] != null && DataSetCSV.Tables[0].Rows.Count > 0)
+                    {
+
+                        xmlDoc.LoadXml(DataSetCSV.GetXml());
+                        conn.Open();
+                        MySqlCommand cmd = new MySqlCommand("SP_BulkUploadDepartmentMaster", conn);
+
+                        cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
+                        cmd.Parameters.AddWithValue("@_node", Xpath);
+                        cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
+                        cmd.Parameters.AddWithValue("@_tenantID", TenantID);
+
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        MySqlDataAdapter da = new MySqlDataAdapter
+                        {
+                            SelectCommand = cmd
+                        };
+                        da.Fill(Bulkds);
+
+                        if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
+                        {
+
+                            //for success file
+                            SuccessFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(SuccessFile);
+
+                            //for error file
+                            ErrorFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            csvLst.Add(ErrorFile);
+
+
+                        }
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (DataSetCSV != null)
+                {
+                    DataSetCSV.Dispose();
+                }
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return csvLst;
         }
     }
 }

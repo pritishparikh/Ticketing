@@ -198,7 +198,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             bool successfilesaved = false;
             int count = 0;
             StoreHierarchyCaller storeHierarchyCaller = new StoreHierarchyCaller();
-            SettingsCaller fileU = new SettingsCaller();
+            StoreFileUploadCaller fileU = new StoreFileUploadCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -277,7 +277,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 if (!string.IsNullOrEmpty(CSVlist[1]))
                     errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv", CSVlist[1]);
 
-                count = fileU.CreateFileUploadLog(new FileUploadService(_connectionSting), authenticate.TenantId, finalAttchment, errorfilesaved,
+                count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectionSting), authenticate.TenantId, finalAttchment, errorfilesaved,
                                    "HierarchyErrorFile.csv", "HierarchySuccessFile.csv", authenticate.UserMasterID, "Hierarchy",
                                    DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv",
                                    DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", 3

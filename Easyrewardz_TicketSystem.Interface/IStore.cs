@@ -31,6 +31,8 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int UpdateClaimAttechmentSetting(ClaimAttechment claimAttechment);
 
+        List<string> BulkUploadUser(int TenantID, int CreatedBy, int UserFor, DataSet DataSetCSV);
+
 
     }
 }

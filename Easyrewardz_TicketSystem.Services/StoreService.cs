@@ -627,7 +627,92 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-        
+        /// <summary>
+        /// Bulk Upload User 
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="UserFor"></param>
+        /// <param name="DataSetCSV"></param>
+        public List<string> BulkUploadUser(int TenantID, int CreatedBy, int UserFor, DataSet DataSetCSV)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            DataSet Bulkds = new DataSet();
+            List<string> csvLst = new List<string>();
+            MySqlCommand cmd = null;
+            string SuccesFile = string.Empty; string ErroFile = string.Empty;
+            try
+            {
+                if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
+                {
+                    if (DataSetCSV.Tables[0] != null && DataSetCSV.Tables[0].Rows.Count > 0)
+                    {
+
+                        //check if user ulpoad or brandcategory mapping
+                        xmlDoc.LoadXml(DataSetCSV.GetXml());
+                        conn.Open();
+
+
+                        string[] dtColumns = Array.ConvertAll(DataSetCSV.Tables[0].Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray(), d => d.ToLower());
+
+                        if (dtColumns.Contains("username"))
+                        {
+                            cmd = new MySqlCommand("SP_BulkUploadStoreUser", conn);
+                            cmd.Parameters.AddWithValue("@_tenantID", TenantID);
+                            cmd.Parameters.AddWithValue("@_UserFor", UserFor);
+
+                        }
+                        else
+                        {
+                            cmd = new MySqlCommand("SP_BulkUploadStoreBrandCategoryMapping", conn);
+                        }
+
+                        cmd.Connection = conn;
+                        cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
+                        cmd.Parameters.AddWithValue("@_node", Xpath);
+                        cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        MySqlDataAdapter da = new MySqlDataAdapter();
+                        da.SelectCommand = cmd;
+                        da.Fill(Bulkds);
+
+                        if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
+                        {
+
+                            //for success file
+                            SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(SuccesFile);
+
+                            //for error file
+                            ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            csvLst.Add(ErroFile);
+
+                        }
+                    }
+
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            finally
+            {
+                if (DataSetCSV != null)
+                {
+                    DataSetCSV.Dispose();
+                }
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return csvLst;
+        }
+
+
         #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -69,6 +70,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _AttachmentSetting.DeleteCampaignScript(TenantId, CreatedBy, CampaignID);
         }
 
+        public List<string> CampaignBulkUpload(IModulesSetting AttachmentSetting, int TenantID, int CreatedBy, int CategoryFor, DataSet DataSetCSV)
+        {
+            _AttachmentSetting = AttachmentSetting;
+            return _AttachmentSetting.CampaignBulkUpload(TenantID, CreatedBy, CategoryFor, DataSetCSV);
+        }
         #endregion
     }
 }

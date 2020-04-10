@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace Easyrewardz_TicketSystem.Interface
@@ -22,5 +23,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateCampaignScript(int TenantId, int CreatedBy, CampaignScriptRequest Campaignscript);
 
         int DeleteCampaignScript(int TenantId, int CreatedBy, int CampaignID);
+
+        List<string> CampaignBulkUpload(int TenantID, int CreatedBy, int CategoryFor, DataSet DataSetCSV);
     }
 }

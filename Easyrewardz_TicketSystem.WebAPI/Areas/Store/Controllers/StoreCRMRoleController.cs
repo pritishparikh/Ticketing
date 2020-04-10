@@ -263,15 +263,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadStoreCRMRole")]
-        public ResponseModel BulkUploadStoreCRMRole(int RoleFor = 2)
+        public ResponseModel BulkUploadStoreCRMRole(int RoleFor = 3)
         {
             string downloadFilePath = string.Empty;
             string bulkUploadFilesPath = string.Empty;
             bool errorFileSaved = false;
             bool successFileSaved = false;
-           // int count = 0;
+            int count = 0;
             List<string> CSVlist = new List<string>();
             StoreCRMRoleCaller newCRM = new StoreCRMRoleCaller();
+            StoreFileUploadCaller fileU = new StoreFileUploadCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
             string statusMessage = "";
@@ -346,11 +347,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 if (!string.IsNullOrEmpty(CSVlist[1]))
                     errorFileSaved = CommonService.SaveFile(downloadFilePath + "\\CRMRole\\Error" + "\\" + "CRMRoleErrorFile.csv", CSVlist[1]);
 
-                //count = newCRM.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorFileSaved,
-                //                   "CRMRoleErrorFile.csv", "CRMRoleSuccessFile.csv", authenticate.UserMasterID, "CRMRole",
-                //                   downloadFilePath + "\\CRMRole\\Error" + "\\" + "CRMRoleErrorFile.csv",
-                //                   downloadFilePath + "\\CRMRole\\ Success" + "\\" + "CRMRoleSuccessFile.csv", RoleFor
-                //                   );
+                count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorFileSaved,
+                                   "CRMRoleErrorFile.csv", "CRMRoleSuccessFile.csv", authenticate.UserMasterID, "CRMRole",
+                                   downloadFilePath + "\\CRMRole\\Error" + "\\" + "CRMRoleErrorFile.csv",
+                                   downloadFilePath + "\\CRMRole\\ Success" + "\\" + "CRMRoleSuccessFile.csv", RoleFor
+                                   );
                 #endregion
 
                 statusCode = successFileSaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;

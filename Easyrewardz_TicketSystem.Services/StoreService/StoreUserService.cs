@@ -17,63 +17,21 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
-        /// <summary>
-        /// AddStoreUserPersonaldetail
-        /// <param name="CustomStoreUserModel"></param>
-        /// </summary>
-        /// <param name="CustomStoreUserModel"></param>
-        public int AddStoreUserPersonaldetail(CustomStoreUserModel storeUserModel)
-        {
-            int UserID = 0;
-            try
-            {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_InserStoreUserPersonalDetail", conn);
-                cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@User_Name", storeUserModel.UserName);
-                cmd.Parameters.AddWithValue("@Mobile_No", storeUserModel.MobileNo);
-                cmd.Parameters.AddWithValue("@First_Name", storeUserModel.FirstName);
-                cmd.Parameters.AddWithValue("@Last_Name", storeUserModel.LastName);
-                cmd.Parameters.AddWithValue("@Email_ID", storeUserModel.EmailID);
-                cmd.Parameters.AddWithValue("@Created_By", storeUserModel.CreatedBy);
-                //cmd.Parameters.AddWithValue("@Is_StoreUser", storeUserModel.IsStoreUser);
-                cmd.Parameters.AddWithValue("@Tenant_ID", storeUserModel.TenantID);
-                cmd.Parameters.AddWithValue("@Brand_IDs", storeUserModel.BrandIDs);
-                cmd.Parameters.AddWithValue("@Store_IDs", storeUserModel.StoreIDs);
-                cmd.CommandType = CommandType.StoredProcedure;
-                UserID = Convert.ToInt32(cmd.ExecuteScalar());
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
-            return UserID;
-        }
-
 
 
         /// <summary>
         /// AddStoreUserPersonaldetail
-        /// <param name="CustomStoreUserModel"></param>
+        /// <param name="StoreUserPersonalDetails"></param>
         /// </summary>
-        /// <param name="CustomStoreUserModel"></param>
+        
         /// 
-         public int AddStoreUserPersonalDetail(StoreUserPersonalDetails personalDetails)
+        public int AddStoreUserPersonalDetails(StoreUserPersonalDetails personalDetails)
         {
             int UserID = 0;
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_InserStoreUserPersonalDetail", conn);
+                MySqlCommand cmd = new MySqlCommand("SP_InsertStoreUserPersonalDetails", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@User_Name", personalDetails.UserName);
                 cmd.Parameters.AddWithValue("@Mobile_No", personalDetails.MobileNo);
@@ -88,7 +46,7 @@ namespace Easyrewardz_TicketSystem.Services
                 UserID = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (Exception)
+            catch (Exception )
             {
                 throw;
             }
@@ -172,7 +130,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_reporteeID", reporteeID);
                 cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
                 cmd.CommandType = CommandType.StoredProcedure;
-                Success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                Success = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
             catch (Exception)
@@ -384,9 +342,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get  Store User List
         /// </summary>
         /// <param name="tenantID"></param>
-
-        /// <returns></returns>
-        /// 
         public List<StoreUserListing> GetStoreUserList(int tenantID)
         {
             DataSet ds = new DataSet();
@@ -396,7 +351,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("GetStoreDepartmentByBrandStore", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreUserList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -409,6 +364,12 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         StoreUserListing Usermaster = new StoreUserListing();
                         Usermaster.UserID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+
+                        Usermaster.BrandID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
+                        Usermaster.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                        Usermaster.StoreID = ds.Tables[0].Rows[i]["StoreID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
+                        Usermaster.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        Usermaster.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
 
                         Usermaster.UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
                         Usermaster.FirstName = ds.Tables[0].Rows[i]["FirstName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
@@ -440,7 +401,12 @@ namespace Easyrewardz_TicketSystem.Services
                         Usermaster.ReporteeDesignation = ds.Tables[0].Rows[i]["ReporteeDesignation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReporteeDesignation"]);
                         Usermaster.DepartmentID = ds.Tables[0].Rows[i]["DepartmentID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["DepartmentID"]);
                         Usermaster.DepartmentName = ds.Tables[0].Rows[i]["DepartmentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+
+                        Usermaster.FunctionIDs = ds.Tables[0].Rows[i]["FunctionIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FunctionIDs"]);
+                        Usermaster.MappedFunctions = ds.Tables[0].Rows[i]["MappedFunction"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MappedFunction"]);
+
                         Usermaster.isActive = ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsActive"]);
+                        Usermaster.isClaimApprover = ds.Tables[0].Rows[i]["IsClaimApprover"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsClaimApprover"]);
                         Usermaster.CreatedBy = ds.Tables[0].Rows[i]["CreatedName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedName"]);
                         Usermaster.UpdatedBy = ds.Tables[0].Rows[i]["ModifyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifyName"]);
                         Usermaster.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
@@ -450,20 +416,6 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-                //if(UsermasterList.Count > 0)
-                //{
-                //    if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
-                //    {
-                //        for (int k = 0; k < UsermasterList.Count; k++)
-                //        {
-                //            UsermasterList[k].BrandID= ds.Tables[1].AsEnumerable().Where(r => r.Field<object>("UserID").Equals(UsermasterList[k].UserID)).
-                //                Select(r => Convert.ToInt32( r.Field<object>("BrandID")))
-                            
-                //        }
-
-
-                //    }
-                //}
 
             }
             catch (Exception)
@@ -484,6 +436,108 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UsermasterList;
         }
+
+        /// <summary>
+        /// Get  Store User List on USerID
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="UserID"></param>
+        public StoreUserListing GetStoreUserOnUserID(int tenantID, int UserID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            StoreUserListing Usermaster = new StoreUserListing();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreUserListByUserID", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
+                cmd1.Parameters.AddWithValue("@_UserID", UserID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+
+                        Usermaster.UserID = Convert.ToInt32(ds.Tables[0].Rows[0]["UserID"]);
+
+                        Usermaster.BrandID = ds.Tables[0].Rows[0]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["BrandID"]);
+                        Usermaster.BrandName = ds.Tables[0].Rows[0]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["BrandName"]);
+                        Usermaster.StoreID = ds.Tables[0].Rows[0]["StoreID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["StoreID"]);
+                        Usermaster.StoreName = ds.Tables[0].Rows[0]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreName"]);
+                        Usermaster.StoreCode = ds.Tables[0].Rows[0]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreCode"]);
+
+                        Usermaster.UserName = ds.Tables[0].Rows[0]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["UserName"]);
+                        Usermaster.FirstName = ds.Tables[0].Rows[0]["FirstName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]);
+                        Usermaster.LastName = ds.Tables[0].Rows[0]["LastName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["LastName"]);
+                        Usermaster.MobileNo = ds.Tables[0].Rows[0]["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["MobileNo"]);
+                        Usermaster.EmailID = ds.Tables[0].Rows[0]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]);
+                        Usermaster.RoleID = ds.Tables[0].Rows[0]["RoleID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["RoleID"]);
+                        Usermaster.BrandIDs = ds.Tables[0].Rows[0]["BrandIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["BrandIDs"]);
+                        Usermaster.MappedBrand = ds.Tables[0].Rows[0]["MappedBrand"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["MappedBrand"]);
+
+                        Usermaster.CategoryCount = ds.Tables[0].Rows[0]["CategoryCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["CategoryCount"]);
+                        Usermaster.CategoryIDs = ds.Tables[0].Rows[0]["CategoryIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CategoryIDs"]);
+                        Usermaster.MappedCategory = ds.Tables[0].Rows[0]["MappedCategory"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["MappedCategory"]);
+
+                        Usermaster.SubCategoryCount = ds.Tables[0].Rows[0]["SubCategoryCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["SubCategoryCount"]);
+                        Usermaster.SubCategoryIDs = ds.Tables[0].Rows[0]["SubCategoryIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["SubCategoryIDs"]);
+                        Usermaster.MappedSubCategory = ds.Tables[0].Rows[0]["MappedSubCategory"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["MappedSubCategory"]);
+
+                        Usermaster.IssueTypeCount = ds.Tables[0].Rows[0]["IssueTypeCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["IssueTypeCount"]);
+                        Usermaster.IssueTypeIDs = ds.Tables[0].Rows[0]["IssueTypeIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["IssueTypeIDs"]);
+                        Usermaster.MappedIssuetype = ds.Tables[0].Rows[0]["MappedIssuetype"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["MappedIssuetype"]);
+
+                        Usermaster.DesignationID = ds.Tables[0].Rows[0]["DesignationID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["DesignationID"]);
+                        Usermaster.DesignationName = ds.Tables[0].Rows[0]["DesignationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["DesignationName"]);
+
+                        Usermaster.ReporteeID = ds.Tables[0].Rows[0]["ReporteeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["ReporteeID"]);
+                        Usermaster.ReporteeName = ds.Tables[0].Rows[0]["ReporteeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ReporteeName"]);
+                        Usermaster.ReporteeDesignationID = ds.Tables[0].Rows[0]["ReporteeDesignationID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["ReporteeDesignationID"]);
+                        Usermaster.ReporteeDesignation = ds.Tables[0].Rows[0]["ReporteeDesignation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ReporteeDesignation"]);
+                        Usermaster.DepartmentID = ds.Tables[0].Rows[0]["DepartmentID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["DepartmentID"]);
+                        Usermaster.DepartmentName = ds.Tables[0].Rows[0]["DepartmentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["DepartmentName"]);
+
+                        Usermaster.FunctionIDs = ds.Tables[0].Rows[0]["FunctionIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["FunctionIDs"]);
+                        Usermaster.MappedFunctions = ds.Tables[0].Rows[0]["MappedFunction"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["MappedFunction"]);
+
+                        Usermaster.isActive = ds.Tables[0].Rows[0]["IsActive"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["IsActive"]);
+                        Usermaster.isClaimApprover = ds.Tables[0].Rows[0]["IsClaimApprover"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["IsClaimApprover"]);
+                        Usermaster.CreatedBy = ds.Tables[0].Rows[0]["CreatedName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CreatedName"]);
+                        Usermaster.UpdatedBy = ds.Tables[0].Rows[0]["ModifyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ModifyName"]);
+                        Usermaster.CreatedDate = ds.Tables[0].Rows[0]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CreatedDate"]);
+                        Usermaster.UpdatedDate = ds.Tables[0].Rows[0]["UpdatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["UpdatedDate"]);
+
+                    }
+                }
+
+               
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+
+                if (ds != null)
+                    ds.Dispose();
+            }
+
+            return Usermaster;
+        }
+
 
         #region Profile Mapping
 
@@ -803,7 +857,7 @@ namespace Easyrewardz_TicketSystem.Services
                     CommandType = CommandType.StoredProcedure
                 };
                 cmd.Parameters.AddWithValue("@_tenantID", TenantID);
-                cmd.Parameters.AddWithValue("@_subcategoryIds", string.IsNullOrEmpty(SubCategoryIDs) ? "" : SubCategoryIDs);
+                cmd.Parameters.AddWithValue("@_subcategoryIds", string.IsNullOrEmpty(SubCategoryIDs) ? "" : SubCategoryIDs.TrimEnd(','));
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
@@ -815,11 +869,11 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            StoreClaimIssueTypeModel issuetype = new StoreClaimIssueTypeModel
+                            StoreClaimIssueTypeModel issuetype = new StoreClaimIssueTypeModel 
                             {
                                 SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]),
-                                IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]),
-                                IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]),
+                                IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]),
+                                IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]),
                                 IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"])
                             };
 
