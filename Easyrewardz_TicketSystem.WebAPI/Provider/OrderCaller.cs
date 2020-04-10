@@ -77,10 +77,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="InvoiceDate"></param>
         /// <param name="_orderMaster"></param>
         /// <returns></returns>
-        public List<OrderItem> GetOrderItemDetailsList(IOrder _orderMaster, int TenantID, int OrderMasterID, string OrderNumber, int CustomerID, string StoreCode, string InvoiceDate)
+        public List<OrderItem> GetOrderItemDetailsList(IOrder _orderMaster, int TenantID, OrderMaster orders)
         {
             _orderRepository = _orderMaster;
-            return _orderRepository.GetOrderItemDetails( TenantID,  OrderMasterID,  OrderNumber,  CustomerID,  StoreCode,  InvoiceDate);
+            return _orderRepository.GetOrderItemDetails( TenantID, orders);
 
         }
 

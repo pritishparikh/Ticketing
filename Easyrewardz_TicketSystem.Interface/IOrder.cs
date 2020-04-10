@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<CustomOrderMaster> getOrderListwithItemDetail(string OrderNumber, int Customer_ID, int TenantID, int CreatedBy);
 
 
-        List<OrderItem> GetOrderItemDetails(int TenantID, int OrderMasterID, string OrderNumber, int CustomerID, string StoreCode, string InvoiceDate); //InvoiceDatedate format : yyyy-MM-dd
+        List<OrderItem> GetOrderItemDetails(int TenantID, OrderMaster orders); //InvoiceDatedate format : yyyy-MM-dd
 
         List<CustomOrderDetailsByCustomer> getOrderListByCustomerID(int CustomerID, int TenantID, int CreatedBy);
 

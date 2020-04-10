@@ -203,7 +203,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getOrderItemDetailsList")]
-        public ResponseModel getOrderItemDetailsList(int OrderMasterID, string OrderNumber, int CustomerID, string StoreCode, string InvoiceDate) //InvoiceDatedate format : yyyy-MM-dd
+        public ResponseModel getOrderItemDetailsList([FromBody]OrderMaster orders) //InvoiceDatedate format : yyyy-MM-dd
         {
             List<OrderItem> objitemMaster = new List<OrderItem>();
             OrderCaller ordercaller = new OrderCaller();
@@ -216,8 +216,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                objitemMaster = ordercaller.GetOrderItemDetailsList(new OrderService(connectioSting), authenticate.TenantId,
-                     OrderMasterID,  OrderNumber,  CustomerID,  StoreCode,  InvoiceDate);
+                objitemMaster = ordercaller.GetOrderItemDetailsList(new OrderService(connectioSting), authenticate.TenantId, orders);
                 StatusCode =
                    objitemMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

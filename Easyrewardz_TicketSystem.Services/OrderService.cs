@@ -316,7 +316,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///   <param name="OrderMasterID"></param>
         /// <returns></returns>
         /// 
-        public List<OrderItem> GetOrderItemDetails(int TenantID, int OrderMasterID, string OrderNumber, int CustomerID, string StoreCode,string InvoiceDate) //InvoiceDatedate format : yyyy-MM-dd
+        public List<OrderItem> GetOrderItemDetails(int TenantID, OrderMaster orders) //InvoiceDatedate format : yyyy-MM-dd
         {
             DataSet ds = new DataSet();
             List<OrderItem> objOrderItemDetails = new List<OrderItem>();
@@ -324,9 +324,9 @@ namespace Easyrewardz_TicketSystem.Services
             CustomerService CustService = new CustomerService(conn.ConnectionString);
             try
             {
-                OrderNumber = string.IsNullOrEmpty(OrderNumber) ? "" : OrderNumber;
+                orders. OrderNumber = string.IsNullOrEmpty(orders.OrderNumber) ? "" : orders.OrderNumber;
 
-                if(OrderMasterID > 0)
+                if(orders.OrderMasterID > 0)
                 { 
 
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -336,9 +336,9 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_GetOrderItemDetails", conn);
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@_OrderNo", OrderNumber);
-                cmd.Parameters.AddWithValue("@_orderMasterID", OrderMasterID);
-                cmd.Parameters.AddWithValue("@Customer_ID", CustomerID);
+                cmd.Parameters.AddWithValue("@_OrderNo", orders.OrderNumber);
+                cmd.Parameters.AddWithValue("@_orderMasterID", orders.OrderMasterID);
+                cmd.Parameters.AddWithValue("@Customer_ID", orders.CustomerID);
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -369,9 +369,9 @@ namespace Easyrewardz_TicketSystem.Services
                 else
                 {
                     // get customer details
-                    customerMaster = CustService.getCustomerbyId(CustomerID, TenantID);
-
-                    objOrderItemDetails = GetItemdetailsfromAPI(OrderNumber, StoreCode, customerMaster.CustomerPhoneNumber, InvoiceDate);
+                    customerMaster = CustService.getCustomerbyId(orders.CustomerID, TenantID);
+                    string strInvoiceDate = orders.InvoiceDate.ToString("yyyy-MM-dd");
+                    objOrderItemDetails = GetItemdetailsfromAPI(orders.OrderNumber, orders.StoreCode, customerMaster.CustomerPhoneNumber, strInvoiceDate);
                 }
                
 
