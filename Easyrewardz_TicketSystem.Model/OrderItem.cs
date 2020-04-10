@@ -11,6 +11,8 @@ namespace Easyrewardz_TicketSystem.Model
         public int? OrderMasterID { get; set; }
         public string ItemName { get; set; }
         public string InvoiceNo { get; set; }
+        public string InvoiceNumber { get; set; }
+
         public DateTime InvoiceDate { get; set; }
         public int? ItemCount { get; set; }
         public decimal ItemPrice { get; set; }

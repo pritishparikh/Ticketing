@@ -157,7 +157,7 @@ namespace Easyrewardz_TicketSystem.Services
                         MySqlCommand cmd = new MySqlCommand("SP_InsertOrderItem", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_OrderMasterID", itemMaster[k].OrderMasterID);
-                        cmd.Parameters.AddWithValue("@_InvoiceNo", itemMaster[k].InvoiceNo);
+                        cmd.Parameters.AddWithValue("@_InvoiceNo", itemMaster[k].InvoiceNumber);
                         cmd.Parameters.AddWithValue("@_InvoiceDate", itemMaster[k].InvoiceDate);
                         cmd.Parameters.AddWithValue("@_ItemCount", itemMaster[k].ItemCount);
                         cmd.Parameters.AddWithValue("@_PricePaid", itemMaster[k].PricePaid);
@@ -354,7 +354,7 @@ namespace Easyrewardz_TicketSystem.Services
                             OrderItemID = x.Field<object>("OrderItemID") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<int>("OrderItemID")),
                             OrderMasterID = x.Field<object>("OrderMasterID") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<int>("OrderMasterID")),
                             ItemName= x.Field<object>("ItemName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<int>("ItemName")),
-                            InvoiceNo = x.Field<object>("InvoiceNo") == DBNull.Value ?string.Empty : Convert.ToString(x.Field<int>("InvoiceNo")),
+                            InvoiceNumber = x.Field<object>("InvoiceNo") == DBNull.Value ?string.Empty : Convert.ToString(x.Field<int>("InvoiceNo")),
                             ArticleNumber = x.Field<object>("SKUNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUNumber")),
                             ArticleName = x.Field<object>("SKUName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUName")),
                             ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
