@@ -81,8 +81,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@user_ID", userID);
                 
-                MySqlDataAdapter da 
-= new MySqlDataAdapter
+                MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
                 };
@@ -101,10 +100,14 @@ namespace Easyrewardz_TicketSystem.Services
                             StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
                             StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
                             CreatedBy = ds.Tables[0].Rows[i]["Createdby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]),
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
                             CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
                             Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
                             PriorityName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]),
-                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"])
+                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]),
+                            Createdago = ds.Tables[0].Rows[i]["CreatedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]), "CreatedSpan"),
+                            Assignedago = ds.Tables[0].Rows[i]["AssignedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["AssignedDate"]), "AssignedSpan"),
+                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]), "ModifiedSpan")
                         };
                         lsttask.Add(taskMaster);
                     }
@@ -594,6 +597,115 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// set Creation details
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="ColName"></param>
+        /// <returns></returns>
+        public string SetCreationdetails(string time, string ColName)
+        {
+            string timespan = string.Empty;
+            DateTime now = DateTime.Now;
+            TimeSpan diff = new TimeSpan();
+            string[] PriorityArr = null;
+            string spantext = "{0}D {1}H {2}M Ago";
+            try
+            {
+                if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
+                {
+                    diff = DateTime.Now - Convert.ToDateTime(time);
+                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
+
+                }
+                else if (ColName == "RespondTimeRemainingSpan")
+                {
+                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+                    DateTime assigneddate = Convert.ToDateTime(time.Split(new char[] { '|' })[1]);
+
+
+                    switch (PriorityArr[1])
+                    {
+                        case "D":
+                            if (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
+                            {
+                                diff = (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
+                            }
+                            break;
+
+                        case "H":
+
+                            if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
+                            {
+                                diff = (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
+                            }
+
+
+                            break;
+
+                        case "M":
+
+                            if (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
+                            {
+                                diff = (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
+                            }
+
+                            break;
+
+                    }
+                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
+
+                }
+                else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
+                {
+                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+                    DateTime assigneddate = Convert.ToDateTime(time.Split(new char[] { '|' })[1]);
+
+                    switch (PriorityArr[1])
+                    {
+                        case "D":
+                            if (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
+                            {
+                                diff = DateTime.Now - (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])));
+                            }
+                            break;
+
+                        case "H":
+                            if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
+                            {
+                                diff = DateTime.Now - (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])));
+                            }
+
+
+                            break;
+
+                        case "M":
+                            if (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
+                            {
+                                diff = DateTime.Now - (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])));
+                            }
+
+
+                            break;
+
+                    }
+
+                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
+                }
+            }
+            catch (Exception)
+            {
+                //throw;
+            }
+            finally
+            {
+                if (PriorityArr != null && PriorityArr.Length > 0)
+                    Array.Clear(PriorityArr, 0, PriorityArr.Length);
+            }
+            return timespan;
+
         }
         #endregion
 
