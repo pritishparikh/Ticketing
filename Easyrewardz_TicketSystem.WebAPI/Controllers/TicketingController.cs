@@ -18,7 +18,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+   // [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class TicketingController : ControllerBase
     {
         #region variable declaration
@@ -141,49 +141,53 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 #region check orderdetails and item details 
 
-                if (orderDetails.OrderMasterID.Equals(0))
+                if (orderDetails != null)
                 {
 
-                    string OrderNumber = string.Empty;
-                    string OrderItemsIds = string.Empty;
-                    OrderMaster objorderMaster = null;
-
-                    OrderCaller ordercaller = new OrderCaller();
-                    //call insert order
-                    OrderNumber = ordercaller.addOrder(new OrderService(_connectioSting), orderDetails, authenticate.TenantId);
-                    if (!string.IsNullOrEmpty(OrderNumber))
+                    if (orderDetails.OrderMasterID.Equals(0))
                     {
-                        objorderMaster = ordercaller.getOrderDetailsByNumber(new OrderService(_connectioSting), OrderNumber, authenticate.TenantId);
 
-                        if (objorderMaster != null)
+                        string OrderNumber = string.Empty;
+                        string OrderItemsIds = string.Empty;
+                        OrderMaster objorderMaster = null;
+
+                        OrderCaller ordercaller = new OrderCaller();
+                        //call insert order
+                        OrderNumber = ordercaller.addOrder(new OrderService(_connectioSting), orderDetails, authenticate.TenantId);
+                        if (!string.IsNullOrEmpty(OrderNumber))
                         {
+                            objorderMaster = ordercaller.getOrderDetailsByNumber(new OrderService(_connectioSting), OrderNumber, authenticate.TenantId);
 
-                            foreach(var item in OrderItemDetails)
+                            if (objorderMaster != null)
                             {
-                                item.OrderMasterID= objorderMaster.OrderMasterID;
+                                if(OrderItemDetails!=null)
+                                {
+                                    foreach (var item in OrderItemDetails)
+                                    {
+                                        item.OrderMasterID = objorderMaster.OrderMasterID;
+                                    }
+
+                                    OrderItemsIds = ordercaller.AddOrderItem(new OrderService(_connectioSting), OrderItemDetails, authenticate.TenantId, authenticate.UserMasterID);
+                                   
+                                }
+                                else
+                                {
+                                    OrderItemsIds = Convert.ToString(objorderMaster.OrderMasterID) + "|0|1";
+                                }
+
                             }
 
-                            OrderItemsIds = ordercaller.AddOrderItem(new OrderService(_connectioSting), OrderItemDetails, authenticate.TenantId, authenticate.UserMasterID);
-
-                            ticketingDetails.OrderMasterID =objorderMaster.OrderMasterID;
+                            ticketingDetails.OrderMasterID = objorderMaster.OrderMasterID;
                             ticketingDetails.OrderItemID = OrderItemsIds;
-
-
-                            //call create ticket
-                            result = newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
-
                         }
+
                     }
+                    
 
                 }
-                else // trigger create ticket
-                {
+                
 
-
-                    result = newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
-
-                }
-
+                result = newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
                 #endregion
 
 

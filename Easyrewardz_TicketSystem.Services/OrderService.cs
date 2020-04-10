@@ -140,8 +140,8 @@ namespace Easyrewardz_TicketSystem.Services
        public string AddOrderItemDetails(List<OrderItem> itemMaster, int TenantId,int CreatedBy )
         {
             string OrderItemIDs = string.Empty;
-            List<int> itemOrderIDList = new List<int>();
-            int InsertedItemID = 0;
+            List<string> itemOrderIDList = new List<string>();
+            string InsertedItemDetails = string.Empty;
             try
             {
 
@@ -168,10 +168,10 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
 
                         cmd.CommandType = CommandType.StoredProcedure;
-                        InsertedItemID = Convert.ToInt32(cmd.ExecuteScalar());
+                        InsertedItemDetails = Convert.ToString(cmd.ExecuteScalar());
 
-                        if (InsertedItemID > 0)
-                            itemOrderIDList.Add(InsertedItemID);
+                        if(!string.IsNullOrEmpty(InsertedItemDetails))
+                            itemOrderIDList.Add(InsertedItemDetails);
                     }
                   
                 }
@@ -191,7 +191,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             }
 
-            return itemOrderIDList.Count >0 ? string.Join(',', itemOrderIDList) : "" ;
+            return itemOrderIDList.Count > 0 ? string.Join(',', itemOrderIDList) : "" ;
         }
 
         /// <summary>
