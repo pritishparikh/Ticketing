@@ -165,6 +165,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                                     foreach (var item in OrderItemDetails)
                                     {
                                         item.OrderMasterID = objorderMaster.OrderMasterID;
+                                        item.InvoiceDate = orderDetails.InvoiceDate;
                                     }
 
                                     OrderItemsIds = ordercaller.AddOrderItem(new OrderService(_connectioSting), OrderItemDetails, authenticate.TenantId, authenticate.UserMasterID);

@@ -361,6 +361,7 @@ namespace Easyrewardz_TicketSystem.Services
                             PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
                             Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
                             RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("RequireSize"))
+                  
                         }).ToList();
                     }
                 }
@@ -864,6 +865,7 @@ namespace Easyrewardz_TicketSystem.Services
                                     PricePaid = string.IsNullOrEmpty(objItemDetails[k].PaidAmount) ? 0 : Convert.ToDecimal(objItemDetails[k].PaidAmount),
                                     InvoiceNo = orderno,
                                     InvoiceNumber= orderno,
+                                    InvoiceDate= Convert.ToDateTime(InvoiceDate),
                                     Discount = string.IsNullOrEmpty(objItemDetails[k].Discount) ? 0 : Convert.ToDecimal(objItemDetails[k].Discount),
                                     RequireSize = ""
                                 });
