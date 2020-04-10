@@ -178,22 +178,33 @@ namespace Easyrewardz_TicketSystem.Services
                         customOrderMaster.StoreAddress = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
                         customOrderMaster.Discount = ds.Tables[0].Rows[i]["Discount"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Discount"]);
                         int orderMasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
-                        customOrderMaster.OrderItems = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("OrderMasterID")).
-                        Equals(orderMasterId)).Select(x => new OrderItem()
-                        {
-                            OrderItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
-                            OrderMasterID = Convert.ToInt32(x.Field<int>("OrderMasterID")),
-                            ArticleNumber = x.Field<object>("SKUNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUNumber")),
-                            ArticleName = x.Field<object>("SKUName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUName")),
-                            ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
-                            PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
-                            Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
-                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("RequireSize"))
-                        }).ToList();
-                        customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
-                        customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
-                        customOrderMaster.PricePaid = customOrderMaster.OrderItems.Sum(item => item.PricePaid);
-                        objorderMaster.Add(customOrderMaster);
+
+                        
+                        //customOrderMaster.OrderItems = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("OrderMasterID")).
+                        //Equals(orderMasterId)).Select(x => new OrderItem()
+                        //{
+                        //    OrderItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
+                        //    OrderMasterID = Convert.ToInt32(x.Field<int>("OrderMasterID")),
+                        //    ArticleNumber = x.Field<object>("SKUNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUNumber")),
+                        //    ArticleName = x.Field<object>("SKUName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUName")),
+                        //    ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
+                        //    PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
+                        //    Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
+                        //    RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("RequireSize"))
+                        //}).ToList();
+                        
+
+                        //customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
+                        //customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
+                        //customOrderMaster.PricePaid = customOrderMaster.OrderItems.Sum(item => item.PricePaid);
+
+
+                        customOrderMaster.ItemCount = ds.Tables[1].Rows[i]["OrderItemCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OrderItemCount"]);
+                        customOrderMaster.ItemPrice = ds.Tables[2].Rows[i]["ItemPriceTotal"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["ItemPriceTotal"]);
+                        customOrderMaster.PricePaid = ds.Tables[3].Rows[i]["PricePaidTotal"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["PricePaidTotal"]);
+
+
+                            objorderMaster.Add(customOrderMaster);
                     }
 
                     }
@@ -218,9 +229,105 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+
+                if(ds!=null)
+                {
+                    ds.Dispose();
+                }
             }
             return objorderMaster;
         }
+
+
+        /// <summary>
+        /// Get Order Item Details
+        /// </summary>
+        /// <param name="CustomerID"></param>
+        /// <param name="TenantID"></param>
+        ///  <param name="OrderNo"></param>
+        ///   <param name="OrderMasterID"></param>
+        /// <returns></returns>
+        /// 
+        public List<OrderItem> GetOrderItemDetails(int TenantID, int OrderMasterID, string OrderNumber, int CustomerID, string StoreCode,string InvoiceDate) //InvoiceDatedate format : yyyy-MM-dd
+        {
+            DataSet ds = new DataSet();
+            List<OrderItem> objOrderItemDetails = new List<OrderItem>();
+            CustomerMaster customerMaster = new CustomerMaster();
+            CustomerService CustService = new CustomerService(conn.ConnectionString);
+            try
+            {
+                OrderNumber = string.IsNullOrEmpty(OrderNumber) ? "" : OrderNumber;
+
+                if(OrderMasterID > 0)
+                { 
+
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand("SP_GetOrderItemDetails", conn);
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@_OrderNo", OrderNumber);
+                cmd.Parameters.AddWithValue("@_orderMasterID", OrderMasterID);
+                cmd.Parameters.AddWithValue("@Customer_ID", CustomerID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+
+                        objOrderItemDetails = ds.Tables[0].AsEnumerable().Select(x => new OrderItem()
+                        {
+                            OrderItemID = x.Field<object>("OrderItemID") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<int>("OrderItemID")),
+                            OrderMasterID = x.Field<object>("OrderMasterID") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<int>("OrderMasterID")),
+                            ArticleNumber = x.Field<object>("SKUNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUNumber")),
+                            ArticleName = x.Field<object>("SKUName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("SKUName")),
+                            ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
+                            PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
+                            Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
+                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("RequireSize"))
+                        }).ToList();
+                    }
+                }
+    
+                }
+                else
+                {
+                    // get customer details
+                    customerMaster = CustService.getCustomerbyId(CustomerID, TenantID);
+
+                    objOrderItemDetails = GetItemdetailsfromAPI(OrderNumber, StoreCode, customerMaster.CustomerPhoneNumber, InvoiceDate);
+                }
+               
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objOrderItemDetails;
+        }
+
+
+
         /// <summary>
         /// Get OrderList By CustomerID
         /// </summary>
@@ -575,14 +682,14 @@ namespace Easyrewardz_TicketSystem.Services
             return objorderMaster;
         }
 
-        public List<CustomOrderMaster> getOrderDetailsfromAPI(string orderNumber, int customerID,string MobNo, int tenantID, int CreatedBy)
+
+        #region Get Order and Item details from LPASS API
+
+        public List<CustomOrderMaster> getOrderDetailsfromAPI(string orderNumber, int customerID, string MobNo, int tenantID, int CreatedBy)
         {
             List<CustomOrderMaster> objorderMaster = new List<CustomOrderMaster>();
             CustomSearchOrder objOrderSearch = new CustomSearchOrder();
             List<CustomOrderDetails> objOrderDetails = new List<CustomOrderDetails>();
-            
-            string InsertOrderNo = string.Empty;
-            int InsertOrderID = 0;
 
             try
             {
@@ -590,82 +697,53 @@ namespace Easyrewardz_TicketSystem.Services
                 objOrderSearch.mobileNumber = MobNo;
                 objOrderSearch.invoiceNumber = orderNumber;
                 objOrderSearch.securityToken = apisecurityToken;
-                objOrderSearch.userID =  3;
+                objOrderSearch.userID = 3;
                 objOrderSearch.appID = 7;
 
                 string apiReq = JsonConvert.SerializeObject(objOrderSearch);
-                apiResponse = CommonService.SendApiRequest(apiURL+ "CustomerOrderDetails", apiReq);
+                apiResponse = CommonService.SendApiRequest(apiURL + "CustomerOrderDetails", apiReq);
+
                 if (!string.IsNullOrEmpty(apiResponse))
                 {
                     ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+
                     if (ApiResponse != null)
                     {
-                        objOrderDetails= JsonConvert.DeserializeObject<List<CustomOrderDetails>>(Convert.ToString((ApiResponse.Responce)));
+                        objOrderDetails = JsonConvert.DeserializeObject<List<CustomOrderDetails>>(Convert.ToString((ApiResponse.Responce)));
+
                         if (objOrderDetails != null)
                         {
-                            if(objOrderDetails.Count > 0)
+                            if (objOrderDetails.Count > 0)
                             {
                                 for (int k = 0; k < objOrderDetails.Count; k++)
                                 {
-                                    OrderMaster OrderReq = new OrderMaster();
-                                    OrderReq.ProductBarCode ="";
-                                    OrderReq.OrderNumber = objOrderDetails[k].InvoiceNumber;
-                                    OrderReq.BillID ="";
-                                    OrderReq.TicketSourceID = 30; // 29-offline; 30- web ; 31- mobile channel of purchase
-                                    OrderReq.ModeOfPaymentID =1;
-                                    OrderReq.TransactionDate = DateTime.ParseExact(objOrderDetails[k].InvoiceDate, "M/d/yy h:mm:ss tt", culture);
-                                    OrderReq.InvoiceNumber =objOrderDetails[k].InvoiceNumber;
-                                    OrderReq.InvoiceDate = DateTime.ParseExact(objOrderDetails[k].InvoiceDate, "M/d/yy h:mm:ss tt", culture);
-                                    OrderReq.StoreCode = 0;// objOrderDetails[k].StoreCode
-                                    OrderReq.OrderPrice =0;
-                                    OrderReq.PricePaid = objOrderDetails[k].PricePaid;
-                                    OrderReq.CustomerID = customerID;
-                                    OrderReq.PurchaseFromStoreId =Convert.ToInt16(!string.IsNullOrEmpty(objOrderDetails[k].StoreCode));
-                                    OrderReq.Discount = string.IsNullOrEmpty(objOrderDetails[k].Discount) ? 0: Convert.ToDecimal(objOrderDetails[k].Discount);
-                                    OrderReq.Size ="";
-                                    OrderReq.RequireSize ="";
-                                    OrderReq.ModeOfPaymentID = 1;
-                                    OrderReq.CreatedBy = CreatedBy;
-                                    OrderReq.TenantID = tenantID;
+                                    CustomOrderMaster orderDetails = new CustomOrderMaster();
+                                    orderDetails.OrderMasterID = 0;
+                                    orderDetails.InvoiceNumber = objOrderDetails[k].InvoiceNumber;
+                                    orderDetails.InvoiceDate = DateTime.ParseExact(objOrderDetails[k].InvoiceDate, "M/d/yy h:mm:ss tt", culture);
+                                    orderDetails.OrdeItemPrice = objOrderDetails[k].ItemPrice;
+                                    orderDetails.OrderPricePaid = objOrderDetails[k].PricePaid;
+                                    orderDetails.DateFormat = DateTime.ParseExact(objOrderDetails[k].InvoiceDate, "M/d/yy h:mm:ss tt", culture).ToString("dd/MMM/yyyy");
+                                    orderDetails.StoreCode = objOrderDetails[k].StoreCode;
+                                    orderDetails.StoreAddress = objOrderDetails[k].StoreAddress;
+                                    orderDetails.Discount = string.IsNullOrEmpty(objOrderDetails[k].Discount) ? 0 : Convert.ToDecimal(objOrderDetails[k].Discount);
+                                    //orderDetails.OrderItems = GetItemdetailsfromAPI(InsertOrderNo, InsertOrderID, MobNo, objOrderDetails[k], CreatedBy);
+                                    orderDetails.ItemCount = objOrderDetails[k].ItemCount;
+                                    orderDetails.ItemPrice = objOrderDetails[k].ItemPrice;
+                                    orderDetails.PricePaid = objOrderDetails[k].PricePaid;
 
-                                    //insert order into table
-                                    InsertOrderNo = addOrderDetails(OrderReq, tenantID);
-
-                                    if(!string.IsNullOrEmpty(InsertOrderNo))
-                                    {
-                                        InsertOrderID = getOrderbyNumber(InsertOrderNo, tenantID).OrderMasterID;
-                                        if(InsertOrderID > 0)
-                                        {
-
-                                            CustomOrderMaster orderDetails = new CustomOrderMaster();
-                                            orderDetails.OrderMasterID = InsertOrderID;
-                                            orderDetails.InvoiceNumber = InsertOrderNo;
-                                            orderDetails.InvoiceDate = OrderReq.InvoiceDate;
-                                            orderDetails.OrdeItemPrice = OrderReq.OrderPrice;
-                                            orderDetails.OrderPricePaid = OrderReq.PricePaid;
-                                            orderDetails.DateFormat = OrderReq.InvoiceDate.ToString("dd/MMM/yyyy");
-                                            orderDetails.StoreCode = objOrderDetails[k].StoreCode;
-                                            orderDetails.StoreAddress = objOrderDetails[k].StoreAddress;
-                                            orderDetails.Discount = OrderReq.Discount;
-                                            orderDetails.OrderItems = GetItemdetailsfromAPI(InsertOrderNo, InsertOrderID, MobNo, objOrderDetails[k], CreatedBy);
-                                            orderDetails.ItemCount = orderDetails.OrderItems.Count();
-                                            orderDetails.ItemPrice = orderDetails.OrderItems.Sum(item => item.ItemPrice);
-                                            orderDetails.PricePaid = orderDetails.OrderItems.Sum(item => item.PricePaid);
-
-
-                                            objorderMaster.Add(orderDetails);
-                                        }
-                                        
-                                    }
-
+                                    objorderMaster.Add(orderDetails);
                                 }
                             }
                         }
+
                     }
+
                 }
 
 
-                }
+
+            }
             catch (Exception)
             {
                 throw;
@@ -674,22 +752,18 @@ namespace Easyrewardz_TicketSystem.Services
             return objorderMaster;
         }
 
-        public List<OrderItem> GetItemdetailsfromAPI(string orderno,int OrderMasterId,string MobileNo, CustomOrderDetails Orders, int CreatedBy)
+        public List<OrderItem> GetItemdetailsfromAPI(string orderno, string storeCode, string MobileNo,string InvoiceDate)
         {
-            //CustomItemSearch objItemSearch = new CustomItemSearch();
             CustomBillItemSearch objItemSearch = new CustomBillItemSearch();
-            //List<CustomItemDetails> objItemDetails = new List<CustomItemDetails>();
             List<CustomBillItemDetails> objItemDetails = new List<CustomBillItemDetails>();
             List<OrderItem> objOrderItems = new List<OrderItem>();
-            int InsertedItemID = 0;
             try
             {
-
                 objItemSearch.ProgramCode = "Bata";
                 objItemSearch.InvoiceNumber = orderno;
-                objItemSearch.StoreCode = Orders.StoreCode;
+                objItemSearch.StoreCode = storeCode;
                 objItemSearch.MemberId = MobileNo;
-                objItemSearch.InvoiceDate = DateTime.ParseExact(Orders.InvoiceDate, "M/d/yy h:mm:ss tt", culture).ToString("yyyy-MM-dd");
+                objItemSearch.InvoiceDate = InvoiceDate;// DateTime.ParseExact(Orders.InvoiceDate, "M/d/yy h:mm:ss tt", culture).ToString("yyyy-MM-dd");
                 objItemSearch.securityToken = apisecurityToken;
                 objItemSearch.userID = 3;
                 objItemSearch.appID = 7;
@@ -706,56 +780,222 @@ namespace Easyrewardz_TicketSystem.Services
 
                         if (objItemDetails != null && objItemDetails.Count > 0)
                         {
-                            for (int k = 0; k < objItemDetails.Count; k++)
+                            for(int k=0; k< objItemDetails.Count; k++)
                             {
-                                if (conn != null && conn.State == ConnectionState.Closed)
-                                {
-                                    conn.Open();
-                                }
-
-                                MySqlCommand cmd = new MySqlCommand("SP_InsertOrderItem", conn);
-                                cmd.Connection = conn;
-                                cmd.Parameters.AddWithValue("@_OrderMasterID", OrderMasterId);
-                                cmd.Parameters.AddWithValue("@_InvoiceNo", Orders.InvoiceNumber);
-                                cmd.Parameters.AddWithValue("@_InvoiceDate", DateTime.ParseExact(Orders.InvoiceDate, "M/d/yy h:mm:ss tt", culture));
-                                cmd.Parameters.AddWithValue("@_ItemCount", Orders.ItemCount);
-                                cmd.Parameters.AddWithValue("@_PricePaid", string.IsNullOrEmpty(objItemDetails[k].PaidAmount) ? 0: Convert.ToDecimal(objItemDetails[k].PaidAmount));
-                                cmd.Parameters.AddWithValue("@_SKUNumber", objItemDetails[k].ArticleCode);
-                                cmd.Parameters.AddWithValue("@_SKUName", objItemDetails[k].Name);
-                                cmd.Parameters.AddWithValue("@_ItemPrice", string.IsNullOrEmpty(objItemDetails[k].Rate) ? 0 : Convert.ToDecimal(objItemDetails[k].Rate));
-                                cmd.Parameters.AddWithValue("@_Discount", string.IsNullOrEmpty(objItemDetails[k].Discount) ? 0 : Convert.ToDecimal(objItemDetails[k].Discount));
-                                cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
-
-                                cmd.CommandType = CommandType.StoredProcedure;
-                                InsertedItemID = Convert.ToInt32(cmd.ExecuteScalar());
-
                                 objOrderItems.Add(new OrderItem
                                 {
-                                    OrderItemID = InsertedItemID,
-                                    OrderMasterID = OrderMasterId,
+                                    OrderItemID = 0,
+                                    OrderMasterID = 0,
                                     ArticleNumber = objItemDetails[k].ArticleCode,
                                     ArticleName = objItemDetails[k].Name, // 
                                     ItemPrice = string.IsNullOrEmpty(objItemDetails[k].Rate) ? 0 : Convert.ToDecimal(objItemDetails[k].Rate),
-                                    ItemCount= Orders.ItemCount,
+                                    ItemCount = objItemDetails.Count,
                                     PricePaid = string.IsNullOrEmpty(objItemDetails[k].PaidAmount) ? 0 : Convert.ToDecimal(objItemDetails[k].PaidAmount),
-                                   
-                                    Discount = string.IsNullOrEmpty(objItemDetails[k].Discount) ? 0 : Convert.ToDecimal(objItemDetails[k].Discount), 
+
+                                    Discount = string.IsNullOrEmpty(objItemDetails[k].Discount) ? 0 : Convert.ToDecimal(objItemDetails[k].Discount),
                                     RequireSize = ""
                                 });
 
 
                             }
-
                         }
                     }
                 }
             }
-            catch (Exception )
+            catch (Exception)
             {
                 throw;
             }
 
             return objOrderItems;
         }
+        #endregion
+
+        #region Get Order and Item details from LPASS API -- OLD Approach
+
+        //public List<CustomOrderMaster> getOrderDetailsfromAPIOLD(string orderNumber, int customerID, string MobNo, int tenantID, int CreatedBy)
+        //{
+        //    List<CustomOrderMaster> objorderMaster = new List<CustomOrderMaster>();
+        //    CustomSearchOrder objOrderSearch = new CustomSearchOrder();
+        //    List<CustomOrderDetails> objOrderDetails = new List<CustomOrderDetails>();
+
+        //    string InsertOrderNo = string.Empty;
+        //    int InsertOrderID = 0;
+
+        //    try
+        //    {
+        //        objOrderSearch.programCode = "bata";
+        //        objOrderSearch.mobileNumber = MobNo;
+        //        objOrderSearch.invoiceNumber = orderNumber;
+        //        objOrderSearch.securityToken = apisecurityToken;
+        //        objOrderSearch.userID = 3;
+        //        objOrderSearch.appID = 7;
+
+        //        string apiReq = JsonConvert.SerializeObject(objOrderSearch);
+        //        apiResponse = CommonService.SendApiRequest(apiURL + "CustomerOrderDetails", apiReq);
+        //        if (!string.IsNullOrEmpty(apiResponse))
+        //        {
+        //            ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+        //            if (ApiResponse != null)
+        //            {
+        //                objOrderDetails = JsonConvert.DeserializeObject<List<CustomOrderDetails>>(Convert.ToString((ApiResponse.Responce)));
+        //                if (objOrderDetails != null)
+        //                {
+        //                    if (objOrderDetails.Count > 0)
+        //                    {
+        //                        for (int k = 0; k < objOrderDetails.Count; k++)
+        //                        {
+        //                            OrderMaster OrderReq = new OrderMaster();
+        //                            OrderReq.ProductBarCode = "";
+        //                            OrderReq.OrderNumber = objOrderDetails[k].InvoiceNumber;
+        //                            OrderReq.BillID = "";
+        //                            OrderReq.TicketSourceID = 30; // 29-offline; 30- web ; 31- mobile channel of purchase
+        //                            OrderReq.ModeOfPaymentID = 1;
+        //                            OrderReq.TransactionDate = DateTime.ParseExact(objOrderDetails[k].InvoiceDate, "M/d/yy h:mm:ss tt", culture);
+        //                            OrderReq.InvoiceNumber = objOrderDetails[k].InvoiceNumber;
+        //                            OrderReq.InvoiceDate = DateTime.ParseExact(objOrderDetails[k].InvoiceDate, "M/d/yy h:mm:ss tt", culture);
+        //                            OrderReq.StoreCode = 0;// objOrderDetails[k].StoreCode
+        //                            OrderReq.OrderPrice = 0;
+        //                            OrderReq.PricePaid = objOrderDetails[k].PricePaid;
+        //                            OrderReq.CustomerID = customerID;
+        //                            OrderReq.PurchaseFromStoreId = Convert.ToInt16(!string.IsNullOrEmpty(objOrderDetails[k].StoreCode));
+        //                            OrderReq.Discount = string.IsNullOrEmpty(objOrderDetails[k].Discount) ? 0 : Convert.ToDecimal(objOrderDetails[k].Discount);
+        //                            OrderReq.Size = "";
+        //                            OrderReq.RequireSize = "";
+        //                            OrderReq.ModeOfPaymentID = 1;
+        //                            OrderReq.CreatedBy = CreatedBy;
+        //                            OrderReq.TenantID = tenantID;
+
+        //                            //insert order into table
+        //                            InsertOrderNo = addOrderDetails(OrderReq, tenantID);
+
+        //                            if (!string.IsNullOrEmpty(InsertOrderNo))
+        //                            {
+        //                                InsertOrderID = getOrderbyNumber(InsertOrderNo, tenantID).OrderMasterID;
+        //                                if (InsertOrderID > 0)
+        //                                {
+
+        //                                    CustomOrderMaster orderDetails = new CustomOrderMaster();
+        //                                    orderDetails.OrderMasterID = InsertOrderID;
+        //                                    orderDetails.InvoiceNumber = InsertOrderNo;
+        //                                    orderDetails.InvoiceDate = OrderReq.InvoiceDate;
+        //                                    orderDetails.OrdeItemPrice = OrderReq.OrderPrice;
+        //                                    orderDetails.OrderPricePaid = OrderReq.PricePaid;
+        //                                    orderDetails.DateFormat = OrderReq.InvoiceDate.ToString("dd/MMM/yyyy");
+        //                                    orderDetails.StoreCode = objOrderDetails[k].StoreCode;
+        //                                    orderDetails.StoreAddress = objOrderDetails[k].StoreAddress;
+        //                                    orderDetails.Discount = OrderReq.Discount;
+        //                                    orderDetails.OrderItems = GetItemdetailsfromAPI(InsertOrderNo, InsertOrderID, MobNo, objOrderDetails[k], CreatedBy);
+        //                                    orderDetails.ItemCount = orderDetails.OrderItems.Count();
+        //                                    orderDetails.ItemPrice = orderDetails.OrderItems.Sum(item => item.ItemPrice);
+        //                                    orderDetails.PricePaid = orderDetails.OrderItems.Sum(item => item.PricePaid);
+
+
+        //                                    objorderMaster.Add(orderDetails);
+        //                                }
+
+        //                            }
+
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+
+
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+
+        //    return objorderMaster;
+        //}
+
+        //public List<OrderItem> GetItemdetailsfromAPIOLD(string orderno,int OrderMasterId,string MobileNo, CustomOrderDetails Orders, int CreatedBy)
+        //{
+        //    //CustomItemSearch objItemSearch = new CustomItemSearch();
+        //    CustomBillItemSearch objItemSearch = new CustomBillItemSearch();
+        //    //List<CustomItemDetails> objItemDetails = new List<CustomItemDetails>();
+        //    List<CustomBillItemDetails> objItemDetails = new List<CustomBillItemDetails>();
+        //    List<OrderItem> objOrderItems = new List<OrderItem>();
+        //    int InsertedItemID = 0;
+        //    try
+        //    {
+
+        //        objItemSearch.ProgramCode = "Bata";
+        //        objItemSearch.InvoiceNumber = orderno;
+        //        objItemSearch.StoreCode = Orders.StoreCode;
+        //        objItemSearch.MemberId = MobileNo;
+        //        objItemSearch.InvoiceDate = DateTime.ParseExact(Orders.InvoiceDate, "M/d/yy h:mm:ss tt", culture).ToString("yyyy-MM-dd");
+        //        objItemSearch.securityToken = apisecurityToken;
+        //        objItemSearch.userID = 3;
+        //        objItemSearch.appID = 7;
+
+        //        string apiReq = JsonConvert.SerializeObject(objItemSearch);
+        //        apiResponse = CommonService.SendApiRequest(apiURL + "BillItemDetails", apiReq);
+
+        //        if (!string.IsNullOrEmpty(apiResponse))
+        //        {
+        //            ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+        //            if (ApiResponse != null)
+        //            {
+        //                objItemDetails = JsonConvert.DeserializeObject<List<CustomBillItemDetails>>(Convert.ToString((ApiResponse.Responce)));
+
+        //                if (objItemDetails != null && objItemDetails.Count > 0)
+        //                {
+        //                    for (int k = 0; k < objItemDetails.Count; k++)
+        //                    {
+        //                        if (conn != null && conn.State == ConnectionState.Closed)
+        //                        {
+        //                            conn.Open();
+        //                        }
+
+        //                        MySqlCommand cmd = new MySqlCommand("SP_InsertOrderItem", conn);
+        //                        cmd.Connection = conn;
+        //                        cmd.Parameters.AddWithValue("@_OrderMasterID", OrderMasterId);
+        //                        cmd.Parameters.AddWithValue("@_InvoiceNo", Orders.InvoiceNumber);
+        //                        cmd.Parameters.AddWithValue("@_InvoiceDate", DateTime.ParseExact(Orders.InvoiceDate, "M/d/yy h:mm:ss tt", culture));
+        //                        cmd.Parameters.AddWithValue("@_ItemCount", Orders.ItemCount);
+        //                        cmd.Parameters.AddWithValue("@_PricePaid", string.IsNullOrEmpty(objItemDetails[k].PaidAmount) ? 0: Convert.ToDecimal(objItemDetails[k].PaidAmount));
+        //                        cmd.Parameters.AddWithValue("@_SKUNumber", objItemDetails[k].ArticleCode);
+        //                        cmd.Parameters.AddWithValue("@_SKUName", objItemDetails[k].Name);
+        //                        cmd.Parameters.AddWithValue("@_ItemPrice", string.IsNullOrEmpty(objItemDetails[k].Rate) ? 0 : Convert.ToDecimal(objItemDetails[k].Rate));
+        //                        cmd.Parameters.AddWithValue("@_Discount", string.IsNullOrEmpty(objItemDetails[k].Discount) ? 0 : Convert.ToDecimal(objItemDetails[k].Discount));
+        //                        cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
+
+        //                        cmd.CommandType = CommandType.StoredProcedure;
+        //                        InsertedItemID = Convert.ToInt32(cmd.ExecuteScalar());
+
+        //                        objOrderItems.Add(new OrderItem
+        //                        {
+        //                            OrderItemID = InsertedItemID,
+        //                            OrderMasterID = OrderMasterId,
+        //                            ArticleNumber = objItemDetails[k].ArticleCode,
+        //                            ArticleName = objItemDetails[k].Name, // 
+        //                            ItemPrice = string.IsNullOrEmpty(objItemDetails[k].Rate) ? 0 : Convert.ToDecimal(objItemDetails[k].Rate),
+        //                            ItemCount= Orders.ItemCount,
+        //                            PricePaid = string.IsNullOrEmpty(objItemDetails[k].PaidAmount) ? 0 : Convert.ToDecimal(objItemDetails[k].PaidAmount),
+
+        //                            Discount = string.IsNullOrEmpty(objItemDetails[k].Discount) ? 0 : Convert.ToDecimal(objItemDetails[k].Discount), 
+        //                            RequireSize = ""
+        //                        });
+
+
+        //                    }
+
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception )
+        //    {
+        //        throw;
+        //    }
+
+        //    return objOrderItems;
+        //}
+
+        #endregion
     }
 }

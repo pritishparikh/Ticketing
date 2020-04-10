@@ -109,7 +109,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get Orderdetail list with item
+        /// Get Orderdetail list 
         /// </summary>
         /// <param name="OrderNumber"></param>
         /// <param name="TenantID"></param>
@@ -149,6 +149,54 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return objResponseModel;
         }
+
+
+        /// <summary>
+        /// Get Order item list
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="OrderMasterID"></param>
+        /// <param name="CustomerID"></param>
+        /// <param name="StoreCode"></param>
+        /// <param name="InvoiceDate"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("getOrderItemDetailsList")]
+        public ResponseModel getOrderItemDetailsList(int OrderMasterID, string OrderNumber, int CustomerID, string StoreCode, string InvoiceDate) //InvoiceDatedate format : yyyy-MM-dd
+        {
+            List<OrderItem> objitemMaster = new List<OrderItem>();
+            OrderCaller ordercaller = new OrderCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                objitemMaster = ordercaller.GetOrderItemDetailsList(new OrderService(connectioSting), authenticate.TenantId,
+                     OrderMasterID,  OrderNumber,  CustomerID,  StoreCode,  InvoiceDate);
+                StatusCode =
+                   objitemMaster.Count == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objitemMaster;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
 
         /// <summary>
         /// Get Orderdetail list with item
