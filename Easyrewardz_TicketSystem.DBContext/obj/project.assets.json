@@ -5470,23 +5470,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\chetan.poojari\\.nuget\\packages\\": {},
+    "C:\\Users\\rashmi.salaria\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Ticketing Project\\StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj",
+      "projectUniqueName": "D:\\Rashmi\\Projects\\Ticketing-WebAPI\\Ticketing_StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj",
       "projectName": "Easyrewardz_TicketSystem.DBContext",
-      "projectPath": "D:\\Ticketing Project\\StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj",
-      "packagesPath": "C:\\Users\\chetan.poojari\\.nuget\\packages\\",
-      "outputPath": "D:\\Ticketing Project\\StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\obj\\",
+      "projectPath": "D:\\Rashmi\\Projects\\Ticketing-WebAPI\\Ticketing_StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj",
+      "packagesPath": "C:\\Users\\rashmi.salaria\\.nuget\\packages\\",
+      "outputPath": "D:\\Rashmi\\Projects\\Ticketing-WebAPI\\Ticketing_StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\chetan.poojari\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\rashmi.salaria\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5499,8 +5499,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "D:\\Ticketing Project\\StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
-              "projectPath": "D:\\Ticketing Project\\StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
+            "D:\\Rashmi\\Projects\\Ticketing-WebAPI\\Ticketing_StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
+              "projectPath": "D:\\Rashmi\\Projects\\Ticketing-WebAPI\\Ticketing_StoreBranch\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
             }
           }
         }

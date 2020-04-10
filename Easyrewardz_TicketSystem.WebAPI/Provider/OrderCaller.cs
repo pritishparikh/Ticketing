@@ -47,10 +47,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="OrderNumber"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<CustomOrderMaster> GetOrderItemList(IOrder _orderMaster, string OrderNumber, int CustomerID, int TenantID)
+        public List<CustomOrderMaster> GetOrderItemList(IOrder _orderMaster, string OrderNumber, int CustomerID, int TenantID, int CreatedBy)
         {
             _orderRepository = _orderMaster;
-            return _orderRepository.getOrderListwithItemDetail(OrderNumber, CustomerID, TenantID);
+            return _orderRepository.getOrderListwithItemDetail(OrderNumber, CustomerID, TenantID, CreatedBy);
 
         }
         public List<CustomOrderMaster> GetOrderDetailByticketID(IOrder _orderMaster, int TicketID, int TenantID)
@@ -59,10 +59,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _orderRepository.getOrderDetailByTicketID(TicketID, TenantID);
 
         }
-        public List<CustomOrderDetailsByCustomer> GetOrderDetailsByCustomerID(IOrder _orderMaster, int CustomerID, int TenantID)
+        public List<CustomOrderDetailsByCustomer> GetOrderDetailsByCustomerID(IOrder _orderMaster, int CustomerID, int TenantID,int CreatedBy)
         {
             _orderRepository = _orderMaster;
-            return _orderRepository.getOrderListByCustomerID(CustomerID, TenantID);
+            return _orderRepository.getOrderListByCustomerID(CustomerID, TenantID, CreatedBy);
 
         }
 

@@ -1,6 +1,8 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.Interface.StoreInterface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 using System.Collections.Generic;
 using System.Data;
 
@@ -9,6 +11,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
     public partial class MasterCaller
     {
         private IItem _IItem;
+        private IStoreDepartment _IStoreDepartment;
+        private IMaster _IMaster;
 
         #region Store Category
 
@@ -88,6 +92,29 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _IItem = Item;
             return _IItem.GetItemList(TenantID);
+        }
+        #endregion
+
+
+        public List<StoreDepartmentModel> GetStoreDepartmentList(IStoreDepartment _department, int TenantID)
+        {
+            _IStoreDepartment = _department;
+            return _IStoreDepartment.GetStoreDepartmentList(TenantID);
+        }
+
+        #region Methods for Store User
+        public List<StoreUser> GetStoreUserList(IMaster _user, int TenantID, int UserID)
+        {
+            _IMaster = _user;
+            return _IMaster.GetStoreUserList(TenantID, UserID);
+        }
+        #endregion
+
+        #region Methods for the User
+        public List<StoreFunctionModel> GetStoreFunctionList(IMaster _user, int TenantID, int UserID)
+        {
+            _IMaster = _user;
+            return _IMaster.GetStoreFunctionList(TenantID, UserID);
         }
         #endregion
 

@@ -220,4 +220,25 @@ namespace Easyrewardz_TicketSystem.Model
     }
 
     #endregion
+
+    public class StoreUser
+    {
+
+        /// <summary>
+        /// User Id 
+        /// </summary>
+        public int UserID { get; set; }
+
+        /// <summary>
+        /// Full Name
+        /// </summary>
+        public string FullName { get; set; }
+
+        /// <summary>
+        /// Reportee Id 
+        /// </summary>
+        public int ReporteeID { get; set; }
+        public string RoleName { get; set; }
+        public int RoleID { get; set; }
+    }
 }

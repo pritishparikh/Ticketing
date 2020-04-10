@@ -16,9 +16,9 @@ namespace Easyrewardz_TicketSystem.Interface
 
         string addOrderDetails(OrderMaster orderMaster, int TenantId);
 
-        List<CustomOrderMaster> getOrderListwithItemDetail(string OrderNumber, int Customer_ID, int TenantID);
+        List<CustomOrderMaster> getOrderListwithItemDetail(string OrderNumber, int Customer_ID, int TenantID, int CreatedBy);
 
-        List<CustomOrderDetailsByCustomer> getOrderListByCustomerID(int CustomerID, int TenantID);
+        List<CustomOrderDetailsByCustomer> getOrderListByCustomerID(int CustomerID, int TenantID, int CreatedBy);
 
         CustomOrderDetailsByClaim getOrderListByClaimID(int CustomerID, int ClaimID, int TenantID);
 

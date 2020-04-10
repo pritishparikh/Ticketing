@@ -61,11 +61,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="TenantID"></param>
         /// <param name=""></param>
         /// <returns></returns>
-        //public List<string> StoreHierarchyBulkUpload(IStoreHierarchy Hierarchy, int TenantID, int CreatedBy, DataSet DataSetCSV)
-        //{
-        //    _HierarchyRepository = Hierarchy;
-        //    return _HierarchyRepository.BulkUploadStoreHierarchy(TenantID, CreatedBy, DataSetCSV);
-        //}
+        public List<string> StoreHierarchyBulkUpload(IStoreHierarchy Hierarchy, int TenantID, int CreatedBy, DataSet DataSetCSV)
+        {
+            _HierarchyRepository = Hierarchy;
+            return _HierarchyRepository.BulkUploadStoreHierarchy(TenantID, CreatedBy, DataSetCSV);
+        }
+
         public List<DesignationMaster> GetDesignations(IStoreHierarchy  hierarchy, int TenantId)
         {
             _HierarchyRepository = hierarchy;

@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -21,9 +22,71 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
         #endregion
+
+
         public List<string> BulkUploadStoreHierarchy(int TenantID, int CreatedBy, DataSet DataSetCSV)
         {
-            throw new NotImplementedException();
+            int insertcount = 0;
+            XmlDocument xmlDoc = new XmlDocument();
+            DataSet Bulkds = new DataSet();
+            List<string> csvLst = new List<string>();
+            string SuccesFile = string.Empty; string ErroFile = string.Empty;
+            try
+            {
+                if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
+                {
+                    if (DataSetCSV.Tables[0] != null && DataSetCSV.Tables[0].Rows.Count > 0)
+                    {
+
+                        xmlDoc.LoadXml(DataSetCSV.GetXml());
+
+                        conn.Open();
+                        MySqlCommand cmd = new MySqlCommand("SP_BulkUploadStoreHierarchy", conn);
+                        cmd.Connection = conn;
+                        cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
+                        cmd.Parameters.AddWithValue("@_node", Xpath);
+                        cmd.Parameters.AddWithValue("@_tenantID", TenantID);
+                        cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        MySqlDataAdapter da = new MySqlDataAdapter();
+                        da.SelectCommand = cmd;
+                        da.Fill(Bulkds);
+
+                        if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
+                        {
+
+                            //for success file
+                            SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(SuccesFile);
+
+                            //for error file
+                            ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            csvLst.Add(ErroFile);
+
+                        }
+
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string message = Convert.ToString(ex.InnerException);
+                throw ex;
+            }
+            finally
+            {
+                if (DataSetCSV != null)
+                {
+                    DataSetCSV.Dispose();
+                }
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return csvLst;
         }
 
         public int CreateStoreHierarchy(CustomHierarchymodel customHierarchymodel)

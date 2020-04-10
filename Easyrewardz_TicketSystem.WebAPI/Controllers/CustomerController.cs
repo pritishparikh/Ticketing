@@ -106,7 +106,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
 
-                objcustomerMaster = customerCaller.getCustomerDetailsByEmailIdandPhone(new CustomerService(_connectioSting), SearchText, authenticate.TenantId);
+                objcustomerMaster = customerCaller.getCustomerDetailsByEmailIdandPhone(new CustomerService(_connectioSting), SearchText, authenticate.TenantId,authenticate.UserMasterID);
 
                 statusCode =
                       objcustomerMaster.Count == 0 ?

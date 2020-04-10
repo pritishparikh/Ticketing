@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -185,118 +188,120 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// Bulk Upload StoreHierarchy
         /// </summary>
         /// <returns></returns>
-        //[HttpPost]
-        //[Route("BulkUploadStoreHierarchy")]
-        //public ResponseModel BulkUploadStoreHierarchy()
-        //{
-        //    string DownloadFilePath = string.Empty;
-        //    string BulkUploadFilesPath = string.Empty;
-        //    bool errorfilesaved = false;
-        //    bool successfilesaved = false;
-        //    int count = 0;
-        //    StoreHierarchyCaller storeHierarchyCaller = new StoreHierarchyCaller();
-        //    SettingsCaller fileU = new SettingsCaller();
-        //    ResponseModel objResponseModel = new ResponseModel();
-        //    int StatusCode = 0;
-        //    string statusMessage = "";
-        //    DataSet DataSetCSV = new DataSet();
-        //    List<string> CSVlist = new List<string>();
-        //    string fileName = "";
-        //    string finalAttchment = "";
+        [HttpPost]
+        [Route("BulkUploadStoreHierarchy")]
+        public ResponseModel BulkUploadStoreHierarchy()
+        {
+            string DownloadFilePath = string.Empty;
+            string BulkUploadFilesPath = string.Empty;
+            bool errorfilesaved = false;
+            bool successfilesaved = false;
+            int count = 0;
+            StoreHierarchyCaller storeHierarchyCaller = new StoreHierarchyCaller();
+            SettingsCaller fileU = new SettingsCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            DataSet DataSetCSV = new DataSet();
+            List<string> CSVlist = new List<string>();
+            string fileName = "";
+            string finalAttchment = "";
 
 
-        //    try
-        //    {
-        //        var files = Request.Form.Files;
-        //        string timeStamp = DateTime.Now.ToString("ddMMyyyyhhmm");
+            try
+            {
+                var files = Request.Form.Files;
+                string timeStamp = DateTime.Now.ToString("ddMMyyyyhhmm");
 
-        //        if (files.Count > 0)
-        //        {
-        //            for (int i = 0; i < files.Count; i++)
-        //            {
-        //                fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
-        //            }
-        //            finalAttchment = fileName.TrimEnd(',');
-        //        }
-        //        var Keys = Request.Form;
+                if (files.Count > 0)
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
+                    }
+                    finalAttchment = fileName.TrimEnd(',');
+                }
+                var Keys = Request.Form;
 
-        //        var exePath = Path.GetDirectoryName(System.Reflection
-        //             .Assembly.GetExecutingAssembly().CodeBase);
-        //        Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
-        //        var appRoot = appPathMatcher.Match(exePath).Value;
-        //        string Folderpath = appRoot + "\\" + _UploadedBulkFile;
-
-
-        //        if (files.Count > 0)
-        //        {
-        //            string[] filesName = finalAttchment.Split(",");
-        //            for (int i = 0; i < files.Count; i++)
-        //            {
-        //                using (var ms = new MemoryStream())
-        //                {
-        //                    files[i].CopyTo(ms);
-        //                    var fileBytes = ms.ToArray();
-        //                    MemoryStream msfile = new MemoryStream(fileBytes);
-        //                    FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
-        //                    msfile.WriteTo(docFile);
-        //                    docFile.Close();
-        //                    ms.Close();
-        //                    msfile.Close();
-        //                    string s = Convert.ToBase64String(fileBytes);
-        //                    byte[] a = Convert.FromBase64String(s);
-        //                    // act on the Base64 data
-
-        //                }
-        //            }
-        //        }
+                var exePath = Path.GetDirectoryName(System.Reflection
+                     .Assembly.GetExecutingAssembly().CodeBase);
+                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                var appRoot = appPathMatcher.Match(exePath).Value;
+                string Folderpath = appRoot + "\\" + _UploadedBulkFile;
 
 
+                if (files.Count > 0)
+                {
+                    string[] filesName = finalAttchment.Split(",");
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            files[i].CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                            MemoryStream msfile = new MemoryStream(fileBytes);
+                            FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                            msfile.WriteTo(docFile);
+                            docFile.Close();
+                            ms.Close();
+                            msfile.Close();
+                            string s = Convert.ToBase64String(fileBytes);
+                            byte[] a = Convert.FromBase64String(s);
+                            // act on the Base64 data
 
-        //        string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-        //        Authenticate authenticate = new Authenticate();
-        //        authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
-
-        //        #region FilePath
-        //        BulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)3);
-        //        DownloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)3);
-
-        //        #endregion             
-
-        //        DataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + finalAttchment);
-
-        //        CSVlist = storeHierarchyCaller.StoreHierarchyBulkUpload(new StoreHierarchyService(_connectionSting),
-        //            authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
-        //        #region Create Error and Success files and  Insert in FileUploadLog
-
-        //        if (!string.IsNullOrEmpty(CSVlist[0]))
-        //            successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", CSVlist[0]);
-
-        //        if (!string.IsNullOrEmpty(CSVlist[1]))
-        //            errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv", CSVlist[1]);
-
-        //        count = fileU.CreateFileUploadLog(new FileUploadService(_connectionSting), authenticate.TenantId, finalAttchment, errorfilesaved,
-        //                           "HierarchyErrorFile.csv", "HierarchySuccessFile.csv", authenticate.UserMasterID, "Hierarchy",
-        //                           DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv",
-        //                           DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", HierarchyFor
-        //                           );
-        //        #endregion
-
-        //        StatusCode = successfilesaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-        //        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-        //        objResponseModel.Status = true;
-        //        objResponseModel.StatusCode = StatusCode;
-        //        objResponseModel.Message = statusMessage;
-        //        objResponseModel.ResponseData = CSVlist.Count;
-
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    return objResponseModel;
+                        }
+                    }
+                }
 
 
-        //}
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                #region FilePath
+                BulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)3);
+                DownloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)3);
+
+                #endregion             
+
+                DataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + finalAttchment);
+
+                CSVlist = storeHierarchyCaller.StoreHierarchyBulkUpload(new StoreHierarchyService(_connectionSting),
+                    authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
+                #region Create Error and Success files and  Insert in FileUploadLog
+
+                if (!string.IsNullOrEmpty(CSVlist[0]))
+                    successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", CSVlist[0]);
+
+                if (!string.IsNullOrEmpty(CSVlist[1]))
+                    errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv", CSVlist[1]);
+
+                count = fileU.CreateFileUploadLog(new FileUploadService(_connectionSting), authenticate.TenantId, finalAttchment, errorfilesaved,
+                                   "HierarchyErrorFile.csv", "HierarchySuccessFile.csv", authenticate.UserMasterID, "Hierarchy",
+                                   DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv",
+                                   DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", 3
+                                   );
+                #endregion
+
+                StatusCode = successfilesaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = CSVlist.Count;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+
+
+        }
+
+
         /// <summary>
         /// Get designation list for the Designation dropdown
         /// </summary>

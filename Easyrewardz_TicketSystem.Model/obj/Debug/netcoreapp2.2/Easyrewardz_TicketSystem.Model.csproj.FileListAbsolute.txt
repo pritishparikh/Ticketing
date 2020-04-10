@@ -75,3 +75,11 @@ D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Model\obj\De
 D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.AssemblyInfo.cs
 D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
 D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Model\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.deps.json
+D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Model\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Model\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.csproj.CoreCompileInputs.cache
+D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.AssemblyInfoInputs.cache
+D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.AssemblyInfo.cs
+D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -467,8 +468,92 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
-        
+
 
         #endregion
+
+        /// <summary>
+        /// Store Bulk Upload SLA
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param
+        /// <param name="DataSetCSV"></param
+        /// </summary>
+        /// 
+        public List<string> StoreBulkUploadSLA(int TenantID, int CreatedBy, DataSet DataSetCSV)
+        {
+
+            XmlDocument xmlDoc = new XmlDocument();
+            DataSet Bulkds = new DataSet();
+            List<string> csvLst = new List<string>();
+            string SuccesFile = string.Empty; string ErroFile = string.Empty;
+
+            try
+            {
+                if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
+                {
+                    if (DataSetCSV.Tables[0] != null && DataSetCSV.Tables[0].Rows.Count > 0)
+                    {
+
+                        xmlDoc.LoadXml(DataSetCSV.GetXml());
+                        conn.Open();
+                        MySqlCommand cmd = new MySqlCommand("SP_BulkUploadStoreSLAMaster", conn);
+                        cmd.Connection = conn;
+                        cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
+                        cmd.Parameters.AddWithValue("@_node", Xpath);
+                        //cmd.Parameters.AddWithValue("@_SLAFor", SLAFor);
+                        cmd.Parameters.AddWithValue("@_tenantID", TenantID);
+                        cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
+
+
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        MySqlDataAdapter da = new MySqlDataAdapter();
+                        da.SelectCommand = cmd;
+                        da.Fill(Bulkds);
+
+                        if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
+                        {
+
+                            //for success file
+                            //if (Bulkds.Tables[0].Rows.Count > 0)
+                            //{
+                                SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                                csvLst.Add(SuccesFile);
+
+                                //uploadcount = UploadSLATarget(Bulkds.Tables[0], TenantID, CreatedBy); //upload SLA Target
+
+                            //}
+
+                            ////for error file
+                            //if (Bulkds.Tables[1].Rows.Count > 0)
+                            //{
+                                ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                                csvLst.Add(ErroFile);
+
+                            //}
+
+                        }
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (DataSetCSV != null)
+                {
+                    DataSetCSV.Dispose();
+                }
+            }
+            return csvLst;
+
+        }
     }
 }

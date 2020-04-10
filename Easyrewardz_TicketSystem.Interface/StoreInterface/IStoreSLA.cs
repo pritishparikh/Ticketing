@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Model.StoreModal;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Easyrewardz_TicketSystem.Interface.StoreInterface
 {
@@ -19,5 +20,7 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         List<StoreSLAResponseModel> StoreSLAList(int tenantID);
 
         StoreSLAResponseModel GetStoreSLADetail(int TenantID, int SLAID);
+
+        List<string> StoreBulkUploadSLA(int TenantID, int CreatedBy, DataSet DataSetCSV);
     }
 }

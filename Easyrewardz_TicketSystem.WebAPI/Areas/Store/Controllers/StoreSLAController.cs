@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -23,6 +26,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private IConfiguration configuration;
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
+        private readonly string _UploadedBulkFile;
         #endregion
 
         #region Constructor
@@ -33,6 +37,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            _UploadedBulkFile = configuration.GetValue<string>("FileUploadLocation");
         }
 
 
@@ -295,6 +300,130 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 throw;
             }
             return _objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Bullk Upload Store SLA
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("BulkUploadStoreSLA")]
+        public ResponseModel BulkUploadStoreSLA()
+        {
+
+
+            string DownloadFilePath = string.Empty;
+            string BulkUploadFilesPath = string.Empty;
+            bool errorfilesaved = false;
+            bool successfilesaved = false;
+            int count = 0;
+            List<string> CSVlist = new List<string>();
+            StoreSLACaller newSLA = new StoreSLACaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            string fileName = "";
+            string finalAttchment = "";
+            string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
+            DataSet DataSetCSV = new DataSet();
+            string[] filesName = null;
+
+
+            try
+            {
+                var files = Request.Form.Files;
+
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                #region Read from Form
+
+                if (files.Count > 0)
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        fileName += files[i].FileName.Replace(".", "_" + authenticate.UserMasterID + "_" + timeStamp + ".") + ",";
+                    }
+                    finalAttchment = fileName.TrimEnd(',');
+                }
+
+                var exePath = Path.GetDirectoryName(System.Reflection
+                     .Assembly.GetExecutingAssembly().CodeBase);
+                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                var appRoot = appPathMatcher.Match(exePath).Value;
+                string Folderpath = appRoot + "\\" + _UploadedBulkFile;
+
+
+
+                if (files.Count > 0)
+                {
+                    filesName = finalAttchment.Split(",");
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            files[i].CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                            MemoryStream msfile = new MemoryStream(fileBytes);
+                            FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                            msfile.WriteTo(docFile);
+                            docFile.Close();
+                            ms.Close();
+                            msfile.Close();
+
+                        }
+                    }
+                }
+
+
+                BulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)3);
+                DownloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)3);
+
+
+
+                DataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + filesName[0]);
+                CSVlist = newSLA.StoreSLABulkUpload(new StoreSLAService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
+
+                #endregion
+
+
+                #region Create Error and Succes files
+
+                if (!string.IsNullOrEmpty(CSVlist[0]))
+                    successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Store\\Success" + "\\" + "SLASuccessFile.csv", CSVlist[0]);
+
+                if (!string.IsNullOrEmpty(CSVlist[1]))
+                    errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Store\\Error" + "\\" + "SLAErrorFile.csv", CSVlist[1]);
+
+                #endregion
+
+                #region Insert in FileUploadLog
+
+
+                count = newSLA.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorfilesaved,
+                                   "SLAErrorFile.csv", "SLASuccessFile.csv", authenticate.UserMasterID, "SLA",
+                                   DownloadFilePath + "\\SLA\\Error" + "\\" + "StoreErrorFile.csv",
+                                   DownloadFilePath + "\\SLA\\ Success" + "\\" + "StoreSuccessFile.csv", 1
+                                   );
+                #endregion
+
+                StatusCode = successfilesaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = count;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+
+
         }
 
         #endregion

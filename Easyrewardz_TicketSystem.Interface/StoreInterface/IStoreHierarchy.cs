@@ -12,6 +12,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int DeleteStoreHierarchy(int designationID,int userMasterID,int tenantID);
         List<CustomHierarchymodel> ListStoreHierarchy(int TenantID);
         List<DesignationMaster> GetDesignations(int TenantID);
-        // List<string> BulkUploadStoreHierarchy(int TenantID, int CreatedBy, DataSet DataSetCSV);
+        List<string> BulkUploadStoreHierarchy(int TenantID, int CreatedBy, DataSet DataSetCSV);
     }
 }
