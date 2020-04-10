@@ -55,6 +55,11 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// StoreName
         /// </summary>
         public string StoreName { get; set; }
+
+        /// <summary>
+        /// StoreAddress
+        /// </summary>
+        public string StoreAddress { get; set; }
         /// <summary>
         /// CreationOn
         /// </summary>
