@@ -235,7 +235,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = ResponseMessage;
-                objResponseModel.ResponseData = result;
+                objResponseModel.ResponseData = result; 
             }
             catch (Exception)
             {
