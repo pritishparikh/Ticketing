@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
+using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -18,6 +18,13 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
         #endregion
+        /// <summary>
+        /// Add Task Details
+        /// </summary>
+        /// <param name="taskMaster"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public int AddTaskDetails(TaskMaster taskMaster, int TenantID, int UserID)
         {
             int taskId = 0;
@@ -52,6 +59,13 @@ namespace Easyrewardz_TicketSystem.Services
             return taskId;
         }
 
+        /// <summary>
+        /// Get Task List
+        /// </summary>
+        /// <param name="tabFor"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public List<CustomStoreTaskDetails> GetTaskList(int tabFor, int tenantID, int userID)
         {
             DataSet ds = new DataSet();
@@ -59,31 +73,39 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_GetStoreTaskList", conn);
-                cmd.Connection = conn;
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreTaskList", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
                 cmd.Parameters.AddWithValue("@tab_For", tabFor);
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@user_ID", userID);
-                cmd.CommandType = CommandType.StoredProcedure;
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd;
+                
+                MySqlDataAdapter da 
+= new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        CustomStoreTaskDetails taskMaster = new CustomStoreTaskDetails();
-                        taskMaster.StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        taskMaster.TaskStatus = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
-                        taskMaster.TaskTitle = ds.Tables[0].Rows[i]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        taskMaster.TaskDescription = ds.Tables[0].Rows[i]["TaskDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskDescription"]);
-                        taskMaster.DepartmentName = ds.Tables[0].Rows[i]["Departmentname"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Departmentname"]);
-                        taskMaster.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        taskMaster.CreatedBy = ds.Tables[0].Rows[i]["Createdby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]);
-                        taskMaster.CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
-                        taskMaster.Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
-                        taskMaster.PriorityName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);
-                        taskMaster.FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]);
+                        CustomStoreTaskDetails taskMaster = new CustomStoreTaskDetails
+                        {
+                            StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            TaskStatus = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"])),
+                            TaskTitle = ds.Tables[0].Rows[i]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]),
+                            TaskDescription = ds.Tables[0].Rows[i]["TaskDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskDescription"]),
+                            DepartmentName = ds.Tables[0].Rows[i]["Departmentname"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Departmentname"]),
+                            StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
+                            StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
+                            CreatedBy = ds.Tables[0].Rows[i]["Createdby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]),
+                            CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
+                            PriorityName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]),
+                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"])
+                        };
                         lsttask.Add(taskMaster);
                     }
                 }
@@ -107,5 +129,473 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return lsttask;
         }
+
+        /// <summary>
+        /// Get Store Task By ID
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public StoreTaskMaster GetStoreTaskByID(int TaskID, int TenantID, int UserID)
+        {
+            DataSet ds = new DataSet();
+            StoreTaskMaster storetaskmaster = new StoreTaskMaster();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetTaskByTaskID", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_TaskID", TaskID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows != null)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            storetaskmaster = new StoreTaskMaster()
+                            {
+                                TaskID = Convert.ToInt32(ds.Tables[0].Rows[0]["TaskID"]),
+                                TaskTitle = ds.Tables[0].Rows[0]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["TaskTitle"]),
+                                TaskDescription = ds.Tables[0].Rows[0]["TaskDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["TaskDescription"]),
+                                DepartmentId = Convert.ToInt32(ds.Tables[0].Rows[0]["DepartmentId"]),
+                                FunctionID = Convert.ToInt32(ds.Tables[0].Rows[0]["FunctionID"]),
+                                PriorityID = Convert.ToInt32(ds.Tables[0].Rows[0]["PriorityID"]),
+                                TaskStatusId = Convert.ToInt32(ds.Tables[0].Rows[0]["TaskStatusId"]),
+                                AssignToName = ds.Tables[0].Rows[0]["AssignToName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["AssignToName"]),
+                                CreatedByName = ds.Tables[0].Rows[0]["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CreatedByName"]),
+                                StoreName = ds.Tables[0].Rows[0]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreName"]),
+                                Address = ds.Tables[0].Rows[0]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
+                                StoreCode = ds.Tables[0].Rows[0]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreCode"])
+                            };
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return storetaskmaster;
+        }
+
+        /// <summary>
+        /// Add Store Task Comment
+        /// </summary>
+        /// <param name="TaskComment"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public int AddStoreTaskComment (StoreTaskComment TaskComment, int TenantID, int UserID)
+        {
+            int taskId = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_AddStoreTaskComment", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TaskID", TaskComment.TaskID);
+                cmd.Parameters.AddWithValue("@_Comment", TaskComment.Comment);
+                cmd.Parameters.AddWithValue("@_CommentBy", UserID);
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+
+                
+                taskId = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return taskId;
+        }
+
+        /// <summary>
+        /// Get Comment On Task
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public List<TaskCommentModel> GetCommentOnTask(int TaskID, int TenantID, int UserID)
+        {
+            DataSet ds = new DataSet();
+            List<TaskCommentModel> TaskCommentList = new List<TaskCommentModel>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetCommentOnTask", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TaskID", TaskID);
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        TaskCommentList = ds.Tables[0].AsEnumerable().Select(r => new TaskCommentModel()
+                        {
+                            TaskCommentID = Convert.ToInt32(r.Field<object>("TaskCommentID")),
+                            TaskID = Convert.ToInt32(r.Field<object>("TaskID")),
+                            Comment = r.Field<object>("Comment") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("Comment")),
+                            CommentedDate = r.Field<object>("CommentedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CommentedDate")),
+                            CommentByName = r.Field<object>("CommentByName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CommentByName")),
+                            CommentedDiff = r.Field<object>("CommentedDiff") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CommentedDiff"))
+
+                        }).ToList();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return TaskCommentList;
+        }
+
+        /// <summary>
+        /// Get Task History
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public List<CustomTaskHistory> GetTaskHistory(int TaskID, int TenantID, int UserID)
+        {
+
+            DataSet ds = new DataSet();
+            List<CustomTaskHistory> ListTaskHistory = new List<CustomTaskHistory>();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_GetHistoryOfTask", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TaskID", TaskID);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomTaskHistory TaskHistory = new CustomTaskHistory
+                        {
+                            Name = ds.Tables[0].Rows[i]["Name"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Name"]),
+                            Action = ds.Tables[0].Rows[i]["Action"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Action"]),
+                            DateandTime = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"])
+                        };
+                        ListTaskHistory.Add(TaskHistory);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return ListTaskHistory;
+        }
+
+
+
+        #region Campaign
+
+        /// <summary>
+        /// Get Store Campaign Customer
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public List<StoreCampaign> GetStoreCampaignCustomer(int TenantID, int UserID)
+        {
+            DataSet ds = new DataSet();
+            List<StoreCampaign> objList = new List<StoreCampaign>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreCampaignCustomer", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreCampaign obj = new StoreCampaign
+                        {
+                            CampaignTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["CampaignTypeID"]),
+                            CampaignName = ds.Tables[0].Rows[i]["CampaignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignName"]),
+                            CampaignScript = ds.Tables[0].Rows[i]["CampaignScript"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignScript"]),
+                            CampaignScriptLess = ds.Tables[0].Rows[i]["CampaignScript"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignScript"]).Length < 15 ? Convert.ToString(ds.Tables[0].Rows[i]["CampaignScript"]) : Convert.ToString(ds.Tables[0].Rows[i]["CampaignScript"]).Substring(0, 15),
+                            ContactCount = Convert.ToInt32(ds.Tables[0].Rows[i]["ContactCount"]),
+                            CampaignEndDate = ds.Tables[0].Rows[i]["CampaignEndDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignEndDate"]),
+                            StoreCampaignCustomerList = new List<StoreCampaignCustomer>()
+                        };
+
+                        obj.StoreCampaignCustomerList = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("CampaignTypeID")).
+                        Equals(obj.CampaignTypeID)).Select(x => new StoreCampaignCustomer()
+                        {
+                            CampaignCustomerID = Convert.ToInt32(x.Field<int>("CampaignCustomerID")),
+                            CustomerID = Convert.ToInt32(x.Field<int>("CustomerID")),
+                            CampaignTypeDate = x.Field<object>("CampaignTypeDate") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CampaignTypeDate")),
+                            CampaignTypeID = Convert.ToInt32(x.Field<int>("CampaignTypeID")),
+                            CampaignStatus = x.Field<object>("CampaignStatus") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("CampaignStatus")),
+                            Response = x.Field<object>("Response") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Response")),
+                            CallReScheduledTo = x.Field<object>("CallReScheduledTo") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CallReScheduledTo")),
+                            CustomerName = x.Field<object>("CustomerName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerName")),
+                            CustomerPhoneNumber = x.Field<object>("CustomerPhoneNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerPhoneNumber")),
+                            CustomerEmailId = x.Field<object>("CustomerEmailId") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerEmailId"))
+                        }).ToList();
+                    
+                        objList.Add(obj);
+                    }
+                }
+            }
+            catch (Exception)
+
+            {
+                throw;
+            }
+
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objList;
+        }
+
+        /// <summary>
+        /// Get Campaign Status Response
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public CampaignStatusResponse GetCampaignStatusResponse(int TenantID, int UserID)
+        {
+
+            DataSet ds = new DataSet();
+            CampaignStatusResponse obj = new CampaignStatusResponse();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_GetCampaignStatusResponse", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    List<CampaignStatus> objStatusList = new List<CampaignStatus>();
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CampaignStatus objStatus = new CampaignStatus
+                        {
+                            StatusID = Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]),
+                            StatusName = ds.Tables[0].Rows[i]["StatusName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]),
+                            StatusNameID = Convert.ToInt32(ds.Tables[0].Rows[i]["StatusNameID"])
+                        };
+                        objStatusList.Add(objStatus);
+                    }
+                    obj.CampaignStatusList = objStatusList;
+                }
+
+                if (ds != null && ds.Tables[1] != null)
+                {
+                    List<CampaignResponse> objResponseList = new List<CampaignResponse>();
+                    for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                    {
+                        CampaignResponse objResponse = new CampaignResponse
+                        {
+                            ResponseID = Convert.ToInt32(ds.Tables[1].Rows[i]["ResponseID"]),
+                            Response = ds.Tables[1].Rows[i]["Response"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["Response"]),
+                            StatusNameID = Convert.ToInt32(ds.Tables[1].Rows[i]["Status"])
+                        };
+                        objResponseList.Add(objResponse);
+                    }
+                    obj.CampaignResponseList = objResponseList;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return obj;
+        }
+
+        /// <summary>
+        /// Update Campaign Status Response
+        /// </summary>
+        /// <param name="objRequest"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public int UpdateCampaignStatusResponse(StoreCampaignCustomerRequest objRequest, int TenantID, int UserID)
+        {
+
+            int result = 0;
+            CampaignStatusResponse obj = new CampaignStatusResponse();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateStoreCampaignCustomer", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_CampaignCustomerID", objRequest.CampaignCustomerID);
+                cmd.Parameters.AddWithValue("@_StatusNameID", objRequest.StatusNameID);
+                cmd.Parameters.AddWithValue("@_ResponseID", objRequest.ResponseID);
+
+                if (objRequest.CallReScheduledTo != null)
+                {
+                    objRequest.CallReScheduledToDate = Convert.ToDateTime(objRequest.CallReScheduledTo);
+                }
+                cmd.Parameters.AddWithValue("@_CallReScheduledTo", objRequest.CallReScheduledToDate);
+
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Close Campaign
+        /// </summary>
+        /// <param name="CampaignTypeID"></param>
+        /// <param name="IsClosed"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public int CloseCampaign(int CampaignTypeID, int IsClosed, int TenantID, int UserID)
+        {
+
+            int result = 0;
+            CampaignStatusResponse obj = new CampaignStatusResponse();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_CloseCampaign", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_CampaignTypeID", CampaignTypeID);
+                cmd.Parameters.AddWithValue("@_IsClosed", IsClosed);
+
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+        #endregion
+
     }
 }

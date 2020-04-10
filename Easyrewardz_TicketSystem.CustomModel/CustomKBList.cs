@@ -21,8 +21,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// KB CODE
         /// </summary>
         public string KBCODE { get; set; }
-        
-       
+
+
         /// <summary>
         /// Subject
         /// </summary>
@@ -72,7 +72,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string Description { get; set; }
 
 
-        
+
 
         public int CategoryID { get; set; }
 

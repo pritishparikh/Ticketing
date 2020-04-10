@@ -34,18 +34,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _StoreUserRepository.AddStoreUserMappedCategory(storeUser);
         }
 
-      //  public int EditStoreUser(IStoreUser Users, CustomStoreUserEdit storeUser)
-        //{
-        //    _StoreUserRepository = Users;
-        //    return _StoreUserRepository.EditStoreUser(storeUser);
-        //}
-
-        
+     
 
         public int CreateStoreUserPersonaldetail(IStoreUser Users, StoreUserPersonalDetails personalDetails)
         {
             _StoreUserRepository = Users;
-            return _StoreUserRepository.AddStoreUserPersonalDetail(personalDetails);
+            return _StoreUserRepository.AddStoreUserPersonalDetails(personalDetails);
         }
 
         public int CreateStoreUserProfiledetail(IStoreUser Users,int tenantID, int userID, int BrandID, int storeID, int departmentId, string functionIDs, int designationID, int reporteeID, int CreatedBy)
@@ -72,6 +66,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _StoreUserRepository = Users;
             return _StoreUserRepository.GetStoreUserList(tenantID);
         }
+
+
+        public StoreUserListing GetStoreUserOnUserID(IStoreUser Users, int tenantID, int UserID)
+        {
+            _StoreUserRepository = Users;
+            return _StoreUserRepository.GetStoreUserOnUserID(tenantID, UserID);
+        }
+
 
         #region Profile Mapping
 

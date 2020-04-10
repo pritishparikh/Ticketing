@@ -158,7 +158,7 @@ namespace Easyrewardz_TicketSystem.Services
                         similarTicket.Subject = ds.Tables[2].Rows[i]["Subject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[i]["Subject"]);
                         similarTicket.Description = ds.Tables[2].Rows[i]["Description"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[i]["Description"]);
                         similarTicket.IsApproveStatus = ds.Tables[2].Rows[i]["IsApprove"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[i]["IsApprove"]);
-                        similarTicket.TicketID= ds.Tables[2].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[i]["TicketID"]);
+                        similarTicket.TicketID = ds.Tables[2].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[i]["TicketID"]);
                         listSimilarTicket.Add(similarTicket);
                     }
 
