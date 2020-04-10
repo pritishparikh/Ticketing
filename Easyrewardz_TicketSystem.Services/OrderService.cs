@@ -79,12 +79,12 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="orderMaster"></param>
         /// <returns></returns>
-        public OrderMaster addOrderDetails(OrderMaster orderMaster, int tenantID)
+        public string addOrderDetails(OrderMaster orderMaster, int tenantID)
         {
             
-            OrderMaster orderDetails = new OrderMaster();
+           
             DataSet ds = new DataSet();
-          //  string OrderNumber="";
+            string OrderNumber="";
             try
             {
 
@@ -112,21 +112,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Size", string.IsNullOrEmpty(orderMaster.Size) ? "" :orderMaster.Size);
                 cmd.Parameters.AddWithValue("@RequireSize", string.IsNullOrEmpty(orderMaster.RequireSize) ? "" :orderMaster.RequireSize);
                 cmd.Parameters.AddWithValue("@CreatedBy", orderMaster.CreatedBy);
-                
 
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd;
-                da.Fill(ds);
+                OrderNumber = Convert.ToString(cmd.ExecuteScalar());
 
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    if (ds.Tables[0].Rows.Count > 0)
-                    {
-                        orderDetails.OrderMasterID= ds.Tables[0].Rows[0]["OrderMaster_ID"] == DBNull.Value ? 0: Convert.ToInt32(ds.Tables[0].Rows[0]["OrderMaster_ID"]);
-                        orderDetails.OrderNumber= ds.Tables[0].Rows[0]["OrderNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["OrderNumber"]);
-                    }
-
-                }
+               
              }
             catch (Exception )
             {
@@ -139,7 +128,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return orderMaster;
+            return OrderNumber;
         }
 
         /// <summary>

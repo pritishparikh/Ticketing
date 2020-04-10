@@ -82,7 +82,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             OrderCaller ordercaller = new OrderCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            OrderMaster orderDetails = new OrderMaster();
+            string OrderNo = string.Empty;
             int StatusCode = 0;
             string statusMessage = "";
             try
@@ -91,16 +91,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 orderMaster.CreatedBy = authenticate.UserMasterID;
-                orderDetails = ordercaller.addOrder(new OrderService(connectioSting), orderMaster, authenticate.TenantId);
+                OrderNo = ordercaller.addOrder(new OrderService(connectioSting), orderMaster, authenticate.TenantId);
               
                 StatusCode =
-               orderDetails==null ?
+               string.IsNullOrEmpty(OrderNo) ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = orderDetails;
+                objResponseModel.ResponseData = OrderNo;
             }
             catch (Exception)
             {
