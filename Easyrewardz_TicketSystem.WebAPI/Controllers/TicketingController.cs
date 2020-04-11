@@ -130,7 +130,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 ticketingDetails.CreatedBy = authenticate.UserMasterID; ///Created  By from the token
                 ticketingDetails.AssignedID = authenticate.UserMasterID;
 
-                orderDetails.CreatedBy = authenticate.UserMasterID;
+             
 
                 var exePath = Path.GetDirectoryName(System.Reflection
                 .Assembly.GetExecutingAssembly().CodeBase);
@@ -153,10 +153,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                         OrderCaller ordercaller = new OrderCaller();
                         //call insert order
+                        orderDetails.CreatedBy = authenticate.UserMasterID;
                         OrderNumber = ordercaller.addOrder(new OrderService(_connectioSting), orderDetails, authenticate.TenantId);
                         if (!string.IsNullOrEmpty(OrderNumber))
                         {
                             objorderMaster = ordercaller.getOrderDetailsByNumber(new OrderService(_connectioSting), OrderNumber, authenticate.TenantId);
+
 
                             if (objorderMaster != null)
                             {
