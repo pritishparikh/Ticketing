@@ -411,9 +411,18 @@ namespace Easyrewardz_TicketSystem.Services
                             CallReScheduledTo = x.Field<object>("CallReScheduledTo") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CallReScheduledTo")),
                             CustomerName = x.Field<object>("CustomerName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerName")),
                             CustomerPhoneNumber = x.Field<object>("CustomerPhoneNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerPhoneNumber")),
-                            CustomerEmailId = x.Field<object>("CustomerEmailId") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerEmailId"))
-                        }).ToList();
-                    
+                            CustomerEmailId = x.Field<object>("CustomerEmailId") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerEmailId")),
+
+                            CampaignResponseList = ds.Tables[2].AsEnumerable().Select(r => new CampaignResponse()
+                            {
+                                ResponseID = Convert.ToInt32(r.Field<object>("ResponseID")),
+                                Response = r.Field<object>("Response") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("Response")),
+                                StatusNameID = Convert.ToInt32(r.Field<object>("Status"))
+
+                            }).ToList()
+
+                    }).ToList();
+
                         objList.Add(obj);
                     }
                 }
