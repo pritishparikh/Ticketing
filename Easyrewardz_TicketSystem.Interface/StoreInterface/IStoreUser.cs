@@ -21,6 +21,8 @@ namespace Easyrewardz_TicketSystem.Interface
         int AddStoreUserMappedCategory(StoreClaimCategory storeUserModel);
 
         int DeleteStoreUser(int tenantID, int UserId, bool IsStoreUser, int ModifiedBy);
+        int AddBrandStore(int tenantID, int brandID, int storeID, int UserMasterID);
+        int UpdateBrandStore(int tenantID, int brandID, int storeID, int UserMasterID,int userID);
 
         List<StoreUserListing> GetStoreUserList(int tenantID);
 

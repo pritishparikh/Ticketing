@@ -224,6 +224,81 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// AddBrandStore
+        /// </summary>
+        /// <param name="storeUser"></param>
+        [HttpPost]
+        [Route("AddUserBrandStore")]
+        public ResponseModel AddUserBrandStore(int brandID, int storeID)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            int Result = 0;
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+              Result = userCaller.AddBrandStore(new StoreUserService(_connectioSting), authenticate.TenantId, brandID, storeID,authenticate.UserMasterID);
+                    StatusCode =
+                   Result == 0 ?
+                          (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+        /// <summary>
+        /// Update User BrandStore
+        /// </summary>
+        /// <param name="storeUser"></param>
+        [HttpPost]
+        [Route("UpdateUserBrandStore")]
+        public ResponseModel UpdateUserBrandStore(int UserID,int brandID, int storeID)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            int Result = 0;
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+                Result = userCaller.UpdateBrandStore(new StoreUserService(_connectioSting), authenticate.TenantId, brandID, storeID, authenticate.UserMasterID, UserID);
+                StatusCode =
+               Result == 0 ?
+                      (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
 
         /// <summary>
         /// Delete Store User
