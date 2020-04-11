@@ -253,6 +253,118 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Update Task Status
+        /// </summary>
+        /// <param name="customTicketSolvedModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateTaskStatus")]
+        public ResponseModel UpdateTaskStatus([FromBody]StoreTaskMaster taskMaster)
+        {
+            StoreTaskCaller taskcaller = new StoreTaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                int result = taskcaller.SubmitTask(new StoreTaskService(_connectionSting), taskMaster, authenticate.UserMasterID, authenticate.TenantId);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+        /// <summary>
+        /// UserListDropdown
+        /// </summary>
+        /// <param name="TicketID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UserDropdown")]
+        public ResponseModel UserDropdown(int TaskID)
+        {
+            List<CustomStoreUserList> objUserList = new List<CustomStoreUserList>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                StoreTaskCaller taskcaller = new StoreTaskCaller();
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                objUserList = taskcaller.UserList(new StoreTaskService(_connectionSting), authenticate.TenantId, TaskID);
+                StatusCode =
+                objUserList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objUserList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Assign Task
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <param name="AgentID"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AssignTask")]
+        public ResponseModel AssignTask(string TaskID, int AgentID)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreTaskCaller taskcaller = new StoreTaskCaller();
+
+                int result = taskcaller.AssignTask(new StoreTaskService(_connectionSting), TaskID, authenticate.TenantId, authenticate.UserMasterID, AgentID);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
 
         #region Campaign
 

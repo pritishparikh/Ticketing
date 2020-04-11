@@ -354,7 +354,118 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return ListTaskHistory;
         }
+        /// <summary>
+        /// Update Task Status
+        /// </summary>
+        /// <param name="taskMaster"></param>
+        /// <param name="taskMaster"></param>
+        /// <returns></returns>
+        public int SubmitTask(StoreTaskMaster taskMaster, int UserID, int TenantId)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateTaskStatus", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Task_ID", taskMaster.TaskID);
+                cmd.Parameters.AddWithValue("@Department_Id", taskMaster.DepartmentId);
+                cmd.Parameters.AddWithValue("@Function_ID", taskMaster.FunctionID);
+                cmd.Parameters.AddWithValue("@Priority_ID", taskMaster.PriorityID);
+                cmd.Parameters.AddWithValue("@TaskStatus_ID", taskMaster.TaskStatusId);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
+                cmd.CommandType = CommandType.StoredProcedure;
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
 
+        public List<CustomStoreUserList> GetUserList(int TenantID, int TaskID)
+        {
+            DataSet ds = new DataSet();
+            List<CustomStoreUserList> listUser = new List<CustomStoreUserList>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreUser", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Task_ID", TaskID);
+                cmd.Connection = conn;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomStoreUserList customUserList = new CustomStoreUserList();
+                        customUserList.User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        customUserList.UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
+                        listUser.Add(customUserList);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return listUser;
+        }
+
+        public int AssignTask(string TaskID, int TenantID, int UserID, int AgentID)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_TaskAssign", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@Task_ID", TaskID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@AssignedUser_ID", AgentID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
 
 
         #region Campaign
