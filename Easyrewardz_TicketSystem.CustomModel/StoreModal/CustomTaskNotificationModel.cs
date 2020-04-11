@@ -19,4 +19,9 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string NotificationName { get; set; }
         public List<CustomTaskNotificationModel> CustomTaskNotificationModels { get; set; }
     }
+    public class ListStoreNotificationModels
+    {
+        public List<StoreNotificationModel> StoreNotificationModel  { get; set; }
+        public int NotiCount { get; set; }
+    }
 }
