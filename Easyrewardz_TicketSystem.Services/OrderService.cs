@@ -165,7 +165,7 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Parameters.AddWithValue("@_SKUName", itemMaster[k].ArticleName);
                         cmd.Parameters.AddWithValue("@_ItemPrice", itemMaster[k].ItemPrice);
                         cmd.Parameters.AddWithValue("@_Discount", itemMaster[k].Discount);
-                        cmd.Parameters.AddWithValue("@_requiredSize", Convert.ToInt32(itemMaster[k].RequireSize));
+                        cmd.Parameters.AddWithValue("@_requiredSize",itemMaster[k].RequireSize);
                         cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
 
                         cmd.CommandType = CommandType.StoredProcedure;
