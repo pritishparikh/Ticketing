@@ -579,8 +579,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@brand_ID", brandID);
                 cmd.Parameters.AddWithValue("@store_ID", storeID);
-                cmd.Parameters.AddWithValue("@userMasterID", userMasterID);
-                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.Parameters.AddWithValue("@userMaster_ID", userMasterID);
+                cmd.Parameters.AddWithValue("@user_ID", userID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 UserID = cmd.ExecuteNonQuery();
             }
