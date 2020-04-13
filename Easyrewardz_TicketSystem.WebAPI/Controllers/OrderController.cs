@@ -417,7 +417,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("attachorder")]
-        public ResponseModel AttachOrder(string OrderID, int TicketId)
+        public ResponseModel AttachOrder(IFormFile File)
         {
             OrderCaller ordercaller = new OrderCaller();
             ResponseModel objResponseModel = new ResponseModel();
@@ -425,6 +425,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             List<OrderItem> OrderItemDetails = new List<OrderItem>();
             int StatusCode = 0;
             string statusMessage = "";
+            string OrderID = string.Empty;
+            int TicketId = 0;
             int result = 0;
             try
             {
@@ -437,6 +439,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 // get order details from form
                 orderDetails = JsonConvert.DeserializeObject<OrderMaster>(Keys["orderDetails"]);
                 OrderItemDetails = JsonConvert.DeserializeObject<List<OrderItem>>(Keys["orderItemDetails"]);
+
+                OrderID = Convert.ToString(Keys["OrderID"]);
+                TicketId = Convert.ToInt32(Keys["TicketId"]);
+
+                if (!string.IsNullOrEmpty(OrderID) && TicketId > 0)
+                { 
 
                 #region check orderdetails and item details 
 
@@ -480,12 +488,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     }
                 }
 
-                    #endregion
+                #endregion
 
-                    result = ordercaller.AttachOrder(new OrderService(connectioSting), OrderID, TicketId, authenticate.UserMasterID);
+                result = ordercaller.AttachOrder(new OrderService(connectioSting), OrderID, TicketId, authenticate.UserMasterID);
+
+            }
                 StatusCode =
                 result == 0 ?
-                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                       (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
