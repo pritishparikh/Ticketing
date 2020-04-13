@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Model.StoreModal;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace Easyrewardz_TicketSystem.Interface.StoreInterface
@@ -52,5 +53,7 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
 
 
         List<DepartmentListingModel> GetBrandDepartmentMappingList(int TenantID);
+
+        List<string> DepartmentBulkUpload(int TenantID, int CreatedBy, int CategoryFor, DataSet DataSetCSV);
     }
 }

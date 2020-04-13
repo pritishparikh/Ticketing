@@ -1,0 +1,4 @@
+IssueType,Priority,SLABreachPercent,ResolutionValue,ResolutionDuration,Status
+Function 6,High,30,2,Day,Active
+Function 6,Medium,30,2,Day,Active
+Function 6,Low,30,2,Day,Active

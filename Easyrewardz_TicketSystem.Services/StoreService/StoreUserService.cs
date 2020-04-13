@@ -41,9 +41,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", personalDetails.CreatedBy);
                 cmd.Parameters.AddWithValue("@Is_StoreUser", Convert.ToInt16(personalDetails.IsStoreUser));
                 cmd.Parameters.AddWithValue("@Tenant_ID", personalDetails.TenantID);
-
+                cmd.Parameters.AddWithValue("@User_ID", personalDetails.UserID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                UserID = Convert.ToInt32(cmd.ExecuteScalar());
+                UserID = cmd.ExecuteNonQuery();
 
             }
             catch (Exception )
@@ -538,7 +538,66 @@ namespace Easyrewardz_TicketSystem.Services
             return Usermaster;
         }
 
+        public int AddBrandStore(int tenantID, int brandID, int storeID, int UserMasterID)
+        {
+            int UserID = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_InsertUserBrandStore", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@brand_ID", brandID);
+                cmd.Parameters.AddWithValue("@store_ID", storeID);
+                cmd.Parameters.AddWithValue("@UserMaster_ID", UserMasterID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                UserID = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
 
+            return UserID;
+        }
+
+        public int UpdateBrandStore(int tenantID, int brandID, int storeID, int userMasterID, int userID)
+        {
+            int UserID = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateUserBrandStore", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@brand_ID", brandID);
+                cmd.Parameters.AddWithValue("@store_ID", storeID);
+                cmd.Parameters.AddWithValue("@userMaster_ID", userMasterID);
+                cmd.Parameters.AddWithValue("@user_ID", userID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                UserID = cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UserID;
+        }
         #region Profile Mapping
 
 
@@ -897,6 +956,10 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return issueTypeList;
         }
+
+       
+
+
 
 
         #endregion

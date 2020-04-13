@@ -1,0 +1,3 @@
+RoleName,Status,EnabledModules,DisabledModules
+Store CRM HOD,InActive,Dashboard|Notification|Reports,Tasks|Claim|Settings
+Store CRM Agent,Active,Settings|Tasks|Notification|Reports,Dashboard|Claim

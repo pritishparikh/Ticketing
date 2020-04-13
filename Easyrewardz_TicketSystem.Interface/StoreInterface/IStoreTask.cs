@@ -12,6 +12,9 @@ namespace Easyrewardz_TicketSystem.Interface
         int AddStoreTaskComment(StoreTaskComment TaskComment, int TenantID, int UserID);
         List<TaskCommentModel> GetCommentOnTask(int TaskID, int TenantID, int UserID);
         List<CustomTaskHistory> GetTaskHistory(int TaskID, int TenantID, int UserID);
+        int SubmitTask(StoreTaskMaster taskMaster, int UserID, int TenantId);
+        List<CustomStoreUserList> GetUserList(int TenantID, int TaskID);
+        int AssignTask(string TaskID, int TenantID, int UserID, int AgentID);
 
         List<StoreCampaign> GetStoreCampaignCustomer(int TenantID, int UserID);
         CampaignStatusResponse GetCampaignStatusResponse(int TenantID, int UserID);

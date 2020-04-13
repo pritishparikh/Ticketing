@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Model.StoreModal;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -71,6 +72,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             ImasterDepartment = dept;
             return ImasterDepartment.GetBrandDepartmentMappingList(TenantID);
+        }
+
+        public List<string> DepartmentBulkUpload(IStoreDepartment dept, int TenantID, int CreatedBy, int CategoryFor, DataSet DataSetCSV)
+        {
+            ImasterDepartment = dept;
+            return ImasterDepartment.DepartmentBulkUpload(TenantID, CreatedBy, CategoryFor, DataSetCSV);
         }
         #endregion
     }

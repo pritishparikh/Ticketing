@@ -77,7 +77,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _storeRepository.UpdateClaimAttechmentSetting(claimAttechment);
         }
 
+        public List<string> UserBulkUpload(IStore Store, int TenantID, int CreatedBy, int UserFor, DataSet DataSetCSV)
+        {
+            _storeRepository = Store;
+            return _storeRepository.BulkUploadUser(TenantID, CreatedBy, UserFor, DataSetCSV);
+        }
 
-       
     }
 }

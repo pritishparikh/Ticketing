@@ -454,7 +454,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             int count = 0;
 
             MasterCaller masterCaller = new MasterCaller();
-            SettingsCaller fileU = new SettingsCaller();
+            StoreFileUploadCaller fileU = new StoreFileUploadCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
             string statusMessage = "";
@@ -536,21 +536,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 #region Create Error and Succes files and  Insert in FileUploadLog
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
-                    successFileSaved = CommonService.SaveFile(downloadFilePath + "\\Category\\Success" + "\\" + "CategorySuccessFile.csv", CSVlist[1]);
+                    successFileSaved = CommonService.SaveFile(downloadFilePath + "\\Category\\Success" + "\\" + "CategorySuccessFile.csv", CSVlist[0]);
 
                 if (!string.IsNullOrEmpty(CSVlist[1]))
-                    errorFileSaved = CommonService.SaveFile(downloadFilePath + "\\Category\\Error" + "\\" + "CategoryErrorFile.csv", CSVlist[0]);
+                    errorFileSaved = CommonService.SaveFile(downloadFilePath + "\\Category\\Error" + "\\" + "CategoryErrorFile.csv", CSVlist[1]);
 
 
 
-                count = fileU.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorFileSaved,
+                count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorFileSaved,
                                    "CategoryErrorFile.csv", "CategorySuccessFile.csv", authenticate.UserMasterID, "Category",
                                    downloadFilePath + "\\Category\\Error" + "\\" + "CategoryErrorFile.csv",
                                    downloadFilePath + "\\Category\\Success" + "\\" + "CategorySuccessFile.csv", CategoryFor
                                    );
                 #endregion
-                statusCode = successFileSaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.ButNoBody;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode.ButNoBody));
+                statusCode = successFileSaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;

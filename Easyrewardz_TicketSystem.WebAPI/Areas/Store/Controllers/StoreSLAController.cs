@@ -320,6 +320,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             int count = 0;
             List<string> CSVlist = new List<string>();
             StoreSLACaller newSLA = new StoreSLACaller();
+            StoreFileUploadCaller fileU = new StoreFileUploadCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -402,7 +403,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 #region Insert in FileUploadLog
 
 
-                count = newSLA.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorfilesaved,
+                count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorfilesaved,
                                    "SLAErrorFile.csv", "SLASuccessFile.csv", authenticate.UserMasterID, "SLA",
                                    DownloadFilePath + "\\SLA\\Error" + "\\" + "StoreErrorFile.csv",
                                    DownloadFilePath + "\\SLA\\ Success" + "\\" + "StoreSuccessFile.csv", 1

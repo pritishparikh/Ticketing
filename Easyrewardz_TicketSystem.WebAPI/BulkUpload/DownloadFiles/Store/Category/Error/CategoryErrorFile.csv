@@ -1,0 +1,2 @@
+id,BrandName,Category,SubCategory,IssueType,StatusID,Reason,ErrorCode
+1,EasyRewarz,Exchange,Defective Article,Broken Shoe,Active,Record Already Exist,1
