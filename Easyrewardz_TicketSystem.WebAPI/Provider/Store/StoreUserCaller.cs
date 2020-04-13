@@ -34,7 +34,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _StoreUserRepository.AddStoreUserMappedCategory(storeUser);
         }
 
-     
+        public int AddBrandStore(IStoreUser Users,int tenantID, int brandID, int storeID,int UserMasterID)
+        {
+            _StoreUserRepository = Users;
+            return _StoreUserRepository.AddBrandStore(tenantID, brandID, storeID, UserMasterID);
+        }
+        public int UpdateBrandStore(IStoreUser Users, int tenantID, int brandID, int storeID, int UserMasterID,int userID)
+        {
+            _StoreUserRepository = Users;
+            return _StoreUserRepository.UpdateBrandStore(tenantID, brandID, storeID, UserMasterID, userID);
+        }
+
 
         public int CreateStoreUserPersonaldetail(IStoreUser Users, StoreUserPersonalDetails personalDetails)
         {

@@ -69,6 +69,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// </summary>
         public string FunctionName { get; set; }
 
+        public string Createdago { get; set; }
+        public string Assignedago { get; set; }
+        public string UpdatedBy { get; set; }
+        public string Updatedago { get; set; }
 
         public List<UserComment> Comments { get; set; }
     }

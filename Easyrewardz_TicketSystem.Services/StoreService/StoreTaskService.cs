@@ -81,8 +81,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@user_ID", userID);
                 
-                MySqlDataAdapter da 
-= new MySqlDataAdapter
+                MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
                 };
@@ -101,10 +100,14 @@ namespace Easyrewardz_TicketSystem.Services
                             StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
                             StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
                             CreatedBy = ds.Tables[0].Rows[i]["Createdby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]),
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
                             CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
                             Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
                             PriorityName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]),
-                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"])
+                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]),
+                            Createdago = ds.Tables[0].Rows[i]["CreatedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]), "CreatedSpan"),
+                            Assignedago = ds.Tables[0].Rows[i]["AssignedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["AssignedDate"]), "AssignedSpan"),
+                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]), "ModifiedSpan")
                         };
                         lsttask.Add(taskMaster);
                     }
@@ -351,7 +354,118 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return ListTaskHistory;
         }
+        /// <summary>
+        /// Update Task Status
+        /// </summary>
+        /// <param name="taskMaster"></param>
+        /// <param name="taskMaster"></param>
+        /// <returns></returns>
+        public int SubmitTask(StoreTaskMaster taskMaster, int UserID, int TenantId)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateTaskStatus", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Task_ID", taskMaster.TaskID);
+                cmd.Parameters.AddWithValue("@Department_Id", taskMaster.DepartmentId);
+                cmd.Parameters.AddWithValue("@Function_ID", taskMaster.FunctionID);
+                cmd.Parameters.AddWithValue("@Priority_ID", taskMaster.PriorityID);
+                cmd.Parameters.AddWithValue("@TaskStatus_ID", taskMaster.TaskStatusId);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
+                cmd.CommandType = CommandType.StoredProcedure;
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
 
+        public List<CustomStoreUserList> GetUserList(int TenantID, int TaskID)
+        {
+            DataSet ds = new DataSet();
+            List<CustomStoreUserList> listUser = new List<CustomStoreUserList>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreUser", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Task_ID", TaskID);
+                cmd.Connection = conn;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomStoreUserList customUserList = new CustomStoreUserList();
+                        customUserList.User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        customUserList.UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
+                        listUser.Add(customUserList);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return listUser;
+        }
+
+        public int AssignTask(string TaskID, int TenantID, int UserID, int AgentID)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_TaskAssign", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@Task_ID", TaskID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@AssignedUser_ID", AgentID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
 
 
         #region Campaign
@@ -408,9 +522,18 @@ namespace Easyrewardz_TicketSystem.Services
                             CallReScheduledTo = x.Field<object>("CallReScheduledTo") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CallReScheduledTo")),
                             CustomerName = x.Field<object>("CustomerName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerName")),
                             CustomerPhoneNumber = x.Field<object>("CustomerPhoneNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerPhoneNumber")),
-                            CustomerEmailId = x.Field<object>("CustomerEmailId") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerEmailId"))
-                        }).ToList();
-                    
+                            CustomerEmailId = x.Field<object>("CustomerEmailId") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerEmailId")),
+
+                            CampaignResponseList = ds.Tables[2].AsEnumerable().Select(r => new CampaignResponse()
+                            {
+                                ResponseID = Convert.ToInt32(r.Field<object>("ResponseID")),
+                                Response = r.Field<object>("Response") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("Response")),
+                                StatusNameID = Convert.ToInt32(r.Field<object>("Status"))
+
+                            }).ToList()
+
+                    }).ToList();
+
                         objList.Add(obj);
                     }
                 }
@@ -594,6 +717,115 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// set Creation details
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="ColName"></param>
+        /// <returns></returns>
+        public string SetCreationdetails(string time, string ColName)
+        {
+            string timespan = string.Empty;
+            DateTime now = DateTime.Now;
+            TimeSpan diff = new TimeSpan();
+            string[] PriorityArr = null;
+            string spantext = "{0}D {1}H {2}M Ago";
+            try
+            {
+                if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
+                {
+                    diff = DateTime.Now - Convert.ToDateTime(time);
+                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
+
+                }
+                else if (ColName == "RespondTimeRemainingSpan")
+                {
+                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+                    DateTime assigneddate = Convert.ToDateTime(time.Split(new char[] { '|' })[1]);
+
+
+                    switch (PriorityArr[1])
+                    {
+                        case "D":
+                            if (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
+                            {
+                                diff = (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
+                            }
+                            break;
+
+                        case "H":
+
+                            if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
+                            {
+                                diff = (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
+                            }
+
+
+                            break;
+
+                        case "M":
+
+                            if (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
+                            {
+                                diff = (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
+                            }
+
+                            break;
+
+                    }
+                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
+
+                }
+                else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
+                {
+                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
+                    DateTime assigneddate = Convert.ToDateTime(time.Split(new char[] { '|' })[1]);
+
+                    switch (PriorityArr[1])
+                    {
+                        case "D":
+                            if (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
+                            {
+                                diff = DateTime.Now - (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])));
+                            }
+                            break;
+
+                        case "H":
+                            if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
+                            {
+                                diff = DateTime.Now - (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])));
+                            }
+
+
+                            break;
+
+                        case "M":
+                            if (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
+                            {
+                                diff = DateTime.Now - (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])));
+                            }
+
+
+                            break;
+
+                    }
+
+                    timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
+                }
+            }
+            catch (Exception)
+            {
+                //throw;
+            }
+            finally
+            {
+                if (PriorityArr != null && PriorityArr.Length > 0)
+                    Array.Clear(PriorityArr, 0, PriorityArr.Length);
+            }
+            return timespan;
+
         }
         #endregion
 

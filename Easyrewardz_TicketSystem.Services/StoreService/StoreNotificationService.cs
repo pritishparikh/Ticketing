@@ -17,9 +17,11 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
-        public List<StoreNotificationModel> GetNotification(int tenantID, int userID)
+        public ListStoreNotificationModels GetNotification(int tenantID, int userID)
         {
            List<StoreNotificationModel> ListstoreNotificationModel = new List<StoreNotificationModel>();
+
+            ListStoreNotificationModels storeNotificationModels = new ListStoreNotificationModels();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             try
@@ -55,7 +57,14 @@ namespace Easyrewardz_TicketSystem.Services
                            NotificatonTypeName = x.Field<object>("NotificatonTypeName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("NotificatonTypeName"))
                        }).ToList();
                         ListstoreNotificationModel.Add(storeNotificationModel);
+                        if (ListstoreNotificationModel.Count > 0)
+                        {
+                            storeNotificationModels.StoreNotificationModel = ListstoreNotificationModel;
+                            storeNotificationModels.NotiCount = ListstoreNotificationModel.Select(x => x.NotificationCount).Sum();
+                        }
                     }
+                   
+
 
                 }
             }
@@ -71,7 +80,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Close();
             }
 
-            return ListstoreNotificationModel;
+            return storeNotificationModels;
         }
 
         public int ReadNotification(int tenantID, int userID, int NotificatonTypeID, int NotificatonType)
