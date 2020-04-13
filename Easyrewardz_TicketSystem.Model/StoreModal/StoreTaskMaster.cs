@@ -168,6 +168,6 @@ namespace Easyrewardz_TicketSystem.Model
         public int StatusNameID { get; set; }
         public int ResponseID { get; set; }
         public string CallReScheduledTo { get; set; }
-        public DateTime CallReScheduledToDate { get; set; }
+        public DateTime? CallReScheduledToDate { get; set; }
     }
 }
