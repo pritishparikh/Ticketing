@@ -683,6 +683,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     objRequest.CallReScheduledToDate = Convert.ToDateTime(objRequest.CallReScheduledTo);
                 }
+
                 cmd.Parameters.AddWithValue("@_CallReScheduledTo", objRequest.CallReScheduledToDate);
 
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
