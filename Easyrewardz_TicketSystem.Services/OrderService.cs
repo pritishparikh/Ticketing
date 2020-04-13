@@ -171,7 +171,7 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.CommandType = CommandType.StoredProcedure;
                         InsertedItemDetails = Convert.ToString(cmd.ExecuteScalar());
 
-                        if(!string.IsNullOrEmpty(InsertedItemDetails))
+                        if(!string.IsNullOrEmpty(InsertedItemDetails)) 
                             itemOrderIDList.Add(InsertedItemDetails); 
                     }
                   
