@@ -384,6 +384,8 @@ namespace Easyrewardz_TicketSystem.Services
                     SelectCommand = cmd
                 };
                 da.Fill(ds);
+
+
                 if (ds != null && ds.Tables[0] != null)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -408,7 +410,7 @@ namespace Easyrewardz_TicketSystem.Services
                             CampaignTypeID = Convert.ToInt32(x.Field<int>("CampaignTypeID")),
                             CampaignStatus = x.Field<object>("CampaignStatus") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("CampaignStatus")),
                             Response = x.Field<object>("Response") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Response")),
-                            CallReScheduledTo = x.Field<object>("CallReScheduledTo") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CallReScheduledTo")),
+                            CallReScheduledTo = x.Field<object>("CallReScheduledTo") == DBNull.Value ? string.Empty : ConvertDatetimeToString(Convert.ToString(x.Field<object>("CallReScheduledTo"))),
                             CustomerName = x.Field<object>("CustomerName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerName")),
                             CustomerPhoneNumber = x.Field<object>("CustomerPhoneNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerPhoneNumber")),
                             CustomerEmailId = x.Field<object>("CustomerEmailId") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerEmailId")),
@@ -445,6 +447,26 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return objList;
+        }
+
+        public string ConvertDatetimeToString(string DateInString)
+        {
+            string result = "";
+            string GMT = " GMT+05:30 (" + TimeZoneInfo.Local.StandardName + ")";
+            try
+            {
+                if(!String.IsNullOrEmpty(DateInString))
+                {
+                    result = DateInString + GMT;
+                }
+               
+            }
+            catch(Exception)
+            {
+
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -546,7 +568,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_StatusNameID", objRequest.StatusNameID);
                 cmd.Parameters.AddWithValue("@_ResponseID", objRequest.ResponseID);
 
-                if (objRequest.CallReScheduledTo != null)
+                if (string.IsNullOrEmpty(objRequest.CallReScheduledTo))
                 {
                     objRequest.CallReScheduledToDate = Convert.ToDateTime(objRequest.CallReScheduledTo);
                 }
