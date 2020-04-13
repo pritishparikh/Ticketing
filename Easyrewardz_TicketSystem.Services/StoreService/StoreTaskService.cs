@@ -679,7 +679,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_StatusNameID", objRequest.StatusNameID);
                 cmd.Parameters.AddWithValue("@_ResponseID", objRequest.ResponseID);
 
-                if (string.IsNullOrEmpty(objRequest.CallReScheduledTo))
+                if (!string.IsNullOrEmpty(objRequest.CallReScheduledTo))
                 {
                     objRequest.CallReScheduledToDate = Convert.ToDateTime(objRequest.CallReScheduledTo);
                 }
