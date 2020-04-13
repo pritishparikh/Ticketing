@@ -56,17 +56,23 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-                    customerMaster.CustomerID = Convert.ToInt32(ds.Tables[0].Rows[0]["CustomerID"]);
-                    customerMaster.TenantID = Convert.ToInt32(ds.Tables[0].Rows[0]["TenantID"]);
-                    customerMaster.CustomerName = Convert.ToString(ds.Tables[0].Rows[0]["CustomerName"]);
-                    customerMaster.CustomerPhoneNumber = Convert.ToString(ds.Tables[0].Rows[0]["CustomerPhoneNumber"]);
-                    customerMaster.CustomerEmailId = Convert.ToString(ds.Tables[0].Rows[0]["CustomerEmailId"]);
-                    customerMaster.GenderID = Convert.ToInt32(ds.Tables[0].Rows[0]["GenderID"]);
-                    customerMaster.AltNumber = Convert.ToString(ds.Tables[0].Rows[0]["AltNumber"]);
-                    customerMaster.AltEmailID = Convert.ToString(ds.Tables[0].Rows[0]["AltEmailID"]);
-                    customerMaster.DateOfBirth = default(DateTime);
-                    customerMaster.IsActive = Convert.ToInt32(ds.Tables[0].Rows[0]["IsActive"]);
-                    customerMaster.DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]);
+
+                    if(ds.Tables[0].Rows.Count> 0)
+                        {
+                        customerMaster.CustomerID = Convert.ToInt32(ds.Tables[0].Rows[0]["CustomerID"]);
+                        customerMaster.TenantID = Convert.ToInt32(ds.Tables[0].Rows[0]["TenantID"]);
+                        customerMaster.CustomerName = Convert.ToString(ds.Tables[0].Rows[0]["CustomerName"]);
+                        customerMaster.CustomerPhoneNumber = Convert.ToString(ds.Tables[0].Rows[0]["CustomerPhoneNumber"]);
+                        customerMaster.CustomerEmailId = Convert.ToString(ds.Tables[0].Rows[0]["CustomerEmailId"]);
+                        customerMaster.GenderID = Convert.ToInt32(ds.Tables[0].Rows[0]["GenderID"]);
+                        customerMaster.AltNumber = Convert.ToString(ds.Tables[0].Rows[0]["AltNumber"]);
+                        customerMaster.AltEmailID = Convert.ToString(ds.Tables[0].Rows[0]["AltEmailID"]);
+                        customerMaster.DateOfBirth = default(DateTime);
+                        customerMaster.IsActive = Convert.ToInt32(ds.Tables[0].Rows[0]["IsActive"]);
+                        customerMaster.DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]);
+
+                    }
+                    
                 }
             }
             catch (Exception)
@@ -79,6 +85,12 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+
+                if (ds!=null)
+                {
+                    ds.Dispose();
+                }
+
             }
             return customerMaster;
         }
