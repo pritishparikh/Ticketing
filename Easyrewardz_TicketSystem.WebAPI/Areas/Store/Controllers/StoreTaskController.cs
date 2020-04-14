@@ -388,9 +388,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 objList = taskcaller.GetStoreCampaignCustomer(new StoreTaskService(_connectionSting), authenticate.TenantId, authenticate.UserMasterID);
-                statusCode =
-                   objList.Count == 0 ?
-                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode = (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 

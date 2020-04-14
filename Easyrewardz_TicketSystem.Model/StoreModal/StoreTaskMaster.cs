@@ -139,6 +139,8 @@ namespace Easyrewardz_TicketSystem.Model
         public string CustomerName { get; set; }
         public string CustomerPhoneNumber { get; set; }
         public string CustomerEmailId { get; set; }
+        public string DOB { get; set; }
+        public int NoOfTimesNotContacted { get; set; }
         public List<CampaignResponse> CampaignResponseList { get; set; }
     }
 

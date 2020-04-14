@@ -525,7 +525,8 @@ namespace Easyrewardz_TicketSystem.Services
                             CustomerName = x.Field<object>("CustomerName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerName")),
                             CustomerPhoneNumber = x.Field<object>("CustomerPhoneNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerPhoneNumber")),
                             CustomerEmailId = x.Field<object>("CustomerEmailId") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerEmailId")),
-
+                            DOB = x.Field<object>("DOB") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("DOB")),
+                            NoOfTimesNotContacted = x.Field<object>("NoOfTimesNotContacted") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("NoOfTimesNotContacted")),
                             CampaignResponseList = ds.Tables[2].AsEnumerable().Select(r => new CampaignResponse()
                             {
                                 ResponseID = Convert.ToInt32(r.Field<object>("ResponseID")),
