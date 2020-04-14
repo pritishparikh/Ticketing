@@ -313,7 +313,7 @@ namespace Easyrewardz_TicketSystem.Services
                             {
                                 StoreMaster store = new StoreMaster();
                                 store.StoreCode = objStoreDetails[k].StoreCode;
-                                store.StoreName = "";// no store name provided in the api response
+                                store.StoreName = objStoreDetails[k].StoreCode ;// no store name provided in the api response hence mapped storecode mapped as per req
                                 store.Pincode = objStoreDetails[k].StorePinCode;
                                 store.StoreEmailID = objStoreDetails[k].StoreEmailId;
                                 store.Address = objStoreDetails[k].StoreAddress;
