@@ -212,6 +212,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                                 InsertedStoreID = newStore.AddStore(new StoreService(_connectioSting), store, authenticate.TenantId, authenticate.UserMasterID);
                                 if (InsertedStoreID > 0)
                                 {
+                                    store.StoreVisitDate = string.IsNullOrEmpty(store.StoreVisitDate) ? "" : store.StoreVisitDate;
                                     ListStoreDetails.Add(Convert.ToString(InsertedStoreID) + "|" + store.StoreVisitDate + "|" + store.Purpose);
 
                                 }
