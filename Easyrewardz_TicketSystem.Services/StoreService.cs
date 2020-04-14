@@ -315,7 +315,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 store.StoreCode = objStoreDetails[k].StoreCode;
                                 store.StoreName = objStoreDetails[k].StoreCode ;// no store name provided in the api response hence mapped storecode mapped as per req
                                 store.Pincode = objStoreDetails[k].StorePinCode;
-                                store.StoreEmailID = objStoreDetails[k].StoreEmailId;
+                                store.StoreEmailID = objStoreDetails[k].StoreEmailId; 
                                 store.Address = objStoreDetails[k].StoreAddress;
                                 store.StoreID = 0;
                                 store.LpassStoreID = objStoreDetails[k].StoreId;
