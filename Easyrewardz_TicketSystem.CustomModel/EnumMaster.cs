@@ -172,7 +172,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
             /// <summary>
             ///ClaimStatus - Open
             /// </summary>
-            [Description("Open/Pending")]
+            [Description("Open")]
             Open = 211,
 
             /// <summary>

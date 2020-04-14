@@ -152,6 +152,29 @@ namespace Easyrewardz_TicketSystem.WebAPI
                 RequestPath = "/"+ TicketAttachment
             });
 
+            string RaiseClaimProductImage = "RaiseClaimProductImage";
+            string RaiseClaimProductImageURL = Path.Combine(CurrentDirectory, RaiseClaimProductImage);
+            if (!Directory.Exists(RaiseClaimProductImageURL))
+            {
+                Directory.CreateDirectory(RaiseClaimProductImageURL);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(RaiseClaimProductImageURL),
+                RequestPath = "/" + RaiseClaimProductImage
+            });
+            //Enable directory browsing
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(RaiseClaimProductImageURL),
+                RequestPath = "/" + RaiseClaimProductImage
+            });
+
+
+
+
+
             string ReportDownload = "ReportDownload";
             string ReportDownloadURL = Path.Combine(CurrentDirectory, ReportDownload);
             if (!Directory.Exists(ReportDownloadURL))
