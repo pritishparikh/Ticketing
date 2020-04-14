@@ -318,7 +318,9 @@ namespace Easyrewardz_TicketSystem.Services
                                 store.StoreEmailID = objStoreDetails[k].StoreEmailId;
                                 store.Address = objStoreDetails[k].StoreAddress;
                                 store.StoreID = 0;
-                                
+                                store.LpassStoreID = objStoreDetails[k].StoreId;
+
+
                                 storeMaster.Add(store);
                             }
                         }
