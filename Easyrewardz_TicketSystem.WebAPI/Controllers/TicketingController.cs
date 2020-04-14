@@ -219,7 +219,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                             }
                         }
 
-                        ticketingDetails.StoreID = ListStoreDetails.Count > 0 ? string.Join(',', ListStoreDetails) : "";
+                        ticketingDetails.StoreID = ListStoreDetails.Count > 0 ? string.Join(',', ListStoreDetails) : ticketingDetails.StoreID;
                     }
                 }
 
@@ -276,19 +276,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             catch (Exception)
             {
-                //if (ticketingDetails.StatusID == 100)
-                //{
-                //    ErrorResponseMessage = "Draft not created.";
-                //}
-                //else
-                //{
-                //    ErrorResponseMessage = "Ticket not created.";
-                //}
+                string ErrorResponseMessage = string.Empty;
+                if (ticketingDetails.StatusID == 100)
+                {
+                    ErrorResponseMessage = "Draft not created.";
+                }
+                else
+                {
+                    ErrorResponseMessage = "Ticket not created.";
+                }
 
-                //objResponseModel.Status = false;
-                //objResponseModel.StatusCode = StatusCode;
-                //objResponseModel.Message = ErrorResponseMessage;
-                //objResponseModel.ResponseData = null;
+                objResponseModel.Status = false;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = ErrorResponseMessage;
+                objResponseModel.ResponseData = null;
 
                 throw;
 

@@ -406,7 +406,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                                 }
                             }
 
-                            StoreId = ListStoreDetails.Count > 0 ? string.Join(',', ListStoreDetails) : "";
+                            StoreId = ListStoreDetails.Count > 0 ? string.Join(',', ListStoreDetails) : StoreId;
 
                         }
 
