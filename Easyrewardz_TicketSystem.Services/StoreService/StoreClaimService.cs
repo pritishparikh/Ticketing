@@ -114,7 +114,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Category_ID", storeClaimMaster.CategoryID);
                 cmd.Parameters.AddWithValue("@SubCategory_ID", storeClaimMaster.SubCategoryID);
                 cmd.Parameters.AddWithValue("@IssueType_ID", storeClaimMaster.IssueTypeID);
-                cmd.Parameters.AddWithValue("@Order_IDs", storeClaimMaster.OrderIDs);
+                cmd.Parameters.AddWithValue("@Order_IDs", string.IsNullOrEmpty(storeClaimMaster.OrderIDs) ? "" : storeClaimMaster.OrderIDs);
                 cmd.Parameters.AddWithValue("@Claim_Percent", storeClaimMaster.ClaimPercent);
                 cmd.CommandType = CommandType.StoredProcedure;
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
