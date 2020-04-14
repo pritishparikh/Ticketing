@@ -90,7 +90,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             TicketingDetails ticketingDetails = new TicketingDetails();
             OrderMaster orderDetails = new OrderMaster();
             List<OrderItem> OrderItemDetails = new List<OrderItem>();
-
+            List<StoreMaster> storeMaster = new List<StoreMaster>();
+            List<string> ListStoreDetails = new List<string>();
             var files = Request.Form.Files;
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
             string fileName = "";
@@ -111,6 +112,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             // get order details from form
             orderDetails = JsonConvert.DeserializeObject<OrderMaster>(Keys["orderDetails"]);
             OrderItemDetails = JsonConvert.DeserializeObject<List<OrderItem>>(Keys["orderItemDetails"]);
+            storeMaster = JsonConvert.DeserializeObject<List<StoreMaster>>(Keys["storeDetails"]);
 
 
             List<TicketingDetails> objTicketList = new List<TicketingDetails>();
@@ -188,10 +190,42 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     
 
                 }
-                
-
-                result = newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
                 #endregion
+
+                #region check Store details
+
+                if (storeMaster != null)
+                {
+                  
+                    if (storeMaster.Count > 0)
+                    {
+                        StoreCaller newStore = new StoreCaller();
+
+                        foreach (var store in storeMaster)
+                        {
+                            if (store.StoreID.Equals(0))
+                            {
+                                int InsertedStoreID = 0;
+
+                                store.BrandIDs = Convert.ToString(ticketingDetails.BrandID);
+
+                                InsertedStoreID = newStore.AddStore(new StoreService(_connectioSting), store, authenticate.TenantId, authenticate.UserMasterID);
+                                if (InsertedStoreID > 0)
+                                {
+                                    ListStoreDetails.Add(Convert.ToString(InsertedStoreID) + "|" + store.StoreVisitDate + "|" + store.Purpose);
+
+                                }
+                            }
+                        }
+
+                        ticketingDetails.StoreID = ListStoreDetails.Count > 0 ? string.Join(',', ListStoreDetails) : "";
+                    }
+                }
+
+
+                #endregion
+
+                    result = newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
 
 
                 if (ticketingDetails.StatusID == 100)

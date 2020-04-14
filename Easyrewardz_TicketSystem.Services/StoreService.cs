@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,12 +14,18 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        CustomResponse ApiResponse = null;
+        string apiResponse = string.Empty;
+        string apisecurityToken = string.Empty;
+        string apiURL = string.Empty;
         #endregion
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
         public StoreService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
+            apisecurityToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9ncmFtQ29kZSI6IkJhdGEiLCJVc2VySUQiOiIzIiwiQXBwSUQiOiI3IiwiRGF5IjoiMjgiLCJNb250aCI6IjMiLCJZZWFyIjoiMjAyMSIsIlJvbGUiOiJBZG1pbiIsImlzcyI6IkF1dGhTZWN1cml0eUlzc3VlciIsImF1ZCI6IkF1dGhTZWN1cml0eUF1ZGllbmNlIn0.0XeF7V5LWfQn0NlSlG7Rb-Qq1hUCtUYRDg6dMGIMvg0";
+            apiURL = "http://searchapi.ercx.co/api/Search/";
         }
 
         /// <summary>
@@ -68,12 +75,15 @@ namespace Easyrewardz_TicketSystem.Services
             int storeId = 0;
             try
             {
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 MySqlCommand cmd = new MySqlCommand("SP_InsertStore", conn);
                 cmd.Connection = conn;
                 //cmd.Parameters.AddWithValue("@Brand_ID", storeMaster.BrandID);
                 cmd.Parameters.AddWithValue("@Store_Code", storeMaster.StoreCode);
-                cmd.Parameters.AddWithValue("@Store_Name", storeMaster.StoreName);
+                cmd.Parameters.AddWithValue("@Store_Name", string.IsNullOrEmpty(storeMaster.StoreName)? "": storeMaster.StoreName);
                 cmd.Parameters.AddWithValue("@State_ID", storeMaster.StateID);
                 cmd.Parameters.AddWithValue("@City_ID", storeMaster.CityID);
                 cmd.Parameters.AddWithValue("@Pincode_ID", storeMaster.Pincode);
@@ -82,16 +92,16 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Zone_ID", storeMaster.ZoneID);
                 cmd.Parameters.AddWithValue("@StoreType_ID", storeMaster.StoreTypeID);
                 cmd.Parameters.AddWithValue("@StoreEmail_ID", storeMaster.StoreEmailID);
-                cmd.Parameters.AddWithValue("@StorePhone_No", storeMaster.StorePhoneNo);
-                cmd.Parameters.AddWithValue("@Is_Active", storeMaster.IsActive);
+                cmd.Parameters.AddWithValue("@StorePhone_No", string.IsNullOrEmpty(storeMaster.StorePhoneNo) ? "" : storeMaster.StorePhoneNo);
+                cmd.Parameters.AddWithValue("@Is_Active",storeMaster.IsActive);
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
-                cmd.Parameters.AddWithValue("@BrandIDs", storeMaster.BrandIDs);
+                cmd.Parameters.AddWithValue("@BrandIDs", string.IsNullOrEmpty(storeMaster.BrandIDs) ? "" : storeMaster.BrandIDs.TrimEnd(','));
                 cmd.CommandType = CommandType.StoredProcedure;
                 storeId = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
-            catch (Exception)
+            catch (Exception )
             {
                 throw;
             }
@@ -220,20 +230,32 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    if (ds.Tables[0].Rows.Count > 0)
                     {
-                        StoreMaster store = new StoreMaster();
-                        store.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        store.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        store.Pincode = ds.Tables[0].Rows[i]["PincodeID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PincodeID"]);
-                        store.StoreEmailID = ds.Tables[0].Rows[i]["StoreEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
-                        store.Address = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
-                        store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
-                        //store.StoreVisitDate= ds.Tables[0].Rows[i]["StoreVisitDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreVisitDate"]);
-                        //store.Purpose= ds.Tables[0].Rows[i]["Purpose"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Purpose"]);
-                        storeMaster.Add(store);
-                    }
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+
+                            StoreMaster store = new StoreMaster();
+                            store.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                            store.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                            store.Pincode = ds.Tables[0].Rows[i]["PincodeID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PincodeID"]);
+                            store.StoreEmailID = ds.Tables[0].Rows[i]["StoreEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
+                            store.Address = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                            store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
+                            //store.StoreVisitDate= ds.Tables[0].Rows[i]["StoreVisitDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreVisitDate"]);
+                            //store.Purpose= ds.Tables[0].Rows[i]["Purpose"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Purpose"]);
+                            storeMaster.Add(store);
+                        }
+
                 }
+                else
+                {
+                        storeMaster = GetStoreDetaisFromAPI(searchText);
+
+                    }
+
+
+            }
             }
             catch (Exception)
             {
@@ -253,6 +275,64 @@ namespace Easyrewardz_TicketSystem.Services
             return storeMaster;
         }
 
+
+        /// <summary>
+        /// Get list of the Stores details from LPASS API
+        /// </summary>
+        /// <param name="searchText"></param>
+        /// <returns></returns>
+        public List<StoreMaster> GetStoreDetaisFromAPI(string searchText)
+        {
+            List<StoreMaster> storeMaster = new List<StoreMaster>();
+            CustomStoreSearch objStore = new CustomStoreSearch();
+            List<CustomStoreDetails> objStoreDetails = new List<CustomStoreDetails>();
+            try
+            {
+                objStore.programCode = "bata";
+                objStore.storeAddressPin = searchText;
+             
+                objStore.securityToken = apisecurityToken;
+                objStore.userID =  3;
+                objStore.appID = 7;
+
+                string apiReq = JsonConvert.SerializeObject(objStore);
+                apiResponse = CommonService.SendApiRequest(apiURL + "StoreDetails", apiReq);
+
+                if (!string.IsNullOrEmpty(apiResponse))
+                {
+                    ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+
+                    if (ApiResponse != null)
+                    {
+
+                        objStoreDetails = JsonConvert.DeserializeObject<List<CustomStoreDetails>>(Convert.ToString((ApiResponse.Responce)));
+
+                        if(objStoreDetails.Count > 0)
+                        {
+                            for(int k =0; k< objStoreDetails.Count;k++)
+                            {
+                                StoreMaster store = new StoreMaster();
+                                store.StoreCode = objStoreDetails[k].StoreCode;
+                                store.StoreName = "";// no store name provided in the api response
+                                store.Pincode = objStoreDetails[k].StorePinCode;
+                                store.StoreEmailID = objStoreDetails[k].StoreEmailId;
+                                store.Address = objStoreDetails[k].StoreAddress;
+                                store.StoreID = 0;
+                                
+                                storeMaster.Add(store);
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            catch (Exception )
+            {
+                throw;
+            }
+
+            return storeMaster;
+        }
 
         /// <summary>
         /// Get list of the Stores
