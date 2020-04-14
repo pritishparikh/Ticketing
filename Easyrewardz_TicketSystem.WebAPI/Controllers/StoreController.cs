@@ -50,7 +50,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="Pincode"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("searchStoreDetail")]
+        [Route("SearchStoreDetail")]
         public ResponseModel SearchStoreDetail(string SearchText)
         {
             List<StoreMaster> objstoreList = new List<StoreMaster>();
