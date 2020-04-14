@@ -399,7 +399,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                                     if (InsertedStoreID > 0)
                                     {
-                                        store.StoreVisitDate = string.IsNullOrEmpty(store.StoreVisitDate) ? "" : store.StoreVisitDate;
+                                        store.StoreVisitDate = string.IsNullOrEmpty(store.StoreVisitDate) ? "" : store.StoreVisitDate; 
                                         ListStoreDetails.Add(Convert.ToString(InsertedStoreID) + "|" + store.StoreVisitDate + "|" + store.Purpose);
                                     }
 
