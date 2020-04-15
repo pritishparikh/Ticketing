@@ -354,6 +354,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return ListTaskHistory;
         }
+        
         /// <summary>
         /// Update Task Status
         /// </summary>
@@ -392,6 +393,12 @@ namespace Easyrewardz_TicketSystem.Services
             return i;
         }
 
+        /// <summary>
+        /// GetUserList
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="TaskID"></param>
+        /// <returns></returns>
         public List<CustomStoreUserList> GetUserList(int TenantID, int TaskID)
         {
             DataSet ds = new DataSet();
@@ -436,6 +443,14 @@ namespace Easyrewardz_TicketSystem.Services
             return listUser;
         }
 
+        /// <summary>
+        /// AssignTask
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="AgentID"></param>
+        /// <returns></returns>
         public int AssignTask(string TaskID, int TenantID, int UserID, int AgentID)
         {
             int i = 0;
@@ -466,6 +481,175 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return i;
         }
+
+        /// <summary>
+        /// Get Store Task By Ticket
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public List<CustomStoreTaskDetails> GetStoreTaskByTicket(int tenantID, int userID)
+        {
+            DataSet ds = new DataSet();
+            List<CustomStoreTaskDetails> lsttask = new List<CustomStoreTaskDetails>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreTaskByTicket", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@User_ID", userID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomStoreTaskDetails taskMaster = new CustomStoreTaskDetails
+                        {
+                            StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]),
+                            TaskStatus = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"])),
+                            TaskTitle = ds.Tables[0].Rows[i]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]),
+                            TaskDescription = ds.Tables[0].Rows[i]["TaskDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskDescription"]),
+                            DepartmentName = ds.Tables[0].Rows[i]["Departmentname"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Departmentname"]),
+                            StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
+                            StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
+                            CreatedBy = ds.Tables[0].Rows[i]["Createdby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]),
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
+                            CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
+                            PriorityName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]),
+                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]),
+                            Createdago = ds.Tables[0].Rows[i]["CreatedDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]),
+                            Assignedago = ds.Tables[0].Rows[i]["AssignedDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignedDate"]),
+                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"])
+                        };
+                        lsttask.Add(taskMaster);
+                    }
+                }
+            }
+            catch (Exception)
+
+            {
+                throw;
+            }
+
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return lsttask;
+        }
+
+        /// <summary>
+        /// Get Store Ticketing TaskByTaskID
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public StoreTaskWithTicket GetStoreTicketingTaskByTaskID(int TaskID, int TenantID, int UserID)
+        {
+            DataSet ds = new DataSet();
+            StoreTaskWithTicket StoreTaskWithTicketDetials = new StoreTaskWithTicket();
+            StoreTaskMaster storetaskmaster = new StoreTaskMaster();
+            TaskTicketDetails ticketDetails = new TaskTicketDetails();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreTicketingTaskByTaskID", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_TaskID", TaskID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows != null)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            storetaskmaster = new StoreTaskMaster()
+                            {
+                                TaskID = Convert.ToInt32(ds.Tables[0].Rows[0]["TicketingTaskID"]),
+                                TicketID = Convert.ToInt32(ds.Tables[0].Rows[0]["TicketID"]),
+                                TaskTitle = ds.Tables[0].Rows[0]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["TaskTitle"]),
+                                TaskDescription = ds.Tables[0].Rows[0]["TaskDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["TaskDescription"]),
+                                DepartmentId = Convert.ToInt32(ds.Tables[0].Rows[0]["DepartmentId"]),
+                                FunctionID = Convert.ToInt32(ds.Tables[0].Rows[0]["FunctionID"]),
+                                PriorityID = Convert.ToInt32(ds.Tables[0].Rows[0]["PriorityID"]),
+                                TaskStatusId = Convert.ToInt32(ds.Tables[0].Rows[0]["TaskStatusId"]),
+                                AssignToName = ds.Tables[0].Rows[0]["AssignToName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["AssignToName"]),
+                                CreatedByName = ds.Tables[0].Rows[0]["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CreatedByName"]),
+                                StoreName = ds.Tables[0].Rows[0]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreName"]),
+                                Address = ds.Tables[0].Rows[0]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
+                                StoreCode = ds.Tables[0].Rows[0]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreCode"])
+                            };
+                        }
+                    }
+                }
+                
+                if (ds != null && ds.Tables[1] != null)
+                {
+                    if (ds.Tables[1].Rows.Count > 0)
+                    {
+                        ticketDetails = new TaskTicketDetails
+                        {
+                            TicketID = ds.Tables[1].Rows[0]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["TicketID"]),
+                            TicketTitle = ds.Tables[1].Rows[0]["TikcketTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["TikcketTitle"]),
+                            Ticketdescription = ds.Tables[1].Rows[0]["TicketDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["TicketDescription"]),
+                            CustomerName = ds.Tables[1].Rows[0]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["CustomerName"]),
+                            Gender = ds.Tables[1].Rows[0]["Gender"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["Gender"]),
+                            CustomerPhoneNumber = ds.Tables[1].Rows[0]["CustomerPhoneNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["CustomerPhoneNumber"]),
+                            CustomerEmailId = ds.Tables[1].Rows[0]["CustomerEmailId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["CustomerEmailId"]),
+                            Status = ds.Tables[1].Rows[0]["StatusID"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TicketStatus)Convert.ToInt32(ds.Tables[1].Rows[0]["StatusID"])),
+                            PriortyName = ds.Tables[1].Rows[0]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["PriortyName"]),
+                            CategoryName = ds.Tables[1].Rows[0]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["CategoryName"]),
+                            SubCategoryName = ds.Tables[1].Rows[0]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["SubCategoryName"]),
+                            IssueTypeName = ds.Tables[1].Rows[0]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["IssueTypeName"]),
+                        };
+
+                    }
+                }
+                StoreTaskWithTicketDetials.StoreTaskMasterDetails = storetaskmaster;
+                StoreTaskWithTicketDetials.TaskTicketDetails = ticketDetails;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return StoreTaskWithTicketDetials;
+        }
+
+
 
 
         #region Campaign

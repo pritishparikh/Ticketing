@@ -58,6 +58,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _TaskRepository.AssignTask(TaskID, TenantID, UserID, AgentID);
 
         }
+        public List<CustomStoreTaskDetails> GetStoreTaskByTicket(IStoreTask task, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetStoreTaskByTicket(TenantID, UserID);
+
+        }
+        public StoreTaskWithTicket GetStoreTicketingTaskByTaskID(IStoreTask task, int TaskID, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetStoreTicketingTaskByTaskID(TaskID, TenantID, UserID);
+
+        }
+
         public List<StoreCampaign> GetStoreCampaignCustomer(IStoreTask task, int TenantID, int UserID)
         {
             _TaskRepository = task;

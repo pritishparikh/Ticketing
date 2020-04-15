@@ -366,6 +366,85 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get Store Task By Ticket
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreTaskByTicket")]
+        public ResponseModel GetStoreTaskByTicket()
+        {
+            List<CustomStoreTaskDetails> objtaskMaster = new List<CustomStoreTaskDetails>();
+            StoreTaskCaller taskcaller = new StoreTaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                objtaskMaster = taskcaller.GetStoreTaskByTicket(new StoreTaskService(_connectionSting), authenticate.TenantId, authenticate.UserMasterID);
+                statusCode =
+                   objtaskMaster.Count == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objtaskMaster;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Store Ticketing Task By TaskID
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreTicketingTaskByTaskID")]
+        public ResponseModel GetStoreTicketingTaskByTaskID(int TaskID)
+        {
+            StoreTaskWithTicket objtaskMaster = new StoreTaskWithTicket();
+            StoreTaskCaller taskcaller = new StoreTaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                objtaskMaster = taskcaller.GetStoreTicketingTaskByTaskID(new StoreTaskService(_connectionSting), TaskID, authenticate.TenantId, authenticate.UserMasterID);
+                statusCode =
+                   objtaskMaster.StoreTaskMasterDetails.TicketID == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objtaskMaster;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
         #region Campaign
 
         /// <summary>

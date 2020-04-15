@@ -74,6 +74,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string UpdatedBy { get; set; }
         public string Updatedago { get; set; }
 
+        public int TicketID { get; set; }
+
         public List<UserComment> Comments { get; set; }
     }
     
