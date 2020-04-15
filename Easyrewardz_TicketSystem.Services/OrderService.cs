@@ -7,7 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -803,8 +805,8 @@ namespace Easyrewardz_TicketSystem.Services
                             ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
                             PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
                             Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
-                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty: Convert.ToString(x.Field<object>("RequireSize")),
-                            InvoiceNumber= customOrderMaster.InvoiceNumber,
+                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("RequireSize")),
+                            InvoiceNumber = x.Field<object>("InvoiceNo") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("InvoiceNo")),// customOrderMaster.InvoiceNumber,
                             InvoiceDate= customOrderMaster.InvoiceDate
                         }).ToList();
                         customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
@@ -826,6 +828,15 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+
+                var exePath = 
+                    Path.GetDirectoryName(System.Reflection
+                    .Assembly.GetExecutingAssembly().CodeBase);
+                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                string Folderpath = appPathMatcher.Match(exePath).Value + "\\testorderetails\\getorderlistJson.txt" ;
+
+                var flag = CommonService.SaveFile(Folderpath, JsonConvert.SerializeObject(objorderMaster));
+
             }
             return objorderMaster;
         }
