@@ -9,11 +9,19 @@ namespace Easyrewardz_TicketSystem.Interface
         int RaiseClaim(StoreClaimMaster storeClaimMaster, string finalAttchment);
         int AddClaimComment(int ClaimID, string Comment, int UserID);
         /// <summary>
-        /// Get list of the claim comments
+        /// Get list of the claim comments from store
         /// </summary>
         /// <param name="ClaimId">Id of the Claim</param>
         /// <returns></returns>
         List<UserComment> GetClaimComment(int ClaimID);
-        List<CustomTaskMasterDetails> GetClaimList();
+        List<CustomClaimList> GetClaimList(int tabFor, int tenantID, int userID);
+        CustomClaimByID GetClaimByID(int ClaimID, int tenantID, int userID,string url);
+        int AddClaimCommentByApprovel(int ClaimID, string Comment, int UserID);
+        /// <summary>
+        /// GetClaimCommentForApprovel
+        /// </summary>
+        /// <param name="ClaimId">Id of the Claim</param>
+        /// <returns></returns>
+        List<CommentByApprovel> GetClaimCommentForApprovel(int ClaimID);
     }
 }

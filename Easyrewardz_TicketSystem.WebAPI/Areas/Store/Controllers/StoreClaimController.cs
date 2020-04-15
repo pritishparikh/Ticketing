@@ -46,7 +46,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         public ResponseModel RaiseClaim(IFormFile File)
         {
             StoreClaimMaster storeClaimMaster = new StoreClaimMaster();
-
+            OrderMaster orderDetails = new OrderMaster();
+            List<OrderItem> OrderItemDetails = new List<OrderItem>();
             var files = Request.Form.Files;
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
             string fileName = "";
@@ -62,6 +63,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             var Keys = Request.Form;
             storeClaimMaster = JsonConvert.DeserializeObject<StoreClaimMaster>(Keys["storeClaimMaster"]);
+            // get order details from form
+            orderDetails = JsonConvert.DeserializeObject<OrderMaster>(Keys["orderDetails"]);
+            OrderItemDetails = JsonConvert.DeserializeObject<List<OrderItem>>(Keys["orderItemDetails"]);
 
             var exePath = Path.GetDirectoryName(System.Reflection
                     .Assembly.GetExecutingAssembly().CodeBase);
@@ -74,10 +78,61 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             try
             {
-                StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                #region check orderdetails and item details 
+
+                if (orderDetails != null)
+                {
+
+                    if (orderDetails.OrderMasterID.Equals(0))
+                    {
+
+                        string OrderNumber = string.Empty;
+                        string OrderItemsIds = string.Empty;
+                        OrderMaster objorderMaster = null;
+
+                        OrderCaller ordercaller = new OrderCaller();
+                        //call insert order
+                        orderDetails.CreatedBy = authenticate.UserMasterID;
+                        OrderNumber = ordercaller.addOrder(new OrderService(_connectionSting), orderDetails, authenticate.TenantId);
+                        if (!string.IsNullOrEmpty(OrderNumber))
+                        {
+                            objorderMaster = ordercaller.getOrderDetailsByNumber(new OrderService(_connectionSting), OrderNumber, authenticate.TenantId);
+
+
+                            if (objorderMaster != null)
+                            {
+                                if (OrderItemDetails != null)
+                                {
+                                    foreach (var item in OrderItemDetails)
+                                    {
+                                        item.OrderMasterID = objorderMaster.OrderMasterID;
+                                        item.InvoiceDate = orderDetails.InvoiceDate;
+                                    }
+
+                                    OrderItemsIds = ordercaller.AddOrderItem(new OrderService(_connectionSting), OrderItemDetails, authenticate.TenantId, authenticate.UserMasterID);
+
+                                }
+                                else
+                                {
+                                    OrderItemsIds = Convert.ToString(objorderMaster.OrderMasterID) + "|0|1";
+                                }
+
+                            }
+
+                            storeClaimMaster.OrderMasterID = objorderMaster.OrderMasterID;
+                            storeClaimMaster.OrderItemID = OrderItemsIds;
+                        }
+
+                    }
+
+
+                }
+                #endregion
+                StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
                 storeClaimMaster.TenantID = authenticate.TenantId;
                 storeClaimMaster.CreatedBy = authenticate.UserMasterID;
                 int result = storeClaimCaller.InsertRaiseClaim(new StoreClaimService(_connectionSting), storeClaimMaster, finalAttchment);
@@ -175,9 +230,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string statusMessage = "";
             try
             {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 objClaimComment = storeClaimCaller.GetClaimComment(new StoreClaimService(_connectionSting), ClaimID);
                 statusCode =
-                   objClaimComment == null ?
+                   objClaimComment.Count==0?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
@@ -203,18 +261,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetClaimList")]
-        public ResponseModel GetClaimList()
+        public ResponseModel GetClaimList(int tab_For)
         {
-            List<CustomTaskMasterDetails> objtaskMaster = new List<CustomTaskMasterDetails>();
+            List<CustomClaimList> objClaimMaster = new List<CustomClaimList>();
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                objtaskMaster = storeClaimCaller.GetClaimList(new StoreClaimService(_connectionSting));
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                objClaimMaster = storeClaimCaller.GetClaimList(new StoreClaimService(_connectionSting), tab_For, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
-                   objtaskMaster.Count == 0 ?
+                   objClaimMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -223,7 +284,121 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = objtaskMaster;
+                objResponseModel.ResponseData = objClaimMaster;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Claim By ID
+        /// </summary>
+        /// <param name="TicketId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetClaimByID")]
+        public ResponseModel GetClaimByID(int ClaimID)
+        {
+            CustomClaimByID objClaimMaster = new CustomClaimByID();
+            StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                string url = configuration.GetValue<string>("APIURL") + _ClaimProductImage;
+                objClaimMaster = storeClaimCaller.GetClaimByID(new StoreClaimService(_connectionSting), ClaimID, authenticate.TenantId, authenticate.UserMasterID, url);
+                StatusCode =
+                   objClaimMaster == null ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objClaimMaster;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Store Claim Comment By Approvel
+        /// </summary>
+        /// <param name="CommentForId"></param>
+        ///    <param name="ID"></param>
+        ///   <param name="Comment"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("StoreClaimCommentByApprovel")]
+        public ResponseModel StoreClaimCommentByApprovel(int ClaimID, string Comment)
+        {
+            StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                int result = storeClaimCaller.AddClaimCommentByApprovel(new StoreClaimService(_connectionSting), ClaimID, Comment, authenticate.UserMasterID);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Claim Comment For Approvel
+        /// </summary>
+        /// <param name="TaskId"></param>
+        [HttpPost]
+        [Route("GetClaimCommentForApprovel")]
+        public ResponseModel GetClaimCommentForApprovel(int ClaimID)
+        {
+            List<CommentByApprovel> objClaimComment = new List<CommentByApprovel>();
+            StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                objClaimComment = storeClaimCaller.GetClaimCommentForApprovel(new StoreClaimService(_connectionSting), ClaimID);
+                statusCode =
+                   objClaimComment.Count==0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objClaimComment;
             }
             catch (Exception)
             {

@@ -11,6 +11,9 @@
         public double ClaimPercent { get; set; }
         public string OrderIDs { get; set; }
         public int CreatedBy { get; set; }
+        public int CustomerID { get; set; }
+        public int OrderMasterID { get; set; }
+        public string OrderItemID { get; set; }
 
     }
 }
