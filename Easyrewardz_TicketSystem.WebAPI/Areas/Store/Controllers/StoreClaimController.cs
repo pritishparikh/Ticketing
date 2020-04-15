@@ -118,7 +118,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                                 }
                                 else
                                 {
-                                    OrderItemsIds = Convert.ToString(objorderMaster.OrderMasterID) + "|0|1";
+                                    //OrderItemsIds = Convert.ToString(objorderMaster.OrderMasterID) + "|0|1";
+                                    OrderItemsIds = Convert.ToString(objorderMaster.OrderMasterID) + "|1";
                                 }
 
                             }
