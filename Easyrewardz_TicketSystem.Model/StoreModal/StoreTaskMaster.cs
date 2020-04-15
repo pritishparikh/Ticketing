@@ -331,4 +331,14 @@ namespace Easyrewardz_TicketSystem.Model
         public TaskTicketDetails TaskTicketDetails { get; set; }
     }
 
+    public class StoreTaskProcressBar
+    {
+        public int Progress { get; set; }
+        public string ProgressIn { get; set; }
+        public string RemainingTime { get; set; }
+        public string ClosureTaskDate { get; set; }
+        public string ColorName { get; set; }
+        public string ColorCode { get; set; }
+    }
+
 }

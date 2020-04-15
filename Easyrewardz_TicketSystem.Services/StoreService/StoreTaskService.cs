@@ -704,6 +704,66 @@ namespace Easyrewardz_TicketSystem.Services
             return Assignedto;
         }
 
+        /// <summary>
+        /// Get Store Task ProcressBar
+        /// </summary>
+        /// <param name="TaskId"></param>
+        /// <param name="TaskBy"></param>
+        /// <returns></returns>
+        public List<StoreTaskProcressBar> GetStoreTaskProcressBar(int TaskId, int TaskBy)
+        {
+            DataSet ds = new DataSet();
+            List<StoreTaskProcressBar> objresult = new List<StoreTaskProcressBar>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_StoreTaskProcressBar", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                cmd.Parameters.AddWithValue("@_TaskId", TaskId);
+                cmd.Parameters.AddWithValue("@_TaskBy", TaskBy);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        StoreTaskProcressBar result = new StoreTaskProcressBar
+                        {
+                            Progress = Convert.ToInt32(ds.Tables[0].Rows[0]["Progress"]),
+                            ProgressIn = ds.Tables[0].Rows[0]["ProgressIn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ProgressIn"]),
+                            RemainingTime = ds.Tables[0].Rows[0]["RemainingTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["RemainingTime"]),
+                            ClosureTaskDate = ds.Tables[0].Rows[0]["ClosureTaskDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ClosureTaskDate"]),
+                            ColorName = ds.Tables[0].Rows[0]["ColorName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ColorName"]),
+                            ColorCode = ds.Tables[0].Rows[0]["ColorCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ColorCode"])
+                        };
+                        objresult.Add(result);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objresult;
+        }
 
         #region Campaign
 

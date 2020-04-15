@@ -484,6 +484,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get Store Task ProcressBar
+        /// </summary>
+        /// <param name="Function_ID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreTaskProcressBar")]
+        public ResponseModel GetStoreTaskProcressBar(int TaskId, int TaskBy)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            List<StoreTaskProcressBar> objresult = new List<StoreTaskProcressBar>();
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreTaskCaller taskcaller = new StoreTaskCaller();
+
+                objresult = taskcaller.GetStoreTaskProcressBar(new StoreTaskService(_connectionSting), TaskId, TaskBy);
+                StatusCode =
+                objresult.Count == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objresult;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
         #region Campaign
 
         /// <summary>

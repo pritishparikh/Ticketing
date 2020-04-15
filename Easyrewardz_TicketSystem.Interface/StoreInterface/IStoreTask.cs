@@ -18,6 +18,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<CustomStoreTaskDetails> GetStoreTaskByTicket(int tenantID, int userID);
         StoreTaskWithTicket GetStoreTicketingTaskByTaskID(int TaskID, int TenantID, int UserID);
         List<CustomUserAssigned> GetAssignedTo(int Function_ID);
+        List<StoreTaskProcressBar> GetStoreTaskProcressBar(int TaskId, int TaskBy);
 
         List<StoreCampaign> GetStoreCampaignCustomer(int TenantID, int UserID);
         CampaignStatusResponse GetCampaignStatusResponse(int TenantID, int UserID);
