@@ -649,7 +649,60 @@ namespace Easyrewardz_TicketSystem.Services
             return StoreTaskWithTicketDetials;
         }
 
+        /// <summary>
+        /// Get Assigned To 
+        /// </summary>
+        /// <param name="Function_ID"></param>
+        /// <returns></returns>
+        public List<CustomUserAssigned> GetAssignedTo(int Function_ID)
+        {
+            DataSet ds = new DataSet();
+            List<CustomUserAssigned> Assignedto = new List<CustomUserAssigned>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreAssignedToByFunctionID", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
 
+                cmd.Parameters.AddWithValue("@Function_ID", Function_ID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomUserAssigned assigned = new CustomUserAssigned
+                        {
+                            UserID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]),
+                            UserName = Convert.ToString(ds.Tables[0].Rows[i]["UserName"])
+                        };
+                        Assignedto.Add(assigned);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return Assignedto;
+        }
 
 
         #region Campaign

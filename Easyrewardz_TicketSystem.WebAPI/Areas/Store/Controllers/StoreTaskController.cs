@@ -445,6 +445,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get Assigned To
+        /// </summary>
+        /// <param name="Function_ID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetAssignedTo")]
+        public ResponseModel GetAssignedTo(int Function_ID)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            List<CustomUserAssigned> objresult = new List<CustomUserAssigned>();
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreTaskCaller taskcaller = new StoreTaskCaller();
+
+                objresult = taskcaller.GetAssignedTo(new StoreTaskService(_connectionSting), Function_ID);
+                StatusCode =
+                objresult.Count == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objresult;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
         #region Campaign
 
         /// <summary>
