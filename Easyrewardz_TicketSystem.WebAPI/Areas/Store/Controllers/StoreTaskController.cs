@@ -487,7 +487,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
         /// <summary>
         /// Get Store Task ProcressBar
         /// </summary>
-        /// <param name="Function_ID"></param>
+        /// <param name="TaskId"></param>
+        /// <param name="TaskBy"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetStoreTaskProcressBar")]
