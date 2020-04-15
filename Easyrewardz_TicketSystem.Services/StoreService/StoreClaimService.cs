@@ -363,7 +363,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Claim_Percent", storeClaimMaster.ClaimPercent); 
                 cmd.Parameters.AddWithValue("@Customer_ID", storeClaimMaster.CustomerID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+                result = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception)
             {
