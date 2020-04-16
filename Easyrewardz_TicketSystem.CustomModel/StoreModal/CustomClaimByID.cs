@@ -14,6 +14,13 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string SubCategoryName { get; set; }
         public int IssueTypeID { get; set; }
         public string IssueTypeName { get; set; }
+        public int CustomerID { get; set; }
+        public string CustomerName  { get; set; }
+        public string CustomerPhoneNumber { get; set; }
+        public string CustomerAlternateNumber { get; set; }
+        public string EmailID { get; set; }
+        public string AlternateEmailID { get; set; }
+        public string Gender { get; set; }
         public int CreatedBy { get; set; }
         public string RaiseBy { get; set; }
         public string CreationOn { get; set; }
