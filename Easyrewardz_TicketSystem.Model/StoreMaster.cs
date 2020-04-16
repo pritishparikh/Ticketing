@@ -31,5 +31,6 @@ namespace Easyrewardz_TicketSystem.Model
         public string Pincode { get; set; }
 
         public string BrandIDs { get; set; }
+        public int LpassStoreID { get; set; }
     }
 }

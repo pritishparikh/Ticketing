@@ -4,8 +4,10 @@ using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -362,6 +364,47 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
+        #region attach order OLD APPROACH
+
+        /// <summary>
+        /// attach order
+        /// </summary>
+        /// <param name="OrderitemID"></param>
+        /// <param name="TicketId"></param>
+        /// <returns></returns>
+        //[HttpPost]
+        //[Route("attachorder")]
+        //public ResponseModel AttachOrder(string OrderID, int TicketId)
+        //{
+        //    OrderCaller ordercaller = new OrderCaller();
+        //    ResponseModel objResponseModel = new ResponseModel();
+        //    int StatusCode = 0;
+        //    string statusMessage = "";
+        //    try
+        //    {
+        //        string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+        //        Authenticate authenticate = new Authenticate();
+        //        authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+        //        int result = ordercaller.AttachOrder(new OrderService(connectioSting), OrderID, TicketId, authenticate.UserMasterID);
+        //        StatusCode =
+        //        result == 0 ?
+        //               (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+        //        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+        //        objResponseModel.Status = true;
+        //        objResponseModel.StatusCode = StatusCode;
+        //        objResponseModel.Message = statusMessage;
+        //        objResponseModel.ResponseData = result;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //    return objResponseModel;
+        //}
+
+        #endregion
+
         /// <summary>
         /// attach order
         /// </summary>
@@ -370,22 +413,85 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("attachorder")]
-        public ResponseModel AttachOrder(string OrderID, int TicketId)
+        public ResponseModel AttachOrder(IFormFile File)
         {
             OrderCaller ordercaller = new OrderCaller();
             ResponseModel objResponseModel = new ResponseModel();
+            OrderMaster orderDetails = new OrderMaster();
+            List<OrderItem> OrderItemDetails = new List<OrderItem>();
             int StatusCode = 0;
             string statusMessage = "";
+            string OrderID = string.Empty;
+            int TicketId = 0;
+            int result = 0;
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                int result = ordercaller.AttachOrder(new OrderService(connectioSting), OrderID, TicketId, authenticate.UserMasterID);
+                var Keys = Request.Form;
+
+                // get order details from form
+                orderDetails = JsonConvert.DeserializeObject<OrderMaster>(Keys["orderDetails"]);
+                OrderItemDetails = JsonConvert.DeserializeObject<List<OrderItem>>(Keys["orderItemDetails"]);
+
+                OrderID = Convert.ToString(Keys["OrderID"]);
+                TicketId = Convert.ToInt32(Keys["TicketId"]);
+
+                if (!string.IsNullOrEmpty(OrderID) && TicketId > 0)
+                {
+
+                    #region check orderdetails and item details 
+
+                    if (orderDetails != null)
+                    {
+                        if (orderDetails.OrderMasterID.Equals(0))
+                        {
+                            string OrderNumber = string.Empty;
+                            string OrderItemsIds = string.Empty;
+                            OrderMaster objorderMaster = null;
+
+                            //call insert order
+                            orderDetails.CreatedBy = authenticate.UserMasterID;
+                            OrderNumber = ordercaller.addOrder(new OrderService(connectioSting), orderDetails, authenticate.TenantId);
+                            if (!string.IsNullOrEmpty(OrderNumber))
+                            {
+                                objorderMaster = ordercaller.getOrderDetailsByNumber(new OrderService(connectioSting), OrderNumber, authenticate.TenantId);
+
+                                if (objorderMaster != null)
+                                {
+                                    if (OrderItemDetails != null)
+                                    {
+                                        foreach (var item in OrderItemDetails)
+                                        {
+                                            item.OrderMasterID = objorderMaster.OrderMasterID;
+                                            item.InvoiceDate = orderDetails.InvoiceDate;
+                                        }
+
+                                        OrderItemsIds = ordercaller.AddOrderItem(new OrderService(connectioSting), OrderItemDetails, authenticate.TenantId, authenticate.UserMasterID);
+                                    }
+                                    else
+                                    {
+                                        OrderItemsIds = Convert.ToString(objorderMaster.OrderMasterID) + "|0|1";
+                                    }
+
+                                    OrderID = OrderItemsIds;
+                                }
+                            }
+
+
+                        }
+                    }
+
+                    #endregion
+
+                    result = ordercaller.AttachOrder(new OrderService(connectioSting), OrderID, TicketId, authenticate.UserMasterID);
+
+                }
                 StatusCode =
                 result == 0 ?
-                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                       (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;

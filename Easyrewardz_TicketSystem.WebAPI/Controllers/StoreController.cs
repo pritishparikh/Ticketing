@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -149,6 +150,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
 
             }
             catch (Exception)
@@ -306,6 +308,47 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
+        #region attach store old approach 
+
+        ///// <summary>
+        ///// attach store
+        ///// </summary>
+        ///// <param name="StoreId"></param>
+        ///// <param name="TicketId"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //[Route("attachstore")]
+        //public ResponseModel Attachstore(string StoreId, int TicketId)
+        //{
+        //    StoreCaller newStore = new StoreCaller();
+        //    ResponseModel objResponseModel = new ResponseModel();
+        //    int StatusCode = 0;
+        //    string statusMessage = "";
+        //    try
+        //    {
+        //        string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+        //        Authenticate authenticate = new Authenticate();
+        //        authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+        //        int result = newStore.AttachStore(new StoreService(_connectionString), StoreId, TicketId, authenticate.UserMasterID);
+        //        StatusCode =
+        //        result == 0 ?
+        //               (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+        //        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+        //        objResponseModel.Status = true;
+        //        objResponseModel.StatusCode = StatusCode;
+        //        objResponseModel.Message = statusMessage;
+        //        objResponseModel.ResponseData = result;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //    return objResponseModel;
+        //}
+
+        #endregion
+
         /// <summary>
         /// attach store
         /// </summary>
@@ -314,11 +357,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("attachstore")]
-        public ResponseModel Attachstore(string StoreId, int TicketId)
+        public ResponseModel Attachstore(IFormFile File)
         {
             StoreCaller newStore = new StoreCaller();
             ResponseModel objResponseModel = new ResponseModel();
+            List<StoreMaster> storeMaster = new List<StoreMaster>();
             int StatusCode = 0;
+            int TicketId = 0; string StoreId = string.Empty;
+            int result = 0;
+            List<string> ListStoreDetails = new List<string>();
             string statusMessage = "";
             try
             {
@@ -326,10 +373,52 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                int result = newStore.AttachStore(new StoreService(_connectionString), StoreId, TicketId, authenticate.UserMasterID);
-                StatusCode =
-                result == 0 ?
-                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                var Keys = Request.Form;
+                StoreId = Convert.ToString(Keys["StoreId"]);
+                TicketId = Convert.ToInt32(Keys["TicketId"]);
+
+
+                if (!string.IsNullOrEmpty(StoreId) && TicketId > 0)
+                {
+                    #region check for store is from LPASS 
+
+
+                    storeMaster = JsonConvert.DeserializeObject<List<StoreMaster>>(Keys["storeDetails"]);
+
+                    if (storeMaster != null)
+                    {
+                        if (storeMaster.Count > 0)
+                        {
+                            foreach (var store in storeMaster)
+                            {
+                                if (store.StoreID.Equals(0))
+                                {
+
+                                    int InsertedStoreID = 0;
+                                    InsertedStoreID = newStore.AddStore(new StoreService(_connectionString), store, authenticate.TenantId, authenticate.UserMasterID);
+
+                                    if (InsertedStoreID > 0)
+                                    {
+                                        store.StoreVisitDate = string.IsNullOrEmpty(store.StoreVisitDate) ? "" : store.StoreVisitDate;
+                                        ListStoreDetails.Add(Convert.ToString(InsertedStoreID) + "|" + store.StoreVisitDate + "|" + store.Purpose);
+                                    }
+
+                                }
+                            }
+
+                            StoreId = ListStoreDetails.Count > 0 ? string.Join(',', ListStoreDetails) : StoreId;
+
+                        }
+
+                    }
+
+
+                    #endregion
+
+                    result = newStore.AttachStore(new StoreService(_connectionString), StoreId, TicketId, authenticate.UserMasterID);
+                }
+
+                StatusCode = result.Equals(0) ? (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
@@ -544,6 +633,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         }
         #endregion  
+
 
     }
 }
