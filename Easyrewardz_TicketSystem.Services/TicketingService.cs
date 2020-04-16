@@ -93,6 +93,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
             MySqlCommand cmd = new MySqlCommand();
             int ticketID = 0;
+            bool issentflag = false;
             try
             {
                 conn.Open();
@@ -130,7 +131,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@_TikcketTitle", string.IsNullOrEmpty(ticketingDetails.TicketTitle) ? "" : ticketingDetails.TicketTitle);
                 cmd1.Parameters.AddWithValue("@_StoreID", string.IsNullOrEmpty(ticketingDetails.StoreID) ? "" : ticketingDetails.StoreID);
                 // added for mailer check 
-                cmd1.Parameters.AddWithValue("@_Is_Sent", Convert.ToInt16(!string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody)));
+
+                issentflag = ticketingDetails.ticketingMailerQues != null && !string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody);
+                cmd1.Parameters.AddWithValue("@_Is_Sent", Convert.ToInt16(issentflag));
+            
 
                 cmd1.CommandType = CommandType.StoredProcedure;
 
