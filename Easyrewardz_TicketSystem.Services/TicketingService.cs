@@ -133,7 +133,7 @@ namespace Easyrewardz_TicketSystem.Services
                 // added for mailer check 
 
                 issentflag = ticketingDetails.ticketingMailerQues != null && ticketingDetails.ticketingMailerQues.Count > 0 &&
-                    !string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody);
+                    !string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody); 
                 cmd1.Parameters.AddWithValue("@_Is_Sent", Convert.ToInt16(issentflag));
             
 
