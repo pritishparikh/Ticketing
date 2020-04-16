@@ -15,7 +15,19 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <returns></returns>
         List<UserComment> GetClaimComment(int ClaimID);
         List<CustomClaimList> GetClaimList(int tabFor, int tenantID, int userID);
+        /// <summary>
+        /// Get Claim By ID
+        /// </summary>
+        /// <param name="ClaimID"></param>
+        /// <returns></returns>
         CustomClaimByID GetClaimByID(int ClaimID, int tenantID, int userID,string url);
+        /// <summary>
+        /// Store Claim Comment By Approvel
+        /// </summary>
+        /// <param name="CommentForId"></param>
+        ///    <param name="ID"></param>
+        ///   <param name="Comment"></param>
+        /// <returns></returns>
         int AddClaimCommentByApprovel(int ClaimID, string Comment, int UserID);
         /// <summary>
         /// GetClaimCommentForApprovel
@@ -23,7 +35,21 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="ClaimId">Id of the Claim</param>
         /// <returns></returns>
         List<CommentByApprovel> GetClaimCommentForApprovel(int ClaimID);
+        /// <summary>
+        /// Claim Approve Or Reject
+        /// </summary>
+        /// <param name="claimID"></param>
+        ///    <param name="finalClaimAsked"></param>
+        ///   <param name="IsApprove"></param>
+        /// <returns></returns>
         int ClaimApprove(int claimID, double finalClaimAsked, bool IsApprove, int userMasterID, int tenantId);
+        /// <summary>
+        /// Claim Re Assign
+        /// </summary>
+        /// <param name=""></param>
+        ///    <param name="claimID"></param>
+        ///   <param name="Comment"></param>
+        /// <returns></returns>
         int AssignClaim(int claimID, int assigneeID, int userMasterID, int tenantId);
     }
 }

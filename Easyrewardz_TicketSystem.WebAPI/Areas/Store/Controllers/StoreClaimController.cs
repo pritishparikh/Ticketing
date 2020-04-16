@@ -297,7 +297,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Claim By ID
         /// </summary>
-        /// <param name="TicketId"></param>
+        /// <param name="ClaimID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetClaimByID")]
@@ -447,7 +447,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// Claim Approve Or Reject
+        /// Claim Re Assign
         /// </summary>
         /// <param name=""></param>
         ///    <param name="claimID"></param>

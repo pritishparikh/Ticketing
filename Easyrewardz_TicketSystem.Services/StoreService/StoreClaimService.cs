@@ -199,16 +199,16 @@ namespace Easyrewardz_TicketSystem.Services
 
                         customClaimList.CommentByStores = ds.Tables[2].AsEnumerable().Select(x => new CommentByStore()
                         {
-                            Name = Convert.ToString(ds.Tables[0].Rows[i]["Name"]),
-                            Comment = Convert.ToString(ds.Tables[0].Rows[i]["Comment"]),
-                            CommentDate = Convert.ToString(ds.Tables[0].Rows[i]["CommentDate"])
+                            Name = x.Field<object>("Name") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Name")),
+                            Comment = x.Field<object>("Comment") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Comment")),
+                            CommentDate = x.Field<object>("CommentDate") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CommentDate"))
                         }).ToList();
 
                         customClaimList.CommentByApprovels = ds.Tables[3].AsEnumerable().Select(x => new CommentByApprovel()
                         {
-                            Name = Convert.ToString(ds.Tables[0].Rows[i]["Name"]),
-                            Comment = Convert.ToString(ds.Tables[0].Rows[i]["Comment"]),
-                            CommentDate = Convert.ToString(ds.Tables[0].Rows[i]["CommentDate"])
+                            Name = x.Field<object>("Name") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Name")),
+                            Comment = x.Field<object>("Comment") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Comment")),
+                            CommentDate = x.Field<object>("CommentDate") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CommentDate"))
                         }).ToList();
 
                     }
