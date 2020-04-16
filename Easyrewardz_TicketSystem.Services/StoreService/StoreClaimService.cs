@@ -82,6 +82,38 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
+        public int AssignClaim(int claimID, int assigneeID, int userMasterID, int tenantId)
+        {
+
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_ClaimReAssign", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@claim_ID", claimID);
+                cmd.Parameters.AddWithValue("@assignee_ID", assigneeID);
+                cmd.Parameters.AddWithValue("@userMaster_ID", userMasterID);
+                cmd.Parameters.AddWithValue("@tenant_Id", tenantId);
+                cmd.CommandType = CommandType.StoredProcedure;
+                result = cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+
         public int ClaimApprove(int claimID, double finalClaimAsked, bool IsApprove, int userMasterID, int tenantId)
         {
             int success = 0;

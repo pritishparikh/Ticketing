@@ -24,5 +24,6 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <returns></returns>
         List<CommentByApprovel> GetClaimCommentForApprovel(int ClaimID);
         int ClaimApprove(int claimID, double finalClaimAsked, bool IsApprove, int userMasterID, int tenantId);
+        int AssignClaim(int claimID, int assigneeID, int userMasterID, int tenantId);
     }
 }

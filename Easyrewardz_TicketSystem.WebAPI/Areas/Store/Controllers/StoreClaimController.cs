@@ -411,9 +411,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Claim Approve Or Reject
         /// </summary>
-        /// <param name="CommentForId"></param>
-        ///    <param name="ID"></param>
-        ///   <param name="Comment"></param>
+        /// <param name="claimID"></param>
+        ///    <param name="finalClaimAsked"></param>
+        ///   <param name="IsApprove"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("IsClaimApprove")]
@@ -430,6 +430,44 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 int result = storeClaimCaller.ClaimApprove(new StoreClaimService(_connectionSting), claimID, finalClaimAsked, IsApprove, authenticate.UserMasterID, authenticate.TenantId);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Claim Approve Or Reject
+        /// </summary>
+        /// <param name=""></param>
+        ///    <param name="claimID"></param>
+        ///   <param name="Comment"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("ClaimReAssign")]
+        public ResponseModel ClaimReAssign(int claimID, int assigneeID)
+        {
+            StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                int result = storeClaimCaller.AssignClaim(new StoreClaimService(_connectionSting), claimID, assigneeID,  authenticate.UserMasterID, authenticate.TenantId);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
