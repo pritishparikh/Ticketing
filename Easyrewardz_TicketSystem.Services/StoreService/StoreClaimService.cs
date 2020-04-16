@@ -144,19 +144,18 @@ namespace Easyrewardz_TicketSystem.Services
                         for (int i = 0; i < ds.Tables[4].Rows.Count; i++)
                         {
                             {
-                                CustomOrderMaster customOrderMaster = new CustomOrderMaster
-                                {
-                                    OrderMasterID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]),
-                                    InvoiceNumber = ds.Tables[0].Rows[i]["InvoiceNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]),
-                                    InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"]),
-                                    OrdeItemPrice = ds.Tables[0].Rows[i]["OrderPrice"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OrderPrice"]),
-                                    OrderPricePaid = ds.Tables[0].Rows[i]["PricePaid"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["PricePaid"])
-                                };
+                                CustomOrderMaster customOrderMaster = new CustomOrderMaster();
+
+                                customOrderMaster.OrderMasterID = Convert.ToInt32(ds.Tables[4].Rows[i]["OrderMasterID"]);
+                                customOrderMaster.InvoiceNumber = ds.Tables[4].Rows[i]["InvoiceNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[i]["InvoiceNumber"]);
+                                customOrderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[4].Rows[i]["InvoiceDate"]);
+                                customOrderMaster.OrdeItemPrice = ds.Tables[4].Rows[i]["OrderPrice"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[4].Rows[i]["OrderPrice"]);
+                                customOrderMaster.OrderPricePaid = ds.Tables[4].Rows[i]["PricePaid"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[4].Rows[i]["PricePaid"]);                            
                                 customOrderMaster.DateFormat = customOrderMaster.InvoiceDate.ToString("dd/MMM/yyyy");
-                                customOrderMaster.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                                customOrderMaster.StoreAddress = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
-                                customOrderMaster.Discount = ds.Tables[0].Rows[i]["Discount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Discount"]);
-                                int orderMasterId = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderMasterID"]);
+                                customOrderMaster.StoreCode = ds.Tables[4].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[i]["StoreCode"]);
+                                customOrderMaster.StoreAddress = ds.Tables[4].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[i]["Address"]);
+                                customOrderMaster.Discount = ds.Tables[4].Rows[i]["Discount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[4].Rows[i]["Discount"]);
+                                int orderMasterId = Convert.ToInt32(ds.Tables[4].Rows[i]["OrderMasterID"]);
                                 customOrderMaster.OrderItems = ds.Tables[5].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("OrderMasterID")).
                                 Equals(orderMasterId)).Select(x => new OrderItem()
                                 {
