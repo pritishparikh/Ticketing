@@ -112,9 +112,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             var Keys = Request.Form;
             ticketingDetails = JsonConvert.DeserializeObject<TicketingDetails>(Keys["ticketingDetails"]);
 
-            // get order details from form
-            orderDetails = JsonConvert.DeserializeObject<OrderMaster>(Keys["orderDetails"]);
-            OrderItemDetails = JsonConvert.DeserializeObject<List<OrderItem>>(Keys["orderItemDetails"]);
+           
 
             // get order details from form
             orderDetails = JsonConvert.DeserializeObject<OrderMaster>(Keys["orderDetails"]);
