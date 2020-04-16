@@ -23,5 +23,6 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="ClaimId">Id of the Claim</param>
         /// <returns></returns>
         List<CommentByApprovel> GetClaimCommentForApprovel(int ClaimID);
+        int ClaimApprove(int claimID, double finalClaimAsked, bool IsApprove, int userMasterID, int tenantId);
     }
 }

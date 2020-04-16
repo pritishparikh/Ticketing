@@ -407,6 +407,44 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Claim Approve Or Reject
+        /// </summary>
+        /// <param name="CommentForId"></param>
+        ///    <param name="ID"></param>
+        ///   <param name="Comment"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("IsClaimApprove")]
+        public ResponseModel IsClaimApprove(int claimID,double finalClaimAsked ,bool IsApprove)
+        {
+            StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                int result = storeClaimCaller.ClaimApprove(new StoreClaimService(_connectionSting), claimID, finalClaimAsked, IsApprove, authenticate.UserMasterID, authenticate.TenantId);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
         #endregion
     }
 }

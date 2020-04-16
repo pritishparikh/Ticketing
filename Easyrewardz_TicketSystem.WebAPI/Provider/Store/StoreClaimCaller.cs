@@ -21,6 +21,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ClaimRepository = storeClaim;
             return _ClaimRepository.AddClaimComment(ClaimID, Comment, UserID);
         }
+        public int ClaimApprove(IStoreClaim storeClaim, int claimID, double finalClaimAsked, bool IsApprove, int userMasterID,int tenantId)
+        {
+            _ClaimRepository = storeClaim;
+            return _ClaimRepository.ClaimApprove(claimID, finalClaimAsked, IsApprove, userMasterID, tenantId);
+        }
         public List<UserComment> GetClaimComment(IStoreClaim storeClaim , int ClaimID)
         {
             _ClaimRepository = storeClaim;
