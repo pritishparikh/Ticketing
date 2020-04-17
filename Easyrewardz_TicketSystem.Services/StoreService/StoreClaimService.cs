@@ -499,7 +499,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         public int RaiseClaim(StoreClaimMaster storeClaimMaster, string finalAttchment)
         {
-            int result = 0;
+            int ClaimID = 0;
             try
             {
                 conn.Open();
@@ -515,7 +515,34 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Claim_Percent", storeClaimMaster.ClaimPercent); 
                 cmd.Parameters.AddWithValue("@Customer_ID", storeClaimMaster.CustomerID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                result = Convert.ToInt32(cmd.ExecuteScalar());
+                ClaimID = Convert.ToInt32(cmd.ExecuteScalar());
+
+                if (storeClaimMaster.Comments.Count > 0)
+                {
+                    for (int j = 0; j < storeClaimMaster.Comments.Count; j++)
+                    {
+                        int taskId = 0;
+                        try
+                        {
+                            conn.Open();
+                            MySqlCommand cmd1 = new MySqlCommand("SP_AddStoreClaimComment", conn)
+                            {
+                                Connection = conn
+                            };
+                            cmd1.Parameters.AddWithValue("@Claim_ID", ClaimID);
+                            cmd1.Parameters.AddWithValue("@_Comments", storeClaimMaster.Comments[j].Comment);
+                            cmd1.Parameters.AddWithValue("@User_ID", storeClaimMaster.CreatedBy);
+                            cmd1.CommandType = CommandType.StoredProcedure;
+                            taskId = Convert.ToInt32(cmd1.ExecuteScalar());
+
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+
+                    }
+                }
             }
             catch (Exception)
             {
@@ -528,7 +555,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return result;
+            return ClaimID;
         }
         #endregion
     }

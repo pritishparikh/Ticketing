@@ -1,4 +1,6 @@
-﻿namespace Easyrewardz_TicketSystem.Model
+﻿using System.Collections.Generic;
+
+namespace Easyrewardz_TicketSystem.Model
 {
     public class StoreClaimMaster
     {
@@ -14,6 +16,12 @@
         public int CustomerID { get; set; }
         public int OrderMasterID { get; set; }
         public string OrderItemID { get; set; }
+        public List<Comments> Comments  { get; set; }
 
+    }
+    public class Comments 
+    {
+        public int ID { get; set; }
+        public string Comment { get; set; }
     }
 }
