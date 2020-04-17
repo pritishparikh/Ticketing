@@ -514,35 +514,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Order_IDs", string.IsNullOrEmpty(storeClaimMaster.OrderItemID) ? "" : storeClaimMaster.OrderItemID);
                 cmd.Parameters.AddWithValue("@Claim_Percent", storeClaimMaster.ClaimPercent); 
                 cmd.Parameters.AddWithValue("@Customer_ID", storeClaimMaster.CustomerID);
+                cmd.Parameters.AddWithValue("@Ticket_ID", storeClaimMaster.TicketID);
+                cmd.Parameters.AddWithValue("@Ticketing_TaskID", storeClaimMaster.TaskID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                ClaimID = Convert.ToInt32(cmd.ExecuteScalar());
-
-                if (storeClaimMaster.Comments.Count > 0)
-                {
-                    for (int j = 0; j < storeClaimMaster.Comments.Count; j++)
-                    {
-                        int taskId = 0;
-                        try
-                        {
-                            conn.Open();
-                            MySqlCommand cmd1 = new MySqlCommand("SP_AddStoreClaimComment", conn)
-                            {
-                                Connection = conn
-                            };
-                            cmd1.Parameters.AddWithValue("@Claim_ID", ClaimID);
-                            cmd1.Parameters.AddWithValue("@_Comments", storeClaimMaster.Comments[j].Comment);
-                            cmd1.Parameters.AddWithValue("@User_ID", storeClaimMaster.CreatedBy);
-                            cmd1.CommandType = CommandType.StoredProcedure;
-                            taskId = Convert.ToInt32(cmd1.ExecuteScalar());
-
-                        }
-                        catch (Exception ex)
-                        {
-                            throw ex;
-                        }
-
-                    }
-                }
+                ClaimID = Convert.ToInt32(cmd.ExecuteScalar());            
             }
             catch (Exception)
             {
