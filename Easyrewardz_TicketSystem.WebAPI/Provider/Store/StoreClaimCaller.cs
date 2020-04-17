@@ -56,5 +56,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ClaimRepository = storeClaim;
             return _ClaimRepository.GetClaimCommentForApprovel(ClaimID);
         }
+        public List<CustomOrderwithCustomerDetails> GetOrderDetailByticketID(IStoreClaim storeClaim, int TicketID, int TenantID)
+        {
+            _ClaimRepository = storeClaim;
+            return _ClaimRepository.GetOrderDetailByTicketID(TicketID, TenantID);
+
+        }
     }
 }

@@ -51,5 +51,13 @@ namespace Easyrewardz_TicketSystem.Interface
         ///   <param name="Comment"></param>
         /// <returns></returns>
         int AssignClaim(int claimID, int assigneeID, int userMasterID, int tenantId);
+        /// <summary>
+        /// Get Order and Customer Detail By TicketID
+        /// </summary>
+        /// <param name=""></param>
+        ///    <param name="claimID"></param>
+        ///   <param name="Comment"></param>
+        /// <returns></returns>
+        List<CustomOrderwithCustomerDetails> GetOrderDetailByTicketID(int TicketID, int TenantID);
     }
 }
