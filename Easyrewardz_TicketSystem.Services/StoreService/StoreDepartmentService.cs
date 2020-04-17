@@ -145,7 +145,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_getFunctionByMultipleDepartmentId", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_getFunctionByMultipleDepartmentId", conn); 
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Department_ID", string.IsNullOrEmpty(DepartmentIds) ? "": DepartmentIds.TrimEnd(','));
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);

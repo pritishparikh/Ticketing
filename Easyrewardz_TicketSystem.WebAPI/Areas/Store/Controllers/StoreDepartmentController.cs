@@ -348,7 +348,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getFunctionNameByMultipleDepartmentIds")]
-        public ResponseModel getFunctionNameByMultipleDepartmentIds(string DepartmentIds)
+        public ResponseModel getFunctionNameByMultipleDepartmentIds(string DepartmentIds) 
         {
             List<StoreFunctionModel> objFunctionList = new List<StoreFunctionModel>();
             ResponseModel objResponseModel = new ResponseModel();
