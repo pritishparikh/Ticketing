@@ -16,6 +16,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string IssueTypeName { get; set; }
         public int ClaimAskFor { get; set; }
         public int CustomerID { get; set; }
+        public int TicketID { get; set; }
+        public int TicketingTaskID { get; set; }
         public string CustomerName  { get; set; }
         public string CustomerPhoneNumber { get; set; }
         public string CustomerAlternateNumber { get; set; }
