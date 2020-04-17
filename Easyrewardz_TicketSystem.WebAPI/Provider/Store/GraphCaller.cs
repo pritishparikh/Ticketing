@@ -1,9 +1,7 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -15,6 +13,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _IGraph = _Graph;
             return _IGraph.GetUserList(TenantID, UserID);
+        }
+
+        public GraphModal GetGraphCountData(IGraph _Graph, int TenantID, int UserID, string UserIds, string BrandIDs)
+        {
+            _IGraph = _Graph;
+            return _IGraph.GetGraphCountData(TenantID, UserID, UserIds, BrandIDs);
         }
     }
 }

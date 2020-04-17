@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Easyrewardz_TicketSystem.CustomModel;
+﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -64,6 +61,44 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = userdetails;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Graph Count Data
+        /// </summary>
+        /// <param name="UserIds"></param>
+        /// <param name="BrandIDs"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetGraphCountData")]
+        public ResponseModel GetGraphCountData([FromBody]GraphCountDataRequest GraphCountData)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            GraphModal graphmodalObj = new GraphModal();
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                GraphCaller graphcaller = new GraphCaller();
+
+                graphmodalObj = graphcaller.GetGraphCountData(new GraphService(_connectionSting), authenticate.TenantId, authenticate.UserMasterID, GraphCountData.UserIds, GraphCountData.BrandIDs);
+                StatusCode =(int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = graphmodalObj;
             }
             catch (Exception)
             {
