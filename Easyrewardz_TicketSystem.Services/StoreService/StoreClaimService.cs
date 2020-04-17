@@ -191,6 +191,7 @@ namespace Easyrewardz_TicketSystem.Services
                         customClaimList.AlternateEmailID = ds.Tables[0].Rows[i]["AltEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AltEmailID"]);
                         customClaimList.Gender = ds.Tables[0].Rows[i]["Gender"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Gender"]);
                         customClaimList.ClaimAskFor= ds.Tables[0].Rows[i]["ClaimPercent"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ClaimPercent"]);
+                        customClaimList.TargetClouserDate = ds.Tables[0].Rows[i]["ClosureDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureDate"]);
                         customClaimList.Attachments = ds.Tables[1].AsEnumerable().Select(x => new ClaimAttachment()
                         {
                             ClaimAttachmentId = Convert.ToInt32(x.Field<int>("ClaimAttachmentId")),

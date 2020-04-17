@@ -27,6 +27,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string CreationOn { get; set; }
         public string AssignTo { get; set; }
         public string Status { get; set; }
+        public string TargetClouserDate { get; set; }
         public List<ClaimAttachment> Attachments { get; set; }
         public List<CommentByStore> CommentByStores { get; set; }
         public List<CommentByApprovel> CommentByApprovels { get; set; }
