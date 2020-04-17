@@ -341,6 +341,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get Function Name By Department ID
+        /// </summary>
+        /// <param name="DepartmentId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("getFunctionNameByMultipleDepartmentIds")]
+        public ResponseModel getFunctionNameByMultipleDepartmentIds(string DepartmentIds)
+        {
+            List<StoreFunctionModel> objFunctionList = new List<StoreFunctionModel>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreDepartmentCaller newMasterChannel = new StoreDepartmentCaller();
+                objFunctionList = newMasterChannel.GetStoreFunctionbyMultiDepartment(new StoreDepartmentService(_connectioSting), DepartmentIds, authenticate.TenantId);
+                StatusCode =
+                objFunctionList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objFunctionList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+
         [HttpPost]
         [Route("CreateDepartment")]
         public ResponseModel CreateDepartment([FromBody] CreateStoreDepartmentModel createDepartmentModel)

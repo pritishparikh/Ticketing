@@ -76,6 +76,8 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return departmentMasters;
         }
+
+
         /// <summary>
         /// Get Function By DepartmentID
         /// </summary>
@@ -124,6 +126,59 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return funcationMasters;
         }
+
+
+
+        /// <summary>
+        /// Get Function By multiple DepartmentIDs
+        /// </summary>
+        /// <param name="DepartmentID"></param>
+        /// <returns></returns>
+        public List<StoreFunctionModel> GetStoreFunctionbyMultiDepartment(string DepartmentIds, int TenantID)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<StoreFunctionModel> funcationMasters = new List<StoreFunctionModel>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_getFunctionByMultipleDepartmentId", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Department_ID", string.IsNullOrEmpty(DepartmentIds) ? "": DepartmentIds.TrimEnd(','));
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreFunctionModel function = new StoreFunctionModel();
+                        function.FunctionID = Convert.ToInt32(ds.Tables[0].Rows[i]["FunctionID"]);
+                        function.FuncationName = Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]);
+                        funcationMasters.Add(function);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return funcationMasters;
+        }
+
+
 
         /// <summary>
         /// Add Department
