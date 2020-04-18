@@ -59,5 +59,6 @@ namespace Easyrewardz_TicketSystem.Interface
         ///   <param name="Comment"></param>
         /// <returns></returns>
         List<CustomOrderwithCustomerDetails> GetOrderDetailByTicketID(int TicketID, int TenantID);
+        List<CustomStoreUserList> GetUserList(int TenantID, int TaskID);
     }
 }

@@ -499,6 +499,50 @@ namespace Easyrewardz_TicketSystem.Services
             return objorderMaster;
         }
 
+        public List<CustomStoreUserList> GetUserList(int tenantID, int assignID)
+        {
+            DataSet ds = new DataSet();
+            List<CustomStoreUserList> listUser = new List<CustomStoreUserList>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetClaimAssignDropdown", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@assign_ID", assignID);
+                cmd.Connection = conn;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomStoreUserList customUserList = new CustomStoreUserList();
+                        customUserList.User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        customUserList.UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
+                        listUser.Add(customUserList);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return listUser;
+        }
+
         public int RaiseClaim(StoreClaimMaster storeClaimMaster, string finalAttchment)
         {
             int ClaimID = 0;
