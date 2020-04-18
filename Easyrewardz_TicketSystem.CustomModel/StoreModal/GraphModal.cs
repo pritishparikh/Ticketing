@@ -18,4 +18,52 @@
         public string DateFrom { get; set; }
         public string DateEnd { get; set; }
     }
+
+
+    public class GraphData
+    {
+        public OpenTaskDepartmentWise OpenTaskDepartmentWise { get; set; }
+        public TaskByPriority TaskByPriority { get; set; }
+        public OpenCampaignByType OpenCampaignByType { get; set; }
+        public ClaimVsInvoiceArticle ClaimVsInvoiceArticle { get; set; }
+        public OpenClaimStatus OpenClaimStatus { get; set; }
+        public ClaimVsInvoiceAmount ClaimVsInvoiceAmount { get; set; }
+    }
+
+    public class OpenTaskDepartmentWise
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int Value { get; set; }
+    }
+    public class TaskByPriority
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int Value { get; set; }
+    }
+    public class OpenCampaignByType
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int Value { get; set; }
+    }
+    public class ClaimVsInvoiceArticle
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int Value { get; set; }
+    }
+    public class OpenClaimStatus
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int Value { get; set; }
+    }
+    public class ClaimVsInvoiceAmount
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int Value { get; set; }
+    }
 }

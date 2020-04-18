@@ -7,6 +7,7 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface IGraph
     {
         List<User> GetUserList(int TenantID, int UserID);
-        GraphModal GetGraphCountData(int TenantID, int UserID, string UserIds, string BrandIDs);
+        GraphModal GetGraphCountData(int TenantID, int UserID, GraphCountDataRequest GraphCountData);
+        GraphData GetGraphData(int TenantID, int UserID, GraphCountDataRequest GraphCountData);
     }
 }
