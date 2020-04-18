@@ -35,7 +35,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public List<CommentByStore> CommentByStores { get; set; }
         public List<CommentByApprovel> CommentByApprovels { get; set; }
         public CustomOrderMaster CustomOrderMaster { get; set; }
-        
     }
     public class ClaimAttachment
     {
