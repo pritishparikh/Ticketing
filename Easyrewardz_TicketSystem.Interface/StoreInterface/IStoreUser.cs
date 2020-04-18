@@ -32,6 +32,9 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateStoreUser(StoreUserDetailsModel userdetails);
         int UpdateUserProfileDetail(UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel);
 
+        CustomChangePassword GetStoreUserCredentails(int userID, int TenantID, int IsStoreUser);
+
+
         #region Profile Mapping
 
         List<StoreUserDepartmentList> BindDepartmentByBrandStore(int BrandID, int storeID);
@@ -53,6 +56,8 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<StoreClaimIssueTypeModel> GetClaimIssueTypeListBySubCategoryID(int TenantID, string SubCategoryIDs);
         #endregion
+
+
 
     }
 }

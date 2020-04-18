@@ -142,6 +142,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #endregion
 
+
+        public CustomChangePassword GetStoreUserCredentails(IStoreUser User, int userID, int TenantID, int IsStoreUser)
+        {
+            _StoreUserRepository = User;
+            return _StoreUserRepository.GetStoreUserCredentails(userID, TenantID, IsStoreUser);
+        }
+
         #endregion
     }
 }

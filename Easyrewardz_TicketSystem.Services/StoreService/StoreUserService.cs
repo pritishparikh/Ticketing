@@ -28,8 +28,14 @@ namespace Easyrewardz_TicketSystem.Services
         public int AddStoreUserPersonalDetails(StoreUserPersonalDetails personalDetails)
         {
             int UserID = 0;
+            string RandomPassword = string.Empty;
+            
             try
             {
+                
+                RandomPassword = SecurityService.Encrypt(CommonService.GeneratePassword());
+
+
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_InsertStoreUserPersonalDetails", conn);
                 cmd.Connection = conn;
@@ -42,8 +48,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Is_StoreUser", Convert.ToInt16(personalDetails.IsStoreUser));
                 cmd.Parameters.AddWithValue("@Tenant_ID", personalDetails.TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", personalDetails.UserID);
+                cmd.Parameters.AddWithValue("@_SecurePassword", RandomPassword);
                 cmd.CommandType = CommandType.StoredProcedure;
-                UserID = cmd.ExecuteNonQuery();
+                UserID = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
             catch (Exception )
@@ -1046,5 +1053,54 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         #endregion
+
+
+        public CustomChangePassword GetStoreUserCredentails(int userID, int TenantID, int IsStoreUser)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            CustomChangePassword customChangePassword = new CustomChangePassword();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreUserEmailandPassword", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@User_ID", userID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@Is_StoreUser", IsStoreUser);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        customChangePassword.UserID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        customChangePassword.EmailID = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                        customChangePassword.Password = ds.Tables[0].Rows[i]["SecurePassword"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SecurePassword"]);
+                    }
+                }
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return customChangePassword;
+        }
     }
 }

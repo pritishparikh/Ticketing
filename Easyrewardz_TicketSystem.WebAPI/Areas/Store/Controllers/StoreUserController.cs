@@ -1087,7 +1087,72 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 throw;
             }
             return objResponseModel;
-        }     
+        }
+
+        /// <summary>
+        /// Send Mail for changepassword
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="IsStoreUser"></param>
+        [HttpPost]
+        [Route("SendMailforchangepassword")]
+        public ResponseModel SendMailforchangepassword(int userID, int IsStoreUser = 1)
+        {
+            CustomChangePassword customChangePassword = new CustomChangePassword();
+            ResponseModel objResponseModel = new ResponseModel();
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                customChangePassword = userCaller.GetStoreUserCredentails(new StoreUserService(_connectioSting), userID, authenticate.TenantId, IsStoreUser);
+                if (customChangePassword.UserID > 0 && !string.IsNullOrEmpty(customChangePassword.Password) && !string.IsNullOrEmpty(customChangePassword.EmailID))
+                {
+                    MasterCaller masterCaller = new MasterCaller();
+                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
+                    securityCaller _securityCaller = new securityCaller();
+                    CommonService commonService = new CommonService();
+                    string encryptedEmailId = SecurityService.Encrypt(customChangePassword.EmailID);
+
+                    string decriptedPassword = SecurityService.DecryptStringAES(customChangePassword.Password);
+                    string url = configuration.GetValue<string>("websiteURL") + "/ChangePassword";
+                    string body = "Dear User, <br/>Please find the below details.  <br/><br/>" + "Your Email ID  : " + customChangePassword.EmailID + "<br/>" + "Your Password : " + decriptedPassword + "<br/><br/>" + "Click on Below link to change the Password <br/>" + url + "?Id:" + encryptedEmailId;
+                    bool isUpdate = _securityCaller.sendMailForChangePassword(new SecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID, body, authenticate.TenantId);
+                    if (isUpdate)
+                    {
+                        objResponseModel.Status = true;
+                        objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                        objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                        objResponseModel.ResponseData = "Mail sent successfully";
+                    }
+                    else
+                    {
+                        objResponseModel.Status = false;
+                        objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                        objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                        objResponseModel.ResponseData = "Mail sent failure";
+                    }
+                }
+
+                else
+                {
+                    objResponseModel.Status = false;
+                    objResponseModel.StatusCode = (int)EnumMaster.StatusCode.RecordNotFound;
+                    objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.RecordNotFound);
+                    objResponseModel.ResponseData = "Sorry User does not exist or active";
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
         #endregion
     }
 }
