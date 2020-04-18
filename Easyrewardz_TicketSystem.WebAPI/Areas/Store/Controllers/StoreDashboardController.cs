@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -22,6 +23,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private readonly string _radisCacheServerAddress;
         private readonly string rootPath;
         private readonly string _UploadedBulkFile;
+        private readonly string _profileImg_Resources;
+        private readonly string StoreProfileImage;
+        private readonly string _API_Url;
         #endregion
 
         #region Constructor
@@ -32,6 +36,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
             _UploadedBulkFile = configuration.GetValue<string>("FileUploadLocation");
             rootPath = configuration.GetValue<string>("APIURL");
+            _API_Url = configuration.GetValue<string>("APIURL");
+            _profileImg_Resources = configuration.GetValue<string>("ProfileImg_Resources");
+            StoreProfileImage = configuration.GetValue<string>("StoreProfileImage");
         }
         #endregion
 
@@ -78,5 +85,43 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Store Logged In Account Details
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("StoreLoggedInAccountDetails")]
+        public ResponseModel StoreLoggedInAccountDetails()
+        {
+            LoggedInAgentModel loggedinAccInfo = null;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0; string statusMessage = "";
+            StoreDashboard storeDashboard = new StoreDashboard();
+            try
+            {
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                var folderName = Path.Combine(_profileImg_Resources, StoreProfileImage);
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                loggedinAccInfo = storeDashboard.GetLogginAccountInfo(new StoreDashboardService(_connectioSting),
+                    authenticate.TenantId, authenticate.UserMasterID, pathToSave);
+
+                statusCode = loggedinAccInfo != null ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = loggedinAccInfo != null ? loggedinAccInfo : null;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
     }
 }
