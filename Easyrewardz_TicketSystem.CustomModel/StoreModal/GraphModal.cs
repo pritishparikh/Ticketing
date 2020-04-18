@@ -1,4 +1,6 @@
-﻿namespace Easyrewardz_TicketSystem.CustomModel
+﻿using System.Collections.Generic;
+
+namespace Easyrewardz_TicketSystem.CustomModel
 {
     public class GraphModal
     {
@@ -22,12 +24,12 @@
 
     public class GraphData
     {
-        public OpenTaskDepartmentWise OpenTaskDepartmentWise { get; set; }
-        public TaskByPriority TaskByPriority { get; set; }
-        public OpenCampaignByType OpenCampaignByType { get; set; }
-        public ClaimVsInvoiceArticle ClaimVsInvoiceArticle { get; set; }
-        public OpenClaimStatus OpenClaimStatus { get; set; }
-        public ClaimVsInvoiceAmount ClaimVsInvoiceAmount { get; set; }
+        public List<OpenTaskDepartmentWise> OpenTaskDepartmentWise { get; set; }
+        public List<TaskByPriority> TaskByPriority { get; set; }
+        public List<OpenCampaignByType> OpenCampaignByType { get; set; }
+        public List<ClaimVsInvoiceArticle> ClaimVsInvoiceArticle { get; set; }
+        public List<OpenClaimStatus> OpenClaimStatus { get; set; }
+        public List<ClaimVsInvoiceAmount> ClaimVsInvoiceAmount { get; set; }
     }
 
     public class OpenTaskDepartmentWise
