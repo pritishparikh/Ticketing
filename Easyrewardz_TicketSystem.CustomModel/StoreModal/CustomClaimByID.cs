@@ -27,6 +27,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public int CreatedBy { get; set; }
         public string RaiseBy { get; set; }
         public string CreationOn { get; set; }
+        public int AssigneeID { get; set; }
         public string AssignTo { get; set; }
         public string Status { get; set; }
         public string TargetClouserDate { get; set; }
