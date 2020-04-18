@@ -236,6 +236,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
+
         /// <summary>
         /// AddBrandStore
         /// </summary>
