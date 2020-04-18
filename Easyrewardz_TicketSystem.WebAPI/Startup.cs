@@ -22,6 +22,7 @@ namespace Easyrewardz_TicketSystem.WebAPI
             Configuration = configuration;
         }
 
+
         public IConfiguration Configuration { get; }
         public ISecurity Security { get; }
 

@@ -980,7 +980,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         }
 
-
         /// <summary>
         /// Get Store User Profile Detail
         /// </summary>
