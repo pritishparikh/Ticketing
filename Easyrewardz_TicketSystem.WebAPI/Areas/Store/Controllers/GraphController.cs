@@ -113,7 +113,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name="GraphCountData"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("GetGraphCountData")]
+        [Route("GetGraphData")]
         public ResponseModel GetGraphData([FromBody]GraphCountDataRequest GraphCountData)
         {
             ResponseModel objResponseModel = new ResponseModel();
