@@ -84,7 +84,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _StoreUserRepository.GetStoreUserOnUserID(tenantID, UserID);
         }
 
-
+        public List<UpdateUserProfiledetailsModel> GetUserProfileDetails(IStoreUser Users, int UserMasterID, string url)
+        {
+            _StoreUserRepository = Users;
+            return _StoreUserRepository.GetUserProfileDetails(UserMasterID, url);
+        }
+        public int UpdateUserProfileDetail(IStoreUser Users, UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel)
+        {
+            _StoreUserRepository = Users;
+            return _StoreUserRepository.UpdateUserProfileDetail(UpdateUserProfiledetailsModel);
+        }
         #region Profile Mapping
 
         public List<StoreUserDepartmentList> GetDepartmentByBrandStore(IStoreUser Users,int BrandID, int storeID)

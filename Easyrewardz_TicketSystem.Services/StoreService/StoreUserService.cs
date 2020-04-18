@@ -957,7 +957,89 @@ namespace Easyrewardz_TicketSystem.Services
             return issueTypeList;
         }
 
-       
+        public List<UpdateUserProfiledetailsModel> GetUserProfileDetails(int UserMasterID, string url)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<UpdateUserProfiledetailsModel> UpdateUserProfiledetailsModel = new List<UpdateUserProfiledetailsModel>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreUserProfileDetails", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@User_ID", UserMasterID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        UpdateUserProfiledetailsModel model = new UpdateUserProfiledetailsModel();
+                        model.UserId = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        model.FirstName = ds.Tables[0].Rows[i]["FirstName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
+                        model.LastName = ds.Tables[0].Rows[i]["LastName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["LastName"]);
+                        model.MobileNo = ds.Tables[0].Rows[i]["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                        model.EmailId = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                        model.DesignationID = Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
+                        model.DesignationName = ds.Tables[0].Rows[i]["DesignationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
+                        model.ProfilePicture = ds.Tables[0].Rows[i]["ProfilePicture"] == DBNull.Value ? string.Empty : url + "/" + Convert.ToString(ds.Tables[0].Rows[i]["ProfilePicture"]);
+                        UpdateUserProfiledetailsModel.Add(model);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return UpdateUserProfiledetailsModel;
+        }
+
+        public int UpdateUserProfileDetail(UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel)
+        {
+            int UserID = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateStoreUserProfileDetails", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@User_ID", UpdateUserProfiledetailsModel.UserId);
+                cmd.Parameters.AddWithValue("@First_Name", UpdateUserProfiledetailsModel.FirstName);
+                cmd.Parameters.AddWithValue("@Last_Name", UpdateUserProfiledetailsModel.LastName);
+                cmd.Parameters.AddWithValue("@Mobile_No", UpdateUserProfiledetailsModel.MobileNo);
+                cmd.Parameters.AddWithValue("@Email_ID", UpdateUserProfiledetailsModel.EmailId);
+                cmd.Parameters.AddWithValue("@Designation_ID", UpdateUserProfiledetailsModel.DesignationID);
+                cmd.Parameters.AddWithValue("@Profile_Picture", UpdateUserProfiledetailsModel.ProfilePicture);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UserID = Convert.ToInt32(cmd.ExecuteScalar());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UserID;
+        }
+
+
 
 
 
