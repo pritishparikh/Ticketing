@@ -16,6 +16,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string IssueTypeName { get; set; }
         public int ClaimAskFor { get; set; }
         public int CustomerID { get; set; }
+        public int TicketID { get; set; }
+        public int TicketingTaskID { get; set; }
         public string CustomerName  { get; set; }
         public string CustomerPhoneNumber { get; set; }
         public string CustomerAlternateNumber { get; set; }
@@ -25,6 +27,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public int CreatedBy { get; set; }
         public string RaiseBy { get; set; }
         public string CreationOn { get; set; }
+        public int AssigneeID { get; set; }
         public string AssignTo { get; set; }
         public string Status { get; set; }
         public string TargetClouserDate { get; set; }
@@ -32,7 +35,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public List<CommentByStore> CommentByStores { get; set; }
         public List<CommentByApprovel> CommentByApprovels { get; set; }
         public CustomOrderMaster CustomOrderMaster { get; set; }
-        
     }
     public class ClaimAttachment
     {

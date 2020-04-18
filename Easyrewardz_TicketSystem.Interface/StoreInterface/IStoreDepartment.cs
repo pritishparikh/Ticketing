@@ -21,7 +21,16 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         /// <param name="DepartmentID"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        List<StoreFunctionModel> GetStoreFunctionByDepartment(int DepartmentID, int TenantID);
+        List<StoreFunctionModel> GetStoreFunctionByDepartment(int DepartmentID, int TenantID); 
+
+
+        /// <summary>
+        /// Get function by mutilpe department
+        /// </summary>
+        /// <param name="DepartmentIDs"></param>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        List<StoreFunctionModel> GetStoreFunctionbyMultiDepartment(string DepartmentIds, int TenantID);
 
         /// <summary>
         /// Add Department

@@ -483,6 +483,87 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Get Order and Customer Detail By TicketID
+        /// </summary>
+        /// <param name="TicketID"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetOrderwithCustomerDetailByTicketID")]
+        public ResponseModel GetOrderandCustomerDetailByTicketID(int ticketID)
+        {
+            List<CustomOrderwithCustomerDetails> objorderMaster = new List<CustomOrderwithCustomerDetails>();
+            StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                objorderMaster = storeClaimCaller.GetOrderDetailByticketID(new StoreClaimService(_connectionSting), ticketID, authenticate.TenantId);
+                StatusCode =
+                   objorderMaster.Count == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objorderMaster;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// UserListDropdown
+        /// </summary>
+        /// <param name="TicketID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("ClaimAssignDropdown")]
+        public ResponseModel ClaimAssignDropdown(int assignID)
+        {
+            List<CustomStoreUserList> objUserList = new List<CustomStoreUserList>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                objUserList = storeClaimCaller.UserList(new StoreClaimService(_connectionSting), authenticate.TenantId, assignID);
+                StatusCode =
+                objUserList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objUserList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
         #endregion
     }
 }

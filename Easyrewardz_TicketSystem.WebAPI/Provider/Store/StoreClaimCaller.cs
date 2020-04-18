@@ -31,6 +31,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ClaimRepository = storeClaim;
             return _ClaimRepository.AssignClaim(claimID, assigneeID, userMasterID,tenantId);
         }
+        public List<CustomStoreUserList> UserList(IStoreClaim storeClaim, int assignID, int tenantId)
+        {
+            _ClaimRepository = storeClaim;
+            return _ClaimRepository.GetUserList(assignID, tenantId);
+        }
         public List<UserComment> GetClaimComment(IStoreClaim storeClaim , int ClaimID)
         {
             _ClaimRepository = storeClaim;
@@ -55,6 +60,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _ClaimRepository = storeClaim;
             return _ClaimRepository.GetClaimCommentForApprovel(ClaimID);
+        }
+        public List<CustomOrderwithCustomerDetails> GetOrderDetailByticketID(IStoreClaim storeClaim, int TicketID, int TenantID)
+        {
+            _ClaimRepository = storeClaim;
+            return _ClaimRepository.GetOrderDetailByTicketID(TicketID, TenantID);
+
         }
     }
 }
