@@ -216,6 +216,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _issueList = _issue;
             return _issueList.GetIssueTypeList(TenantID, SubCategoryID);
         }
+        public List<IssueType> GetIssueTypeOnSearch(IIssueType _issue, int TenantID, int SubCategoryID, string searchText)
+        {
+            _issueList = _issue;
+            return _issueList.GetIssueTypeOnSearch(TenantID, SubCategoryID, searchText);
+        }
         public List<IssueType> IssueTypeListByMultiSubCategoryID(IIssueType _issue, int TenantID, string SubCategoryIDs)
         {
             _issueList = _issue;

@@ -158,6 +158,49 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+        /// <summary>
+        /// Get IssueType On Seach
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetIssueTypeOnSeach")]
+        public ResponseModel GetIssueTypeOnSeach(int SubCategoryID, string searchText)
+        {
+            List<IssueType> objIssueTypeList = new List<IssueType>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                MasterCaller newMasterBrand = new MasterCaller();
+
+                objIssueTypeList = newMasterBrand.GetIssueTypeOnSearch(new IssueTypeServices(connectioSting), authenticate.TenantId, SubCategoryID, searchText);
+
+                StatusCode =
+                objIssueTypeList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objIssueTypeList;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
         #endregion
     }
 }
