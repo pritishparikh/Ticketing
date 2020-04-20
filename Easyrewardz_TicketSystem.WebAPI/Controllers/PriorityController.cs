@@ -280,6 +280,50 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+
+        /// <summary>
+        /// ValidatePriorityNameExist
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("ValidatePriorityNameExist")]
+        public ResponseModel ValidatePriorityNameExist(string PriorityName)
+        {
+            string resultMessage = "";
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                MasterCaller newMaster = new MasterCaller();
+
+                resultMessage = newMaster.VallidatePriority(new PriorityService(connectionString), PriorityName, authenticate.TenantId);
+
+                statusCode =
+              string.IsNullOrEmpty(resultMessage) ?
+                   (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = resultMessage;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
         #endregion
     }
 }

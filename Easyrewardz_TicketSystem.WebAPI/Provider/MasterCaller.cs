@@ -200,7 +200,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _priorityList = _priority;
             return _priorityList.UpdatePriorityOrder(TenantID, selectedPriorityID, currentPriorityID, PriorityFor);
         }
+        public string VallidatePriority(IPriority _priority,string priorityName, int tenantID)
+        {
+            _priorityList = _priority;
+            return _priorityList.ValidatePriority(priorityName, tenantID);
 
+        }
         #endregion
 
         #region Methods for the Channel of the Purchase

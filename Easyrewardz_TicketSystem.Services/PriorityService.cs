@@ -279,7 +279,38 @@ namespace Easyrewardz_TicketSystem.Services
 
             return isUpdate;
         }
-               
+
+        public string ValidatePriority(string priorityName, int TenantID)
+        {
+
+            string Message = "";
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("Sp_ValidatePriorityExists", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@priority_Name", priorityName);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                Message = Convert.ToString(cmd.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return Message;
+        }
+
         #endregion
     }
 }
