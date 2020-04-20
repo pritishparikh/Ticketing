@@ -18,7 +18,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _dashboard = dashboard;
             return _dashboard.GetTaskDataForStoreDashboard(modelname);
-        }        
+        }
+        public LoggedInAgentModel GetLogginAccountInfo(IStoreDashboard dashboard, int tenantID, int UserId, string ProfilePicPath)
+        {
+            _dashboard = dashboard;
+            return _dashboard.GetLogginAccountInfo(tenantID, UserId, ProfilePicPath);
+        }
         #endregion
     }
 }
