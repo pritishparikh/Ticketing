@@ -258,6 +258,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 StoreCaller newStore = new StoreCaller();
 
                 objstoreList = newStore.StoreList(new StoreService(_connectionString), authenticate.TenantId);
+
+                //set zone here
+
+                 if(objstoreList.Count > 0)
+                {
+                    foreach(var stores in objstoreList)
+                    {
+                        stores.Zone = stores.ZoneID > 0 ? CommonFunction.GetEnumDescription((EnumMaster.Zones)stores.ZoneID) : string.Empty;
+                    }
+
+                }
+
                 StatusCode =
                 objstoreList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
