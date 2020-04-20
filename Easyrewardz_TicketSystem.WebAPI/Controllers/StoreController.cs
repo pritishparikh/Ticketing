@@ -258,6 +258,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 StoreCaller newStore = new StoreCaller();
 
                 objstoreList = newStore.StoreList(new StoreService(_connectionString), authenticate.TenantId);
+
+                //set zone here
+
+                 if(objstoreList.Count > 0)
+                {
+                    foreach(var stores in objstoreList)
+                    {
+                        stores.Zone = stores.ZoneID > 0 ? CommonFunction.GetEnumDescription((EnumMaster.Zones)stores.ZoneID) : string.Empty;
+                    }
+
+                }
+
                 StatusCode =
                 objstoreList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -589,8 +601,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string SuccessFileName = "StoreSuccessFile_" + timeStamp + ".csv";
                 string ErrorFileName = "StoreErrorFile_" + timeStamp + ".csv";
 
-                string SuccessFileUrl = rootPath + "/" + BulkUploadFilesPath + "/" + DownloadFile + "/Success/" + SuccessFileName;
-                string ErrorFileUrl = rootPath + "/" + BulkUploadFilesPath + "/" + DownloadFile + "/Error/" + ErrorFileName;
+                string SuccessFileUrl = rootPath + "/" + BulkUpload + "/" + DownloadFile + "/Success/" + SuccessFileName;
+                string ErrorFileUrl = rootPath + "/" + BulkUpload + "/" + DownloadFile + "/Error/" + ErrorFileName;
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
                     successfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Success", SuccessFileName), CSVlist[0]);
