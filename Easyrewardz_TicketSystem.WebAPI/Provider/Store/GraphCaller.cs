@@ -15,10 +15,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _IGraph.GetUserList(TenantID, UserID);
         }
 
-        public GraphModal GetGraphCountData(IGraph _Graph, int TenantID, int UserID, string UserIds, string BrandIDs)
+        public GraphModal GetGraphCountData(IGraph _Graph, int TenantID, int UserID, GraphCountDataRequest GraphCountData)
         {
             _IGraph = _Graph;
-            return _IGraph.GetGraphCountData(TenantID, UserID, UserIds, BrandIDs);
+            return _IGraph.GetGraphCountData(TenantID, UserID, GraphCountData);
+        }
+        public GraphData GetGraphData(IGraph _Graph, int TenantID, int UserID, GraphCountDataRequest GraphCountData)
+        {
+            _IGraph = _Graph;
+            return _IGraph.GetGraphData(TenantID, UserID, GraphCountData);
         }
     }
 }

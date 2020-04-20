@@ -180,6 +180,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
             /// </summary>
             [Description("Resolved")]
             Resolved = 212
+
         }
 
 
@@ -196,16 +197,29 @@ namespace Easyrewardz_TicketSystem.CustomModel
             New = 220,
 
             /// <summary>
-            ///TaskStatus - Open
+            ///TaskStatus - Open/Pending
             /// </summary>
             [Description("Open/Pending")]
             Open = 221,
 
             /// <summary>
-            ///TaskStatus - Pending 
+            ///TaskStatus - Resolved 
             /// </summary>
             [Description("Resolved")]
-            Resolved = 222
+            Resolved = 222,
+
+            /// <summary>
+            ///TaskStatus - Closed  
+            /// </summary>
+            [Description("Closed")]
+            Closed = 223,
+
+            /// <summary>
+            ///TaskStatus - Re-Opened
+            /// </summary>
+            [Description("Re-Opened")]
+            ReOpened = 224,
+
         }
 
         /// <summary>

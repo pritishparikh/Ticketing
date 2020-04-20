@@ -13,7 +13,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class StoreTaskController : ControllerBase
     {
         #region variable declaration
@@ -484,6 +484,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             return objResponseModel;
         }
 
+        [AllowAnonymous]
         /// <summary>
         /// Get Store Task ProcressBar
         /// </summary>

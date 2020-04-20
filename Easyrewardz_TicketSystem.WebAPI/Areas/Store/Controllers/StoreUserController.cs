@@ -5,12 +5,15 @@ using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -27,6 +30,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         private IConfiguration configuration;
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
+        private readonly string ProfileImg_Resources;
+        private readonly string StoreProfileImage;
+        private readonly string rootPath;
         #endregion
         #region Constructor
         /// <summary>
@@ -38,6 +44,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            rootPath = configuration.GetValue<string>("APIURL");
+            ProfileImg_Resources = configuration.GetValue<string>("ProfileImg_Resources");
+            StoreProfileImage = configuration.GetValue<string>("StoreProfileImage");
         }
         #endregion
 
@@ -103,8 +112,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
-              
-                if(userID > 0)
+
+                if (userID > 0)
                 {
                     Result = userCaller.CreateStoreUserProfiledetail(new StoreUserService(_connectioSting), authenticate.TenantId,
                      userID, BrandID, storeID, departmentId, functionIDs, designationID, reporteeID, authenticate.UserMasterID);
@@ -112,11 +121,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     StatusCode =
                    Result == 0 ?
                           (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
-                    
+
                 }
                 else
                 {
-                    Result= (int)EnumMaster.StatusCode.RecordNotFound;
+                    Result = (int)EnumMaster.StatusCode.RecordNotFound;
                 }
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -157,11 +166,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 storeUser.CreatedBy = authenticate.UserMasterID;
                 storeUser.TenantID = authenticate.TenantId;
 
-                if(storeUser.UserID > 0)
+                if (storeUser.UserID > 0)
                 {
                     Result = userCaller.CreateStoreUserMapping(new StoreUserService(_connectioSting), storeUser);
 
-                    StatusCode = Result == 0 ?(int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                    StatusCode = Result == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 }
                 else
                 {
@@ -190,7 +199,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <param name="editStoreUser"></param>
         [HttpPost]
-        [Route("ModifyStoreUser")] 
+        [Route("ModifyStoreUser")]
         public ResponseModel ModifyStoreUser([FromBody] StoreUserDetailsModel editStoreUser)
         {
             ResponseModel objResponseModel = new ResponseModel();
@@ -227,6 +236,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
+
         /// <summary>
         /// AddBrandStore
         /// </summary>
@@ -246,10 +256,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
-              Result = userCaller.AddBrandStore(new StoreUserService(_connectioSting), authenticate.TenantId, brandID, storeID,authenticate.UserMasterID);
-                    StatusCode =
-                   Result == 0 ?
-                          (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
+                Result = userCaller.AddBrandStore(new StoreUserService(_connectioSting), authenticate.TenantId, brandID, storeID, authenticate.UserMasterID);
+                StatusCode =
+               Result == 0 ?
+                      (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
@@ -270,7 +280,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="storeUser"></param>
         [HttpPost]
         [Route("UpdateUserBrandStore")]
-        public ResponseModel UpdateUserBrandStore(int UserID,int brandID, int storeID)
+        public ResponseModel UpdateUserBrandStore(int UserID, int brandID, int storeID)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -326,12 +336,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
-                deletecount = userCaller.DeleteStoreUser(new StoreUserService(_connectioSting),authenticate.TenantId, UserId, IsStoreUser,authenticate.UserMasterID);
+                deletecount = userCaller.DeleteStoreUser(new StoreUserService(_connectioSting), authenticate.TenantId, UserId, IsStoreUser, authenticate.UserMasterID);
 
                 StatusCode =
                deletecount == 0 ?
                       (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode); 
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
@@ -353,7 +363,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// Get  Store User List
         /// </summary>
         /// <param name="tenantID"></param>
-        
+
         /// <returns></returns>
         [HttpPost]
         [Route("GetStoreUsers")]
@@ -385,7 +395,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
             }
-            catch (Exception )
+            catch (Exception)
             {
                 throw;
             }
@@ -418,7 +428,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 objUser = userCaller.GetStoreUserOnUserID(new StoreUserService(_connectioSting), authenticate.TenantId, UserID);
 
-                StatusCode = objUser == null?
+                StatusCode = objUser == null ?
                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
@@ -600,7 +610,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
-                 objClaimModel = userCaller.GetClaimCategoryListByBrandID(new StoreUserService(_connectioSting), authenticate.TenantId, BrandIds);
+                objClaimModel = userCaller.GetClaimCategoryListByBrandID(new StoreUserService(_connectioSting), authenticate.TenantId, BrandIds);
 
                 StatusCode =
                objClaimModel.Count == 0 ?
@@ -969,6 +979,178 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
 
 
+        }
+
+        /// <summary>
+        /// Get Store User Profile Detail
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        [HttpPost]
+        [Route("GetStoreUserProfileDetail")]
+        public ResponseModel GetStoreUserProfileDetail()
+        {
+            List<UpdateUserProfiledetailsModel> objUserList = new List<UpdateUserProfiledetailsModel>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                string url = configuration.GetValue<string>("APIURL") + ProfileImg_Resources + "/" + StoreProfileImage;
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                StoreUserCaller userCaller = new StoreUserCaller();
+                objUserList = userCaller.GetUserProfileDetails(new StoreUserService(_connectioSting), authenticate.UserMasterID, url);
+                StatusCode =
+               objUserList.Count == 0 ?
+                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objUserList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// UpdateStoreUserProfileDetails
+        /// </summary>
+        /// <param name="File"></param>
+        /// <returns></returns>
+        /// 
+        [HttpPost]
+        [Route("UpdateStoreUserProfileDetails")]
+        public ResponseModel UpdateStoreUserProfileDetails(IFormFile File)
+        {
+            UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel = new UpdateUserProfiledetailsModel();
+            ProfileDetailsmodel profileDetailsmodel = new ProfileDetailsmodel();
+            var Keys = Request.Form;
+            UpdateUserProfiledetailsModel = JsonConvert.DeserializeObject<UpdateUserProfiledetailsModel>(Keys["UpdateUserProfiledetailsModel"]);
+            var file = Request.Form.Files;
+            string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
+            var folderName = Path.Combine(ProfileImg_Resources, StoreProfileImage);
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            ResponseModel objResponseModel = new ResponseModel();
+            try
+            {
+                if (file.Count > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(file[0].ContentDisposition).FileName.Trim('"');
+                    var fileName_Id = fileName.Replace(".", UpdateUserProfiledetailsModel.UserId + timeStamp + ".") + "";
+                    var fullPath = Path.Combine(pathToSave, fileName_Id);
+                    var dbPath = Path.Combine(folderName, fileName_Id);
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file[0].CopyTo(stream);
+                    }
+                    UpdateUserProfiledetailsModel.ProfilePicture = fileName_Id;
+                    string url = configuration.GetValue<string>("APIURL") + ProfileImg_Resources + "/" + StoreProfileImage + "/" + fileName_Id;
+                    profileDetailsmodel.ProfilePath = url;
+                }
+
+          
+                int StatusCode = 0;
+                string statusMessage = "";
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+                int Result = userCaller.UpdateUserProfileDetail(new StoreUserService(_connectioSting), UpdateUserProfiledetailsModel);
+
+                profileDetailsmodel.Result = Result;
+
+                StatusCode =
+               Result == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = profileDetailsmodel;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Send Mail for changepassword
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="IsStoreUser"></param>
+        [HttpPost]
+        [Route("SendMailforchangepassword")]
+        public ResponseModel SendMailforchangepassword(int userID, int IsStoreUser = 1)
+        {
+            CustomChangePassword customChangePassword = new CustomChangePassword();
+            ResponseModel objResponseModel = new ResponseModel();
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                customChangePassword = userCaller.GetStoreUserCredentails(new StoreUserService(_connectioSting), userID, authenticate.TenantId, IsStoreUser);
+                if (customChangePassword.UserID > 0 && !string.IsNullOrEmpty(customChangePassword.Password) && !string.IsNullOrEmpty(customChangePassword.EmailID))
+                {
+                    MasterCaller masterCaller = new MasterCaller();
+                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
+                    securityCaller _securityCaller = new securityCaller();
+                    CommonService commonService = new CommonService();
+                    string encryptedEmailId = SecurityService.Encrypt(customChangePassword.EmailID);
+
+                    string decriptedPassword = SecurityService.DecryptStringAES(customChangePassword.Password);
+                    string url = configuration.GetValue<string>("websiteURL") + "/ChangePassword";
+                    string body = "Dear User, <br/>Please find the below details.  <br/><br/>" + "Your Email ID  : " + customChangePassword.EmailID + "<br/>" + "Your Password : " + decriptedPassword + "<br/><br/>" + "Click on Below link to change the Password <br/>" + url + "?Id:" + encryptedEmailId;
+                    bool isUpdate = _securityCaller.sendMailForChangePassword(new SecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID, body, authenticate.TenantId);
+                    if (isUpdate)
+                    {
+                        objResponseModel.Status = true;
+                        objResponseModel.StatusCode = (int)EnumMaster.StatusCode.Success;
+                        objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.Success);
+                        objResponseModel.ResponseData = "Mail sent successfully";
+                    }
+                    else
+                    {
+                        objResponseModel.Status = false;
+                        objResponseModel.StatusCode = (int)EnumMaster.StatusCode.InternalServerError;
+                        objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.InternalServerError);
+                        objResponseModel.ResponseData = "Mail sent failure";
+                    }
+                }
+
+                else
+                {
+                    objResponseModel.Status = false;
+                    objResponseModel.StatusCode = (int)EnumMaster.StatusCode.RecordNotFound;
+                    objResponseModel.Message = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)(int)EnumMaster.StatusCode.RecordNotFound);
+                    objResponseModel.ResponseData = "Sorry User does not exist or active";
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
         }
 
         #endregion

@@ -171,9 +171,9 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-
                         customClaimList.ClaimID = ds.Tables[0].Rows[i]["ClaimID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ClaimID"]);
                         customClaimList.Status = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.ClaimStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
+                        customClaimList.AssigneeID = ds.Tables[0].Rows[i]["AssigneeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["AssigneeID"]);
                         customClaimList.AssignTo = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
                         customClaimList.BrandID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
                         customClaimList.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
@@ -192,6 +192,8 @@ namespace Easyrewardz_TicketSystem.Services
                         customClaimList.Gender = ds.Tables[0].Rows[i]["Gender"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Gender"]);
                         customClaimList.ClaimAskFor= ds.Tables[0].Rows[i]["ClaimPercent"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ClaimPercent"]);
                         customClaimList.TargetClouserDate = ds.Tables[0].Rows[i]["ClosureDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureDate"]);
+                        customClaimList.TicketID = ds.Tables[0].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
+                        customClaimList.TicketingTaskID = ds.Tables[0].Rows[i]["TicketingTaskID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketingTaskID"]);
                         customClaimList.Attachments = ds.Tables[1].AsEnumerable().Select(x => new ClaimAttachment()
                         {
                             ClaimAttachmentId = Convert.ToInt32(x.Field<int>("ClaimAttachmentId")),
@@ -497,6 +499,50 @@ namespace Easyrewardz_TicketSystem.Services
             return objorderMaster;
         }
 
+        public List<CustomStoreUserList> GetUserList(int tenantID, int assignID)
+        {
+            DataSet ds = new DataSet();
+            List<CustomStoreUserList> listUser = new List<CustomStoreUserList>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetClaimAssignDropdown", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@assign_ID", assignID);
+                cmd.Connection = conn;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomStoreUserList customUserList = new CustomStoreUserList();
+                        customUserList.User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+                        customUserList.UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
+                        listUser.Add(customUserList);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return listUser;
+        }
+
         public int RaiseClaim(StoreClaimMaster storeClaimMaster, string finalAttchment)
         {
             int ClaimID = 0;
@@ -514,35 +560,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Order_IDs", string.IsNullOrEmpty(storeClaimMaster.OrderItemID) ? "" : storeClaimMaster.OrderItemID);
                 cmd.Parameters.AddWithValue("@Claim_Percent", storeClaimMaster.ClaimPercent); 
                 cmd.Parameters.AddWithValue("@Customer_ID", storeClaimMaster.CustomerID);
+                cmd.Parameters.AddWithValue("@Ticket_ID", storeClaimMaster.TicketID);
+                cmd.Parameters.AddWithValue("@Ticketing_TaskID", storeClaimMaster.TaskID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                ClaimID = Convert.ToInt32(cmd.ExecuteScalar());
-
-                if (storeClaimMaster.Comments.Count > 0)
-                {
-                    for (int j = 0; j < storeClaimMaster.Comments.Count; j++)
-                    {
-                        int taskId = 0;
-                        try
-                        {
-                            conn.Open();
-                            MySqlCommand cmd1 = new MySqlCommand("SP_AddStoreClaimComment", conn)
-                            {
-                                Connection = conn
-                            };
-                            cmd1.Parameters.AddWithValue("@Claim_ID", ClaimID);
-                            cmd1.Parameters.AddWithValue("@_Comments", storeClaimMaster.Comments[j].Comment);
-                            cmd1.Parameters.AddWithValue("@User_ID", storeClaimMaster.CreatedBy);
-                            cmd1.CommandType = CommandType.StoredProcedure;
-                            taskId = Convert.ToInt32(cmd1.ExecuteScalar());
-
-                        }
-                        catch (Exception ex)
-                        {
-                            throw ex;
-                        }
-
-                    }
-                }
+                ClaimID = Convert.ToInt32(cmd.ExecuteScalar());            
             }
             catch (Exception)
             {

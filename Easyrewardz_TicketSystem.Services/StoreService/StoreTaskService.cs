@@ -153,6 +153,7 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
                 cmd.Parameters.AddWithValue("@_TaskID", TaskID);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -175,11 +176,15 @@ namespace Easyrewardz_TicketSystem.Services
                                 FunctionID = Convert.ToInt32(ds.Tables[0].Rows[0]["FunctionID"]),
                                 PriorityID = Convert.ToInt32(ds.Tables[0].Rows[0]["PriorityID"]),
                                 TaskStatusId = Convert.ToInt32(ds.Tables[0].Rows[0]["TaskStatusId"]),
+                                TaskStatusName = ds.Tables[0].Rows[0]["TaskStatusId"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[0]["TaskStatusId"])),
                                 AssignToName = ds.Tables[0].Rows[0]["AssignToName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["AssignToName"]),
                                 CreatedByName = ds.Tables[0].Rows[0]["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CreatedByName"]),
                                 StoreName = ds.Tables[0].Rows[0]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreName"]),
                                 Address = ds.Tables[0].Rows[0]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
-                                StoreCode = ds.Tables[0].Rows[0]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreCode"])
+                                StoreCode = ds.Tables[0].Rows[0]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreCode"]),
+                                CanEdit = Convert.ToInt32(ds.Tables[0].Rows[0]["CanEdit"]),
+                                CanSubmit = Convert.ToInt32(ds.Tables[0].Rows[0]["CanSubmit"]),
+                                IsAssignTo = Convert.ToInt32(ds.Tables[0].Rows[0]["IsAssignTo"]),
                             };
                         }
                     }
@@ -577,6 +582,7 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
                 cmd.Parameters.AddWithValue("@_TaskID", TaskID);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -600,11 +606,15 @@ namespace Easyrewardz_TicketSystem.Services
                                 FunctionID = Convert.ToInt32(ds.Tables[0].Rows[0]["FunctionID"]),
                                 PriorityID = Convert.ToInt32(ds.Tables[0].Rows[0]["PriorityID"]),
                                 TaskStatusId = Convert.ToInt32(ds.Tables[0].Rows[0]["TaskStatusId"]),
+                                TaskStatusName = ds.Tables[0].Rows[0]["TaskStatusId"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[0]["TaskStatusId"])),
                                 AssignToName = ds.Tables[0].Rows[0]["AssignToName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["AssignToName"]),
                                 CreatedByName = ds.Tables[0].Rows[0]["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CreatedByName"]),
                                 StoreName = ds.Tables[0].Rows[0]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreName"]),
                                 Address = ds.Tables[0].Rows[0]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
-                                StoreCode = ds.Tables[0].Rows[0]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreCode"])
+                                StoreCode = ds.Tables[0].Rows[0]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreCode"]),
+                                CanEdit = Convert.ToInt32(ds.Tables[0].Rows[0]["CanEdit"]),
+                                CanSubmit = Convert.ToInt32(ds.Tables[0].Rows[0]["CanSubmit"]),
+                                IsAssignTo = Convert.ToInt32(ds.Tables[0].Rows[0]["IsAssignTo"]),
                             };
                         }
                     }
