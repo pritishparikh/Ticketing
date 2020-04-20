@@ -502,8 +502,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string SuccessFileName = "UserSuccessFile_" + timeStamp + ".csv";
                 string ErrorFileName = "UserErrorFile_" + timeStamp + ".csv";
 
-                string SuccessFileUrl = rootPath + "/" + BulkUploadFilesPath + "/" + DownloadFile + "/Success/" + SuccessFileName;
-                string ErrorFileUrl = rootPath + "/" + BulkUploadFilesPath + "/" + DownloadFile + "/Error/" + ErrorFileName;
+                string SuccessFileUrl = rootPath + "/" + BulkUpload + "/" + DownloadFile + "/Success/" + SuccessFileName;
+                string ErrorFileUrl = rootPath + "/" + BulkUpload + "/" + DownloadFile + "/Error/" + ErrorFileName;
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
                 {
