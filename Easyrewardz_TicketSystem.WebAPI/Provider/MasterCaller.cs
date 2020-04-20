@@ -148,6 +148,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _subCategoryList = _SubCategory;
             return _subCategoryList.GetSubCategoryByCategoryID(CategoryID,TypeId);
         }
+        public List<SubCategory> GetSubCategoryByCategoryOnSearch(ISubCategories _SubCategory, int tenantID,int CategoryID, string searchText)
+        {
+            _subCategoryList = _SubCategory;
+            return _subCategoryList.GetSubCategoryByCategoryOnSearch(tenantID,CategoryID, searchText);
+        }
         public List<SubCategory> GetSubCategoryByMultiCategoryID(ISubCategories _SubCategory, string CategoryIDs)
         {
             _subCategoryList = _SubCategory;

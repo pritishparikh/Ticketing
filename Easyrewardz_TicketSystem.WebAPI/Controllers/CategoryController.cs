@@ -532,7 +532,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetCategoryOnSearch")]
-        public List<Category> GetCategoryOnSearch(int brandID, string searchText)
+        public ResponseModel GetCategoryOnSearch(int brandID, string searchText)
         {
             ResponseModel _objResponseModel = new ResponseModel();
             List<Category> objCategoryList = new List<Category>();
@@ -561,7 +561,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 throw;
             }
-            return objCategoryList;
+            return _objResponseModel;
         }
         #endregion
     }
