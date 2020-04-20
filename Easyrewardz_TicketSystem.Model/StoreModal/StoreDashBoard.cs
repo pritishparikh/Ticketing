@@ -42,4 +42,43 @@ namespace Easyrewardz_TicketSystem.Model
     }
 
 
+
+
+    public class StoreDashboardClaimModel
+    {
+        public int claimID { get; set; }
+        public int ticketID { get; set; }
+        public int claimissueType { get; set; }
+        public int ticketMapped { get; set; }
+        public int claimsubcat { get; set; }
+        public int assignTo { get; set; }
+        public int claimcat { get; set; }
+        public int claimraise { get; set; }
+        public int taskID { get; set; }
+        public int claimstatus { get; set; }
+        public int taskmapped { get; set; }
+        public int raisedby { get; set; }
+    }
+
+    public class StoreDashboardClaimResponseModel
+    {
+
+        public string claimID { get; set; }
+        public int ticketID { get; set; }
+        public string claimissueType { get; set; }
+        public int ticketMapped { get; set; }
+        public string claimsubcat { get; set; }
+        public string claimcat { get; set; }
+        public int claimraise { get; set; }
+        public int taskID { get; set; }
+        public string claimstatus { get; set; }
+        public int taskmapped { get; set; }
+        public int raisedby { get; set; }
+        public string CreatedOn { get; set; }
+        public string AssigntoId { get; set; }
+        public string createdID { get; set; }
+    }
+
+
+
 }

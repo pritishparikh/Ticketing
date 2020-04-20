@@ -7,5 +7,8 @@ namespace Easyrewardz_TicketSystem.Interface
     {   
         List<StoreDashboardResponseModel> GetTaskDataForStoreDashboard(StoreDashboardModel model);
 
+
+        List<StoreDashboardClaimResponseModel> GetClaimDataForStoreDashboard(StoreDashboardClaimModel model);
+
     }
 }
