@@ -125,8 +125,8 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         CustomerMaster customer = new CustomerMaster
                         {
-                            CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty: Convert.ToString(dt.Rows[i]["CustomerName"]),
-                            CustomerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? 0 :  Convert.ToInt32(dt.Rows[i]["CustomerID"])
+                            CustomerName = dt.Rows[i]["CustomerName"] == DBNull.Value ? string.Empty: Convert.ToString(dt.Rows[i]["CustomerName"]),
+                            CustomerID = dt.Rows[i]["CustomerID"] == DBNull.Value ? 0 :  Convert.ToInt32(dt.Rows[i]["CustomerID"])
                         };
 
                         customerMasters.Add(customer);
