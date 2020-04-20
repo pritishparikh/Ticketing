@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Model
 {
@@ -89,6 +88,14 @@ namespace Easyrewardz_TicketSystem.Model
         ///Task Comments
         /// </summary>
         public string StoreCode { get; set; }
+        /// <summary>
+        /// CanEdit
+        /// </summary>
+        public int CanEdit { get; set; }
+        /// <summary>
+        /// CanSubmit
+        /// </summary>
+        public int CanSubmit { get; set; }
     }
 
 

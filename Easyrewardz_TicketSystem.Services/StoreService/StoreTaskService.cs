@@ -153,6 +153,7 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
                 cmd.Parameters.AddWithValue("@_TaskID", TaskID);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -179,7 +180,9 @@ namespace Easyrewardz_TicketSystem.Services
                                 CreatedByName = ds.Tables[0].Rows[0]["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CreatedByName"]),
                                 StoreName = ds.Tables[0].Rows[0]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreName"]),
                                 Address = ds.Tables[0].Rows[0]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
-                                StoreCode = ds.Tables[0].Rows[0]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreCode"])
+                                StoreCode = ds.Tables[0].Rows[0]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreCode"]),
+                                CanEdit = Convert.ToInt32(ds.Tables[0].Rows[0]["CanEdit"]),
+                                CanSubmit = Convert.ToInt32(ds.Tables[0].Rows[0]["CanSubmit"]),
                             };
                         }
                     }
@@ -577,6 +580,7 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
                 cmd.Parameters.AddWithValue("@_TaskID", TaskID);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -604,7 +608,9 @@ namespace Easyrewardz_TicketSystem.Services
                                 CreatedByName = ds.Tables[0].Rows[0]["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CreatedByName"]),
                                 StoreName = ds.Tables[0].Rows[0]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreName"]),
                                 Address = ds.Tables[0].Rows[0]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
-                                StoreCode = ds.Tables[0].Rows[0]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreCode"])
+                                StoreCode = ds.Tables[0].Rows[0]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["StoreCode"]),
+                                CanEdit = Convert.ToInt32(ds.Tables[0].Rows[0]["CanEdit"]),
+                                CanSubmit = Convert.ToInt32(ds.Tables[0].Rows[0]["CanSubmit"]),
                             };
                         }
                     }
