@@ -150,6 +150,50 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Get SubCategory By Category On Search
+        /// </summary>
+        /// <param name="CategoryID"></param>
+        /// <param name="searchText"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetSubCategoryByCategoryOnSearch")]
+        public ResponseModel GetSubCategoryByCategoryOnSearch(int CategoryID, string searchText)
+        {
+            List<SubCategory> objSubCategory = new List<SubCategory>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                MasterCaller newMasterSubCat = new MasterCaller();
+
+                objSubCategory = newMasterSubCat.GetSubCategoryByCategoryOnSearch(new SubCategoryService(_connectioSting), authenticate.TenantId, CategoryID, searchText);
+
+                StatusCode =
+                objSubCategory.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objSubCategory;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
         #endregion
     }
 }
