@@ -454,22 +454,15 @@ namespace Easyrewardz_TicketSystem.Services
                         {
 
                             //for success file
-                            if (Bulkds.Tables[0].Rows.Count > 0)
-                            {
-                                SuccesFile = CommonService.DataTableToCsv(Bulkds.Tables[0]);
-                                csvLst.Add(SuccesFile);
-
-                                //uploadcount = UploadSLATarget(Bulkds.Tables[0], TenantID, CreatedBy); //upload SLA Target
-
-                            }
+                            SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(SuccesFile);
 
                             //for error file
-                            if (Bulkds.Tables[1].Rows.Count > 0)
-                            {
-                                ErroFile = CommonService.DataTableToCsv(Bulkds.Tables[1]);
-                                csvLst.Add(ErroFile);
+                            ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            csvLst.Add(ErroFile);
 
-                            }
+
+                            
 
                         }
                     }
@@ -477,7 +470,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
