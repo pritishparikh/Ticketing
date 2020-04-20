@@ -534,7 +534,57 @@ namespace Easyrewardz_TicketSystem.Services
 
             return result;
         }
+        /// <summary>
+        /// Get Category On Search
+        /// </summary>
+        /// <param name="brandID"></param>
+        /// <param name="searchText"></param>
+        /// <returns></returns>
+        public List<Category> GetCategoryOnSearch(int TenantID, int brandID, string searchText)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<Category> categoryList = new List<Category>();
 
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetCategoryOnSearch", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Brand_ID", brandID);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.Parameters.AddWithValue("@search_Text", searchText);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        Category category = new Category();
+                        category.CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
+                        category.CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        category.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
+
+                        categoryList.Add(category);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return categoryList;
+        }
 
 
     }

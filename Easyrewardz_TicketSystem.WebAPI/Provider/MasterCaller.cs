@@ -88,7 +88,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _categoryList = _category;
             return _categoryList.GetCategoryList(TenantID, BrandID);
         }
-
+        public List<Category> GetCategoryOnSearch(ICategory _category, int TenantID, int BrandID, string searchText)
+        {
+            _categoryList = _category;
+            return _categoryList.GetCategoryOnSearch(TenantID, BrandID, searchText);
+        }
         public int AddCategory(ICategory _category, string category, int TenantID, int UserID, int BrandID)
         {
             _categoryList = _category;
