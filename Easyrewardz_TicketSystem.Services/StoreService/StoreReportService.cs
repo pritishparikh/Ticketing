@@ -235,5 +235,48 @@ namespace Easyrewardz_TicketSystem.Services
             return deleteCount;
         }
 
+
+        /// <summary>
+        /// Save/Update  Store Re[ort
+        /// </summary>
+        /// <param name="StoreReportRequest"></param>
+        /// <returns></returns>
+        public int SaveStoreReport(StoreReportRequest ReportMaster)
+        {
+
+
+            int ReportID = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_SaveStoreReport", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", ReportMaster.TenantID);
+                cmd.Parameters.AddWithValue("@_ScheduleID", ReportMaster.ScheduleID);
+                cmd.Parameters.AddWithValue("@_ReportID", string.IsNullOrEmpty(ReportMaster.ReportName) ? "" : ReportMaster.ReportName);
+                cmd.Parameters.AddWithValue("@_ReportName", ReportMaster.ReportName);
+                cmd.Parameters.AddWithValue("@_StoreReportSearchParams", string.IsNullOrEmpty(ReportMaster.StoreReportSearchParams) ? "" : ReportMaster.StoreReportSearchParams);
+                cmd.Parameters.AddWithValue("@_CreatedBy", ReportMaster.CreatedBy);
+                cmd.Parameters.AddWithValue("@_ModifyBy", ReportMaster.ModifyBy);
+                cmd.Parameters.AddWithValue("@_IsActive", Convert.ToInt16(ReportMaster.IsActive));
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                ReportID = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return ReportID;
+        }
+
     }
 }

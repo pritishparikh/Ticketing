@@ -45,5 +45,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
+        public int InsertStoreReport(IStoreReport Report, StoreReportRequest ReportMaster)
+        {
+            _Reports = Report;
+            return _Reports.SaveStoreReport(ReportMaster);
+        }
+
     }
 }

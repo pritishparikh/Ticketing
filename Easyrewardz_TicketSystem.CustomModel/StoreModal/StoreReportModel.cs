@@ -55,4 +55,18 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         //ends here
         
     }
+
+    public class StoreReportRequest
+    {
+        public int ReportID { get; set; }
+        public int TenantID { get; set; }
+        public string ReportName { get; set; }
+        public bool IsActive { get; set; }
+        public int CreatedBy { get; set; }
+        public int ModifyBy { get; set; }
+        public int ScheduleID { get; set; }
+        public string StoreReportSearchParams { get; set; }
+
+    }
+
 }

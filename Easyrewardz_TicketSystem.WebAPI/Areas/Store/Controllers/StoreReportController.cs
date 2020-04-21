@@ -81,7 +81,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// Schedule
+        /// Schedule Store Report
         /// </summary>
         /// <param name="scheduleMaster"></param>
         /// <returns></returns>
@@ -203,5 +203,47 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Insert New report
+        /// </summary>
+        /// <param name="scheduleMaster"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("SaveStoreReport")]
+        public ResponseModel SaveStoreReport([FromBody]StoreReportRequest ReportMaster )
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreReportCaller reportCaller = new StoreReportCaller();
+                ReportMaster.CreatedBy = authenticate.UserMasterID;
+                ReportMaster.ModifyBy = authenticate.UserMasterID;
+                ReportMaster.TenantID = authenticate.TenantId;
+
+                int result = reportCaller.InsertStoreReport(new StoreReportService(_connectioSting), ReportMaster);
+                StatusCode =
+                result >= 0 ?
+                       (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
     }
 }

@@ -14,5 +14,8 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
 
         int DeleteStoreReport(int tenantID, int ReportID);
 
+
+        int SaveStoreReport(StoreReportRequest ReportMaster);
+
     }
 }
