@@ -61,7 +61,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 searchparams.TenantID = authenticate.TenantId; // add tenantID to request
-               // searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
+                                                               // searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
 
                 resultCount = dbsearchMaster.StoreReportSearch(new StoreReportService(_connectioSting), searchparams);
 
@@ -157,6 +157,50 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 throw;
             }
 
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Delete Store Report
+        /// </summary>
+        /// <param name="ReportID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("DeleteStoreReport")]
+        public ResponseModel DeleteStoreReport(int ReportID)
+        {
+            int Deletecount = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreReportCaller newReport = new StoreReportCaller();
+
+                Deletecount = newReport.DeleteStoreReport(new StoreReportService(_connectioSting), authenticate.TenantId, ReportID);
+
+                StatusCode =
+                Deletecount.Equals(0) ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Deletecount;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
             return objResponseModel;
         }
     }

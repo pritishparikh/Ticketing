@@ -37,5 +37,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Reports.StoreReportList(tenantID);
         }
 
+
+        public int DeleteStoreReport(IStoreReport Report, int tenantID, int ReportID)
+        {
+            _Reports = Report;
+            return _Reports.DeleteStoreReport(tenantID, ReportID);
+
+        }
+
     }
 }

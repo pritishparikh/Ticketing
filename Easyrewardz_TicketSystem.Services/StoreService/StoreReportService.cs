@@ -202,5 +202,38 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        /// <summary>
+        /// Delete StoreReport
+        /// </summary>
+        public int DeleteStoreReport(int tenantID, int ReportID)
+        {
+            int deleteCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_DeleteStoreReport", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_tenantId", tenantID);
+                cmd.Parameters.AddWithValue("@_reportId", ReportID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                deleteCount = cmd.ExecuteNonQuery();
+            }
+
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return deleteCount;
+        }
+
     }
 }
