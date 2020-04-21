@@ -31,5 +31,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
+        public List<ReportModel> GetStoreReportList(IStoreReport Report, int tenantID)
+        {
+            _Reports = Report;
+            return _Reports.StoreReportList(tenantID);
+        }
+
     }
 }
