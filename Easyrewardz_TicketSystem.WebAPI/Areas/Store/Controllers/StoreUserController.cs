@@ -1152,7 +1152,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+        /// <summary>
+        /// Delete Store User Profile
+        /// </summary>
+        /// <param name=""></param>
+        [HttpPost]
+        [Route("DeleteStoreUserProfile")]
+        public ResponseModel DeleteStoreUserProfile()
+        {
+            ResponseModel responseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
+                StoreUserCaller userCaller = new StoreUserCaller();
+                int Result = userCaller.DeleteProfilePicture(new StoreUserService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
+
+                StatusCode =
+                Result == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                responseModel.Status = true;
+                responseModel.StatusCode = StatusCode;
+                responseModel.Message = statusMessage;
+                responseModel.ResponseData = Result;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return responseModel;
+        }
         #endregion
     }
 }

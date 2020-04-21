@@ -31,7 +31,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<UpdateUserProfiledetailsModel> GetUserProfileDetails(int UserMasterID, string url);
         int UpdateStoreUser(StoreUserDetailsModel userdetails);
         int UpdateUserProfileDetail(UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel);
-
+        int DeleteProfilePicture(int tenantID, int userID);
         CustomChangePassword GetStoreUserCredentails(int userID, int TenantID, int IsStoreUser);
 
 

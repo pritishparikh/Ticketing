@@ -1047,11 +1047,6 @@ namespace Easyrewardz_TicketSystem.Services
             return UserID;
         }
 
-
-
-
-
-
         #endregion
 
 
@@ -1101,6 +1096,42 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return customChangePassword;
+        }
+        /// <summary>
+        /// Delete Profile Picture
+        /// <param name="tenantID"></param>
+        /// <param name="tenantID"></param>
+        /// </summary>
+        public int DeleteProfilePicture(int tenantID, int userID)
+        {
+
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_DeleteStoreUserProfile", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@User_ID", userID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return success;
         }
     }
 }
