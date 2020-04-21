@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.CustomModel.StoreModal;
 using Easyrewardz_TicketSystem.Interface.StoreInterface;
+using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Reports.GetStoreReportSearch(searchModel);
         }
 
+
+        public int ScheduleStoreReport(IStoreReport Report, ScheduleMaster scheduleMaster, int TenantID, int UserID)
+        {
+            _Reports = Report;
+            return _Reports.ScheduleStoreReport(scheduleMaster, TenantID, UserID);
+
+        }
 
     }
 }

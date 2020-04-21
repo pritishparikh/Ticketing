@@ -78,5 +78,44 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+
+        /// <summary>
+        /// Schedule
+        /// </summary>
+        /// <param name="scheduleMaster"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("ScheduleStoreReport")]
+        public ResponseModel Schedule([FromBody]ScheduleMaster scheduleMaster)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreReportCaller reportCaller = new StoreReportCaller();
+
+                int result = reportCaller.ScheduleStoreReport(new StoreReportService(_connectioSting), scheduleMaster, authenticate.TenantId, authenticate.UserMasterID);
+                StatusCode =
+                result >= 0 ?
+                       (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
     }
 }
