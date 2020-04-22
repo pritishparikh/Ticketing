@@ -26,7 +26,6 @@ namespace Easyrewardz_TicketSystem.Services
 
         public List<string> BulkUploadStoreHierarchy(int TenantID, int CreatedBy, DataSet DataSetCSV)
         {
-            int insertcount = 0;
             XmlDocument xmlDoc = new XmlDocument();
             DataSet Bulkds = new DataSet();
             List<string> csvLst = new List<string>();
@@ -70,10 +69,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+               throw;
             }
             finally
             {

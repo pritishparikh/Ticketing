@@ -155,6 +155,53 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objIssueType;
         }
+
+        public List<IssueType> GetIssueTypeOnSearch(int TenantID, int SubCategoryID, string searchText)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<IssueType> objIssueType = new List<IssueType>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetIssueTypeOnsearch", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@SubCategory_ID", SubCategoryID);
+                cmd1.Parameters.AddWithValue("@search_Text", searchText);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        IssueType issueType = new IssueType();
+                        issueType.IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
+                        issueType.IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        issueType.SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
+
+                        objIssueType.Add(issueType);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return objIssueType;
+        }
         #endregion
     }
 }

@@ -85,6 +85,50 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+
+
+
+        /// <summary>
+        /// Get Stroe Dashboard Data
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("getstoreDashboardListClaim")]
+        public ResponseModel getstoreDashboardListClaim([FromBody] StoreDashboardClaimModel dasbhboardmodel)
+        {
+
+            List<StoreDashboardClaimResponseModel> objDepartmentList = new List<StoreDashboardClaimResponseModel>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                StoreDashboard newMasterBrand = new StoreDashboard();
+
+                objDepartmentList = newMasterBrand.getStoreDashboardClaimList(new StoreDashboardService(_connectioSting), dasbhboardmodel);
+
+                StatusCode =
+                objDepartmentList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objDepartmentList;
+            }
+            catch (Exception ex)
+            { throw ex; }
+            return objResponseModel;
+        }
+
         /// <summary>
         /// Store Logged In Account Details
         /// </summary>
@@ -116,6 +160,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = loggedinAccInfo != null ? loggedinAccInfo : null;
+
             }
             catch (Exception)
             {
@@ -123,5 +168,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+
     }
 }

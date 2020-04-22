@@ -152,7 +152,7 @@ namespace Easyrewardz_TicketSystem.Services
 
         public List<string> BulkUploadHierarchy(int TenantID, int CreatedBy, int HierarchyFor, DataSet DataSetCSV)
         {
-            int insertcount = 0;
+
             XmlDocument xmlDoc = new XmlDocument();
             DataSet Bulkds = new DataSet();
             List<string> csvLst = new List<string>();

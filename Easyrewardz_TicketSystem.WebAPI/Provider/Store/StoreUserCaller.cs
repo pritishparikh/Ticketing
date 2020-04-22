@@ -95,6 +95,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _StoreUserRepository = Users;
             return _StoreUserRepository.UpdateUserProfileDetail(UpdateUserProfiledetailsModel);
         }
+        public int DeleteProfilePicture(IStoreUser Users, int tenantID, int userID)
+        {
+            _StoreUserRepository = Users;
+            return _StoreUserRepository.DeleteProfilePicture(tenantID, userID);
+        }
         #region Profile Mapping
 
         public List<StoreUserDepartmentList> GetDepartmentByBrandStore(IStoreUser Users,int BrandID, int storeID)

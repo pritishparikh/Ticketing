@@ -1646,7 +1646,7 @@ namespace Easyrewardz_TicketSystem.Services
                         i = cmdattachment.ExecuteNonQuery();
                     }
                 }
-                catch (IOException ioex)
+                catch (IOException)
                 {
                     ticketID = 0;
                 }

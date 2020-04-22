@@ -88,7 +88,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _categoryList = _category;
             return _categoryList.GetCategoryList(TenantID, BrandID);
         }
-
+        public List<Category> GetCategoryOnSearch(ICategory _category, int TenantID, int BrandID, string searchText)
+        {
+            _categoryList = _category;
+            return _categoryList.GetCategoryOnSearch(TenantID, BrandID, searchText);
+        }
         public int AddCategory(ICategory _category, string category, int TenantID, int UserID, int BrandID)
         {
             _categoryList = _category;
@@ -143,6 +147,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _subCategoryList = _SubCategory;
             return _subCategoryList.GetSubCategoryByCategoryID(CategoryID,TypeId);
         }
+        public List<SubCategory> GetSubCategoryByCategoryOnSearch(ISubCategories _SubCategory, int tenantID, int CategoryID, string searchText)
+        {
+            _subCategoryList = _SubCategory;
+            return _subCategoryList.GetSubCategoryByCategoryOnSearch(tenantID, CategoryID, searchText);
+        }
         public List<SubCategory> GetSubCategoryByMultiCategoryID(ISubCategories _SubCategory, string CategoryIDs)
         {
             _subCategoryList = _SubCategory;
@@ -190,6 +199,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _priorityList = _priority;
             return _priorityList.UpdatePriorityOrder(TenantID, selectedPriorityID, currentPriorityID, PriorityFor);
         }
+        public string VallidatePriority(IPriority _priority, string priorityName, int tenantID)
+        {
+            _priorityList = _priority;
+            return _priorityList.ValidatePriority(priorityName, tenantID);
+
+        }
 
         #endregion
 
@@ -206,6 +221,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _issueList = _issue;
             return _issueList.GetIssueTypeList(TenantID, SubCategoryID);
+        }
+        public List<IssueType> GetIssueTypeOnSearch(IIssueType _issue, int TenantID, int SubCategoryID, string searchText)
+        {
+            _issueList = _issue;
+            return _issueList.GetIssueTypeOnSearch(TenantID, SubCategoryID, searchText);
         }
         public List<IssueType> IssueTypeListByMultiSubCategoryID(IIssueType _issue, int TenantID, string SubCategoryIDs)
         {
