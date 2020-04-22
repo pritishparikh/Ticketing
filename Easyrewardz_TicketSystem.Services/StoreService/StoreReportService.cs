@@ -253,8 +253,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_TenantID", ReportMaster.TenantID);
                 cmd.Parameters.AddWithValue("@_ScheduleID", ReportMaster.ScheduleID);
-                cmd.Parameters.AddWithValue("@_ReportID", string.IsNullOrEmpty(ReportMaster.ReportName) ? "" : ReportMaster.ReportName);
-                cmd.Parameters.AddWithValue("@_ReportName", ReportMaster.ReportName);
+                cmd.Parameters.AddWithValue("@_ReportID", ReportMaster.ReportID);
+                cmd.Parameters.AddWithValue("@_ReportName", string.IsNullOrEmpty(ReportMaster.ReportName) ? "" : ReportMaster.ReportName);
                 cmd.Parameters.AddWithValue("@_StoreReportSearchParams", string.IsNullOrEmpty(ReportMaster.StoreReportSearchParams) ? "" : ReportMaster.StoreReportSearchParams);
                 cmd.Parameters.AddWithValue("@_CreatedBy", ReportMaster.CreatedBy);
                 cmd.Parameters.AddWithValue("@_ModifyBy", ReportMaster.ModifyBy);
