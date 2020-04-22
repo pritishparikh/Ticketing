@@ -47,10 +47,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _TaskRepository = task;
             return _TaskRepository.SubmitTask(taskMaster, UserID, TenantId);
         }
-        public List<CustomStoreUserList> UserList(IStoreTask task, int TenantID, int TaskID)
+        public List<CustomStoreUserList> UserList(IStoreTask task, int TenantID, int TaskID, int TaskFor)
         {
             _TaskRepository = task;
-            return _TaskRepository.GetUserList(TenantID, TaskID);
+            return _TaskRepository.GetUserList(TenantID, TaskID, TaskFor);
         }
         public int AssignTask(IStoreTask task, string TaskID, int TenantID, int UserID, int AgentID)
         {
@@ -80,6 +80,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _TaskRepository = task;
             return _TaskRepository.GetStoreTaskProcressBar(TaskId, TaskBy);
+
+        }
+        public int SubmitTaskByTicket(IStoreTask task, StoreTaskMaster taskMaster, int UserID, int TenantId)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.SubmitTaskByTicket(taskMaster, UserID, TenantId);
+
+        }
+        public int AssignTaskByTicket(IStoreTask task, string TaskID, int TenantID, int UserID, int AgentID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.AssignTaskByTicket(TaskID, TenantID, UserID, AgentID);
 
         }
 

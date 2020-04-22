@@ -13,7 +13,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class StoreTaskController : ControllerBase
     {
         #region variable declaration
@@ -67,9 +67,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
         }
 
         /// <summary>
-        /// Get Task List
+        /// Get Store Task List
         /// </summary>
-        /// <param name="TicketId"></param>
+        /// <param name="tabFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetStoreTaskList")]
@@ -256,7 +256,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
         /// <summary>
         /// Update Task Status
         /// </summary>
-        /// <param name="customTicketSolvedModel"></param>
+        /// <param name="taskMaster"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateTaskStatus")]
@@ -288,6 +288,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             }
             return objResponseModel;
         }
+
         /// <summary>
         /// UserListDropdown
         /// </summary>
@@ -295,7 +296,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
         /// <returns></returns>
         [HttpPost]
         [Route("UserDropdown")]
-        public ResponseModel UserDropdown(int TaskID)
+        public ResponseModel UserDropdown(int TaskID, int TaskFor = 1)
         {
             List<CustomStoreUserList> objUserList = new List<CustomStoreUserList>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -309,7 +310,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                objUserList = taskcaller.UserList(new StoreTaskService(_connectionSting), authenticate.TenantId, TaskID);
+                objUserList = taskcaller.UserList(new StoreTaskService(_connectionSting), authenticate.TenantId, TaskID, TaskFor);
                 StatusCode =
                 objUserList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -484,7 +485,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             return objResponseModel;
         }
 
-        [AllowAnonymous]
         /// <summary>
         /// Get Store Task ProcressBar
         /// </summary>
@@ -517,6 +517,81 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = objresult;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Submit Task By Ticket
+        /// </summary>
+        /// <param name="taskMaster"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("SubmitTaskByTicket")]
+        public ResponseModel SubmitTaskByTicket([FromBody]StoreTaskMaster taskMaster)
+        {
+            StoreTaskCaller taskcaller = new StoreTaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                int result = taskcaller.SubmitTaskByTicket(new StoreTaskService(_connectionSting), taskMaster, authenticate.UserMasterID, authenticate.TenantId);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Assign Task By Ticket
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <param name="AgentID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AssignTaskByTicket")]
+        public ResponseModel AssignTaskByTicket(string TaskID, int AgentID)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreTaskCaller taskcaller = new StoreTaskCaller();
+
+                int result = taskcaller.AssignTaskByTicket(new StoreTaskService(_connectionSting), TaskID, authenticate.TenantId, authenticate.UserMasterID, AgentID);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
             catch (Exception)
             {

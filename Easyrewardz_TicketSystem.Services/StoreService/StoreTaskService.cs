@@ -31,18 +31,21 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd1 = new MySqlCommand("SP_createStoreTask", conn);
-                cmd1.Connection = conn;
-                cmd1.Parameters.AddWithValue("@Task_Title", taskMaster.TaskTitle);
-                cmd1.Parameters.AddWithValue("@Task_Description", taskMaster.TaskDescription);
-                cmd1.Parameters.AddWithValue("@Department_Id", taskMaster.DepartmentId);
-                cmd1.Parameters.AddWithValue("@Function_ID", taskMaster.FunctionID);
-                cmd1.Parameters.AddWithValue("@AssignTo_ID", taskMaster.AssignToID);
-                cmd1.Parameters.AddWithValue("@Priority_ID", taskMaster.PriorityID);
-                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
-                cmd1.Parameters.AddWithValue("@Created_By", UserID);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                taskId = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                MySqlCommand cmd = new MySqlCommand("SP_createStoreTask", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                cmd.Parameters.AddWithValue("@Task_Title", taskMaster.TaskTitle);
+                cmd.Parameters.AddWithValue("@Task_Description", taskMaster.TaskDescription);
+                cmd.Parameters.AddWithValue("@Department_Id", taskMaster.DepartmentId);
+                cmd.Parameters.AddWithValue("@Function_ID", taskMaster.FunctionID);
+                cmd.Parameters.AddWithValue("@AssignTo_ID", taskMaster.AssignToID);
+                cmd.Parameters.AddWithValue("@Priority_ID", taskMaster.PriorityID);
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd.Parameters.AddWithValue("@Created_By", UserID);
+                
+                taskId = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
             catch (Exception)
@@ -107,7 +110,12 @@ namespace Easyrewardz_TicketSystem.Services
                             FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]),
                             Createdago = ds.Tables[0].Rows[i]["CreatedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]), "CreatedSpan"),
                             Assignedago = ds.Tables[0].Rows[i]["AssignedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["AssignedDate"]), "AssignedSpan"),
-                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]), "ModifiedSpan")
+                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]), "ModifiedSpan"),
+                            TaskCloureDate = ds.Tables[0].Rows[i]["ClosureTaskDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureTaskDate"]),
+                            ResolutionTimeRemaining = ds.Tables[0].Rows[i]["RemainingTime"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RemainingTime"]),
+                            ResolutionOverdueBy = ds.Tables[0].Rows[i]["taskoverDue"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["taskoverDue"]),
+                            ColorName = ds.Tables[0].Rows[i]["ColorName"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorName"]),
+                            ColorCode = ds.Tables[0].Rows[i]["ColorCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorCode"])
                         };
                         lsttask.Add(taskMaster);
                     }
@@ -372,8 +380,11 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_UpdateTaskStatus", conn);
-                cmd.Connection = conn;
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateTaskStatus", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
                 cmd.Parameters.AddWithValue("@Task_ID", taskMaster.TaskID);
                 cmd.Parameters.AddWithValue("@Department_Id", taskMaster.DepartmentId);
                 cmd.Parameters.AddWithValue("@Function_ID", taskMaster.FunctionID);
@@ -381,7 +392,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@TaskStatus_ID", taskMaster.TaskStatusId);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
-                cmd.CommandType = CommandType.StoredProcedure;
+                
                 i = cmd.ExecuteNonQuery();
             }
             catch (Exception)
@@ -404,28 +415,35 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TenantID"></param>
         /// <param name="TaskID"></param>
         /// <returns></returns>
-        public List<CustomStoreUserList> GetUserList(int TenantID, int TaskID)
+        public List<CustomStoreUserList> GetUserList(int TenantID, int TaskID, int TaskFor)
         {
             DataSet ds = new DataSet();
             List<CustomStoreUserList> listUser = new List<CustomStoreUserList>();
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_GetStoreUser", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreUser", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@Task_ID", TaskID);
-                cmd.Connection = conn;
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd;
+                cmd.Parameters.AddWithValue("@_TaskFor", TaskFor);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        CustomStoreUserList customUserList = new CustomStoreUserList();
-                        customUserList.User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
-                        customUserList.UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
+                        CustomStoreUserList customUserList = new CustomStoreUserList
+                        {
+                            User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]),
+                            UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"])
+                        };
                         listUser.Add(customUserList);
                     }
                 }
@@ -462,14 +480,15 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_TaskAssign", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_StoreTaskAssign", conn)
                 {
                     Connection = conn
                 };
-                cmd.Parameters.AddWithValue("@Task_ID", TaskID);
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
-                cmd.Parameters.AddWithValue("@User_ID", UserID);
-                cmd.Parameters.AddWithValue("@AssignedUser_ID", AgentID);
+                cmd.Parameters.AddWithValue("@_TaskID", TaskID);
+                cmd.Parameters.AddWithValue("@AssignTo_ID", AgentID);
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd.Parameters.AddWithValue("@Created_By", UserID);
+                
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }
@@ -532,9 +551,14 @@ namespace Easyrewardz_TicketSystem.Services
                             Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
                             PriorityName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]),
                             FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]),
-                            Createdago = ds.Tables[0].Rows[i]["CreatedDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]),
-                            Assignedago = ds.Tables[0].Rows[i]["AssignedDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignedDate"]),
-                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"])
+                            Createdago = ds.Tables[0].Rows[i]["Createdago"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdago"]),
+                            Assignedago = ds.Tables[0].Rows[i]["Assignedago"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignedago"]),
+                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]),
+                            TaskCloureDate = ds.Tables[0].Rows[i]["ClosureTaskDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureTaskDate"]),
+                            ResolutionTimeRemaining = ds.Tables[0].Rows[i]["RemainingTime"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RemainingTime"]),
+                            ResolutionOverdueBy = ds.Tables[0].Rows[i]["taskoverDue"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["taskoverDue"]),
+                            ColorName = ds.Tables[0].Rows[i]["ColorName"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorName"]),
+                            ColorCode = ds.Tables[0].Rows[i]["ColorCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorCode"])
                         };
                         lsttask.Add(taskMaster);
                     }
@@ -773,6 +797,85 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return objresult;
+        }
+
+        /// <summary>
+        /// Submit Task By Ticket
+        /// </summary>
+        /// <param name="taskMaster"></param>
+        /// <param name="UserID"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
+        public int SubmitTaskByTicket(StoreTaskMaster taskMaster, int UserID, int TenantId)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateTaskByTicketStatus", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Task_ID", taskMaster.TaskID);
+                cmd.Parameters.AddWithValue("@Department_Id", taskMaster.DepartmentId);
+                cmd.Parameters.AddWithValue("@Function_ID", taskMaster.FunctionID);
+                cmd.Parameters.AddWithValue("@Priority_ID", taskMaster.PriorityID);
+                cmd.Parameters.AddWithValue("@TaskStatus_ID", taskMaster.TaskStatusId);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
+        }
+
+        /// <summary>
+        /// Assign Task By Ticket
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="AgentID"></param>
+        /// <returns></returns>
+        public int AssignTaskByTicket(string TaskID, int TenantID, int UserID, int AgentID)
+        {
+            int i = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_TaskByTicketAssign", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@Task_ID", TaskID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@AssignedUser_ID", AgentID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                i = cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return i;
         }
 
         #region Campaign

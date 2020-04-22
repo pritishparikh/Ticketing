@@ -74,6 +74,12 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string UpdatedBy { get; set; }
         public string Updatedago { get; set; }
 
+        public string TaskCloureDate { get; set; }
+        public string ResolutionTimeRemaining { get; set; }
+        public string ResolutionOverdueBy { get; set; }
+        public string ColorName { get; set; }
+        public string ColorCode { get; set; }
+
         public int TicketID { get; set; }
 
         public List<UserComment> Comments { get; set; }
