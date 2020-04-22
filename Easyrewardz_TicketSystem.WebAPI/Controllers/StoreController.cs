@@ -261,7 +261,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 //set zone here
 
-                 if(objstoreList.Count > 0)
+
+                if (objstoreList.Count > 0)
                 {
                     foreach(var stores in objstoreList)
                     {
@@ -601,8 +602,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string SuccessFileName = "StoreSuccessFile_" + timeStamp + ".csv";
                 string ErrorFileName = "StoreErrorFile_" + timeStamp + ".csv";
 
-                string SuccessFileUrl = rootPath + "/" + BulkUpload + "/" + DownloadFile + "/Success/" + SuccessFileName;
-                string ErrorFileUrl = rootPath + "/" + BulkUpload + "/" + DownloadFile + "/Error/" + ErrorFileName;
+                string SuccessFileUrl = rootPath + BulkUpload + "/" + DownloadFile + "/Success/" + SuccessFileName;
+                string ErrorFileUrl = rootPath + BulkUpload + "/" + DownloadFile + "/Error/" + ErrorFileName;
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
                     successfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Success", SuccessFileName), CSVlist[0]);

@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class UserController : ControllerBase
     {
         #region  Variable Declaration
@@ -319,7 +319,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// Get User List Data
         /// </summary>
         /// <param name="IsStoreUser"></param>
-        [HttpGet]
+        [HttpPost]
         [Route("GetUserListData")]
         public ResponseModel GetUserListData(int IsStoreUser=1)
         {
@@ -502,8 +502,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string SuccessFileName = "UserSuccessFile_" + timeStamp + ".csv";
                 string ErrorFileName = "UserErrorFile_" + timeStamp + ".csv";
 
-                string SuccessFileUrl = rootPath + "/" + BulkUpload + "/" + DownloadFile + "/Success/" + SuccessFileName;
-                string ErrorFileUrl = rootPath + "/" + BulkUpload + "/" + DownloadFile + "/Error/" + ErrorFileName;
+
+
+                string SuccessFileUrl = rootPath + BulkUpload + "/" + DownloadFile + "/Success/" + SuccessFileName;
+                string ErrorFileUrl = rootPath + BulkUpload + "/" + DownloadFile + "/Error/" + ErrorFileName;
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
                 {

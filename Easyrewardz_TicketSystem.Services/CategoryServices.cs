@@ -454,6 +454,7 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Parameters.AddWithValue("@_node", Xpath);
                       
                         cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
+                        cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                         cmd.CommandType = CommandType.StoredProcedure;
                         MySqlDataAdapter da = new MySqlDataAdapter();
                         da.SelectCommand = cmd;

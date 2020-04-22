@@ -258,8 +258,8 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         while (!sr.EndOfStream)
                         {
-                            FileContent = sr.ReadToEnd().ToString(); //read full file text  
-                            string[] rows = FileContent.Split('\n'); //split full file text into rows  
+                            FileContent = sr.ReadToEnd().ToString().Replace("\"",""); //read full file text  
+                            string[] rows = FileContent.Split('\n',StringSplitOptions.RemoveEmptyEntries); //split full file text into rows  
                             for (int i = 0; i < rows.Count() - 1; i++)
                             {
                                 string[] rowValues = rows[i].Split(','); //split each row with comma to get individual values  
