@@ -10,16 +10,16 @@ namespace Easyrewardz_TicketSystem.Model
         public int taskid { get; set; }
         public int Department { get; set; }      
         public string tasktitle { get; set; }
-        public string taskstatus { get; set; }
+        public int taskstatus { get; set; }
         public int ticketID { get; set; }
         public int functionID { get; set; }
         public string CreatedOn { get; set; }
-        public string AssigntoId { get; set; }
+        public int AssigntoId { get; set; }
         public int createdID { get; set; }
         public string taskwithTicket { get; set; }
         public string taskwithClaim { get; set; }
         public int claimID { get; set; }
-        public string Priority { get; set; }
+        public int Priority { get; set; }
     }
 
     public class StoreDashboardResponseModel
@@ -34,11 +34,14 @@ namespace Easyrewardz_TicketSystem.Model
         public int functionID { get; set; }
         public string CreatedOn { get; set; }
         public string AssigntoId { get; set; }
-        public int createdID { get; set; }
+        public string CreatedBy { get; set; }
         public string taskwithTicket { get; set; }
         public string taskwithClaim { get; set; }
         public int claimID { get; set; }
         public string Priority { get; set; }
+        public int totalCount { get; set; }
+        public string modifedOn { get; set; }
+        public string ModifiedBy { get; set; }
     }
 
 
@@ -77,6 +80,10 @@ namespace Easyrewardz_TicketSystem.Model
         public string CreatedOn { get; set; }
         public string AssigntoId { get; set; }
         public string createdID { get; set; }
+        public int totalCount { get; set; }
+
+        public string modifedOn { get; set; }
+        public int modifiedID { get; set; }
     }
 
 
