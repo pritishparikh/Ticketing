@@ -145,6 +145,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
+
                         objReportLst = ds.Tables[0].AsEnumerable().Select(r => new ReportModel()
                         {
                             ReportID = Convert.ToInt32(r.Field<object>("ReportID")),
@@ -159,7 +160,7 @@ namespace Easyrewardz_TicketSystem.Services
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
                             ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
                             ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),
-                            ScheduleTime = r.Field<object>("ScheduleTime") == System.DBNull.Value ? default(DateTime?) : Convert.ToDateTime(r.Field<object>("ScheduleTime")),
+                            ScheduleTime = r.Field<object>("ScheduleTime") == System.DBNull.Value ? default(DateTime?) : Convert.ToDateTime(Convert.ToString(r.Field<object>("ScheduleTime"))),
                             IsDaily = Convert.ToBoolean(r.Field<object>("IsDaily") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDaily"))),
                             NoOfDay = Convert.ToInt32(r.Field<object>("NoOfDay") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDay"))),
                             IsWeekly = Convert.ToBoolean(r.Field<object>("IsWeekly") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsWeekly"))),
@@ -185,7 +186,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;
