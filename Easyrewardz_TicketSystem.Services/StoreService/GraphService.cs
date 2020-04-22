@@ -232,6 +232,57 @@ namespace Easyrewardz_TicketSystem.Services
                             }
                         }
                     }
+
+                    if (ds.Tables[3] != null)
+                    {
+                        if (ds.Tables[3].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < ds.Tables[3].Rows.Count; i++)
+                            {
+                                OpenClaimStatus objOpenClaimStatus = new OpenClaimStatus()
+                                {
+                                    ID = 0,
+                                    Name = ds.Tables[3].Rows[i]["ClaimTypeName"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[3].Rows[i]["ClaimTypeName"]),
+                                    Value = ds.Tables[3].Rows[i]["ClaimTypeCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[3].Rows[i]["ClaimTypeCount"]),
+                                };
+                                obj.OpenClaimStatus.Add(objOpenClaimStatus);
+                            }
+                        }
+                    }
+
+                    if (ds.Tables[4] != null)
+                    {
+                        if (ds.Tables[4].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < ds.Tables[4].Rows.Count; i++)
+                            {
+                                ClaimVsInvoiceAmount objClaimVsInvoiceAmount = new ClaimVsInvoiceAmount()
+                                {
+                                    ID = 0,
+                                    Name = ds.Tables[4].Rows[i]["totalName"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[4].Rows[i]["totalName"]),
+                                    Value = ds.Tables[4].Rows[i]["totalInvoce"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[4].Rows[i]["totalInvoce"]),
+                                };
+                                obj.ClaimVsInvoiceAmount.Add(objClaimVsInvoiceAmount);
+                            }
+                        }
+                    }
+
+                    if (ds.Tables[5] != null)
+                    {
+                        if (ds.Tables[5].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < ds.Tables[5].Rows.Count; i++)
+                            {
+                                ClaimVsInvoiceArticle objClaimVsInvoiceArticle = new ClaimVsInvoiceArticle()
+                                {
+                                    ID = 0,
+                                    Name = ds.Tables[5].Rows[i]["totalName"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[5].Rows[i]["totalName"]),
+                                    Value = ds.Tables[5].Rows[i]["TotalCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[5].Rows[i]["TotalCount"]),
+                                };
+                                obj.ClaimVsInvoiceArticle.Add(objClaimVsInvoiceArticle);
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception)
