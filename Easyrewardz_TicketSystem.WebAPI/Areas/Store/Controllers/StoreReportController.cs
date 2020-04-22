@@ -245,5 +245,47 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+
+        /// <summary>
+        /// Get CampaignNames
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetCampaignNames")]
+        public ResponseModel GetCampaignNames()
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<CampaignScriptName> objCampaignList = new List<CampaignScriptName>();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreReportCaller newReport = new StoreReportCaller();
+
+                objCampaignList = newReport.GetCampaignNames(new StoreReportService(_connectioSting));
+
+                StatusCode = objCampaignList.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objCampaignList;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
     }
 }

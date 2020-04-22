@@ -140,7 +140,6 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<StoreDashboardResponseModel> departmentMasters = new List<StoreDashboardResponseModel>();
-           
             try
             {
                 conn.Open();
@@ -190,6 +189,15 @@ namespace Easyrewardz_TicketSystem.Services
 
 
                         storedashboard.AssigntoId = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
+
+                        storedashboard.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                        storedashboard.modifedOn = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
+
+
+                        storedashboard.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+
+
+                        storedashboard.totalCount = ds.Tables.Count;
 
                         departmentMasters.Add(storedashboard);
                     }
@@ -268,7 +276,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         storedashboard.AssigntoId = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
 
-                        
+                        storedashboard.totalCount = ds.Tables.Count;
                         departmentMasters.Add(storedashboard);
                     }
                 }

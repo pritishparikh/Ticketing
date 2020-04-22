@@ -145,6 +145,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
+
                         objReportLst = ds.Tables[0].AsEnumerable().Select(r => new ReportModel()
                         {
                             ReportID = Convert.ToInt32(r.Field<object>("ReportID")),
@@ -159,7 +160,7 @@ namespace Easyrewardz_TicketSystem.Services
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
                             ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
                             ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),
-                            ScheduleTime = r.Field<object>("ScheduleTime") == System.DBNull.Value ? default(DateTime?) : Convert.ToDateTime(r.Field<object>("ScheduleTime")),
+                            ScheduleTime = r.Field<object>("ScheduleTime") == System.DBNull.Value ? default(DateTime?) : Convert.ToDateTime(Convert.ToString(r.Field<object>("ScheduleTime"))),
                             IsDaily = Convert.ToBoolean(r.Field<object>("IsDaily") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDaily"))),
                             NoOfDay = Convert.ToInt32(r.Field<object>("NoOfDay") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDay"))),
                             IsWeekly = Convert.ToBoolean(r.Field<object>("IsWeekly") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsWeekly"))),
@@ -185,7 +186,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception)
+            catch (Exception )
             {
 
                 throw;
@@ -253,8 +254,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_TenantID", ReportMaster.TenantID);
                 cmd.Parameters.AddWithValue("@_ScheduleID", ReportMaster.ScheduleID);
-                cmd.Parameters.AddWithValue("@_ReportID", string.IsNullOrEmpty(ReportMaster.ReportName) ? "" : ReportMaster.ReportName);
-                cmd.Parameters.AddWithValue("@_ReportName", ReportMaster.ReportName);
+                cmd.Parameters.AddWithValue("@_ReportID", ReportMaster.ReportID);
+                cmd.Parameters.AddWithValue("@_ReportName", string.IsNullOrEmpty(ReportMaster.ReportName) ? "" : ReportMaster.ReportName);
                 cmd.Parameters.AddWithValue("@_StoreReportSearchParams", string.IsNullOrEmpty(ReportMaster.StoreReportSearchParams) ? "" : ReportMaster.StoreReportSearchParams);
                 cmd.Parameters.AddWithValue("@_CreatedBy", ReportMaster.CreatedBy);
                 cmd.Parameters.AddWithValue("@_ModifyBy", ReportMaster.ModifyBy);
@@ -278,5 +279,56 @@ namespace Easyrewardz_TicketSystem.Services
             return ReportID;
         }
 
+
+        /// <summary>
+        /// Get Campaign Names
+        /// </summary>
+        /// <returns></returns>
+        List<CampaignScriptName> GetCampaignNames()
+        {
+            List<CampaignScriptName> objCampaignList = new List<CampaignScriptName>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("GetCampaignNames", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                //  cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objCampaignList = ds.Tables[0].AsEnumerable().Select(r => new CampaignScriptName()
+                        {
+                            CampaignNameID = Convert.ToInt32(r.Field<object>("CampaignID")),
+                            CampaignName = r.Field<object>("CampaignName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CampaignName")),
+
+                        }).ToList();
+
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (ds != null)
+                    ds.Dispose();
+                conn.Close();
+            }
+
+            return objCampaignList;
+        }
     }
 }
