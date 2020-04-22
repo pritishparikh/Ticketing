@@ -340,9 +340,9 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CommentByApprovel userComment = new CommentByApprovel();
-                        userComment.Name = Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
-                        userComment.Comment = Convert.ToString(ds.Tables[0].Rows[i]["Comment"]);
-                        userComment.CommentDate = Convert.ToString(ds.Tables[0].Rows[i]["CommentDate"]);
+                        userComment.Name = ds.Tables[0].Rows[i]["Name"]== DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
+                        userComment.Comment = ds.Tables[0].Rows[i]["Comment"]== DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Comment"]);
+                        userComment.CommentDate = ds.Tables[0].Rows[i]["CommentDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentDate"]);
                         lstClaimComment.Add(userComment);
                     }
                 }
