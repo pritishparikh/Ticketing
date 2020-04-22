@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
-    public class StoreReportCaller 
+    public class StoreReportCaller
     {
         #region Variable declaration
 
@@ -49,6 +49,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _Reports = Report;
             return _Reports.SaveStoreReport(ReportMaster);
+        }
+
+
+        public List<CampaignScriptName> GetCampaignNames(IStoreReport Report)
+        {
+            _Reports = Report;
+            return _Reports.GetCampaignNames();
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.CustomModel.StoreModal;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.CustomModel.StoreModal;
 using Easyrewardz_TicketSystem.Model;
 using System.Collections.Generic;
 
@@ -16,6 +17,9 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
 
 
         int SaveStoreReport(StoreReportRequest ReportMaster);
+
+
+        List<CampaignScriptName> GetCampaignNames();
 
     }
 }

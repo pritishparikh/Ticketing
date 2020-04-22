@@ -186,7 +186,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
 
                 throw;
@@ -279,5 +279,56 @@ namespace Easyrewardz_TicketSystem.Services
             return ReportID;
         }
 
+
+        /// <summary>
+        /// Get Campaign Names
+        /// </summary>
+        /// <returns></returns>
+        List<CampaignScriptName> GetCampaignNames()
+        {
+            List<CampaignScriptName> objCampaignList = new List<CampaignScriptName>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("GetCampaignNames", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                //  cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objCampaignList = ds.Tables[0].AsEnumerable().Select(r => new CampaignScriptName()
+                        {
+                            CampaignNameID = Convert.ToInt32(r.Field<object>("CampaignID")),
+                            CampaignName = r.Field<object>("CampaignName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CampaignName")),
+
+                        }).ToList();
+
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (ds != null)
+                    ds.Dispose();
+                conn.Close();
+            }
+
+            return objCampaignList;
+        }
     }
 }
