@@ -13,7 +13,8 @@ namespace Easyrewardz_TicketSystem.Model
         public int taskstatus { get; set; }
         public int ticketID { get; set; }
         public int functionID { get; set; }
-        public string CreatedOn { get; set; }
+        public string CreatedOnFrom { get; set; }
+        public string CreatedOnTo { get; set; }
         public int AssigntoId { get; set; }
         public int createdID { get; set; }
         public string taskwithTicket { get; set; }

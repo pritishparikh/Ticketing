@@ -152,7 +152,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@objticketID", model.ticketID);
                 cmd1.Parameters.AddWithValue("@objDepartment", model.Department);
                 cmd1.Parameters.AddWithValue("@objfuncation", model.functionID);
-                cmd1.Parameters.AddWithValue("@objcreatedOn", model.CreatedOn);
+                cmd1.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
+                cmd1.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
                 cmd1.Parameters.AddWithValue("@objassignTo", model.AssigntoId);
                 cmd1.Parameters.AddWithValue("@objtaskCreatedBy", model.createdID);
                 cmd1.Parameters.AddWithValue("@objtaskwithticket", model.taskwithTicket);
