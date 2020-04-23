@@ -47,7 +47,7 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
 
         // cmapaign search params
         public string CampaignName { get; set; }
-        public string CampaignAssignedIds { get; set; }
+        public int CampaignAssignedIds { get; set; }
         public string CampaignStartDate { get; set; }
         public string CampaignEndDate { get; set; }
         public string CampaignStatusids { get; set; }
