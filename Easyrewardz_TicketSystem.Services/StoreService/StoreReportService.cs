@@ -284,7 +284,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get Campaign Names
         /// </summary>
         /// <returns></returns>
-        List<CampaignScriptName> GetCampaignNames()
+       public  List<CampaignScriptName> GetCampaignNames()
         {
             List<CampaignScriptName> objCampaignList = new List<CampaignScriptName>();
             DataSet ds = new DataSet();
