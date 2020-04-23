@@ -5,7 +5,7 @@ using System.Data;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
-    public class StoreDashboard
+    public class StoreDashboardCaller
     {
 
         private IStoreDashboard _dashboard;
@@ -29,10 +29,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <summary>
         ///get store Dashborad Details For Claim
         /// </summary>
-        public List<StoreDashboardClaimResponseModel> getStoreDashboardClaimList(IStoreDashboard dashboard, StoreDashboardClaimModel modelname)
+        public List<StoreDashboardClaimResponseModel> getStoreDashboardClaimList(IStoreDashboard DashBoard, StoreDashboardClaimModel ClaimSearchModel)
         {
-            _dashboard = dashboard;
-            return _dashboard.GetClaimDataForStoreDashboard(modelname);
+            _dashboard = DashBoard;
+            return _dashboard.GetClaimDataForStoreDashboard(ClaimSearchModel);
         }
 
         public LoggedInAgentModel GetLogginAccountInfo(IStoreDashboard dashboard, int tenantID, int UserId, string ProfilePicPath)

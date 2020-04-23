@@ -50,6 +50,8 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class StoreDashboardClaimModel
     {
+        public int tenantID { get; set; }
+
         public int claimID { get; set; }
         public int ticketID { get; set; }
         public int claimissueType { get; set; }
@@ -57,18 +59,22 @@ namespace Easyrewardz_TicketSystem.Model
         public int claimsubcat { get; set; }
         public int assignTo { get; set; }
         public int claimcat { get; set; }
-        public int claimraise { get; set; }
+        public string claimraiseddate { get; set; }
         public int taskID { get; set; }
         public int claimstatus { get; set; }
         public int taskmapped { get; set; }
         public int raisedby { get; set; }
+
+
     }
 
     public class StoreDashboardClaimResponseModel
     {
+        /*
 
         public string claimID { get; set; }
         public int ticketID { get; set; }
+
         public string claimissueType { get; set; }
         public int ticketMapped { get; set; }
         public string claimsubcat { get; set; }
@@ -85,7 +91,31 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string modifedOn { get; set; }
         public int modifiedID { get; set; }
+
+    */
+
+        public int ClaimID { get; set; }
+        public int ClaimStatusId { get; set; }
+        public string ClaimStatus { get; set; }
+        public int BrandID { get; set; }
+        public string BrandName { get; set; }
+        public int CategoryID { get; set; }
+        public string CategoryName { get; set; }
+        public int SubCategoryID { get; set; }
+        public string SubCategoryName { get; set; }
+        public int IssueTypeID { get; set; }
+        public string IssueTypeName { get; set; }
+        public int CreatedBy { get; set; }
+        public string CreatedByName { get; set; }
+
+        public int ClaimRaisedByID { get; set; }
+        public string ClaimRaisedBy { get; set; }
+        public string CreationOn { get; set; }
+        public int AssignedId { get; set; }
+        public string AssignTo { get; set; }
+
     }
+
 
 
 

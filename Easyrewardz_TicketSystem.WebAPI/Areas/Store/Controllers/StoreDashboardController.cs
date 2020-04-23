@@ -63,7 +63,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                StoreDashboard newMasterBrand = new StoreDashboard();
+                StoreDashboardCaller newMasterBrand = new StoreDashboardCaller();
 
                 objDepartmentList = newMasterBrand.getStoreDashboardTaskList(new StoreDashboardService(_connectioSting), dasbhboardmodel);
 
@@ -91,38 +91,37 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Stroe Dashboard Data
         /// </summary>
-        /// <param name=""></param>
+        /// <param name=StoreDashboardClaimModel></param>
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        [Route("getstoreDashboardListClaim")]
-        public ResponseModel getstoreDashboardListClaim([FromBody] StoreDashboardClaimModel dasbhboardmodel)
+        [Route("GetstoreDashboardListClaim")]
+        public ResponseModel GetstoreDashboardListClaim([FromBody] StoreDashboardClaimModel ClaimSearchModel)
         {
 
-            List<StoreDashboardClaimResponseModel> objDepartmentList = new List<StoreDashboardClaimResponseModel>();
+            List<StoreDashboardClaimResponseModel> ClaimSearchResponse = new List<StoreDashboardClaimResponseModel>();
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
             try
             {
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                StoreDashboard newMasterBrand = new StoreDashboard();
+                StoreDashboardCaller dashBoardcaller = new StoreDashboardCaller();
 
-                objDepartmentList = newMasterBrand.getStoreDashboardClaimList(new StoreDashboardService(_connectioSting), dasbhboardmodel);
+                ClaimSearchResponse = dashBoardcaller.getStoreDashboardClaimList(new StoreDashboardService(_connectioSting), ClaimSearchModel);
 
-                StatusCode =
-                objDepartmentList.Count == 0 ?
-                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                StatusCode = ClaimSearchResponse.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = objDepartmentList;
+                objResponseModel.ResponseData = ClaimSearchResponse;
             }
             catch (Exception ex)
             { throw ex; }
@@ -140,7 +139,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             LoggedInAgentModel loggedinAccInfo = null;
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0; string statusMessage = "";
-            StoreDashboard storeDashboard = new StoreDashboard();
+            StoreDashboardCaller storeDashboard = new StoreDashboardCaller();
             try
             {
 
