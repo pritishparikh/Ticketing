@@ -80,8 +80,6 @@ namespace Easyrewardz_TicketSystem.Services
 
 
 
-
-
                 /*------------------ CAMPAIGN  PARAMETERS------------------------------*/
 
                 cmd.Parameters.AddWithValue("@_CampaignName", string.IsNullOrEmpty(searchModel.CampaignName) ? "" : searchModel.CampaignName);

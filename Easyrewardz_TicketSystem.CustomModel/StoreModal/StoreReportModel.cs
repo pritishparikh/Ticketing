@@ -43,7 +43,7 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public int ClaimAssignedId { get; set; }
 
         //ends here
-
+         
 
         // cmapaign search params
         public string CampaignName { get; set; }
