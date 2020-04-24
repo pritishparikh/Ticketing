@@ -51,20 +51,25 @@ namespace Easyrewardz_TicketSystem.Model
     public class StoreDashboardClaimModel
     {
         public int tenantID { get; set; }
-        
-        public int claimID { get; set; }
-        public int ticketID { get; set; }
-        public int claimissueType { get; set; }
-        public int ticketMapped { get; set; }
-        public int claimsubcat { get; set; }
-        public int assignTo { get; set; }
-        public int claimcat { get; set; }
+
+        public int? claimID { get; set; }
+        public int? ticketID { get; set; }
+        public int? claimissueType { get; set; }
+        public int? ticketMapped { get; set; }
+        public int? claimsubcat { get; set; }
+        public int? assignTo { get; set; }
+        public int? claimcat { get; set; }
         public string claimraiseddate { get; set; }
-        public int claimraise { get; set; }
-        public int taskID { get; set; }
-        public int claimstatus { get; set; }
-        public int taskmapped { get; set; }
-        public int raisedby { get; set; }
+        public int? claimraise { get; set; }
+        public int? taskID { get; set; }
+        public int? claimstatus { get; set; }
+        public int? taskmapped { get; set; }
+        public int? raisedby { get; set; }
+
+        public string BrandIDs { get; set; }
+        public string AgentIds { get; set; }
+        public string FromDate { get; set; } //'yyyy-MM-dd'
+        public string ToDate { get; set; } //'yyyy-MM-dd'
 
 
     }
@@ -113,6 +118,9 @@ namespace Easyrewardz_TicketSystem.Model
         public string CreationOn { get; set; }
         public int AssignedId { get; set; }
         public string AssignTo { get; set; }
+
+  
+
     }
 
 
