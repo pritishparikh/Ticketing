@@ -600,6 +600,96 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Add filter for raised by me on task tab
+        /// </summary>
+        /// <param name="taskMaster"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetRaisedbymefilterData")]
+        public ResponseModel GetRaisedbymefilterData(TaskFilterRaisedBymeModel taskMaster)
+        {
+
+
+            List<TaskFilterRaisedBymeResponseModel> objRaisedbyfilter = new List<TaskFilterRaisedBymeResponseModel>();
+            StoreTaskCaller taskCaller = new StoreTaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                //taskMaster.CreatedBy = authenticate.UserMasterID;
+
+                objRaisedbyfilter = taskCaller.GetRaisedbyfiterData(new StoreTaskService(_connectionSting), taskMaster);
+                StatusCode =
+              objRaisedbyfilter.Count == 0 ?
+                   (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objRaisedbyfilter;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Add filter for raised by me on task tab
+        /// </summary>
+        /// <param name="taskMaster"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetAssigenBymefilterData")]
+        public ResponseModel GetAssigenBymefilterData(TaskFilterAssignBymeModel taskMaster)
+        {
+
+
+            List<TaskFilterAssignBymeResponseModel> objRaisedbyfilter = new List<TaskFilterAssignBymeResponseModel>();
+            StoreTaskCaller taskCaller = new StoreTaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                //taskMaster.CreatedBy = authenticate.UserMasterID;
+
+                objRaisedbyfilter = taskCaller.GetAssigenBYfiterData(new StoreTaskService(_connectionSting), taskMaster);
+                StatusCode =
+              objRaisedbyfilter.Count == 0 ?
+                   (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objRaisedbyfilter;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
         #region Campaign
 
         /// <summary>

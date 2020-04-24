@@ -26,5 +26,8 @@ namespace Easyrewardz_TicketSystem.Interface
         CampaignStatusResponse GetCampaignStatusResponse(int TenantID, int UserID);
         int UpdateCampaignStatusResponse(StoreCampaignCustomerRequest objRequest, int TenantID, int UserID);
         int CloseCampaign(int CampaignTypeID, int IsClosed, int TenantID, int UserID);
+        List<TaskFilterRaisedBymeResponseModel> GetRaisedbyfiterData(TaskFilterRaisedBymeModel model);
+
+        List<TaskFilterAssignBymeResponseModel> GetAssignBYfiterData(TaskFilterAssignBymeModel model);
     }
 }

@@ -1261,6 +1261,194 @@ namespace Easyrewardz_TicketSystem.Services
             return timespan;
 
         }
+
+
+        /// <summary>
+        /// Get task Data for raised by me filter---
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+
+        public List<TaskFilterRaisedBymeResponseModel> GetRaisedbyfiterData(TaskFilterRaisedBymeModel model)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<TaskFilterRaisedBymeResponseModel> departmentMasters = new List<TaskFilterRaisedBymeResponseModel>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("sp_getStoreDashboardTaskData", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@objtaskID", model.taskid);
+                cmd1.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
+                cmd1.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
+                cmd1.Parameters.AddWithValue("@objticketID", model.ticketID);
+                cmd1.Parameters.AddWithValue("@objDepartment", model.Department);
+                cmd1.Parameters.AddWithValue("@objfuncation", model.functionID);
+                cmd1.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
+                cmd1.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
+                cmd1.Parameters.AddWithValue("@objassignTo", model.AssigntoId);
+                cmd1.Parameters.AddWithValue("@objtaskCreatedBy", model.createdID);
+                cmd1.Parameters.AddWithValue("@objtaskwithticket", model.taskwithTicket);
+                cmd1.Parameters.AddWithValue("@objtaskwithclaim", model.taskwithClaim);
+                cmd1.Parameters.AddWithValue("@objclaimID", model.claimID);
+                cmd1.Parameters.AddWithValue("@objtaskPriority", model.Priority);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+
+
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
+
+                        TaskFilterRaisedBymeResponseModel storedashboard = new TaskFilterRaisedBymeResponseModel();
+                        storedashboard.taskid = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+
+                        storedashboard.taskstatus = TaskStatusName;
+
+                        storedashboard.tasktitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
+
+                        storedashboard.Department = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+
+                        storedashboard.storeName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+
+                        storedashboard.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
+
+                        storedashboard.Priority = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
+
+                        storedashboard.CreatedOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
+
+
+                        storedashboard.AssigntoId = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
+
+                        storedashboard.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                        storedashboard.modifedOn = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
+
+
+                        storedashboard.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+
+
+                        storedashboard.totalCount = ds.Tables.Count;
+
+                        departmentMasters.Add(storedashboard);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return departmentMasters;
+
+        }
+
+
+
+
+        /// <summary>
+        /// Get task Data for raised by me filter---
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+
+        public List<TaskFilterAssignBymeResponseModel> GetAssignBYfiterData(TaskFilterAssignBymeModel model)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<TaskFilterAssignBymeResponseModel> departmentMasters = new List<TaskFilterAssignBymeResponseModel>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("sp_getStoreDashboardTaskData", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@objtaskID", model.taskid);
+                cmd1.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
+                cmd1.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
+                cmd1.Parameters.AddWithValue("@objticketID", model.ticketID);
+                cmd1.Parameters.AddWithValue("@objDepartment", model.Department);
+                cmd1.Parameters.AddWithValue("@objfuncation", model.functionID);
+                cmd1.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
+                cmd1.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
+                cmd1.Parameters.AddWithValue("@objassignTo", model.AssigntoId);
+                cmd1.Parameters.AddWithValue("@objtaskCreatedBy", model.createdID);
+                cmd1.Parameters.AddWithValue("@objtaskwithticket", model.taskwithTicket);
+                cmd1.Parameters.AddWithValue("@objtaskwithclaim", model.taskwithClaim);
+                cmd1.Parameters.AddWithValue("@objclaimID", model.claimID);
+                cmd1.Parameters.AddWithValue("@objtaskPriority", model.Priority);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+
+
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
+
+                        TaskFilterAssignBymeResponseModel storedashboard = new TaskFilterAssignBymeResponseModel();
+                        storedashboard.taskid = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+
+                        storedashboard.taskstatus = TaskStatusName;
+
+                        storedashboard.tasktitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
+
+                        storedashboard.Department = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+
+                        storedashboard.storeName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+
+                        storedashboard.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
+
+                        storedashboard.Priority = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
+
+                        storedashboard.CreatedOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
+
+
+                        storedashboard.AssigntoId = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
+
+                        storedashboard.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                        storedashboard.modifedOn = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
+
+
+                        storedashboard.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+
+
+                        storedashboard.totalCount = ds.Tables.Count;
+
+                        departmentMasters.Add(storedashboard);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return departmentMasters;
+
+        }
+
+
         #endregion
 
     }
