@@ -18,7 +18,7 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
-        public int AddClaimComment(int ClaimID, string Comment, int UserID)
+        public int AddClaimComment(int claimID, string comment, int userID, int oldAssignID, int newAssignID)
         {
             int success = 0;
             try
@@ -28,9 +28,11 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     Connection = conn
                 };
-                cmd1.Parameters.AddWithValue("@Claim_ID", ClaimID);
-                cmd1.Parameters.AddWithValue("@_Comments", Comment);
-                cmd1.Parameters.AddWithValue("@User_ID", UserID);
+                cmd1.Parameters.AddWithValue("@Claim_ID", claimID);
+                cmd1.Parameters.AddWithValue("@_Comments", comment);
+                cmd1.Parameters.AddWithValue("@User_ID", userID);
+                cmd1.Parameters.AddWithValue("@oldAssign_ID", oldAssignID);
+                cmd1.Parameters.AddWithValue("@newAssign_ID", newAssignID);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd1.ExecuteNonQuery());
 
@@ -294,9 +296,14 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         UserComment userComment = new UserComment();
-                        userComment.Name = Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
-                        userComment.Comment = Convert.ToString(ds.Tables[0].Rows[i]["Comment"]);
-                        userComment.datetime = Convert.ToString(ds.Tables[0].Rows[i]["datetime"]);
+                        userComment.Name = ds.Tables[0].Rows[i]["Name"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
+                        userComment.Comment = ds.Tables[0].Rows[i]["Comment"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Comment"]);
+                        userComment.datetime = ds.Tables[0].Rows[i]["datetime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["datetime"]);
+                        userComment.OldAgentID = ds.Tables[0].Rows[i]["OldAgentID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OldAgentID"]);
+                        userComment.OldAgentName = ds.Tables[0].Rows[i]["OldAgentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["OldAgentName"]);
+                        userComment.NewAgentID = ds.Tables[0].Rows[i]["NewAgentID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NewAgentID"]);
+                        userComment.NewAgentName = ds.Tables[0].Rows[i]["NewAgentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NewAgentName"]);
+
                         lstClaimComment.Add(userComment);
                     }
                 }

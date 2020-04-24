@@ -187,7 +187,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("AddStoreClaimComment")]
-        public ResponseModel AddStoreClaimComment(int ClaimID, string Comment)
+        public ResponseModel AddStoreClaimComment(int claimID, string comment, int oldAssignID, int newAssignID)
         {
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
@@ -199,7 +199,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                int result = storeClaimCaller.AddClaimComment(new StoreClaimService(_connectionSting), ClaimID, Comment, authenticate.UserMasterID);
+                int result = storeClaimCaller.AddClaimComment(new StoreClaimService(_connectionSting), claimID, comment, authenticate.UserMasterID, oldAssignID, newAssignID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -222,7 +222,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name="TaskId"></param>
         [HttpPost]
         [Route("GetClaimCommentByClaimID")]
-        public ResponseModel GetClaimCommentByClaimID(int ClaimID)
+        public ResponseModel GetClaimCommentByClaimID(int claimID)
         {
             List<UserComment> objClaimComment= new List<UserComment>();
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
@@ -234,7 +234,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-                objClaimComment = storeClaimCaller.GetClaimComment(new StoreClaimService(_connectionSting), ClaimID);
+                objClaimComment = storeClaimCaller.GetClaimComment(new StoreClaimService(_connectionSting), claimID);
                 statusCode =
                    objClaimComment.Count==0?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

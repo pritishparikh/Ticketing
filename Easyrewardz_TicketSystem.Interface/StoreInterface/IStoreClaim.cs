@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface IStoreClaim
     {
         int RaiseClaim(StoreClaimMaster storeClaimMaster, string finalAttchment);
-        int AddClaimComment(int ClaimID, string Comment, int UserID);
+        int AddClaimComment(int ClaimID, string Comment, int UserID, int oldAssignID, int newAssignID);
         /// <summary>
         /// Get list of the claim comments from store
         /// </summary>

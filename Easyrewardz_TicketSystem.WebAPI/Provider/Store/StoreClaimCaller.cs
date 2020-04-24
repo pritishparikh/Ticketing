@@ -16,10 +16,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _ClaimRepository = storeClaim;
             return _ClaimRepository.RaiseClaim(storeClaimMaster, finalAttchment);
         }
-        public int AddClaimComment(IStoreClaim storeClaim,int ClaimID, string Comment, int UserID)
+        public int AddClaimComment(IStoreClaim storeClaim, int ClaimID, string Comment, int UserID, int oldAssignID, int newAssignID)
         {
             _ClaimRepository = storeClaim;
-            return _ClaimRepository.AddClaimComment(ClaimID, Comment, UserID);
+            return _ClaimRepository.AddClaimComment(ClaimID, Comment, UserID, oldAssignID, newAssignID);
         }
         public int ClaimApprove(IStoreClaim storeClaim, int claimID, double finalClaimAsked, bool IsApprove, int userMasterID,int tenantId)
         {
