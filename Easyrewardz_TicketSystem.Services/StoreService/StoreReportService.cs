@@ -26,7 +26,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Search the Report
         /// </summary>
-        /// <param name="searchparams"></param>
+        /// <param name="StoreReportModel"></param>
         /// <returns></returns>
         public int GetStoreReportSearch(StoreReportModel searchModel)
         {
@@ -107,6 +107,94 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return resultCount;
         }
+
+
+
+        /// <summary>
+        /// Search the Report
+        /// </summary>
+        /// <param name="StoreReportModel"></param>
+        /// <returns></returns>
+        public List<string> DownloadStoreReportSearch(StoreReportModel searchModel)
+        {
+            List<string> ReportDownloadList = new List<string>();
+            MySqlCommand cmd = new MySqlCommand();
+            int resultCount = 0;
+
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_ScheduleStoreReportForDownload", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", searchModel.TenantID);
+                cmd.Parameters.AddWithValue("@_ActiveTabID", searchModel.ActiveTabId);
+
+                /*------------------ TASK PARAMETERS ------------------------------*/
+
+                cmd.Parameters.AddWithValue("@_TaskTitle", string.IsNullOrEmpty(searchModel.TaskTitle) ? "" : searchModel.TaskTitle);
+                cmd.Parameters.AddWithValue("@_TaskStatus", string.IsNullOrEmpty(searchModel.TaskStatus) ? "" : searchModel.TaskStatus);
+                cmd.Parameters.AddWithValue("@_IsTaskWithTicket", Convert.ToInt16(searchModel.IsTaskWithTicket));
+                cmd.Parameters.AddWithValue("@_TaskTicketID", searchModel.TaskTicketID);
+                cmd.Parameters.AddWithValue("@_DepartmentIds", string.IsNullOrEmpty(searchModel.DepartmentIds) ? "" : searchModel.DepartmentIds);
+                cmd.Parameters.AddWithValue("@_FunctionIds", string.IsNullOrEmpty(searchModel.FunctionIds) ? "" : searchModel.FunctionIds);
+                cmd.Parameters.AddWithValue("@_PriorityIds", string.IsNullOrEmpty(searchModel.PriorityIds) ? "" : searchModel.PriorityIds);
+                cmd.Parameters.AddWithValue("@_IsTaskWithClaim", Convert.ToInt16(searchModel.IsTaskWithClaim));
+                cmd.Parameters.AddWithValue("@_TaskClaimID", searchModel.TaskClaimID);
+                cmd.Parameters.AddWithValue("@_TaskCreatedDate", searchModel.TaskCreatedDate);
+                cmd.Parameters.AddWithValue("@_TaskCreatedBy", searchModel.TaskCreatedBy);
+                cmd.Parameters.AddWithValue("@_TaskAssignedId", searchModel.TaskAssignedId);
+
+                /*------------------ ENDS HERE-------------------------------*/
+
+                /*------------------ CLAIM  PARAMETERS------------------------------*/
+
+                cmd.Parameters.AddWithValue("@_ClaimID", searchModel.ClaimID);
+                cmd.Parameters.AddWithValue("@_ClaimStatus", string.IsNullOrEmpty(searchModel.ClaimStatus) ? "" : searchModel.ClaimStatus);
+                cmd.Parameters.AddWithValue("@_IsClaimWithTicket", Convert.ToInt16(searchModel.IsClaimWithTicket));
+                cmd.Parameters.AddWithValue("@_ClaimTicketID", searchModel.ClaimTicketID);
+                cmd.Parameters.AddWithValue("@_ClaimCategoryIds", string.IsNullOrEmpty(searchModel.ClaimCategoryIds) ? "" : searchModel.ClaimCategoryIds);
+                cmd.Parameters.AddWithValue("@_ClaimSubCategoryIds", string.IsNullOrEmpty(searchModel.ClaimSubCategoryIds) ? "" : searchModel.ClaimSubCategoryIds);
+                cmd.Parameters.AddWithValue("@_ClaimIssuetypeIds", string.IsNullOrEmpty(searchModel.ClaimIssuetypeIds) ? "" : searchModel.ClaimIssuetypeIds);
+                cmd.Parameters.AddWithValue("@_IsClaimWithTask", Convert.ToInt16(searchModel.IsClaimWithTask));
+                cmd.Parameters.AddWithValue("@_ClaimTaskID", searchModel.ClaimTaskID);
+                cmd.Parameters.AddWithValue("@_ClaimCreatedDate", searchModel.ClaimCreatedDate);
+                cmd.Parameters.AddWithValue("@_ClaimCreatedBy", searchModel.ClaimCreatedBy);
+                cmd.Parameters.AddWithValue("@_ClaimAssignedId", searchModel.ClaimAssignedId);
+
+
+
+                /*------------------ CAMPAIGN  PARAMETERS------------------------------*/
+
+                cmd.Parameters.AddWithValue("@_CampaignName", string.IsNullOrEmpty(searchModel.CampaignName) ? "" : searchModel.CampaignName);
+                cmd.Parameters.AddWithValue("@_CampaignAssignedId", searchModel.CampaignAssignedIds);
+                cmd.Parameters.AddWithValue("@_CampaignStartDate", string.IsNullOrEmpty(searchModel.CampaignStartDate) ? "" : searchModel.CampaignStartDate);
+                cmd.Parameters.AddWithValue("@_CampaignEndDate", string.IsNullOrEmpty(searchModel.CampaignEndDate) ? "" : searchModel.CampaignEndDate);
+                cmd.Parameters.AddWithValue("@_CampaignStatusids", string.IsNullOrEmpty(searchModel.CampaignStatusids) ? "" : searchModel.CampaignStatusids);
+
+                /*------------------ ENDS HERE-------------------------------*/
+
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                resultCount = Convert.ToInt32(cmd.ExecuteScalar());
+
+                resultCount = 10;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return ReportDownloadList;
+        }
+
 
 
         /// <summary>

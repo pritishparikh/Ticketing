@@ -46,7 +46,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("StoreReportSearch")]
-        public ResponseModel ReportSearch([FromBody]StoreReportModel searchparams)
+        public ResponseModel ReportSearch([FromBody]StoreReportModel SearchParams)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -60,10 +60,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-                searchparams.TenantID = authenticate.TenantId; // add tenantID to request
+                SearchParams.TenantID = authenticate.TenantId; // add tenantID to request
                                                                // searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
 
-                resultCount = dbsearchMaster.StoreReportSearch(new StoreReportService(_connectioSting), searchparams);
+                resultCount = dbsearchMaster.StoreReportSearch(new StoreReportService(_connectioSting), SearchParams);
 
                 StatusCode = resultCount > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -71,6 +71,47 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = resultCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Search the Report
+        /// </summary>
+        /// <param name="searchparams"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("DownloadStoreReportSearch")]
+        public ResponseModel DownloadStoreReportSearch([FromBody]StoreReportModel SearchParams)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            List<string> ReportDownloadList = new List<string>();
+            StoreReportCaller dbsearchMaster = new StoreReportCaller();
+            try
+            {
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                SearchParams.TenantID = authenticate.TenantId; // add tenantID to request
+                                                               // searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
+
+                ReportDownloadList = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), SearchParams);
+
+                StatusCode = ReportDownloadList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = ReportDownloadList;
             }
             catch (Exception)
             {

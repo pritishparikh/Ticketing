@@ -9,7 +9,9 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
     {
          int GetStoreReportSearch(StoreReportModel searchModel);
 
-         int ScheduleStoreReport(ScheduleMaster scheduleMaster, int TenantID, int UserID);
+        List<string> DownloadStoreReportSearch(StoreReportModel searchModel);
+
+        int ScheduleStoreReport(ScheduleMaster scheduleMaster, int TenantID, int UserID);
 
         List<ReportModel> StoreReportList(int tenantID);
 

@@ -169,7 +169,66 @@ namespace Easyrewardz_TicketSystem.WebAPI
                 FileProvider = new PhysicalFileProvider(ReportDownloadURL),
                 RequestPath = "/" + ReportDownload
             });
-           
+
+
+            string BulkUpload = "BulkUpload";
+            string BulkUploadURL = Path.Combine(CurrentDirectory, BulkUpload);
+            if (!Directory.Exists(BulkUploadURL))
+            {
+                Directory.CreateDirectory(BulkUploadURL);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(BulkUploadURL),
+                RequestPath = "/" + BulkUpload
+            });
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(BulkUploadURL),
+                RequestPath = "/" + BulkUpload
+            });
+
+
+            string BulkUploadErrorFilePath = "BulkUpload/Downloadfile/Ticketing/Error";
+            string BulkUploadErrorFilePathURL = Path.Combine(CurrentDirectory, BulkUploadErrorFilePath);
+            if (!Directory.Exists(BulkUploadErrorFilePathURL))
+            {
+                Directory.CreateDirectory(BulkUploadErrorFilePathURL);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(BulkUploadErrorFilePathURL),
+                RequestPath = "/" + BulkUploadErrorFilePath
+            });
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(BulkUploadErrorFilePathURL),
+                RequestPath = "/" + BulkUploadErrorFilePath
+            });
+
+
+            string BulkUploadSuccessFilePath = "BulkUpload/Downloadfile/Ticketing/Success";
+            string BulkUploadSuccessFilePathURL = Path.Combine(CurrentDirectory, BulkUploadSuccessFilePath);
+            if (!Directory.Exists(BulkUploadSuccessFilePathURL))
+            {
+                Directory.CreateDirectory(BulkUploadSuccessFilePathURL);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(BulkUploadSuccessFilePathURL),
+                RequestPath = "/" + BulkUploadSuccessFilePath
+            });
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(BulkUploadSuccessFilePathURL),
+                RequestPath = "/" + BulkUploadSuccessFilePath
+            });
+
+
+
             app.UseMvc();
         }       
     }
