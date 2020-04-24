@@ -1,2 +1,3 @@
 RoleName,Status,EnabledModules,DisabledModules
 Test1,InActive,Dashboard|Tasks,Settings|Claim|Notification|Reports
+Test2,Active,Settings|Notification|Reports,Claim|Tasks|Dashboard
