@@ -28,7 +28,7 @@ namespace Easyrewardz_TicketSystem.Interface
         ///    <param name="ID"></param>
         ///   <param name="Comment"></param>
         /// <returns></returns>
-        int AddClaimCommentByApprovel(int ClaimID, string Comment, int UserID);
+        int AddClaimCommentByApprovel(int claimID, string comment, int UserID, bool iSRejectComment);
         /// <summary>
         /// GetClaimCommentForApprovel
         /// </summary>

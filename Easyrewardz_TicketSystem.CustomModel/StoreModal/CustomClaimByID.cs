@@ -52,5 +52,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string Name { get; set; }
         public string Comment { get; set; }
         public string CommentDate { get; set; }
+        public bool IsRejectComment { get; set; }
     }
 }

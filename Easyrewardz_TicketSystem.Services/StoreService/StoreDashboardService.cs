@@ -173,7 +173,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         StoreDashboardResponseModel storedashboard = new StoreDashboardResponseModel();
                         storedashboard.taskid = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-
+                        storedashboard.totalCount = ds.Tables[0].Rows.Count;
                         storedashboard.taskstatus = TaskStatusName;
 
                         storedashboard.tasktitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
@@ -198,7 +198,7 @@ namespace Easyrewardz_TicketSystem.Services
                         storedashboard.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
 
 
-                        storedashboard.totalCount = ds.Tables.Count;
+                       
 
                         departmentMasters.Add(storedashboard);
                     }
@@ -252,6 +252,14 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@objraisedby", model.raisedby);
                 cmd1.Parameters.AddWithValue("@objtenantID", model.tenantID);
 
+
+                cmd1.Parameters.AddWithValue("@objbrandIDs", string.IsNullOrEmpty(model.BrandIDs)? "" : model.BrandIDs);
+                cmd1.Parameters.AddWithValue("@objAgentIds", string.IsNullOrEmpty(model.AgentIds) ? "" : model.AgentIds);
+                cmd1.Parameters.AddWithValue("@objFromDate", string.IsNullOrEmpty(model.FromDate) ? "" : model.FromDate);
+                cmd1.Parameters.AddWithValue("@objToDate", string.IsNullOrEmpty(model.ToDate) ? "" : model.ToDate);
+
+
+
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -267,7 +275,6 @@ namespace Easyrewardz_TicketSystem.Services
                         StoreDashboard.ClaimID = ds.Tables[0].Rows[i]["ClaimID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ClaimID"]);
                         StoreDashboard.ClaimStatusId = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]);
                         StoreDashboard.ClaimStatus = StoreDashboard.ClaimStatusId.Equals(0) ? string.Empty : Convert.ToString((EnumMaster.ClaimStatus)StoreDashboard.ClaimStatusId);
-                        StoreDashboard.AssignTo = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
                         StoreDashboard.BrandID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
                         StoreDashboard.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
                         StoreDashboard.CategoryID = ds.Tables[0].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);

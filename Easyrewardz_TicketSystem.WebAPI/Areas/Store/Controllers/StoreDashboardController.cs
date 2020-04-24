@@ -48,12 +48,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name=""></param>
         /// <returns></returns>
         [HttpPost]
-        [AllowAnonymous]
-        [Route("getstoreDashboardList")]
-        public ResponseModel getstoreDashboardList([FromBody] StoreDashboardModel dasbhboardmodel)
+        [Route("GetstoreDashboardList")]
+        public ResponseModel GetstoreDashboardList([FromBody] StoreDashboardModel dasbhboardmodel)
         {
 
-            List<StoreDashboardResponseModel> objDepartmentList = new List<StoreDashboardResponseModel>();
+            List<StoreDashboardResponseModel> objStoreDash = new List<StoreDashboardResponseModel>();
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -63,12 +62,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                StoreDashboard newMasterBrand = new StoreDashboard();
+                StoreDashboard newstoreDash = new StoreDashboard();
 
-                objDepartmentList = newMasterBrand.getStoreDashboardTaskList(new StoreDashboardService(_connectioSting), dasbhboardmodel);
+                objStoreDash = newstoreDash.getStoreDashboardTaskList(new StoreDashboardService(_connectioSting), dasbhboardmodel);
 
                 StatusCode =
-                objDepartmentList.Count == 0 ?
+                objStoreDash.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -76,7 +75,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = objDepartmentList;
+                objResponseModel.ResponseData = objStoreDash;
             }
             catch (Exception)
             {
@@ -94,7 +93,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name=StoreDashboardClaimModel></param>
         /// <returns></returns>
         [HttpPost]
-        [AllowAnonymous]
         [Route("getstoreDashboardListClaim")]
         public ResponseModel getstoreDashboardListClaim([FromBody] StoreDashboardClaimModel ClaimSearchModel)
         {
@@ -121,7 +119,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = ClaimSearchResponse;
+                objResponseModel.ResponseData = ClaimSearchResponse; 
             }
             catch (Exception )
 
