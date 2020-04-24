@@ -1191,6 +1191,56 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return responseModel;
         }
+        /// <summary>
+        /// StoreChangePassword
+        /// </summary>
+        /// <param name="customChangePassword"></param>
+        /// 
+        [HttpPost]
+        [Route("StoreChangePassword")]
+        public ResponseModel StoreChangePassword([FromBody] CustomChangePassword customChangePassword)
+        {
+
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreSecurityCaller _securityCaller = new StoreSecurityCaller();
+                CommonService commonService = new CommonService();
+
+                if (customChangePassword.ChangePasswordType.Equals("mail"))
+                {
+                    customChangePassword.EmailID = SecurityService.DecryptStringAES(customChangePassword.EmailID);
+                }
+                customChangePassword.Password = SecurityService.Encrypt(customChangePassword.Password);
+
+
+                bool Result = _securityCaller.ChangePassword(new StoreSecurityService(_connectioSting), customChangePassword, authenticate.TenantId, authenticate.UserMasterID);
+
+                StatusCode =
+               Result == false ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Result;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
         #endregion
     }
 }
