@@ -50,7 +50,7 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
-        public int AddClaimCommentByApprovel(int ClaimID, string Comment, int UserID)
+        public int AddClaimCommentByApprovel(int claimID, string comment, int userID, bool iSRejectComment)
         {
             int success = 0;
             try
@@ -60,9 +60,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     Connection = conn
                 };
-                cmd1.Parameters.AddWithValue("@Claim_ID", ClaimID);
-                cmd1.Parameters.AddWithValue("@_Comments", Comment);
-                cmd1.Parameters.AddWithValue("@User_ID", UserID);
+                cmd1.Parameters.AddWithValue("@Claim_ID", claimID);
+                cmd1.Parameters.AddWithValue("@_Comments", comment);
+                cmd1.Parameters.AddWithValue("@User_ID", userID);
+                cmd1.Parameters.AddWithValue("@iSReject_Comment", iSRejectComment);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd1.ExecuteNonQuery());
 
@@ -343,6 +344,7 @@ namespace Easyrewardz_TicketSystem.Services
                         userComment.Name = ds.Tables[0].Rows[i]["Name"]== DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
                         userComment.Comment = ds.Tables[0].Rows[i]["Comment"]== DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Comment"]);
                         userComment.CommentDate = ds.Tables[0].Rows[i]["CommentDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentDate"]);
+                        userComment.IsRejectComment = ds.Tables[0].Rows[i]["IsRejectComment"] == DBNull.Value ? false : Convert.ToBoolean(Convert.ToInt16(ds.Tables[0].Rows[i]["IsRejectComment"]));
                         lstClaimComment.Add(userComment);
                     }
                 }
