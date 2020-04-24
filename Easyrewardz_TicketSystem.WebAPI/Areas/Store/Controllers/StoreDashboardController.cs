@@ -111,6 +111,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreDashboardCaller dashBoardcaller = new StoreDashboardCaller();
+                ClaimSearchModel.tenantID = authenticate.TenantId;
 
                 ClaimSearchResponse = dashBoardcaller.getStoreDashboardClaimList(new StoreDashboardService(_connectioSting), ClaimSearchModel);
 
