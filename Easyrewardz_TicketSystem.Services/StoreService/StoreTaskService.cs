@@ -822,6 +822,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Priority_ID", taskMaster.PriorityID);
                 cmd.Parameters.AddWithValue("@TaskStatus_ID", taskMaster.TaskStatusId);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
 
                 i = cmd.ExecuteNonQuery();
             }

@@ -196,16 +196,28 @@ namespace Easyrewardz_TicketSystem.CustomModel
             New = 220,
 
             /// <summary>
-            ///TaskStatus - Open
+            ///TaskStatus - Open/Pending
             /// </summary>
             [Description("Open/Pending")]
             Open = 221,
 
             /// <summary>
-            ///TaskStatus - Pending 
+            ///TaskStatus - Resolved 
             /// </summary>
             [Description("Resolved")]
-            Resolved = 222
+            Resolved = 222,
+
+            /// <summary>
+            ///TaskStatus - Closed  
+            /// </summary>
+            [Description("Closed")]
+            Closed = 223,
+
+            /// <summary>
+            ///TaskStatus - Re-Opened
+            /// </summary>
+            [Description("Re-Opened")]
+            ReOpened = 224,
         }
 
         /// <summary>
@@ -260,19 +272,19 @@ namespace Easyrewardz_TicketSystem.CustomModel
             ///CommunicationMode - Email
             /// </summary>
             [Description("Email")]
-            New = 240,
+            Email = 240,
 
             /// <summary>
             ///CommunicationMode - SMS
             /// </summary>
             [Description("SMS")]
-            Open = 241,
+            SMS = 241,
 
             /// <summary>
             ///CommunicationMode - Notification 
             /// </summary>
             [Description("Notification")]
-            Resolved = 242
+            Notification = 242
         }
 
         /// <summary>
@@ -284,19 +296,25 @@ namespace Easyrewardz_TicketSystem.CustomModel
             ///CommunicationFor - Customer
             /// </summary>
             [Description("Customer")]
-            New = 250,
+            Customer = 250,
 
             /// <summary>
             ///CommunicationFor - Internal
             /// </summary>
             [Description("Internal")]
-            Open = 251,
+            Internal = 251,
 
             /// <summary>
             ///CommunicationFor - Store 
             /// </summary>
             [Description("Store")]
-            Resolved = 252
+            Store = 252,
+
+            /// <summary>
+            ///CommunicationFor - Ticketing 
+            /// </summary>
+            [Description("Ticketing")]
+            Ticketing = 253
         }
 
         /// <summary>
