@@ -207,14 +207,19 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             Name = x.Field<object>("Name") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Name")),
                             Comment = x.Field<object>("Comment") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Comment")),
-                            CommentDate = x.Field<object>("CommentDate") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CommentDate"))
+                            CommentDate = x.Field<object>("CommentDate") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CommentDate")),
+                            OldAgentID = x.Field<object>("OldAgentID") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("OldAgentID")),
+                            OldAgentName = x.Field<object>("OldAgentName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("OldAgentName")),
+                            NewAgentID = x.Field<object>("NewAgentID") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("NewAgentID")),
+                            NewAgentName = x.Field<object>("NewAgentName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("NewAgentName")),
                         }).ToList();
 
                         customClaimList.CommentByApprovels = ds.Tables[3].AsEnumerable().Select(x => new CommentByApprovel()
                         {
                             Name = x.Field<object>("Name") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Name")),
                             Comment = x.Field<object>("Comment") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Comment")),
-                            CommentDate = x.Field<object>("CommentDate") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CommentDate"))
+                            CommentDate = x.Field<object>("CommentDate") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CommentDate")),
+                            IsRejectComment = x.Field<object>("IsRejectComment") == DBNull.Value ? false : Convert.ToBoolean(x.Field<object>("IsRejectComment")),
                         }).ToList();
 
                     }
