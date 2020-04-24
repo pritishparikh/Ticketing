@@ -230,7 +230,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
-            List<StoreDashboardClaimResponseModel> departmentMasters = new List<StoreDashboardClaimResponseModel>();
+            List<StoreDashboardClaimResponseModel> ClaimSearchResponse = new List<StoreDashboardClaimResponseModel>();
 
             try
             {
@@ -245,12 +245,13 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@objclaimsubcat", model.claimsubcat);
                 cmd1.Parameters.AddWithValue("@objassignTo", model.assignTo);
                 cmd1.Parameters.AddWithValue("@objclaimcat", model.claimcat);
-                cmd1.Parameters.AddWithValue("@objclaimraise", model.claimraise);
+                cmd1.Parameters.AddWithValue("@objclaimraise", model.claimraiseddate);
                 cmd1.Parameters.AddWithValue("@objtaskID", model.taskID);
                 cmd1.Parameters.AddWithValue("@objclaimstatus", model.claimstatus);
                 cmd1.Parameters.AddWithValue("@objtaskmapped", model.taskmapped);
                 cmd1.Parameters.AddWithValue("@objraisedby", model.raisedby);
-           
+                cmd1.Parameters.AddWithValue("@objtenantID", model.tenantID);
+
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -260,25 +261,31 @@ namespace Easyrewardz_TicketSystem.Services
 
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.ClaimStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
+                       
+                        StoreDashboardClaimResponseModel StoreDashboard = new StoreDashboardClaimResponseModel();
 
-                        StoreDashboardClaimResponseModel storedashboard = new StoreDashboardClaimResponseModel();
-                        storedashboard.claimID = Convert.ToString(ds.Tables[0].Rows[i]["ID"]);
+                        StoreDashboard.ClaimID = ds.Tables[0].Rows[i]["ClaimID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ClaimID"]);
+                        StoreDashboard.ClaimStatusId = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]);
+                        StoreDashboard.ClaimStatus = StoreDashboard.ClaimStatusId.Equals(0) ? string.Empty : Convert.ToString((EnumMaster.ClaimStatus)StoreDashboard.ClaimStatusId);
+                        StoreDashboard.AssignTo = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
+                        StoreDashboard.BrandID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
+                        StoreDashboard.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                        StoreDashboard.CategoryID = ds.Tables[0].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
+                        StoreDashboard.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        StoreDashboard.SubCategoryID = ds.Tables[0].Rows[i]["SubCategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        StoreDashboard.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        StoreDashboard.IssueTypeID = ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
+                        StoreDashboard.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
 
-                        storedashboard.claimstatus = TaskStatusName;
+                        StoreDashboard.CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CreatedBy"]);
+                        StoreDashboard.CreatedByName = ds.Tables[0].Rows[i]["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedByName"]);
+                        StoreDashboard.AssignedId = ds.Tables[0].Rows[i]["AssignedID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["AssignedID"]);
+                        StoreDashboard.AssignTo = ds.Tables[0].Rows[i]["AssignedToName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignedToName"]);
+                        StoreDashboard.ClaimRaisedByID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
+                        StoreDashboard.ClaimRaisedBy = ds.Tables[0].Rows[i]["Raisedby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Raisedby"]);
+                        StoreDashboard.CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
 
-                        storedashboard.claimissueType = Convert.ToString(ds.Tables[0].Rows[i]["ClaimIssueType"]);
-
-                        storedashboard.claimcat = Convert.ToString(ds.Tables[0].Rows[i]["Category"]);
-
-                        storedashboard.createdID = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-
-                        storedashboard.CreatedOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
-
-                        storedashboard.AssigntoId = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
-
-                        storedashboard.totalCount = ds.Tables.Count;
-                        departmentMasters.Add(storedashboard);
+                        ClaimSearchResponse.Add(StoreDashboard);
                     }
                 }
             }
@@ -294,7 +301,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return departmentMasters;
+            return ClaimSearchResponse;
 
         }
 
