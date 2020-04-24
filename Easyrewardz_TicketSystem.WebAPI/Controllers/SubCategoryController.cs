@@ -155,7 +155,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// Get SubCategory By Category On Search
         /// </summary>
         /// <param name="CategoryID"></param>
-        /// <param name="searchText"></param>
+        /// <param name="TypeId"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetSubCategoryByCategoryOnSearch")]

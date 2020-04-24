@@ -56,17 +56,23 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-                    customerMaster.CustomerID = Convert.ToInt32(ds.Tables[0].Rows[0]["CustomerID"]);
-                    customerMaster.TenantID = Convert.ToInt32(ds.Tables[0].Rows[0]["TenantID"]);
-                    customerMaster.CustomerName = Convert.ToString(ds.Tables[0].Rows[0]["CustomerName"]);
-                    customerMaster.CustomerPhoneNumber = Convert.ToString(ds.Tables[0].Rows[0]["CustomerPhoneNumber"]);
-                    customerMaster.CustomerEmailId = Convert.ToString(ds.Tables[0].Rows[0]["CustomerEmailId"]);
-                    customerMaster.GenderID = Convert.ToInt32(ds.Tables[0].Rows[0]["GenderID"]);
-                    customerMaster.AltNumber = Convert.ToString(ds.Tables[0].Rows[0]["AltNumber"]);
-                    customerMaster.AltEmailID = Convert.ToString(ds.Tables[0].Rows[0]["AltEmailID"]);
-                    customerMaster.DateOfBirth = default(DateTime);
-                    customerMaster.IsActive = Convert.ToInt32(ds.Tables[0].Rows[0]["IsActive"]);
-                    customerMaster.DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]);
+
+                    if(ds.Tables[0].Rows.Count> 0)
+                        {
+                        customerMaster.CustomerID = ds.Tables[0].Rows[0]["CustomerID"] == DBNull.Value ? 0 :  Convert.ToInt32(ds.Tables[0].Rows[0]["CustomerID"]);
+                        customerMaster.TenantID = ds.Tables[0].Rows[0]["TenantID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["TenantID"]);
+                        customerMaster.CustomerName = ds.Tables[0].Rows[0]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CustomerName"]);
+                        customerMaster.CustomerPhoneNumber = ds.Tables[0].Rows[0]["CustomerPhoneNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CustomerPhoneNumber"]);
+                        customerMaster.CustomerEmailId = ds.Tables[0].Rows[0]["CustomerEmailId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CustomerEmailId"]);
+                        customerMaster.GenderID = ds.Tables[0].Rows[0]["GenderID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["GenderID"]);
+                        customerMaster.AltNumber = ds.Tables[0].Rows[0]["AltNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["AltNumber"]);
+                        customerMaster.AltEmailID = ds.Tables[0].Rows[0]["AltEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["AltEmailID"]);
+                        customerMaster.DateOfBirth = default(DateTime);
+                        customerMaster.IsActive = ds.Tables[0].Rows[0]["IsActive"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["IsActive"]);
+                        customerMaster.DOB = ds.Tables[0].Rows[0]["DOB"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["DOB"]);
+
+                    }
+                    
                 }
             }
             catch (Exception)
@@ -79,6 +85,12 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+
+                if (ds!=null)
+                {
+                    ds.Dispose();
+                }
+
             }
             return customerMaster;
         }
@@ -113,8 +125,8 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         CustomerMaster customer = new CustomerMaster
                         {
-                            CustomerName = Convert.ToString(dt.Rows[i]["CustomerName"]),
-                            CustomerID = Convert.ToInt32(dt.Rows[i]["CustomerID"])
+                            CustomerName = dt.Rows[i]["CustomerName"] == DBNull.Value ? string.Empty: Convert.ToString(dt.Rows[i]["CustomerName"]),
+                            CustomerID = dt.Rows[i]["CustomerID"] == DBNull.Value ? 0 :  Convert.ToInt32(dt.Rows[i]["CustomerID"])
                         };
 
                         customerMasters.Add(customer);

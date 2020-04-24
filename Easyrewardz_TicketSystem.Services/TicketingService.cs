@@ -131,11 +131,11 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@_TikcketTitle", string.IsNullOrEmpty(ticketingDetails.TicketTitle) ? "" : ticketingDetails.TicketTitle);
                 cmd1.Parameters.AddWithValue("@_StoreID", string.IsNullOrEmpty(ticketingDetails.StoreID) ? "" : ticketingDetails.StoreID);
                 // added for mailer check 
+                //cmd1.Parameters.AddWithValue("@_Is_Sent", Convert.ToInt16(!string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody)));
 
-                issentflag = ticketingDetails.ticketingMailerQues != null && ticketingDetails.ticketingMailerQues.Count > 0 &&
-                    !string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody); 
+
+                issentflag = ticketingDetails.ticketingMailerQues != null && !string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody);
                 cmd1.Parameters.AddWithValue("@_Is_Sent", Convert.ToInt16(issentflag));
-            
 
                 cmd1.CommandType = CommandType.StoredProcedure;
 
@@ -241,50 +241,42 @@ namespace Easyrewardz_TicketSystem.Services
 
                 #endregion
 
-                if(ticketingDetails.ticketingMailerQues!=null)
+
+                if(!string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody))
                 {
-                    if(ticketingDetails.ticketingMailerQues.Count > 0)
-                    {
-                        if (!string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody))
-                        {
 
-                            ticketingDetails.ticketingMailerQues[0].CreatedBy = ticketingDetails.CreatedBy;
+                ticketingDetails.ticketingMailerQues[0].CreatedBy = ticketingDetails.CreatedBy;
 
 
-                            MySqlCommand cmdMail = new MySqlCommand("SP_SendTicketingEmail", conn);
-                            cmdMail.Parameters.AddWithValue("@Tenant_ID", ticketingDetails.TenantID);
-                            cmdMail.Parameters.AddWithValue("@Ticket_ID", ticketID);
-                            cmdMail.Parameters.AddWithValue("@TikcketMail_Subject", ticketingDetails.ticketingMailerQues[0].TikcketMailSubject);
-                            cmdMail.Parameters.AddWithValue("@TicketMail_Body", ticketingDetails.ticketingMailerQues[0].TicketMailBody);
-                            cmdMail.Parameters.AddWithValue("@To_Email", ticketingDetails.ticketingMailerQues[0].ToEmail);
-                            cmdMail.Parameters.AddWithValue("@User_CC", ticketingDetails.ticketingMailerQues[0].UserCC);
-                            cmdMail.Parameters.AddWithValue("@User_BCC", ticketingDetails.ticketingMailerQues[0].UserBCC);
-                            cmdMail.Parameters.AddWithValue("@Ticket_Source", ticketingDetails.ticketingMailerQues[0].TicketSource);
-                            cmdMail.Parameters.AddWithValue("@Alert_ID", ticketingDetails.ticketingMailerQues[0].AlertID);
-                            cmdMail.Parameters.AddWithValue("@Is_Sent", ticketingDetails.ticketingMailerQues[0].IsSent);
-                            cmdMail.Parameters.AddWithValue("@Priority_ID", ticketingDetails.ticketingMailerQues[0].PriorityID);
-                            cmdMail.Parameters.AddWithValue("@Created_By", ticketingDetails.ticketingMailerQues[0].CreatedBy);
-                            if (finalAttchment == null || finalAttchment == String.Empty)
-                            {
-                                cmdMail.Parameters.AddWithValue("@Has_Attachment", 0);
-                            }
-                            else
-                            {
-                                cmdMail.Parameters.AddWithValue("@Has_Attachment", 1);
-                            }
-
-                            cmdMail.CommandType = CommandType.StoredProcedure;
-                            a = Convert.ToInt32(cmdMail.ExecuteScalar());
-
-                        }
-                    }
-                  
+                MySqlCommand cmdMail = new MySqlCommand("SP_SendTicketingEmail", conn);
+                cmdMail.Parameters.AddWithValue("@Tenant_ID", ticketingDetails.TenantID);
+                cmdMail.Parameters.AddWithValue("@Ticket_ID", ticketID);
+                cmdMail.Parameters.AddWithValue("@TikcketMail_Subject", ticketingDetails.ticketingMailerQues[0].TikcketMailSubject);
+                cmdMail.Parameters.AddWithValue("@TicketMail_Body", ticketingDetails.ticketingMailerQues[0].TicketMailBody);
+                cmdMail.Parameters.AddWithValue("@To_Email", ticketingDetails.ticketingMailerQues[0].ToEmail);
+                cmdMail.Parameters.AddWithValue("@User_CC", ticketingDetails.ticketingMailerQues[0].UserCC);
+                cmdMail.Parameters.AddWithValue("@User_BCC", ticketingDetails.ticketingMailerQues[0].UserBCC);
+                cmdMail.Parameters.AddWithValue("@Ticket_Source", ticketingDetails.ticketingMailerQues[0].TicketSource);
+                cmdMail.Parameters.AddWithValue("@Alert_ID", ticketingDetails.ticketingMailerQues[0].AlertID);
+                cmdMail.Parameters.AddWithValue("@Is_Sent", ticketingDetails.ticketingMailerQues[0].IsSent);
+                cmdMail.Parameters.AddWithValue("@Priority_ID", ticketingDetails.ticketingMailerQues[0].PriorityID);
+                cmdMail.Parameters.AddWithValue("@Created_By", ticketingDetails.ticketingMailerQues[0].CreatedBy);
+                if (finalAttchment == null || finalAttchment == String.Empty)
+                {
+                    cmdMail.Parameters.AddWithValue("@Has_Attachment", 0);
+                }
+                else
+                {
+                    cmdMail.Parameters.AddWithValue("@Has_Attachment", 1);
                 }
 
-              
+                cmdMail.CommandType = CommandType.StoredProcedure;
+                a = Convert.ToInt32(cmdMail.ExecuteScalar());
+
+                }
 
             }
-            catch (Exception)
+            catch (Exception )
             {
                 throw;
             }
@@ -1646,7 +1638,7 @@ namespace Easyrewardz_TicketSystem.Services
                         i = cmdattachment.ExecuteNonQuery();
                     }
                 }
-                catch (IOException)
+                catch (IOException ioex)
                 {
                     ticketID = 0;
                 }

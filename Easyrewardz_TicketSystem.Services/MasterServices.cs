@@ -728,13 +728,13 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_CreateDepartment", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@_BrandID", createDepartmentModel.BrandID);
-                cmd.Parameters.AddWithValue("@_StoreID", createDepartmentModel.StoreID);
-                cmd.Parameters.AddWithValue("@_DepartmentID", createDepartmentModel.DepartmentID);
-                cmd.Parameters.AddWithValue("@_FunctionID", createDepartmentModel.FunctionID);
-                cmd.Parameters.AddWithValue("@_Status", createDepartmentModel.Status);
-                cmd.Parameters.AddWithValue("@_TenantID", createDepartmentModel.TenantID);
-                cmd.Parameters.AddWithValue("@_UserID", createDepartmentModel.CreatedBy);
+                cmd.Parameters.AddWithValue("@BrandID", createDepartmentModel.BrandID);
+                cmd.Parameters.AddWithValue("@StoreID", createDepartmentModel.StoreID);
+                cmd.Parameters.AddWithValue("@DepartmentID", createDepartmentModel.DepartmentID);
+                cmd.Parameters.AddWithValue("@FunctionID", createDepartmentModel.FunctionID);
+                cmd.Parameters.AddWithValue("@Status", createDepartmentModel.Status);
+                cmd.Parameters.AddWithValue("@TenantID", createDepartmentModel.TenantID);
+                cmd.Parameters.AddWithValue("@UserID", createDepartmentModel.CreatedBy);
 
 
                 cmd.CommandType = CommandType.StoredProcedure;

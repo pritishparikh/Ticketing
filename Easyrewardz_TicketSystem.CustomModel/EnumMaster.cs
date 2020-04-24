@@ -172,7 +172,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
             /// <summary>
             ///ClaimStatus - Open
             /// </summary>
-            [Description("Open")]
+            [Description("Open/Pending")]
             Open = 211,
 
             /// <summary>
@@ -180,7 +180,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
             /// </summary>
             [Description("Resolved")]
             Resolved = 212
-
         }
 
 
@@ -197,29 +196,16 @@ namespace Easyrewardz_TicketSystem.CustomModel
             New = 220,
 
             /// <summary>
-            ///TaskStatus - Open/Pending
+            ///TaskStatus - Open
             /// </summary>
             [Description("Open/Pending")]
             Open = 221,
 
             /// <summary>
-            ///TaskStatus - Resolved 
+            ///TaskStatus - Pending 
             /// </summary>
             [Description("Resolved")]
-            Resolved = 222,
-
-            /// <summary>
-            ///TaskStatus - Closed  
-            /// </summary>
-            [Description("Closed")]
-            Closed = 223,
-
-            /// <summary>
-            ///TaskStatus - Re-Opened
-            /// </summary>
-            [Description("Re-Opened")]
-            ReOpened = 224,
-
+            Resolved = 222
         }
 
         /// <summary>
@@ -274,19 +260,19 @@ namespace Easyrewardz_TicketSystem.CustomModel
             ///CommunicationMode - Email
             /// </summary>
             [Description("Email")]
-            Email = 240,
+            New = 240,
 
             /// <summary>
             ///CommunicationMode - SMS
             /// </summary>
             [Description("SMS")]
-            SMS = 241,
+            Open = 241,
 
             /// <summary>
             ///CommunicationMode - Notification 
             /// </summary>
             [Description("Notification")]
-            Notification = 242
+            Resolved = 242
         }
 
         /// <summary>
@@ -298,25 +284,19 @@ namespace Easyrewardz_TicketSystem.CustomModel
             ///CommunicationFor - Customer
             /// </summary>
             [Description("Customer")]
-            Customer = 250,
+            New = 250,
 
             /// <summary>
             ///CommunicationFor - Internal
             /// </summary>
             [Description("Internal")]
-            Internal = 251,
+            Open = 251,
 
             /// <summary>
             ///CommunicationFor - Store 
             /// </summary>
             [Description("Store")]
-            Store = 252,
-
-            /// <summary>
-            ///CommunicationFor - Ticketing 
-            /// </summary>
-            [Description("Ticketing")]
-            Ticketing = 253
+            Resolved = 252
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class OrderController : ControllerBase
     {
         #region variable declaration
@@ -364,8 +364,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
-        #region attach order OLD APPROACH
 
+        #region attach order OLD APPROACH
         /// <summary>
         /// attach order
         /// </summary>
@@ -386,6 +386,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         //        Authenticate authenticate = new Authenticate();
         //        authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
+
+
+
         //        int result = ordercaller.AttachOrder(new OrderService(connectioSting), OrderID, TicketId, authenticate.UserMasterID);
         //        StatusCode =
         //        result == 0 ?
@@ -402,6 +405,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         //    }
         //    return objResponseModel;
         //}
+
 
         #endregion
 
@@ -440,55 +444,55 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 TicketId = Convert.ToInt32(Keys["TicketId"]);
 
                 if (!string.IsNullOrEmpty(OrderID) && TicketId > 0)
+                { 
+
+                #region check orderdetails and item details 
+
+                if (orderDetails != null)
                 {
-
-                    #region check orderdetails and item details 
-
-                    if (orderDetails != null)
+                    if (orderDetails.OrderMasterID.Equals(0))
                     {
-                        if (orderDetails.OrderMasterID.Equals(0))
+                        string OrderNumber = string.Empty;
+                        string OrderItemsIds = string.Empty;
+                        OrderMaster objorderMaster = null;
+
+                        //call insert order
+                        orderDetails.CreatedBy = authenticate.UserMasterID;
+                        OrderNumber = ordercaller.addOrder(new OrderService(connectioSting), orderDetails, authenticate.TenantId);
+                        if (!string.IsNullOrEmpty(OrderNumber))
                         {
-                            string OrderNumber = string.Empty;
-                            string OrderItemsIds = string.Empty;
-                            OrderMaster objorderMaster = null;
+                            objorderMaster = ordercaller.getOrderDetailsByNumber(new OrderService(connectioSting), OrderNumber, authenticate.TenantId);
 
-                            //call insert order
-                            orderDetails.CreatedBy = authenticate.UserMasterID;
-                            OrderNumber = ordercaller.addOrder(new OrderService(connectioSting), orderDetails, authenticate.TenantId);
-                            if (!string.IsNullOrEmpty(OrderNumber))
+                            if (objorderMaster != null)
                             {
-                                objorderMaster = ordercaller.getOrderDetailsByNumber(new OrderService(connectioSting), OrderNumber, authenticate.TenantId);
-
-                                if (objorderMaster != null)
+                                if (OrderItemDetails != null)
                                 {
-                                    if (OrderItemDetails != null)
+                                    foreach (var item in OrderItemDetails)
                                     {
-                                        foreach (var item in OrderItemDetails)
-                                        {
-                                            item.OrderMasterID = objorderMaster.OrderMasterID;
-                                            item.InvoiceDate = orderDetails.InvoiceDate;
-                                        }
-
-                                        OrderItemsIds = ordercaller.AddOrderItem(new OrderService(connectioSting), OrderItemDetails, authenticate.TenantId, authenticate.UserMasterID);
-                                    }
-                                    else
-                                    {
-                                        OrderItemsIds = Convert.ToString(objorderMaster.OrderMasterID) + "|0|1";
+                                        item.OrderMasterID = objorderMaster.OrderMasterID;
+                                        item.InvoiceDate = orderDetails.InvoiceDate;
                                     }
 
-                                    OrderID = OrderItemsIds;
+                                    OrderItemsIds = ordercaller.AddOrderItem(new OrderService(connectioSting), OrderItemDetails, authenticate.TenantId, authenticate.UserMasterID);
                                 }
+                                else
+                                {
+                                    OrderItemsIds = Convert.ToString(objorderMaster.OrderMasterID) + "|0|1";
+                                }
+
+                                OrderID = OrderItemsIds;
                             }
-
-
                         }
+
+
                     }
-
-                    #endregion
-
-                    result = ordercaller.AttachOrder(new OrderService(connectioSting), OrderID, TicketId, authenticate.UserMasterID);
-
                 }
+
+                #endregion
+
+                result = ordercaller.AttachOrder(new OrderService(connectioSting), OrderID, TicketId, authenticate.UserMasterID);
+
+            }
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
@@ -504,6 +508,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return objResponseModel;
         }
+
 
         /// <summary>
         /// Get Order Detail By TicketID

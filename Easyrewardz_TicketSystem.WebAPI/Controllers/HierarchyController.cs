@@ -25,7 +25,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         private readonly string _radisCacheServerAddress;
         private readonly string _connectionSting;
         private readonly string rootPath;
-        private readonly string _UploadedBulkFile;
+        private readonly string BulkUpload;
+        private readonly string UploadFiles;
+        private readonly string DownloadFile;
 
         #endregion
 
@@ -36,7 +38,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             _connectionSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
             rootPath = configuration.GetValue<string>("APIURL");
-            _UploadedBulkFile = configuration.GetValue<string>("FileUploadLocation");
+            BulkUpload = configuration.GetValue<string>("BulkUpload");
+            UploadFiles = configuration.GetValue<string>("Uploadfiles");
+            DownloadFile = configuration.GetValue<string>("Downloadfile");
+
         }
         #endregion
 
@@ -175,7 +180,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
                 var files = Request.Form.Files;
-                string timeStamp = DateTime.Now.ToString("ddMMyyyyhhmm");
+                string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
 
                 if (files.Count > 0)
                 {
@@ -187,16 +192,33 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 }
                 var Keys = Request.Form;
 
-                var exePath = Path.GetDirectoryName(System.Reflection
-                     .Assembly.GetExecutingAssembly().CodeBase);
-                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
-                var appRoot = appPathMatcher.Match(exePath).Value;
-                string Folderpath = appRoot + "\\" + _UploadedBulkFile;
+                //var exePath = Path.GetDirectoryName(System.Reflection
+                //     .Assembly.GetExecutingAssembly().CodeBase);
+                //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                //var appRoot = appPathMatcher.Match(exePath).Value;
+                //string Folderpath = appRoot + "\\" + _UploadedBulkFile;
 
-               
+
+
+                #region FilePath
+                string Folderpath = Directory.GetCurrentDirectory();
+                string[] filesName = finalAttchment.Split(",");
+
+
+                BulkUploadFilesPath = Path.Combine(Folderpath, BulkUpload, UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor));// Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
+                DownloadFilePath = Path.Combine(Folderpath, BulkUpload, DownloadFile, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor)); ;// Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
+
+
+                if (!Directory.Exists(BulkUploadFilesPath))
+                {
+                    Directory.CreateDirectory(BulkUploadFilesPath);
+                }
+
+
+
                 if (files.Count > 0)
                 {
-                    string[] filesName = finalAttchment.Split(",");
+                    
                     for (int i = 0; i < files.Count; i++)
                     {
                         using (var ms = new MemoryStream())
@@ -204,7 +226,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                             files[i].CopyTo(ms);
                             var fileBytes = ms.ToArray();
                             MemoryStream msfile = new MemoryStream(fileBytes);
-                            FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                            FileStream docFile = new FileStream(Path.Combine(BulkUploadFilesPath, filesName[i]), FileMode.Create, FileAccess.Write);
                             msfile.WriteTo(docFile);
                             docFile.Close();
                             ms.Close();
@@ -217,38 +239,38 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     }
                 }
 
-               
+                #endregion
 
                 string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                #region FilePath
-                BulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
-                DownloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)HierarchyFor);
+                       
 
-                #endregion             
-
-                DataSetCSV = CommonService.csvToDataSet(Folderpath +"\\"+ finalAttchment);
+                DataSetCSV = CommonService.csvToDataSet(Path.Combine(BulkUploadFilesPath, filesName[0]));
 
                 CSVlist = _Hierarchy.HierarchyBulkUpload(new HierarchyService(_connectionSting),
                     authenticate.TenantId, authenticate.UserMasterID, HierarchyFor, DataSetCSV);
+
                 #region Create Error and Success files and  Insert in FileUploadLog
-                
+
+                string SuccessFileName = "HierarchySuccessFile_" + timeStamp + ".csv";
+                string ErrorFileName = "HierarchyErrorFile_" + timeStamp + ".csv";
+
+                string SuccessFileUrl = rootPath + "/" + BulkUpload + "/" + DownloadFile + "/Success/" + SuccessFileName;
+                string ErrorFileUrl = rootPath + "/" + BulkUpload + "/" + DownloadFile + "/Error/" + ErrorFileName;
+
                 if (!string.IsNullOrEmpty(CSVlist[0]))
-                    successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", CSVlist[0]);
+                    successfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath,"Success", SuccessFileName), CSVlist[0]);
 
                 if (!string.IsNullOrEmpty(CSVlist[1]))
-                    errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv", CSVlist[1]);
+                    errorfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Error", ErrorFileName), CSVlist[1]);
 
-                count = fileU.CreateFileUploadLog(new FileUploadService(_connectionSting), authenticate.TenantId, finalAttchment, errorfilesaved,
-                                   "HierarchyErrorFile.csv", "HierarchySuccessFile.csv", authenticate.UserMasterID, "Hierarchy",
-                                   DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv",
-                                   DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", HierarchyFor
-                                   );
+                count = fileU.CreateFileUploadLog(new FileUploadService(_connectionSting), authenticate.TenantId, filesName[0], errorfilesaved,
+                                 ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Hierarchy", SuccessFileUrl, ErrorFileUrl, HierarchyFor);
                 #endregion
 
-                StatusCode = successfilesaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                StatusCode = count>0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;

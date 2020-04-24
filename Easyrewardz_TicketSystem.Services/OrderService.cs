@@ -7,7 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -165,13 +167,13 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Parameters.AddWithValue("@_SKUName", itemMaster[k].ArticleName);
                         cmd.Parameters.AddWithValue("@_ItemPrice", itemMaster[k].ItemPrice);
                         cmd.Parameters.AddWithValue("@_Discount", itemMaster[k].Discount);
-                        cmd.Parameters.AddWithValue("@_requiredSize", string.IsNullOrEmpty(itemMaster[k].RequireSize) ? "0" : itemMaster[k].RequireSize);
+                        cmd.Parameters.AddWithValue("@_requiredSize", string.IsNullOrEmpty(itemMaster[k].RequireSize) ? "0": itemMaster[k].RequireSize); 
                         cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
 
                         cmd.CommandType = CommandType.StoredProcedure;
                         InsertedItemDetails = Convert.ToString(cmd.ExecuteScalar());
 
-                        if(!string.IsNullOrEmpty(InsertedItemDetails))
+                        if(!string.IsNullOrEmpty(InsertedItemDetails)) 
                             itemOrderIDList.Add(InsertedItemDetails); 
                     }
                   
@@ -398,6 +400,7 @@ namespace Easyrewardz_TicketSystem.Services
             return objOrderItemDetails;
         }
 
+
         /// <summary>
         /// Get OrderList By CustomerID  (new approach get data directly from LPASS API)
         /// </summary>
@@ -417,7 +420,7 @@ namespace Easyrewardz_TicketSystem.Services
                 // get customer details
                 customerMaster = CustService.getCustomerbyId(customerID, tenantID);
 
-                if (!string.IsNullOrEmpty(customerMaster.CustomerPhoneNumber))
+                if(!string.IsNullOrEmpty(customerMaster.CustomerPhoneNumber))
                 {
                     customOrderdetail = getOrderDetailsfromAPI("", customerID, customerMaster.CustomerPhoneNumber, tenantID, CreatedBy);
 
@@ -449,7 +452,7 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-
+               
             }
             catch (Exception ex)
             {
@@ -475,7 +478,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="CustomerID"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        //public List<CustomOrderDetailsByCustomer> getOrderListByCustomerID(int customerID, int tenantID,int CreatedBy)
+        //public List<CustomOrderDetailsByCustomer> getOrderListByCustomerIDOLD(int customerID, int tenantID,int CreatedBy)
         //{
         //    DataSet ds = new DataSet();
         //    List<CustomOrderDetailsByCustomer> objorderMaster = new List<CustomOrderDetailsByCustomer>();
@@ -584,6 +587,7 @@ namespace Easyrewardz_TicketSystem.Services
         //}
 
         #endregion
+
 
         /// <summary>
         /// Get Order List By ClaimID
@@ -801,9 +805,9 @@ namespace Easyrewardz_TicketSystem.Services
                             ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
                             PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
                             Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
-                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty: Convert.ToString(x.Field<object>("RequireSize")),
+                            RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("RequireSize")),
                             InvoiceNumber = x.Field<object>("InvoiceNo") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("InvoiceNo")),// customOrderMaster.InvoiceNumber,
-                            InvoiceDate = customOrderMaster.InvoiceDate
+                            InvoiceDate= customOrderMaster.InvoiceDate
                         }).ToList();
                         customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                         customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);

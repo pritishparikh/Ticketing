@@ -25,6 +25,11 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public int RegionID { get; set; }
         public int ZoneID { get; set; }
         public int StoreTypeID { get; set; }
+
+        public string RegionName { get; set; }
+        public string StoreTypeName { get; set; }
+        public string Zone { get; set; }
+
         public bool StatusID { get; set; }
         public string BrandIDs { get; set; }
         public string BrandNames{ get; set; }

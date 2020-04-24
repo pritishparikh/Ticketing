@@ -158,6 +158,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+
         /// <summary>
         /// Get IssueType On Seach
         /// </summary>
@@ -165,7 +166,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetIssueTypeOnSeach")]
-        public ResponseModel GetIssueTypeOnSeach(int SubCategoryID, string searchText)
+        public ResponseModel GetIssueTypeOnSeach(int SubCategoryID,string searchText)
         {
             List<IssueType> objIssueTypeList = new List<IssueType>();
             ResponseModel objResponseModel = new ResponseModel();

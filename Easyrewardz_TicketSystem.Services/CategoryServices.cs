@@ -35,7 +35,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TenantID"></param>
         /// <param name="BrandID"></param>
         /// <returns></returns>
-        public List<Category> GetCategoryList(int TenantID,int BrandID)
+        public List<Category> GetCategoryList(int TenantID, int BrandID)
         {
 
             DataSet ds = new DataSet();
@@ -263,8 +263,8 @@ namespace Easyrewardz_TicketSystem.Services
         public int CreateCategoryBrandMapping(CustomCreateCategory customCreateCategory)
         {
             int Success = 0;
-            if (customCreateCategory.BrandCategoryMappingID==0)
-            {             
+            if (customCreateCategory.BrandCategoryMappingID == 0)
+            {
                 try
                 {
                     conn.Open();
@@ -289,9 +289,9 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         conn.Close();
                     }
-                }              
+                }
             }
-            if(customCreateCategory.BrandCategoryMappingID >0)
+            if (customCreateCategory.BrandCategoryMappingID > 0)
             {
                 try
                 {
@@ -347,11 +347,11 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CustomCreateCategory CreateCategory = new CustomCreateCategory();
-                        CreateCategory.BrandCategoryMappingID = ds.Tables[0].Rows[i]["BrandCategoryMappingID"] == DBNull.Value ? 0: Convert.ToInt32(ds.Tables[0].Rows[i]["BrandCategoryMappingID"]);
+                        CreateCategory.BrandCategoryMappingID = ds.Tables[0].Rows[i]["BrandCategoryMappingID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandCategoryMappingID"]);
                         CreateCategory.BraindID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
                         CreateCategory.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
                         CreateCategory.CategoryID = ds.Tables[0].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
-                        CreateCategory.CategoryName= ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        CreateCategory.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
                         CreateCategory.SubCategoryID = ds.Tables[0].Rows[i]["SubCategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
                         CreateCategory.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
                         CreateCategory.IssueTypeID = ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
@@ -452,7 +452,7 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
                         cmd.Parameters.AddWithValue("@_node", Xpath);
-                      
+
                         cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
                         cmd.CommandType = CommandType.StoredProcedure;
                         MySqlDataAdapter da = new MySqlDataAdapter();
@@ -469,7 +469,7 @@ namespace Easyrewardz_TicketSystem.Services
                             //for error file
                             ErrorFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
                             csvLst.Add(ErrorFile);
-                           
+
 
                         }
                     }

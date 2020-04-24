@@ -280,8 +280,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+
         /// <summary>
-        /// Validate Priority Name Exist
+        /// ValidatePriorityNameExist
         /// </summary>
         /// <returns></returns>
         [HttpPost]

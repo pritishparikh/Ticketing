@@ -34,14 +34,14 @@ namespace Easyrewardz_TicketSystem.Model
         public bool IsSMSCustomer { get; set; }
         public bool IsNotificationInternal { get; set; }
 
+        public bool IsEmailTicketing { get; set; }
+        public bool IsNotificationTicketing { get; set; }
+        public bool IsCommunicationModeEnabled { get; set; }
         public string MailContent { get; set; }
         public string Subject { get; set; }
         public string SMSContent { get; set; }
         public string NotificationContent { get; set; }
 
-        public bool IsEmailTicketing { get; set; }
-        public bool IsNotificationTicketing { get; set; }
-        public bool IsCommunicationModeEnabled { get; set; }
         // public CommunicationModeBy ModeOfCommunication { get; set; }
     }
 
@@ -83,7 +83,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string CCEmailID { get; set; }
         public string BCCEmailID { get; set; }
         public string Subject { get; set; }
-        public bool IsAlertActive { get; set; }
+
 
     }
 

@@ -6,6 +6,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
 {
    public  class CustomStoreDetails
     {
+
         public int StoreId { get; set; }
         public string StoreCode { get; set; }
 

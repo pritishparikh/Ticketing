@@ -90,11 +90,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             TicketingDetails ticketingDetails = new TicketingDetails();
             OrderMaster orderDetails = new OrderMaster();
             List<OrderItem> OrderItemDetails = new List<OrderItem>();
-
             List<StoreMaster> storeMaster = new List<StoreMaster>();
             List<string> ListStoreDetails = new List<string>();
-
-
             var files = Request.Form.Files;
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
             string fileName = "";
@@ -111,8 +108,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             var Keys = Request.Form;
             ticketingDetails = JsonConvert.DeserializeObject<TicketingDetails>(Keys["ticketingDetails"]);
-
-           
 
             // get order details from form
             orderDetails = JsonConvert.DeserializeObject<OrderMaster>(Keys["orderDetails"]);
@@ -169,7 +164,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                             if (objorderMaster != null)
                             {
-                                if (OrderItemDetails != null)
+                                if(OrderItemDetails!=null)
                                 {
                                     foreach (var item in OrderItemDetails)
                                     {
@@ -178,7 +173,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                                     }
 
                                     OrderItemsIds = ordercaller.AddOrderItem(new OrderService(_connectioSting), OrderItemDetails, authenticate.TenantId, authenticate.UserMasterID);
-
+                                   
                                 }
                                 else
                                 {
@@ -192,7 +187,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                         }
 
                     }
-
+                    
 
                 }
                 #endregion
@@ -201,7 +196,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (storeMaster != null)
                 {
-
+                  
                     if (storeMaster.Count > 0)
                     {
                         StoreCaller newStore = new StoreCaller();
@@ -217,7 +212,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                                 InsertedStoreID = newStore.AddStore(new StoreService(_connectioSting), store, authenticate.TenantId, authenticate.UserMasterID);
                                 if (InsertedStoreID > 0)
                                 {
-                                    store.StoreVisitDate = string.IsNullOrEmpty(store.StoreVisitDate) ? "" : store.StoreVisitDate;
+                                    store.StoreVisitDate = string.IsNullOrEmpty(store.StoreVisitDate) ? "" : store.StoreVisitDate; 
                                     ListStoreDetails.Add(Convert.ToString(InsertedStoreID) + "|" + store.StoreVisitDate + "|" + store.Purpose);
 
                                 }
@@ -231,7 +226,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 #endregion
 
-                result = newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
+                    result = newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
+
 
                 if (ticketingDetails.StatusID == 100)
                     {

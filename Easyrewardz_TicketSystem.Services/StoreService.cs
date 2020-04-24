@@ -73,7 +73,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int CreateStore(StoreMaster storeMaster, int TenantID, int UserID)
         {
-          
+
             int storeId = 0;
             try
             {
@@ -548,7 +548,7 @@ namespace Easyrewardz_TicketSystem.Services
                         store.StoreVisitDate = ds.Tables[0].Rows[i]["StoreVisitDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreVisitDate"]) + GMT;
                         store.Purpose = ds.Tables[0].Rows[i]["Purpose"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Purpose"]);
                         storeMaster.Add(store);
-                    } 
+                    }
                 }
             }
             catch (Exception)
@@ -608,13 +608,13 @@ namespace Easyrewardz_TicketSystem.Services
                         if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
                         {
 
-                                //for success file
-                                SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
-                                csvLst.Add(SuccesFile);
+                            //for success file
+                            SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(SuccesFile);
 
-                                //for error file
-                                ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
-                                csvLst.Add(ErroFile);
+                            //for error file
+                            ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            csvLst.Add(ErroFile);
 
                         }
                     }
@@ -622,7 +622,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception )
+            catch (Exception)
             {
                 throw;
             }

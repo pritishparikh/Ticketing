@@ -142,6 +142,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
+                customerMaster.CreatedBy = authenticate.UserMasterID;
+
                 int result = customerCaller.addCustomer(new CustomerService(_connectioSting), customerMaster, authenticate.TenantId);
                 statusCode =
                 result == 0?
