@@ -223,7 +223,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get task Data For store dashboard for claim
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name="StoreDashboardClaimModel"></param>
         /// <returns></returns>
 
         public List<StoreDashboardClaimResponseModel> GetClaimDataForStoreDashboard(StoreDashboardClaimModel model)
