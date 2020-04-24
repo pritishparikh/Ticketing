@@ -251,12 +251,12 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@objtaskmapped", model.taskmapped);
                 cmd1.Parameters.AddWithValue("@objraisedby", model.raisedby);
                 cmd1.Parameters.AddWithValue("@objtenantID", model.tenantID);
-                 
 
-                //cmd1.Parameters.AddWithValue("@objbrandIDs", model.BrandIDs);
-                //cmd1.Parameters.AddWithValue("@objAgentIds", model.AgentIds);
-                //cmd1.Parameters.AddWithValue("@objFromDate", model.FromDate);
-                //cmd1.Parameters.AddWithValue("@objToDate", model.ToDate);
+
+                cmd1.Parameters.AddWithValue("@objbrandIDs", string.IsNullOrEmpty(model.BrandIDs)? "" : model.BrandIDs);
+                cmd1.Parameters.AddWithValue("@objAgentIds", string.IsNullOrEmpty(model.AgentIds) ? "" : model.AgentIds);
+                cmd1.Parameters.AddWithValue("@objFromDate", string.IsNullOrEmpty(model.FromDate) ? "" : model.FromDate);
+                cmd1.Parameters.AddWithValue("@objToDate", string.IsNullOrEmpty(model.ToDate) ? "" : model.ToDate);
 
 
 
