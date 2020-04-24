@@ -48,7 +48,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name=""></param>
         /// <returns></returns>
         [HttpPost]
-        [AllowAnonymous]
         [Route("getstoreDashboardList")]
         public ResponseModel getstoreDashboardList([FromBody] StoreDashboardModel dasbhboardmodel)
         {
@@ -94,7 +93,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name=StoreDashboardClaimModel></param>
         /// <returns></returns>
         [HttpPost]
-        [AllowAnonymous]
         [Route("getstoreDashboardListClaim")]
         public ResponseModel getstoreDashboardListClaim([FromBody] StoreDashboardClaimModel ClaimSearchModel)
         {
@@ -121,7 +119,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = ClaimSearchResponse;
+                objResponseModel.ResponseData = ClaimSearchResponse; 
             }
             catch (Exception )
 

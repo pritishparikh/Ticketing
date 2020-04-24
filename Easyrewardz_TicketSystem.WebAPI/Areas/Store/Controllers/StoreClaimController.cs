@@ -341,11 +341,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("StoreClaimCommentByApprovel")]
-        public ResponseModel StoreClaimCommentByApprovel(int ClaimID, string Comment)
+        public ResponseModel StoreClaimCommentByApprovel(int claimID, string comment,bool iSRejectComment)
         {
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -353,13 +353,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                int result = storeClaimCaller.AddClaimCommentByApprovel(new StoreClaimService(_connectionSting), ClaimID, Comment, authenticate.UserMasterID);
-                StatusCode =
+                int result = storeClaimCaller.AddClaimCommentByApprovel(new StoreClaimService(_connectionSting), claimID, comment, authenticate.UserMasterID, iSRejectComment);
+                statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
 
             }
@@ -376,7 +376,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name="TaskId"></param>
         [HttpPost]
         [Route("GetClaimCommentForApprovel")]
-        public ResponseModel GetClaimCommentForApprovel(int ClaimID)
+        public ResponseModel GetClaimCommentForApprovel(int claimID)
         {
             List<CommentByApprovel> objClaimComment = new List<CommentByApprovel>();
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
@@ -388,7 +388,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-                objClaimComment = storeClaimCaller.GetClaimCommentForApprovel(new StoreClaimService(_connectionSting), ClaimID);
+                objClaimComment = storeClaimCaller.GetClaimCommentForApprovel(new StoreClaimService(_connectionSting), claimID);
                 statusCode =
                    objClaimComment.Count==0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
