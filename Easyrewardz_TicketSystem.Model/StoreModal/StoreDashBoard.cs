@@ -69,7 +69,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string BrandIDs { get; set; }
         public string AgentIds { get; set; }
         public string FromDate { get; set; } //'yyyy-MM-dd'
-        public string ToDate { get; set; } //'yyyy-MM-dd'
+        public string ToDate { get; set; } //'yyyy-MM-dd' 
 
 
     }

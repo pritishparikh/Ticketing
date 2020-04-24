@@ -251,7 +251,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@objtaskmapped", model.taskmapped);
                 cmd1.Parameters.AddWithValue("@objraisedby", model.raisedby);
                 cmd1.Parameters.AddWithValue("@objtenantID", model.tenantID);
-
+                 
 
                 //cmd1.Parameters.AddWithValue("@objbrandIDs", model.BrandIDs);
                 //cmd1.Parameters.AddWithValue("@objAgentIds", model.AgentIds);

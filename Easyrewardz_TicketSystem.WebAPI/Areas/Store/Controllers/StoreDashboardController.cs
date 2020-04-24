@@ -119,7 +119,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = ClaimSearchResponse;
+                objResponseModel.ResponseData = ClaimSearchResponse; 
             }
             catch (Exception )
 
