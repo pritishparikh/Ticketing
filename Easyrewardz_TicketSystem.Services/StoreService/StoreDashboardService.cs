@@ -173,7 +173,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         StoreDashboardResponseModel storedashboard = new StoreDashboardResponseModel();
                         storedashboard.taskid = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-
+                        storedashboard.totalCount = ds.Tables[0].Rows.Count;
                         storedashboard.taskstatus = TaskStatusName;
 
                         storedashboard.tasktitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
@@ -198,7 +198,7 @@ namespace Easyrewardz_TicketSystem.Services
                         storedashboard.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
 
 
-                        storedashboard.totalCount = ds.Tables.Count;
+                       
 
                         departmentMasters.Add(storedashboard);
                     }
