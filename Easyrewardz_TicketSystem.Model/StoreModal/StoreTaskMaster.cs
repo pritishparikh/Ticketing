@@ -190,6 +190,51 @@ namespace Easyrewardz_TicketSystem.Model
     }
 
 
+
+
+
+
+    public class TaskFilterTicketByModel
+    {
+        public int? taskid { get; set; }
+        public int? Department { get; set; }
+        public string tasktitle { get; set; }
+        public int? taskstatus { get; set; }
+        public int? ticketID { get; set; }
+        public int? functionID { get; set; }
+        public string CreatedOnFrom { get; set; }
+        public string CreatedOnTo { get; set; }
+        public int? AssigntoId { get; set; }
+        public int? createdID { get; set; }
+        public string taskwithTicket { get; set; }
+        public string taskwithClaim { get; set; }
+        public int? claimID { get; set; }
+        public int? Priority { get; set; }
+    }
+
+    public class TaskFilterTicketByResponseModel
+    {
+        public int taskid { get; set; }
+        public string Department { get; set; }
+        public string storeName { get; set; }
+        public string StoreAddress { get; set; }
+        public string tasktitle { get; set; }
+        public string taskstatus { get; set; }
+        public int ticketID { get; set; }
+        public int functionID { get; set; }
+        public string CreatedOn { get; set; }
+        public string AssigntoId { get; set; }
+        public string CreatedBy { get; set; }
+        public string taskwithTicket { get; set; }
+        public string taskwithClaim { get; set; }
+        public int claimID { get; set; }
+        public string Priority { get; set; }
+        public int totalCount { get; set; }
+        public string modifedOn { get; set; }
+        public string ModifiedBy { get; set; }
+    }
+
+
     public class StoreTaskComment
     {
         public int TaskID { get; set; }

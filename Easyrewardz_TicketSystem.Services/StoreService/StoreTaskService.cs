@@ -1412,6 +1412,85 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
+
+
+
+        /// <summary>
+        /// Get task Data for task for ticket data
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+
+        public List<TaskFilterTicketByResponseModel> GetTaskTicketData(TaskFilterTicketByModel model)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<TaskFilterTicketByResponseModel> ticketByTask = new List<TaskFilterTicketByResponseModel>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("sp_geTaskBYticketData", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@objtaskID", model.taskid);
+                cmd1.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
+                cmd1.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
+                cmd1.Parameters.AddWithValue("@objticketID", model.ticketID);
+                cmd1.Parameters.AddWithValue("@objDepartment", model.Department);
+                cmd1.Parameters.AddWithValue("@objfuncation", model.functionID);
+                cmd1.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
+                cmd1.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
+                cmd1.Parameters.AddWithValue("@objassignTo", model.AssigntoId);
+                cmd1.Parameters.AddWithValue("@objtaskCreatedBy", model.createdID);
+                cmd1.Parameters.AddWithValue("@objtaskwithclaim", model.taskwithClaim);
+                cmd1.Parameters.AddWithValue("@objclaimID", model.claimID);
+                cmd1.Parameters.AddWithValue("@objtaskPriority", model.Priority);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+
+
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
+
+                        TaskFilterTicketByResponseModel taskTicket = new TaskFilterTicketByResponseModel();
+                        taskTicket.totalCount = ds.Tables[0].Rows.Count;
+                        taskTicket.taskid = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                        taskTicket.taskstatus = TaskStatusName;
+                        taskTicket.tasktitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
+                        taskTicket.Department = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+                        taskTicket.storeName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        taskTicket.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
+                        taskTicket.Priority = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
+                        taskTicket.CreatedOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
+                        taskTicket.AssigntoId = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
+                        taskTicket.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                        taskTicket.modifedOn = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
+                        taskTicket.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        ticketByTask.Add(taskTicket);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return ticketByTask;
+
+        }
+
+
         #endregion
 
     }

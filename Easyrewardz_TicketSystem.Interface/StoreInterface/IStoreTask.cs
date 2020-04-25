@@ -29,5 +29,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<TaskFilterRaisedBymeResponseModel> GetRaisedbyfiterData(TaskFilterRaisedBymeModel model);
 
         List<TaskFilterAssignBymeResponseModel> GetAssignBYfiterData(TaskFilterAssignBymeModel model);
+
+        List<TaskFilterTicketByResponseModel> GetTaskTicketData(TaskFilterTicketByModel model);
     }
 }

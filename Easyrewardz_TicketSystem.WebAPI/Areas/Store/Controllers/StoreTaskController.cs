@@ -683,6 +683,48 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
         }
 
 
+
+
+        /// <summary>
+        /// Add filter for raised by me on task tab
+        /// </summary>
+        /// <param name="taskMaster"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetTaskbyTicketData")]
+        public ResponseModel GetTaskbyTicketData(TaskFilterTicketByModel taskMaster)
+        {
+            List<TaskFilterTicketByResponseModel> objtaskticket = new List<TaskFilterTicketByResponseModel>();
+            StoreTaskCaller taskCaller = new StoreTaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                objtaskticket = taskCaller.GetTaskTicketData(new StoreTaskService(_connectionSting), taskMaster);
+                StatusCode =
+              objtaskticket.Count == 0 ?
+                   (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objtaskticket;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
         #region Campaign
 
         /// <summary>

@@ -127,5 +127,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _TaskRepository = task;
             return _TaskRepository.GetAssignBYfiterData(taskMaster);
         }
+
+
+        public List<TaskFilterTicketByResponseModel> GetTaskTicketData(IStoreTask task, TaskFilterTicketByModel taskMaster)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetTaskTicketData(taskMaster);
+        }
     }
 }
