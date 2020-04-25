@@ -134,7 +134,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-
         public List<StoreDashboardResponseModel> GetTaskDataForStoreDashboard(StoreDashboardModel model)
         {
             DataSet ds = new DataSet();
@@ -238,25 +237,25 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("sp_getStoreDashboardClaimData", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@objclaimID", model.claimID);
-                cmd1.Parameters.AddWithValue("@objticketID", model.ticketID);
-                cmd1.Parameters.AddWithValue("@objclaimissueType", model.claimissueType);
-                cmd1.Parameters.AddWithValue("@objticketMapped", model.ticketMapped);
-                cmd1.Parameters.AddWithValue("@objclaimsubcat", model.claimsubcat);
-                cmd1.Parameters.AddWithValue("@objassignTo", model.assignTo);
-                cmd1.Parameters.AddWithValue("@objclaimcat", model.claimcat);
-                cmd1.Parameters.AddWithValue("@objclaimraise", model.claimraiseddate);
-                cmd1.Parameters.AddWithValue("@objtaskID", model.taskID);
-                cmd1.Parameters.AddWithValue("@objclaimstatus", model.claimstatus);
-                cmd1.Parameters.AddWithValue("@objtaskmapped", model.taskmapped);
-                cmd1.Parameters.AddWithValue("@objraisedby", model.raisedby);
+                cmd1.Parameters.AddWithValue("@objclaimID", model.claimID == null ? 0 : model.claimID);
+                cmd1.Parameters.AddWithValue("@objticketID", model.ticketID == null ? 0 : model.ticketID);
+                cmd1.Parameters.AddWithValue("@objclaimissueType", model.claimissueType == null ? 0 : model.claimissueType);
+                cmd1.Parameters.AddWithValue("@objticketMapped", model.ticketMapped == null ? 0 : model.ticketMapped);
+                cmd1.Parameters.AddWithValue("@objclaimsubcat", model.claimsubcat == null ? 0 : model.claimsubcat);
+                cmd1.Parameters.AddWithValue("@objassignTo", model.assignTo == null ? 0 : model.assignTo);
+                cmd1.Parameters.AddWithValue("@objclaimcat", model.claimcat == null ? 0 : model.claimcat);
+                cmd1.Parameters.AddWithValue("@objclaimraise", string.IsNullOrEmpty(model.claimraiseddate) ? "" : model.claimraiseddate);
+                cmd1.Parameters.AddWithValue("@objtaskID", model.taskID == null ? 0 : model.taskID);
+                cmd1.Parameters.AddWithValue("@objclaimstatus", model.claimstatus == null ? 0 : model.claimstatus);
+                cmd1.Parameters.AddWithValue("@objtaskmapped", model.taskmapped == null ? 0 : model.taskmapped);
+                cmd1.Parameters.AddWithValue("@objraisedby", model.raisedby == null ? 0 : model.raisedby);
                 cmd1.Parameters.AddWithValue("@objtenantID", model.tenantID);
 
 
-                cmd1.Parameters.AddWithValue("@objbrandIDs", string.IsNullOrEmpty(model.BrandIDs)? "" : model.BrandIDs);
-                cmd1.Parameters.AddWithValue("@objAgentIds", string.IsNullOrEmpty(model.AgentIds) ? "" : model.AgentIds);
+                cmd1.Parameters.AddWithValue("@objbrandIDs", string.IsNullOrEmpty(model.BrandIDs) ? "" : model.BrandIDs.TrimEnd(','));
+                cmd1.Parameters.AddWithValue("@objAgentIds", string.IsNullOrEmpty(model.AgentIds) ? "" : model.AgentIds.TrimEnd(','));
                 cmd1.Parameters.AddWithValue("@objFromDate", string.IsNullOrEmpty(model.FromDate) ? "" : model.FromDate);
-                cmd1.Parameters.AddWithValue("@objToDate", string.IsNullOrEmpty(model.ToDate) ? "" : model.ToDate);
+                cmd1.Parameters.AddWithValue("@objToDate", string.IsNullOrEmpty(model.ToDate) ? "" : model.ToDate); 
 
 
 
