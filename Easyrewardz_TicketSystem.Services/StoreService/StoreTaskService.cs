@@ -1304,18 +1304,18 @@ namespace Easyrewardz_TicketSystem.Services
 
                         TaskFilterRaisedBymeResponseModel storeRaisedby = new TaskFilterRaisedBymeResponseModel();
                         storeRaisedby.totalCount = ds.Tables[0].Rows.Count;
-                        storeRaisedby.taskid = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        storeRaisedby.taskstatus = TaskStatusName;
-                        storeRaisedby.tasktitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        storeRaisedby.Department = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
-                        storeRaisedby.storeName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        storeRaisedby.StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                        storeRaisedby.TaskStatus = TaskStatusName;
+                        storeRaisedby.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
+                        storeRaisedby.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+                        storeRaisedby.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
                         storeRaisedby.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
-                        storeRaisedby.Priority = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
-                        storeRaisedby.CreatedOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
-                        storeRaisedby.AssigntoId = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
+                        storeRaisedby.PriorityName = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
+                        storeRaisedby.CreationOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
+                        storeRaisedby.Assignto = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
                         storeRaisedby.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        storeRaisedby.modifedOn = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
-                        storeRaisedby.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        storeRaisedby.Updatedago = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
+                        storeRaisedby.UpdatedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
                         raisedByfilter.Add(storeRaisedby);
                     }
                 }
@@ -1379,18 +1379,18 @@ namespace Easyrewardz_TicketSystem.Services
 
                         TaskFilterAssignBymeResponseModel storeAssignBY = new TaskFilterAssignBymeResponseModel();
                         storeAssignBY.totalCount = ds.Tables[0].Rows.Count;
-                        storeAssignBY.taskid = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        storeAssignBY.taskstatus = TaskStatusName;
-                        storeAssignBY.tasktitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        storeAssignBY.Department = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
-                        storeAssignBY.storeName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        storeAssignBY.StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                        storeAssignBY.TaskStatus = TaskStatusName;
+                        storeAssignBY.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
+                        storeAssignBY.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+                        storeAssignBY.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
                         storeAssignBY.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
-                        storeAssignBY.Priority = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
-                        storeAssignBY.CreatedOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
-                        storeAssignBY.AssigntoId = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
+                        storeAssignBY.PriorityName = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
+                        storeAssignBY.CreationOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
+                        storeAssignBY.Assignto = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
                         storeAssignBY.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        storeAssignBY.modifedOn = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
-                        storeAssignBY.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        storeAssignBY.Updatedago = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
+                        storeAssignBY.UpdatedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
                         assignByfilter.Add(storeAssignBY);
                     }
                 }
@@ -1458,18 +1458,18 @@ namespace Easyrewardz_TicketSystem.Services
 
                         TaskFilterTicketByResponseModel taskTicket = new TaskFilterTicketByResponseModel();
                         taskTicket.totalCount = ds.Tables[0].Rows.Count;
-                        taskTicket.taskid = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        taskTicket.taskstatus = TaskStatusName;
-                        taskTicket.tasktitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        taskTicket.Department = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
-                        taskTicket.storeName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        taskTicket.StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                        taskTicket.TaskStatus = TaskStatusName;
+                        taskTicket.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
+                        taskTicket.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+                        taskTicket.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
                         taskTicket.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
-                        taskTicket.Priority = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
-                        taskTicket.CreatedOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
-                        taskTicket.AssigntoId = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
+                        taskTicket.PriorityName = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
+                        taskTicket.CreationOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
+                        taskTicket.Assignto = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
                         taskTicket.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        taskTicket.modifedOn = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
-                        taskTicket.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        taskTicket.Updatedago = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
+                        taskTicket.UpdatedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
                         ticketByTask.Add(taskTicket);
                     }
                 }
