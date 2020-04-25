@@ -8,9 +8,16 @@ namespace Easyrewardz_TicketSystem.CustomModel
     {
         public int TicketClaimID { get; set; }
         public string TaskStatus { get; set; }
+        public int ClaimIssueID { get; set; }
         public string ClaimIssueType { get; set; }
+        public int CategoryID { get; set; }
         public string Category { get; set; }
+        public int BrandID { get; set; }
+        public string BrandName { get; set; }
+        public int SubCategoryID { get; set; }
+        public string SubCategoryName { get; set; }
         public string RaisedBy { get; set; }
+        public string CreationOn { get; set; }
         public DateTime Creation_on { get; set; }
         public string Dateformat { get; set; }
         public string AssignName { get; set; }
