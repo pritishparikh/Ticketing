@@ -614,7 +614,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 if (!string.IsNullOrEmpty(CSVlist[1]))
                     errorfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Error", ErrorFileName), CSVlist[1]);
 
-                count = newFile.CreateFileUploadLog(new FileUploadService(_connectionString), authenticate.TenantId, filesName[0], errorfilesaved,
+                count = newFile.CreateFileUploadLog(new FileUploadService(_connectionString), authenticate.TenantId, filesName[0], true,
                                  ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store", SuccessFileUrl, ErrorFileUrl, StoreFor);
                 #endregion
 
