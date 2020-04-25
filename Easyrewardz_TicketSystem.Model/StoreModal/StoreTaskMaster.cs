@@ -122,6 +122,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string taskwithClaim { get; set; }
         public int? claimID { get; set; }
         public int? Priority { get; set; }
+        public int? userid { get; set; }
     }
 
     public class TaskFilterRaisedBymeResponseModel
@@ -163,6 +164,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string taskwithClaim { get; set; }
         public int? claimID { get; set; }
         public int? Priority { get; set; }
+        public int? userid { get; set; }
     }
 
     public class TaskFilterAssignBymeResponseModel

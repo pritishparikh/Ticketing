@@ -609,8 +609,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
         [Route("GetRaisedbymefilterData")]
         public ResponseModel GetRaisedbymefilterData(TaskFilterRaisedBymeModel taskMaster)
         {
-
-
             List<TaskFilterRaisedBymeResponseModel> objRaisedbyfilter = new List<TaskFilterRaisedBymeResponseModel>();
             StoreTaskCaller taskCaller = new StoreTaskCaller();
             ResponseModel objResponseModel = new ResponseModel();
@@ -620,9 +618,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
-                //taskMaster.CreatedBy = authenticate.UserMasterID;
+               // authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 objRaisedbyfilter = taskCaller.GetRaisedbyfiterData(new StoreTaskService(_connectionSting), taskMaster);
                 StatusCode =
@@ -656,7 +652,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
         {
 
 
-            List<TaskFilterAssignBymeResponseModel> objRaisedbyfilter = new List<TaskFilterAssignBymeResponseModel>();
+            List<TaskFilterAssignBymeResponseModel> objAssignfilter = new List<TaskFilterAssignBymeResponseModel>();
             StoreTaskCaller taskCaller = new StoreTaskCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -665,13 +661,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
-                //taskMaster.CreatedBy = authenticate.UserMasterID;
-
-                objRaisedbyfilter = taskCaller.GetAssigenBYfiterData(new StoreTaskService(_connectionSting), taskMaster);
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                objAssignfilter = taskCaller.GetAssigenBYfiterData(new StoreTaskService(_connectionSting), taskMaster);
                 StatusCode =
-              objRaisedbyfilter.Count == 0 ?
+              objAssignfilter.Count == 0 ?
                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -679,7 +672,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = objRaisedbyfilter;
+                objResponseModel.ResponseData = objAssignfilter;
 
             }
             catch (Exception)
