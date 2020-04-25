@@ -618,15 +618,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-               // authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
-                objRaisedbyfilter = taskCaller.GetRaisedbyfiterData(new StoreTaskService(_connectionSting), taskMaster);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                taskMaster.userid = authenticate.UserMasterID;
+                objRaisedbyfilter = taskCaller.GetRaisedbyfiterData(new StoreTaskService(_connectionSting), taskMaster);              
                 StatusCode =
               objRaisedbyfilter.Count == 0 ?
                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
@@ -661,7 +659,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                taskMaster.userid = authenticate.UserMasterID;
                 objAssignfilter = taskCaller.GetAssigenBYfiterData(new StoreTaskService(_connectionSting), taskMaster);
                 StatusCode =
               objAssignfilter.Count == 0 ?
@@ -703,7 +702,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 objtaskticket = taskCaller.GetTaskTicketData(new StoreTaskService(_connectionSting), taskMaster);
                 StatusCode =
               objtaskticket.Count == 0 ?
