@@ -306,7 +306,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get list of claims
         /// <param name="TicketId"></param>
         /// </summary>
-        public List<CustomClaimMaster> GetClaimList(int TicketId)
+        public List<CustomClaimMaster> GetClaimList(int ticketId)
         {
             DataSet ds = new DataSet();
             List<CustomClaimMaster> lsttask = new List<CustomClaimMaster>();
@@ -315,7 +315,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_GetClaimListByTicketID", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Ticket_ID", TicketId);
+                cmd.Parameters.AddWithValue("@Ticket_ID", ticketId);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -338,6 +338,8 @@ namespace Easyrewardz_TicketSystem.Services
                         taskMaster.CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
                         taskMaster.RaisedBy = ds.Tables[0].Rows[i]["RaiseBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RaiseBy"]);
                         taskMaster.AssignName = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
+                        taskMaster.ModifiedBy= ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        taskMaster.ModifiedDate= ds.Tables[0].Rows[i]["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]);
                         lsttask.Add(taskMaster);
                     }
                 }
