@@ -25,16 +25,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
         #region Constructor
 
-        /// <summary>
-        /// Store File Controller
-        /// </summary>
-        /// <param name="_iConfig"></param>
+        
         public StoreFileController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
+        #endregion
         #region Custom Methods 
 
         /// <summary>
@@ -77,6 +75,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
         #endregion
 
-        #endregion
+    
     }
 }
