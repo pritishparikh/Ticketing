@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -87,12 +88,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("DownloadStoreReportSearch")]
-        public ResponseModel DownloadStoreReportSearch([FromBody]StoreReportModel SearchParams)
+        public ResponseModel DownloadStoreReportSearch(int SchedulerID)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
-            List<string> ReportDownloadList = new List<string>();
+            string CSVReport = string.Empty;
+            string appRoot = string.Empty;
+            string Folderpath = string.Empty;
+            string URLPath = string.Empty;
             StoreReportCaller dbsearchMaster = new StoreReportCaller();
             try
             {
@@ -101,17 +105,34 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-                SearchParams.TenantID = authenticate.TenantId; // add tenantID to request
-                                                               // searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
 
-                ReportDownloadList = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), SearchParams);
+                CSVReport = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), SchedulerID, authenticate.UserMasterID, authenticate.TenantId);
 
-                StatusCode = ReportDownloadList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                appRoot = Directory.GetCurrentDirectory();
+
+                string CSVFileName = "StoreReport_" + SchedulerID + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".csv";
+
+                Folderpath = Path.Combine(appRoot, "ReportDownload");
+                if (!Directory.Exists(Folderpath))
+                {
+                    Directory.CreateDirectory(Folderpath);
+                }
+
+
+                if (!string.IsNullOrEmpty(CSVReport))
+                {
+                    URLPath = rootPath + "ReportDownload" + "/" + CSVFileName;
+                    Folderpath = Path.Combine(Folderpath, CSVFileName);
+                    CommonService.SaveFile(Folderpath, CSVReport);
+                }
+
+
+                StatusCode = (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = ReportDownloadList;
+                objResponseModel.ResponseData = URLPath;
             }
             catch (Exception)
             {
@@ -119,6 +140,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
 
 
         /// <summary>
