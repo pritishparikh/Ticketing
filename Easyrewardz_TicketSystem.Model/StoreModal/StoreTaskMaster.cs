@@ -485,6 +485,11 @@ namespace Easyrewardz_TicketSystem.Model
         public string CommentedDate { get; set; }
         public string CommentByName { get; set; }
         public string CommentedDiff { get; set; }
+        public int IsCommentOnAssign { get; set; }
+        public int NewAgentID { get; set; }
+        public string NewAgentName { get; set; }
+        public int OldAgentID { get; set; }
+        public string OldAgentName { get; set; }
     }
 
     public class CustomTaskHistory
@@ -717,6 +722,15 @@ namespace Easyrewardz_TicketSystem.Model
         public string ClosureTaskDate { get; set; }
         public string ColorName { get; set; }
         public string ColorCode { get; set; }
+    }
+
+    public class AssignTaskModel
+    {
+        public string TaskID { get; set; }
+        public int AgentID { get; set; }
+        public string CommentOnAssign { get; set; }
+        public int IsCommentOnAssign { get; set; }
+        public int OldAgentID { get; set; }
     }
 
 }

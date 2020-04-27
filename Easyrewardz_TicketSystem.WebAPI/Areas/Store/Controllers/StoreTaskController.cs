@@ -336,7 +336,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
         /// <returns></returns>
         [HttpPost]
         [Route("AssignTask")]
-        public ResponseModel AssignTask(string TaskID, int AgentID)
+        public ResponseModel AssignTask([FromBody] AssignTaskModel assignTaskModel)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -349,7 +349,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
 
                 StoreTaskCaller taskcaller = new StoreTaskCaller();
 
-                int result = taskcaller.AssignTask(new StoreTaskService(_connectionSting), TaskID, authenticate.TenantId, authenticate.UserMasterID, AgentID);
+                int result = taskcaller.AssignTask(new StoreTaskService(_connectionSting), assignTaskModel, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -569,7 +569,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
         /// <returns></returns>
         [HttpPost]
         [Route("AssignTaskByTicket")]
-        public ResponseModel AssignTaskByTicket(string TaskID, int AgentID)
+        public ResponseModel AssignTaskByTicket([FromBody] AssignTaskModel assignTaskModel)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -582,7 +582,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
 
                 StoreTaskCaller taskcaller = new StoreTaskCaller();
 
-                int result = taskcaller.AssignTaskByTicket(new StoreTaskService(_connectionSting), TaskID, authenticate.TenantId, authenticate.UserMasterID, AgentID);
+                int result = taskcaller.AssignTaskByTicket(new StoreTaskService(_connectionSting), assignTaskModel, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

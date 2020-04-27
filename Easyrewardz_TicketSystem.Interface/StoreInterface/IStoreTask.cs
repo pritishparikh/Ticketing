@@ -14,13 +14,13 @@ namespace Easyrewardz_TicketSystem.Interface
         List<CustomTaskHistory> GetTaskHistory(int TaskID, int TenantID, int UserID);
         int SubmitTask(StoreTaskMaster taskMaster, int UserID, int TenantId);
         List<CustomStoreUserList> GetUserList(int TenantID, int TaskID, int TaskFor);
-        int AssignTask(string TaskID, int TenantID, int UserID, int AgentID);
+        int AssignTask(AssignTaskModel assignTaskModel, int TenantID, int UserID);
         List<CustomStoreTaskDetails> GetStoreTaskByTicket(int tenantID, int userID);
         StoreTaskWithTicket GetStoreTicketingTaskByTaskID(int TaskID, int TenantID, int UserID);
         List<CustomUserAssigned> GetAssignedTo(int Function_ID);
         List<StoreTaskProcressBar> GetStoreTaskProcressBar(int TaskId, int TaskBy);
         int SubmitTaskByTicket(StoreTaskMaster taskMaster, int UserID, int TenantId);
-        int AssignTaskByTicket(string TaskID, int TenantID, int UserID, int AgentID);
+        int AssignTaskByTicket(AssignTaskModel assignTaskModel, int TenantID, int UserID);
 
         List<StoreCampaign> GetStoreCampaignCustomer(int TenantID, int UserID);
         CampaignStatusResponse GetCampaignStatusResponse(int TenantID, int UserID);

@@ -273,6 +273,7 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@_TaskID", TaskID);
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_taskFor", taskFor);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -291,7 +292,12 @@ namespace Easyrewardz_TicketSystem.Services
                             Comment = r.Field<object>("Comment") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("Comment")),
                             CommentedDate = r.Field<object>("CommentedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CommentedDate")),
                             CommentByName = r.Field<object>("CommentByName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CommentByName")),
-                            CommentedDiff = r.Field<object>("CommentedDiff") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CommentedDiff"))
+                            CommentedDiff = r.Field<object>("CommentedDiff") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CommentedDiff")),
+                            IsCommentOnAssign = r.Field<object>("IsCommentOnAssign") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsCommentOnAssign")),
+                            NewAgentID = r.Field<object>("NewAgentID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NewAgentID")),
+                            NewAgentName = r.Field<object>("NewAgentName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NewAgentName")),
+                            OldAgentID = r.Field<object>("OldAgentID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("OldAgentID")),
+                            OldAgentName = r.Field<object>("OldAgentName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("OldAgentName")),
 
                         }).ToList();
                     }
@@ -475,7 +481,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="UserID"></param>
         /// <param name="AgentID"></param>
         /// <returns></returns>
-        public int AssignTask(string TaskID, int TenantID, int UserID, int AgentID)
+        public int AssignTask(AssignTaskModel assignTaskModel, int TenantID, int UserID)
         {
             int i = 0;
             try
@@ -485,8 +491,11 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     Connection = conn
                 };
-                cmd.Parameters.AddWithValue("@_TaskID", TaskID);
-                cmd.Parameters.AddWithValue("@AssignTo_ID", AgentID);
+                cmd.Parameters.AddWithValue("@_TaskID", assignTaskModel.TaskID);
+                cmd.Parameters.AddWithValue("@AssignTo_ID", assignTaskModel.AgentID);
+                cmd.Parameters.AddWithValue("@_OldAgentID", assignTaskModel.OldAgentID);
+                cmd.Parameters.AddWithValue("@_IsCommentOnAssign", assignTaskModel.IsCommentOnAssign);
+                cmd.Parameters.AddWithValue("@_CommentOnAssign", assignTaskModel.CommentOnAssign);
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantID);
                 cmd.Parameters.AddWithValue("@Created_By", UserID);
                 
@@ -849,7 +858,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="UserID"></param>
         /// <param name="AgentID"></param>
         /// <returns></returns>
-        public int AssignTaskByTicket(string TaskID, int TenantID, int UserID, int AgentID)
+        public int AssignTaskByTicket(AssignTaskModel assignTaskModel, int TenantID, int UserID)
         {
             int i = 0;
             try
@@ -857,13 +866,17 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_TaskByTicketAssign", conn)
                 {
-                    Connection = conn
+                    CommandType = CommandType.StoredProcedure
                 };
-                cmd.Parameters.AddWithValue("@Task_ID", TaskID);
+                cmd.Parameters.AddWithValue("@Task_ID", assignTaskModel.TaskID);
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
-                cmd.Parameters.AddWithValue("@AssignedUser_ID", AgentID);
-                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@AssignedUser_ID", assignTaskModel.AgentID);
+                cmd.Parameters.AddWithValue("@_OldAgentID", assignTaskModel.OldAgentID);
+                cmd.Parameters.AddWithValue("@_IsCommentOnAssign", assignTaskModel.IsCommentOnAssign);
+                cmd.Parameters.AddWithValue("@_CommentOnAssign", assignTaskModel.CommentOnAssign);
+
+                
                 i = cmd.ExecuteNonQuery();
             }
             catch (Exception)
