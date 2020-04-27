@@ -10,61 +10,139 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #region Variable
         public IStoreClaim _ClaimRepository;
         #endregion
-
+        /// <summary>
+        /// InsertRaiseClaim
+        /// </summary>
+        /// <param name="storeClaim"></param>
+        /// <param name="storeClaimMaster"></param>
+        /// <param name="finalAttchment"></param>
+        /// <returns></returns>
         public int InsertRaiseClaim(IStoreClaim storeClaim, StoreClaimMaster storeClaimMaster,string finalAttchment)
         {
             _ClaimRepository = storeClaim;
             return _ClaimRepository.RaiseClaim(storeClaimMaster, finalAttchment);
         }
-        public int AddClaimComment(IStoreClaim storeClaim, int ClaimID, string Comment, int UserID, int oldAssignID, int newAssignID)
+        /// <summary>
+        /// Add Claim Comment
+        /// </summary>
+        /// <param name="storeClaim"></param>
+        /// <param name="claimID"></param>
+        /// <param name="comment"></param>
+        /// <param name="userID"></param>
+        /// <param name="oldAssignID"></param>
+        /// <param name="newAssignID"></param>
+        /// <returns></returns>
+        public int AddClaimComment(IStoreClaim storeClaim, int claimID, string comment, int userID, int oldAssignID, int newAssignID)
         {
             _ClaimRepository = storeClaim;
-            return _ClaimRepository.AddClaimComment(ClaimID, Comment, UserID, oldAssignID, newAssignID);
+            return _ClaimRepository.AddClaimComment(claimID, comment, userID, oldAssignID, newAssignID);
         }
+        /// <summary>
+        /// Claim Approve
+        /// </summary>
+        /// <param name="storeClaim"></param>
+        /// <param name="claimID"></param>
+        /// <param name="finalClaimAsked"></param>
+        /// <param name="IsApprove"></param>
+        /// <param name="userMasterID"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
         public int ClaimApprove(IStoreClaim storeClaim, int claimID, double finalClaimAsked, bool IsApprove, int userMasterID,int tenantId)
         {
             _ClaimRepository = storeClaim;
             return _ClaimRepository.ClaimApprove(claimID, finalClaimAsked, IsApprove, userMasterID, tenantId);
         }
+        /// <summary>
+        /// Assign Claim
+        /// </summary>
+        /// <param name="storeClaim"></param>
+        /// <param name="claimID"></param>
+        /// <param name="assigneeID"></param>
+        /// <param name="userMasterID"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
         public int AssignClaim(IStoreClaim storeClaim, int claimID,int assigneeID, int userMasterID, int tenantId)
         {
             _ClaimRepository = storeClaim;
             return _ClaimRepository.AssignClaim(claimID, assigneeID, userMasterID,tenantId);
         }
+        /// <summary>
+        /// User List
+        /// </summary>
+        /// <param name="storeClaim"></param>
+        /// <param name="assignID"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
         public List<CustomStoreUserList> UserList(IStoreClaim storeClaim, int assignID, int tenantId)
         {
             _ClaimRepository = storeClaim;
             return _ClaimRepository.GetUserList(assignID, tenantId);
         }
-        public List<UserComment> GetClaimComment(IStoreClaim storeClaim , int ClaimID)
+        /// <summary>
+        /// Get Claim Comment
+        /// </summary>
+        /// <param name="storeClaim"></param>
+        /// <param name="claimID"></param>
+        /// <returns></returns>
+        public List<UserComment> GetClaimComment(IStoreClaim storeClaim , int claimID)
         {
             _ClaimRepository = storeClaim;
-            return _ClaimRepository.GetClaimComment(ClaimID);
+            return _ClaimRepository.GetClaimComment(claimID);
         }
+        /// <summary>
+        /// Get Claim List
+        /// </summary>
+        /// <param name="storeClaim"></param>
+        /// <param name="tabFor"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public List<CustomClaimList> GetClaimList(IStoreClaim storeClaim,int tabFor,int tenantID,int userID)
         {
             _ClaimRepository = storeClaim;
             return _ClaimRepository.GetClaimList(tabFor, tenantID, userID);
         }
-        public CustomClaimByID GetClaimByID(IStoreClaim storeClaim, int ClaimID, int tenantID, int userID,string url)
+        /// <summary>
+        /// Get Claim By ID
+        /// </summary>
+        /// <param name="storeClaim"></param>
+        /// <param name="claimID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public CustomClaimByID GetClaimByID(IStoreClaim storeClaim, int claimID, int tenantID, int userID,string url)
         {
             _ClaimRepository = storeClaim;
-            return _ClaimRepository.GetClaimByID(ClaimID, tenantID, userID, url);
+            return _ClaimRepository.GetClaimByID(claimID, tenantID, userID, url);
         }
         public int AddClaimCommentByApprovel(IStoreClaim storeClaim, int ClaimID, string Comment, int UserID, bool iSRejectComment)
         {
             _ClaimRepository = storeClaim;
             return _ClaimRepository.AddClaimCommentByApprovel(ClaimID, Comment, UserID,iSRejectComment);
         }
-        public List<CommentByApprovel> GetClaimCommentForApprovel(IStoreClaim storeClaim, int ClaimID)
+        /// <summary>
+        /// Get Claim Comment For Approvel
+        /// </summary>
+        /// <param name="storeClaim"></param>
+        /// <param name="claimID"></param>
+        /// <returns></returns>
+        public List<CommentByApprovel> GetClaimCommentForApprovel(IStoreClaim storeClaim, int claimID)
         {
             _ClaimRepository = storeClaim;
-            return _ClaimRepository.GetClaimCommentForApprovel(ClaimID);
+            return _ClaimRepository.GetClaimCommentForApprovel(claimID);
         }
-        public List<CustomOrderwithCustomerDetails> GetOrderDetailByticketID(IStoreClaim storeClaim, int TicketID, int TenantID)
+        /// <summary>
+        /// Get Order Detail By ticketID
+        /// </summary>
+        /// <param name="storeClaim"></param>
+        /// <param name="ticketID"></param>
+        ///  <param name="tenantID"></param>
+        /// <returns></returns>
+        public List<CustomOrderwithCustomerDetails> GetOrderDetailByticketID(IStoreClaim storeClaim, int ticketID, int tenantID)
         {
             _ClaimRepository = storeClaim;
-            return _ClaimRepository.GetOrderDetailByTicketID(TicketID, TenantID);
+            return _ClaimRepository.GetOrderDetailByTicketID(ticketID, tenantID);
 
         }
     }
