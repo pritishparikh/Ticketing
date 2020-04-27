@@ -44,6 +44,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// </summary>
         public string Assignto { get; set; }
         /// <summary>
+        /// Assign Id
+        /// </summary>
+        public string AssigntoId { get; set; }
+        /// <summary>
         ///Duedate
         /// </summary>
         public DateTime Duedate { get; set; }
