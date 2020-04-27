@@ -39,7 +39,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Raise Claim
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="">IFormFile</param>
+        /// <param name="">storeClaimMaster</param>
         /// <returns></returns>
         [HttpPost]
         [Route("RaiseClaim")]
@@ -71,9 +72,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                     .Assembly.GetExecutingAssembly().CodeBase);
             Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
             var appRoot = appPathMatcher.Match(exePath).Value;
-            string Folderpath = appRoot + "\\" + _ClaimProductImage;
+            string folderpath = appRoot + "\\" + _ClaimProductImage;
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
 
             try
@@ -149,7 +150,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                                 files[i].CopyTo(ms);
                                 var fileBytes = ms.ToArray();
                                 MemoryStream msfile = new MemoryStream(fileBytes);
-                                FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                                FileStream docFile = new FileStream(folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
                                 msfile.WriteTo(docFile);
                                 docFile.Close();
                                 ms.Close();
@@ -162,12 +163,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                         }
                     }
                 }
-                StatusCode =
+                statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = result;
             }
@@ -181,9 +182,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Add Store Claim Comment
         /// </summary>
-        /// <param name="CommentForId"></param>
-        ///    <param name="ID"></param>
-        ///   <param name="Comment"></param>
+        /// <param name="claimID"></param>
+        /// <param name="comment"></param>
+        /// <param name="oldAssignID"></param>
+        /// <param name="newAssignID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("AddStoreClaimComment")]
@@ -191,7 +193,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -200,12 +202,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 int result = storeClaimCaller.AddClaimComment(new StoreClaimService(_connectionSting), claimID, comment, authenticate.UserMasterID, oldAssignID, newAssignID);
-                StatusCode =
+                statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
 
             }
@@ -219,7 +221,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Claim Comment By ClaimID
         /// </summary>
-        /// <param name="TaskId"></param>
+        /// <param name="claimID"></param>
         [HttpPost]
         [Route("GetClaimCommentByClaimID")]
         public ResponseModel GetClaimCommentByClaimID(int claimID)
@@ -267,7 +269,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             List<CustomClaimList> objClaimMaster = new List<CustomClaimList>();
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -275,15 +277,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 objClaimMaster = storeClaimCaller.GetClaimList(new StoreClaimService(_connectionSting), tab_For, authenticate.TenantId, authenticate.UserMasterID);
-                StatusCode =
+                statusCode =
                    objClaimMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
 
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = objClaimMaster;
             }
@@ -306,7 +308,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             CustomClaimByID objClaimMaster = new CustomClaimByID();
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -315,13 +317,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 string url = configuration.GetValue<string>("APIURL") + _ClaimProductImage;
                 objClaimMaster = storeClaimCaller.GetClaimByID(new StoreClaimService(_connectionSting), ClaimID, authenticate.TenantId, authenticate.UserMasterID, url);
-                StatusCode =
+                statusCode =
                    objClaimMaster == null ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = objClaimMaster;
             }
@@ -335,9 +337,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Store Claim Comment By Approvel
         /// </summary>
-        /// <param name="CommentForId"></param>
-        ///    <param name="ID"></param>
-        ///   <param name="Comment"></param>
+        /// <param name="claimID"></param>
+        ///    <param name="comment"></param>
+        ///   <param name="iSRejectComment"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("StoreClaimCommentByApprovel")]
@@ -373,7 +375,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Claim Comment For Approvel
         /// </summary>
-        /// <param name="TaskId"></param>
+        /// <param name="claimID"></param>
         [HttpPost]
         [Route("GetClaimCommentForApprovel")]
         public ResponseModel GetClaimCommentForApprovel(int claimID)
@@ -421,7 +423,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -430,12 +432,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 int result = storeClaimCaller.ClaimApprove(new StoreClaimService(_connectionSting), claimID, finalClaimAsked, IsApprove, authenticate.UserMasterID, authenticate.TenantId);
-                StatusCode =
+                statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
 
             }
@@ -451,7 +453,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// </summary>
         /// <param name=""></param>
         ///    <param name="claimID"></param>
-        ///   <param name="Comment"></param>
+        ///   <param name="assigneeID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("ClaimReAssign")]
@@ -459,7 +461,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -468,12 +470,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 int result = storeClaimCaller.AssignClaim(new StoreClaimService(_connectionSting), claimID, assigneeID,  authenticate.UserMasterID, authenticate.TenantId);
-                StatusCode =
+                statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
 
             }
@@ -487,7 +489,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Order and Customer Detail By TicketID
         /// </summary>
-        /// <param name="TicketID"></param>
+        /// <param name="ticketID"></param>
         /// <param name=""></param>
         /// <returns></returns>
         [HttpPost]
@@ -497,7 +499,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             List<CustomOrderwithCustomerDetails> objorderMaster = new List<CustomOrderwithCustomerDetails>();
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -506,15 +508,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 objorderMaster = storeClaimCaller.GetOrderDetailByticketID(new StoreClaimService(_connectionSting), ticketID, authenticate.TenantId);
-                StatusCode =
+                statusCode =
                    objorderMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
 
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = objorderMaster;
 
@@ -530,7 +532,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// UserListDropdown
         /// </summary>
-        /// <param name="TicketID"></param>
+        /// <param name="assignID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("ClaimAssignDropdown")]
@@ -538,7 +540,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             List<CustomStoreUserList> objUserList = new List<CustomStoreUserList>();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -549,12 +551,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 objUserList = storeClaimCaller.UserList(new StoreClaimService(_connectionSting), authenticate.TenantId, assignID);
-                StatusCode =
+                statusCode =
                 objUserList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = objUserList;
             }
