@@ -550,7 +550,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                objUserList = storeClaimCaller.UserList(new StoreClaimService(_connectionSting), authenticate.TenantId, assignID);
+                objUserList = storeClaimCaller.UserList(new StoreClaimService(_connectionSting),assignID, authenticate.TenantId);
                 statusCode =
                 objUserList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

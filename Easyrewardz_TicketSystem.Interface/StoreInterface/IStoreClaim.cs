@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface IStoreClaim
     {
         /// <summary>
-        /// InsertRaiseClaim
+        /// Raise Claim
         /// </summary>
         /// <param name="storeClaimMaster"></param>
         /// <param name="finalAttchment"></param>
@@ -83,7 +83,6 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <summary>
         /// Get Order Detail By ticketID
         /// </summary>
-        /// <param name="storeClaim"></param>
         /// <param name="ticketID"></param>
         ///  <param name="tenantID"></param>
         /// <returns></returns>

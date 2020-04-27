@@ -17,7 +17,17 @@ namespace Easyrewardz_TicketSystem.Services
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
+        /// <summary>
+        /// Add Claim Comment
+        /// </summary> 
+        /// <param name="claimID"></param>
+        /// <param name="comment"></param>
+        /// <param name="userID"></param>
+        /// <param name="oldAssignID"></param>
+        /// <param name="newAssignID"></param>
+        /// <returns></returns>
         public int AddClaimComment(int claimID, string comment, int userID, int oldAssignID, int newAssignID)
         {
             int success = 0;
@@ -52,6 +62,14 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
+        /// <summary>
+        /// Add Claim Comment By Approvel
+        /// </summary>
+        /// <param name="claimID"></param>
+        /// <param name="comment"></param>
+        /// <param name="userID"></param>
+        /// <param name="iSRejectComment"></param>
+        /// <returns></returns>
         public int AddClaimCommentByApprovel(int claimID, string comment, int userID, bool iSRejectComment)
         {
             int success = 0;
@@ -85,6 +103,14 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
+        /// <summary>
+        /// Re Assign Claim
+        /// </summary>
+        /// <param name="claimID"></param>
+        /// <param name="assigneeID"></param>
+        /// <param name="userMasterID"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
         public int AssignClaim(int claimID, int assigneeID, int userMasterID, int tenantId)
         {
 
@@ -117,6 +143,15 @@ namespace Easyrewardz_TicketSystem.Services
             return result;
         }
 
+        /// <summary>
+        /// Claim Approve or Rejet
+        /// </summary>
+        /// <param name="claimID"></param>
+        /// <param name="finalClaimAsked"></param>
+        /// <param name="IsApprove"></param>
+        /// <param name="userMasterID"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
         public int ClaimApprove(int claimID, double finalClaimAsked, bool IsApprove, int userMasterID, int tenantId)
         {
             int success = 0;
@@ -151,7 +186,15 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
-        public CustomClaimByID GetClaimByID(int ClaimID, int tenantID, int userID,string url)
+        /// <summary>
+        /// Get Claim By ID
+        /// </summary>
+        /// <param name="claimID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public CustomClaimByID GetClaimByID(int claimID, int tenantID, int userID,string url)
         {
             DataSet ds = new DataSet();
             CustomClaimByID customClaimList = new CustomClaimByID();
@@ -161,7 +204,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_GetClaimByID", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Claim_ID", ClaimID);
+                cmd.Parameters.AddWithValue("@Claim_ID", claimID);
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@user_ID", userID);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -280,7 +323,12 @@ namespace Easyrewardz_TicketSystem.Services
             return customClaimList;
         }
 
-        public List<UserComment> GetClaimComment(int ClaimID)
+        /// <summary>
+        /// Get Claim Comment
+        /// </summary>
+        /// <param name="claimID"></param>
+        /// <returns></returns>
+        public List<UserComment> GetClaimComment(int claimID)
         {
             DataSet ds = new DataSet();
             List<UserComment> lstClaimComment = new List<UserComment>();
@@ -289,7 +337,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_GetClaimCommentByClaimId", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Claim_ID", ClaimID);
+                cmd.Parameters.AddWithValue("@Claim_ID", claimID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -331,7 +379,12 @@ namespace Easyrewardz_TicketSystem.Services
             return lstClaimComment;
         }
 
-        public List<CommentByApprovel> GetClaimCommentForApprovel(int ClaimID)
+        /// <summary>
+        /// GetClaimCommentForApprovel
+        /// </summary>
+        /// <param name="claimID">Id of the Claim</param>
+        /// <returns></returns>
+        public List<CommentByApprovel> GetClaimCommentForApprovel(int claimID)
         {
 
             DataSet ds = new DataSet();
@@ -341,7 +394,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_GetClaimCommentByApprovel", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Claim_ID", ClaimID);
+                cmd.Parameters.AddWithValue("@Claim_ID", claimID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -379,6 +432,13 @@ namespace Easyrewardz_TicketSystem.Services
             return lstClaimComment;
         }
 
+        /// <summary>
+        /// Get Claim List
+        /// </summary>
+        /// <param name="tabFor"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public List<CustomClaimList> GetClaimList(int tabFor, int tenantID, int userID)
         {
             DataSet ds = new DataSet();
@@ -437,6 +497,12 @@ namespace Easyrewardz_TicketSystem.Services
             return lstCustomClaim;
         }
 
+        /// <summary>
+        /// Get Order Detail By ticketID
+        /// </summary>
+        /// <param name="ticketID"></param>
+        ///  <param name="tenantID"></param>
+        /// <returns></returns>
         public List<CustomOrderwithCustomerDetails> GetOrderDetailByTicketID(int ticketID, int tenantID)
         {
             DataSet ds = new DataSet();
@@ -513,7 +579,14 @@ namespace Easyrewardz_TicketSystem.Services
             return objorderMaster;
         }
 
-        public List<CustomStoreUserList> GetUserList(int tenantID, int assignID)
+        /// <summary>
+        /// User List for Dropdown for reassign claim
+        /// </summary>
+        /// <param name="storeClaim"></param>
+        /// <param name="assignID"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        public List<CustomStoreUserList> GetUserList(int assignID, int tenantID)
         {
             DataSet ds = new DataSet();
             List<CustomStoreUserList> listUser = new List<CustomStoreUserList>();
@@ -557,6 +630,12 @@ namespace Easyrewardz_TicketSystem.Services
             return listUser;
         }
 
+        /// <summary>
+        /// Raise Claim
+        /// </summary>
+        /// <param name="storeClaimMaster"></param>
+        /// <param name="finalAttchment"></param>
+        /// <returns></returns>
         public int RaiseClaim(StoreClaimMaster storeClaimMaster, string finalAttchment)
         {
             int ClaimID = 0;
@@ -592,6 +671,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return ClaimID;
         }
-        #endregion
+
     }
 }
