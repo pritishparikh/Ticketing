@@ -186,7 +186,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
         /// <returns></returns>
         [HttpPost]
         [Route("GetCommentOnTask")]
-        public ResponseModel GetCommentOnTask(int TaskID)
+        public ResponseModel GetCommentOnTask(int TaskID, int taskFor)
         {
             StoreTaskCaller taskcaller = new StoreTaskCaller();
             ResponseModel objResponseModel = new ResponseModel();
@@ -200,7 +200,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                TaskCommentList = taskcaller.GetCommentOnTask(new StoreTaskService(_connectionSting), TaskID, authenticate.TenantId, authenticate.UserMasterID);
+                TaskCommentList = taskcaller.GetCommentOnTask(new StoreTaskService(_connectionSting), TaskID, taskFor, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode = TaskCommentList.Count == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

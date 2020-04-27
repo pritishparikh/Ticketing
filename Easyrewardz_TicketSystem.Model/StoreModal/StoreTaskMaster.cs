@@ -473,6 +473,7 @@ namespace Easyrewardz_TicketSystem.Model
     {
         public int TaskID { get; set; }
         public string Comment { get; set; }
+        public int TaskFor { get; set; }
     }
 
     public class TaskCommentModel

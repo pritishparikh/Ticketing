@@ -231,6 +231,7 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@_TaskID", TaskComment.TaskID);
                 cmd.Parameters.AddWithValue("@_Comment", TaskComment.Comment);
+                cmd.Parameters.AddWithValue("@_TaskFor", TaskComment.TaskFor == 0 ? 1 : TaskComment.TaskFor);
                 cmd.Parameters.AddWithValue("@_CommentBy", UserID);
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
 
@@ -259,7 +260,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TenantID"></param>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        public List<TaskCommentModel> GetCommentOnTask(int TaskID, int TenantID, int UserID)
+        public List<TaskCommentModel> GetCommentOnTask(int TaskID, int taskFor, int TenantID, int UserID)
         {
             DataSet ds = new DataSet();
             List<TaskCommentModel> TaskCommentList = new List<TaskCommentModel>();

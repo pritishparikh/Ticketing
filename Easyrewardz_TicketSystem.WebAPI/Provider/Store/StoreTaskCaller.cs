@@ -32,10 +32,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _TaskRepository = task;
             return _TaskRepository.AddStoreTaskComment(TaskComment, TenantID, UserID);
         }
-        public List<TaskCommentModel> GetCommentOnTask(IStoreTask task, int TaskID, int TenantID, int UserID)
+        public List<TaskCommentModel> GetCommentOnTask(IStoreTask task, int TaskID, int taskFor, int TenantID, int UserID)
         {
             _TaskRepository = task;
-            return _TaskRepository.GetCommentOnTask(TaskID, TenantID, UserID);
+            return _TaskRepository.GetCommentOnTask(TaskID, taskFor, TenantID, UserID);
         }
         public List<CustomTaskHistory> GetTaskHistory(IStoreTask task, int TaskID, int TenantID, int UserID)
         {
