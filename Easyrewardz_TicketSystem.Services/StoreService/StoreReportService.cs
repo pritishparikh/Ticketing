@@ -144,7 +144,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                SearchInputParams = Convert.ToString(cmd.ExecuteScalar());
+                SearchInputParams = Convert.ToString(cmd.ExecuteScalar()); 
 
                 if (!string.IsNullOrEmpty(SearchInputParams))
                 {

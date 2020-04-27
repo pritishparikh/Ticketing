@@ -40,7 +40,7 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public int? ClaimTaskID { get; set; }
         public string ClaimCreatedDate { get; set; }
         public int? ClaimCreatedBy { get; set; }
-        public int? ClaimAssignedId { get; set; }
+        public int? ClaimAssignedId { get; set; } 
 
         //ends here
 
