@@ -74,6 +74,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
         /// <summary>
         /// UpdateStoreHierarchy
         /// </summary>
@@ -111,6 +112,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
         /// <summary>
         /// DeleteStoreHierarchy
         /// </summary>
@@ -146,6 +148,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
         /// <summary>
         /// List Store Hierarchy
         /// </summary>
@@ -192,17 +195,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         [Route("BulkUploadStoreHierarchy")]
         public ResponseModel BulkUploadStoreHierarchy()
         {
-            string DownloadFilePath = string.Empty;
-            string BulkUploadFilesPath = string.Empty;
+            string downloadFilePath = string.Empty;
+            string bulkUploadFilesPath = string.Empty;
             bool errorfilesaved = false;
             bool successfilesaved = false;
             int count = 0;
             StoreHierarchyCaller storeHierarchyCaller = new StoreHierarchyCaller();
             StoreFileUploadCaller fileU = new StoreFileUploadCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
-            DataSet DataSetCSV = new DataSet();
+            DataSet dataSetCSV = new DataSet();
             List<string> CSVlist = new List<string>();
             string fileName = "";
             string finalAttchment = "";
@@ -255,39 +258,39 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 #region FilePath
-                BulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)3);
-                DownloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)3);
+                bulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)3);
+                downloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)3);
 
                 #endregion             
 
-                DataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + finalAttchment);
+                dataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + finalAttchment);
 
                 CSVlist = storeHierarchyCaller.StoreHierarchyBulkUpload(new StoreHierarchyService(_connectionSting),
-                    authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
+                    authenticate.TenantId, authenticate.UserMasterID, dataSetCSV);
                 #region Create Error and Success files and  Insert in FileUploadLog
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
-                    successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", CSVlist[0]);
+                    successfilesaved = CommonService.SaveFile(downloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", CSVlist[0]);
 
                 if (!string.IsNullOrEmpty(CSVlist[1]))
-                    errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv", CSVlist[1]);
+                    errorfilesaved = CommonService.SaveFile(downloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv", CSVlist[1]);
 
                 count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectionSting), authenticate.TenantId, finalAttchment, errorfilesaved,
                                    "HierarchyErrorFile.csv", "HierarchySuccessFile.csv", authenticate.UserMasterID, "Hierarchy",
-                                   DownloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv",
-                                   DownloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", 3
+                                   downloadFilePath + "\\Hierarchy\\Error" + "\\" + "HierarchyErrorFile.csv",
+                                   downloadFilePath + "\\Hierarchy\\ Success" + "\\" + "HierarchySuccessFile.csv", 3
                                    );
                 #endregion
 
-                StatusCode = successfilesaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = successfilesaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = CSVlist.Count;
 
