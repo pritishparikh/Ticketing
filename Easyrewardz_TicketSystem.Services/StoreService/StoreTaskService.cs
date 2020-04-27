@@ -1431,7 +1431,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("sp_geTaskBYticketData", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetTaskbyTicketData", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@objtaskID", model.taskid);
                 cmd1.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);

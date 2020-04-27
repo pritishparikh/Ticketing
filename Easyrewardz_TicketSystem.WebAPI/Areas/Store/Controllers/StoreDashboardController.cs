@@ -48,7 +48,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name=""></param>
         /// <returns></returns>
         [HttpPost]
-        [AllowAnonymous]
         [Route("GetstoreDashboardList")]
         public ResponseModel GetstoreDashboardList([FromBody] StoreDashboardModel dasbhboardmodel)
         {
