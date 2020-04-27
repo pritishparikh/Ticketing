@@ -158,14 +158,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             {
                 StoreSecurityCaller newSecurityCaller = new StoreSecurityCaller();
                 AccountModal account = new AccountModal();
-                string Programcode = X_Authorized_Programcode.Replace(' ', '+');
-                string Domainname = X_Authorized_Domainname.Replace(' ', '+');
+                string programCode = X_Authorized_Programcode.Replace(' ', '+');
+                string domainName = X_Authorized_Domainname.Replace(' ', '+');
                 string userId = X_Authorized_userId.Replace(' ', '+');
                 string password = X_Authorized_password.Replace(' ', '+');
 
-                if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
+                if (!string.IsNullOrEmpty(programCode) && !string.IsNullOrEmpty(domainName) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
-                    account = newSecurityCaller.validateUser(new StoreSecurityService(_connectioSting, _radisCacheServerAddress), Programcode, Domainname, userId, password);
+                    account = newSecurityCaller.validateUser(new StoreSecurityService(_connectioSting, _radisCacheServerAddress), programCode, domainName, userId, password);
 
                     if (!string.IsNullOrEmpty(account.Token))
                     {
@@ -199,7 +199,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return resp;
         }
         /// <summary>
-        /// Logout User
+        /// Logout Store User
         /// </summary>
         /// <returns></returns>
         [Route("Logout")]
@@ -243,12 +243,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             try
             {
                 StoreSecurityCaller newSecurityCaller = new StoreSecurityCaller();
-                string Programcode = X_Authorized_Programcode.Replace(' ', '+');
-                string Domainname = X_Authorized_Domainname.Replace(' ', '+');
+                string programCode = X_Authorized_Programcode.Replace(' ', '+');
+                string domainName = X_Authorized_Domainname.Replace(' ', '+');
 
-                if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname))
+                if (!string.IsNullOrEmpty(programCode) && !string.IsNullOrEmpty(domainName))
                 {
-                    bool isValid = newSecurityCaller.validateProgramCode(new StoreSecurityService(_connectioSting, _radisCacheServerAddress), Programcode, Domainname);
+                    bool isValid = newSecurityCaller.validateProgramCode(new StoreSecurityService(_connectioSting, _radisCacheServerAddress), programCode, domainName);
 
                     if (isValid)
                     {
