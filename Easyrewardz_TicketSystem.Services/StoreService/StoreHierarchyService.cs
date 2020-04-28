@@ -301,7 +301,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Is_Active", customHierarchymodel.IsActive);
                 cmd.Parameters.AddWithValue("@Tenant_ID", customHierarchymodel.TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", customHierarchymodel.CreatedBy);
-                success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                success = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception)
             {
