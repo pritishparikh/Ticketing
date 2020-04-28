@@ -40,7 +40,7 @@ namespace Easyrewardz_TicketSystem.Services
                         CustomCreateCategory CreateCategory = new CustomCreateCategory
                         {
                             BrandCategoryMappingID = ds.Tables[0].Rows[i]["BrandCategoryMappingID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandCategoryMappingID"]),
-                            BraindID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]),
+                            BraindID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? "0" : Convert.ToString(ds.Tables[0].Rows[i]["BrandID"]),
                             BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]),
                             CategoryID = ds.Tables[0].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]),
                             CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]),
@@ -91,6 +91,64 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantID);
                 cmd.Parameters.AddWithValue("@Brand_ID", BrandID);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null)
+                {
+                    if (ds.Tables[0] != null)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            Category category = new Category
+                            {
+                                CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]),
+                                CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]),
+                                IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"])
+                            };
+
+                            categoryList.Add(category);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return categoryList;
+        }
+
+        /// <summary>
+        /// Get ClaimCategory By Search
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="CategoryName"></param>
+        /// <returns></returns>
+        public List<Category> GetClaimCategoryBySearch(int TenantID, string CategoryName)
+        {
+
+            DataSet ds = new DataSet();
+            List<Category> categoryList = new List<Category>();
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetClaimCategoryBySearch", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd.Parameters.AddWithValue("@_CategoryName", CategoryName);
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd

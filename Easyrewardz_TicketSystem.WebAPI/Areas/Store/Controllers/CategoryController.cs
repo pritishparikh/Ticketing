@@ -130,6 +130,56 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
+        /// Get ClaimCategory By Search
+        /// </summary>
+        /// <param name="CategoryName"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetClaimCategoryBySearch")]
+        public ResponseModel GetClaimCategoryBySearch(string CategoryName)
+        {
+            List<Category> objCategoryList = new List<Category>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                if (CategoryName.Length < 3)
+                {
+                    objResponseModel.Status = false;
+                    objResponseModel.StatusCode = StatusCode;
+                    objResponseModel.Message = "Record Not Found";
+                    objResponseModel.ResponseData = objCategoryList;
+                    return objResponseModel;
+                }
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                MasterCaller newMasterCategory = new MasterCaller();
+                objCategoryList = newMasterCategory.GetClaimCategoryBySearch(new CategoryServices(_connectioSting), authenticate.TenantId, CategoryName);
+
+                StatusCode =
+              objCategoryList.Count == 0 ?
+                   (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objCategoryList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
         ///Add Claim Category
         /// </summary>
         /// <param name="BrandID"></param>

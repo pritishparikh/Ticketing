@@ -29,6 +29,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _categoryList.GetClaimCategoryList(TenantID, BrandID);
         }
 
+        public List<Category> GetClaimCategoryBySearch(ICategory _category, int TenantID, string CategoryName)
+        {
+            _categoryList = _category;
+            return _categoryList.GetClaimCategoryBySearch(TenantID, CategoryName);
+        }
+
 
         public int AddClaimCategory(ICategory _category, string CategoryName, int BrandID, int TenantID, int UserID)
         {
