@@ -191,7 +191,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("AddStoreClaimComment")]
-        public ResponseModel AddStoreClaimComment(int claimID, string comment, int oldAssignID, int newAssignID)
+        public ResponseModel AddStoreClaimComment(int claimID, string comment, int oldAssignID, int newAssignID,bool iSTicketingComment)
         {
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
@@ -203,7 +203,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                int result = storeClaimCaller.AddClaimComment(new StoreClaimService(_connectionSting), claimID, comment, authenticate.UserMasterID, oldAssignID, newAssignID);
+                int result = storeClaimCaller.AddClaimComment(new StoreClaimService(_connectionSting), claimID, comment, authenticate.UserMasterID, oldAssignID, newAssignID, iSTicketingComment);
                 statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

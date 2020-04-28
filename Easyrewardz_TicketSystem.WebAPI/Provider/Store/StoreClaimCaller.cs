@@ -32,10 +32,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="oldAssignID"></param>
         /// <param name="newAssignID"></param>
         /// <returns></returns>
-        public int AddClaimComment(IStoreClaim storeClaim, int claimID, string comment, int userID, int oldAssignID, int newAssignID)
+        public int AddClaimComment(IStoreClaim storeClaim, int claimID, string comment, int userID, int oldAssignID, int newAssignID, bool iSTicketingComment)
         {
             _ClaimRepository = storeClaim;
-            return _ClaimRepository.AddClaimComment(claimID, comment, userID, oldAssignID, newAssignID);
+            return _ClaimRepository.AddClaimComment(claimID, comment, userID, oldAssignID, newAssignID, iSTicketingComment);
         }
         /// <summary>
         /// Claim Approve

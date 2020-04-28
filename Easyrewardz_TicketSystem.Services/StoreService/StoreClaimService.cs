@@ -28,7 +28,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="oldAssignID"></param>
         /// <param name="newAssignID"></param>
         /// <returns></returns>
-        public int AddClaimComment(int claimID, string comment, int userID, int oldAssignID, int newAssignID)
+        public int AddClaimComment(int claimID, string comment, int userID, int oldAssignID, int newAssignID, bool iSTicketingComment)
         {
             int success = 0;
             try
@@ -43,6 +43,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@User_ID", userID);
                 cmd1.Parameters.AddWithValue("@oldAssign_ID", oldAssignID);
                 cmd1.Parameters.AddWithValue("@newAssign_ID", newAssignID);
+                cmd1.Parameters.AddWithValue("@iSTicketing_Comment", iSTicketingComment);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd1.ExecuteNonQuery());
 
@@ -255,6 +256,7 @@ namespace Easyrewardz_TicketSystem.Services
                             OldAgentName = x.Field<object>("OldAgentName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("OldAgentName")),
                             NewAgentID = x.Field<object>("NewAgentID") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("NewAgentID")),
                             NewAgentName = x.Field<object>("NewAgentName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("NewAgentName")),
+                            IsTicketingComment= x.Field<object>("iSTicketingComment") == DBNull.Value ? false : Convert.ToBoolean(x.Field<object>("iSTicketingComment"))
                         }).ToList();
 
                         customClaimList.CommentByApprovels = ds.Tables[3].AsEnumerable().Select(x => new CommentByApprovel()
@@ -283,6 +285,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 customOrderMaster.StoreCode = ds.Tables[4].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[i]["StoreCode"]);
                                 customOrderMaster.StoreAddress = ds.Tables[4].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[i]["Address"]);
                                 customOrderMaster.Discount = ds.Tables[4].Rows[i]["Discount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[4].Rows[i]["Discount"]);
+                                customOrderMaster.PaymentModename = ds.Tables[4].Rows[i]["PaymentModename"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[i]["PaymentModename"]);
                                 int orderMasterId = Convert.ToInt32(ds.Tables[4].Rows[i]["OrderMasterID"]);
                                 customOrderMaster.OrderItems = ds.Tables[5].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("OrderMasterID")).
                                 Equals(orderMasterId)).Select(x => new OrderItem()
@@ -356,7 +359,7 @@ namespace Easyrewardz_TicketSystem.Services
                         userComment.OldAgentName = ds.Tables[0].Rows[i]["OldAgentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["OldAgentName"]);
                         userComment.NewAgentID = ds.Tables[0].Rows[i]["NewAgentID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NewAgentID"]);
                         userComment.NewAgentName = ds.Tables[0].Rows[i]["NewAgentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NewAgentName"]);
-
+                        userComment.IsTicketingComment = ds.Tables[0].Rows[i]["iSTicketingComment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["iSTicketingComment"]);
                         lstClaimComment.Add(userComment);
                     }
                 }

@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="oldAssignID"></param>
         /// <param name="newAssignID"></param>
         /// <returns></returns>
-        int AddClaimComment(int ClaimID, string comment, int userID, int oldAssignID, int newAssignID);
+        int AddClaimComment(int ClaimID, string comment, int userID, int oldAssignID, int newAssignID, bool iSTicketingComment);
         /// <summary>
         /// Get Claim Comment
         /// </summary>

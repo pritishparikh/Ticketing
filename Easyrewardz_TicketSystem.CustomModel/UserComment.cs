@@ -13,5 +13,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string OldAgentName { get; set; }
         public int NewAgentID { get; set; }
         public string NewAgentName { get; set; }
+        public bool IsTicketingComment { get; set; }
     }
 }
