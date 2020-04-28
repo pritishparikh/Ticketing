@@ -23,8 +23,14 @@ namespace Easyrewardz_TicketSystem.Services
         }
         #endregion
 
-
-        public List<string> BulkUploadStoreHierarchy(int TenantID, int CreatedBy, DataSet DataSetCSV)
+        /// <summary>
+        /// Store Hierarchy BulkUpload
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="DataSetCSV"></param>
+        /// <returns></returns>
+        public List<string> BulkUploadStoreHierarchy(int tenantID, int createdBy, DataSet DataSetCSV)
         {
             XmlDocument xmlDoc = new XmlDocument();
             DataSet Bulkds = new DataSet();
@@ -44,8 +50,8 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
                         cmd.Parameters.AddWithValue("@_node", Xpath);
-                        cmd.Parameters.AddWithValue("@_tenantID", TenantID);
-                        cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
+                        cmd.Parameters.AddWithValue("@_tenantID", tenantID);
+                        cmd.Parameters.AddWithValue("@_createdBy", createdBy);
                         cmd.CommandType = CommandType.StoredProcedure;
                         MySqlDataAdapter da = new MySqlDataAdapter();
                         da.SelectCommand = cmd;
@@ -87,6 +93,12 @@ namespace Easyrewardz_TicketSystem.Services
             return csvLst;
         }
 
+        /// <summary>
+        /// Create Store Hierarchy
+        /// </summary>
+        /// <param name="customHierarchymodel"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
         public int CreateStoreHierarchy(CustomHierarchymodel customHierarchymodel)
         {
             int Success = 0;
@@ -120,6 +132,13 @@ namespace Easyrewardz_TicketSystem.Services
             return Success;
         }
 
+        /// <summary>
+        /// Delete Store Hierarchy
+        /// </summary>
+        /// <param name="designationID"></param>
+        /// <param name="usermasterID"></param>
+        /// <param name="tenantID"></param>
+        /// /// <returns></returns>
         public int DeleteStoreHierarchy(int designationID, int userMasterID, int tenantID)
         {
             int success = 0;
@@ -151,7 +170,12 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
-        public List<DesignationMaster> GetDesignations(int TenantID)
+        /// <summary>
+        /// Get designation list for the Designation dropdown
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
+        public List<DesignationMaster> GetDesignations(int tenantID)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -168,7 +192,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     SelectCommand = cmd1
                 };
-                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
@@ -196,7 +220,13 @@ namespace Easyrewardz_TicketSystem.Services
             return designationMasters;
         }
 
-        public List<CustomHierarchymodel> ListStoreHierarchy(int TenantID)
+        /// <summary>
+        /// List Store Hierarchy
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public List<CustomHierarchymodel> ListStoreHierarchy(int tenantID)
         {
             DataSet ds = new DataSet();
             List<CustomHierarchymodel> listHierarchy = new List<CustomHierarchymodel>();
@@ -207,7 +237,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     Connection = conn
                 };
-                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -226,10 +256,8 @@ namespace Easyrewardz_TicketSystem.Services
                         hierarchymodel.Createdbyperson = ds.Tables[0].Rows[i]["Createdby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]);
                         hierarchymodel.Updatedbyperson = ds.Tables[0].Rows[i]["UpdatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedBy"]);
                         hierarchymodel.Status = ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsActive"]);
-                        hierarchymodel.Createddate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
-                        hierarchymodel.Createdateformat = hierarchymodel.Createddate.ToString("dd MMMM yyyy");
-                        hierarchymodel.Updateddate = Convert.ToDateTime(ds.Tables[0].Rows[i]["ModifiedDate"]);
-                        hierarchymodel.Updateddateformat = hierarchymodel.Updateddate.ToString("dd MMMM yyyy");
+                        hierarchymodel.Createdateformat = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
+                        hierarchymodel.Updateddateformat = ds.Tables[0].Rows[i]["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]);
                         hierarchymodel.ReportToDesignation = ds.Tables[0].Rows[i]["ReportToDesignation"] == DBNull.Value ? 0 : Convert.ToInt16(ds.Tables[0].Rows[i]["ReportToDesignation"]);
                         listHierarchy.Add(hierarchymodel);
                     }
@@ -249,9 +277,15 @@ namespace Easyrewardz_TicketSystem.Services
             return listHierarchy;
         }
 
+        /// <summary>
+        /// Update Store Hierarchy
+        /// </summary>
+        /// <param name="customHierarchymodel"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
         public int UpdateStoreHierarchy(CustomHierarchymodel customHierarchymodel)
         {
-            int Success = 0;
+            int success = 0;
             try
             {
                 conn.Open();
@@ -267,7 +301,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Is_Active", customHierarchymodel.IsActive);
                 cmd.Parameters.AddWithValue("@Tenant_ID", customHierarchymodel.TenantID);
                 cmd.Parameters.AddWithValue("@User_ID", customHierarchymodel.CreatedBy);
-                Success = Convert.ToInt32(cmd.ExecuteNonQuery());
+                success = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception)
             {
@@ -280,7 +314,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return Success;
+            return success;
         }
     }       
 }

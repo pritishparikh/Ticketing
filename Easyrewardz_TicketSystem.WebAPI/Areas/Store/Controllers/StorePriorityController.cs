@@ -22,7 +22,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private readonly string connectionString;
         private readonly string radisCacheServerAddress;
         #endregion
-        #region Cunstructor
+
+        #region Constructor
         public StorePriorityController(IConfiguration iConfig)
         {
             configuration = iConfig;
@@ -33,9 +34,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
         #region Custom Methods
         /// <summary>
-        /// Get PriorityList
+        /// Get PriorityList for Dropdown
         /// </summary>
-        /// <param name="PriorityFor"></param>
+        /// <param name=""></param>
         /// <returns></returns>
         [HttpGet]
         [Route("GetPriorityList")]
@@ -81,7 +82,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// </summary>
         /// <param name="PriorityName"></param>
         /// <param name="status"></param>
-        /// <param name="PriorityFor"></param>
+        /// <param name=""></param>
         /// <returns></returns>
         [HttpPost]
         [Route("AddPriority")]
@@ -89,7 +90,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             StorePriorityCaller storePriorityCaller = new StorePriorityCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -97,12 +98,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 int result = storePriorityCaller.Addpriority(new StorePriorityService(connectionString), PriorityName, status, authenticate.TenantId, authenticate.UserMasterID);
-                StatusCode =
+                statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = result;
             }
@@ -119,7 +120,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name="PriorityID"></param>
         /// <param name="PriorityName"></param>
         /// <param name="status"></param>
-        /// <param name="PriorityFor"></param>
+        /// <param name=""></param>
         /// <returns></returns>
         [HttpPost]
         [Route("UpdatePriority")]
@@ -127,7 +128,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             StorePriorityCaller storePriorityCaller = new StorePriorityCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -135,12 +136,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 int result = storePriorityCaller.Updatepriority(new StorePriorityService(connectionString), PriorityID, PriorityName, status, authenticate.TenantId, authenticate.UserMasterID);
-                StatusCode =
+                statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = result;
 
@@ -157,7 +158,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         ///Delete Priority
         /// </summary>
         /// <param name="PriorityID"></param>
-        /// // <param name="PriorityFor"></param>
+        /// // <param name=""></param>
         /// <returns></returns>
         [HttpPost]
         [Route("DeletePriority")]
@@ -165,7 +166,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             StorePriorityCaller storePriorityCaller = new StorePriorityCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -174,12 +175,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
                 int result = storePriorityCaller.Deletepriority(new StorePriorityService(connectionString), PriorityID, authenticate.TenantId, authenticate.UserMasterID);
-                StatusCode =
+                statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordInUse : (int)EnumMaster.StatusCode.RecordDeletedSuccess;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = result;
 
@@ -191,10 +192,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             return objResponseModel;
         }
+
         /// <summary>
         /// Priority List
         /// </summary>
-        /// <param name="PriorityFor"></param>
+        /// <param name=""></param>
         /// <returns></returns>
         [HttpGet]
         [Route("PriorityList")]
@@ -237,7 +239,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// </summary>
         /// <param name="selectedPriorityID"></param>
         /// <param name="currentPriorityID"></param>
-        /// <param name="PriorityFor"></param>
+        /// <param name=""></param>
         /// <returns></returns>
         [HttpPost]
         [Route("UpdatePriorityOrder")]
@@ -273,6 +275,52 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             return objResponseModel;
         }
+
+        /// <summary>
+        /// ValidateStorePriorityNameExist
+        /// </summary>
+        /// <param name="priorityName"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("ValidateStorePriorityNameExist")]
+        public ResponseModel ValidatePriorityNameExist(string priorityName)
+        {
+            string resultMessage = "";
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StorePriorityCaller storePriorityCaller = new StorePriorityCaller();
+
+                resultMessage = storePriorityCaller.VallidatePriority(new StorePriorityService(connectionString), priorityName, authenticate.TenantId);
+
+                statusCode =
+              string.IsNullOrEmpty(resultMessage) ?
+                   (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = resultMessage;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
         #endregion
     }
 }

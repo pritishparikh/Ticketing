@@ -42,7 +42,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _priorityList = _priority;
             return _priorityList.UpdatePriorityOrder(TenantID, selectedPriorityID, currentPriorityID);
         }
+        public string VallidatePriority(IStorePriority _priority, string priorityName, int tenantID)
+        {
+            _priorityList = _priority;
+            return _priorityList.ValidatePriority(priorityName, tenantID);
 
+        }
         #endregion
     }
 }

@@ -21,6 +21,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public DateTime Creation_on { get; set; }
         public string Dateformat { get; set; }
         public string AssignName { get; set; }
+        public string ModifiedBy { get; set; }
+        public string ModifiedDate { get; set; }
 
         public List<ClaimCategory> claimCategory { get; set; }
         public List<CampaignScript> campaignScript { get; set; }
