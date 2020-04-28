@@ -100,7 +100,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 int result = storePriorityCaller.Addpriority(new StorePriorityService(connectionString), PriorityName, status, authenticate.TenantId, authenticate.UserMasterID);
                 statusCode =
                 result == 0 ?
-                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                       (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
