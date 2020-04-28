@@ -26,6 +26,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private readonly string _connectionSting;
         private readonly string _ClaimProductImage;
         #endregion
+
         #region Constructor
         public StoreClaimController(IConfiguration _iConfig)
         {
@@ -35,6 +36,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             _ClaimProductImage = configuration.GetValue<string>("RaiseClaimProductImage");
         }
         #endregion
+
         #region Custom Methods
         /// <summary>
         /// Raise Claim
@@ -256,11 +258,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
         /// <summary>
         /// Get Claim List
         /// </summary>
-        /// <param name="TicketId"></param>
+        /// <param name="tab_For"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetClaimList")]
@@ -338,8 +339,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// Store Claim Comment By Approvel
         /// </summary>
         /// <param name="claimID"></param>
-        ///    <param name="comment"></param>
-        ///   <param name="iSRejectComment"></param>
+        /// <param name="comment"></param>
+        /// <param name="iSRejectComment"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("StoreClaimCommentByApprovel")]
@@ -414,8 +415,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// Claim Approve Or Reject
         /// </summary>
         /// <param name="claimID"></param>
-        ///    <param name="finalClaimAsked"></param>
-        ///   <param name="IsApprove"></param>
+        /// <param name="finalClaimAsked"></param>
+        /// <param name="IsApprove"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("IsClaimApprove")]
