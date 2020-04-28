@@ -71,7 +71,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 }
                 else
                 {
-                    statusCode = count == 0 ? (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
+                    statusCode = count < 0 ? (int)EnumMaster.StatusCode.RecordAlreadyExists : count ==0 ? (int)EnumMaster.StatusCode.InternalServerError :(int)EnumMaster.StatusCode.Success;
                 }
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
