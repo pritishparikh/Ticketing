@@ -19,6 +19,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
        public string ModifiedBy { get; set; }
        public string ModifiedOn { get; set; }
        public bool Status { get; set; }
+       public string StatusName { get; set; }
     }
 
     public class CampaignScriptName

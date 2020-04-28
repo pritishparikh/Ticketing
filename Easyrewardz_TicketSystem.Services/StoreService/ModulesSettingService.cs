@@ -198,6 +198,7 @@ namespace Easyrewardz_TicketSystem.Services
                             ModifiedBy = r.Field<object>("modifiedBy") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("modifiedBy")),
                             ModifiedOn = r.Field<object>("ModifiedOn") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModifiedOn")),
                             Status = r.Field<object>("Status") == DBNull.Value ? false : Convert.ToBoolean(r.Field<object>("Status")),
+                            StatusName = r.Field<object>("Status") == DBNull.Value ? "InActive" : Convert.ToBoolean(r.Field<object>("Status")) ? "Active" :"InActive" ,
                         }).ToList();
                     }
                 }
