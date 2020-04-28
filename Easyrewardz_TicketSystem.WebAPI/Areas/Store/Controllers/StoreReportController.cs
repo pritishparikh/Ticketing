@@ -87,7 +87,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name="searchparams"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("DownloadStoreReportSearch")]
+        [Route("DownloadStoreReport")]
         public ResponseModel DownloadStoreReportSearch(int SchedulerID)
         {
             ResponseModel objResponseModel = new ResponseModel();
@@ -127,12 +127,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 }
 
 
-                StatusCode = (int)EnumMaster.StatusCode.Success;
+                StatusCode = !string.IsNullOrEmpty(CSVReport) ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = URLPath;
+                objResponseModel.ResponseData = !string.IsNullOrEmpty(CSVReport) ? URLPath : string.Empty;
             }
             catch (Exception)
             {

@@ -73,6 +73,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return departmentMasters;
         }
@@ -88,7 +92,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
-            List<StoreFunctionModel> funcationMasters = new List<StoreFunctionModel>();
+            List<StoreFunctionModel> FunctionMasters = new List<StoreFunctionModel>();
 
             try
             {
@@ -108,7 +112,7 @@ namespace Easyrewardz_TicketSystem.Services
                         StoreFunctionModel function = new StoreFunctionModel();
                         function.FunctionID = Convert.ToInt32(ds.Tables[0].Rows[i]["FunctionID"]);
                         function.FuncationName = Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]);
-                        funcationMasters.Add(function);
+                        FunctionMasters.Add(function);
                     }
                 }
             }
@@ -123,8 +127,12 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
-            return funcationMasters;
+            return FunctionMasters;
         }
 
 
@@ -173,6 +181,67 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+            }
+            return funcationMasters;
+        }
+
+
+
+        /// <summary>
+        /// Search function by department ID and Namne
+        /// </summary>
+        /// <param name="DepartmentID"></param>
+        /// <param name="SearchText"></param>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        public List<StoreFunctionModel> SearchStoreFunctionByDepartment(int departmentID, string SearchText,int tenantID)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<StoreFunctionModel> funcationMasters = new List<StoreFunctionModel>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_SearchFunctionByDepartmentId", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Department_ID", departmentID);
+                cmd1.Parameters.AddWithValue("@FuncText", string.IsNullOrEmpty(SearchText) ? "" : SearchText.ToLower());
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreFunctionModel function = new StoreFunctionModel();
+                        function.FunctionID = Convert.ToInt32(ds.Tables[0].Rows[i]["FunctionID"]);
+                        function.FuncationName = Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]);
+                        function.DepartmentID = departmentID;
+                        function.TenantID = tenantID;
+                        funcationMasters.Add(function);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+
+                if(ds!=null)
+                {
+                    ds.Dispose();
                 }
             }
             return funcationMasters;

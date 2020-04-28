@@ -157,17 +157,17 @@ namespace Easyrewardz_TicketSystem.Services
                         if (SearchModel.ActiveTabId.Equals(1))
                         {
                             TaskReport = ReportDownloadList.TaskReport;
-                            CSVReport = TaskReport.Count > 0 ? CommonService.ListToCSV(TaskReport) : string.Empty;
+                            CSVReport = TaskReport!=null &&  TaskReport.Count > 0 ? CommonService.ListToCSV(TaskReport) : string.Empty;
                         }
                         else if (SearchModel.ActiveTabId.Equals(2))
                         {
                             ClaimReport = ReportDownloadList.ClaimReport;
-                            CSVReport = ClaimReport.Count > 0 ? CommonService.ListToCSV(ClaimReport) : string.Empty;
+                            CSVReport = ClaimReport != null && ClaimReport.Count > 0 ? CommonService.ListToCSV(ClaimReport) : string.Empty;
                         }
                         else
                         {
                             CampaignReport = ReportDownloadList.CampaignReport;
-                            CSVReport = CampaignReport.Count > 0 ? CommonService.ListToCSV(CampaignReport) : string.Empty;
+                            CSVReport = CampaignReport != null && CampaignReport.Count > 0 ? CommonService.ListToCSV(CampaignReport) : string.Empty;
                         }
                     }
 
