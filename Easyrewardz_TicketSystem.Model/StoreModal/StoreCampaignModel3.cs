@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Model
 {
-    public partial class StoreCampaignModel
+    public class StoreCampaignModel3
     {
     }
 }
