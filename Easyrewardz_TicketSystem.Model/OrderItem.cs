@@ -27,6 +27,8 @@ namespace Easyrewardz_TicketSystem.Model
         public string ArticleNumber { get; set; }
         public string ArticleName { get; set; }
         public bool isCheck { get; set; }
+        public string PaymentMode { get; set; }
+        
 
     }
 }

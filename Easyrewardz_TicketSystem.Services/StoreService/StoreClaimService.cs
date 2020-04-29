@@ -297,7 +297,8 @@ namespace Easyrewardz_TicketSystem.Services
                                     ItemPrice = x.Field<object>("ItemPrice") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("ItemPrice")),
                                     PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
                                     Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
-                                    RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("RequireSize"))
+                                    RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("RequireSize")),
+                                    PaymentMode= x.Field<object>("PaymentMode") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("PaymentMode")),
                                 }).ToList();
                                 customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                                 customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
