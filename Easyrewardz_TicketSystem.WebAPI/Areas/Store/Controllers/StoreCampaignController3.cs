@@ -2,7 +2,7 @@
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     //[ApiController]
     public partial class StoreCampaignController : ControllerBase
     {
