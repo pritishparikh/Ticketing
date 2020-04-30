@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-   public class CustomerChatService: ICustomerChat
+   public partial class CustomerChatService: ICustomerChat
     {
         #region variable
         MySqlConnection conn = new MySqlConnection();
@@ -147,6 +147,39 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return lstCustomerChatMaster;
+        }
+
+        public int ScheduleVisit(AppointmentMaster appointmentMaster)
+        {
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@Customer_ID", appointmentMaster.CustomerID);
+                cmd.Parameters.AddWithValue("@Appointment_Date", appointmentMaster.AppointmentDate);
+                cmd.Parameters.AddWithValue("@Time_Slot", appointmentMaster.TimeSlot);
+                cmd.Parameters.AddWithValue("@Tenant_ID", appointmentMaster.TenantID);
+                cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
+                cmd.Parameters.AddWithValue("@NOof_People", appointmentMaster.NOofPeople);
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return success;
         }
 
         public int UpdateCustomerChatIdStatus(int chatID, int tenantId)

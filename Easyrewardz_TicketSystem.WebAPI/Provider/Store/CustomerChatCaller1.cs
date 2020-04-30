@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
-    public class CustomerChatCaller
+    public partial class CustomerChatCaller
     {
         #region Variable declaration
 
@@ -39,6 +39,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _customerChat = customerChatStatus;
 
             return _customerChat.UpdateCustomerChatIdStatus(chatID, TenantId);
+        }
+        public int ScheduleVisit(ICustomerChat customerChatStatus, AppointmentMaster appointmentMaster)
+        {
+            _customerChat = customerChatStatus;
+
+            return _customerChat.ScheduleVisit(appointmentMaster);
         }
         #endregion
     }

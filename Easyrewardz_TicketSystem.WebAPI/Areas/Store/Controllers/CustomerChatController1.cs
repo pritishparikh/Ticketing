@@ -124,8 +124,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        [HttpPost]
-        
+        [HttpPost]     
         [Route("MarkAsReadOnGoingChat")]
         public ResponseModel ReadOnGoingMessage(int chatID)
         {
@@ -201,6 +200,49 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
 
+        }
+
+        /// <summary>
+        /// Schedule Visit 
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("ScheduleVisit")]
+        public ResponseModel ScheduleVisit([FromBody]AppointmentMaster appointmentMaster)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                appointmentMaster.CreatedBy = authenticate.UserMasterID;
+                appointmentMaster.TenantID=authenticate.TenantId;
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                int result = customerChatCaller.ScheduleVisit(new CustomerChatService(_connectionString), appointmentMaster);
+
+                statusCode =
+               result.Equals(0) ?
+                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
         }
         #endregion
     }
