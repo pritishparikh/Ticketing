@@ -9,5 +9,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
     public partial class CustomerChatCaller
     {
+        #region Methods 
+
+        public List<CustomerChatMessages> GetChatmessageDetails(ICustomerChat customerChat, int TenantId, int ChatID)
+        {
+            _customerChat = customerChat;
+            return _customerChat.GetChatMessageDetails(TenantId, ChatID);
+        }
+
+
+        #endregion
     }
 }

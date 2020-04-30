@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public partial interface ICustomerChat
     {
-        
-       
+
+        List<CustomerChatMessages> GetChatMessageDetails(int tenantId, int ChatID);
     }
 }
