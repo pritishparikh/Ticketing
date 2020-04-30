@@ -392,6 +392,27 @@ namespace Easyrewardz_TicketSystem.CustomModel
           
         }
 
+        public enum CampaignScriptStatus
+        {
+            /// <summary>
+            /// New
+            /// </summary>
+            [Description("New")]
+            New = 101,
+
+            /// <summary>
+            /// InProgress
+            /// </summary>
+            [Description("InProgress")]
+            InProgress = 102,
+
+            /// <summary>
+            /// Close
+            /// </summary>
+            [Description("Close")]
+            Close = 103
+        }
+
 
         }
 }
