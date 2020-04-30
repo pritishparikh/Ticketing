@@ -54,7 +54,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Time Ago Chat
         /// </summary>
-        public int TimeAgo { get; set; }
+        public string TimeAgo { get; set; }
 
         /// <summary>
         /// On going Chat Count
