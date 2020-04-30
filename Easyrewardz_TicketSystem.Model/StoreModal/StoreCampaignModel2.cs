@@ -12,8 +12,8 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string CampaignName { get; set; }
 
-        public string CustomerName { get; set; }
-        
+        public string CustomerCount { get; set; }
+
         public string ChatbotScript { get; set; }
         
         public string SmsScript { get; set; }
