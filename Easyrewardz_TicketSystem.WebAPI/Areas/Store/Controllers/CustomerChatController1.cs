@@ -224,7 +224,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 appointmentMaster.TenantID=authenticate.TenantId;
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                int result = customerChatCaller.ScheduleVisit(new CustomerChatService(_connectionString), appointmentMaster);
+                string result = customerChatCaller.ScheduleVisit(new CustomerChatService(_connectionString), appointmentMaster);
 
                 statusCode =
                result.Equals(0) ?

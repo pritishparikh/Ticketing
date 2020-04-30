@@ -40,7 +40,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
             return _customerChat.UpdateCustomerChatIdStatus(chatID, TenantId);
         }
-        public int ScheduleVisit(ICustomerChat customerChatStatus, AppointmentMaster appointmentMaster)
+        public string ScheduleVisit(ICustomerChat customerChatStatus, AppointmentMaster appointmentMaster)
         {
             _customerChat = customerChatStatus;
 

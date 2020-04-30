@@ -57,7 +57,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_NewChat", conn)
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSNewChat", conn)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -108,7 +108,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_OngoingChat", conn)
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSOngoingChat", conn)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -149,13 +149,13 @@ namespace Easyrewardz_TicketSystem.Services
             return lstCustomerChatMaster;
         }
 
-        public int ScheduleVisit(AppointmentMaster appointmentMaster)
+        public string ScheduleVisit(AppointmentMaster appointmentMaster)
         {
-            int success = 0;
+            string message ="";
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_HSScheduleVisit", conn)
                 {
                     Connection = conn
                 };
@@ -165,8 +165,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", appointmentMaster.TenantID);
                 cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
                 cmd.Parameters.AddWithValue("@NOof_People", appointmentMaster.NOofPeople);
+                cmd.Parameters.AddWithValue("@Mobile_No", appointmentMaster.MobileNo);
+                cmd.Parameters.AddWithValue("@Store_ID", appointmentMaster.StoreID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                success = cmd.ExecuteNonQuery();
+                message = Convert.ToString(cmd.ExecuteScalar());
             }
             catch (Exception)
             {
@@ -179,7 +181,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return success;
+            return message;
         }
 
         public int UpdateCustomerChatIdStatus(int chatID, int tenantId)
