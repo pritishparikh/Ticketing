@@ -76,5 +76,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Update Campaign Status Response
+        /// </summary>
+        /// <param name="objRequest"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateCampaignStatusResponse")]
+        public ResponseModel UpdateCampaignStatusResponse(CampaignResponseInput objRequest)
+        {
+            int obj = new int();
+            StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                obj = storecampaigncaller.UpdateCampaignStatusResponse(new StoreCampaignService(_connectioSting), objRequest, authenticate.TenantId, authenticate.UserMasterID);
+                statusCode =
+                   obj == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = obj;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
     }
 }
