@@ -24,14 +24,14 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="tenantID"></param>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public List<StoreCampaignModel> GetStoreCampaign(int tenantID, int userID)
+        public List<StoreCampaignModel2> GetStoreCampaign(int tenantID, int userID)
         {
             DataSet ds = new DataSet();
-            List<StoreCampaignModel> lsttask = new List<StoreCampaignModel>();
+            List<StoreCampaignModel2> lstCampaign = new List<StoreCampaignModel2>();
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_GetStoreTaskByTicket", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_HSGetCampaignList", conn)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -47,13 +47,20 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        StoreCampaignModel taskMaster = new StoreCampaignModel
+                        StoreCampaignModel2 storecampaign = new StoreCampaignModel2
                         {
-                           
+                            CampaignID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            CampaignName = ds.Tables[0].Rows[i]["CampaignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignName"]),
+                            CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
+                            ChatbotScript = ds.Tables[0].Rows[i]["ChatbotScript"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ChatbotScript"]),
+                            SmsScript = ds.Tables[0].Rows[i]["SmsScript"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SmsScript"]),
+                            CampaingPeriod = ds.Tables[0].Rows[i]["CampaingPeriod"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaingPeriod"]),
+                            Status = Convert.ToString((StoreCampaignStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"])),
                         };
-                        lsttask.Add(taskMaster);
+                        lstCampaign.Add(storecampaign);
                     }
                 }
+
             }
             catch (Exception)
 
@@ -72,7 +79,7 @@ namespace Easyrewardz_TicketSystem.Services
                     ds.Dispose();
                 }
             }
-            return lsttask;
+            return lstCampaign;
         }
 
     }

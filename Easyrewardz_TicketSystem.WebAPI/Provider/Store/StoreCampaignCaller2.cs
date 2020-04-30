@@ -13,7 +13,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public IStoreCampaign _CampaignRepository;
         #endregion
 
-        public List<StoreCampaignModel> GetStoreCampaign(IStoreCampaign Campaign, int TenantID, int UserID)
+        public List<StoreCampaignModel2> GetStoreCampaign(IStoreCampaign Campaign, int TenantID, int UserID)
         {
             _CampaignRepository = Campaign;
             return _CampaignRepository.GetStoreCampaign(TenantID, UserID);

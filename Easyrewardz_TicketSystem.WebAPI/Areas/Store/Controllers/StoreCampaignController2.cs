@@ -20,7 +20,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         [Route("GetCampaignDetails")]
         public ResponseModel GetCampaignDetails()
         {
-            List<StoreCampaignModel> objStoreCampaign = new List<StoreCampaignModel>();
+            List<StoreCampaignModel2> objStoreCampaign = new List<StoreCampaignModel2>();
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
