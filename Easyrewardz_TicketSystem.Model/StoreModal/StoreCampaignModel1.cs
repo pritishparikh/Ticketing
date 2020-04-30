@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Model
 {
@@ -78,5 +77,25 @@ namespace Easyrewardz_TicketSystem.Model
         /// StatusName
         /// </summary>
         public string StatusName { get; set; }
+    }
+
+    public class CampaignResponseInput
+    {
+        /// <summary>
+        /// Campaign Customer ID
+        /// </summary>
+        public int CampaignCustomerID { get; set; }
+        /// <summary>
+        /// Response ID
+        /// </summary>
+        public int ResponseID { get; set; }
+        /// <summary>
+        /// Call ReScheduled To
+        /// </summary>
+        public string CallReScheduledTo { get; set; }
+        /// <summary>
+        /// Call ReScheduled To Date
+        /// </summary>
+        public DateTime? CallReScheduledToDate { get; set; }
     }
 }
