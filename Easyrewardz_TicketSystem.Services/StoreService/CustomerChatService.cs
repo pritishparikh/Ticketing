@@ -19,6 +19,85 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
+        public int MarkAsReadOnGoingChat(int chatID)
+        {
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_MarkAsReadOnGoingChat", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@chat_ID", chatID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                success = cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return success;
+        }
+
+        public List<CustomerChatMaster> NewChat(int userMasterID, int tenantID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<CustomerChatMaster> lstCustomerChatMaster = new List<CustomerChatMaster>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_NewChat", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
+                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomerChatMaster customerChatMaster = new CustomerChatMaster();
+                        customerChatMaster.ChatID = Convert.ToInt32(ds.Tables[0].Rows[i]["CurrentChatID"]);
+                       // customerChatMaster.CustomerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerID"]);
+                        customerChatMaster.CumtomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
+                        customerChatMaster.MobileNo = ds.Tables[0].Rows[i]["CustomerNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerNumber"]);
+                        customerChatMaster.MessageCount = ds.Tables[0].Rows[i]["NewMessageCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NewMessageCount"]);
+                        customerChatMaster.TimeAgo = ds.Tables[0].Rows[i]["TimeAgo"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TimeAgo"]);
+                        lstCustomerChatMaster.Add(customerChatMaster);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return lstCustomerChatMaster;
+        }
+
         public List<CustomerChatMaster> OngoingChat(int userMasterID, int tenantID)
         {
             DataSet ds = new DataSet();
@@ -45,14 +124,12 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CustomerChatMaster customerChatMaster = new CustomerChatMaster();
-                        customerChatMaster.ChatID = Convert.ToInt32(ds.Tables[0].Rows[i]["ChatID"]);
-                        customerChatMaster.StoreID = ds.Tables[0].Rows[i][""] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i][""]);
-                        customerChatMaster.CustomerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerID"]);
-                        customerChatMaster.CumtomerName = ds.Tables[0].Rows[i][""] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i][""]);
-                        customerChatMaster.ChatStatus = ds.Tables[0].Rows[i]["ChatStatus"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ChatStatus"]);
-                        customerChatMaster.MobileNo = ds.Tables[0].Rows[i][""] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i][""]);
-                        customerChatMaster.MessageCount= ds.Tables[0].Rows[i][""] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i][""]);
-                        customerChatMaster.TimeAgo = ds.Tables[0].Rows[i][""] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i][""]);
+                        customerChatMaster.ChatID = Convert.ToInt32(ds.Tables[0].Rows[i]["CurrentChatID"]);
+                       // customerChatMaster.CustomerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerID"]);
+                        customerChatMaster.CumtomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
+                        customerChatMaster.MobileNo = ds.Tables[0].Rows[i]["CustomerNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerNumber"]);
+                        customerChatMaster.MessageCount= ds.Tables[0].Rows[i]["NewMessageCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NewMessageCount"]);
+                        customerChatMaster.TimeAgo = ds.Tables[0].Rows[i]["TimeAgo"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TimeAgo"]);
                         lstCustomerChatMaster.Add(customerChatMaster);
                     }
                 }

@@ -22,6 +22,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _customerChat.OngoingChat(userMasterID, tenantID);
         }
 
+        public List<CustomerChatMaster> NewChat(ICustomerChat customerChat, int userMasterID, int tenantID)
+        {
+            _customerChat = customerChat;
+
+            return _customerChat.NewChat(userMasterID, tenantID);
+        }
+        public int MarkAsReadMessage(ICustomerChat customerChat, int chatID)
+        {
+            _customerChat = customerChat;
+
+            return _customerChat.MarkAsReadOnGoingChat(chatID);
+        }
+
         #endregion
     }
 }
