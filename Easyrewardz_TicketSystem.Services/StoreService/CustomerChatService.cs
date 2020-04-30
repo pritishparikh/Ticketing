@@ -148,5 +148,34 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return lstCustomerChatMaster;
         }
+
+        public int UpdateCustomerChatIdStatus(int chatID, int tenantId)
+        {
+
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateCustomerChatStatus", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@chat_id", chatID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return result;
+        }
     }
 }

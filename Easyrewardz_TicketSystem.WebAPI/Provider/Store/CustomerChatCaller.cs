@@ -34,7 +34,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
             return _customerChat.MarkAsReadOnGoingChat(chatID);
         }
+        public int UpdateCustomerChatIdStatus(ICustomerChat customerChatStatus, int chatID, int TenantId)
+        {
+            _customerChat = customerChatStatus;
 
+            return _customerChat.UpdateCustomerChatIdStatus(chatID, TenantId);
+        }
         #endregion
     }
 }

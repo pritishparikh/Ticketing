@@ -13,5 +13,6 @@ namespace Easyrewardz_TicketSystem.Interface
         List<CustomerChatMaster> NewChat(int userMasterID, int tenantID);
 
         int MarkAsReadOnGoingChat(int chatID);
+        int UpdateCustomerChatIdStatus(int chatID, int tenantID);
     }
 }
