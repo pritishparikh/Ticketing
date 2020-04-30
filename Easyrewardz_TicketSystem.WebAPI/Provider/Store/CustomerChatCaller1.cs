@@ -46,6 +46,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
             return _customerChat.ScheduleVisit(appointmentMaster);
         }
+        public List<CustomerChatHistory> CustomerChatHistory(ICustomerChat customerchatHistory, int ChatID)
+        {
+            _customerChat = customerchatHistory;
+            return _customerChat.CustomerChatHistory(ChatID);
+        }
         #endregion
     }
 }
