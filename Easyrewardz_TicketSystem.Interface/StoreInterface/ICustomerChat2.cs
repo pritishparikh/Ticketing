@@ -9,5 +9,7 @@ namespace Easyrewardz_TicketSystem.Interface
     {
 
         List<CustomerChatMessages> GetChatMessageDetails(int tenantId, int ChatID);
+
+        int SaveChatMessages(CustomerChatModel ChatMessageDetails);
     }
 }

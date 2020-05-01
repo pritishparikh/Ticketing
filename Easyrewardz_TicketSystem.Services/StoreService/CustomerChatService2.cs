@@ -94,5 +94,53 @@ namespace Easyrewardz_TicketSystem.Services
             return ChatList;
         }
 
+
+        /// <summary>
+        /// Save Chat messages
+        /// </summary>
+        /// <param name="CustomerChatModel"></param>
+        /// <returns></returns>
+        public int SaveChatMessages(CustomerChatModel ChatMessageDetails)
+        {
+
+            MySqlCommand cmd = new MySqlCommand();
+            int resultCount = 0;
+
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSInsertChatDetails", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_ChatID", ChatMessageDetails.ChatID);
+                cmd.Parameters.AddWithValue("@_Message", string.IsNullOrEmpty(ChatMessageDetails.Message) ? "" : ChatMessageDetails.Message);
+                cmd.Parameters.AddWithValue("@_ByCustomer", ChatMessageDetails.ByCustomer ? 1 : 2);
+                cmd.Parameters.AddWithValue("@_Status", ChatMessageDetails.ChatStatus);
+                cmd.Parameters.AddWithValue("@_StoreManagerId", ChatMessageDetails.StoreManagerId);
+                cmd.Parameters.AddWithValue("@_CreatedBy", ChatMessageDetails.CreatedBy);
+
+
+                //cmd.Parameters.AddWithValue("@_IsTaskWithTicket", Convert.ToInt16(ChatMessageDetails.IsTaskWithTicket));
+                //cmd.Parameters.AddWithValue("@_TaskTicketID", ChatMessageDetails.TaskTicketID);
+
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                resultCount = Convert.ToInt32(cmd.ExecuteScalar());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return resultCount;
+        }
     }
 }

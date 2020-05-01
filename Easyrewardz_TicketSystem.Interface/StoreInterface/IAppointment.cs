@@ -8,5 +8,7 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface IAppointment
     {
         List<AppointmentModel> GetAppointmentList(int TenantID);
+
+        List<AppointmentCount> GetAppointmentCount(int TenantID);
     }
 }

@@ -15,6 +15,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #endregion
 
         #region Methods 
+        /// <summary>
+        /// Get Ongoing Chat
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
         public List<CustomerChatMaster> OngoingChat(ICustomerChat customerChat,int userMasterID,int tenantID)
         {
             _customerChat = customerChat;
@@ -22,30 +27,59 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _customerChat.OngoingChat(userMasterID, tenantID);
         }
 
+        /// <summary>
+        /// Get New Chat
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
         public List<CustomerChatMaster> NewChat(ICustomerChat customerChat, int userMasterID, int tenantID)
         {
             _customerChat = customerChat;
 
             return _customerChat.NewChat(userMasterID, tenantID);
         }
+
+        /// <summary>
+        /// Read On Going Message
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
         public int MarkAsReadMessage(ICustomerChat customerChat, int chatID)
         {
             _customerChat = customerChat;
 
             return _customerChat.MarkAsReadOnGoingChat(chatID);
         }
+
+        /// <summary>
+        /// UpdateCustomerChatStatus
+        /// </summary>
+        /// <param name="chatid"></param>
+        /// <returns></returns>
         public int UpdateCustomerChatIdStatus(ICustomerChat customerChatStatus, int chatID, int TenantId)
         {
             _customerChat = customerChatStatus;
 
             return _customerChat.UpdateCustomerChatIdStatus(chatID, TenantId);
         }
+
+        /// <summary>
+        /// Schedule Visit 
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
         public string ScheduleVisit(ICustomerChat customerChatStatus, AppointmentMaster appointmentMaster)
         {
             _customerChat = customerChatStatus;
 
             return _customerChat.ScheduleVisit(appointmentMaster);
         }
+
+        /// <summary>
+        /// CustomerChatHistory
+        /// </summary>
+        /// <param name="ChatId"></param>
+        /// <returns></returns>
         public List<CustomerChatHistory> CustomerChatHistory(ICustomerChat customerchatHistory, int ChatID)
         {
             _customerChat = customerchatHistory;

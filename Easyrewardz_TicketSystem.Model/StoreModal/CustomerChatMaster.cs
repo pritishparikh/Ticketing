@@ -169,4 +169,50 @@ namespace Easyrewardz_TicketSystem.Model
 
 
     }
+
+
+    public class CustomerChatModel
+    {
+        /// <summary>
+        /// Chat ID of Customer
+        /// </summary>
+        public int ChatID { get; set; }
+
+        /// <summary>
+        /// Message
+        /// </summary>
+        public string Message { get; set; }
+
+        /// <summary>
+        /// Attachment
+        /// </summary>
+        public string Attachment { get; set; }
+
+        /// <summary>
+        /// is by customer or not
+        /// </summary>
+        public bool ByCustomer { get; set; }
+
+
+        /// <summary>
+        /// Status of the chat
+        /// </summary>
+        public int ChatStatus { get; set; }
+
+        /// <summary>
+        /// StoreManagerId
+        /// </summary>
+        public int StoreManagerId { get; set; }
+
+        /// <summary>
+        /// Created BY
+        /// </summary>
+        public int CreatedBy { get; set; }
+
+
+       
+
+
+    }
+
 }
