@@ -5,11 +5,12 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-   public partial class CustomerChatService: ICustomerChat
+    public partial class CustomerChatService : ICustomerChat
     {
         /// <summary>
         /// Get Customer Chat Details
@@ -124,8 +125,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_CreatedBy", ChatMessageDetails.CreatedBy);
 
 
-                //cmd.Parameters.AddWithValue("@_IsTaskWithTicket", Convert.ToInt16(ChatMessageDetails.IsTaskWithTicket));
-                //cmd.Parameters.AddWithValue("@_TaskTicketID", ChatMessageDetails.TaskTicketID);
 
 
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -145,11 +144,10 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-
         /// <summary>
-        /// Save Chat messages
+        /// Search Item Details in Card Tab of Chat
         /// </summary>
-        /// <param name="CustomerChatModel"></param>
+        /// <param name="SearchText"></param>
         /// <returns></returns>
         public List<CustomItemSearchResponseModel> ChatItemDetailsSearch(string SearchText)
         {
@@ -158,13 +156,19 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                ItemList.Add(new
-                 CustomItemSearchResponseModel
+
+                for(int i=0; i< 6; i++)
                 {
-                    ImageURL = "https://img2.bata.in/0/images/product/854-6523_700x650_1.jpeg",
-                    Label = "Black Slipons for Men",
-                    AlternativeText= "Product Code: F854652300",
-                });
+                    ItemList.Add(new
+                 CustomItemSearchResponseModel
+                    {
+                        ImageURL = "https://img2.bata.in/0/images/product/854-6523_700x650_1.jpeg",
+                        Label = "Black Slipons for Men " + i.ToString(),
+                        AlternativeText = "Product Code: F854652300" + i.ToString(),
+                        RedirectionUrl = "https://www.bata.in/bataindia/pr-1463307_c-262/black-slipons-for-men.html"
+                    });
+                }
+                
             }
             catch (Exception)
             {
@@ -175,6 +179,51 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Close();
             }
             return ItemList;
+        }
+
+
+        /// <summary>
+        /// Save Customer Chat reply 
+        /// </summary>
+        /// <param name="ChatMessageReply"></param>
+        /// <returns></returns>
+        public int SaveCustomerChatMessageReply(CustomerChatReplyModel ChatReply)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int resultCount = 0;
+
+            try
+            {
+
+                DateTime Now = !string.IsNullOrEmpty(ChatReply.DateTime) ? DateTime.ParseExact(ChatReply.DateTime, "dd MMM yyyy hh:mm:ss tt", CultureInfo.InvariantCulture) : DateTime.Now;
+
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_InsertCustomerChatReplyMessage", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_ProgramCode", ChatReply.ProgramCode);
+                cmd.Parameters.AddWithValue("@_StoreCode", ChatReply.StoreCode);
+                cmd.Parameters.AddWithValue("@_Mobile", ChatReply.Mobile);
+                cmd.Parameters.AddWithValue("@_Message",string.IsNullOrEmpty(ChatReply.Message) ? "" :  ChatReply.Message);
+                //cmd.Parameters.AddWithValue("@_DateTime", string.IsNullOrEmpty(ChatReply.DateTime) ? NowTime : ChatReply.Message);
+                cmd.Parameters.AddWithValue("@_DateTime", Now);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                resultCount = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return resultCount;
         }
     }
 }

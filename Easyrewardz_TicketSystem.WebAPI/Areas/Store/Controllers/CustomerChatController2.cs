@@ -103,9 +103,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// Get Customer Chat messages list
+        /// Search Item Details in Card Tab of Chat
         /// </summary>
-        /// <param name="ChatID"></param>
+        /// <param name="SearchText"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("searchChatItemDetails")]
@@ -133,6 +133,43 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = ItemList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Save Customer Chat reply 
+        /// </summary>
+        /// <param name="ChatMessageReply"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("saveCustomerChatReply")]
+        public ResponseModel saveCustomerChatReply([FromBody]  CustomerChatReplyModel ChatMessageReply)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int result = 0; int statusCode = 0; 
+            string statusMessage = "";
+            try
+            {
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                result = customerChatCaller.SaveCustomerChatMessageReply(new CustomerChatService(_connectionString), ChatMessageReply);
+
+                statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
             catch (Exception)
             {

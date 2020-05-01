@@ -21,6 +21,11 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// </summary>
         public string AlternativeText { get; set; }
 
-       
+        /// <summary>
+        /// RedirectionUrl
+        /// </summary>
+        public string RedirectionUrl { get; set; }
+
+
     }
 }
