@@ -45,16 +45,17 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         AppointmentModel obj = new AppointmentModel
                         {
-                            AppointmentDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["AppointmentDate"]),
+                            AppointmentDate = Convert.ToString(ds.Tables[0].Rows[i]["AppointmentDate"]),
                             TimeSlot = Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]),
                             NOofPeople = Convert.ToInt32(ds.Tables[0].Rows[i]["NOofPeople"]),
                             AppointmentCustomerList = new List<AppointmentCustomer>()
                         };
 
 
-                        obj.AppointmentCustomerList = ds.Tables[1].AsEnumerable().Where(x => Convert.ToDateTime(x.Field<DateTime>("AppointmentDate")).
+                        obj.AppointmentCustomerList = ds.Tables[1].AsEnumerable().Where(x => (x.Field<string>("AppointmentDate")).
                     Equals(obj.AppointmentDate)).Select(x => new AppointmentCustomer()
                     {
+                        AppointmentID = Convert.ToInt32(x.Field<int>("AppointmentID")),
                         CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
                         CustomerNumber = Convert.ToString(x.Field<string>("CustomerNumber")),
                         NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),

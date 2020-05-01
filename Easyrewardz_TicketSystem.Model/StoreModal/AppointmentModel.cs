@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.Model
     public class AppointmentModel
     {
         
-        public DateTime AppointmentDate { get; set; }
+        public string AppointmentDate { get; set; }
         public string TimeSlot { get; set; }
         public int NOofPeople { get; set; }
         public List<AppointmentCustomer> AppointmentCustomerList { get; set; }
