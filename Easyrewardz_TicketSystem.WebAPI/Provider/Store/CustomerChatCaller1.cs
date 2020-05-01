@@ -85,6 +85,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _customerChat = customerchatHistory;
             return _customerChat.CustomerChatHistory(ChatID);
         }
+
+        /// <summary>
+        /// Get Chat Notification Count
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public int GetChatCount(ICustomerChat customerChat,int tenantID)
+        {
+            _customerChat = customerChat;
+
+            return _customerChat.GetChatCount(tenantID);
+        }
+
         #endregion
     }
 }

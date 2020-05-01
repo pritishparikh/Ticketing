@@ -19,5 +19,7 @@ namespace Easyrewardz_TicketSystem.Interface
         string ScheduleVisit(AppointmentMaster appointmentMaster);
 
         List<CustomerChatHistory> CustomerChatHistory(int chatID);
+
+        int GetChatCount(int tenantID);
     }
 }
