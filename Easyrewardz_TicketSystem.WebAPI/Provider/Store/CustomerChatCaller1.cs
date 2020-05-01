@@ -91,12 +91,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
+        /// 
         public int GetChatCount(ICustomerChat customerChat,int tenantID)
         {
 
             _customerChat = customerChat;
 
             return _customerChat.GetChatCount(tenantID);
+        }
+
+        /// <summary>
+        /// Get Time Slot
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
+        public List<TimeSlotModel> GetTimeSlot(ICustomerChat customerChat, int storeID, int userMasterID, int tenantID)
+        {
+            _customerChat = customerChat;
+
+            return _customerChat.GetTimeSlot(storeID,userMasterID, tenantID);
         }
 
         #endregion

@@ -343,5 +343,63 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return counts;
         }
+
+        /// <summary>
+        /// GetTimeSlot
+        /// </summary>
+        /// <param name="userMasterID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
+        public List<TimeSlotModel> GetTimeSlot(int storeID,int userMasterID, int tenantID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<TimeSlotModel> lstTimeSlotModel = new List<TimeSlotModel>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetTimeSlot", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
+                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd1.Parameters.AddWithValue("@store_ID", storeID);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        TimeSlotModel timeSlotModel = new TimeSlotModel();
+
+                        timeSlotModel.SlotID = ds.Tables[0].Rows[i]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SlotId"]);
+                        timeSlotModel.StoreID = ds.Tables[0].Rows[i]["StoreId"] == DBNull.Value ? 0: Convert.ToInt32(ds.Tables[0].Rows[i]["StoreId"]);
+                        timeSlotModel.TimeSlot = ds.Tables[0].Rows[i]["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]);
+                        timeSlotModel.MaxCapacity = ds.Tables[0].Rows[i]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MaxCapacity"]); 
+                        lstTimeSlotModel.Add(timeSlotModel);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return lstTimeSlotModel;
+        }
     }
 }

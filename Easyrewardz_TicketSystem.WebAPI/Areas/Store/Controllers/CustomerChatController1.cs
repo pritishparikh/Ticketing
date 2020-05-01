@@ -370,6 +370,48 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Get Time Slot
+        /// </summary>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetTimeSlot")]
+        public ResponseModel GetTimeSlot(int storeID)
+        {
+            List<TimeSlotModel> timeSlotModel = new List<TimeSlotModel>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                timeSlotModel = customerChatCaller.GetTimeSlot(new CustomerChatService(_connectionString), storeID, authenticate.UserMasterID, authenticate.TenantId);
+
+                statusCode =
+               timeSlotModel.Count == 0 ?
+                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = timeSlotModel;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
         #endregion
     }
 }
