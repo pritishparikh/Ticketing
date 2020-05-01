@@ -6,8 +6,7 @@ using System.Text;
 namespace Easyrewardz_TicketSystem.Interface
 {
     public partial interface ICustomerChat
-    {
-        
+    {     
         List<CustomerChatMaster> OngoingChat(int userMasterID,int tenantID);
 
         List<CustomerChatMaster> NewChat(int userMasterID, int tenantID);

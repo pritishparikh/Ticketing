@@ -350,7 +350,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
-
                 int counts = customerChatCaller.GetChatCount(new CustomerChatService(_connectionString),authenticate.TenantId);
 
                 statusCode =
