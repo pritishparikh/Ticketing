@@ -181,6 +181,77 @@ namespace Easyrewardz_TicketSystem.Services
             return ItemList;
         }
 
+        /// <summary>
+        /// Get Chat Suggestions
+        /// </summary>
+        /// <param name="SearchText"></param>
+        /// <returns></returns>
+        public List<CustomerChatSuggestionModel> GetChatSuggestions(string SearchText)
+        {
+
+            List<CustomerChatSuggestionModel> SuggestionList = new List<CustomerChatSuggestionModel>();
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            try
+            {
+
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSGetChatSuggestions", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@SearchText", string.IsNullOrEmpty(SearchText) ? "" : SearchText.ToLower());
+
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            CustomerChatSuggestionModel obj = new CustomerChatSuggestionModel()
+                            {
+                                SuggestionID = Convert.ToInt32(dr["SuggestionID"]),
+                                SuggestionText = dr["SuggestionText"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SuggestionText"]),
+                                //CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0: Convert.ToInt32(dr["CreatedBy"]),
+                                //CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),
+                                //ModifyBy = dr["ModifyBy"] == DBNull.Value ? 0: Convert.ToInt32(dr["ModifyBy"]),
+                                //ModifiedDate = dr["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifiedDate"]),
+
+                            };
+
+                            SuggestionList.Add(obj);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return SuggestionList;
+        }
+
 
         /// <summary>
         /// Save Customer Chat reply 

@@ -39,6 +39,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
+        public List<CustomerChatSuggestionModel> GetChatSuggestions(ICustomerChat customerChat, string SearchText)
+        {
+            _customerChat = customerChat;
+            return _customerChat.GetChatSuggestions(SearchText);
+        }
+
+
         #endregion
     }
 }

@@ -143,6 +143,46 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
+        /// Get Chat Suggestions
+        /// </summary>
+        /// <param name="SearchText"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("getChatSuggestions")]
+        public ResponseModel getChatSuggestions(string SearchText)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<CustomerChatSuggestionModel> SuggestionList = new List<CustomerChatSuggestionModel>();
+
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                SuggestionList = customerChatCaller.GetChatSuggestions(new CustomerChatService(_connectionString), SearchText);
+                statusCode = SuggestionList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = SuggestionList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
         /// Save Customer Chat reply 
         /// </summary>
         /// <param name="ChatMessageReply"></param>
