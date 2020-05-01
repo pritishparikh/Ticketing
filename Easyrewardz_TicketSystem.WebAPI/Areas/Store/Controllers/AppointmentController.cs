@@ -37,7 +37,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         #region Custom Methods 
         [HttpPost]
         [Route("GetAppointmentList")]
-        public ResponseModel GetAppointmentList()
+        public ResponseModel GetAppointmentList(string AppDate)
         {
             List<AppointmentModel> objAppointmentList = new List<AppointmentModel>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -52,7 +52,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 AppointmentCaller newAppointment = new AppointmentCaller();
 
-                objAppointmentList = newAppointment.GetAppointmentList(new AppointmentServices(_connectioSting), authenticate.TenantId);
+                objAppointmentList = newAppointment.GetAppointmentList(new AppointmentServices(_connectioSting), authenticate.TenantId, AppDate);
 
                 statusCode =
                 objAppointmentList.Count == 0 ?
