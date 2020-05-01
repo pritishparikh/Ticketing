@@ -21,6 +21,14 @@ namespace Easyrewardz_TicketSystem.Model
         public string CampaingPeriod { get; set; }
 
         public string Status { get; set; }
+
+        public bool SmsFlag { get; set; }
+
+        public bool EmailFlag { get; set; }
+
+        public bool MessengerFlag { get; set; }
+
+        public bool BotFlag { get; set; }
     }
 
     public enum StoreCampaignStatus
@@ -66,6 +74,26 @@ namespace Easyrewardz_TicketSystem.Model
     {
         public int Id { get; set; }
         public string name { get; set; }
+    }
+
+    public class StoreCampaignKeyInsight
+    {
+        public string mobileNumber { get; set; }
+        public string insightText { get; set; }
+    }
+
+    public class StoreCampaignRecommended
+    {
+        public string mobileNumber { get; set; }
+        public string itemCode { get; set; }
+        public string category { get; set; }
+        public string subCategory { get; set; }
+        public string brand { get; set; }
+        public string color { get; set; }
+        public string size { get; set; }
+        public string price { get; set; }
+        public string url { get; set; }
+        public string imageURL { get; set; }
     }
 
 }

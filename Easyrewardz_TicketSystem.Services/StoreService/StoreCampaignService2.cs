@@ -61,6 +61,10 @@ namespace Easyrewardz_TicketSystem.Services
                             ChatbotScript = ds.Tables[0].Rows[i]["ChatbotScript"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ChatbotScript"]),
                             SmsScript = ds.Tables[0].Rows[i]["SmsScript"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SmsScript"]),
                             CampaingPeriod = ds.Tables[0].Rows[i]["CampaingPeriod"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaingPeriod"]),
+                            SmsFlag = Convert.ToBoolean(ds.Tables[0].Rows[i]["SmsFlag"]),
+                            EmailFlag = Convert.ToBoolean(ds.Tables[0].Rows[i]["EmailFlag"]),
+                            MessengerFlag = Convert.ToBoolean(ds.Tables[0].Rows[i]["MessengerFlag"]),
+                            BotFlag = Convert.ToBoolean(ds.Tables[0].Rows[i]["BotFlag"]),
                             Status = Convert.ToString((StoreCampaignStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"])),
                         };
                         lstCampaign.Add(storecampaign);
@@ -90,17 +94,22 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        /// Get Store Task By Ticket
+        ///Get Customer popup Details List
         /// </summary>
         /// <param name="tenantID"></param>
         /// <param name="userID"></param>
+        /// <param name="mobileNumber"></param>
+        /// <param name="programCode"></param>
         /// <returns></returns>
         public List<CustomerpopupDetails> GetCustomerpopupDetailsList(string mobileNumber, string programCode, int tenantID, int userID)
         {
-            List<CustomerpopupDetails> objorderMaster = new List<CustomerpopupDetails>();
             StoreCampaignSearchOrder objOrderSearch = new StoreCampaignSearchOrder();
+            List<CustomerpopupDetails> objpopupdetails = new List<CustomerpopupDetails>();
             List<CustomerpopupDetails> objOrderDetails = new List<CustomerpopupDetails>();
-
+            List<StoreCampaignKeyInsight> objkeyinsight = new List<StoreCampaignKeyInsight>();
+            List<StoreCampaignKeyInsight> objkeyinsightDetails = new List<StoreCampaignKeyInsight>();
+        
+         
             try
             {
              
@@ -122,12 +131,65 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             if (objOrderDetails.Count > 0)
                             {
-                                for (int k = 0; k < objOrderDetails.Count; k++)
-                                {
-                                    CustomerpopupDetails orderDetails = new CustomerpopupDetails();
-                                    
-                                    objorderMaster.Add(orderDetails);
-                                }
+                                    CustomerpopupDetails popupDetail = new CustomerpopupDetails();
+                                    popupDetail.name = "Abu";
+                                    popupDetail.mobileNumber = "1234567890";
+                                    popupDetail.tiername = "";
+                                    popupDetail.lifeTimeValue = "1050.30";
+                                    popupDetail.visitCount = "6";
+                                    objpopupdetails.Add(popupDetail);
+                            }
+                        }
+
+                    }
+
+                }
+
+                apiResponse = CommonService.SendApiRequest(apiURL + "CustomerOrderDetails", apiReq);
+
+                if (!string.IsNullOrEmpty(apiResponse))
+                {
+                    ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+
+                    if (ApiResponse != null)
+                    {
+                        objkeyinsightDetails = JsonConvert.DeserializeObject<List<StoreCampaignKeyInsight>>(Convert.ToString((ApiResponse.Responce)));
+
+                        if (objkeyinsightDetails != null)
+                        {
+                            if (objkeyinsightDetails.Count > 0)
+                            {
+                                StoreCampaignKeyInsight popupDetail = new StoreCampaignKeyInsight();
+                               
+                                popupDetail.mobileNumber = "1234567890";
+                                popupDetail.insightText = "For Test";
+                                objkeyinsight.Add(popupDetail);
+                            }
+                        }
+
+                    }
+
+                }
+
+                apiResponse = CommonService.SendApiRequest(apiURL + "CustomerOrderDetails", apiReq);
+
+                if (!string.IsNullOrEmpty(apiResponse))
+                {
+                    ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+
+                    if (ApiResponse != null)
+                    {
+                        objkeyinsightDetails = JsonConvert.DeserializeObject<List<StoreCampaignKeyInsight>>(Convert.ToString((ApiResponse.Responce)));
+
+                        if (objkeyinsightDetails != null)
+                        {
+                            if (objkeyinsightDetails.Count > 0)
+                            {
+                                StoreCampaignKeyInsight popupDetail = new StoreCampaignKeyInsight();
+
+                                popupDetail.mobileNumber = "1234567890";
+                                popupDetail.insightText = "For Test";
+                                objkeyinsight.Add(popupDetail);
                             }
                         }
 
@@ -142,7 +204,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw;
             }
-            return objorderMaster;
+            return objpopupdetails;
         }
 
         /// <summary>
