@@ -173,9 +173,9 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="AppointmentMaster"></param>
         /// <returns></returns>
-        public string ScheduleVisit(AppointmentMaster appointmentMaster)
+        public int ScheduleVisit(AppointmentMaster appointmentMaster)
         {
-            string message ="";
+            int message;
             try
             {
                 conn.Open();
@@ -192,7 +192,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Mobile_No", appointmentMaster.MobileNo);
                 cmd.Parameters.AddWithValue("@Store_ID", appointmentMaster.StoreID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                message = Convert.ToString(cmd.ExecuteScalar());
+                message = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
             catch (Exception)
             {
