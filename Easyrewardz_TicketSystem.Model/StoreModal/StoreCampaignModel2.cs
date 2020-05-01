@@ -45,4 +45,27 @@ namespace Easyrewardz_TicketSystem.Model
 
     }
 
+    public class StoreCampaignSearchOrder
+    {
+        public string programCode { get; set; }
+        public string mobileNumber { get; set; }
+    }
+
+    public class CustomerpopupDetails
+    {
+        public string name { get; set; }
+        public string mobileNumber { get; set; }
+        public string tiername { get; set; }
+        public string lifeTimeValue { get; set; }
+        public string visitCount { get; set; }
+        public string insightText { get; set; }
+        
+    }
+
+    public class StoreCampaignLogo
+    {
+        public int Id { get; set; }
+        public string name { get; set; }
+    }
+
 }

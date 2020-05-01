@@ -19,5 +19,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _CampaignRepository.GetStoreCampaign(TenantID, UserID);
 
         }
+
+        public List<CustomerpopupDetails> GetCustomerpopupDetailsList(IStoreCampaign Campaign, string mobileNumber, string programCode, int TenantID, int UserID)
+        {
+            _CampaignRepository = Campaign;
+            return _CampaignRepository.GetCustomerpopupDetailsList(mobileNumber, programCode, TenantID, UserID);
+
+        }
+
+        public List<StoreCampaignLogo> GetCampaignDetailsLogo(IStoreCampaign Campaign, int TenantID, int UserID)
+        {
+            _CampaignRepository = Campaign;
+            return _CampaignRepository.GetCampaignDetailsLogo(TenantID, UserID);
+
+        }
     }
 }
