@@ -210,9 +210,6 @@ namespace Easyrewardz_TicketSystem.Model
         public int CreatedBy { get; set; }
 
 
-       
-
-
     }
 
 }

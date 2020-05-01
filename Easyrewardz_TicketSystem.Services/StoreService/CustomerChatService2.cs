@@ -1,5 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -141,6 +142,39 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Close();
             }
             return resultCount;
+        }
+
+
+
+        /// <summary>
+        /// Save Chat messages
+        /// </summary>
+        /// <param name="CustomerChatModel"></param>
+        /// <returns></returns>
+        public List<CustomItemSearchResponseModel> ChatItemDetailsSearch(string SearchText)
+        {
+
+            List<CustomItemSearchResponseModel> ItemList = new List<CustomItemSearchResponseModel>();
+
+            try
+            {
+                ItemList.Add(new
+                 CustomItemSearchResponseModel
+                {
+                    ImageURL = "https://img2.bata.in/0/images/product/854-6523_700x650_1.jpeg",
+                    Label = "Black Slipons for Men",
+                    AlternativeText= "Product Code: F854652300",
+                });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return ItemList;
         }
     }
 }
