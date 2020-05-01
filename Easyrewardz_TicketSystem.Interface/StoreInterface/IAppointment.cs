@@ -10,5 +10,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<AppointmentModel> GetAppointmentList(int TenantID);
 
         List<AppointmentCount> GetAppointmentCount(int TenantID);
+
+        int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId);
     }
 }
