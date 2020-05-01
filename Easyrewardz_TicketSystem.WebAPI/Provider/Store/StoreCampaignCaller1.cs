@@ -1,9 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -13,7 +10,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _CampaignRepository = Campaign;
             return _CampaignRepository.GetCampaignCustomer(tenantID, userID, campaignScriptID, pageNo, pageSize);
+        }
 
+        public int UpdateCampaignStatusResponse(IStoreCampaign Campaign, CampaignResponseInput objRequest, int TenantID, int UserID)
+        {
+            _CampaignRepository = Campaign;
+            return _CampaignRepository.UpdateCampaignStatusResponse(objRequest, TenantID, UserID);
         }
 
     }

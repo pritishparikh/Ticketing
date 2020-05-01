@@ -1,10 +1,9 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.Model;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Easyrewardz_TicketSystem.Model;
 using System.Data;
-using MySql.Data.MySqlClient;
 using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -57,7 +56,7 @@ namespace Easyrewardz_TicketSystem.Services
                             DOB = ds.Tables[0].Rows[i]["DOB"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DOB"]),
                             CampaignDate = ds.Tables[0].Rows[i]["CampaignDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignDate"]),
                             ResponseID = ds.Tables[0].Rows[i]["ResponseID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ResponseID"]),
-                            CallRescheduledTo = ds.Tables[0].Rows[i]["CallRescheduledTo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CallRescheduledTo"]),
+                            CallRescheduledTo = ds.Tables[0].Rows[i]["CallRescheduledTo"] == DBNull.Value ? string.Empty : ConvertDatetimeToString(Convert.ToString(ds.Tables[0].Rows[i]["CallRescheduledTo"])),
                             DoesTicketRaised = ds.Tables[0].Rows[i]["DoesTicketRaised"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["DoesTicketRaised"]),
                             StatusName = ds.Tables[0].Rows[i]["StatusName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]),
                             StatusID = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]),
@@ -90,6 +89,78 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return objList;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="objRequest"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public int UpdateCampaignStatusResponse(CampaignResponseInput objRequest, int TenantID, int UserID)
+        {
+
+            int result = 0;
+            CampaignStatusResponse obj = new CampaignStatusResponse();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateCampaignCustomer", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_CampaignCustomerID", objRequest.CampaignCustomerID);
+                cmd.Parameters.AddWithValue("@_ResponseID", objRequest.ResponseID);
+
+                if (!string.IsNullOrEmpty(objRequest.CallReScheduledTo))
+                {
+                    objRequest.CallReScheduledToDate = Convert.ToDateTime(objRequest.CallReScheduledTo);
+                }
+                cmd.Parameters.AddWithValue("@_CallReScheduledTo", objRequest.CallReScheduledToDate);
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
+
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Convert Datetime ToString
+        /// </summary>
+        /// <param name="DateInString"></param>
+        /// <returns></returns>
+        public string ConvertDatetimeToString(string DateInString)
+        {
+            string result = "";
+            string GMT = " GMT+05:30 (" + TimeZoneInfo.Local.StandardName + ")";
+            try
+            {
+                if (!String.IsNullOrEmpty(DateInString))
+                {
+                    result = DateInString + GMT;
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return result;
         }
     }
 }

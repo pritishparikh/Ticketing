@@ -54,7 +54,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Time Ago Chat
         /// </summary>
-        public int TimeAgo { get; set; }
+        public string TimeAgo { get; set; }
 
         /// <summary>
         /// On going Chat Count
@@ -85,5 +85,88 @@ namespace Easyrewardz_TicketSystem.Model
         /// Updated Date
         /// </summary>
         public DateTime UpdatedDate{ get; set; }
+    }
+
+    public class CustomerChatMessages
+    {
+        /// <summary>
+        /// Chat ID of Customer
+        /// </summary>
+        public int ChatID { get; set; }
+
+        /// <summary>
+        /// Message
+        /// </summary>
+        public string Message { get; set; }
+
+        /// <summary>
+        /// Attachment
+        /// </summary>
+        public string Attachment { get; set; }
+
+        /// <summary>
+        /// is by customer or not
+        /// </summary>
+        public bool ByCustomer { get; set; }
+
+        /// <summary>
+        /// Customer Name
+        /// </summary>
+        public string CustomerName { get; set; }
+
+        /// <summary>
+        /// Status of the chat
+        /// </summary>
+        public string ChatStatus { get; set; }
+
+        /// <summary>
+        /// StoreManagerId
+        /// </summary>
+        public int StoreManagerId { get; set; }
+
+        /// <summary>
+        /// Created BY
+        /// </summary>
+        public int CreatedBy { get; set; }
+
+
+        /// <summary>
+        /// User name who Created
+        /// </summary>
+        public string CreateByName { get; set; }
+
+        /// <summary>
+        /// Updated By
+        /// </summary>
+        public int ModifyBy { get; set; }
+
+        /// <summary>
+        /// Updated Date
+        /// </summary>
+        public string ModifyByName { get; set; }
+
+        /// <summary>
+        /// Date when chat happend
+        /// </summary>
+        public string ChatDate { get; set; }
+
+        /// <summary>
+        /// time of Chat
+        /// </summary>
+        public string ChatTime { get; set; }
+
+        /// <summary>
+        /// Agent ProfilePic Path
+        /// </summary>
+        public string AgentProfilePic { get; set; }
+
+
+        /// <summary>
+        /// Customer ProfilePic Path
+        /// </summary>
+        public string CustomerProfilePic { get; set; }
+
+
+
     }
 }

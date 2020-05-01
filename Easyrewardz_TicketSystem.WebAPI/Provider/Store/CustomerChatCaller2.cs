@@ -7,20 +7,16 @@ using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
-    public class CustomerChatCaller
+    public partial class CustomerChatCaller
     {
-        #region Variable declaration
-
-        private ICustomerChat _customerChat;
-        #endregion
-
         #region Methods 
-        public List<CustomerChatMaster> OngoingChat(ICustomerChat customerChat,int userMasterID,int tenantID)
+
+        public List<CustomerChatMessages> GetChatmessageDetails(ICustomerChat customerChat, int TenantId, int ChatID)
         {
             _customerChat = customerChat;
-
-            return _customerChat.OngoingChat(userMasterID, tenantID);
+            return _customerChat.GetChatMessageDetails(TenantId, ChatID);
         }
+
 
         #endregion
     }

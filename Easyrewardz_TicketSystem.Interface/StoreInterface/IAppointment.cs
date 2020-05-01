@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
-    public interface ICustomerChat
+    public interface IAppointment
     {
-        List<CustomerChatMaster> OngoingChat(int userMasterID,int tenantID);
+        List<AppointmentModel> GetAppointmentList(int TenantID);
     }
 }
