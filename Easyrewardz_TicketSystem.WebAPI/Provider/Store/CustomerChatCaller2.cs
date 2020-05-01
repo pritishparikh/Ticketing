@@ -1,5 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _customerChat = customerChat;
             return _customerChat.SaveChatMessages(ChatMessageDetails);
 
+        }
+
+        public List<CustomItemSearchResponseModel> ChatItemSearch(ICustomerChat customerChat, string SearchText)
+        {
+            _customerChat = customerChat;
+            return _customerChat.ChatItemDetailsSearch(SearchText);
         }
 
 
