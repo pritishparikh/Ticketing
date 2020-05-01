@@ -172,7 +172,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = SuggestionList;
+                objResponseModel.ResponseData = SuggestionList; 
             }
             catch (Exception)
             {

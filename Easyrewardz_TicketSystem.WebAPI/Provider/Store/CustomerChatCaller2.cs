@@ -28,7 +28,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public List<CustomItemSearchResponseModel> ChatItemSearch(ICustomerChat customerChat, string SearchText)
         {
             _customerChat = customerChat;
-            return _customerChat.ChatItemDetailsSearch(SearchText);
+            return _customerChat.ChatItemDetailsSearch(SearchText); 
         }
 
 

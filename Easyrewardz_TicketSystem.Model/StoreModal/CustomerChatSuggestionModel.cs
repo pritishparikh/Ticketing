@@ -19,7 +19,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// <summary>
         /// CreatedBy
         /// </summary>
-        public int CreatedBy { get; set; }
+        public int CreatedBy { get; set; } 
 
         /// <summary>
         /// CreatedDate
