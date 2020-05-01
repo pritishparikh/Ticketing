@@ -17,6 +17,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _customerChat.GetChatMessageDetails(TenantId, ChatID);
         }
 
+        public int SaveChatMessages(ICustomerChat customerChat, CustomerChatModel ChatMessageDetails)
+        {
+            _customerChat = customerChat;
+            return _customerChat.SaveChatMessages(ChatMessageDetails);
+
+        }
+
 
         #endregion
     }
