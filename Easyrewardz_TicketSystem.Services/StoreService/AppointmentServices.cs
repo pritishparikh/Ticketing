@@ -46,7 +46,7 @@ namespace Easyrewardz_TicketSystem.Services
                         AppointmentModel obj = new AppointmentModel
                         {
                             AppointmentDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["AppointmentDate"]),
-                            TimeSlot = Convert.ToDateTime(ds.Tables[0].Rows[i]["TimeSlot"]),
+                            TimeSlot = Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]),
                             NOofPeople = Convert.ToInt32(ds.Tables[0].Rows[i]["NOofPeople"]),
                             AppointmentCustomerList = new List<AppointmentCustomer>()
                         };
@@ -58,7 +58,7 @@ namespace Easyrewardz_TicketSystem.Services
                         CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
                         CustomerNumber = Convert.ToString(x.Field<string>("CustomerNumber")),
                         NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),
-                        Status = x.Field<object>("Status") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Status")),
+                        Status = x.Field<int?>("Status").ToString() == "" ? "" : Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" : "Cancel",
                     }).ToList();
 
 
@@ -134,7 +134,38 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        public int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId)
+        {
 
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSUpdateAppoinmentStatus", conn);
+                cmd1.Parameters.AddWithValue("@Appointment_ID", appointmentCustomer.AppointmentID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.Parameters.AddWithValue("@_Status", appointmentCustomer.Status);
+               
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = cmd1.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
 
     }
 }

@@ -33,6 +33,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
 
+        public int updateAppoinment(IAppointment appointment, AppointmentCustomer appointmentCustomer, int TenantId)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.UpdateAppointmentStatus(appointmentCustomer, TenantId);
+        }
+
 
 
         #endregion
