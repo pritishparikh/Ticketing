@@ -124,7 +124,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Read On Going Message
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="chatID"></param>
         /// <returns></returns>
         [HttpPost]     
         [Route("MarkAsReadOnGoingChat")]
@@ -165,7 +165,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// UpdateCustomerChatStatus
         /// </summary>
-        /// <param name="chatid"></param>
+        /// <param name="chatID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateCustomerChatStatus")]
@@ -207,7 +207,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Schedule Visit 
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="AppointmentMaster"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("ScheduleVisit")]
@@ -250,7 +250,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// CustomerChatHistory
         /// </summary>
-        /// <param name="ChatId"></param>
+        /// <param name="GetChatHistoryModel"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetCustomerChatHistory")]

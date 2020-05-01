@@ -13,12 +13,19 @@ namespace Easyrewardz_TicketSystem.Services
         #region variable
         MySqlConnection conn = new MySqlConnection();
         #endregion
-         
+
+        #region Constructor
         public CustomerChatService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
+        /// <summary>
+        /// Read On Going Message
+        /// </summary>
+        /// <param name="chatID"></param>
+        /// <returns></returns>
         public int MarkAsReadOnGoingChat(int chatID)
         {
             int success = 0;
@@ -47,6 +54,12 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
+        /// <summary>
+        /// Get New Chat
+        /// </summary>
+        /// <param name="userMasterID"></param>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
         public List<CustomerChatMaster> NewChat(int userMasterID, int tenantID)
         {
             DataSet ds = new DataSet();
@@ -98,6 +111,12 @@ namespace Easyrewardz_TicketSystem.Services
             return lstCustomerChatMaster;
         }
 
+        /// <summary>
+        /// Get Ongoing Chat
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userMasterID"></param>
+        /// <returns></returns>
         public List<CustomerChatMaster> OngoingChat(int userMasterID, int tenantID)
         {
             DataSet ds = new DataSet();
@@ -149,6 +168,11 @@ namespace Easyrewardz_TicketSystem.Services
             return lstCustomerChatMaster;
         }
 
+        /// <summary>
+        /// Schedule Visit 
+        /// </summary>
+        /// <param name="AppointmentMaster"></param>
+        /// <returns></returns>
         public string ScheduleVisit(AppointmentMaster appointmentMaster)
         {
             string message ="";
@@ -184,6 +208,12 @@ namespace Easyrewardz_TicketSystem.Services
             return message;
         }
 
+        /// <summary>
+        /// UpdateCustomerChatStatus
+        /// </summary>
+        /// <param name="chatid"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
         public int UpdateCustomerChatIdStatus(int chatID, int tenantId)
         {
 
@@ -213,6 +243,11 @@ namespace Easyrewardz_TicketSystem.Services
             return result;
         }
 
+        /// <summary>
+        /// CustomerChatHistory
+        /// </summary>
+        /// <param name="chatID"></param>
+        /// <returns></returns>
         public List<CustomerChatHistory> CustomerChatHistory(int chatID)
         {
             DataSet ds = new DataSet();
