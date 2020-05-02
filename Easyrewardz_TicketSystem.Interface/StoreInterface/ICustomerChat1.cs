@@ -6,8 +6,7 @@ using System.Text;
 namespace Easyrewardz_TicketSystem.Interface
 {
     public partial interface ICustomerChat
-    {
-        
+    {     
         List<CustomerChatMaster> OngoingChat(int userMasterID,int tenantID);
 
         List<CustomerChatMaster> NewChat(int userMasterID, int tenantID);
@@ -16,8 +15,12 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int UpdateCustomerChatIdStatus(int chatID, int tenantID);
 
-        string ScheduleVisit(AppointmentMaster appointmentMaster);
+        int ScheduleVisit(AppointmentMaster appointmentMaster);
 
         List<CustomerChatHistory> CustomerChatHistory(int chatID);
+
+        int GetChatCount(int tenantID);
+
+        List<DateofSchedule> GetTimeSlot(int storeID,int userMasterID, int tenantID);
     }
 }

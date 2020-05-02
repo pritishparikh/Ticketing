@@ -54,6 +54,36 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public int StatusID { get; set; }
         /// <summary>
+        /// StatusID
+        /// </summary>
+        public int Programcode { get; set; }
+        /// <summary>
+        /// StatusID
+        /// </summary>
+        public int Storecode { get; set; }
+        /// <summary>
+        /// StatusID
+        /// </summary>
+        public int StoreManagerId { get; set; }
+
+        /// <summary>
+        /// SmsFlag
+        /// </summary>
+        public bool SmsFlag { get; set; }
+        /// <summary>
+        /// EmailFlag
+        /// </summary>
+        public bool EmailFlag { get; set; }
+        /// <summary>
+        /// MessengerFlag
+        /// </summary>
+        public bool MessengerFlag { get; set; }
+        /// <summary>
+        /// BotFlag
+        /// </summary>
+        public bool BotFlag { get; set; }
+
+        /// <summary>
         /// HSCampaignResponseList
         /// </summary>
         public List<HSCampaignResponse> HSCampaignResponseList { get; set; }
@@ -97,5 +127,33 @@ namespace Easyrewardz_TicketSystem.Model
         /// Call ReScheduled To Date
         /// </summary>
         public DateTime? CallReScheduledToDate { get; set; }
+    }
+
+    public class ShareChatbotModel
+    {
+        /// <summary>
+        /// StoreID
+        /// </summary>
+        public string StoreID { get; set; }
+        /// <summary>
+        /// ProgramCode
+        /// </summary>
+        public string ProgramCode { get; set; }
+        /// <summary>
+        /// CustomerID
+        /// </summary>
+        public string CustomerID { get; set; }
+        /// <summary>
+        /// CustomerMobileNumber
+        /// </summary>
+        public string CustomerMobileNumber { get; set; }
+        /// <summary>
+        /// StoreManagerId
+        /// </summary>
+        public int StoreManagerId { get; set; }
+        /// <summary>
+        /// Message
+        /// </summary>
+        public int CampaignScriptID { get; set; }
     }
 }

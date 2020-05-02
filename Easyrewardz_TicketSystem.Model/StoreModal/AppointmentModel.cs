@@ -6,28 +6,27 @@ namespace Easyrewardz_TicketSystem.Model
 {
     public class AppointmentModel
     {
-        public DateTime AppointmentDate { get; set; }
-        public DateTime TimeSlot { get; set; }
+
+        public string AppointmentDate { get; set; }
+        public int SlotId { get; set; }
+        public string TimeSlot { get; set; }
         public int NOofPeople { get; set; }
+        public int MaxCapacity { get; set; }
         public List<AppointmentCustomer> AppointmentCustomerList { get; set; }
-        
+
     }
 
     public class AppointmentCustomer
     {
-        
+        public int AppointmentID { get; set; }
         public string CustomerName { get; set; }
         public string CustomerNumber { get; set; }
         public int NOofPeople { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
        
     }
 
-    //public class AppointmentCountModel
-    //{
-    //    public DateTime AppointmentDate { get; set; }
-    //    public List<AppointmentCount> AppointmentCountList { get; set; }
-    //}
+    
 
     public class AppointmentCount
     {

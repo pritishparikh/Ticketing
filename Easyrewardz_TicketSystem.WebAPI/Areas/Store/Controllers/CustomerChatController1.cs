@@ -226,7 +226,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 appointmentMaster.TenantID=authenticate.TenantId;
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                string result = customerChatCaller.ScheduleVisit(new CustomerChatService(_connectionString), appointmentMaster);
+                int result = customerChatCaller.ScheduleVisit(new CustomerChatService(_connectionString), appointmentMaster);
 
                 statusCode =
                result.Equals(0) ?
@@ -323,6 +323,88 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 HttpContext.Response.Headers.Add("Paging-Headers", JsonConvert.SerializeObject(paginationMetadata));
 
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Chat Notification Count
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetChatNotificationCount")]
+        public ResponseModel GetChatNotificationCount()
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+                int counts = customerChatCaller.GetChatCount(new CustomerChatService(_connectionString),authenticate.TenantId);
+
+                statusCode =
+               counts== 0 ?
+                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = counts;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Time Slot
+        /// </summary>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetTimeSlot")]
+        public ResponseModel GetTimeSlot(int storeID)
+        {
+            List<DateofSchedule> dateOfSchedule = new List<DateofSchedule>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                dateOfSchedule = customerChatCaller.GetTimeSlot(new CustomerChatService(_connectionString), storeID, authenticate.UserMasterID, authenticate.TenantId);
+
+                statusCode =
+               dateOfSchedule.Count == 0 ?
+                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = dateOfSchedule;
             }
             catch (Exception)
             {

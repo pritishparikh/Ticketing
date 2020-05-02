@@ -68,7 +68,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        public string ScheduleVisit(ICustomerChat customerChatStatus, AppointmentMaster appointmentMaster)
+        public int ScheduleVisit(ICustomerChat customerChatStatus, AppointmentMaster appointmentMaster)
         {
             _customerChat = customerChatStatus;
 
@@ -85,6 +85,33 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _customerChat = customerchatHistory;
             return _customerChat.CustomerChatHistory(ChatID);
         }
+
+        /// <summary>
+        /// Get Chat Notification Count
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        /// 
+        public int GetChatCount(ICustomerChat customerChat,int tenantID)
+        {
+
+            _customerChat = customerChat;
+
+            return _customerChat.GetChatCount(tenantID);
+        }
+
+        /// <summary>
+        /// Get Time Slot
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
+        public List<DateofSchedule> GetTimeSlot(ICustomerChat customerChat, int storeID, int userMasterID, int tenantID)
+        {
+            _customerChat = customerChat;
+
+            return _customerChat.GetTimeSlot(storeID,userMasterID, tenantID);
+        }
+
         #endregion
     }
 }

@@ -37,7 +37,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         #region Custom Methods 
         [HttpPost]
         [Route("GetAppointmentList")]
-        public ResponseModel GetAppointmentList()
+        public ResponseModel GetAppointmentList(string AppDate)
         {
             List<AppointmentModel> objAppointmentList = new List<AppointmentModel>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -52,7 +52,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 AppointmentCaller newAppointment = new AppointmentCaller();
 
-                objAppointmentList = newAppointment.GetAppointmentList(new AppointmentServices(_connectioSting), authenticate.TenantId);
+                objAppointmentList = newAppointment.GetAppointmentList(new AppointmentServices(_connectioSting), authenticate.TenantId, AppDate);
 
                 statusCode =
                 objAppointmentList.Count == 0 ?
@@ -117,7 +117,36 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
         }
 
+        [HttpPost]
+        [Route("UpdateAppointmentStatus")]
+        public ResponseModel UpdateAppointmentStatus([FromBody]AppointmentCustomer appointment)
+        {
+            AppointmentCaller newAppointment = new AppointmentCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
+                int result = newAppointment.updateAppoinment(new AppointmentServices(_connectioSting), appointment, authenticate.TenantId);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
         #endregion
     }
 }

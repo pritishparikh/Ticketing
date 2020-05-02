@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -173,9 +174,9 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="AppointmentMaster"></param>
         /// <returns></returns>
-        public string ScheduleVisit(AppointmentMaster appointmentMaster)
+        public int ScheduleVisit(AppointmentMaster appointmentMaster)
         {
-            string message ="";
+            int message;
             try
             {
                 conn.Open();
@@ -185,14 +186,14 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@Customer_ID", appointmentMaster.CustomerID);
                 cmd.Parameters.AddWithValue("@Appointment_Date", appointmentMaster.AppointmentDate);
-                cmd.Parameters.AddWithValue("@Time_Slot", appointmentMaster.TimeSlot);
+                cmd.Parameters.AddWithValue("@Slot_ID", appointmentMaster.SlotID);
                 cmd.Parameters.AddWithValue("@Tenant_ID", appointmentMaster.TenantID);
                 cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
                 cmd.Parameters.AddWithValue("@NOof_People", appointmentMaster.NOofPeople);
                 cmd.Parameters.AddWithValue("@Mobile_No", appointmentMaster.MobileNo);
                 cmd.Parameters.AddWithValue("@Store_ID", appointmentMaster.StoreID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                message = Convert.ToString(cmd.ExecuteScalar());
+                message = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception)
             {
@@ -276,7 +277,7 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception ) 
             {
                 throw;
             }
@@ -293,6 +294,138 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return customerChatHistory;
+        }
+
+        /// <summary>
+        /// Get New Chat
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
+        public int GetChatCount(int tenantID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            int counts = 0;
+            try
+            {
+
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSCountTotalUnreadOngoingChat", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        counts= ds.Tables[0].Rows[i]["TotalUnreadChatCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TotalUnreadChatCount"]);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return counts;
+        }
+
+        /// <summary>
+        /// GetTimeSlot
+        /// </summary>
+        /// <param name="userMasterID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
+        public List<DateofSchedule> GetTimeSlot(int storeID,int userMasterID, int tenantID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<TimeSlotModel> lstTimeSlotModel = new List<TimeSlotModel>();
+            List<DateofSchedule> lstdateofSchedule = new List<DateofSchedule>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetTimeSlot", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
+                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd1.Parameters.AddWithValue("@store_ID", storeID);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        DateofSchedule dateofSchedule = new DateofSchedule();
+                        dateofSchedule.Day = ds.Tables[0].Rows[i]["Today"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Today"]);
+                        dateofSchedule.Dates = ds.Tables[0].Rows[i]["Dates"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Dates"]);
+
+                        if (ds != null && ds.Tables[1] != null)
+                        {
+                            for (int j = 0; j < ds.Tables[1].Rows.Count; j++)
+                            {
+                                TimeSlotModel timeSlotModel = new TimeSlotModel();
+                                timeSlotModel.SlotID = ds.Tables[1].Rows[j]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[j]["SlotId"]);
+                                timeSlotModel.StoreID = ds.Tables[1].Rows[j]["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[j]["StoreId"]);
+                                timeSlotModel.TimeSlot = ds.Tables[1].Rows[j]["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[j]["TimeSlot"]);
+                                timeSlotModel.MaxCapacity = ds.Tables[1].Rows[j]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[j]["MaxCapacity"]);
+
+                                timeSlotModel.AlreadyScheduleDetails = ds.Tables[2].AsEnumerable().Where(r => Convert.ToInt32(r.Field<int>("TimeSlotId")).
+                                Equals(timeSlotModel.SlotID)).Select(r => new AlreadyScheduleDetail()
+                                {
+                                    TimeSlotId = r.Field<object>("TimeSlotId") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TimeSlotId")),
+                                    AppointmentDate = r.Field<object>("AppointmentDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AppointmentDate")),
+                                    VisitedCount = r.Field<object>("VisitedCount") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("VisitedCount")),
+                                    MaxCapacity = r.Field<object>("MaxCapacity") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("MaxCapacity")),
+                                    Remaining = r.Field<object>("Remaining") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("Remaining")),
+                                    StoreId = r.Field<object>("StoreId") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("StoreId")),
+                                    TimeSlot = r.Field<object>("TimeSlot") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TimeSlot")),
+                                }).ToList();
+
+                                lstTimeSlotModel.Add(timeSlotModel);
+                            }
+                            dateofSchedule.TimeSlotModels = lstTimeSlotModel;
+                        }
+                        lstdateofSchedule.Add(dateofSchedule);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return lstdateofSchedule;
         }
     }
 }

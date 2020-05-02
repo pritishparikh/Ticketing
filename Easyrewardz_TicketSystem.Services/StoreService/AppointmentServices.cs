@@ -23,7 +23,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<AppointmentModel> GetAppointmentList(int TenantID)
+        public List<AppointmentModel> GetAppointmentList(int TenantID,string AppDate)
         {
 
             DataSet ds = new DataSet();
@@ -36,6 +36,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_HSAppointmentDeatils", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.Parameters.AddWithValue("@Apt_Date", AppDate);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -45,20 +46,22 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         AppointmentModel obj = new AppointmentModel
                         {
-                            AppointmentDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["AppointmentDate"]),
-                            TimeSlot = Convert.ToDateTime(ds.Tables[0].Rows[i]["TimeSlot"]),
+                            AppointmentDate = Convert.ToString(ds.Tables[0].Rows[i]["AppointmentDate"]),
+                            TimeSlot = Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]),
                             NOofPeople = Convert.ToInt32(ds.Tables[0].Rows[i]["NOofPeople"]),
+                            MaxCapacity = Convert.ToInt32(ds.Tables[0].Rows[i]["MaxCapacity"]),
                             AppointmentCustomerList = new List<AppointmentCustomer>()
                         };
 
 
-                        obj.AppointmentCustomerList = ds.Tables[1].AsEnumerable().Where(x => Convert.ToDateTime(x.Field<DateTime>("AppointmentDate")).
-                    Equals(obj.AppointmentDate)).Select(x => new AppointmentCustomer()
+                        obj.AppointmentCustomerList = ds.Tables[1].AsEnumerable().Where(x => (x.Field<string>("AppointmentDate")).
+                    Equals(obj.AppointmentDate) && (x.Field<int>("SlotId")).Equals(obj.SlotId)).Select(x => new AppointmentCustomer()
                     {
+                        AppointmentID = Convert.ToInt32(x.Field<int>("AppointmentID")),
                         CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
                         CustomerNumber = Convert.ToString(x.Field<string>("CustomerNumber")),
                         NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),
-                        Status = x.Field<object>("Status") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Status")),
+                        Status = x.Field<int?>("Status").ToString() == "" ? "" : Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" : "Cancel",
                     }).ToList();
 
 
@@ -107,14 +110,19 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        AppointmentCount obj = new AppointmentCount
-                        {
-                            Today = Convert.ToInt32(ds.Tables[0].Rows[i]["Today"]),
-                            Tomorrow = Convert.ToInt32(ds.Tables[1].Rows[i]["Tomorrow"]),
-                            DayAfterTomorrow = Convert.ToInt32(ds.Tables[2].Rows[i]["DayAfterTomorrow"])
-                        };
+                       
+                            AppointmentCount obj = new AppointmentCount
+                            {
+                                Today = Convert.ToInt32(ds.Tables[0].Rows[i]["Today"]),
+                                Tomorrow = Convert.ToInt32(ds.Tables[1].Rows[i]["Tomorrow"]),
+                                DayAfterTomorrow = Convert.ToInt32(ds.Tables[2].Rows[i]["DayAfterTomorrow"])
+                            };
 
-                       appointmentsCount.Add(obj);
+                            appointmentsCount.Add(obj);
+                        
+                        
+
+                       
                     }
                 }
             }
@@ -134,7 +142,38 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        public int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId)
+        {
 
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSUpdateAppoinmentStatus", conn);
+                cmd1.Parameters.AddWithValue("@Appointment_ID", appointmentCustomer.AppointmentID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.Parameters.AddWithValue("@_Status", appointmentCustomer.Status);
+               
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = cmd1.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
 
     }
 }
