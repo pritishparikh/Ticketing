@@ -54,7 +54,8 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string Dates { get; set; }
 
-        public List<TimeSlotModel> TimeSlotModels { get; set; }
+        // public List<TimeSlotModel> TimeSlotModels { get; set; }
+        public List<AlreadyScheduleDetail> AlreadyScheduleDetails { get; set; }
 
     }
 }

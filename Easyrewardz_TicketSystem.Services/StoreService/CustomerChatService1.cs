@@ -123,7 +123,6 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<CustomerChatMaster> lstCustomerChatMaster = new List<CustomerChatMaster>();
-
             try
             {
                 conn.Open();
@@ -145,7 +144,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         CustomerChatMaster customerChatMaster = new CustomerChatMaster();
                         customerChatMaster.ChatID = Convert.ToInt32(ds.Tables[0].Rows[i]["CurrentChatID"]);
-                       // customerChatMaster.CustomerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerID"]);
+                        customerChatMaster.CustomerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerID"]);
                         customerChatMaster.CumtomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
                         customerChatMaster.MobileNo = ds.Tables[0].Rows[i]["CustomerNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerNumber"]);
                         customerChatMaster.MessageCount= ds.Tables[0].Rows[i]["NewMessageCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NewMessageCount"]);
@@ -185,7 +184,7 @@ namespace Easyrewardz_TicketSystem.Services
                     Connection = conn
                 };
                 cmd.Parameters.AddWithValue("@Customer_ID", appointmentMaster.CustomerID);
-                cmd.Parameters.AddWithValue("@Appointment_Date", appointmentMaster.AppointmentDate);
+                cmd.Parameters.AddWithValue("@Appointment_Date", appointmentMaster.AppointmentDate); 
                 cmd.Parameters.AddWithValue("@Slot_ID", appointmentMaster.SlotID);
                 cmd.Parameters.AddWithValue("@Tenant_ID", appointmentMaster.TenantID);
                 cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
@@ -355,8 +354,7 @@ namespace Easyrewardz_TicketSystem.Services
         public List<DateofSchedule> GetTimeSlot(int storeID,int userMasterID, int tenantID)
         {
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
-            List<TimeSlotModel> lstTimeSlotModel = new List<TimeSlotModel>();
+            MySqlCommand cmd = new MySqlCommand();        
             List<DateofSchedule> lstdateofSchedule = new List<DateofSchedule>();
 
             try
@@ -383,31 +381,37 @@ namespace Easyrewardz_TicketSystem.Services
                         dateofSchedule.Day = ds.Tables[0].Rows[i]["Today"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Today"]);
                         dateofSchedule.Dates = ds.Tables[0].Rows[i]["Dates"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Dates"]);
 
-                        if (ds != null && ds.Tables[1] != null)
+                        DataTable dataTable = new DataTable();
+
+                        if(i==0)
                         {
-                            for (int j = 0; j < ds.Tables[1].Rows.Count; j++)
+                            dataTable = ds.Tables[1];
+                        }
+                       else if (i == 1)
+                        {
+                            dataTable = ds.Tables[2];
+                        }
+                        else if (i == 2)
+                        {
+                            dataTable = ds.Tables[3];
+                        }
+
+                        List<AlreadyScheduleDetail> lstAlreadyScheduleDetail = new List<AlreadyScheduleDetail>();
+                        if (dataTable != null )
+                        {
+                            for (int j = 0; j < dataTable.Rows.Count; j++)
                             {
-                                TimeSlotModel timeSlotModel = new TimeSlotModel();
-                                timeSlotModel.SlotID = ds.Tables[1].Rows[j]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[j]["SlotId"]);
-                                timeSlotModel.StoreID = ds.Tables[1].Rows[j]["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[j]["StoreId"]);
-                                timeSlotModel.TimeSlot = ds.Tables[1].Rows[j]["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[j]["TimeSlot"]);
-                                timeSlotModel.MaxCapacity = ds.Tables[1].Rows[j]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[j]["MaxCapacity"]);
-
-                                timeSlotModel.AlreadyScheduleDetails = ds.Tables[2].AsEnumerable().Where(r => Convert.ToInt32(r.Field<int>("TimeSlotId")).
-                                Equals(timeSlotModel.SlotID)).Select(r => new AlreadyScheduleDetail()
-                                {
-                                    TimeSlotId = r.Field<object>("TimeSlotId") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TimeSlotId")),
-                                    AppointmentDate = r.Field<object>("AppointmentDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AppointmentDate")),
-                                    VisitedCount = r.Field<object>("VisitedCount") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("VisitedCount")),
-                                    MaxCapacity = r.Field<object>("MaxCapacity") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("MaxCapacity")),
-                                    Remaining = r.Field<object>("Remaining") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("Remaining")),
-                                    StoreId = r.Field<object>("StoreId") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("StoreId")),
-                                    TimeSlot = r.Field<object>("TimeSlot") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TimeSlot")),
-                                }).ToList();
-
-                                lstTimeSlotModel.Add(timeSlotModel);
+                                AlreadyScheduleDetail alreadyScheduleDetail = new AlreadyScheduleDetail();
+                                alreadyScheduleDetail.TimeSlotId= dataTable.Rows[j]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["SlotId"]);
+                                alreadyScheduleDetail.AppointmentDate= dataTable.Rows[j]["AppointmentDate"] == DBNull.Value ? string.Empty : Convert.ToString(dataTable.Rows[j]["AppointmentDate"]);
+                                alreadyScheduleDetail.VisitedCount = dataTable.Rows[j]["VisitedCount"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["VisitedCount"]);
+                                alreadyScheduleDetail.MaxCapacity = dataTable.Rows[j]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["MaxCapacity"]);
+                                alreadyScheduleDetail.Remaining = dataTable.Rows[j]["Remaining"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["Remaining"]);
+                                alreadyScheduleDetail.TimeSlot = dataTable.Rows[j]["TimeSlot"] == DBNull.Value ? string.Empty: Convert.ToString(dataTable.Rows[j]["TimeSlot"]);
+                                alreadyScheduleDetail.StoreId = dataTable.Rows[j]["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["StoreId"]);
+                                lstAlreadyScheduleDetail.Add(alreadyScheduleDetail);
                             }
-                            dateofSchedule.TimeSlotModels = lstTimeSlotModel;
+                            dateofSchedule.AlreadyScheduleDetails = lstAlreadyScheduleDetail;
                         }
                         lstdateofSchedule.Add(dateofSchedule);
                     }
