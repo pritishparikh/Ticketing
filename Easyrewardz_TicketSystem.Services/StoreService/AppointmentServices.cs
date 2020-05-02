@@ -55,7 +55,7 @@ namespace Easyrewardz_TicketSystem.Services
 
 
                         obj.AppointmentCustomerList = ds.Tables[1].AsEnumerable().Where(x => (x.Field<string>("AppointmentDate")).
-                    Equals(obj.AppointmentDate)).Select(x => new AppointmentCustomer()
+                    Equals(obj.AppointmentDate) && (x.Field<int>("SlotId")).Equals(obj.SlotId)).Select(x => new AppointmentCustomer()
                     {
                         AppointmentID = Convert.ToInt32(x.Field<int>("AppointmentID")),
                         CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
@@ -110,14 +110,19 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        AppointmentCount obj = new AppointmentCount
-                        {
-                            Today = Convert.ToInt32(ds.Tables[0].Rows[i]["Today"]),
-                            Tomorrow = Convert.ToInt32(ds.Tables[1].Rows[i]["Tomorrow"]),
-                            DayAfterTomorrow = Convert.ToInt32(ds.Tables[2].Rows[i]["DayAfterTomorrow"])
-                        };
+                       
+                            AppointmentCount obj = new AppointmentCount
+                            {
+                                Today = Convert.ToInt32(ds.Tables[0].Rows[i]["Today"]),
+                                Tomorrow = Convert.ToInt32(ds.Tables[1].Rows[i]["Tomorrow"]),
+                                DayAfterTomorrow = Convert.ToInt32(ds.Tables[2].Rows[i]["DayAfterTomorrow"])
+                            };
 
-                       appointmentsCount.Add(obj);
+                            appointmentsCount.Add(obj);
+                        
+                        
+
+                       
                     }
                 }
             }
