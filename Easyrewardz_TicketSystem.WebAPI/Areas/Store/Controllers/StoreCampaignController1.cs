@@ -126,7 +126,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         [Route("CampaignShareChatbot")]
         public ResponseModel CampaignShareChatbot(ShareChatbotModel objRequest)
         {
-            int obj = new int();
+            int obj = 0;
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
@@ -140,6 +140,46 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 obj = storecampaigncaller.CampaignShareChatbot(new StoreCampaignService(_connectioSting), objRequest, authenticate.TenantId, authenticate.UserMasterID);
                 statusCode =
                    obj == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = obj;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Campaign Share Massanger
+        /// </summary>
+        /// <param name="objRequest"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CampaignShareMassanger")]
+        public ResponseModel CampaignShareMassanger(ShareChatbotModel objRequest)
+        {
+            string obj = string.Empty;
+            StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                obj = storecampaigncaller.CampaignShareMassanger(new StoreCampaignService(_connectioSting), objRequest, authenticate.TenantId, authenticate.UserMasterID);
+                statusCode =
+                   obj.Length == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

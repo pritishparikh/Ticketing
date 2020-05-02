@@ -226,5 +226,60 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return result;
         }
+
+        /// <summary>
+        /// Campaign Share Massanger
+        /// </summary>
+        /// <param name="objRequest"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public string CampaignShareMassanger(ShareChatbotModel objRequest, int TenantID, int UserID)
+        {
+            DataSet ds = new DataSet();
+            string Message = "";
+            CampaignStatusResponse obj = new CampaignStatusResponse();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_HSCampaignShareMassanger", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_StoreID", objRequest.StoreID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", objRequest.ProgramCode);
+                cmd.Parameters.AddWithValue("@_CustomerID", objRequest.CustomerID);
+                cmd.Parameters.AddWithValue("@_CustomerMobileNumber", objRequest.CustomerMobileNumber);
+                cmd.Parameters.AddWithValue("@_StoreManagerId", objRequest.StoreManagerId);
+                cmd.Parameters.AddWithValue("@_CampaignScriptID", objRequest.CampaignScriptID);
+                cmd.Parameters.AddWithValue("@_CreatedBy", UserID);
+
+                //result = Convert.ToInt32(cmd.ExecuteNonQuery());
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    Message = ds.Tables[0].Rows[0]["Message"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Message"]);
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return Message;
+        }
     }
 }
