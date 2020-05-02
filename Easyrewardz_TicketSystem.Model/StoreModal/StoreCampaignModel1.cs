@@ -56,11 +56,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// StatusID
         /// </summary>
-        public int Programcode { get; set; }
+        public string Programcode { get; set; }
         /// <summary>
         /// StatusID
         /// </summary>
-        public int Storecode { get; set; }
+        public string Storecode { get; set; }
         /// <summary>
         /// StatusID
         /// </summary>
