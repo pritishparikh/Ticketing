@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -185,14 +186,14 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@Customer_ID", appointmentMaster.CustomerID);
                 cmd.Parameters.AddWithValue("@Appointment_Date", appointmentMaster.AppointmentDate);
-                cmd.Parameters.AddWithValue("@Time_Slot", appointmentMaster.TimeSlot);
+                cmd.Parameters.AddWithValue("@Slot_ID", appointmentMaster.SlotID);
                 cmd.Parameters.AddWithValue("@Tenant_ID", appointmentMaster.TenantID);
                 cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
                 cmd.Parameters.AddWithValue("@NOof_People", appointmentMaster.NOofPeople);
                 cmd.Parameters.AddWithValue("@Mobile_No", appointmentMaster.MobileNo);
                 cmd.Parameters.AddWithValue("@Store_ID", appointmentMaster.StoreID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                message = Convert.ToInt32(cmd.ExecuteNonQuery());
+                message = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception)
             {
@@ -351,11 +352,11 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="tenantID"></param>
         /// <param name="storeID"></param>
         /// <returns></returns>
-        public List<TimeSlotModel> GetTimeSlot(int storeID,int userMasterID, int tenantID)
+        public List<DateofSchedule> GetTimeSlot(int storeID,int userMasterID, int tenantID)
         {
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
-            List<TimeSlotModel> lstTimeSlotModel = new List<TimeSlotModel>();
+            MySqlCommand cmd = new MySqlCommand();        
+            List<DateofSchedule> lstdateofSchedule = new List<DateofSchedule>();
 
             try
             {
@@ -377,13 +378,43 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        TimeSlotModel timeSlotModel = new TimeSlotModel();
+                        DateofSchedule dateofSchedule = new DateofSchedule();
+                        dateofSchedule.Day = ds.Tables[0].Rows[i]["Today"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Today"]);
+                        dateofSchedule.Dates = ds.Tables[0].Rows[i]["Dates"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Dates"]);
 
-                        timeSlotModel.SlotID = ds.Tables[0].Rows[i]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SlotId"]);
-                        timeSlotModel.StoreID = ds.Tables[0].Rows[i]["StoreId"] == DBNull.Value ? 0: Convert.ToInt32(ds.Tables[0].Rows[i]["StoreId"]);
-                        timeSlotModel.TimeSlot = ds.Tables[0].Rows[i]["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]);
-                        timeSlotModel.MaxCapacity = ds.Tables[0].Rows[i]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MaxCapacity"]); 
-                        lstTimeSlotModel.Add(timeSlotModel);
+                        DataTable dataTable = new DataTable();
+
+                        if(i==0)
+                        {
+                            dataTable = ds.Tables[1];
+                        }
+                       else if (i == 1)
+                        {
+                            dataTable = ds.Tables[2];
+                        }
+                        else if (i == 2)
+                        {
+                            dataTable = ds.Tables[3];
+                        }
+
+                        List<AlreadyScheduleDetail> lstAlreadyScheduleDetail = new List<AlreadyScheduleDetail>();
+                        if (dataTable != null )
+                        {
+                            for (int j = 0; j < dataTable.Rows.Count; j++)
+                            {
+                                AlreadyScheduleDetail alreadyScheduleDetail = new AlreadyScheduleDetail();
+                                alreadyScheduleDetail.TimeSlotId= dataTable.Rows[j]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["SlotId"]);
+                                alreadyScheduleDetail.AppointmentDate= dataTable.Rows[j]["AppointmentDate"] == DBNull.Value ? string.Empty : Convert.ToString(dataTable.Rows[j]["AppointmentDate"]);
+                                alreadyScheduleDetail.VisitedCount = dataTable.Rows[j]["VisitedCount"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["VisitedCount"]);
+                                alreadyScheduleDetail.MaxCapacity = dataTable.Rows[j]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["MaxCapacity"]);
+                                alreadyScheduleDetail.Remaining = dataTable.Rows[j]["Remaining"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["Remaining"]);
+                                alreadyScheduleDetail.TimeSlot = dataTable.Rows[j]["TimeSlot"] == DBNull.Value ? string.Empty: Convert.ToString(dataTable.Rows[j]["TimeSlot"]);
+                                alreadyScheduleDetail.StoreId = dataTable.Rows[j]["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["StoreId"]);
+                                lstAlreadyScheduleDetail.Add(alreadyScheduleDetail);
+                            }
+                            dateofSchedule.AlreadyScheduleDetails = lstAlreadyScheduleDetail;
+                        }
+                        lstdateofSchedule.Add(dateofSchedule);
                     }
                 }
             }
@@ -399,7 +430,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return lstTimeSlotModel;
+            return lstdateofSchedule;
         }
     }
 }

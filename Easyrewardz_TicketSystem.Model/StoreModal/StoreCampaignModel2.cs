@@ -59,6 +59,13 @@ namespace Easyrewardz_TicketSystem.Model
         public string mobileNumber { get; set; }
     }
 
+    public class CampaignStatusResponse1
+    {
+        public List<CustomerpopupDetails> useratvdetails { get; set; }
+        public List<StoreCampaignKeyInsight> campaignkeyinsight { get; set; }
+        public List<StoreCampaignRecommended> campaignrecommended { get; set; }
+    }
+
     public class CustomerpopupDetails
     {
         public string name { get; set; }
@@ -67,7 +74,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string lifeTimeValue { get; set; }
         public string visitCount { get; set; }
         public string insightText { get; set; }
-        
+       
     }
 
     public class StoreCampaignLogo
