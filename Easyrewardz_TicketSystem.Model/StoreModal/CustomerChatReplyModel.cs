@@ -31,5 +31,10 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// </summary>
         public string DateTime { get; set; }
 
+        /// <summary>
+        /// ChatID
+        /// </summary>
+        public int ChatID { get; set; }
+
     }
 }

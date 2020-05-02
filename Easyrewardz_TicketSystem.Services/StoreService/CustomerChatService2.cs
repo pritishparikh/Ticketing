@@ -162,6 +162,7 @@ namespace Easyrewardz_TicketSystem.Services
                     ItemList.Add(new
                  CustomItemSearchResponseModel
                     {
+                        ItemID = i + 1,
                         ImageURL = "https://img2.bata.in/0/images/product/854-6523_700x650_1.jpeg",
                         Label = "Black Slipons for Men " + i.ToString(),
                         AlternativeText = "Product Code: F854652300" + i.ToString(),
@@ -279,7 +280,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_StoreCode", ChatReply.StoreCode);
                 cmd.Parameters.AddWithValue("@_Mobile", ChatReply.Mobile);
                 cmd.Parameters.AddWithValue("@_Message",string.IsNullOrEmpty(ChatReply.Message) ? "" :  ChatReply.Message);
-                //cmd.Parameters.AddWithValue("@_DateTime", string.IsNullOrEmpty(ChatReply.DateTime) ? NowTime : ChatReply.Message);
+                cmd.Parameters.AddWithValue("@_ChatID", ChatReply.ChatID);
                 cmd.Parameters.AddWithValue("@_DateTime", Now);
 
                 cmd.CommandType = CommandType.StoredProcedure;
