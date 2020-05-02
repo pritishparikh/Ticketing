@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -351,11 +352,12 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="tenantID"></param>
         /// <param name="storeID"></param>
         /// <returns></returns>
-        public List<TimeSlotModel> GetTimeSlot(int storeID,int userMasterID, int tenantID)
+        public List<DateofSchedule> GetTimeSlot(int storeID,int userMasterID, int tenantID)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<TimeSlotModel> lstTimeSlotModel = new List<TimeSlotModel>();
+            List<DateofSchedule> lstdateofSchedule = new List<DateofSchedule>();
 
             try
             {
@@ -377,13 +379,37 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        TimeSlotModel timeSlotModel = new TimeSlotModel();
+                        DateofSchedule dateofSchedule = new DateofSchedule();
+                        dateofSchedule.Day = ds.Tables[0].Rows[i]["Today"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Today"]);
+                        dateofSchedule.Dates = ds.Tables[0].Rows[i]["Dates"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Dates"]);
 
-                        timeSlotModel.SlotID = ds.Tables[0].Rows[i]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SlotId"]);
-                        timeSlotModel.StoreID = ds.Tables[0].Rows[i]["StoreId"] == DBNull.Value ? 0: Convert.ToInt32(ds.Tables[0].Rows[i]["StoreId"]);
-                        timeSlotModel.TimeSlot = ds.Tables[0].Rows[i]["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]);
-                        timeSlotModel.MaxCapacity = ds.Tables[0].Rows[i]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MaxCapacity"]); 
-                        lstTimeSlotModel.Add(timeSlotModel);
+                        if (ds != null && ds.Tables[1] != null)
+                        {
+                            for (int j = 0; j < ds.Tables[1].Rows.Count; j++)
+                            {
+                                TimeSlotModel timeSlotModel = new TimeSlotModel();
+                                timeSlotModel.SlotID = ds.Tables[1].Rows[j]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[j]["SlotId"]);
+                                timeSlotModel.StoreID = ds.Tables[1].Rows[j]["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[j]["StoreId"]);
+                                timeSlotModel.TimeSlot = ds.Tables[1].Rows[j]["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[j]["TimeSlot"]);
+                                timeSlotModel.MaxCapacity = ds.Tables[1].Rows[j]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[j]["MaxCapacity"]);
+
+                                timeSlotModel.AlreadyScheduleDetails = ds.Tables[2].AsEnumerable().Where(r => Convert.ToInt32(r.Field<int>("TimeSlotId")).
+                                Equals(timeSlotModel.SlotID)).Select(r => new AlreadyScheduleDetail()
+                                {
+                                    TimeSlotId = r.Field<object>("TimeSlotId") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("TimeSlotId")),
+                                    AppointmentDate = r.Field<object>("AppointmentDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AppointmentDate")),
+                                    VisitedCount = r.Field<object>("VisitedCount") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("VisitedCount")),
+                                    MaxCapacity = r.Field<object>("MaxCapacity") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("MaxCapacity")),
+                                    Remaining = r.Field<object>("Remaining") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("Remaining")),
+                                    StoreId = r.Field<object>("StoreId") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("StoreId")),
+                                    TimeSlot = r.Field<object>("TimeSlot") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TimeSlot")),
+                                }).ToList();
+
+                                lstTimeSlotModel.Add(timeSlotModel);
+                            }
+                            dateofSchedule.TimeSlotModels = lstTimeSlotModel;
+                        }
+                        lstdateofSchedule.Add(dateofSchedule);
                     }
                 }
             }
@@ -399,7 +425,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            return lstTimeSlotModel;
+            return lstdateofSchedule;
         }
     }
 }
