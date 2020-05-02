@@ -186,14 +186,14 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@Customer_ID", appointmentMaster.CustomerID);
                 cmd.Parameters.AddWithValue("@Appointment_Date", appointmentMaster.AppointmentDate);
-                cmd.Parameters.AddWithValue("@Time_Slot", appointmentMaster.TimeSlot);
+                cmd.Parameters.AddWithValue("@Slot_ID", appointmentMaster.SlotID);
                 cmd.Parameters.AddWithValue("@Tenant_ID", appointmentMaster.TenantID);
                 cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
                 cmd.Parameters.AddWithValue("@NOof_People", appointmentMaster.NOofPeople);
                 cmd.Parameters.AddWithValue("@Mobile_No", appointmentMaster.MobileNo);
                 cmd.Parameters.AddWithValue("@Store_ID", appointmentMaster.StoreID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                message = Convert.ToInt32(cmd.ExecuteNonQuery());
+                message = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception)
             {

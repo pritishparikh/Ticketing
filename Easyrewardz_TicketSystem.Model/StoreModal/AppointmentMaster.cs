@@ -34,12 +34,12 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// AppointmentDate
         /// </summary>
-        public string AppointmentDate { get; set; }
+        public DateTime AppointmentDate { get; set; }
         
         /// <summary>
         /// TimeSlot
         /// </summary>
-        public string TimeSlot { get; set; }
+        public int SlotID { get; set; }
         
         /// <summary>
         /// MobileNo
