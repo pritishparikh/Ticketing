@@ -47,6 +47,7 @@ namespace Easyrewardz_TicketSystem.Services
                         AppointmentModel obj = new AppointmentModel
                         {
                             AppointmentDate = Convert.ToString(ds.Tables[0].Rows[i]["AppointmentDate"]),
+                            SlotId = Convert.ToInt32(ds.Tables[0].Rows[i]["SlotId"]),
                             TimeSlot = Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]),
                             NOofPeople = Convert.ToInt32(ds.Tables[0].Rows[i]["NOofPeople"]),
                             MaxCapacity = Convert.ToInt32(ds.Tables[0].Rows[i]["MaxCapacity"]),
@@ -64,15 +65,11 @@ namespace Easyrewardz_TicketSystem.Services
                         Status = x.Field<int?>("Status").ToString() == "" ? "" : Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" : "Cancel",
                     }).ToList();
 
-
-
-
-
-                        appointments.Add(obj);
+                    appointments.Add(obj);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw;
             }
@@ -106,25 +103,15 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
+
+                AppointmentCount obj = new AppointmentCount
                 {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                       
-                            AppointmentCount obj = new AppointmentCount
-                            {
-                                Today = Convert.ToInt32(ds.Tables[0].Rows[i]["Today"]),
-                                Tomorrow = Convert.ToInt32(ds.Tables[1].Rows[i]["Tomorrow"]),
-                                DayAfterTomorrow = Convert.ToInt32(ds.Tables[2].Rows[i]["DayAfterTomorrow"])
-                            };
+                    Today = ds.Tables[0].Rows.Count == 0 ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["Today"]),
+                    Tomorrow = ds.Tables[1].Rows.Count == 0 ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["Tomorrow"]),
+                    DayAfterTomorrow = ds.Tables[2].Rows.Count == 0 ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["DayAfterTomorrow"])
+                };
 
-                            appointmentsCount.Add(obj);
-                        
-                        
-
-                       
-                    }
-                }
+                appointmentsCount.Add(obj);
             }
             catch (Exception ex)
             {
