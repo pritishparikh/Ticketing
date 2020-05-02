@@ -123,7 +123,6 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<CustomerChatMaster> lstCustomerChatMaster = new List<CustomerChatMaster>();
-
             try
             {
                 conn.Open();
