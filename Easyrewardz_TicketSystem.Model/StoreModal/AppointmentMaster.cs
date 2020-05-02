@@ -34,7 +34,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// AppointmentDate
         /// </summary>
-        public DateTime AppointmentDate { get; set; }
+        public string AppointmentDate { get; set; }
         
         /// <summary>
         /// TimeSlot
