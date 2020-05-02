@@ -68,7 +68,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 objStoreCampaign = storecampaigncaller.GetCustomerpopupDetailsList(new StoreCampaignService(_connectioSting), mobileNumber, programCode, authenticate.TenantId, authenticate.UserMasterID);
                 statusCode =
-                   objStoreCampaign.useratvdetails.Count == 0 ?
+                   objStoreCampaign.campaignrecommended.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

@@ -101,25 +101,54 @@ namespace Easyrewardz_TicketSystem.Services
         ///// <param name="mobileNumber"></param>
         ///// <param name="programCode"></param>
         ///// <returns></returns>
-        //public List<CustomerpopupDetails> GetCustomerpopupDetailsList(string mobileNumber, string programCode, int tenantID, int userID)
+        //public CampaignStatusResponse1 GetCustomerpopupDetailsList(string mobileNumber, string programCode, int tenantID, int userID)
         //{
+        //    CampaignStatusResponse1 obj = new CampaignStatusResponse1();
         //    StoreCampaignSearchOrder objOrderSearch = new StoreCampaignSearchOrder();
-        //    List<CustomerpopupDetails> objpopupdetails = new List<CustomerpopupDetails>();
-        //    List<CustomerpopupDetails> objOrderDetails = new List<CustomerpopupDetails>();
-        //    List<StoreCampaignKeyInsight> objkeyinsight = new List<StoreCampaignKeyInsight>();
-        //    List<StoreCampaignKeyInsight> objkeyinsightDetails = new List<StoreCampaignKeyInsight>();
+        //    List<CustomerpopupDetails> lstpopupDetails = new List<CustomerpopupDetails>();
+        //    CustomerpopupDetails objpopupDetails = new CustomerpopupDetails();
+        //    StoreCampaignKeyInsight objkeyinsight = new StoreCampaignKeyInsight();
+        //    List<StoreCampaignKeyInsight> lstkeyinsightDetails = new List<StoreCampaignKeyInsight>();
         //    List<StoreCampaignRecommended> objrecommended = new List<StoreCampaignRecommended>();
         //    List<StoreCampaignRecommended> objrecommendedDetails = new List<StoreCampaignRecommended>();
 
 
         //    try
         //    {
-
+        //        apisecurityToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9ncmFtQ29kZSI6IkJhdGEiLCJVc2VySUQiOiIzIiwiQXBwSUQiOiI3IiwiRGF5IjoiMjgiLCJNb250aCI6IjMiLCJZZWFyIjoiMjAyMSIsIlJvbGUiOiJBZG1pbiIsImlzcyI6IkF1dGhTZWN1cml0eUlzc3VlciIsImF1ZCI6IkF1dGhTZWN1cml0eUF1ZGllbmNlIn0.0XeF7V5LWfQn0NlSlG7Rb-Qq1hUCtUYRDg6dMGIMvg0";
         //        objOrderSearch.mobileNumber = mobileNumber;
         //        objOrderSearch.programCode = programCode;
+        //        objOrderSearch.securityToken = apisecurityToken;
+
 
         //        string apiReq = JsonConvert.SerializeObject(objOrderSearch);
-        //        apiResponse = CommonService.SendApiRequest(apiURL + "CustomerOrderDetails", apiReq);
+        //        apiResponse = CommonService.SendApiRequest("http://chatbotbellapiqa.ercx.co/api/BellChatBotIntegration/GetUserATVDetails", apiReq);
+
+        //        if (!string.IsNullOrEmpty(apiResponse))
+        //        {
+        //            ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+
+        //            if (apiResponse != null)
+        //            {
+        //                objpopupDetails = JsonConvert.DeserializeObject<CustomerpopupDetails>(((apiResponse)));
+
+        //                if (objpopupDetails != null)
+        //                {
+        //                    CustomerpopupDetails popupDetail = new CustomerpopupDetails();
+        //                    popupDetail.name = objpopupDetails.name;
+        //                    popupDetail.mobileNumber = objpopupDetails.mobileNumber;
+        //                    popupDetail.tiername = objpopupDetails.tiername;
+        //                    popupDetail.lifeTimeValue = objpopupDetails.lifeTimeValue;
+        //                    popupDetail.visitCount = objpopupDetails.visitCount;
+        //                    lstpopupDetails.Add(popupDetail);
+
+        //                }
+
+        //            }
+
+        //        }
+
+        //        apiResponse = CommonService.SendApiRequest("http://chatbotbellapiqa.ercx.co/api/BellChatBotIntegration/GetKeyInsight", apiReq);
 
         //        if (!string.IsNullOrEmpty(apiResponse))
         //        {
@@ -127,53 +156,23 @@ namespace Easyrewardz_TicketSystem.Services
 
         //            if (ApiResponse != null)
         //            {
-        //                objOrderDetails = JsonConvert.DeserializeObject<List<CustomerpopupDetails>>(Convert.ToString((ApiResponse.Responce)));
+        //                objkeyinsight = JsonConvert.DeserializeObject<StoreCampaignKeyInsight>(Convert.ToString((ApiResponse.Responce)));
 
-        //                if (objOrderDetails != null)
+        //                if (objkeyinsight != null)
         //                {
-        //                    if (objOrderDetails.Count > 0)
-        //                    {
-        //                            CustomerpopupDetails popupDetail = new CustomerpopupDetails();
-        //                            popupDetail.name = "Abu Tarique";
-        //                            popupDetail.mobileNumber = "1234567890";
-        //                            popupDetail.tiername = "";
-        //                            popupDetail.lifeTimeValue = "1050.30";
-        //                            popupDetail.visitCount = "6";
-        //                            objpopupdetails.Add(popupDetail);
-        //                    }
+        //                    StoreCampaignKeyInsight popupDetail = new StoreCampaignKeyInsight();
+
+        //                    popupDetail.mobileNumber = objkeyinsight.mobileNumber;
+        //                    popupDetail.insightText = objkeyinsight.insightText;
+        //                    lstkeyinsightDetails.Add(popupDetail);
+
         //                }
 
         //            }
 
         //        }
 
-        //        apiResponse = CommonService.SendApiRequest(apiURL + "CustomerOrderDetails", apiReq);
-
-        //        if (!string.IsNullOrEmpty(apiResponse))
-        //        {
-        //            ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
-
-        //            if (ApiResponse != null)
-        //            {
-        //                objkeyinsightDetails = JsonConvert.DeserializeObject<List<StoreCampaignKeyInsight>>(Convert.ToString((ApiResponse.Responce)));
-
-        //                if (objkeyinsightDetails != null)
-        //                {
-        //                    if (objkeyinsightDetails.Count > 0)
-        //                    {
-        //                        StoreCampaignKeyInsight popupDetail = new StoreCampaignKeyInsight();
-
-        //                        popupDetail.mobileNumber = "1234567890";
-        //                        popupDetail.insightText = "For Test";
-        //                        objkeyinsight.Add(popupDetail);
-        //                    }
-        //                }
-
-        //            }
-
-        //        }
-
-        //        apiResponse = CommonService.SendApiRequest(apiURL + "CustomerOrderDetails", apiReq);
+        //        apiResponse = CommonService.SendApiRequest("http://chatbotbellapiqa.ercx.co/api/BellChatBotIntegration/GetRecommendedList", apiReq);
 
         //        if (!string.IsNullOrEmpty(apiResponse))
         //        {
@@ -214,7 +213,7 @@ namespace Easyrewardz_TicketSystem.Services
         //    {
         //        throw;
         //    }
-        //    return objpopupdetails;
+        //    return obj;
         //}
 
         /// <summary>
@@ -238,35 +237,45 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                                CustomerpopupDetails popupDetail = new CustomerpopupDetails();
-                                popupDetail.name = "Abu Tarique";
-                                popupDetail.mobileNumber = "1234567890";
-                                popupDetail.tiername = "xyx";
-                                popupDetail.lifeTimeValue = "1050.30";
-                                popupDetail.visitCount = "6";
-                                objpopupdetails.Add(popupDetail);
-                                obj.useratvdetails = objpopupdetails;
-                                  StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight();
+                CustomerpopupDetails popupDetail = new CustomerpopupDetails();
+                popupDetail.name = "Dharmendra";
+                popupDetail.mobileNumber = "9923165567";
+                popupDetail.tiername = "";
+                popupDetail.lifeTimeValue = "4568.45";
+                popupDetail.visitCount = "6";
+               // objpopupdetails.Add(popupDetail);
+                obj.useratvdetails = popupDetail;
+                StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight();
 
-                                  KeyInsight.mobileNumber = "1234567890";
-                                  KeyInsight.insightText = "For Test";
-                                 objkeyinsight.Add(KeyInsight);
-                                 obj.campaignkeyinsight = objkeyinsight;
+                KeyInsight.mobileNumber = "9923165567";
+                KeyInsight.insightText = "Lorem Ipsum";
+               // objkeyinsight.Add(KeyInsight);
+                obj.campaignkeyinsight = KeyInsight;
 
-                           StoreCampaignRecommended RecommendedDetail = new StoreCampaignRecommended();
+                StoreCampaignRecommended RecommendedDetail = new StoreCampaignRecommended();
 
-                                RecommendedDetail.mobileNumber = "1234567890";
-                                RecommendedDetail.itemCode = "For Test";
-                                RecommendedDetail.category = "For Test";
-                                RecommendedDetail.subCategory = "For Test";
-                                RecommendedDetail.brand = "For Test";
-                                RecommendedDetail.color = "For Test";
-                                RecommendedDetail.size = "For Test";
-                                RecommendedDetail.price = "For Test";
-                                RecommendedDetail.url = "For Test";
-                                RecommendedDetail.imageURL = "For Test";
-                                objrecommended.Add(RecommendedDetail);
-                                obj.campaignrecommended = objrecommended;
+                RecommendedDetail.mobileNumber = "9923165567";
+                RecommendedDetail.itemCode = "F808920000";
+                RecommendedDetail.category = "Shoes";
+                RecommendedDetail.subCategory = "Casual";
+                RecommendedDetail.brand = "";
+                RecommendedDetail.color = "Black";
+                RecommendedDetail.size = "7";
+                RecommendedDetail.price = "3499";
+                RecommendedDetail.url = "https://www.bata.in/bataindia/e-124_c-262/blacks-and-browns/men.html";
+                RecommendedDetail.imageURL = "https://img2.bata.in/0/images/product/854-6523_300x300_1.jpeg";
+                objrecommended.Add(RecommendedDetail);
+                obj.campaignrecommended = objrecommended;
+
+                StoreCampaignLastTransactionDetails LastTransactionDetails = new StoreCampaignLastTransactionDetails();
+
+                     LastTransactionDetails.billNo = "BB332398";
+                     LastTransactionDetails.billDate = "12 Jan 2020";
+                     LastTransactionDetails.storeName = "Bata-Rajouri Garden";
+                     LastTransactionDetails.amount = "1,499";
+                     LastTransactionDetails.itemDetails = "";
+                     obj.lasttransactiondetails = LastTransactionDetails;
+
             }
             catch (Exception)
             {

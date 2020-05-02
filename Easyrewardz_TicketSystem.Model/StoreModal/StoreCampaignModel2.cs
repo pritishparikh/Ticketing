@@ -57,13 +57,15 @@ namespace Easyrewardz_TicketSystem.Model
     {
         public string programCode { get; set; }
         public string mobileNumber { get; set; }
+        public string securityToken { get; set; }
     }
 
     public class CampaignStatusResponse1
     {
-        public List<CustomerpopupDetails> useratvdetails { get; set; }
-        public List<StoreCampaignKeyInsight> campaignkeyinsight { get; set; }
+        public CustomerpopupDetails useratvdetails { get; set; }
+        public StoreCampaignKeyInsight campaignkeyinsight { get; set; }
         public List<StoreCampaignRecommended> campaignrecommended { get; set; }
+        public StoreCampaignLastTransactionDetails lasttransactiondetails { get; set; }
     }
 
     public class CustomerpopupDetails
@@ -73,8 +75,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string tiername { get; set; }
         public string lifeTimeValue { get; set; }
         public string visitCount { get; set; }
-        public string insightText { get; set; }
-       
+             
     }
 
     public class StoreCampaignLogo
@@ -102,5 +103,12 @@ namespace Easyrewardz_TicketSystem.Model
         public string url { get; set; }
         public string imageURL { get; set; }
     }
-
+    public class StoreCampaignLastTransactionDetails
+    {
+        public string billNo { get; set; }
+        public string billDate { get; set; }
+        public string storeName { get; set; }
+        public string amount { get; set; }
+        public string itemDetails { get; set; }
+    }
 }
