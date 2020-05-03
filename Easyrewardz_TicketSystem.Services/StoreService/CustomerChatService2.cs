@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Model.StoreModal;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -288,6 +289,100 @@ namespace Easyrewardz_TicketSystem.Services
                 resultCount = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return resultCount;
+        }
+
+        /// <summary>
+        /// send Recommendations To Customer
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <param name="mobileNo"></param>
+        /// <returns></returns>
+        public int SendRecommendationsToCustomer(int CustomerID, string MobileNo, int CreatedBy)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int resultCount = 0; int Chat_ID = 0;
+          
+            List<CustomerRecommendatonModel> RecommendationsList = new List<CustomerRecommendatonModel>();
+            DataSet ds = new DataSet();
+
+            try
+            {
+
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("GetRecomendationsByCustomer", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
+                cmd.Parameters.AddWithValue("@_MobileNo", MobileNo);
+           
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            CustomerRecommendatonModel obj = new CustomerRecommendatonModel()
+                            {
+                                Id = Convert.ToInt32(dr["Id"]),
+                                ItemCode = dr["ItemCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ItemCode"]),
+                                Category = dr["Category"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Category"]),
+                                SubCategory = dr["SubCategory"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SubCategory"]),
+                                Brand = dr["Brand"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Brand"]),
+                                Color = dr["Color"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Color"]),
+                                Size = dr["Size"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Size"]),
+                                Price = dr["Price"] == DBNull.Value ? "0" : Convert.ToString(dr["Price"]),
+                                Url = dr["Url"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Url"]),
+                                ImageURL = dr["ImageURL"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ImageURL"]),
+
+                           };
+
+                            RecommendationsList.Add(obj);
+                        }
+                    }
+
+                    if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                    {
+                        Chat_ID= ds.Tables[1].Rows[0]["Chat_ID"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["Chat_ID"]);
+                    }
+                }
+
+                if(RecommendationsList.Count > 0 && Chat_ID > 0)
+                {
+
+                    foreach(CustomerRecommendatonModel RecObj in RecommendationsList)
+                    {
+                        CustomerChatModel ChatMessageDetails = new CustomerChatModel();
+                        ChatMessageDetails.ChatID = Chat_ID;
+                        ChatMessageDetails.Message = JsonConvert.SerializeObject(RecObj);
+                        ChatMessageDetails.ByCustomer =false;
+                        ChatMessageDetails.ChatStatus = 1;
+                        ChatMessageDetails.StoreManagerId = CreatedBy;
+                        ChatMessageDetails.CreatedBy = CreatedBy;
+
+                        resultCount  = resultCount + SaveChatMessages(ChatMessageDetails);
+
+                    }
+                }
+
+            }
+            catch (Exception ex)
             {
                 throw;
             }

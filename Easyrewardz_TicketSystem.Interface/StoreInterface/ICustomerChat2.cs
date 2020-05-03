@@ -20,5 +20,9 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<CustomerChatSuggestionModel>  GetChatSuggestions(string SearchText);
 
+        int SendRecommendationsToCustomer(int CustomerID, string MobileNo, int CreatedBy);
+
+
+
     }
 }
