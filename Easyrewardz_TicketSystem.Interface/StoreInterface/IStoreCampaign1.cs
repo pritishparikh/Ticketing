@@ -9,5 +9,6 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateCampaignStatusResponse(CampaignResponseInput objRequest, int TenantID, int UserID);
         int CampaignShareChatbot(ShareChatbotModel objRequest, int TenantID, int UserID);
         string CampaignShareMassanger(ShareChatbotModel objRequest, int TenantID, int UserID);
+        int CampaignShareSMS(ShareChatbotModel objRequest, string ClientAPIURL, string SMSsenderId, int TenantID, int UserID);
     }
 }

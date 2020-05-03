@@ -156,4 +156,44 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public int CampaignScriptID { get; set; }
     }
+
+    public class ChatSendSMS
+    {
+        /// <summary>
+        /// MobileNumber
+        /// </summary>
+        public string MobileNumber { get; set; }
+        /// <summary>
+        /// SenderId
+        /// </summary>
+        public string SenderId { get; set; }
+        /// <summary>
+        /// SmsText
+        /// </summary>
+        public string SmsText { get; set; }
+    }
+
+    public class ChatSendSMSResponse
+    {
+        /// <summary>
+        /// Guid
+        /// </summary>
+        public string Guid { get; set; }
+        /// <summary>
+        /// SubmitDate
+        /// </summary>
+        public string SubmitDate { get; set; }
+        /// <summary>
+        /// Id
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// ErrorSEQ
+        /// </summary>
+        public string ErrorSEQ { get; set; }
+        /// <summary>
+        /// ErrorCODE
+        /// </summary>
+        public string ErrorCODE { get; set; }
+    }
 }

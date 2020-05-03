@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -99,7 +100,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// 
+        /// Update Campaign Status Response
         /// </summary>
         /// <param name="objRequest"></param>
         /// <param name="TenantID"></param>
@@ -280,6 +281,84 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return Message;
+        }
+
+        /// <summary>
+        /// Campaign Share SMS
+        /// </summary>
+        /// <param name="objRequest"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public int CampaignShareSMS(ShareChatbotModel objRequest, string ClientAPIURL, string SMSsenderId, int TenantID, int UserID)
+        {
+            DataSet ds = new DataSet();
+            int result = 0;
+            string Message = "";
+            CampaignStatusResponse obj = new CampaignStatusResponse();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_HSCampaignShareSMS", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_StoreID", objRequest.StoreID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", objRequest.ProgramCode);
+                cmd.Parameters.AddWithValue("@_CustomerID", objRequest.CustomerID);
+                cmd.Parameters.AddWithValue("@_CustomerMobileNumber", objRequest.CustomerMobileNumber);
+                cmd.Parameters.AddWithValue("@_StoreManagerId", objRequest.StoreManagerId);
+                cmd.Parameters.AddWithValue("@_CampaignScriptID", objRequest.CampaignScriptID);
+                cmd.Parameters.AddWithValue("@_CreatedBy", UserID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    Message = ds.Tables[0].Rows[0]["Message"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Message"]);
+                }
+
+                if(!String.IsNullOrEmpty(Message))
+                {
+                    ChatSendSMS chatSendSMS = new ChatSendSMS
+                    {
+                        MobileNumber = objRequest.CustomerMobileNumber.Length > 10 ? objRequest.CustomerMobileNumber : "91" + objRequest.CustomerMobileNumber,
+                        SenderId = SMSsenderId,
+                        SmsText = Message
+                    };
+                    
+                    string apiReq = JsonConvert.SerializeObject(chatSendSMS);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL, apiReq);
+
+                    ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
+
+                    chatSendSMSResponse = JsonConvert.DeserializeObject<ChatSendSMSResponse>(apiResponse);
+
+                    if(chatSendSMSResponse != null)
+                    {
+                        result = chatSendSMSResponse.Id;
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
         }
     }
 }
