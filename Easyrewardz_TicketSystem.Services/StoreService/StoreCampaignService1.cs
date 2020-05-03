@@ -20,7 +20,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="pageNo"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public List<CampaignCustomerModel> GetCampaignCustomer(int tenantID, int userID, int campaignScriptID, int pageNo, int pageSize)
+        public List<CampaignCustomerModel> GetCampaignCustomer(int tenantID, int userID, int campaignScriptID, int pageNo, int pageSize, string FilterStatus)
         {
             DataSet ds = new DataSet();
             List<CampaignCustomerModel> objList = new List<CampaignCustomerModel>();
@@ -36,6 +36,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_CampaignScriptID", campaignScriptID);
                 cmd.Parameters.AddWithValue("@_pageno", pageNo);
                 cmd.Parameters.AddWithValue("@_pagesize", pageSize);
+                cmd.Parameters.AddWithValue("@_FilterStatus", FilterStatus);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
