@@ -46,6 +46,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
 
+        public int SendRecommendationsToCustomer(ICustomerChat customerChat, int CustomerID, string MobileNo ,int CreatedBy)
+        {
+            _customerChat = customerChat;
+            return _customerChat.SendRecommendationsToCustomer( CustomerID,  MobileNo, CreatedBy);
+
+        }
+
+
         #endregion
     }
 }
