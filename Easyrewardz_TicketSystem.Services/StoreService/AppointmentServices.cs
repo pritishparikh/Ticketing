@@ -23,7 +23,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<AppointmentModel> GetAppointmentList(int TenantID,string AppDate)
+        public List<AppointmentModel> GetAppointmentList(int TenantID, string AppDate)
         {
 
             DataSet ds = new DataSet();
@@ -56,20 +56,22 @@ namespace Easyrewardz_TicketSystem.Services
 
 
                         obj.AppointmentCustomerList = ds.Tables[1].AsEnumerable().Where(x => (x.Field<string>("AppointmentDate")).
-                    Equals(obj.AppointmentDate) && (x.Field<int>("SlotId")).Equals(obj.SlotId)).Select(x => new AppointmentCustomer()
-                    {
-                        AppointmentID = Convert.ToInt32(x.Field<int>("AppointmentID")),
-                        CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
-                        CustomerNumber = Convert.ToString(x.Field<string>("CustomerNumber")),
-                        NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),
-                        Status = x.Field<int?>("Status").ToString() == "" ? "" : Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" : "Cancel",
-                    }).ToList();
+                        Equals(obj.AppointmentDate) && (x.Field<int>("SlotId")).Equals(obj.SlotId)).Select(x => new AppointmentCustomer()
+                        {
+                            AppointmentID = Convert.ToInt32(x.Field<int>("AppointmentID")),
+                            CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
+                            CustomerNumber = Convert.ToString(x.Field<string>("CustomerNumber")),
+                            NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),
+                            Status = x.Field<int?>("Status").ToString() == "" ? "" :
+                        Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
+                        Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
+                        }).ToList();
 
-                    appointments.Add(obj);
+                        appointments.Add(obj);
                     }
                 }
             }
-            catch (Exception )
+            catch (Exception)
             {
                 throw;
             }
@@ -83,6 +85,8 @@ namespace Easyrewardz_TicketSystem.Services
 
             return appointments;
         }
+
+
         /// <summary>
         /// Get Appointment Count
         /// </summary>

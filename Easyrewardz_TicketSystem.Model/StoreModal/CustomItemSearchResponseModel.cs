@@ -9,6 +9,10 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// <summary>
         /// Item Image URL
         /// </summary>
+        public int ItemID { get; set; }
+        /// <summary>
+        /// Item Image URL
+        /// </summary>
         public string ImageURL { get; set; }
 
         /// <summary>
