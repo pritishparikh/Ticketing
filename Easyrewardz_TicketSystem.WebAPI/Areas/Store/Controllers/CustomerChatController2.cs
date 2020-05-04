@@ -242,7 +242,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                result = customerChatCaller.SendRecommendationsToCustomer(new CustomerChatService(_connectionString), CustomerID, MobileNumber,authenticate.UserMasterID);
+                result = customerChatCaller.SendRecommendationsToCustomer(new CustomerChatService(_connectionString), CustomerID, MobileNumber,_ClientAPIUrl,authenticate.UserMasterID);
 
                 statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

@@ -20,7 +20,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<CustomerChatSuggestionModel>  GetChatSuggestions(string SearchText);
 
-        int SendRecommendationsToCustomer(int CustomerID, string MobileNo, int CreatedBy);
+        int SendRecommendationsToCustomer(int CustomerID, string MobileNo, string ClientAPIURL, int CreatedBy);
 
         int SendMessageToCustomer(int ChatID, string MobileNo,string ProgramCode,string Message, string ClientAPIURL,int CreatedBy);
 

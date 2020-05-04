@@ -306,11 +306,11 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="customerID"></param>
         /// <param name="mobileNo"></param>
         /// <returns></returns>
-        public int SendRecommendationsToCustomer(int CustomerID, string MobileNo, int CreatedBy)
+        public int SendRecommendationsToCustomer(int CustomerID, string MobileNo, string ClientAPIURL, int CreatedBy)
         {
             MySqlCommand cmd = new MySqlCommand();
             int resultCount = 0; int Chat_ID = 0;
-          
+            string ProgramCode = string.Empty;
             List<CustomerRecommendatonModel> RecommendationsList = new List<CustomerRecommendatonModel>();
             DataSet ds = new DataSet();
 
@@ -322,7 +322,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Open();
                 }
 
-                cmd = new MySqlCommand("GetRecomendationsByCustomer", conn);
+                cmd = new MySqlCommand("SP_HSGetRecomendationsByCustomer", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", MobileNo);
@@ -361,13 +361,25 @@ namespace Easyrewardz_TicketSystem.Services
                     if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
                     {
                         Chat_ID= ds.Tables[1].Rows[0]["Chat_ID"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["Chat_ID"]);
+                        ProgramCode = ds.Tables[1].Rows[0]["prgCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["prgCode"]);
                     }
                 }
 
-                if(RecommendationsList.Count > 0 && Chat_ID > 0)
+                if(RecommendationsList.Count > 0 && Chat_ID > 0 && !string.IsNullOrEmpty(ProgramCode))
                 {
 
-                    foreach(CustomerRecommendatonModel RecObj in RecommendationsList)
+                    #region cal client send text api for sending message to customer
+
+                    //foreach (CustomerRecommendatonModel RecObj in RecommendationsList)
+                    //{
+                    //    resultCount = resultCount + SendMessageToCustomer(Chat_ID, MobileNo, ProgramCode, JsonConvert.SerializeObject(RecObj), ClientAPIURL, CreatedBy);
+                    //}
+
+                     #endregion
+
+
+
+                        foreach (CustomerRecommendatonModel RecObj in RecommendationsList)
                     {
                         CustomerChatModel ChatMessageDetails = new CustomerChatModel();
                         ChatMessageDetails.ChatID = Chat_ID;
