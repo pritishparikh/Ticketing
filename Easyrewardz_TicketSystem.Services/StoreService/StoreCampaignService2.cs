@@ -118,6 +118,8 @@ namespace Easyrewardz_TicketSystem.Services
             StoreCampaignKeyInsight objkeyinsight = new StoreCampaignKeyInsight();
             List<StoreCampaignRecommended> objrecommended = new List<StoreCampaignRecommended>();
             List<StoreCampaignRecommended> objrecommendedDetails = new List<StoreCampaignRecommended>();
+
+            string apiReq = string.Empty;
             DataSet ds = new DataSet();
 
             try
@@ -127,70 +129,99 @@ namespace Easyrewardz_TicketSystem.Services
                 objOrderSearch.programCode = programCode;
                 objOrderSearch.securityToken = apisecurityToken;
 
-
-                string apiReq = JsonConvert.SerializeObject(objOrderSearch);
-                apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/GetUserATVDetails", apiReq);
-
-                if (!string.IsNullOrEmpty(apiResponse))
+                try
                 {
-                    ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+                     apiReq = JsonConvert.SerializeObject(objOrderSearch);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/GetUserATVDetails", apiReq);
 
-                    if (apiResponse != null)
+                    if (!string.IsNullOrEmpty(apiResponse))
                     {
-                        objpopupDetails = JsonConvert.DeserializeObject<CustomerpopupDetails>(((apiResponse)));
+                        ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
 
-                        if (objpopupDetails != null)
+                        if (apiResponse != null)
                         {
-                            CustomerpopupDetails popupDetail = new CustomerpopupDetails();
-                            popupDetail.name = objpopupDetails.name;
-                            popupDetail.mobileNumber = objpopupDetails.mobileNumber;
-                            popupDetail.tiername = objpopupDetails.tiername;
-                            popupDetail.lifeTimeValue = objpopupDetails.lifeTimeValue;
-                            popupDetail.visitCount = objpopupDetails.visitCount;
-                            obj.useratvdetails = popupDetail;
+                            objpopupDetails = JsonConvert.DeserializeObject<CustomerpopupDetails>(((apiResponse)));
 
-                        }
-                        else
-                        {
-                            CustomerpopupDetails popupDetail = new CustomerpopupDetails();
-                            popupDetail.name = "";
-                            popupDetail.mobileNumber = "";
-                            popupDetail.tiername = "";
-                            popupDetail.lifeTimeValue = "";
-                            popupDetail.visitCount = "";
-                            obj.useratvdetails = popupDetail;
+                            if (objpopupDetails != null)
+                            {
+                                CustomerpopupDetails popupDetail = new CustomerpopupDetails();
+                                popupDetail.name = objpopupDetails.name;
+                                popupDetail.mobileNumber = objpopupDetails.mobileNumber;
+                                popupDetail.tiername = objpopupDetails.tiername;
+                                popupDetail.lifeTimeValue = objpopupDetails.lifeTimeValue;
+                                popupDetail.visitCount = objpopupDetails.visitCount;
+                                obj.useratvdetails = popupDetail;
+
+                            }
+                            else
+                            {
+                                CustomerpopupDetails popupDetail = new CustomerpopupDetails();
+                                popupDetail.name = "";
+                                popupDetail.mobileNumber = "";
+                                popupDetail.tiername = "";
+                                popupDetail.lifeTimeValue = "";
+                                popupDetail.visitCount = "";
+                                obj.useratvdetails = popupDetail;
+                            }
                         }
                     }
 
+                    }
+               catch(Exception)
+                {
+                    if (obj.useratvdetails == null)
+                    {
+                        CustomerpopupDetails popupDetail = new CustomerpopupDetails();
+                        popupDetail.name = "";
+                        popupDetail.mobileNumber = "";
+                        popupDetail.tiername = "";
+                        popupDetail.lifeTimeValue = "";
+                        popupDetail.visitCount = "";
+                        obj.useratvdetails = popupDetail;
+
+                    }
                 }
-                apiResponse = string.Empty;
-                apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/GetKeyInsight", apiReq);
-
-                if (!string.IsNullOrEmpty(apiResponse))
+                try
                 {
+                    apiResponse = string.Empty;
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/GetKeyInsight", apiReq);
 
-                    if (apiResponse != null)
+                    if (!string.IsNullOrEmpty(apiResponse))
                     {
-                        objkeyinsight = JsonConvert.DeserializeObject<StoreCampaignKeyInsight>(((apiResponse)));
 
-                        if (objkeyinsight != null)
+                        if (apiResponse != null)
                         {
-                            StoreCampaignKeyInsight popupDetail = new StoreCampaignKeyInsight();
+                            objkeyinsight = JsonConvert.DeserializeObject<StoreCampaignKeyInsight>(((apiResponse)));
 
-                            popupDetail.mobileNumber = objkeyinsight.mobileNumber;
-                            popupDetail.insightText = objkeyinsight.insightText;
-                            obj.campaignkeyinsight = popupDetail;
+                            if (objkeyinsight != null)
+                            {
+                                StoreCampaignKeyInsight popupDetail = new StoreCampaignKeyInsight();
 
-                        }
-                        else
-                        {
-                            StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight();
-                            KeyInsight.mobileNumber = "";
-                            KeyInsight.insightText = "";
-                            obj.campaignkeyinsight = KeyInsight;
+                                popupDetail.mobileNumber = objkeyinsight.mobileNumber;
+                                popupDetail.insightText = objkeyinsight.insightText;
+                                obj.campaignkeyinsight = popupDetail;
+
+                            }
+                            else
+                            {
+                                StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight();
+                                KeyInsight.mobileNumber = "";
+                                KeyInsight.insightText = "";
+                                obj.campaignkeyinsight = KeyInsight;
+                            }
                         }
                     }
+                    }
+                catch (Exception)
+                {
+                    if (obj.campaignkeyinsight == null)
+                    {
+                        StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight();
+                        KeyInsight.mobileNumber = "";
+                        KeyInsight.insightText = "";
+                        obj.campaignkeyinsight = KeyInsight;
 
+                    }
                 }
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_HSGetCampaignRecommendedList", conn)
@@ -223,7 +254,7 @@ namespace Easyrewardz_TicketSystem.Services
                         RecommendedDetail.url = ds.Tables[0].Rows[i]["Url"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Url"]);
                         RecommendedDetail.imageURL = ds.Tables[0].Rows[i]["ImageURL"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ImageURL"]);
                         objrecommended.Add(RecommendedDetail);
-                       
+
                     }
                     obj.campaignrecommended = objrecommended;
                 }
@@ -245,139 +276,70 @@ namespace Easyrewardz_TicketSystem.Services
                     obj.campaignrecommended = objrecommended;
                 }
 
-                apiResponse = string.Empty;
-                apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/GetLastTransactionDetails", apiReq);
-
-                if (!string.IsNullOrEmpty(apiResponse))
+                try
                 {
+                    apiResponse = string.Empty;
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/GetLastTransactionDetails", apiReq);
 
-                    if (apiResponse != null)
+                    if (!string.IsNullOrEmpty(apiResponse))
                     {
-                        objLastTransactionDetails = JsonConvert.DeserializeObject<StoreCampaignLastTransactionDetails>(((apiResponse)));
 
-                        if (objrecommendedDetails != null)
+                        if (apiResponse != null)
                         {
-                            if (objrecommendedDetails.Count > 0)
+                            objLastTransactionDetails = JsonConvert.DeserializeObject<StoreCampaignLastTransactionDetails>(((apiResponse)));
+
+                            if (objLastTransactionDetails != null)
+                            {
+                                //if (objrecommendedDetails.Count > 0)
+                                //{
+                                //    StoreCampaignLastTransactionDetails LastTransactionDetails = new StoreCampaignLastTransactionDetails();
+
+                                //    LastTransactionDetails.billNo = LastTransactionDetails.billNo;
+                                //    LastTransactionDetails.billDate = LastTransactionDetails.billDate; ;
+                                //    LastTransactionDetails.storeName = LastTransactionDetails.storeName;
+                                //    LastTransactionDetails.amount = LastTransactionDetails.amount;
+                                //    //LastTransactionDetails.itemDetails = LastTransactionDetails.itemDetails;
+                                //    obj.lasttransactiondetails = LastTransactionDetails;
+                                //}
+                                obj.lasttransactiondetails = objLastTransactionDetails;
+                            }
+                            else
                             {
                                 StoreCampaignLastTransactionDetails LastTransactionDetails = new StoreCampaignLastTransactionDetails();
 
-                                LastTransactionDetails.billNo = LastTransactionDetails.billNo;
-                                LastTransactionDetails.billDate = LastTransactionDetails.billDate; ;
-                                LastTransactionDetails.storeName = LastTransactionDetails.storeName;
-                                LastTransactionDetails.amount = LastTransactionDetails.amount;
-                                LastTransactionDetails.itemDetails = LastTransactionDetails.itemDetails;
+                                LastTransactionDetails.billNo = "";
+                                LastTransactionDetails.billDate = "";
+                                LastTransactionDetails.storeName = "";
+                                LastTransactionDetails.amount = "";
+                                //  LastTransactionDetails.itemDetails = "";
                                 obj.lasttransactiondetails = LastTransactionDetails;
                             }
-                        }
-                        else
-                        {
-                            StoreCampaignLastTransactionDetails LastTransactionDetails = new StoreCampaignLastTransactionDetails();
 
-                            LastTransactionDetails.billNo = "";
-                            LastTransactionDetails.billDate = "";
-                            LastTransactionDetails.storeName = "";
-                            LastTransactionDetails.amount = "";
-                            LastTransactionDetails.itemDetails = "";
-                            obj.lasttransactiondetails = LastTransactionDetails;
                         }
-
                     }
+                    }
+                 catch (Exception)
+                {
+                    if (obj.lasttransactiondetails == null)
+                    {
+                        StoreCampaignLastTransactionDetails LastTransactionDetails = new StoreCampaignLastTransactionDetails();
 
+                        LastTransactionDetails.billNo = "";
+                        LastTransactionDetails.billDate = "";
+                        LastTransactionDetails.storeName = "";
+                        LastTransactionDetails.amount = "";
+                        //  LastTransactionDetails.itemDetails = "";
+                        obj.lasttransactiondetails = LastTransactionDetails;
+                    }
                 }
 
 
-
-            }
-            catch (Exception)
+                }
+            catch(Exception)
             {
-                if (obj.useratvdetails == null)
-                {
-                    CustomerpopupDetails popupDetail = new CustomerpopupDetails();
-                    popupDetail.name = "";
-                    popupDetail.mobileNumber = "";
-                    popupDetail.tiername = "";
-                    popupDetail.lifeTimeValue = "";
-                    popupDetail.visitCount = "";
-                    obj.useratvdetails = popupDetail;
-                   
-                }
-                if (obj.campaignkeyinsight == null)
-                {
-                    StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight();
-                    KeyInsight.mobileNumber = "";
-                    KeyInsight.insightText = "";
-                    obj.campaignkeyinsight = KeyInsight;
-                   
-                }
-                if (obj.campaignrecommended == null)
-                {
-                    conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("SP_HSGetCampaignRecommendedList", conn)
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    };
-                    cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
-                    cmd.Parameters.AddWithValue("@User_ID", userID);
-                    cmd.Parameters.AddWithValue("@mobile_Number", mobileNumber);
-                    cmd.Parameters.AddWithValue("@program_Code", programCode);
-
-                    MySqlDataAdapter da = new MySqlDataAdapter
-                    {
-                        SelectCommand = cmd
-                    };
-                    da.Fill(ds);
-                    if (ds != null && ds.Tables[0].Rows.Count > 0)
-                    {
-                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                        {
-                            StoreCampaignRecommended RecommendedDetail = new StoreCampaignRecommended();
-                            RecommendedDetail.mobileNumber = ds.Tables[0].Rows[i]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]);
-                            RecommendedDetail.itemCode = ds.Tables[0].Rows[i]["ItemCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemCode"]);
-                            RecommendedDetail.category = ds.Tables[0].Rows[i]["Category"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Category"]);
-                            RecommendedDetail.subCategory = ds.Tables[0].Rows[i]["SubCategory"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategory"]);
-                            RecommendedDetail.brand = ds.Tables[0].Rows[i]["Brand"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Brand"]);
-                            RecommendedDetail.color = ds.Tables[0].Rows[i]["Color"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Color"]);
-                            RecommendedDetail.size = ds.Tables[0].Rows[i]["Size"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Size"]);
-                            RecommendedDetail.price = ds.Tables[0].Rows[i]["Price"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Price"]);
-                            RecommendedDetail.url = ds.Tables[0].Rows[i]["Url"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Url"]);
-                            RecommendedDetail.imageURL = ds.Tables[0].Rows[i]["ImageURL"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ImageURL"]);
-                            objrecommended.Add(RecommendedDetail);
-                            
-                        }
-                        obj.campaignrecommended = objrecommended;
-                    }
-
-                    else
-                    {
-                        StoreCampaignRecommended RecommendedDetail = new StoreCampaignRecommended();
-
-                        RecommendedDetail.mobileNumber = "";
-                        RecommendedDetail.itemCode = "";
-                        RecommendedDetail.category = "";
-                        RecommendedDetail.subCategory = "";
-                        RecommendedDetail.brand = "";
-                        RecommendedDetail.color = "";
-                        RecommendedDetail.size = "";
-                        RecommendedDetail.price = "";
-                        RecommendedDetail.url = "";
-                        RecommendedDetail.imageURL = "";
-                        objrecommended.Add(RecommendedDetail);
-                        obj.campaignrecommended = objrecommended;
-                    }
-                }
-
-                if (obj.lasttransactiondetails == null)
-                {
-                    StoreCampaignLastTransactionDetails LastTransactionDetails = new StoreCampaignLastTransactionDetails();
-
-                    LastTransactionDetails.billNo = "";
-                    LastTransactionDetails.billDate = "";
-                    LastTransactionDetails.storeName = "";
-                    LastTransactionDetails.amount = "";
-                    LastTransactionDetails.itemDetails = "";
-                    obj.lasttransactiondetails = LastTransactionDetails;
-                }
+               
             }
+          //  InsertApiResponseData(obj, userID);
             return obj;
         }
 
@@ -538,6 +500,69 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return lstCampaignLogo;
+        }
+
+
+        /// <summary>
+        /// Update Campaign Status Response
+        /// </summary>
+        /// <param name="objRequest"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public int InsertApiResponseData(StoresCampaignStatusResponse obj, int userID)
+        {
+            int result = 0;
+             try
+            {
+                conn.Close();
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_HScreateUserAtvDetails", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_name", obj.useratvdetails.name);
+                cmd.Parameters.AddWithValue("@_mobileNumber", obj.useratvdetails.mobileNumber);
+                cmd.Parameters.AddWithValue("@_tiername", obj.useratvdetails.tiername);
+                cmd.Parameters.AddWithValue("@_visitCount", obj.useratvdetails.visitCount);
+                cmd.Parameters.AddWithValue("@_lifeTimeValue", obj.useratvdetails.lifeTimeValue);
+                cmd.Parameters.AddWithValue("@_UserID", userID);
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+                MySqlCommand cmd1 = new MySqlCommand("SP_HScreateKeyInsight", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd1.Parameters.AddWithValue("@_mobileNumber", obj.campaignkeyinsight.mobileNumber);
+                cmd1.Parameters.AddWithValue("@_insightText", obj.campaignkeyinsight.insightText);
+                cmd1.Parameters.AddWithValue("@_UserID", userID);
+                result = Convert.ToInt32(cmd1.ExecuteNonQuery());
+
+                MySqlCommand cmd2 = new MySqlCommand("SP_HScreateLastTransactionDetails", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd2.Parameters.AddWithValue("@_billNo", obj.lasttransactiondetails.billNo);
+                cmd2.Parameters.AddWithValue("@_billDate", obj.lasttransactiondetails.billDate);
+                cmd2.Parameters.AddWithValue("@_storeName", obj.lasttransactiondetails.storeName);
+                cmd2.Parameters.AddWithValue("@_amount", obj.lasttransactiondetails.amount);
+               // cmd2.Parameters.AddWithValue("@_itemDetails", obj.lasttransactiondetails.itemDetails);
+                cmd2.Parameters.AddWithValue("@_UserID", userID);
+                result = Convert.ToInt32(cmd2.ExecuteNonQuery());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
         }
 
     }

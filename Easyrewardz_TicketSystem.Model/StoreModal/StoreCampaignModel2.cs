@@ -66,6 +66,8 @@ namespace Easyrewardz_TicketSystem.Model
         public StoreCampaignKeyInsight campaignkeyinsight { get; set; }
         public List<StoreCampaignRecommended> campaignrecommended { get; set; }
         public StoreCampaignLastTransactionDetails lasttransactiondetails { get; set; }
+ 
+        
     }
 
     public class CustomerpopupDetails
@@ -109,6 +111,16 @@ namespace Easyrewardz_TicketSystem.Model
         public string billDate { get; set; }
         public string storeName { get; set; }
         public string amount { get; set; }
-        public string itemDetails { get; set; }
+        public List<StoreCampaignLastTransactionitemDetailsDetails> itemDetails { get; set; }
     }
+  
+    public class StoreCampaignLastTransactionitemDetailsDetails
+    {
+        public string mobileNo { get; set; }
+        public string article { get; set; }
+        public string quantity { get; set; }
+        public string amount { get; set; }
+       
+    }
+
 }
