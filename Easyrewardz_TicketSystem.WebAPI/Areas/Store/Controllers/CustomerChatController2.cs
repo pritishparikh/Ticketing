@@ -242,7 +242,52 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                result = customerChatCaller.SendRecommendationsToCustomer(new CustomerChatService(_connectionString), CustomerID, MobileNumber,authenticate.UserMasterID);
+                result = customerChatCaller.SendRecommendationsToCustomer(new CustomerChatService(_connectionString), CustomerID, MobileNumber,_ClientAPIUrl,authenticate.UserMasterID);
+
+                statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// send Message To Customer
+        /// </summary>
+        /// <param name="ChatID"></param>
+        /// <param name="MobileNo"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="Messsage"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("sendMessageToCustomer")]
+        public ResponseModel sendMessageToCustomer(int ChatID, string MobileNo, string ProgramCode, string Message)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int result = 0;
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                result = customerChatCaller.SendMessageToCustomer(new CustomerChatService(_connectionString),  ChatID,  MobileNo,  ProgramCode, 
+                          Message, _ClientAPIUrl, authenticate.UserMasterID);
 
                 statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

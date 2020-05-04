@@ -196,4 +196,20 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string ErrorCODE { get; set; }
     }
+
+    public class SendFreeTextRequest
+    {
+        /// <summary>
+        /// ProgramCode
+        /// </summary>
+        public string ProgramCode { get; set; }
+        /// <summary>
+        /// PhoneNumber
+        /// </summary>
+        public string PhoneNumber { get; set; }
+        /// <summary>
+        /// Text
+        /// </summary>
+        public string Text { get; set; }
+    }
 }

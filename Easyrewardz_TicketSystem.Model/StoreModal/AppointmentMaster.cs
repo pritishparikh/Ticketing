@@ -70,5 +70,20 @@ namespace Easyrewardz_TicketSystem.Model
         /// ModifyDate  
         /// </summary>
         public string ModifyDate { get; set; }
+
+        /// <summary>
+        /// CustomerName  
+        /// </summary>
+        public string CustomerName { get; set; }
+
+        /// <summary>
+        /// TimeSlot
+        /// </summary>
+        public string TimeSlot { get; set; }
+
+        /// <summary>s
+        /// MessageToReply
+        /// </summary>
+        public string MessageToReply { get; set; }
     }
 }

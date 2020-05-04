@@ -3,9 +3,11 @@ using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 using System.Data;
 using System.Text;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -149,6 +151,9 @@ namespace Easyrewardz_TicketSystem.Services
                         customerChatMaster.MobileNo = ds.Tables[0].Rows[i]["CustomerNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerNumber"]);
                         customerChatMaster.MessageCount= ds.Tables[0].Rows[i]["NewMessageCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NewMessageCount"]);
                         customerChatMaster.TimeAgo = ds.Tables[0].Rows[i]["TimeAgo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TimeAgo"]);
+                        customerChatMaster.ProgramCode = ds.Tables[0].Rows[i]["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ProgramCode"]);
+                        customerChatMaster.StoreID = ds.Tables[0].Rows[i]["StoreID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreID"]);
+                        customerChatMaster.StoreManagerId = ds.Tables[0].Rows[i]["StoreManagerId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreManagerId"]);
                         lstCustomerChatMaster.Add(customerChatMaster);
                     }
                 }
@@ -193,6 +198,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Store_ID", appointmentMaster.StoreID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 message = Convert.ToInt32(cmd.ExecuteScalar());
+
+               // int response = SendMessageToCustomer( /*ChatID*/0, appointmentMaster.MobileNo, appointmentMaster.ProgramCode, appointmentMaster.MessageToReply,/*ClientAPIURL*/"",appointmentMaster.CreatedBy);
             }
             catch (Exception)
             {
@@ -430,6 +437,57 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return lstdateofSchedule;
+        }
+
+        public int SendMessageToCustomerForVisit(AppointmentMaster appointmentMaster, string ClientAPIURL, int CreatedBy)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int resultCount = 0;
+            //CustomerChatModel ChatMessageDetails = new CustomerChatModel();
+            ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
+            string ClientAPIResponse = string.Empty;
+
+            try
+            {
+                string textToReply = "Dear" + appointmentMaster.CustomerName + ",Your Visit for Our Store is schedule On" + appointmentMaster.AppointmentDate +
+                    "On Time Between"+ appointmentMaster.TimeSlot;
+                #region call client api for sending message to customer
+
+                SendTextRequest.To = appointmentMaster.MobileNo;
+                SendTextRequest.textToReply = textToReply;
+                SendTextRequest.programCode = appointmentMaster.ProgramCode;
+
+                string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
+
+                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIResponse + "api/BellChatBotIntegration/SendText", JsonRequest);
+
+
+                // response binding pending as no response structure is provided yet from client------
+
+                //--------
+
+                #endregion
+
+                //if (ChatID > 0)
+                //{
+                //    ChatMessageDetails.ChatID = ChatID;
+                //    ChatMessageDetails.Message = Message;
+                //    ChatMessageDetails.ByCustomer = false;
+                //    ChatMessageDetails.ChatStatus = 1;
+                //    ChatMessageDetails.StoreManagerId = CreatedBy;
+                //    ChatMessageDetails.CreatedBy = CreatedBy;
+
+                //    resultCount = SaveChatMessages(ChatMessageDetails);
+
+                //}
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return resultCount;
         }
     }
 }

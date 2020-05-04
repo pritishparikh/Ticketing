@@ -25,6 +25,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private IConfiguration configuration;
         private readonly string _connectionString;
         private readonly string _radisCacheServerAddress;
+        private readonly string _ClientAPIUrl;
         #endregion
 
         #region Constructor
@@ -33,6 +34,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             configuration = iConfig;
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            _ClientAPIUrl = configuration.GetValue<string>("ClientAPIURL");
         }
         #endregion
 
@@ -412,6 +414,50 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// sendMessageToCustomerForScheduleVisit
+        /// </summary>
+        /// <param name="ChatID"></param>
+        /// <param name="MobileNo"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="Messsage"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("sendMessageToCustomerForScheduleVisit")]
+        public ResponseModel SendMessageToCustomerForScheduleVisit([FromBody]AppointmentMaster appointmentMaster)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int result = 0;
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                result = customerChatCaller.SendMessageToCustomerForVisit(new CustomerChatService(_connectionString), appointmentMaster, _ClientAPIUrl, authenticate.UserMasterID);
+
+                statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
         #endregion
     }
 }
