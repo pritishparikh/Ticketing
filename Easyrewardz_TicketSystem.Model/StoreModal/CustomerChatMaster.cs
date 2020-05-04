@@ -85,6 +85,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// Updated Date
         /// </summary>
         public DateTime UpdatedDate{ get; set; }
+
+        /// <summary>
+        /// StoreManagerId 
+        /// </summary>
+        public int StoreManagerId { get; set; }
     }
 
     public class CustomerChatMessages
