@@ -22,5 +22,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int GetChatCount(int tenantID);
 
         List<DateofSchedule> GetTimeSlot(int storeID,int userMasterID, int tenantID);
+
+        int SendMessageToCustomerForVisit(AppointmentMaster appointmentMaster, string ClientAPIURL, int CreatedBy);
     }
 }
