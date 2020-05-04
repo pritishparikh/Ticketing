@@ -3,6 +3,7 @@ using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string statusMessage = "";
             try
             {
+               
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
@@ -55,18 +57,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         [Route("GetCustomerpopupDetails")]
         public ResponseModel GetCustomerpopupDetails(string mobileNumber,string programCode)
         {
-            CampaignStatusResponse1 objStoreCampaign = new CampaignStatusResponse1();
+            StoresCampaignStatusResponse objStoreCampaign = new StoresCampaignStatusResponse();
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
             string statusMessage = "";
             try
             {
+                string ClientAPIURL = configuration.GetValue<string>("ClientAPIURL");
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                objStoreCampaign = storecampaigncaller.GetCustomerpopupDetailsList(new StoreCampaignService(_connectioSting), mobileNumber, programCode, authenticate.TenantId, authenticate.UserMasterID);
+                objStoreCampaign = storecampaigncaller.GetCustomerpopupDetailsList(new StoreCampaignService(_connectioSting), mobileNumber, programCode, authenticate.TenantId, authenticate.UserMasterID, ClientAPIURL);
                 statusCode =
                    objStoreCampaign.campaignrecommended.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

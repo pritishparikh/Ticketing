@@ -60,7 +60,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string securityToken { get; set; }
     }
 
-    public class CampaignStatusResponse1
+    public class StoresCampaignStatusResponse
     {
         public CustomerpopupDetails useratvdetails { get; set; }
         public StoreCampaignKeyInsight campaignkeyinsight { get; set; }
