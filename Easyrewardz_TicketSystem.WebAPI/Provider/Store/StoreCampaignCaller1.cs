@@ -18,10 +18,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _CampaignRepository.UpdateCampaignStatusResponse(objRequest, TenantID, UserID);
         }
 
-        public int CampaignShareChatbot(IStoreCampaign Campaign, ShareChatbotModel objRequest, int TenantID, int UserID)
+        public int CampaignShareChatbot(IStoreCampaign Campaign, ShareChatbotModel objRequest, string ClientAPIURL, int TenantID, int UserID)
         {
             _CampaignRepository = Campaign;
-            return _CampaignRepository.CampaignShareChatbot(objRequest, TenantID, UserID);
+            return _CampaignRepository.CampaignShareChatbot(objRequest, ClientAPIURL, TenantID, UserID);
         }
 
         public string CampaignShareMassanger(IStoreCampaign Campaign, ShareChatbotModel objRequest, int TenantID, int UserID)

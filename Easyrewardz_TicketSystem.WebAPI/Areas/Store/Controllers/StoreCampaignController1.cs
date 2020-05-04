@@ -137,7 +137,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                obj = storecampaigncaller.CampaignShareChatbot(new StoreCampaignService(_connectioSting), objRequest, authenticate.TenantId, authenticate.UserMasterID);
+                string ClientAPIURL = configuration.GetValue<string>("ClientAPIURL");
+
+                obj = storecampaigncaller.CampaignShareChatbot(new StoreCampaignService(_connectioSting), objRequest, ClientAPIURL, authenticate.TenantId, authenticate.UserMasterID);
                 statusCode =
                    obj == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -217,7 +219,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                string ClientAPIURL = configuration.GetValue<string>("ClientAPIURL") + "api/BellChatBotIntegration/SendSMS";
+                string ClientAPIURL = configuration.GetValue<string>("ClientAPIURL");
                 string SMSsenderId = configuration.GetValue<string>("SMSsenderId");
 
                 obj = storecampaigncaller.CampaignShareSMS(new StoreCampaignService(_connectioSting), objRequest, ClientAPIURL, SMSsenderId, authenticate.TenantId, authenticate.UserMasterID);

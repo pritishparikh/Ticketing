@@ -176,13 +176,15 @@ namespace Easyrewardz_TicketSystem.Services
         /// Campaign Share Chat bot
         /// </summary>
         /// <param name="objRequest"></param>
+        /// <param name="ClientAPIURL"></param>
         /// <param name="TenantID"></param>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        public int CampaignShareChatbot(ShareChatbotModel objRequest, int TenantID, int UserID)
+        public int CampaignShareChatbot(ShareChatbotModel objRequest, string ClientAPIURL, int TenantID, int UserID)
         {
             DataSet ds = new DataSet();
             int result = 0;
+            int resultApi = 0;
             string Message = "";
             CampaignStatusResponse obj = new CampaignStatusResponse();
             try
@@ -212,6 +214,33 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     result = ds.Tables[0].Rows[0]["ChatID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["ChatID"]);
                     Message = ds.Tables[0].Rows[0]["Message"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Message"]);
+                }
+
+                if (!String.IsNullOrEmpty(Message))
+                {
+                    SendFreeTextRequest sendFreeTextRequest = new SendFreeTextRequest
+                    {
+                        ProgramCode = objRequest.ProgramCode,
+                        PhoneNumber = objRequest.CustomerMobileNumber.Length > 10 ? objRequest.CustomerMobileNumber : "91" + objRequest.CustomerMobileNumber,
+                        Text = Message
+                    };
+
+                    string apiReq = JsonConvert.SerializeObject(sendFreeTextRequest);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/SendFreeText", apiReq);
+
+                    //ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
+
+                    //chatSendSMSResponse = JsonConvert.DeserializeObject<ChatSendSMSResponse>(apiResponse);
+
+                    //if (chatSendSMSResponse != null)
+                    //{
+                    //    resultApi = chatSendSMSResponse.Id;
+                    //}
+
+                    if (resultApi > 0)
+                    {
+                        UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");
+                    }
                 }
 
             }
@@ -335,7 +364,7 @@ namespace Easyrewardz_TicketSystem.Services
                     };
                     
                     string apiReq = JsonConvert.SerializeObject(chatSendSMS);
-                    apiResponse = CommonService.SendApiRequest(ClientAPIURL, apiReq);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/SendSMS", apiReq);
 
                     ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
 
@@ -345,8 +374,51 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         result = chatSendSMSResponse.Id;
                     }
+
+                    if(result > 0)
+                    {
+                        UpdateResponseShare(objRequest.CustomerID, "Contacted Via SMS");
+                    }
                 }
 
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Update Response Share
+        /// </summary>
+        /// <param name="CustomerID"></param>
+        /// <param name="ResponseName"></param>
+        /// <returns></returns>
+        public int UpdateResponseShare(string CustomerID, string ResponseName)
+        {
+
+            int result = 0;
+            CampaignStatusResponse obj = new CampaignStatusResponse();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateResponseShare", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
+                cmd.Parameters.AddWithValue("@_ResponseName", ResponseName);
+
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
             catch (Exception)
             {
