@@ -146,3 +146,17 @@ D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.
 D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.csproj.CopyComplete
 D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
 D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.deps.json
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.csprojAssemblyReference.cache
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.csproj.CoreCompileInputs.cache
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.AssemblyInfoInputs.cache
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.AssemblyInfo.cs
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.csproj.CopyComplete
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
+D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb

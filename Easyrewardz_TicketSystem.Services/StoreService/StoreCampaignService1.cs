@@ -409,7 +409,11 @@ namespace Easyrewardz_TicketSystem.Services
             CampaignStatusResponse obj = new CampaignStatusResponse();
             try
             {
-                conn.Open();
+                if (conn == null)
+                {
+                    conn.Open();
+                }
+                
 
                 MySqlCommand cmd = new MySqlCommand("SP_HSUpdateResponseShare", conn)
                 {

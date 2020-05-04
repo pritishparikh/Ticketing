@@ -6250,23 +6250,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\suraj.kumthekar\\.nuget\\packages\\": {},
+    "C:\\Users\\devesh.padmashali\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Ticketing\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj",
+      "projectUniqueName": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj",
       "projectName": "Easyrewardz_TicketSystem.Services",
-      "projectPath": "D:\\Ticketing\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj",
-      "packagesPath": "C:\\Users\\suraj.kumthekar\\.nuget\\packages\\",
-      "outputPath": "D:\\Ticketing\\Ticketing\\Easyrewardz_TicketSystem.Services\\obj\\",
+      "projectPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj",
+      "packagesPath": "C:\\Users\\devesh.padmashali\\.nuget\\packages\\",
+      "outputPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Services\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\suraj.kumthekar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\devesh.padmashali\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -6279,14 +6279,14 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "D:\\Ticketing\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj": {
-              "projectPath": "D:\\Ticketing\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj"
+            "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj": {
+              "projectPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj"
             },
-            "D:\\Ticketing\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj": {
-              "projectPath": "D:\\Ticketing\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj"
+            "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj": {
+              "projectPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj"
             },
-            "D:\\Ticketing\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
-              "projectPath": "D:\\Ticketing\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
+            "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
+              "projectPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
             }
           }
         }
