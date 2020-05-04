@@ -13,6 +13,7 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public partial class CustomerChatService : ICustomerChat
     {
+
         /// <summary>
         /// Get Customer Chat Details
         /// </summary>
@@ -382,7 +383,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw;
             }
@@ -392,5 +393,68 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return resultCount;
         }
+
+
+        /// <summary>
+        /// send Message To Customer
+        /// </summary>
+        /// <param name="ChatID"></param>
+        /// <param name="MobileNo"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="Messsage"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <param name="CreatedBy"></param>
+        /// <returns></returns>
+        public int SendMessageToCustomer(int ChatID, string MobileNo, string ProgramCode, string Message, string ClientAPIURL, int CreatedBy)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int resultCount = 0;
+            CustomerChatModel ChatMessageDetails = new CustomerChatModel();
+            ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
+            string ClientAPIResponse = string.Empty;
+
+            try
+            {
+
+                #region call client api for sending message to customer
+
+                SendTextRequest.To = MobileNo;
+                SendTextRequest.textToReply = Message;
+                SendTextRequest.programCode = ProgramCode;
+
+                string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
+
+                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIResponse + "api/BellChatBotIntegration/SendText", JsonRequest);
+
+
+                // response binding pending as no response structure is provided yet from client------
+
+                //--------
+
+                #endregion
+
+                if (ChatID > 0)
+                {
+                        ChatMessageDetails.ChatID = ChatID;
+                        ChatMessageDetails.Message = Message;
+                        ChatMessageDetails.ByCustomer = false;
+                        ChatMessageDetails.ChatStatus = 1;
+                        ChatMessageDetails.StoreManagerId = CreatedBy;
+                        ChatMessageDetails.CreatedBy = CreatedBy;
+
+                        resultCount = SaveChatMessages(ChatMessageDetails);
+
+                }
+
+            }
+            catch (Exception )
+            {
+                throw;
+            }
+            
+            return resultCount;
+        }
+
     }
+
 }

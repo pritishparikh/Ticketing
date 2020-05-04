@@ -25,6 +25,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private IConfiguration configuration;
         private readonly string _connectionString;
         private readonly string _radisCacheServerAddress;
+        private readonly string _ClientAPIUrl;
         #endregion
 
         #region Constructor
@@ -33,6 +34,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             configuration = iConfig;
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            _ClientAPIUrl = configuration.GetValue<string>("ClientAPIURL");
         }
         #endregion
 
