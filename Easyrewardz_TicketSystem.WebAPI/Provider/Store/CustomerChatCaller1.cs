@@ -111,7 +111,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
             return _customerChat.GetTimeSlot(storeID,userMasterID, tenantID);
         }
+        public int SendMessageToCustomerForVisit(ICustomerChat customerChat, AppointmentMaster appointmentMaster, string ClientAPIURL, int CreatedBy)
+        {
+            _customerChat = customerChat;
+            return _customerChat.SendMessageToCustomerForVisit(appointmentMaster, ClientAPIURL, CreatedBy);
 
+        }
         #endregion
     }
 }

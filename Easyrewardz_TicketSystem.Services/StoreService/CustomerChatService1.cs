@@ -3,9 +3,11 @@ using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 using System.Data;
 using System.Text;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -430,6 +432,57 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return lstdateofSchedule;
+        }
+
+        public int SendMessageToCustomerForVisit(AppointmentMaster appointmentMaster, string ClientAPIURL, int CreatedBy)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int resultCount = 0;
+            //CustomerChatModel ChatMessageDetails = new CustomerChatModel();
+            ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
+            string ClientAPIResponse = string.Empty;
+
+            try
+            {
+                string textToReply = "Dear" + appointmentMaster.CustomerName + ",Your Visit for Our Store is schedule On" + appointmentMaster.AppointmentDate +
+                    "On Time Between"+ appointmentMaster.TimeSlot;
+                #region call client api for sending message to customer
+
+                SendTextRequest.To = appointmentMaster.MobileNo;
+                SendTextRequest.textToReply = textToReply;
+                SendTextRequest.programCode = appointmentMaster.ProgramCode;
+
+                string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
+
+                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIResponse + "api/BellChatBotIntegration/SendText", JsonRequest);
+
+
+                // response binding pending as no response structure is provided yet from client------
+
+                //--------
+
+                #endregion
+
+                //if (ChatID > 0)
+                //{
+                //    ChatMessageDetails.ChatID = ChatID;
+                //    ChatMessageDetails.Message = Message;
+                //    ChatMessageDetails.ByCustomer = false;
+                //    ChatMessageDetails.ChatStatus = 1;
+                //    ChatMessageDetails.StoreManagerId = CreatedBy;
+                //    ChatMessageDetails.CreatedBy = CreatedBy;
+
+                //    resultCount = SaveChatMessages(ChatMessageDetails);
+
+                //}
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return resultCount;
         }
     }
 }
