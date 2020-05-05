@@ -308,7 +308,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name=""></param>
         /// <param name="tenantID"></param>
         /// <returns></returns>
-        public int GetChatCount(int tenantID)
+        public int GetChatCount(int tenantID,int UserMasterID)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -318,11 +318,12 @@ namespace Easyrewardz_TicketSystem.Services
 
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSCountTotalUnreadOngoingChat", conn)
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSCountTotalUnreadChat", conn)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
                 cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd1.Parameters.AddWithValue("@UserMaster_ID", UserMasterID);
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd1
