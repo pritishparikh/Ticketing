@@ -449,6 +449,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
+
                 string textToReply = "Dear" + appointmentMaster.CustomerName + ",Your Visit for Our Store is schedule On" + appointmentMaster.AppointmentDate +
                     "On Time Between"+ appointmentMaster.TimeSlot;
                 #region call client api for sending message to customer
