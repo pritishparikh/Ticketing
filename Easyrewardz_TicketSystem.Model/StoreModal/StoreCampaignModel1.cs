@@ -89,6 +89,13 @@ namespace Easyrewardz_TicketSystem.Model
         public List<HSCampaignResponse> HSCampaignResponseList { get; set; }
     }
 
+    public class CampaignCustomerDetails
+    {
+        public List<CampaignCustomerModel> CampaignCustomerModel { get; set; }
+        public int CampaignCustomerCount { get; set; }
+    }
+
+
     public class HSCampaignResponse
     {
         /// <summary>
@@ -200,16 +207,26 @@ namespace Easyrewardz_TicketSystem.Model
     public class SendFreeTextRequest
     {
         /// <summary>
+        /// To
+        /// </summary>
+        public string To { get; set; }
+        /// <summary>
         /// ProgramCode
         /// </summary>
         public string ProgramCode { get; set; }
         /// <summary>
-        /// PhoneNumber
+        /// TemplateName
         /// </summary>
-        public string PhoneNumber { get; set; }
+        public string TemplateName { get; set; }
         /// <summary>
-        /// Text
+        /// TemplateNamespace
         /// </summary>
-        public string Text { get; set; }
+        public string TemplateNamespace { get; set; }
+        /// <summary>
+        /// TemplateName
+        /// </summary>
+        public List<string> AdditionalInfo { get; set; }
     }
+
+   
 }

@@ -46,7 +46,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         [Route("GetCampaignCustomer")]
         public ResponseModel GetCampaignCustomer(int campaignScriptID, int pageNo, int pageSize, string FilterStatus = "All")
         {
-            List<CampaignCustomerModel> obj = new List<CampaignCustomerModel>();
+            CampaignCustomerDetails obj = new CampaignCustomerDetails();
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
@@ -59,7 +59,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 obj = storecampaigncaller.GetCampaignCustomer(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, campaignScriptID, pageNo, pageSize, FilterStatus);
                 statusCode =
-                   obj.Count == 0 ?
+                   obj.CampaignCustomerCount == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
