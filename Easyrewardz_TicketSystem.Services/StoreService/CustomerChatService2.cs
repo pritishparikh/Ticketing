@@ -439,7 +439,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
 
-                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIResponse + "api/BellChatBotIntegration/SendText", JsonRequest);
+                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/SendText", JsonRequest);
 
                 if (!string.IsNullOrEmpty(ClientAPIResponse))
                 {
