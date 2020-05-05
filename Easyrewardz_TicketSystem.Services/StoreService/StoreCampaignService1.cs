@@ -229,13 +229,18 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     SendFreeTextRequest sendFreeTextRequest = new SendFreeTextRequest
                     {
+                        To = objRequest.CustomerMobileNumber.Length > 10 ? objRequest.CustomerMobileNumber : "91" + objRequest.CustomerMobileNumber,
                         ProgramCode = objRequest.ProgramCode,
-                        PhoneNumber = objRequest.CustomerMobileNumber.Length > 10 ? objRequest.CustomerMobileNumber : "91" + objRequest.CustomerMobileNumber,
-                        Text = Message
+                        TemplateName = "abc",
+                        TemplateNamespace = "abc",
+                        AdditionalInfo = new List<string>()
+                        {
+                            "abc","abcd"
+                        }
                     };
 
                     string apiReq = JsonConvert.SerializeObject(sendFreeTextRequest);
-                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendFreeText", apiReq);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendCampaign", apiReq);
 
                     //ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
 
@@ -246,7 +251,7 @@ namespace Easyrewardz_TicketSystem.Services
                     //    resultApi = chatSendSMSResponse.Id;
                     //}
 
-                    if (resultApi > 0)
+                    if (apiResponse.Equals("true"))
                     {
                         UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");
                     }
