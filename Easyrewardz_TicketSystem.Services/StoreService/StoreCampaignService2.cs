@@ -359,7 +359,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                
             }
-            InsertApiResponseData(obj, userID);
+           // InsertApiResponseData(obj, userID);
             return obj;
         }
 
