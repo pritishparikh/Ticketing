@@ -132,7 +132,7 @@ namespace Easyrewardz_TicketSystem.Services
                 try
                 {
                      apiReq = JsonConvert.SerializeObject(objOrderSearch);
-                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/GetUserATVDetails", apiReq);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetUserATVDetails", apiReq);
 
                     if (!string.IsNullOrEmpty(apiResponse))
                     {
@@ -184,7 +184,7 @@ namespace Easyrewardz_TicketSystem.Services
                 try
                 {
                     apiResponse = string.Empty;
-                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/GetKeyInsight", apiReq);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetKeyInsight", apiReq);
 
                     if (!string.IsNullOrEmpty(apiResponse))
                     {
@@ -223,42 +223,62 @@ namespace Easyrewardz_TicketSystem.Services
 
                     }
                 }
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSGetCampaignRecommendedList", conn)
+                try
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
-                cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
-                cmd.Parameters.AddWithValue("@User_ID", userID);
-                cmd.Parameters.AddWithValue("@mobile_Number", mobileNumber);
-                cmd.Parameters.AddWithValue("@program_Code", programCode);
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SP_HSGetCampaignRecommendedList", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                    cmd.Parameters.AddWithValue("@User_ID", userID);
+                    cmd.Parameters.AddWithValue("@mobile_Number", mobileNumber);
+                    cmd.Parameters.AddWithValue("@program_Code", programCode);
 
-                MySqlDataAdapter da = new MySqlDataAdapter
-                {
-                    SelectCommand = cmd
-                };
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    MySqlDataAdapter da = new MySqlDataAdapter
+                    {
+                        SelectCommand = cmd
+                    };
+                    da.Fill(ds);
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            StoreCampaignRecommended RecommendedDetail = new StoreCampaignRecommended();
+                            RecommendedDetail.mobileNumber = ds.Tables[0].Rows[i]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]);
+                            RecommendedDetail.itemCode = ds.Tables[0].Rows[i]["ItemCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemCode"]);
+                            RecommendedDetail.category = ds.Tables[0].Rows[i]["Category"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Category"]);
+                            RecommendedDetail.subCategory = ds.Tables[0].Rows[i]["SubCategory"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategory"]);
+                            RecommendedDetail.brand = ds.Tables[0].Rows[i]["Brand"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Brand"]);
+                            RecommendedDetail.color = ds.Tables[0].Rows[i]["Color"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Color"]);
+                            RecommendedDetail.size = ds.Tables[0].Rows[i]["Size"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Size"]);
+                            RecommendedDetail.price = ds.Tables[0].Rows[i]["Price"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Price"]);
+                            RecommendedDetail.url = ds.Tables[0].Rows[i]["Url"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Url"]);
+                            RecommendedDetail.imageURL = ds.Tables[0].Rows[i]["ImageURL"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ImageURL"]);
+                            objrecommended.Add(RecommendedDetail);
+
+                        }
+                        obj.campaignrecommended = objrecommended;
+                    }
+                    else
                     {
                         StoreCampaignRecommended RecommendedDetail = new StoreCampaignRecommended();
-                        RecommendedDetail.mobileNumber = ds.Tables[0].Rows[i]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]);
-                        RecommendedDetail.itemCode = ds.Tables[0].Rows[i]["ItemCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemCode"]);
-                        RecommendedDetail.category = ds.Tables[0].Rows[i]["Category"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Category"]);
-                        RecommendedDetail.subCategory = ds.Tables[0].Rows[i]["SubCategory"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategory"]);
-                        RecommendedDetail.brand = ds.Tables[0].Rows[i]["Brand"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Brand"]);
-                        RecommendedDetail.color = ds.Tables[0].Rows[i]["Color"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Color"]);
-                        RecommendedDetail.size = ds.Tables[0].Rows[i]["Size"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Size"]);
-                        RecommendedDetail.price = ds.Tables[0].Rows[i]["Price"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Price"]);
-                        RecommendedDetail.url = ds.Tables[0].Rows[i]["Url"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Url"]);
-                        RecommendedDetail.imageURL = ds.Tables[0].Rows[i]["ImageURL"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ImageURL"]);
-                        objrecommended.Add(RecommendedDetail);
 
+                        RecommendedDetail.mobileNumber = "";
+                        RecommendedDetail.itemCode = "";
+                        RecommendedDetail.category = "";
+                        RecommendedDetail.subCategory = "";
+                        RecommendedDetail.brand = "";
+                        RecommendedDetail.color = "";
+                        RecommendedDetail.size = "";
+                        RecommendedDetail.price = "";
+                        RecommendedDetail.url = "";
+                        RecommendedDetail.imageURL = "";
+                        objrecommended.Add(RecommendedDetail);
+                        obj.campaignrecommended = objrecommended;
                     }
-                    obj.campaignrecommended = objrecommended;
                 }
-                else
+                catch(Exception)
                 {
                     StoreCampaignRecommended RecommendedDetail = new StoreCampaignRecommended();
 
@@ -279,7 +299,7 @@ namespace Easyrewardz_TicketSystem.Services
                 try
                 {
                     apiResponse = string.Empty;
-                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/GetLastTransactionDetails", apiReq);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetLastTransactionDetails", apiReq);
 
                     if (!string.IsNullOrEmpty(apiResponse))
                     {
