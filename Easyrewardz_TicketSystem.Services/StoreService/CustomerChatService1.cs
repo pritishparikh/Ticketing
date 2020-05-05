@@ -449,6 +449,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
+
                 string textToReply = "Dear" + appointmentMaster.CustomerName + ",Your Visit for Our Store is schedule On" + appointmentMaster.AppointmentDate +
                     "On Time Between"+ appointmentMaster.TimeSlot;
                 #region call client api for sending message to customer
@@ -459,7 +460,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
 
-                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIResponse + "api/BellChatBotIntegration/SendText", JsonRequest);
+                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIResponse + "api/ChatbotBell/SendText", JsonRequest);
 
 
                 // response binding pending as no response structure is provided yet from client------
