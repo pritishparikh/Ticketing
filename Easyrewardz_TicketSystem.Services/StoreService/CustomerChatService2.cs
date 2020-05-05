@@ -370,14 +370,14 @@ namespace Easyrewardz_TicketSystem.Services
 
                     #region cal client send text api for sending message to customer
 
-                    //foreach (CustomerRecommendatonModel RecObj in RecommendationsList)
-                    //{
-                    //    resultCount = resultCount + SendMessageToCustomer(Chat_ID, MobileNo, ProgramCode, JsonConvert.SerializeObject(RecObj), ClientAPIURL, CreatedBy);
-                    //}
+                    foreach (CustomerRecommendatonModel RecObj in RecommendationsList)
+                    {
+                        resultCount = resultCount + SendMessageToCustomer(Chat_ID, MobileNo, ProgramCode, JsonConvert.SerializeObject(RecObj), ClientAPIURL, CreatedBy);
+                    }
 
-                     #endregion
+                    #endregion
 
-
+                    /*
 
                         foreach (CustomerRecommendatonModel RecObj in RecommendationsList)
                     {
@@ -392,6 +392,8 @@ namespace Easyrewardz_TicketSystem.Services
                         resultCount  = resultCount + SaveChatMessages(ChatMessageDetails);
 
                     }
+
+                     */
                 }
 
             }
@@ -424,6 +426,7 @@ namespace Easyrewardz_TicketSystem.Services
             CustomerChatModel ChatMessageDetails = new CustomerChatModel();
             ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
             string ClientAPIResponse = string.Empty;
+            bool isMessageSent = false;
 
             try
             {
@@ -438,15 +441,12 @@ namespace Easyrewardz_TicketSystem.Services
 
                 ClientAPIResponse = CommonService.SendApiRequest(ClientAPIResponse + "api/BellChatBotIntegration/SendText", JsonRequest);
 
-
-                // response binding pending as no response structure is provided yet from client------
-
-                //--------
-
-                #endregion
-
-                if (ChatID > 0)
+                if (!string.IsNullOrEmpty(ClientAPIResponse))
                 {
+                    isMessageSent = Convert.ToBoolean(ClientAPIResponse);
+
+                    if (isMessageSent && ChatID > 0)
+                    {
                         ChatMessageDetails.ChatID = ChatID;
                         ChatMessageDetails.Message = Message;
                         ChatMessageDetails.ByCustomer = false;
@@ -456,7 +456,12 @@ namespace Easyrewardz_TicketSystem.Services
 
                         resultCount = SaveChatMessages(ChatMessageDetails);
 
+                    }
                 }
+
+                #endregion
+
+                
 
             }
             catch (Exception )
