@@ -20,10 +20,13 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="pageNo"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public List<CampaignCustomerModel> GetCampaignCustomer(int tenantID, int userID, int campaignScriptID, int pageNo, int pageSize, string FilterStatus)
+        public CampaignCustomerDetails GetCampaignCustomer(int tenantID, int userID, int campaignScriptID, int pageNo, int pageSize, string FilterStatus)
         {
             DataSet ds = new DataSet();
+            CampaignCustomerDetails objdetails = new CampaignCustomerDetails();
+
             List<CampaignCustomerModel> objList = new List<CampaignCustomerModel>();
+            int CustomerCount = 0;
             try
             {
                 conn.Open();
@@ -81,6 +84,12 @@ namespace Easyrewardz_TicketSystem.Services
                         objList.Add(obj);
                     }
                 }
+                if (ds != null && ds.Tables[2] != null)
+                {
+                    CustomerCount = ds.Tables[2].Rows[0]["TotalCustomerCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["TotalCustomerCount"]);
+                }
+                objdetails.CampaignCustomerModel = objList;
+                objdetails.CampaignCustomerCount = CustomerCount;
             }
             catch (Exception)
             {
@@ -97,7 +106,7 @@ namespace Easyrewardz_TicketSystem.Services
                     ds.Dispose();
                 }
             }
-            return objList;
+            return objdetails;
         }
 
         /// <summary>

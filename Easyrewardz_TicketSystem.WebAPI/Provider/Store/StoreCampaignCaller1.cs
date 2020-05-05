@@ -6,7 +6,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
     public partial class StoreCampaignCaller
     {
-        public List<CampaignCustomerModel> GetCampaignCustomer(IStoreCampaign Campaign, int tenantID, int userID, int campaignScriptID, int pageNo, int pageSize, string FilterStatus)
+        public CampaignCustomerDetails GetCampaignCustomer(IStoreCampaign Campaign, int tenantID, int userID, int campaignScriptID, int pageNo, int pageSize, string FilterStatus)
         {
             _CampaignRepository = Campaign;
             return _CampaignRepository.GetCampaignCustomer(tenantID, userID, campaignScriptID, pageNo, pageSize, FilterStatus);
