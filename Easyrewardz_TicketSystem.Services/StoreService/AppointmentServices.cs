@@ -86,58 +86,6 @@ namespace Easyrewardz_TicketSystem.Services
             return appointments;
         }
 
-
-        public List<AppointmentCustomer> GetAppointmentCustomerList(int TenantID, string AppDate,int SlotId)
-        {
-
-            DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
-            List<AppointmentCustomer> appointments = new List<AppointmentCustomer>();
-            try
-            {
-                conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSAppointmentCustomerDeatils", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
-                cmd1.Parameters.AddWithValue("@Apt_Date", AppDate);
-                cmd1.Parameters.AddWithValue("@Slot_Id", SlotId);
-
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        AppointmentCustomer obj = new AppointmentCustomer
-                        {
-                            AppointmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["AppointmentID"]),
-                            CustomerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
-                            CustomerNumber = Convert.ToString(ds.Tables[0].Rows[i]["CustomerNumber"]),
-                            NOofPeople = Convert.ToInt32(ds.Tables[0].Rows[i]["NOofPeople"]),
-                            Status = ds.Tables[0].Rows[i]["Status"].ToString() == "" ? "" : Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]) == 1 ? "Visited" : Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]) == 2 ? "Not Visited" : "Cancel",
-
-                        };
-                        appointments.Add(obj);
-                    } 
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
-            return appointments;
-        }
-
         /// <summary>
         /// Get Appointment Count
         /// </summary>

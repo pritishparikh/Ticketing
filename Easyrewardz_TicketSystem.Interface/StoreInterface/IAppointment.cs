@@ -9,8 +9,6 @@ namespace Easyrewardz_TicketSystem.Interface
     {
         List<AppointmentModel> GetAppointmentList(int TenantID, string AppDate);
 
-        List<AppointmentCustomer> GetAppointmentCustomerList(int TenantID, string AppDate, int SlotId);
-
         List<AppointmentCount> GetAppointmentCount(int TenantID);
 
         int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId);
