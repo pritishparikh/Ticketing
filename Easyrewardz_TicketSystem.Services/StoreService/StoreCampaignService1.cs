@@ -226,7 +226,7 @@ namespace Easyrewardz_TicketSystem.Services
                     };
 
                     string apiReq = JsonConvert.SerializeObject(sendFreeTextRequest);
-                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/SendFreeText", apiReq);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendFreeText", apiReq);
 
                     //ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
 
@@ -364,7 +364,7 @@ namespace Easyrewardz_TicketSystem.Services
                     };
                     
                     string apiReq = JsonConvert.SerializeObject(chatSendSMS);
-                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/BellChatBotIntegration/SendSMS", apiReq);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendSMS", apiReq);
 
                     ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
 
