@@ -674,6 +674,10 @@ namespace Easyrewardz_TicketSystem.Services
                             CategoryName = ds.Tables[1].Rows[0]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["CategoryName"]),
                             SubCategoryName = ds.Tables[1].Rows[0]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["SubCategoryName"]),
                             IssueTypeName = ds.Tables[1].Rows[0]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["IssueTypeName"]),
+                            StoreID = ds.Tables[1].Rows[0]["StoreID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["StoreID"]),
+                            StoreNames = ds.Tables[1].Rows[0]["StoreName"] == DBNull.Value ? "NA" : Convert.ToString(ds.Tables[1].Rows[0]["StoreName"]),
+                            ProductID = ds.Tables[1].Rows[0]["OrderItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["OrderItemID"]),
+                            ProductNames = ds.Tables[1].Rows[0]["SKUName"] == DBNull.Value ? "NA" : Convert.ToString(ds.Tables[1].Rows[0]["SKUName"]),
                         };
 
                     }
