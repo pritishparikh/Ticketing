@@ -89,6 +89,15 @@ namespace Easyrewardz_TicketSystem.Model
         public List<HSCampaignResponse> HSCampaignResponseList { get; set; }
     }
 
+    public class CampaingCustomerFilterRequest
+    {
+        public int CampaignScriptID { get; set; }
+        public int PageNo { get; set; }
+        public int PageSize { get; set; }
+        public string FilterStatus { get; set; } = "All";
+        public string MobileNumber { get; set; } = "";
+    }
+
     public class CampaignCustomerDetails
     {
         public List<CampaignCustomerModel> CampaignCustomerModel { get; set; }

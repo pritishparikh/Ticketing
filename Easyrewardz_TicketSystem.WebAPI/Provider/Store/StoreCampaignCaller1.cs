@@ -6,10 +6,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
     public partial class StoreCampaignCaller
     {
-        public CampaignCustomerDetails GetCampaignCustomer(IStoreCampaign Campaign, int tenantID, int userID, int campaignScriptID, int pageNo, int pageSize, string FilterStatus)
+        public CampaignCustomerDetails GetCampaignCustomer(IStoreCampaign Campaign, int tenantID, int userID, CampaingCustomerFilterRequest campaingCustomerFilterRequest)
         {
             _CampaignRepository = Campaign;
-            return _CampaignRepository.GetCampaignCustomer(tenantID, userID, campaignScriptID, pageNo, pageSize, FilterStatus);
+            return _CampaignRepository.GetCampaignCustomer(tenantID, userID, campaingCustomerFilterRequest);
         }
 
         public int UpdateCampaignStatusResponse(IStoreCampaign Campaign, CampaignResponseInput objRequest, int TenantID, int UserID)

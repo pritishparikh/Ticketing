@@ -20,7 +20,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="pageNo"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public CampaignCustomerDetails GetCampaignCustomer(int tenantID, int userID, int campaignScriptID, int pageNo, int pageSize, string FilterStatus)
+        public CampaignCustomerDetails GetCampaignCustomer(int tenantID, int userID, CampaingCustomerFilterRequest campaingCustomerFilterRequest)
         {
             DataSet ds = new DataSet();
             CampaignCustomerDetails objdetails = new CampaignCustomerDetails();
@@ -36,10 +36,11 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@_TenantID", tenantID);
                 cmd.Parameters.AddWithValue("@_UserID", userID);
-                cmd.Parameters.AddWithValue("@_CampaignScriptID", campaignScriptID);
-                cmd.Parameters.AddWithValue("@_pageno", pageNo);
-                cmd.Parameters.AddWithValue("@_pagesize", pageSize);
-                cmd.Parameters.AddWithValue("@_FilterStatus", FilterStatus);
+                cmd.Parameters.AddWithValue("@_CampaignScriptID", campaingCustomerFilterRequest.CampaignScriptID);
+                cmd.Parameters.AddWithValue("@_pageno", campaingCustomerFilterRequest.PageNo);
+                cmd.Parameters.AddWithValue("@_pagesize", campaingCustomerFilterRequest.PageSize);
+                cmd.Parameters.AddWithValue("@_FilterStatus", campaingCustomerFilterRequest.FilterStatus);
+                cmd.Parameters.AddWithValue("@_MobileNumber", campaingCustomerFilterRequest.MobileNumber);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
