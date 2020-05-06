@@ -200,7 +200,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     foreach(CustomItemSearchResponseModel Item in ItemList)
                     {
-                        Item.imageURL = "https://img2.bata.in/0/images/product/854-6523_700x650_1.jpeg"; 
+                        Item.imageURL = "https://img2.bata.in/0/images/product/854-6523_700x650_1.jpeg";
                          Item.url = "https://www.bata.in/bataindia/pr-1463307_c-262/black-slipons-for-men.html";
                     }
                 }
