@@ -151,14 +151,17 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="SearchText"></param>
         /// <returns></returns>
-        public List<CustomItemSearchResponseModel> ChatItemDetailsSearch(string SearchText)
+        public List<CustomItemSearchResponseModel> ChatItemDetailsSearch(string ClientAPIURL, string SearchText, string ProgramCode)
         {
 
             List<CustomItemSearchResponseModel> ItemList = new List<CustomItemSearchResponseModel>();
-
+            ClientCustomGetItemOnSearch SearchItemRequest = new ClientCustomGetItemOnSearch();
+            string ClientAPIResponse = string.Empty;
             try
             {
 
+                #region oldcode
+                /*
                 for(int i=0; i< 6; i++)
                 {
                     ItemList.Add(new
@@ -171,16 +174,46 @@ namespace Easyrewardz_TicketSystem.Services
                         RedirectionUrl = "https://www.bata.in/bataindia/pr-1463307_c-262/black-slipons-for-men.html"
                     });
                 }
-                
+                */
+
+                #endregion
+
+                #region call client api for getting item list
+
+                SearchItemRequest.programcode = ProgramCode;
+               SearchItemRequest.searchCriteria = SearchText;
+
+
+                string JsonRequest = JsonConvert.SerializeObject(SearchItemRequest);
+
+                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetItemsByArticlesSKUID", JsonRequest);
+
+                if (!string.IsNullOrEmpty(ClientAPIResponse))
+                {
+                    ItemList = JsonConvert.DeserializeObject<List<CustomItemSearchResponseModel>>(ClientAPIResponse);
+                }
+
+
+                //url addition for demo purpose need to remove later
+
+                if(ItemList.Count > 0)
+                {
+                    foreach(CustomItemSearchResponseModel Item in ItemList)
+                    {
+                        Item.imageURL = "https://img2.bata.in/0/images/product/854-6523_700x650_1.jpeg";
+                         Item.url = "https://www.bata.in/bataindia/pr-1463307_c-262/black-slipons-for-men.html";
+                    }
+                }
+
+
+                #endregion
+
             }
             catch (Exception)
             {
                 throw;
             }
-            finally
-            {
-                conn.Close();
-            }
+            
             return ItemList;
         }
 
@@ -313,6 +346,7 @@ namespace Easyrewardz_TicketSystem.Services
             string ProgramCode = string.Empty;
             List<CustomerRecommendatonModel> RecommendationsList = new List<CustomerRecommendatonModel>();
             DataSet ds = new DataSet();
+            string HtmlMessageContent = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\"><img class=\"chat-product-img\" src=\"{0}\" alt=\"Product Image\" ></div><div class=\"col-md-10 bkcprdt\"><div><label class=\"chat-product-name\">Brand :{1}</label></div><div><label class=\"chat-product-code\">Category: {2}</label></div><div><label class=\"chat-product-code\">SubCategory: {3}</label></div><div><label class=\"chat-product-code\">Color: {4}</label></div><div><label class=\"chat-product-code\">Size: {5}</label></div><div><label class=\"chat-product-code\">Item Code: {6}</label></div><div><label class=\"chat-product-prize\"> Price : {7}</label></div><div><a href=\"{8}\" target=\"_blank\" class=\"chat-product-url\">{9}</a></div></div></div></div>";
 
             try
             {
@@ -322,7 +356,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Open();
                 }
 
-                cmd = new MySqlCommand("SP_HSGetRecomendationsByCustomer", conn);
+                cmd = new MySqlCommand("SP_HSGetRecomendationsByCustomerID", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", MobileNo);
@@ -368,24 +402,29 @@ namespace Easyrewardz_TicketSystem.Services
                 if(RecommendationsList.Count > 0 && Chat_ID > 0 && !string.IsNullOrEmpty(ProgramCode))
                 {
 
-                    #region cal client send text api for sending message to customer
+                    #region call client send text api for sending message to customer
 
                     foreach (CustomerRecommendatonModel RecObj in RecommendationsList)
                     {
-                        resultCount = resultCount + SendMessageToCustomer(Chat_ID, MobileNo, ProgramCode, JsonConvert.SerializeObject(RecObj), ClientAPIURL, CreatedBy);
+
+                        resultCount = resultCount + SendMessageToCustomer(Chat_ID, MobileNo, ProgramCode, RecObj.Url, ClientAPIURL, CreatedBy,0);
                     }
 
                     #endregion
 
-                    /*
 
-                        foreach (CustomerRecommendatonModel RecObj in RecommendationsList)
+
+                    foreach (CustomerRecommendatonModel RecObj in RecommendationsList)
                     {
+
+                        string messagecontent = string.Format(HtmlMessageContent, RecObj.ImageURL, RecObj.Brand, RecObj.Category, RecObj.SubCategory, RecObj.Color
+                                                , RecObj.Size, RecObj.ItemCode, RecObj.Price, RecObj.Url, RecObj.Url);
+
                         CustomerChatModel ChatMessageDetails = new CustomerChatModel();
                         ChatMessageDetails.ChatID = Chat_ID;
-                        ChatMessageDetails.Message = JsonConvert.SerializeObject(RecObj);
+                        ChatMessageDetails.Message = messagecontent;
                         ChatMessageDetails.ByCustomer =false;
-                        ChatMessageDetails.ChatStatus = 1;
+                        ChatMessageDetails.ChatStatus = 0;
                         ChatMessageDetails.StoreManagerId = CreatedBy;
                         ChatMessageDetails.CreatedBy = CreatedBy;
 
@@ -393,7 +432,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                     }
 
-                     */
+                     
                 }
 
             }
@@ -419,7 +458,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ClientAPIURL"></param>
         /// <param name="CreatedBy"></param>
         /// <returns></returns>
-        public int SendMessageToCustomer(int ChatID, string MobileNo, string ProgramCode, string Message, string ClientAPIURL, int CreatedBy)
+        public int SendMessageToCustomer(int ChatID, string MobileNo, string ProgramCode, string Message, string ClientAPIURL, int CreatedBy, int InsertChat)
         {
             MySqlCommand cmd = new MySqlCommand();
             int resultCount = 0;
@@ -435,7 +474,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 SendTextRequest.To = MobileNo;
                 SendTextRequest.textToReply = Message;
-                SendTextRequest.programCode = ProgramCode;
+                SendTextRequest.programCode ="bata";// ProgramCode;
 
                 string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
 
@@ -445,7 +484,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     isMessageSent = Convert.ToBoolean(ClientAPIResponse);
 
-                    if (isMessageSent && ChatID > 0)
+                    if (isMessageSent && ChatID > 0 && InsertChat.Equals(1))
                     {
                         ChatMessageDetails.ChatID = ChatID;
                         ChatMessageDetails.Message = Message;

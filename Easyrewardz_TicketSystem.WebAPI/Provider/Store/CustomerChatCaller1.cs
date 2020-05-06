@@ -92,12 +92,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name=""></param>
         /// <returns></returns>
         /// 
-        public int GetChatCount(ICustomerChat customerChat,int tenantID)
+        public int GetChatCount(ICustomerChat customerChat,int tenantID,int UserMasterID)
         {
 
             _customerChat = customerChat;
 
-            return _customerChat.GetChatCount(tenantID);
+            return _customerChat.GetChatCount(tenantID, UserMasterID);
         }
 
         /// <summary>

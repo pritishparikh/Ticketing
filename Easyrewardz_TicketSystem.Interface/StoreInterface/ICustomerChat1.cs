@@ -19,7 +19,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<CustomerChatHistory> CustomerChatHistory(int chatID);
 
-        int GetChatCount(int tenantID);
+        int GetChatCount(int tenantID, int UserMasterID);
 
         List<DateofSchedule> GetTimeSlot(int storeID,int userMasterID, int tenantID);
 

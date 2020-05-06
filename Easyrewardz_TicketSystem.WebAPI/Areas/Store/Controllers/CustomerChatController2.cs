@@ -109,7 +109,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("searchChatItemDetails")]
-        public ResponseModel searchChatItemDetails(string SearchText)
+        public ResponseModel searchChatItemDetails(string SearchText, string ProgramCode)
         {
             ResponseModel objResponseModel = new ResponseModel();
             List<CustomItemSearchResponseModel> ItemList = new List<CustomItemSearchResponseModel>();
@@ -125,7 +125,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                ItemList = customerChatCaller.ChatItemSearch(new CustomerChatService(_connectionString), SearchText);
+                ItemList = customerChatCaller.ChatItemSearch(new CustomerChatService(_connectionString),_ClientAPIUrl, SearchText, ProgramCode);
                 statusCode = ItemList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
@@ -271,7 +271,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("sendMessageToCustomer")]
-        public ResponseModel sendMessageToCustomer(int ChatID, string MobileNo, string ProgramCode, string Message)
+        public ResponseModel sendMessageToCustomer(int ChatID, string MobileNo, string ProgramCode, string Message, int InsertChat=1)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int result = 0;
@@ -287,7 +287,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
                 result = customerChatCaller.SendMessageToCustomer(new CustomerChatService(_connectionString),  ChatID,  MobileNo,  ProgramCode, 
-                          Message, _ClientAPIUrl, authenticate.UserMasterID);
+                          Message, _ClientAPIUrl, authenticate.UserMasterID, InsertChat);
 
                 statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

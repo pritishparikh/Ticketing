@@ -359,7 +359,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                
             }
-          //  InsertApiResponseData(obj, userID);
+           // InsertApiResponseData(obj, userID);
             return obj;
         }
 
@@ -533,7 +533,9 @@ namespace Easyrewardz_TicketSystem.Services
         public int InsertApiResponseData(StoresCampaignStatusResponse obj, int userID)
         {
             int result = 0;
-             try
+            int TransactionID = 0;
+            DataSet ds = new DataSet();
+            try
             {
                 conn.Close();
                 conn.Open();
@@ -567,13 +569,43 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd2.Parameters.AddWithValue("@_billDate", obj.lasttransactiondetails.billDate);
                 cmd2.Parameters.AddWithValue("@_storeName", obj.lasttransactiondetails.storeName);
                 cmd2.Parameters.AddWithValue("@_amount", obj.lasttransactiondetails.amount);
-               // cmd2.Parameters.AddWithValue("@_itemDetails", obj.lasttransactiondetails.itemDetails);
                 cmd2.Parameters.AddWithValue("@_UserID", userID);
-                result = Convert.ToInt32(cmd2.ExecuteNonQuery());
+               // cmd2.ExecuteNonQuery();
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd2;
+
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        TransactionID = ds.Tables[0].Rows[0]["TransactionID"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["TransactionID"]);
+                    }
+
+                }
+
+                if (obj.lasttransactiondetails.itemDetails.Count>0)
+                {
+                    for(int i=0;i< obj.lasttransactiondetails.itemDetails.Count;i++)
+                    {
+                        MySqlCommand cmd3 = new MySqlCommand("SP_HScreateLastTransactionItemDetails", conn)
+                        {
+                            CommandType = CommandType.StoredProcedure
+                        };
+                        cmd3.Parameters.AddWithValue("@_mobileNo", obj.lasttransactiondetails.itemDetails[i].mobileNo);
+                        cmd3.Parameters.AddWithValue("@_article", obj.lasttransactiondetails.itemDetails[i].article);
+                        cmd3.Parameters.AddWithValue("@_quantity", obj.lasttransactiondetails.itemDetails[i].quantity);
+                        cmd3.Parameters.AddWithValue("@_amount", obj.lasttransactiondetails.itemDetails[i].amount);
+                        cmd3.Parameters.AddWithValue("@_UserID", userID);
+                        cmd3.Parameters.AddWithValue("@_TransactionID", TransactionID);
+                        result = Convert.ToInt32(cmd3.ExecuteNonQuery());
+                    }
+                }
             }
             catch (Exception)
             {
-                throw;
+                //throw;
             }
             finally
             {
