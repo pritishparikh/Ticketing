@@ -13,7 +13,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int SaveChatMessages(CustomerChatModel ChatMessageDetails);
 
-        List<CustomItemSearchResponseModel>  ChatItemDetailsSearch(string SearchText);
+        List<CustomItemSearchResponseModel>  ChatItemDetailsSearch(string ClientAPIURL,string SearchText, string ProgramCode);
 
         int SaveCustomerChatMessageReply(CustomerChatReplyModel ChatReply); 
 

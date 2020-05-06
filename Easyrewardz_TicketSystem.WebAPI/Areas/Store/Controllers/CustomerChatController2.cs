@@ -109,7 +109,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("searchChatItemDetails")]
-        public ResponseModel searchChatItemDetails(string SearchText)
+        public ResponseModel searchChatItemDetails(string SearchText, string ProgramCode)
         {
             ResponseModel objResponseModel = new ResponseModel();
             List<CustomItemSearchResponseModel> ItemList = new List<CustomItemSearchResponseModel>();
@@ -125,7 +125,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                ItemList = customerChatCaller.ChatItemSearch(new CustomerChatService(_connectionString), SearchText);
+                ItemList = customerChatCaller.ChatItemSearch(new CustomerChatService(_connectionString),_ClientAPIUrl, SearchText, ProgramCode);
                 statusCode = ItemList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 

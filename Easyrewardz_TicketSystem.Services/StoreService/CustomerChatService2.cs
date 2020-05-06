@@ -151,14 +151,17 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="SearchText"></param>
         /// <returns></returns>
-        public List<CustomItemSearchResponseModel> ChatItemDetailsSearch(string SearchText)
+        public List<CustomItemSearchResponseModel> ChatItemDetailsSearch(string ClientAPIURL, string SearchText, string ProgramCode)
         {
 
             List<CustomItemSearchResponseModel> ItemList = new List<CustomItemSearchResponseModel>();
-
+            ClientCustomGetItemOnSearch SearchItemRequest = new ClientCustomGetItemOnSearch();
+            string ClientAPIResponse = string.Empty;
             try
             {
 
+                #region oldcode
+                /*
                 for(int i=0; i< 6; i++)
                 {
                     ItemList.Add(new
@@ -171,16 +174,33 @@ namespace Easyrewardz_TicketSystem.Services
                         RedirectionUrl = "https://www.bata.in/bataindia/pr-1463307_c-262/black-slipons-for-men.html"
                     });
                 }
-                
+                */
+
+                #endregion
+
+                #region call client api for getting item list
+
+                SearchItemRequest.programcode = ProgramCode;
+               SearchItemRequest.searchCriteria = SearchText;
+
+
+                string JsonRequest = JsonConvert.SerializeObject(SearchItemRequest);
+
+                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetItemsByArticlesSKUID", JsonRequest);
+
+                if (!string.IsNullOrEmpty(ClientAPIResponse))
+                {
+                    ItemList = JsonConvert.DeserializeObject<List<CustomItemSearchResponseModel>>(ClientAPIResponse);
+                }
+
+                #endregion
+
             }
             catch (Exception)
             {
                 throw;
             }
-            finally
-            {
-                conn.Close();
-            }
+            
             return ItemList;
         }
 

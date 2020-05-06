@@ -7,29 +7,38 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
     public class CustomItemSearchResponseModel
     {
         /// <summary>
-        /// Item Image URL
+        ///productName
         /// </summary>
-        public int ItemID { get; set; }
+        public string productName { get; set; }
         /// <summary>
-        /// Item Image URL
+        /// uniqueItemCode
         /// </summary>
-        public string ImageURL { get; set; }
+        public string uniqueItemCode { get; set; }
 
         /// <summary>
         /// Label
         /// </summary>
-        public string Label { get; set; }
+        public string price { get; set; }
 
         /// <summary>
-        /// AlterbativeText
+        /// discount
         /// </summary>
-        public string AlternativeText { get; set; }
+        public string discount { get; set; }
 
         /// <summary>
         /// RedirectionUrl
         /// </summary>
-        public string RedirectionUrl { get; set; }
+        public string url { get; set; }
+
+
+        /// <summary>
+        /// imageURL
+        /// </summary>
+        public string imageURL { get; set; }
+
 
 
     }
+
+
 }
