@@ -122,7 +122,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ChatID", ChatMessageDetails.ChatID);
                 cmd.Parameters.AddWithValue("@_Message", string.IsNullOrEmpty(ChatMessageDetails.Message) ? "" : ChatMessageDetails.Message);
                 cmd.Parameters.AddWithValue("@_ByCustomer", ChatMessageDetails.ByCustomer ? 1 : 2);
-                cmd.Parameters.AddWithValue("@_Status", ChatMessageDetails.ChatStatus);
+                cmd.Parameters.AddWithValue("@_Status",!ChatMessageDetails.ByCustomer ? 0 : 1);
                 cmd.Parameters.AddWithValue("@_StoreManagerId", ChatMessageDetails.StoreManagerId);
                 cmd.Parameters.AddWithValue("@_CreatedBy", ChatMessageDetails.CreatedBy);
 
@@ -183,15 +183,22 @@ namespace Easyrewardz_TicketSystem.Services
                 SearchItemRequest.programcode = ProgramCode;
                SearchItemRequest.searchCriteria = SearchText;
 
-
-                string JsonRequest = JsonConvert.SerializeObject(SearchItemRequest);
-
-                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetItemsByArticlesSKUID", JsonRequest);
-
-                if (!string.IsNullOrEmpty(ClientAPIResponse))
+                try
                 {
-                    ItemList = JsonConvert.DeserializeObject<List<CustomItemSearchResponseModel>>(ClientAPIResponse);
+                    string JsonRequest = JsonConvert.SerializeObject(SearchItemRequest);
+
+                    ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetItemsByArticlesSKUID", JsonRequest);
+
+                    if (!string.IsNullOrEmpty(ClientAPIResponse))
+                    {
+                        ItemList = JsonConvert.DeserializeObject<List<CustomItemSearchResponseModel>>(ClientAPIResponse);
+                    }
                 }
+                catch(Exception )
+                {
+                    ClientAPIResponse = string.Empty;
+                }
+                
 
 
                 //url addition for demo purpose need to remove later
