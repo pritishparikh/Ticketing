@@ -237,7 +237,7 @@ namespace Easyrewardz_TicketSystem.Services
                         customClaimList.EmailID = ds.Tables[0].Rows[i]["CustomerEmailId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
                         customClaimList.AlternateEmailID = ds.Tables[0].Rows[i]["AltEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AltEmailID"]);
                         customClaimList.Gender = ds.Tables[0].Rows[i]["Gender"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Gender"]);
-                        customClaimList.ClaimAskFor= ds.Tables[0].Rows[i]["ClaimPercent"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ClaimPercent"]);
+                        customClaimList.ClaimAskFor= ds.Tables[0].Rows[i]["ClaimPercent"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["ClaimPercent"]);
                         customClaimList.TargetClouserDate = ds.Tables[0].Rows[i]["ClosureDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureDate"]);
                         customClaimList.TicketID = ds.Tables[0].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
                         customClaimList.TicketingTaskID = ds.Tables[0].Rows[i]["TicketingTaskID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketingTaskID"]);
