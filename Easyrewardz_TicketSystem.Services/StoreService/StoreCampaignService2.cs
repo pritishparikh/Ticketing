@@ -195,18 +195,20 @@ namespace Easyrewardz_TicketSystem.Services
 
                             if (objkeyinsight != null)
                             {
-                                StoreCampaignKeyInsight popupDetail = new StoreCampaignKeyInsight();
-
-                                popupDetail.mobileNumber = objkeyinsight.mobileNumber;
-                                popupDetail.insightText = objkeyinsight.insightText;
+                                StoreCampaignKeyInsight popupDetail = new StoreCampaignKeyInsight
+                                {
+                                    mobileNumber = objkeyinsight.mobileNumber,
+                                    insightText = String.IsNullOrEmpty(objkeyinsight.insightText.Trim()) ? GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID) : objkeyinsight.insightText
+                                };
                                 obj.campaignkeyinsight = popupDetail;
-
                             }
                             else
                             {
-                                StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight();
-                                KeyInsight.mobileNumber = "";
-                                KeyInsight.insightText = "";
+                                StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight
+                                {
+                                    mobileNumber = mobileNumber,
+                                    insightText = GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID)
+                                };
                                 obj.campaignkeyinsight = KeyInsight;
                             }
                         }
@@ -216,11 +218,12 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (obj.campaignkeyinsight == null)
                     {
-                        StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight();
-                        KeyInsight.mobileNumber = "";
-                        KeyInsight.insightText = "";
+                        StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight
+                        {
+                            mobileNumber = "",
+                            insightText = ""
+                        };
                         obj.campaignkeyinsight = KeyInsight;
-
                     }
                 }
                 try
@@ -360,6 +363,49 @@ namespace Easyrewardz_TicketSystem.Services
                
             }
            // InsertApiResponseData(obj, userID);
+            return obj;
+        }
+
+        /// <summary>
+        /// Get Key Insight As ChatBot
+        /// </summary>
+        /// <param name="mobileNumber"></param>
+        /// <param name="programCode"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public string GetKeyInsightAsChatBot(string mobileNumber, string programCode, int tenantID, int userID)
+        {
+            string obj = "";
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_HSGetKeyInsightAsChatBot", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantID);
+                cmd.Parameters.AddWithValue("@_UserID", userID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", programCode);
+                cmd.Parameters.AddWithValue("@_MobileNumber", mobileNumber);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    obj = ds.Tables[0].Rows[0]["Message"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Message"]);
+                }
+            }
+            catch(Exception ex)
+            {
+                obj = "";
+            }
+
             return obj;
         }
 

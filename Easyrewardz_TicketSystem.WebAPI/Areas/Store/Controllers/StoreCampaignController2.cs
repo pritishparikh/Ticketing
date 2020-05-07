@@ -53,6 +53,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get Customer popup Details
+        /// </summary>
+        /// <param name="mobileNumber"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetCustomerpopupDetails")]
         public ResponseModel GetCustomerpopupDetails(string mobileNumber,string programCode)
