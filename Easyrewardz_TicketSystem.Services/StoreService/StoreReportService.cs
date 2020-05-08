@@ -29,12 +29,12 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="StoreReportModel"></param>
         /// <returns></returns>
-        public int GetStoreReportSearch(StoreReportModel searchModel)
+        public int GetStoreReportSearch(StoreReportModel searchModel, List<StoreUserListing> StoreUserList)
         {
 
             MySqlCommand cmd = new MySqlCommand();
             int resultCount = 0;
-            List<StoreUserListing> StoreUserList = new List<StoreUserListing>();
+
             string UserList = "";
             try
             {
@@ -43,40 +43,48 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Open();
                 }
 
-
-
                 // get all users if created by =0 and assigned user =0
-                StoreUserService StoreUser = new StoreUserService(conn.ConnectionString);
-                StoreUserList = StoreUser.GetStoreUserList(searchModel.TenantID);
+
                 if (StoreUserList.Count > 0)
                 {
                     UserList = string.Join(',', StoreUserList.AsEnumerable().Select(x => x.UserID).ToList());
                 }
 
-                if (searchModel.TaskCreatedBy.Equals("0"))
+                if (searchModel.ActiveTabId.Equals(1))
                 {
-                    searchModel.TaskCreatedBy = UserList;
+
+                    if (searchModel.TaskCreatedBy.Equals("0"))
+                    {
+                        searchModel.TaskCreatedBy = UserList;
+                    }
+
+                    if (searchModel.TaskAssignedId.Equals("0"))
+                    {
+                        searchModel.TaskAssignedId = UserList;
+                    }
                 }
 
-                if (searchModel.TaskAssignedId.Equals("0"))
+                else if (searchModel.ActiveTabId.Equals(2))
                 {
-                    searchModel.TaskAssignedId = UserList;
+                    if (searchModel.ClaimCreatedBy.Equals("0"))
+                    {
+                        searchModel.ClaimCreatedBy = UserList;
+                    }
+
+                    if (searchModel.ClaimAssignedId.Equals("0"))
+                    {
+                        searchModel.ClaimAssignedId = UserList;
+                    }
                 }
 
-                if (searchModel.ClaimCreatedBy.Equals("0"))
+                else
                 {
-                    searchModel.ClaimCreatedBy = UserList;
+                    if (searchModel.CampaignAssignedIds.Equals("0"))
+                    {
+                        searchModel.CampaignAssignedIds = UserList;
+                    }
                 }
 
-                if (searchModel.ClaimAssignedId.Equals("0"))
-                {
-                    searchModel.ClaimAssignedId = UserList;
-                }
-
-                if (searchModel.CampaignAssignedIds.Equals("0"))
-                {
-                    searchModel.CampaignAssignedIds = UserList;
-                }
 
 
                 //--------
@@ -90,17 +98,17 @@ namespace Easyrewardz_TicketSystem.Services
                 /*------------------ TASK PARAMETERS ------------------------------*/
 
                 cmd.Parameters.AddWithValue("@_TaskTitle", string.IsNullOrEmpty(searchModel.TaskTitle) ? "" : searchModel.TaskTitle);
-                cmd.Parameters.AddWithValue("@_TaskStatus", string.IsNullOrEmpty(searchModel.TaskStatus) ? "" :  searchModel.TaskStatus);
-                cmd.Parameters.AddWithValue("@_IsTaskWithTicket",Convert.ToInt16( searchModel.IsTaskWithTicket));
-                cmd.Parameters.AddWithValue("@_TaskTicketID", searchModel.TaskTicketID);
+                cmd.Parameters.AddWithValue("@_TaskStatus", string.IsNullOrEmpty(searchModel.TaskStatus) ? "" : searchModel.TaskStatus);
+                cmd.Parameters.AddWithValue("@_IsTaskWithTicket", Convert.ToInt16(searchModel.IsTaskWithTicket));
+                cmd.Parameters.AddWithValue("@_TaskTicketID", searchModel.TaskTicketID == null ? 0 : searchModel.TaskTicketID);
                 cmd.Parameters.AddWithValue("@_DepartmentIds", string.IsNullOrEmpty(searchModel.DepartmentIds) ? "" : searchModel.DepartmentIds);
                 cmd.Parameters.AddWithValue("@_FunctionIds", string.IsNullOrEmpty(searchModel.FunctionIds) ? "" : searchModel.FunctionIds);
-                cmd.Parameters.AddWithValue("@_PriorityIds", string.IsNullOrEmpty(searchModel.PriorityIds) ? "" :  searchModel.PriorityIds);
+                cmd.Parameters.AddWithValue("@_PriorityIds", string.IsNullOrEmpty(searchModel.PriorityIds) ? "" : searchModel.PriorityIds);
                 cmd.Parameters.AddWithValue("@_IsTaskWithClaim", Convert.ToInt16(searchModel.IsTaskWithClaim));
-                cmd.Parameters.AddWithValue("@_TaskClaimID", searchModel.TaskClaimID);
-                cmd.Parameters.AddWithValue("@_TaskCreatedDate", searchModel.TaskCreatedDate);
-                cmd.Parameters.AddWithValue("@_TaskCreatedBy", searchModel.TaskCreatedBy);
-                cmd.Parameters.AddWithValue("@_TaskAssignedId", searchModel.TaskAssignedId);
+                cmd.Parameters.AddWithValue("@_TaskClaimID", searchModel.TaskClaimID == null ? 0 : searchModel.TaskClaimID);
+                cmd.Parameters.AddWithValue("@_TaskCreatedDate", string.IsNullOrEmpty(searchModel.TaskCreatedDate) ? "" : searchModel.TaskCreatedDate);
+                cmd.Parameters.AddWithValue("@_TaskCreatedBy", string.IsNullOrEmpty(searchModel.TaskCreatedBy) ? "" : searchModel.TaskCreatedBy);
+                cmd.Parameters.AddWithValue("@_TaskAssignedId", string.IsNullOrEmpty(searchModel.TaskAssignedId) ? "" : searchModel.TaskAssignedId);
 
                 /*------------------ ENDS HERE-------------------------------*/
 
@@ -109,22 +117,22 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ClaimID", searchModel.ClaimID);
                 cmd.Parameters.AddWithValue("@_ClaimStatus", string.IsNullOrEmpty(searchModel.ClaimStatus) ? "" : searchModel.ClaimStatus);
                 cmd.Parameters.AddWithValue("@_IsClaimWithTicket", Convert.ToInt16(searchModel.IsClaimWithTicket));
-                cmd.Parameters.AddWithValue("@_ClaimTicketID", searchModel.ClaimTicketID);
+                cmd.Parameters.AddWithValue("@_ClaimTicketID", searchModel.ClaimTicketID == null ? 0 : searchModel.ClaimTicketID);
                 cmd.Parameters.AddWithValue("@_ClaimCategoryIds", string.IsNullOrEmpty(searchModel.ClaimCategoryIds) ? "" : searchModel.ClaimCategoryIds);
                 cmd.Parameters.AddWithValue("@_ClaimSubCategoryIds", string.IsNullOrEmpty(searchModel.ClaimSubCategoryIds) ? "" : searchModel.ClaimSubCategoryIds);
                 cmd.Parameters.AddWithValue("@_ClaimIssuetypeIds", string.IsNullOrEmpty(searchModel.ClaimIssuetypeIds) ? "" : searchModel.ClaimIssuetypeIds);
                 cmd.Parameters.AddWithValue("@_IsClaimWithTask", Convert.ToInt16(searchModel.IsClaimWithTask));
-                cmd.Parameters.AddWithValue("@_ClaimTaskID", searchModel.ClaimTaskID);
-                cmd.Parameters.AddWithValue("@_ClaimCreatedDate", searchModel.ClaimCreatedDate);
-                cmd.Parameters.AddWithValue("@_ClaimCreatedBy", searchModel.ClaimCreatedBy);
-                cmd.Parameters.AddWithValue("@_ClaimAssignedId", searchModel.ClaimAssignedId);
+                cmd.Parameters.AddWithValue("@_ClaimTaskID", searchModel.ClaimTaskID == null ? 0 : searchModel.ClaimTaskID);
+                cmd.Parameters.AddWithValue("@_ClaimCreatedDate", string.IsNullOrEmpty(searchModel.ClaimCreatedDate) ? "" : searchModel.ClaimCreatedDate);
+                cmd.Parameters.AddWithValue("@_ClaimCreatedBy", string.IsNullOrEmpty(searchModel.ClaimCreatedBy) ? "" : searchModel.ClaimCreatedBy);
+                cmd.Parameters.AddWithValue("@_ClaimAssignedId", string.IsNullOrEmpty(searchModel.ClaimAssignedId) ? "" : searchModel.ClaimAssignedId);
 
 
 
                 /*------------------ CAMPAIGN  PARAMETERS------------------------------*/
 
                 cmd.Parameters.AddWithValue("@_CampaignName", string.IsNullOrEmpty(searchModel.CampaignName) ? "" : searchModel.CampaignName);
-                cmd.Parameters.AddWithValue("@_CampaignAssignedId", searchModel.CampaignAssignedIds);
+                cmd.Parameters.AddWithValue("@_CampaignAssignedId", string.IsNullOrEmpty(searchModel.CampaignAssignedIds) ? "" : searchModel.CampaignAssignedIds);
                 cmd.Parameters.AddWithValue("@_CampaignStartDate", string.IsNullOrEmpty(searchModel.CampaignStartDate) ? "" : searchModel.CampaignStartDate);
                 cmd.Parameters.AddWithValue("@_CampaignEndDate", string.IsNullOrEmpty(searchModel.CampaignEndDate) ? "" : searchModel.CampaignEndDate);
                 cmd.Parameters.AddWithValue("@_CampaignStatusids", string.IsNullOrEmpty(searchModel.CampaignStatusids) ? "" : searchModel.CampaignStatusids);
@@ -158,7 +166,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///  <param name="UserId"></param>
         ///   <param name="TenantId"></param>
         /// <returns></returns>
-        public string DownloadStoreReportSearch(int SchedulerID, int UserID, int TenantID)
+        public string DownloadStoreReportSearch(int SchedulerID, int UserID, int TenantID, List<StoreUserListing> StoreUserList)
         {
             MySqlCommand cmd = new MySqlCommand();
             string SearchInputParams = string.Empty;
@@ -190,7 +198,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     SearchModel = JsonConvert.DeserializeObject<StoreReportModel>(SearchInputParams);
                     SearchModel.TenantID = TenantID;
-                    ReportDownloadList = GetStoreReportSearchList(SearchModel);
+                    ReportDownloadList = GetStoreReportSearchList(SearchModel, StoreUserList);
 
                     if (ReportDownloadList != null)
                     {
@@ -233,7 +241,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="StoreReportModel"></param>
         /// <returns></returns>
-        public SearchStoreResponseReport GetStoreReportSearchList(StoreReportModel searchModel)
+        public SearchStoreResponseReport GetStoreReportSearchList(StoreReportModel searchModel, List<StoreUserListing> StoreUserList)
         {
             List<string> ReportDownloadList = new List<string>();
             MySqlCommand cmd = new MySqlCommand();
@@ -243,7 +251,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<SearchStoreTaskReportResponse> TaskReport = new List<SearchStoreTaskReportResponse>();
             List<SearchStoreClaimReportResponse> ClaimReport = new List<SearchStoreClaimReportResponse>();
             List<SearchStoreCampaignReportResponse> CampaignReport = new List<SearchStoreCampaignReportResponse>();
-            List<StoreUserListing> StoreUserList = new List<StoreUserListing>();
+
             string UserList = "";
             try
             {
@@ -255,37 +263,47 @@ namespace Easyrewardz_TicketSystem.Services
 
 
                 // get all users if created by =0 and assigned user =0
-                StoreUserService StoreUser = new StoreUserService(conn.ConnectionString);
-                  StoreUserList = StoreUser.GetStoreUserList(searchModel.TenantID);
+
                 if (StoreUserList.Count > 0)
                 {
                     UserList = string.Join(',', StoreUserList.AsEnumerable().Select(x => x.UserID).ToList());
                 }
 
-                if (searchModel.TaskCreatedBy.Equals("0"))
+                if (searchModel.ActiveTabId.Equals(1))
                 {
-                    searchModel.TaskCreatedBy = UserList;
+
+                    if (searchModel.TaskCreatedBy.Equals("0"))
+                    {
+                        searchModel.TaskCreatedBy = UserList;
+                    }
+
+                    if (searchModel.TaskAssignedId.Equals("0"))
+                    {
+                        searchModel.TaskAssignedId = UserList;
+                    }
                 }
 
-                if (searchModel.TaskAssignedId.Equals("0"))
+               else if (searchModel.ActiveTabId.Equals(2))
                 {
-                    searchModel.TaskAssignedId = UserList;
+                    if (searchModel.ClaimCreatedBy.Equals("0"))
+                    {
+                        searchModel.ClaimCreatedBy = UserList;
+                    }
+
+                    if (searchModel.ClaimAssignedId.Equals("0"))
+                    {
+                        searchModel.ClaimAssignedId = UserList;
+                    }
                 }
 
-                if (searchModel.ClaimCreatedBy.Equals("0"))
+                else
                 {
-                    searchModel.ClaimCreatedBy = UserList;
+                    if (searchModel.CampaignAssignedIds.Equals("0"))
+                    {
+                        searchModel.CampaignAssignedIds = UserList;
+                    }
                 }
 
-                if (searchModel.ClaimAssignedId.Equals("0"))
-                {
-                    searchModel.ClaimAssignedId = UserList;
-                }
-
-                if (searchModel.CampaignAssignedIds.Equals("0"))
-                {
-                    searchModel.CampaignAssignedIds = UserList;
-                }
 
 
                 //--------
@@ -307,8 +325,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_IsTaskWithClaim", Convert.ToInt16(searchModel.IsTaskWithClaim));
                 cmd.Parameters.AddWithValue("@_TaskClaimID", searchModel.TaskClaimID == null ? 0 : searchModel.TaskClaimID);
                 cmd.Parameters.AddWithValue("@_TaskCreatedDate", string.IsNullOrEmpty(searchModel.TaskCreatedDate) ? "" : searchModel.TaskCreatedDate);
-                cmd.Parameters.AddWithValue("@_TaskCreatedBy", searchModel.TaskCreatedBy);
-                cmd.Parameters.AddWithValue("@_TaskAssignedId", searchModel.TaskAssignedId);
+                cmd.Parameters.AddWithValue("@_TaskCreatedBy", string.IsNullOrEmpty(searchModel.TaskCreatedBy) ? "" : searchModel.TaskCreatedBy);
+                cmd.Parameters.AddWithValue("@_TaskAssignedId", string.IsNullOrEmpty(searchModel.TaskAssignedId) ? "" : searchModel.TaskAssignedId);
 
                 /*------------------ ENDS HERE-------------------------------*/
 
@@ -324,15 +342,15 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_IsClaimWithTask", Convert.ToInt16(searchModel.IsClaimWithTask));
                 cmd.Parameters.AddWithValue("@_ClaimTaskID", searchModel.ClaimTaskID == null ? 0 : searchModel.ClaimTaskID);
                 cmd.Parameters.AddWithValue("@_ClaimCreatedDate", string.IsNullOrEmpty(searchModel.ClaimCreatedDate) ? "" : searchModel.ClaimCreatedDate);
-                cmd.Parameters.AddWithValue("@_ClaimCreatedBy", searchModel.ClaimCreatedBy);
-                cmd.Parameters.AddWithValue("@_ClaimAssignedId", searchModel.ClaimAssignedId);
+                cmd.Parameters.AddWithValue("@_ClaimCreatedBy", string.IsNullOrEmpty(searchModel.ClaimCreatedBy) ? "" : searchModel.ClaimCreatedBy);
+                cmd.Parameters.AddWithValue("@_ClaimAssignedId", string.IsNullOrEmpty(searchModel.ClaimAssignedId) ? "" : searchModel.ClaimAssignedId);
 
 
 
                 /*------------------ CAMPAIGN  PARAMETERS------------------------------*/
 
                 cmd.Parameters.AddWithValue("@_CampaignName", string.IsNullOrEmpty(searchModel.CampaignName) ? "" : searchModel.CampaignName);
-                cmd.Parameters.AddWithValue("@_CampaignAssignedId", searchModel.CampaignAssignedIds);
+                cmd.Parameters.AddWithValue("@_CampaignAssignedId", string.IsNullOrEmpty(searchModel.CampaignAssignedIds) ? "" : searchModel.CampaignAssignedIds);
                 cmd.Parameters.AddWithValue("@_CampaignStartDate", string.IsNullOrEmpty(searchModel.CampaignStartDate) ? "" : searchModel.CampaignStartDate);
                 cmd.Parameters.AddWithValue("@_CampaignEndDate", string.IsNullOrEmpty(searchModel.CampaignEndDate) ? "" : searchModel.CampaignEndDate);
                 cmd.Parameters.AddWithValue("@_CampaignStatusids", string.IsNullOrEmpty(searchModel.CampaignStatusids) ? "" : searchModel.CampaignStatusids);

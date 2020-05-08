@@ -54,6 +54,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string statusMessage = "";
             int resultCount = 0;
             StoreReportCaller dbsearchMaster = new StoreReportCaller();
+            List<StoreUserListing> StoreUserList = new List<StoreUserListing>();
             try
             {
 
@@ -64,7 +65,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 SearchParams.TenantID = authenticate.TenantId; // add tenantID to request
                                                                // searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
 
-                resultCount = dbsearchMaster.StoreReportSearch(new StoreReportService(_connectioSting), SearchParams);
+                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
+
+                resultCount = dbsearchMaster.StoreReportSearch(new StoreReportService(_connectioSting), SearchParams, StoreUserList);
 
                 StatusCode = resultCount > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -98,6 +101,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string Folderpath = string.Empty;
             string URLPath = string.Empty;
             StoreReportCaller dbsearchMaster = new StoreReportCaller();
+            List<StoreUserListing> StoreUserList = new List<StoreUserListing>();
             try
             {
 
@@ -105,8 +109,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate(); 
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
-                CSVReport = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), SchedulerID, authenticate.UserMasterID, authenticate.TenantId);
+                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
+                CSVReport = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), SchedulerID, authenticate.UserMasterID, authenticate.TenantId, StoreUserList);
 
                 appRoot = Directory.GetCurrentDirectory();
 
