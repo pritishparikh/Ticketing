@@ -165,7 +165,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 int result = reportCaller.ScheduleStoreReport(new StoreReportService(_connectioSting), scheduleMaster, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
-                result > =0 ?
+                result > 0 ?
                        (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
