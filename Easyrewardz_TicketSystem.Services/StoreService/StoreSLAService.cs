@@ -200,7 +200,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@tenant_ID", SLA.TenantID);
                 cmd.Parameters.AddWithValue("@modified_By", SLA.CreatedBy);
                 cmd.Parameters.AddWithValue("@SLA_ID", SLA.SlaID);
-                cmd.Parameters.AddWithValue("@Is_Active", SLA.isSLAActive);
+                cmd.Parameters.AddWithValue("@Is_Active", Convert.ToInt16(SLA.isSLAActive));
                 cmd.ExecuteScalar();
 
                 if (SLA != null)
