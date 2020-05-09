@@ -195,7 +195,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
                 cmd.Parameters.AddWithValue("@NOof_People", appointmentMaster.NOofPeople);
                 cmd.Parameters.AddWithValue("@Mobile_No", appointmentMaster.MobileNo);
-                cmd.Parameters.AddWithValue("@Store_ID", appointmentMaster.StoreID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 message = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -375,7 +374,7 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
                 cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
-                cmd1.Parameters.AddWithValue("@store_ID", storeID);
+                //cmd1.Parameters.AddWithValue("@store_ID", storeID);
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd1

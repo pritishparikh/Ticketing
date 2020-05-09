@@ -23,7 +23,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<AppointmentModel> GetAppointmentList(int TenantID, string AppDate)
+        public List<AppointmentModel> GetAppointmentList(int TenantID, int UserId, string AppDate)
         {
 
             DataSet ds = new DataSet();
@@ -36,6 +36,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_HSAppointmentDeatils", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.Parameters.AddWithValue("@User_Id", UserId);
                 cmd1.Parameters.AddWithValue("@Apt_Date", AppDate);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
@@ -91,7 +92,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<AppointmentCount> GetAppointmentCount(int TenantID)
+        public List<AppointmentCount> GetAppointmentCount(int TenantID, int UserId)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -103,6 +104,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_HSGetAppointmentCount", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.Parameters.AddWithValue("@User_Id", UserId);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);

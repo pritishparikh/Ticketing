@@ -15,10 +15,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #endregion
 
         #region Customer wrapper method 
-        public List<AppointmentModel> GetAppointmentList(IAppointment appointment,int tenantID,string AppDate)
+        public List<AppointmentModel> GetAppointmentList(IAppointment appointment,int tenantID, int UserId ,string AppDate)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.GetAppointmentList(tenantID, AppDate);
+            return _AppointmentRepository.GetAppointmentList(tenantID, UserId, AppDate);
         }
 
         
@@ -28,10 +28,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="appointment"></param>
         /// <param name="tenantID"></param>
         /// <returns></returns>
-        public List<AppointmentCount> GetAppointmentCountList(IAppointment appointment, int tenantID)
+        public List<AppointmentCount> GetAppointmentCountList(IAppointment appointment, int tenantID, int UserId)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.GetAppointmentCount(tenantID);
+            return _AppointmentRepository.GetAppointmentCount(tenantID, UserId);
         }
 
 
