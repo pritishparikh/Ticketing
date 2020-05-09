@@ -587,41 +587,90 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        objReportLst = ds.Tables[0].AsEnumerable().Select(r => new ReportModel()
-                        {
-                            ReportID = Convert.ToInt32(r.Field<object>("ReportID")),
-                            ScheduleID = Convert.ToInt32(r.Field<object>("ScheduleID")),
-                            ScheduleType = Convert.ToInt32(r.Field<object>("ScheduleType")),
-                            ReportSearchParams = r.Field<object>("StoreReportSearchParams") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("StoreReportSearchParams")),
-                            IsDownloaded = Convert.ToInt32(r.Field<object>("IsDownloaded")),
-                            ReportName = r.Field<object>("ReportName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ReportName")),
-                            ReportStatus = r.Field<object>("ReportStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ReportStatus")),
-                            ScheduleStatus = r.Field<object>("ScheduleStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleStatus")),
-                            CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
-                            CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
-                            ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
-                            ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),
-                            ScheduleTime =Convert.ToString(r.Field<object>("ScheduleTime")) =="" ? default(DateTime?) : new DateTime().Add(TimeSpan.Parse(r.Field<object>("ScheduleTime").ToString())),
-                            IsDaily = Convert.ToBoolean(r.Field<object>("IsDaily") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDaily"))),
-                            NoOfDay = Convert.ToInt32(r.Field<object>("NoOfDay") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDay"))),
-                            IsWeekly = Convert.ToBoolean(r.Field<object>("IsWeekly") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsWeekly"))),
-                            NoOfWeek = Convert.ToInt32(r.Field<object>("NoOfWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeek"))),
-                            DayIds = r.Field<object>("DayIds") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("DayIds")),
-                            IsDailyForMonth = Convert.ToBoolean(r.Field<object>("IsDailyForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDailyForMonth"))),
-                            NoOfDaysForMonth = Convert.ToInt32(r.Field<object>("NoOfDaysForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDaysForMonth"))),
-                            NoOfMonthForMonth = Convert.ToInt32(r.Field<object>("NoOfMonthForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfMonthForMonth"))),
-                            IsWeeklyForMonth = Convert.ToBoolean(r.Field<object>("IsWeeklyForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsWeeklyForMonth"))),
-                            NoOfMonthForWeek = Convert.ToInt32(r.Field<object>("NoOfMonthForWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfMonthForWeek"))),
-                            NoOfWeekForWeek = Convert.ToInt32(r.Field<object>("NoOfWeekForWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeekForWeek"))),
-                            NameOfDayForYear = r.Field<object>("NameOfDayForYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfDayForYear")),
-                            NameOfDayForWeek = r.Field<object>("NameOfDayForWeek") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfDayForWeek")),
-                            NoOfWeekForYear = r.Field<object>("NoOfWeekForYear") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeekForYear")),
-                            NameOfMonthForYear = r.Field<object>("NameOfMonthForYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfMonthForYear")),
-                            IsDailyForYear = Convert.ToBoolean(r.Field<object>("IsDailyForYear") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDailyForYear"))),
-                            NameOfMonthForDailyYear = r.Field<object>("NameOfMonthForDailyYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfMonthForDailyYear")),
-                            NoOfDayForDailyYear = Convert.ToInt32(r.Field<object>("NoOfDayForDailyYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NoOfDayForDailyYear")))
 
-                        }).ToList();
+                       for(int i=0; i< ds.Tables[0].Rows.Count; i++ )
+                        {
+                            ReportModel Report = new ReportModel();
+                            Report.ReportID = ds.Tables[0].Rows[i]["ReportID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ReportID"]);
+                            Report.ScheduleID = ds.Tables[0].Rows[i]["ScheduleID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ScheduleID"]);
+                            Report.ScheduleType = ds.Tables[0].Rows[i]["ScheduleType"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ScheduleType"]);
+                            Report.ReportSearchParams = ds.Tables[0].Rows[i]["StoreReportSearchParams"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreReportSearchParams"]);
+                            Report.IsDownloaded = ds.Tables[0].Rows[i]["IsDownloaded"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IsDownloaded"]);
+                            Report.ReportName = ds.Tables[0].Rows[i]["ReportName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReportName"]);
+                            Report.ReportStatus = ds.Tables[0].Rows[i]["ReportStatus"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReportStatus"]);
+                            Report.ScheduleStatus = ds.Tables[0].Rows[i]["ScheduleStatus"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ScheduleStatus"]);
+                            Report.CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                            Report.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
+                            Report.ModifiedBy = ds.Tables[0].Rows[i]["UpdatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedBy"]);
+                            Report.ScheduleFor = ds.Tables[0].Rows[i]["ScheduleFor"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ScheduleFor"]);
+                            Report.ScheduleTime = ds.Tables[0].Rows[i]["ScheduleTime"] == DBNull.Value  || Convert.ToString(ds.Tables[0].Rows[i]["ScheduleTime"]) == "" 
+                                ? default(DateTime?) : new DateTime().Add(TimeSpan.Parse(Convert.ToString(ds.Tables[0].Rows[i]["ScheduleTime"])));
+                            Report.IsDaily = ds.Tables[0].Rows[i]["IsDaily"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsDaily"]);
+                            Report.NoOfDay = ds.Tables[0].Rows[i]["NoOfDay"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfDay"]);
+                            Report.IsWeekly = ds.Tables[0].Rows[i]["IsWeekly"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsWeekly"]);
+                            Report.NoOfWeek = ds.Tables[0].Rows[i]["NoOfWeek"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfWeek"]);
+                            Report.DayIds = ds.Tables[0].Rows[i]["DayIds"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayIds"]);
+                            Report.IsDailyForMonth = ds.Tables[0].Rows[i]["IsDailyForMonth"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsDailyForMonth"]);
+                            Report.NoOfDaysForMonth = ds.Tables[0].Rows[i]["NoOfDaysForMonth"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfDaysForMonth"]);
+                            Report.NoOfMonthForMonth = ds.Tables[0].Rows[i]["NoOfMonthForMonth"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfMonthForMonth"]);
+                            Report.IsWeeklyForMonth = ds.Tables[0].Rows[i]["IsWeeklyForMonth"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsWeeklyForMonth"]);
+                            Report.NoOfMonthForWeek = ds.Tables[0].Rows[i]["NoOfMonthForWeek"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfMonthForWeek"]);
+                            Report.NoOfWeekForWeek = ds.Tables[0].Rows[i]["NoOfWeekForWeek"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfWeekForWeek"]);
+                            Report.NameOfDayForYear = ds.Tables[0].Rows[i]["NameOfDayForYear"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NameOfDayForYear"]);
+                            Report.NameOfDayForWeek = ds.Tables[0].Rows[i]["NameOfDayForWeek"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NameOfDayForWeek"]);
+                            Report.NoOfWeekForYear = ds.Tables[0].Rows[i]["NoOfWeekForYear"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfWeekForYear"]);
+                            Report.NameOfMonthForYear = ds.Tables[0].Rows[i]["NameOfMonthForYear"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NameOfMonthForYear"]);
+                            Report.IsDailyForYear = ds.Tables[0].Rows[i]["IsDailyForYear"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsDailyForYear"]);
+                            Report.NameOfMonthForDailyYear = ds.Tables[0].Rows[i]["NameOfMonthForDailyYear"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NameOfMonthForDailyYear"]);
+                            Report.NoOfDayForDailyYear = ds.Tables[0].Rows[i]["NoOfDayForDailyYear"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfDayForDailyYear"]);
+
+                            objReportLst.Add(Report);
+                        }
+
+
+                        #region old store report mapping mapping 
+                        /*
+
+                         objReportLst = ds.Tables[0].AsEnumerable().Select(r => new ReportModel()
+                         {
+                             ReportID = Convert.ToInt32(r.Field<object>("ReportID")),
+                             ScheduleID = Convert.ToInt32(r.Field<object>("ScheduleID")),
+                             ScheduleType = Convert.ToInt32(r.Field<object>("ScheduleType")),
+                             ReportSearchParams = r.Field<object>("StoreReportSearchParams") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("StoreReportSearchParams")),
+                             IsDownloaded = Convert.ToInt32(r.Field<object>("IsDownloaded")),
+                             ReportName = r.Field<object>("ReportName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ReportName")),
+                             ReportStatus = r.Field<object>("ReportStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ReportStatus")),
+                             ScheduleStatus = r.Field<object>("ScheduleStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleStatus")),
+                             CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
+                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
+                             ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
+                             ScheduleFor = r.Field<object>("ScheduleFor") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ScheduleFor")),
+                             ScheduleTime = r.Field<object>("ScheduleTime") == System.DBNull.Value || Convert.ToString(r.Field<object>("ScheduleTime")) =="" ? default(DateTime?) : new DateTime().Add(TimeSpan.Parse(r.Field<object>("ScheduleTime").ToString())),
+                             IsDaily = Convert.ToBoolean(r.Field<object>("IsDaily") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDaily"))),
+                             NoOfDay = Convert.ToInt32(r.Field<object>("NoOfDay") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDay"))),
+                             IsWeekly = Convert.ToBoolean(r.Field<object>("IsWeekly") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsWeekly"))),
+                             NoOfWeek = Convert.ToInt32(r.Field<object>("NoOfWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeek"))),
+                             DayIds = r.Field<object>("DayIds") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("DayIds")),
+                             IsDailyForMonth = Convert.ToBoolean(r.Field<object>("IsDailyForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDailyForMonth"))),
+                             NoOfDaysForMonth = Convert.ToInt32(r.Field<object>("NoOfDaysForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfDaysForMonth"))),
+                             NoOfMonthForMonth = Convert.ToInt32(r.Field<object>("NoOfMonthForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfMonthForMonth"))),
+                             IsWeeklyForMonth = Convert.ToBoolean(r.Field<object>("IsWeeklyForMonth") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsWeeklyForMonth"))),
+                             NoOfMonthForWeek = Convert.ToInt32(r.Field<object>("NoOfMonthForWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfMonthForWeek"))),
+                             NoOfWeekForWeek = Convert.ToInt32(r.Field<object>("NoOfWeekForWeek") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeekForWeek"))),
+                             NameOfDayForYear = r.Field<object>("NameOfDayForYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfDayForYear")),
+                             NameOfDayForWeek = r.Field<object>("NameOfDayForWeek") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfDayForWeek")),
+                             NoOfWeekForYear = r.Field<object>("NoOfWeekForYear") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("NoOfWeekForYear")),
+                             NameOfMonthForYear = r.Field<object>("NameOfMonthForYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfMonthForYear")),
+                             IsDailyForYear = Convert.ToBoolean(r.Field<object>("IsDailyForYear") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("IsDailyForYear"))),
+                             NameOfMonthForDailyYear = r.Field<object>("NameOfMonthForDailyYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NameOfMonthForDailyYear")),
+                             NoOfDayForDailyYear = Convert.ToInt32(r.Field<object>("NoOfDayForDailyYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NoOfDayForDailyYear")))
+
+                         }).ToList();
+
+
+                     */
+
+                        #endregion
                     }
 
 
