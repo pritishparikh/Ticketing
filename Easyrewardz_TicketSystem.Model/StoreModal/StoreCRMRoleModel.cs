@@ -33,5 +33,9 @@ namespace Easyrewardz_TicketSystem.Model
         /// ModuleName
         /// </summary>
         public string ModuleName { get; set; }
+        /// <summary>
+        /// IsActive
+        /// </summary>
+        public bool IsActive { get; set; }
     }
 }
