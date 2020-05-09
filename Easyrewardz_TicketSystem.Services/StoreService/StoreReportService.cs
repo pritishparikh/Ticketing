@@ -496,6 +496,45 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
+        /// <summary>
+        /// Check If Report Name Exists
+        /// </summary>
+        /// <param name="ReportID"></param>
+        /// <param name="ReportName"></param>
+        /// <returns></returns>
+        public bool CheckIfReportNameExists(int ReportID, string ReportName, int TenantID)
+        {
+
+
+            bool Isexists = false;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_CheckIfStoreReportNameAlreadyExsists", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Report_ID", ReportID);
+                cmd.Parameters.AddWithValue("@Report_Name", string.IsNullOrEmpty(ReportName) ? "" : ReportName.ToLower());
+                
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                Isexists = Convert.ToBoolean(Convert.ToInt32(cmd.ExecuteScalar()));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return Isexists;
+        }
+
 
         /// <summary>
         /// Schedule

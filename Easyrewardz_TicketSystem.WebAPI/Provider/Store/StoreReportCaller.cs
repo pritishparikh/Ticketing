@@ -29,6 +29,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Reports.DownloadStoreReportSearch(SchedulerID, UserID, TenantID, StoreUserList); 
         }
 
+        public bool CheckIfReportNameExists(IStoreReport Report, int ReportID, string ReportName,int TenantID)
+        {
+            _Reports = Report;
+            return _Reports.CheckIfReportNameExists( ReportID,  ReportName,  TenantID);
+        }
+
 
         public int ScheduleStoreReport(IStoreReport Report, ScheduleMaster scheduleMaster, int TenantID, int UserID)
         {

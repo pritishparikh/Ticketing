@@ -146,6 +146,47 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
 
+        /// <summary>
+        /// Check If Report Name Exists
+        /// </summary>
+        /// <param name="ReportID"></param>
+        /// <param name="ReportName"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CheckIfReportNameExists")]
+        public ResponseModel CheckIfReportNameExists(int ReportID, string ReportName)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            bool IsExists = false;
+            StoreReportCaller dbsearchMaster = new StoreReportCaller();
+            List<StoreUserListing> StoreUserList = new List<StoreUserListing>();
+            try
+            {
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
+                IsExists = dbsearchMaster.CheckIfReportNameExists(new StoreReportService(_connectioSting),  ReportID,  ReportName, authenticate.TenantId);
+
+                StatusCode = IsExists ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = IsExists;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
 
         /// <summary>
         /// Schedule Store Report

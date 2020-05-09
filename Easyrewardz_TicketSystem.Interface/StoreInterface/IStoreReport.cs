@@ -11,6 +11,10 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
 
         string DownloadStoreReportSearch(int SchedulerID, int UserID, int TenantID, List<StoreUserListing> StoreUserList);
 
+
+        bool CheckIfReportNameExists(int ReportID, string ReportName, int TenantID);
+
+
         int ScheduleStoreReport(ScheduleMaster scheduleMaster, int TenantID, int UserID);
 
         List<ReportModel> StoreReportList(int tenantID);
