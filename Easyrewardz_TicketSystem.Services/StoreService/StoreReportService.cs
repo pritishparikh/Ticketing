@@ -643,7 +643,7 @@ namespace Easyrewardz_TicketSystem.Services
                             Report.ModifiedBy = ds.Tables[0].Rows[i]["UpdatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedBy"]);
                             Report.ScheduleFor = ds.Tables[0].Rows[i]["ScheduleFor"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ScheduleFor"]);
                             Report.ScheduleTime = ds.Tables[0].Rows[i]["ScheduleTime"] == DBNull.Value  || Convert.ToString(ds.Tables[0].Rows[i]["ScheduleTime"]) == "" 
-                                ? default(DateTime?) : new DateTime().Add(TimeSpan.Parse(Convert.ToString(ds.Tables[0].Rows[i]["ScheduleTime"])));
+                                ? date : new DateTime().Add(TimeSpan.Parse(Convert.ToString(ds.Tables[0].Rows[i]["ScheduleTime"])));
                             Report.IsDaily = ds.Tables[0].Rows[i]["IsDaily"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsDaily"]);
                             Report.NoOfDay = ds.Tables[0].Rows[i]["NoOfDay"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfDay"]);
                             Report.IsWeekly = ds.Tables[0].Rows[i]["IsWeekly"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsWeekly"]);
