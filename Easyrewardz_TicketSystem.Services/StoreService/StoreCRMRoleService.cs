@@ -383,6 +383,52 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+
+        /// <summary>
+        /// Get Store Crm Module
+        /// </summary>
+        /// <param name="tenantID"></param>
+        public List<CrmModule> GetStoreCrmModule(int tenantID)
+        {
+            List<CrmModule> objCRMLst = new List<CrmModule>();
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_StoreGetCrmModule", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                //cmd.Parameters.AddWithValue("@_tenantID", tenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objCRMLst = ds.Tables[0].AsEnumerable().Select(r => new CrmModule()
+                        {
+                            ModuleID = Convert.ToInt32(r.Field<object>("ModuleID")),
+                            ModuleName = r.Field<object>("ModuleName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModuleName")),
+                        }).ToList();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (ds != null) ds.Dispose(); conn.Close();
+            }
+            return objCRMLst;
+        }
         #endregion
     }
 }

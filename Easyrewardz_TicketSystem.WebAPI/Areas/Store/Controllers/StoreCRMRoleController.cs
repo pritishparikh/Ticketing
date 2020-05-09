@@ -370,6 +370,46 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
         }
 
+        /// <summary>
+        /// Get Store Crm Module
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreCrmModule")]
+        public ResponseModel GetStoreCrmModule()
+        {
+
+            ResponseModel objResponseModel = new ResponseModel();
+            List<CrmModule> listCrmModule = new List<CrmModule>();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreCRMRoleCaller newCRM = new StoreCRMRoleCaller();
+                listCrmModule = newCRM.GetStoreCrmModule(new StoreCRMRoleService(_connectioSting), authenticate.TenantId);
+
+                statusCode = listCrmModule.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = listCrmModule;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
 
         #endregion
 
