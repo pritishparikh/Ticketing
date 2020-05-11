@@ -26,6 +26,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private IConfiguration configuration;
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
+
         private readonly string rootPath;
         private readonly string BulkUpload;
         private readonly string UploadFiles;

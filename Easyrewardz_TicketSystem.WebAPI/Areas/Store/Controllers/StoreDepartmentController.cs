@@ -547,7 +547,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
                 BulkUploadFilesPath = Path.Combine(Folderpath, BulkUpload, UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)DeptFor));
-                DownloadFilePath = Path.Combine(Folderpath, BulkUpload, DownloadFile, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)DeptFor)); ;
+                DownloadFilePath = Path.Combine(Folderpath, BulkUpload, DownloadFile, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)DeptFor)); 
 
 
                 if (!Directory.Exists(BulkUploadFilesPath))
