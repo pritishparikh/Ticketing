@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
+
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
     [Route("api/[controller]")]
@@ -78,7 +79,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
             string statusMessage = "";
-
+            
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
@@ -136,31 +137,42 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 }
                 #endregion
+
                 StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
                 storeClaimMaster.TenantID = authenticate.TenantId;
                 storeClaimMaster.CreatedBy = authenticate.UserMasterID;
                 int result = storeClaimCaller.InsertRaiseClaim(new StoreClaimService(_connectionSting), storeClaimMaster, finalAttchment);
                 if (result > 0)
                 {
+                  
                     if (files.Count > 0)
                     {
                         string[] filesName = finalAttchment.Split(",");
                         for (int i = 0; i < files.Count; i++)
                         {
-                            using (var ms = new MemoryStream())
+                            try
                             {
-                                files[i].CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                MemoryStream msfile = new MemoryStream(fileBytes);
-                                FileStream docFile = new FileStream(folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
-                                msfile.WriteTo(docFile);
-                                docFile.Close();
-                                ms.Close();
-                                msfile.Close();
-                                string s = Convert.ToBase64String(fileBytes);
-                                byte[] a = Convert.FromBase64String(s);
-                                // act on the Base64 data
+                                System.IO.File.WriteAllText(folderpath + "\\" + "Text1.txt", folderpath + "\\" + filesName[i]);
 
+                                using (var ms = new MemoryStream())
+                                {
+                                    files[i].CopyTo(ms);
+                                    var fileBytes = ms.ToArray();
+                                    MemoryStream msfile = new MemoryStream(fileBytes);
+                                    FileStream docFile = new FileStream(folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                                    msfile.WriteTo(docFile);
+                                    docFile.Close();
+                                    ms.Close();
+                                    msfile.Close();
+                                    string s = Convert.ToBase64String(fileBytes);
+                                    byte[] a = Convert.FromBase64String(s);
+                                    // act on the Base64 data
+
+                                }
+                            }
+                           catch( Exception)
+                            {
+                                throw;
                             }
                         }
                     }
