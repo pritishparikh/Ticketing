@@ -159,7 +159,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                                     files[i].CopyTo(ms);
                                     var fileBytes = ms.ToArray();
                                     MemoryStream msfile = new MemoryStream(fileBytes);
-                                    FileStream docFile = new FileStream(folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                                    FileStream docFile = new FileStream(folderpath + "/" + filesName[i], FileMode.Create, FileAccess.Write);
                                     msfile.WriteTo(docFile);
                                     docFile.Close();
                                     ms.Close();
