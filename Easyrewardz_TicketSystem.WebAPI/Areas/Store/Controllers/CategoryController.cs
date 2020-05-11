@@ -201,7 +201,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             try
             {
 
-                if (BrandID == 0 || String.IsNullOrEmpty(CategoryName))
+                if (String.IsNullOrEmpty(CategoryName))
                 {
                     objResponseModel.Status = false;
                     objResponseModel.StatusCode = statusCode;
