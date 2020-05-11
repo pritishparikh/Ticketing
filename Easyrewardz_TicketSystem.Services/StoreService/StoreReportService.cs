@@ -166,7 +166,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///  <param name="UserId"></param>
         ///   <param name="TenantId"></param>
         /// <returns></returns>
-        public string DownloadStoreReportSearch(int SchedulerID, int UserID, int TenantID, List<StoreUserListing> StoreUserList)
+        public string DownloadStoreReportSearch(int ReportID, int UserID, int TenantID, List<StoreUserListing> StoreUserList)
         {
             MySqlCommand cmd = new MySqlCommand();
             string SearchInputParams = string.Empty;
@@ -188,7 +188,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd = new MySqlCommand("SP_DownloadStoreReportSearch", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
-                cmd.Parameters.AddWithValue("@Schedule_ID", SchedulerID);
+                cmd.Parameters.AddWithValue("@Report_ID", ReportID);
 
                 cmd.CommandType = CommandType.StoredProcedure;
 

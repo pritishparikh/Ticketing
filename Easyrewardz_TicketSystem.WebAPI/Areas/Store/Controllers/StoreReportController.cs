@@ -91,7 +91,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("DownloadStoreReport")]
-        public ResponseModel DownloadStoreReportSearch(int SchedulerID)
+        public ResponseModel DownloadStoreReportSearch(int ReportID)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -110,7 +110,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
-                CSVReport = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), SchedulerID, authenticate.UserMasterID, authenticate.TenantId, StoreUserList);
+                CSVReport = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), ReportID, authenticate.UserMasterID, authenticate.TenantId, StoreUserList);
 
                 appRoot = Directory.GetCurrentDirectory();
 
