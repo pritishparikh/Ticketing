@@ -114,7 +114,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 appRoot = Directory.GetCurrentDirectory();
 
-                string CSVFileName = "StoreReport_" + SchedulerID + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".csv";
+                string CSVFileName = "StoreReport_" + ReportID + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".csv";
 
                 Folderpath = Path.Combine(appRoot, "ReportDownload");
                 if (!Directory.Exists(Folderpath))
