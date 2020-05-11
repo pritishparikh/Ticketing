@@ -26,7 +26,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
         private readonly string rootPath;
-        private readonly string _UploadedBulkFile;
+        private readonly string BulkUpload;
+        private readonly string UploadFiles;
+        private readonly string DownloadFile;
         #endregion
 
         #region Cunstructor
@@ -36,7 +38,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
             rootPath = configuration.GetValue<string>("APIURL");
-            _UploadedBulkFile = configuration.GetValue<string>("FileUploadLocation");
+            BulkUpload = configuration.GetValue<string>("BulkUpload");
+            UploadFiles = configuration.GetValue<string>("Uploadfiles");
+            DownloadFile = configuration.GetValue<string>("Downloadfile");
         }
 
         #endregion
@@ -265,15 +269,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         [Route("BulkUploadStoreCRMRole")]
         public ResponseModel BulkUploadStoreCRMRole(int RoleFor = 3)
         {
-            string downloadFilePath = string.Empty;
-            string bulkUploadFilesPath = string.Empty;
-            bool errorFileSaved = false;
-            bool successFileSaved = false;
+            string DownloadFilePath = string.Empty;
+            string BulkUploadFilesPath = string.Empty;
+            bool errorfilesaved = false;
+            bool successfilesaved = false;
             int count = 0;
             List<string> CSVlist = new List<string>();
             StoreCRMRoleCaller newCRM = new StoreCRMRoleCaller();
-            StoreFileUploadCaller fileU = new StoreFileUploadCaller();
             ResponseModel objResponseModel = new ResponseModel();
+            StoreFileUploadCaller fileU = new StoreFileUploadCaller();
             int statusCode = 0;
             string statusMessage = "";
             DataSet dataSetCSV = new DataSet();
@@ -301,16 +305,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 }
                 var Keys = Request.Form;
 
-                var exePath = Path.GetDirectoryName(System.Reflection
-                     .Assembly.GetExecutingAssembly().CodeBase);
-                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
-                var appRoot = appPathMatcher.Match(exePath).Value;
-                string Folderpath = appRoot + "\\" + _UploadedBulkFile;
+                #region FilePath
+                string Folderpath = Directory.GetCurrentDirectory();
+                filesName = finalAttchment.Split(",");
+
+
+                BulkUploadFilesPath = Path.Combine(Folderpath, BulkUpload, UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor));
+                DownloadFilePath = Path.Combine(Folderpath, BulkUpload, DownloadFile, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor));
+
+
+                if (!Directory.Exists(BulkUploadFilesPath))
+                {
+                    Directory.CreateDirectory(BulkUploadFilesPath);
+                }
+
 
 
                 if (files.Count > 0)
                 {
-                    filesName = finalAttchment.Split(",");
+
                     for (int i = 0; i < files.Count; i++)
                     {
                         using (var ms = new MemoryStream())
@@ -318,7 +331,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                             files[i].CopyTo(ms);
                             var fileBytes = ms.ToArray();
                             MemoryStream msfile = new MemoryStream(fileBytes);
-                            FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                            FileStream docFile = new FileStream(Path.Combine(BulkUploadFilesPath, filesName[i]), FileMode.Create, FileAccess.Write);
                             msfile.WriteTo(docFile);
                             docFile.Close();
                             ms.Close();
@@ -331,30 +344,34 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                     }
                 }
 
-                #region FilePath
-                bulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor);
-                downloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor);
-
                 #endregion
-                dataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + finalAttchment);
+
+
+
+                dataSetCSV = CommonService.csvToDataSet(Path.Combine(BulkUploadFilesPath, filesName[0]));
                 CSVlist = newCRM.CRMRoleBulkUpload(new StoreCRMRoleService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, RoleFor, dataSetCSV);
 
-                #region Create Error and Succes files and  Insert in FileUploadLog
+                #region Create Error and Success files and  Insert in FileUploadLog
+
+                string SuccessFileName = "Store_CRMRoleSuccessFile_" + timeStamp + ".csv";
+                string ErrorFileName = "Store_CRMRoleErrorFile_" + timeStamp + ".csv";
+
+                string SuccessFileUrl = !string.IsNullOrEmpty(CSVlist[0]) ?
+                  rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor) + "/Success/" + SuccessFileName : string.Empty;
+                string ErrorFileUrl = !string.IsNullOrEmpty(CSVlist[1]) ?
+                    rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor) + "/Error/" + ErrorFileName : string.Empty;
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
-                    successFileSaved = CommonService.SaveFile(downloadFilePath + "\\CRMRole\\ Success" + "\\" + "CRMRoleSuccessFile.csv", CSVlist[0]);
+                    successfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Success", SuccessFileName), CSVlist[0]);
 
                 if (!string.IsNullOrEmpty(CSVlist[1]))
-                    errorFileSaved = CommonService.SaveFile(downloadFilePath + "\\CRMRole\\Error" + "\\" + "CRMRoleErrorFile.csv", CSVlist[1]);
+                    errorfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Error", ErrorFileName), CSVlist[1]);
 
-                count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorFileSaved,
-                                   "CRMRoleErrorFile.csv", "CRMRoleSuccessFile.csv", authenticate.UserMasterID, "CRMRole",
-                                   downloadFilePath + "\\CRMRole\\Error" + "\\" + "CRMRoleErrorFile.csv",
-                                   downloadFilePath + "\\CRMRole\\ Success" + "\\" + "CRMRoleSuccessFile.csv", RoleFor
-                                   );
+                count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, filesName[0], true,
+                                 ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store_CRMRole", SuccessFileUrl, ErrorFileUrl, RoleFor);
                 #endregion
 
-                statusCode = successFileSaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.WehadanerrorSorryaboutthat;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
