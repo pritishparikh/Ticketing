@@ -15,7 +15,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         private IStoreReport _Reports;
 
-        #endregion
+        #endregion 
 
         public int StoreReportSearch(IStoreReport Report, StoreReportModel searchModel, List<StoreUserListing>  StoreUserList)
         {

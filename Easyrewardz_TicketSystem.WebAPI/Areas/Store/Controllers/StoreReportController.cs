@@ -99,7 +99,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string CSVReport = string.Empty;
             string appRoot = string.Empty;
             string Folderpath = string.Empty;
-            string URLPath = string.Empty;
+            string URLPath = string.Empty; 
             StoreReportCaller dbsearchMaster = new StoreReportCaller();
             List<StoreUserListing> StoreUserList = new List<StoreUserListing>();
             try

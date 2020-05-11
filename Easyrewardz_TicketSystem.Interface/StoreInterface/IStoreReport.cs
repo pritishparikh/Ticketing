@@ -17,7 +17,7 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
 
         int ScheduleStoreReport(ScheduleMaster scheduleMaster, int TenantID, int UserID);
 
-        List<ReportModel> StoreReportList(int tenantID);
+        List<ReportModel> StoreReportList(int tenantID); 
 
         int DeleteStoreReport(int tenantID, int ReportID); 
 

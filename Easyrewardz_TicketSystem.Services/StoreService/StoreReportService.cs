@@ -196,7 +196,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 if (!string.IsNullOrEmpty(SearchInputParams))
                 {
-                    SearchModel = JsonConvert.DeserializeObject<StoreReportModel>(SearchInputParams);
+                    SearchModel = JsonConvert.DeserializeObject<StoreReportModel>(SearchInputParams); 
                     SearchModel.TenantID = TenantID;
                     ReportDownloadList = GetStoreReportSearchList(SearchModel, StoreUserList);
 
