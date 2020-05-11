@@ -26,6 +26,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private readonly string _radisCacheServerAddress;
         private readonly string _connectionSting;
         private readonly string _ClaimProductImage;
+        private readonly string rootPath;
         #endregion
 
         #region Constructor
@@ -35,6 +36,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             _connectionSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
             _ClaimProductImage = configuration.GetValue<string>("RaiseClaimProductImage");
+            rootPath = configuration.GetValue<string>("APIURL");
         }
         #endregion
 
@@ -71,11 +73,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             orderDetails = JsonConvert.DeserializeObject<OrderMaster>(Keys["orderDetails"]);
             OrderItemDetails = JsonConvert.DeserializeObject<List<OrderItem>>(Keys["orderItemDetails"]);
 
-            var exePath = Path.GetDirectoryName(System.Reflection
-                    .Assembly.GetExecutingAssembly().CodeBase);
-            Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
-            var appRoot = appPathMatcher.Match(exePath).Value;
-            string folderpath = appRoot + "\\" + _ClaimProductImage;
+            //var exePath = Path.GetDirectoryName(System.Reflection
+            //        .Assembly.GetExecutingAssembly().CodeBase);
+            //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+            //var appRoot = appPathMatcher.Match(exePath).Value;
+            string folderpath = rootPath + "\\" + _ClaimProductImage;
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
             string statusMessage = "";
@@ -152,8 +154,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                         {
                             try
                             {
-                                System.IO.File.WriteAllText(folderpath + "\\" + "Text1.txt", folderpath + "\\" + filesName[i]);
-
                                 using (var ms = new MemoryStream())
                                 {
                                     files[i].CopyTo(ms);
