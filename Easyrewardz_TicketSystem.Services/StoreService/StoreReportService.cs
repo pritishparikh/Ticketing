@@ -641,6 +641,7 @@ namespace Easyrewardz_TicketSystem.Services
                             Report.CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
                             Report.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
                             Report.ModifiedBy = ds.Tables[0].Rows[i]["UpdatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedBy"]);
+                            Report.ModifiedDate= ds.Tables[0].Rows[i]["UpdatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedDate"]);
                             Report.ScheduleFor = ds.Tables[0].Rows[i]["ScheduleFor"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ScheduleFor"]);
                             Report.ScheduleTime = ds.Tables[0].Rows[i]["ScheduleTime"] == DBNull.Value  || Convert.ToString(ds.Tables[0].Rows[i]["ScheduleTime"]) == "" 
                                 ? date : new DateTime().Add(TimeSpan.Parse(Convert.ToString(ds.Tables[0].Rows[i]["ScheduleTime"])));
