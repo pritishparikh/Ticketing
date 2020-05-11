@@ -77,7 +77,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             //        .Assembly.GetExecutingAssembly().CodeBase);
             //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
             //var appRoot = appPathMatcher.Match(exePath).Value;
-            string folderpath = rootPath + "\\" + _ClaimProductImage;
+            string folderpath = rootPath + _ClaimProductImage;
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
             string statusMessage = "";
