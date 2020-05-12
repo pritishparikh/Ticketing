@@ -560,7 +560,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
                         cmd.Parameters.AddWithValue("@_node", Xpath);
-
+                        cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                         cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
                         cmd.CommandType = CommandType.StoredProcedure;
                         MySqlDataAdapter da = new MySqlDataAdapter
