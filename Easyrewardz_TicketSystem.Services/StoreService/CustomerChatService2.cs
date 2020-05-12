@@ -478,7 +478,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
                 #region call client api for sending message to customer
-
+                
                 SendTextRequest.To = MobileNo;
                 SendTextRequest.textToReply = Message;
                 SendTextRequest.programCode ="bata";// ProgramCode;

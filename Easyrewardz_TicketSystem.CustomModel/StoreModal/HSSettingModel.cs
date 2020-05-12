@@ -8,6 +8,7 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
     {
         public int AgentID { get; set; }
         public string AgentName { get; set; }
+        public string EmailID { get; set; }
         public int TenantID { get; set; }
         public int BrandID { get; set; }
         public string StoreCode { get; set; }

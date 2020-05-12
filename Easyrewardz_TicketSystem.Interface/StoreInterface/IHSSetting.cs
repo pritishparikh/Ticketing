@@ -10,5 +10,7 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         List<HSSettingModel> GetStoreAgentList(int tenantID, int BrandID, string StoreCode);
 
         int InsertUpdateAgentDetails(HSSettingModel hSSettingModel, int tenantID);
+
+        List<HSSettingModel> GetStoreAgentDetailsById(int tenantID, int AgentID);
     }
 }
