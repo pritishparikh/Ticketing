@@ -58,6 +58,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
             string fileName = "";
             string finalAttchment = "";
+            string ImagePath = string.Empty;
 
             if (files.Count > 0)
             {
@@ -77,7 +78,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             //        .Assembly.GetExecutingAssembly().CodeBase);
             //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
             //var appRoot = appPathMatcher.Match(exePath).Value;
-            string folderpath = rootPath + _ClaimProductImage;
+            // string folderpath = rootPath + _ClaimProductImage;
+            string Folderpath = Directory.GetCurrentDirectory();
+            string[] filesName = finalAttchment.Split(",");
+
+
+            ImagePath = Path.Combine(Folderpath, _ClaimProductImage);
+
+            if (!Directory.Exists(ImagePath))
+            {
+                Directory.CreateDirectory(ImagePath);
+            }
+          
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
             string statusMessage = "";
@@ -149,7 +161,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                   
                     if (files.Count > 0)
                     {
-                        string[] filesName = finalAttchment.Split(",");
+                        //string[] filesName = finalAttchment.Split(",");
                         for (int i = 0; i < files.Count; i++)
                         {
                             try
@@ -159,7 +171,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                                     files[i].CopyTo(ms);
                                     var fileBytes = ms.ToArray();
                                     MemoryStream msfile = new MemoryStream(fileBytes);
-                                    FileStream docFile = new FileStream(folderpath + "/" + filesName[i], FileMode.Create, FileAccess.Write);
+                                    FileStream docFile = new FileStream(Path.Combine(ImagePath, filesName[i]), FileMode.Create, FileAccess.Write);
                                     msfile.WriteTo(docFile);
                                     docFile.Close();
                                     ms.Close();
@@ -169,6 +181,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                                     // act on the Base64 data
 
                                 }
+                                //using (var ms = new MemoryStream())
+                                //{
+                                //    files[i].CopyTo(ms);
+                                //    var fileBytes = ms.ToArray();
+                                //    MemoryStream msfile = new MemoryStream(fileBytes);
+                                //    FileStream docFile = new FileStream(folderpath + "/" + filesName[i], FileMode.Create, FileAccess.Write);
+                                //    msfile.WriteTo(docFile);
+                                //    docFile.Close();
+                                //    ms.Close();
+                                //    msfile.Close();
+                                //    string s = Convert.ToBase64String(fileBytes);
+                                //    byte[] a = Convert.FromBase64String(s);
+                                //    // act on the Base64 data
+
+                                //}
                             }
                            catch( Exception)
                             {
