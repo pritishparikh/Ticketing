@@ -48,6 +48,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _categoryList.GetClaimSubCategoryByCategoryID(CategoryID, TypeId);
         }
 
+        public List<SubCategory> GetClaimSubCategoryByCategoryOnSearch(ICategory _category, int tenantID, int CategoryID, string searchText)
+        {
+            _categoryList = _category;
+            return _categoryList.GetClaimSubCategoryByCategoryOnSearch(tenantID, CategoryID, searchText);
+        }
+
         public int AddClaimSubCategory(ICategory _category, int CategoryID, string category, int TenantID, int UserID)
         {
             _categoryList = _category;
@@ -58,6 +64,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _categoryList = _category;
             return _categoryList.GetClaimIssueTypeList(TenantID, SubCategoryID);
+        }
+
+        public List<IssueType> GetClaimIssueTypeOnSearch(ICategory _category, int TenantID, int SubCategoryID, string searchText)
+        {
+            _categoryList = _category;
+            return _categoryList.GetClaimIssueTypeOnSearch(TenantID, SubCategoryID, searchText);
         }
 
         public int AddClaimIssueType(ICategory _category, int SubcategoryID, string IssuetypeName, int TenantID, int UserID)

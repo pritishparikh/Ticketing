@@ -290,6 +290,67 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
+        /// GetClaimSubCategoryByCategoryOnSearch
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="CategoryID"></param>
+        /// <param name="searchText"></param>
+        /// <returns></returns>
+        public List<SubCategory> GetClaimSubCategoryByCategoryOnSearch(int tenantID, int CategoryID, string searchText)
+        {
+            DataSet ds = new DataSet();
+            List<SubCategory> objSubCategory = new List<SubCategory>();
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetClaimSubCategoryByCategoryIdOnSearch", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@Category_ID", CategoryID);
+                cmd.Parameters.AddWithValue("@search_Text", searchText);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        SubCategory SubCat = new SubCategory
+                        {
+                            SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]),
+                            CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]),
+                            SubCategoryName = Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]),
+                            IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"])
+                        };
+
+                        objSubCategory.Add(SubCat);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objSubCategory;
+        }
+
+        /// <summary>
         /// Add Claim Sub Category
         /// </summary>
         /// <param name="CategoryID">ID of the category </param>
@@ -384,6 +445,65 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objIssueType;
         }
+
+        /// <summary>
+        /// GetClaimIssueTypeOnSearch
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="SubCategoryID"></param>
+        /// <param name="searchText"></param>
+        /// <returns></returns>
+        public List<IssueType> GetClaimIssueTypeOnSearch(int TenantID, int SubCategoryID, string searchText)
+        {
+            DataSet ds = new DataSet();
+            List<IssueType> objIssueType = new List<IssueType>();
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetClaimIssueTypeOnSearch", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@SubCategory_ID", SubCategoryID);
+                cmd.Parameters.AddWithValue("@search_Text", searchText);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        IssueType issueType = new IssueType
+                        {
+                            IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]),
+                            IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]),
+                            SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"])
+                        };
+                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
+
+                        objIssueType.Add(issueType);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return objIssueType;
+        }
+
 
         /// <summary>
         /// Add Claim Issue Type
