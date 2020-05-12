@@ -91,7 +91,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("DownloadStoreReport")]
-        public ResponseModel DownloadStoreReportSearch(int SchedulerID)
+        public ResponseModel DownloadStoreReportSearch(int ReportID)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -99,7 +99,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string CSVReport = string.Empty;
             string appRoot = string.Empty;
             string Folderpath = string.Empty;
-            string URLPath = string.Empty;
+            string URLPath = string.Empty; 
             StoreReportCaller dbsearchMaster = new StoreReportCaller();
             List<StoreUserListing> StoreUserList = new List<StoreUserListing>();
             try
@@ -110,11 +110,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
-                CSVReport = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), SchedulerID, authenticate.UserMasterID, authenticate.TenantId, StoreUserList);
+                CSVReport = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), ReportID, authenticate.UserMasterID, authenticate.TenantId, StoreUserList);
 
                 appRoot = Directory.GetCurrentDirectory();
 
-                string CSVFileName = "StoreReport_" + SchedulerID + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".csv";
+                string CSVFileName = "StoreReport_" + ReportID + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".csv";
 
                 Folderpath = Path.Combine(appRoot, "ReportDownload");
                 if (!Directory.Exists(Folderpath))

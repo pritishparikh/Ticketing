@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
+
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
     [Route("api/[controller]")]
@@ -25,6 +26,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private readonly string _radisCacheServerAddress;
         private readonly string _connectionSting;
         private readonly string _ClaimProductImage;
+        private readonly string rootPath;
         #endregion
 
         #region Constructor
@@ -34,6 +36,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             _connectionSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
             _ClaimProductImage = configuration.GetValue<string>("RaiseClaimProductImage");
+            rootPath = configuration.GetValue<string>("APIURL");
         }
         #endregion
 
@@ -70,15 +73,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             orderDetails = JsonConvert.DeserializeObject<OrderMaster>(Keys["orderDetails"]);
             OrderItemDetails = JsonConvert.DeserializeObject<List<OrderItem>>(Keys["orderItemDetails"]);
 
-            var exePath = Path.GetDirectoryName(System.Reflection
-                    .Assembly.GetExecutingAssembly().CodeBase);
-            Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
-            var appRoot = appPathMatcher.Match(exePath).Value;
-            string folderpath = appRoot + "\\" + _ClaimProductImage;
+            //var exePath = Path.GetDirectoryName(System.Reflection
+            //        .Assembly.GetExecutingAssembly().CodeBase);
+            //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+            //var appRoot = appPathMatcher.Match(exePath).Value;
+            string folderpath = rootPath + _ClaimProductImage;
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
             string statusMessage = "";
-
+            
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
@@ -136,31 +139,40 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 }
                 #endregion
+
                 StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
                 storeClaimMaster.TenantID = authenticate.TenantId;
                 storeClaimMaster.CreatedBy = authenticate.UserMasterID;
                 int result = storeClaimCaller.InsertRaiseClaim(new StoreClaimService(_connectionSting), storeClaimMaster, finalAttchment);
                 if (result > 0)
                 {
+                  
                     if (files.Count > 0)
                     {
                         string[] filesName = finalAttchment.Split(",");
                         for (int i = 0; i < files.Count; i++)
                         {
-                            using (var ms = new MemoryStream())
+                            try
                             {
-                                files[i].CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                MemoryStream msfile = new MemoryStream(fileBytes);
-                                FileStream docFile = new FileStream(folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
-                                msfile.WriteTo(docFile);
-                                docFile.Close();
-                                ms.Close();
-                                msfile.Close();
-                                string s = Convert.ToBase64String(fileBytes);
-                                byte[] a = Convert.FromBase64String(s);
-                                // act on the Base64 data
+                                using (var ms = new MemoryStream())
+                                {
+                                    files[i].CopyTo(ms);
+                                    var fileBytes = ms.ToArray();
+                                    MemoryStream msfile = new MemoryStream(fileBytes);
+                                    FileStream docFile = new FileStream(folderpath + "/" + filesName[i], FileMode.Create, FileAccess.Write);
+                                    msfile.WriteTo(docFile);
+                                    docFile.Close();
+                                    ms.Close();
+                                    msfile.Close();
+                                    string s = Convert.ToBase64String(fileBytes);
+                                    byte[] a = Convert.FromBase64String(s);
+                                    // act on the Base64 data
 
+                                }
+                            }
+                           catch( Exception)
+                            {
+                                throw;
                             }
                         }
                     }
