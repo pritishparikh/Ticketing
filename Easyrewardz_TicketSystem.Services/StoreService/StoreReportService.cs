@@ -409,8 +409,8 @@ namespace Easyrewardz_TicketSystem.Services
                                 SearchStoreClaimReportResponse obj = new SearchStoreClaimReportResponse()
                                 {
                                     ClaimID = Convert.ToInt32(dr["ClaimID"]),
-                                    ClaimTitle = dr["ClaimTitle"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimTitle"]),
-                                    ClaimDescription = dr["ClaimDescription"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimDescription"]),
+                                  //  ClaimTitle = dr["ClaimTitle"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimTitle"]),
+                                   // ClaimDescription = dr["ClaimDescription"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimDescription"]),
                                     BrandID = dr["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["BrandID"]),
                                     BrandName = dr["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["BrandName"]),
                                     CategoryID = dr["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CategoryID"]),
@@ -433,7 +433,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                                     IsActive = dr["IsActive"] == DBNull.Value ? string.Empty : Convert.ToString(dr["IsActive"]),
                                     ClaimApproved = dr["ClaimApproved"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimApproved"]),
-                                    ClaimRejected = dr["ClaimRejected"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimRejected"]),
+                                   // ClaimRejected = dr["ClaimRejected"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimRejected"]),
                                     CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CreatedBy"]),
                                     CreatedByName = dr["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedByName"]),
                                     CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),
@@ -441,8 +441,8 @@ namespace Easyrewardz_TicketSystem.Services
                                     ModifiedByName = dr["ModifiedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifiedByName"]),
                                     ModifiedDate = dr["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifiedDate"]),
                                     IsClaimEscalated = dr["IsClaimEscalated"] == DBNull.Value ? string.Empty : Convert.ToString(dr["IsClaimEscalated"]),
-                                    IsCustomerResponseDone = dr["IsCustomerResponseDone"] == DBNull.Value ? string.Empty : Convert.ToString(dr["IsCustomerResponseDone"]),
-                                    CustomerResponsedOn = dr["CustomerResponsedOn"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerResponsedOn"]),
+                                   // IsCustomerResponseDone = dr["IsCustomerResponseDone"] == DBNull.Value ? string.Empty : Convert.ToString(dr["IsCustomerResponseDone"]),
+                                   // CustomerResponsedOn = dr["CustomerResponsedOn"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerResponsedOn"]),
                                     FinalClaimPercent = dr["FinalClaimPercent"] == DBNull.Value ? string.Empty : Convert.ToString(dr["FinalClaimPercent"]),
                                     TicketDescription = dr["TicketDescription"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TicketDescription"]),
                                     TaskDescription = dr["TaskDescription"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TaskDescription"]),

@@ -118,8 +118,8 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
     public class SearchStoreClaimReportResponse
     {
         public int ClaimID { get; set; }
-        public string ClaimTitle { get; set; }
-        public string ClaimDescription { get; set; }
+       // public string ClaimTitle { get; set; }
+       // public string ClaimDescription { get; set; }
         public int BrandID { get; set; }
         public string BrandName { get; set; }
         public int CategoryID { get; set; }
@@ -141,7 +141,7 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public string ClaimStatus { get; set; }
         public string IsActive { get; set; }
         public string ClaimApproved { get; set; }
-        public string ClaimRejected { get; set; }
+      //  public string ClaimRejected { get; set; }
         public int CreatedBy { get; set; }
         public string CreatedByName { get; set; }
         public string CreatedDate { get; set; }
@@ -149,8 +149,8 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public string ModifiedByName { get; set; }
         public string ModifiedDate { get; set; }
         public string IsClaimEscalated { get; set; }
-        public string IsCustomerResponseDone { get; set; }
-        public string CustomerResponsedOn { get; set; }
+      //  public string IsCustomerResponseDone { get; set; }
+      //  public string CustomerResponsedOn { get; set; }
 
         public string FinalClaimPercent { get; set; }
         public string TicketDescription { get; set; }
