@@ -367,6 +367,7 @@ namespace Easyrewardz_TicketSystem.Services
                 if (ds != null && ds.Tables[0] != null)
                 {
                     Message = ds.Tables[0].Rows[0]["Message"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Message"]);
+                    SMSsenderId = ds.Tables[0].Rows[0]["SmsSenderID"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["SmsSenderID"]);
                 }
 
                 if(!String.IsNullOrEmpty(Message))
