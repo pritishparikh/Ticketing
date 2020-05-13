@@ -68,7 +68,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        public int ScheduleVisit(ICustomerChat customerChatStatus, AppointmentMaster appointmentMaster)
+        public List<AppointmentDetails> ScheduleVisit(ICustomerChat customerChatStatus, AppointmentMaster appointmentMaster)
         {
             _customerChat = customerChatStatus;
 

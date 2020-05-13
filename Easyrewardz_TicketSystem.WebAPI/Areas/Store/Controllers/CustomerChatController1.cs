@@ -216,6 +216,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         public ResponseModel ScheduleVisit([FromBody]AppointmentMaster appointmentMaster)
         {
             ResponseModel objResponseModel = new ResponseModel();
+            List<AppointmentDetails> appointmentDetails = new List<AppointmentDetails>();
             int statusCode = 0;
             string statusMessage = "";
             try
@@ -228,10 +229,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 appointmentMaster.TenantID=authenticate.TenantId;
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                int result = customerChatCaller.ScheduleVisit(new CustomerChatService(_connectionString), appointmentMaster);
+                appointmentDetails = customerChatCaller.ScheduleVisit(new CustomerChatService(_connectionString), appointmentMaster);
 
                 statusCode =
-               result.Equals(0) ?
+              appointmentDetails.Count == 0 ?
                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
@@ -240,7 +241,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = result;
+                objResponseModel.ResponseData = appointmentDetails;
             }
             catch (Exception)
             {

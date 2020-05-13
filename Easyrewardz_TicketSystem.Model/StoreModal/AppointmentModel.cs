@@ -36,4 +36,14 @@ namespace Easyrewardz_TicketSystem.Model
         public int DayAfterTomorrow { get; set; }
     }
 
+    public class AppointmentDetails
+    {
+
+        public int AppointmentID { get; set; }
+        public string CustomerName { get; set; }
+        public string MobileNo { get; set; }
+        public string StoreName { get; set; }
+        public string StoreAddress { get; set; }
+    }
+
 }
