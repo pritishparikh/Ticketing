@@ -61,6 +61,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider.Store
             return _dCRMrole.StoreBulkUploadCRMRole(TenantID, CreatedBy, RoleFor, DataSetCSV);
         }
 
+        public List<CrmModule> GetStoreCrmModule(IStoreCRMRole CRM, int tenantID)
+        {
+            _dCRMrole = CRM;
+            return _dCRMrole.GetStoreCrmModule(tenantID);
+        }
+
         #endregion
     }
 }

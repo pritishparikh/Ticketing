@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.Model
 {
-   public class StoreCRMRoleModel
+    public class StoreCRMRoleModel
     {
         public int CRMRoleID { get; set; }
         public string RoleName { get; set; }
@@ -23,5 +21,21 @@ namespace Easyrewardz_TicketSystem.Model
         public string ModuleName { get; set; }
         public bool Modulestatus { get; set; }
 
+    }
+
+    public class CrmModule
+    {
+        /// <summary>
+        /// ModuleID
+        /// </summary>
+        public int ModuleID { get; set; }
+        /// <summary>
+        /// ModuleName
+        /// </summary>
+        public string ModuleName { get; set; }
+        /// <summary>
+        /// IsActive
+        /// </summary>
+        public bool IsActive { get; set; }
     }
 }
