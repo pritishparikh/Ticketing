@@ -220,7 +220,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 string ClientAPIURL = configuration.GetValue<string>("ClientAPIURL");
-                string SMSsenderId = configuration.GetValue<string>("SMSsenderId");
+                string SMSsenderId = "";//configuration.GetValue<string>("SMSsenderId");
 
                 obj = storecampaigncaller.CampaignShareSMS(new StoreCampaignService(_connectioSting), objRequest, ClientAPIURL, SMSsenderId, authenticate.TenantId, authenticate.UserMasterID);
                 statusCode =
