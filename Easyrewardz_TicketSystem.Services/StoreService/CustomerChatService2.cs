@@ -481,7 +481,7 @@ namespace Easyrewardz_TicketSystem.Services
                 
                 SendTextRequest.To = MobileNo;
                 SendTextRequest.textToReply = Message;
-                SendTextRequest.programCode ="bata";// ProgramCode;
+                SendTextRequest.programCode = ProgramCode;
 
                 string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
 
