@@ -53,10 +53,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-        public int SendMessageToCustomer(ICustomerChat customerChat, int ChatID, string MobileNo, string ProgramCode, string Message, string ClientAPIURL, int CreatedBy, int InsertChat)
+        public int SendMessageToCustomer(ICustomerChat customerChat, int ChatID, string MobileNo, string ProgramCode, string Message, string WhatsAppMessage, string ImageURL, string ClientAPIURL, int CreatedBy, int InsertChat)
         {
             _customerChat = customerChat;
-            return _customerChat.SendMessageToCustomer( ChatID,  MobileNo,  ProgramCode,  Message,  ClientAPIURL,  CreatedBy, InsertChat);
+            return _customerChat.SendMessageToCustomer( ChatID,  MobileNo,  ProgramCode,  Message, WhatsAppMessage, ImageURL,  ClientAPIURL,  CreatedBy, InsertChat);
 
         }
 

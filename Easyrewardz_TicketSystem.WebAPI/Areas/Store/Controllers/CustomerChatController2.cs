@@ -271,7 +271,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("sendMessageToCustomer")]
-        public ResponseModel sendMessageToCustomer(int ChatID, string MobileNo, string ProgramCode, string Message, int InsertChat=1)
+        public ResponseModel sendMessageToCustomer(int ChatID, string MobileNo, string ProgramCode, string Message, string WhatsAppMessage, string ImageURL, int InsertChat=1)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int result = 0;
@@ -287,7 +287,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
                 result = customerChatCaller.SendMessageToCustomer(new CustomerChatService(_connectionString),  ChatID,  MobileNo,  ProgramCode, 
-                          Message, _ClientAPIUrl, authenticate.UserMasterID, InsertChat);
+                          Message, WhatsAppMessage, ImageURL, _ClientAPIUrl, authenticate.UserMasterID, InsertChat);
 
                 statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

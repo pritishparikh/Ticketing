@@ -413,8 +413,9 @@ namespace Easyrewardz_TicketSystem.Services
 
                     foreach (CustomerRecommendatonModel RecObj in RecommendationsList)
                     {
-
-                        resultCount = resultCount + SendMessageToCustomer(Chat_ID, MobileNo, ProgramCode, RecObj.Url, ClientAPIURL, CreatedBy,0);
+                        string whatsAppContent = "Brand: " + RecObj.Brand + ", Category: " + RecObj.Category + ", Sub Category: " + RecObj.SubCategory + ", Color: " + RecObj.Color + ", Size: " +
+                                                 RecObj.Size + ", Item Code: " + RecObj.ItemCode + ", Price: " + RecObj.Price + "  " + RecObj.Url;
+                        resultCount = resultCount + SendMessageToCustomer(Chat_ID, MobileNo, ProgramCode, RecObj.Url, whatsAppContent, RecObj.ImageURL, ClientAPIURL, CreatedBy,0);
                     }
 
                     #endregion
@@ -465,27 +466,43 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ClientAPIURL"></param>
         /// <param name="CreatedBy"></param>
         /// <returns></returns>
-        public int SendMessageToCustomer(int ChatID, string MobileNo, string ProgramCode, string Message, string ClientAPIURL, int CreatedBy, int InsertChat)
+        public int SendMessageToCustomer(int ChatID, string MobileNo, string ProgramCode, string Message, string WhatsAppMessage, string ImageURL, string ClientAPIURL, int CreatedBy, int InsertChat)
         {
             MySqlCommand cmd = new MySqlCommand();
             int resultCount = 0;
             CustomerChatModel ChatMessageDetails = new CustomerChatModel();
             ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
+            ClientCustomSendImageModel SendImageRequest = new ClientCustomSendImageModel();
             string ClientAPIResponse = string.Empty;
+            string ClientImageAPIResponse = string.Empty;
             bool isMessageSent = false;
 
             try
             {
 
                 #region call client api for sending message to customer
-                
-                SendTextRequest.To = MobileNo;
-                SendTextRequest.textToReply = Message;
-                SendTextRequest.programCode = ProgramCode;
+                if (string.IsNullOrEmpty(ImageURL))
+                {
+                    SendTextRequest.To = MobileNo;
+                    SendTextRequest.textToReply = Message;
+                    SendTextRequest.programCode = ProgramCode;
 
-                string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
+                    string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
 
-                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendText", JsonRequest);
+                    ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendText", JsonRequest);
+                }
+
+                if (!string.IsNullOrEmpty(ImageURL))
+                {
+                    SendImageRequest.To = MobileNo;
+                    SendImageRequest.textToReply = WhatsAppMessage;
+                    SendImageRequest.programCode = ProgramCode;
+                    SendImageRequest.imageUrl = ImageURL;
+
+                    string JsonRequests = JsonConvert.SerializeObject(SendImageRequest);
+
+                    ClientImageAPIResponse = CommonService.SendImageApiRequest(ClientAPIURL + "api/ChatbotBell/SendImage", JsonRequests);
+                }
 
                 if (!string.IsNullOrEmpty(ClientAPIResponse))
                 {

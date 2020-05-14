@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int SendRecommendationsToCustomer(int CustomerID, string MobileNo, string ClientAPIURL, int CreatedBy);
 
-        int SendMessageToCustomer(int ChatID, string MobileNo,string ProgramCode,string Message, string ClientAPIURL,int CreatedBy, int InsertChat);
+        int SendMessageToCustomer(int ChatID, string MobileNo,string ProgramCode,string Message, string WhatsAppMessage, string ImageURL, string ClientAPIURL,int CreatedBy, int InsertChat);
 
 
     }
