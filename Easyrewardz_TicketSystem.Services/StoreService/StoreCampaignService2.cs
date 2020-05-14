@@ -38,7 +38,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="tenantID"></param>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public List<StoreCampaignModel2> GetStoreCampaign(int tenantID, int userID)
+        public List<StoreCampaignModel2> GetStoreCampaign(int tenantID, int userID, string campaignName, string statusId)
         {
             DataSet ds = new DataSet();
             List<StoreCampaignModel2> lstCampaign = new List<StoreCampaignModel2>();
@@ -51,6 +51,8 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@User_ID", userID);
+                cmd.Parameters.AddWithValue("@_campaignName", campaignName);
+                cmd.Parameters.AddWithValue("@_statusId", statusId);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
