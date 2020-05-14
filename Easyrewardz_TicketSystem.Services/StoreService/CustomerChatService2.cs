@@ -415,7 +415,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         string whatsAppContent = "Brand: " + RecObj.Brand + ", Category: " + RecObj.Category + ", Sub Category: " + RecObj.SubCategory + ", Color: " + RecObj.Color + ", Size: " +
                                                  RecObj.Size + ", Item Code: " + RecObj.ItemCode + ", Price: " + RecObj.Price + "  " + RecObj.Url;
-                        resultCount = resultCount + SendMessageToCustomer(Chat_ID, MobileNo, ProgramCode, RecObj.Url, whatsAppContent, RecObj.ImageURL, ClientAPIURL, CreatedBy,0);
+                        resultCount = resultCount + SendMessageToCustomer(Chat_ID, MobileNo.Length>10?MobileNo:"91"+MobileNo, ProgramCode, RecObj.Url, whatsAppContent, RecObj.ImageURL, ClientAPIURL, CreatedBy,0);
                     }
 
                     #endregion
@@ -504,23 +504,23 @@ namespace Easyrewardz_TicketSystem.Services
                     ClientImageAPIResponse = CommonService.SendImageApiRequest(ClientAPIURL + "api/ChatbotBell/SendImage", JsonRequests);
                 }
 
-                if (!string.IsNullOrEmpty(ClientAPIResponse))
-                {
-                    isMessageSent = Convert.ToBoolean(ClientAPIResponse);
+                //if (!string.IsNullOrEmpty(ClientAPIResponse))
+                //{
+                //    isMessageSent = Convert.ToBoolean(ClientAPIResponse);
 
-                    if (isMessageSent && ChatID > 0 && InsertChat.Equals(1))
-                    {
-                        ChatMessageDetails.ChatID = ChatID;
-                        ChatMessageDetails.Message = Message;
-                        ChatMessageDetails.ByCustomer = false;
-                        ChatMessageDetails.ChatStatus = 1;
-                        ChatMessageDetails.StoreManagerId = CreatedBy;
-                        ChatMessageDetails.CreatedBy = CreatedBy;
+                //    if (isMessageSent && ChatID > 0 && InsertChat.Equals(1))
+                //    {
+                //        ChatMessageDetails.ChatID = ChatID;
+                //        ChatMessageDetails.Message = Message;
+                //        ChatMessageDetails.ByCustomer = false;
+                //        ChatMessageDetails.ChatStatus = 1;
+                //        ChatMessageDetails.StoreManagerId = CreatedBy;
+                //        ChatMessageDetails.CreatedBy = CreatedBy;
 
-                        resultCount = SaveChatMessages(ChatMessageDetails);
+                //        resultCount = SaveChatMessages(ChatMessageDetails);
 
-                    }
-                }
+                //    }
+                //}
 
                 #endregion
 
