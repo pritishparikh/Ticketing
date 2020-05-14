@@ -15,12 +15,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
     public partial class StoreCampaignController : ControllerBase
     {
         /// <summary>
-        /// Get Campaign Details
+        /// GetCampaignDetails
         /// </summary>
+        /// <param name="campaignName"></param>
+        /// <param name="statusId"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetCampaignDetails")]
-        public ResponseModel GetCampaignDetails()
+        public ResponseModel GetCampaignDetails(string campaignName = "", string statusId="All")
         {
             List<StoreCampaignModel2> objStoreCampaign = new List<StoreCampaignModel2>();
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -34,7 +36,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                objStoreCampaign = storecampaigncaller.GetStoreCampaign(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
+                objStoreCampaign = storecampaigncaller.GetStoreCampaign(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, campaignName, statusId);
                 statusCode =
                    objStoreCampaign.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

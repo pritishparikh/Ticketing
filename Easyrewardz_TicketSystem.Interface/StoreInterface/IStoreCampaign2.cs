@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public partial interface IStoreCampaign
     {
-        List<StoreCampaignModel2> GetStoreCampaign(int tenantID, int userID);
+        List<StoreCampaignModel2> GetStoreCampaign(int tenantID, int userID, string campaignName, string statusId);
 
         StoresCampaignStatusResponse GetCustomerpopupDetailsList(string mobileNumber, string programCode, int tenantID, int userID, string ClientAPIURL);
 
