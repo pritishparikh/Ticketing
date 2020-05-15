@@ -135,7 +135,7 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
                 cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
-                cmd1.Parameters.AddWithValue("@search", Search);
+                cmd1.Parameters.AddWithValue("@search", Search==null?"": Search);
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd1
