@@ -20,6 +20,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Variable
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly string _ErconnectioSting;
         private readonly string _radisCacheServerAddress;
         #endregion
 
@@ -28,6 +29,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            _ErconnectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessErMasterMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
@@ -250,7 +252,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname))
                 {
-                    bool isValid = newSecurityCaller.validateProgramCode(new SecurityService(_connectioSting, _radisCacheServerAddress), Programcode, Domainname);
+                    bool isValid = newSecurityCaller.validateProgramCode(new SecurityService(_ErconnectioSting, _radisCacheServerAddress), Programcode, Domainname);
 
                     if (isValid)
                     {

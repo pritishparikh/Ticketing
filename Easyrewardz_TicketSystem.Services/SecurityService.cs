@@ -681,35 +681,59 @@ namespace Easyrewardz_TicketSystem.Services
         {
             bool isValid = false;
 
-          
-                DataSet ds = new DataSet();
-                MySqlCommand cmd = new MySqlCommand();
-                try
-                {
 
-                    Programcode = DecryptStringAES(Programcode);
-                    Domainname = DecryptStringAES(Domainname);
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
 
-                    conn.Open();
-                    cmd.Connection = conn;
-                    MySqlCommand cmd1 = new MySqlCommand("SP_validateProgramCode", conn);
-                    cmd1.CommandType = CommandType.StoredProcedure;
-                    cmd1.Parameters.AddWithValue("@Program_code", Programcode);
-                    cmd1.Parameters.AddWithValue("@Domain_name", Domainname);
-                    isValid = Convert.ToBoolean(cmd1.ExecuteScalar());
-                }
-                catch (Exception)
+                Programcode = DecryptStringAES(Programcode);
+                Domainname = DecryptStringAES(Domainname);
+
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_validateProgramCode", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Program_code", Programcode);
+                cmd1.Parameters.AddWithValue("@Domain_name", Domainname);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd)
                 {
-                    throw;
-                }
-                finally
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
                 {
-                    if (conn != null)
+                    if (ds.Tables[0].Rows.Count > 0)
                     {
-                        conn.Close();
+                        bool status = Convert.ToBoolean(ds.Tables[0].Rows[0]["Return"]);
+                        isValid = status;
+
+                        if (status)
+                        {
+                            string ConnectionString = ds.Tables[0].Rows[0]["ConnectionString"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ConnectionString"]);
+                            string ProgramCodeString = ds.Tables[0].Rows[0]["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ProgramCode"]);
+
+
+                            string jsonString = JsonConvert.SerializeObject(ConnectionString);
+
+                            RedisCacheService radisCacheService = new RedisCacheService(radisCacheServerAddress);
+                            radisCacheService.Set("Con" + ProgramCodeString, jsonString);
+                        }
                     }
                 }
-                return isValid;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return isValid;
         }
 
 

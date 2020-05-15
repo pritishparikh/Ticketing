@@ -684,7 +684,6 @@ namespace Easyrewardz_TicketSystem.Services
 
 
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
             try
             {
 
@@ -692,12 +691,37 @@ namespace Easyrewardz_TicketSystem.Services
                 Domainname = DecryptStringAES(Domainname);
 
                 conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_validateStoreProgramCode", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Program_code", Programcode);
-                cmd1.Parameters.AddWithValue("@Domain_name", Domainname);
-                isValid = Convert.ToBoolean(cmd1.ExecuteScalar());
+                MySqlCommand cmd = new MySqlCommand("SP_validateStoreProgramCode", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Program_code", Programcode);
+                cmd.Parameters.AddWithValue("@Domain_name", Domainname);
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd)
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        bool status = Convert.ToBoolean(ds.Tables[0].Rows[0]["Return"]);
+                        isValid = status;
+
+                        if (status)
+                        {
+                            string ConnectionString = ds.Tables[0].Rows[0]["ConnectionString"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ConnectionString"]);
+                            string ProgramCodeString = ds.Tables[0].Rows[0]["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ProgramCode"]);
+
+
+                            string jsonString = JsonConvert.SerializeObject(ConnectionString);
+
+                            RedisCacheService radisCacheService = new RedisCacheService(radisCacheServerAddress);
+                            radisCacheService.Set("Con" + ProgramCodeString, jsonString);
+                        }
+                    }
+                }
+                        
             }
             catch (Exception)
             {
