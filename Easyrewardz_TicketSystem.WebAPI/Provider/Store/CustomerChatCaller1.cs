@@ -20,11 +20,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        public List<CustomerChatMaster> OngoingChat(ICustomerChat customerChat,int userMasterID,int tenantID)
+        public List<CustomerChatMaster> OngoingChat(ICustomerChat customerChat,int userMasterID,int tenantID, string Search)
         {
             _customerChat = customerChat;
 
-            return _customerChat.OngoingChat(userMasterID, tenantID);
+            return _customerChat.OngoingChat(userMasterID, tenantID, Search);
         }
 
         /// <summary>
