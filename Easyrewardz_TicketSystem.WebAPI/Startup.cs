@@ -4,6 +4,8 @@ using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
@@ -92,48 +94,9 @@ namespace Easyrewardz_TicketSystem.WebAPI
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.Use(async (context, next) =>
-            {
-                var routeData = context.Request.Path.Value;
-                //var XAuthorizedToken = Convert.ToString(context.Request.Headers["X-Authorized-Token"]);
-                if (!string.IsNullOrEmpty(routeData))
-                {
-                    if (!routeData.Contains("dev-Ticketingsecuritymodule"))
-                    {
-                        if (!routeData.Contains("validateprogramcode"))
-                        {
-                            var XAuthorizedProgramcode = Convert.ToString(context.Request.Headers["X-Authorized-Programcode"]);
-                            if (string.IsNullOrEmpty(XAuthorizedProgramcode))
-                            {
-                                var XAuthorizedToken = Convert.ToString(context.Request.Headers["X-Authorized-Token"]);
 
-                                Authenticate authenticate = new Authenticate();
-                                authenticate = GetAuthenticateDataFromToken(Configuration.GetValue<string>("radishCache"), DecryptStringAES(XAuthorizedToken));
-                                XAuthorizedProgramcode = authenticate.ProgramCode;
-                            }
-                            else
-                            {
-                                XAuthorizedProgramcode = DecryptStringAES(XAuthorizedProgramcode);
-                            }
-                            if (XAuthorizedProgramcode != null)
-                            {
-                                RedisCacheService cacheService = new RedisCacheService(Configuration.GetValue<string>("radishCache"));
-                                if (cacheService.Exists("Con" + XAuthorizedProgramcode))
-                                {
-                                    string _data = cacheService.Get("Con" + XAuthorizedProgramcode);
-                                    _data = JsonConvert.DeserializeObject<string>(_data);
-                                    Configuration["ConnectionStrings:DataAccessMySqlProvider"] = _data;
-                                }
-                            }
-                        }
-                    }
-                }
-                //var tenant = routeData?.Values["tenant"]?.ToString();
-                //if (!string.IsNullOrEmpty(tenant))
-                //    context.Items["tenant"] = tenant;
-
-                await next();
-            });
+            app.UseEndpointRouting();
+            
             string CurrentDirectory = Directory.GetCurrentDirectory();
 
             app.UseHttpsRedirection();

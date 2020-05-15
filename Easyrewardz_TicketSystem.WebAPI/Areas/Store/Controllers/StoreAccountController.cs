@@ -5,6 +5,7 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
@@ -165,9 +166,22 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 string userId = X_Authorized_userId.Replace(' ', '+');
                 string password = X_Authorized_password.Replace(' ', '+');
 
+                string _data = "";
+                if (X_Authorized_Programcode != null)
+                {
+                    X_Authorized_Programcode = SecurityService.DecryptStringAES(X_Authorized_Programcode);
+
+                    RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                    if (cacheService.Exists("Con" + X_Authorized_Programcode))
+                    {
+                        _data = cacheService.Get("Con" + X_Authorized_Programcode);
+                        _data = JsonConvert.DeserializeObject<string>(_data);
+                    }
+                }
+
                 if (!string.IsNullOrEmpty(programCode) && !string.IsNullOrEmpty(domainName) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
-                    account = newSecurityCaller.validateUser(new StoreSecurityService(_connectioSting, _radisCacheServerAddress), programCode, domainName, userId, password);
+                    account = newSecurityCaller.validateUser(new StoreSecurityService(_data, _radisCacheServerAddress), programCode, domainName, userId, password);
 
                     if (!string.IsNullOrEmpty(account.Token))
                     {
