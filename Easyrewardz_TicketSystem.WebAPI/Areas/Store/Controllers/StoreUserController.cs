@@ -1025,6 +1025,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
             var folderName = Path.Combine(ProfileImg_Resources, StoreProfileImage);
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            if (!Directory.Exists(pathToSave))
+            {
+                Directory.CreateDirectory(pathToSave);
+            }
+
             ResponseModel objResponseModel = new ResponseModel();
             try
             {
