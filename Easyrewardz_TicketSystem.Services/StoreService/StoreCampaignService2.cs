@@ -303,7 +303,7 @@ namespace Easyrewardz_TicketSystem.Services
                         obj.campaignrecommended = objrecommended;
                     }
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
                     StoreCampaignRecommended RecommendedDetail = new StoreCampaignRecommended();
 
