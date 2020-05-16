@@ -191,7 +191,7 @@ namespace Easyrewardz_TicketSystem.Services
                     if (!string.IsNullOrEmpty(apiResponse))
                     {
 
-                        if (apiResponse != null)
+                        if (!string.IsNullOrEmpty(apiResponse.Replace("[]","")))
                         {
                             objkeyinsight = JsonConvert.DeserializeObject<StoreCampaignKeyInsight>(((apiResponse)));
 
@@ -213,6 +213,15 @@ namespace Easyrewardz_TicketSystem.Services
                                 };
                                 obj.campaignkeyinsight = KeyInsight;
                             }
+                        }
+                        else
+                        {
+                            StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight
+                            {
+                                mobileNumber = mobileNumber,
+                                insightText = GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID)
+                            };
+                            obj.campaignkeyinsight = KeyInsight;
                         }
                     }
                     }
