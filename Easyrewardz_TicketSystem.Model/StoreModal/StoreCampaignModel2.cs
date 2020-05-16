@@ -32,7 +32,13 @@ namespace Easyrewardz_TicketSystem.Model
 
         public int MaxClickAllowed { get; set; }
 
-        public int ClickCount { get; set; }
+        public int SmsClickCount { get; set; }
+
+        public int EmailClickCount { get; set; }
+
+        public int MessengerClickCount { get; set; }
+
+        public int BotClickCount { get; set; }
 
 
     }
