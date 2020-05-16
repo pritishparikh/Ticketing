@@ -29,6 +29,12 @@ namespace Easyrewardz_TicketSystem.Model
         public bool MessengerFlag { get; set; }
 
         public bool BotFlag { get; set; }
+
+        public int MaxClickAllowed { get; set; }
+
+        public int ClickCount { get; set; }
+
+
     }
 
     public enum StoreCampaignStatus

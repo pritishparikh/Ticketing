@@ -76,6 +76,8 @@ namespace Easyrewardz_TicketSystem.Services
                             MessengerFlag = Convert.ToBoolean(ds.Tables[0].Rows[i]["MessengerFlag"]),
                             BotFlag = Convert.ToBoolean(ds.Tables[0].Rows[i]["BotFlag"]),
                             Status = Convert.ToString((StoreCampaignStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"])),
+                            MaxClickAllowed = ds.Tables[0].Rows[i]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MaxClickAllowed"]),
+                            ClickCount = ds.Tables[0].Rows[i]["ClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ClickCount"]),
                         };
                         lstCampaign.Add(storecampaign);
                     }
