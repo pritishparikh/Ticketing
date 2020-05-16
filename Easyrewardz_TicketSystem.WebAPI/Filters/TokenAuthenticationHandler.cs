@@ -63,38 +63,38 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
 
                 var routeData = Context.Request.Path.Value;
                 //var XAuthorizedToken = Convert.ToString(context.Request.Headers["X-Authorized-Token"]);
-                if (!string.IsNullOrEmpty(routeData))
-                {
-                    if (!routeData.Contains("dev-Ticketingsecuritymodule"))
-                    {
-                        if (!routeData.Contains("validateprogramcode"))
-                        {
-                            var XAuthorizedProgramcode = Convert.ToString(Context.Request.Headers["X-Authorized-Programcode"]);
-                            if (string.IsNullOrEmpty(XAuthorizedProgramcode))
-                            {
-                                var XAuthorizedToken = Convert.ToString(Context.Request.Headers["X-Authorized-Token"]);
+                //if (!string.IsNullOrEmpty(routeData))
+                //{
+                //    if (!routeData.Contains("dev-Ticketingsecuritymodule"))
+                //    {
+                //        if (!routeData.Contains("validateprogramcode"))
+                //        {
+                //            var XAuthorizedProgramcode = Convert.ToString(Context.Request.Headers["X-Authorized-Programcode"]);
+                //            if (string.IsNullOrEmpty(XAuthorizedProgramcode))
+                //            {
+                //                var XAuthorizedToken = Convert.ToString(Context.Request.Headers["X-Authorized-Token"]);
 
-                                Authenticate authenticates = new Authenticate();
-                                authenticates = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(XAuthorizedToken));
-                                XAuthorizedProgramcode = authenticates.ProgramCode;
-                            }
-                            else
-                            {
-                                XAuthorizedProgramcode = SecurityService.DecryptStringAES(XAuthorizedProgramcode);
-                            }
-                            if (XAuthorizedProgramcode != null)
-                            {
-                                RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
-                                if (cacheService.Exists("Con" + XAuthorizedProgramcode))
-                                {
-                                    string _data = cacheService.Get("Con" + XAuthorizedProgramcode);
-                                    _data = JsonConvert.DeserializeObject<string>(_data);
-                                    Configurations["ConnectionStrings:DataAccessMySqlProvider"] = _data;
-                                }
-                            }
-                        }
-                    }
-                }
+                //                Authenticate authenticates = new Authenticate();
+                //                authenticates = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(XAuthorizedToken));
+                //                XAuthorizedProgramcode = authenticates.ProgramCode;
+                //            }
+                //            else
+                //            {
+                //                XAuthorizedProgramcode = SecurityService.DecryptStringAES(XAuthorizedProgramcode);
+                //            }
+                //            if (XAuthorizedProgramcode != null)
+                //            {
+                //                RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                //                if (cacheService.Exists("Con" + XAuthorizedProgramcode))
+                //                {
+                //                    string _data = cacheService.Get("Con" + XAuthorizedProgramcode);
+                //                    _data = JsonConvert.DeserializeObject<string>(_data);
+                //                    Configurations["ConnectionStrings:DataAccessMySqlProvider"] = _data;
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
 
 
                 Authenticate authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));

@@ -32,7 +32,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
-            _ErconnectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessErMasterMySqlProvider");
+            //_ErconnectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessErMasterMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         public void OnException(ExceptionContext context)
@@ -56,7 +56,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                 MessageException = context.Exception.Message,
                 IPAddress = Convert.ToString(context.HttpContext.Connection.RemoteIpAddress)
             };
-            int result = errorLogCaller.AddErrorLog(new ErrorLogging(_ErconnectioSting), errorLogs);
+            int result = errorLogCaller.AddErrorLog(new ErrorLogging(_connectioSting), errorLogs);
             context.Result = new RedirectToRouteResult(
              new RouteValueDictionary
              {

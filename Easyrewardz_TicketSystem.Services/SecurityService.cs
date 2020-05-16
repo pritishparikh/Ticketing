@@ -696,31 +696,32 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Program_code", Programcode);
                 cmd1.Parameters.AddWithValue("@Domain_name", Domainname);
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd)
-                {
-                    SelectCommand = cmd
-                };
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    if (ds.Tables[0].Rows.Count > 0)
-                    {
-                        bool status = Convert.ToBoolean(ds.Tables[0].Rows[0]["Return"]);
-                        isValid = status;
+                isValid = Convert.ToBoolean(cmd1.ExecuteScalar());
+                //MySqlDataAdapter da = new MySqlDataAdapter(cmd)
+                //{
+                //    SelectCommand = cmd
+                //};
+                //da.Fill(ds);
+                //if (ds != null && ds.Tables[0] != null)
+                //{
+                //    if (ds.Tables[0].Rows.Count > 0)
+                //    {
+                //        bool status = Convert.ToBoolean(ds.Tables[0].Rows[0]["Return"]);
+                //        isValid = status;
 
-                        if (status)
-                        {
-                            string ConnectionString = ds.Tables[0].Rows[0]["ConnectionString"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ConnectionString"]);
-                            string ProgramCodeString = ds.Tables[0].Rows[0]["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ProgramCode"]);
+                //        if (status)
+                //        {
+                //            string ConnectionString = ds.Tables[0].Rows[0]["ConnectionString"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ConnectionString"]);
+                //            string ProgramCodeString = ds.Tables[0].Rows[0]["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ProgramCode"]);
 
 
-                            string jsonString = JsonConvert.SerializeObject(ConnectionString);
+                //            string jsonString = JsonConvert.SerializeObject(ConnectionString);
 
-                            RedisCacheService radisCacheService = new RedisCacheService(radisCacheServerAddress);
-                            radisCacheService.Set("Con" + ProgramCodeString, jsonString);
-                        }
-                    }
-                }
+                //            RedisCacheService radisCacheService = new RedisCacheService(radisCacheServerAddress);
+                //            radisCacheService.Set("Con" + ProgramCodeString, jsonString);
+                //        }
+                //    }
+                //}
             }
             catch (Exception)
             {
