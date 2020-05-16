@@ -25,5 +25,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
+        public int UpdateCampaignMaxClickTimer(IStoreCampaign Campaign, int TimerID, int MaxClick, int EnableClickAfter, string ClickAfterDuration, int ModifiedBy)
+        {
+            _CampaignRepository = Campaign;
+            return _CampaignRepository.UpdateCampaignMaxClickTimer(TimerID, MaxClick, EnableClickAfter, ClickAfterDuration, ModifiedBy);
+
+        }
+
+        
     }
 }

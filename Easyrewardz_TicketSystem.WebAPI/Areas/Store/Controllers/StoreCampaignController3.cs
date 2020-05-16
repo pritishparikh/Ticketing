@@ -92,5 +92,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+
+        /// <summary>
+        ///Update Campaign Max Click Timer
+        /// </summary>
+        /// <param name="TimerID"></param>
+        /// <param name="MaxClick"></param>
+        /// <param name="EnableClickAfter"></param>
+        /// <param name="ClickAfterDuration"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateCampaignMaxClickTimer")]
+        public ResponseModel UpdateCampaignMaxClickTimer(int TimerID,int MaxClick, int EnableClickAfter, string ClickAfterDuration)
+        {
+
+            StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int UpdateCount = 0;
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                UpdateCount = storecampaigncaller.UpdateCampaignMaxClickTimer(new StoreCampaignService(_connectioSting), TimerID, MaxClick, EnableClickAfter,
+                    ClickAfterDuration, authenticate.UserMasterID);
+                statusCode = UpdateCount.Equals(0) ?
+                           (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = UpdateCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
     }
 }

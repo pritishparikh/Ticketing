@@ -15,7 +15,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get Campaign Setting List
         /// </summary>
         /// <returns></returns>
-
         public StoreCampaignModel3 GetStoreCampignSetting(int TenantId, int UserId, string ProgramCode)
         {
             DataSet ds = new DataSet();
@@ -142,6 +141,43 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
+        /// <summary>
+        /// Update Campaign Setting
+        /// </summary>
+        /// <param name="CampaignModel"></param>
+        /// <returns></returns>
+        public int UpdateCampaignMaxClickTimer(int TimerID, int MaxClick, int EnableClickAfter, string ClickAfterDuration, int ModifiedBy)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateCampaignMaxClickTimer", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@timerID", TimerID);
+                cmd.Parameters.AddWithValue("@_MaxClickAllowed", MaxClick);
+                cmd.Parameters.AddWithValue("@_EnableClickAfterValue", EnableClickAfter);
+                cmd.Parameters.AddWithValue("@_EnableClickAfterDuration", ClickAfterDuration);
+                cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
 
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
     }
 }
