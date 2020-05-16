@@ -11,6 +11,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int UpdateStoreCampaignSetting(StoreCampaignSettingModel CampaignModel);
 
-        int UpdateCampaignMaxClickTimer( int TimerID, int MaxClick, int EnableClickAfter, string ClickAfterDuration, int ModifiedBy);
+        int UpdateCampaignMaxClickTimer(StoreCampaignSettingTimer storeCampaignSettingTimer, int ModifiedBy);
     }
 }

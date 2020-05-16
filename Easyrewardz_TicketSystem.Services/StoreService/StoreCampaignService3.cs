@@ -39,41 +39,44 @@ namespace Easyrewardz_TicketSystem.Services
                     SelectCommand = cmd
                 };
                 da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        StoreCampaignSettingModel storecampaign = new StoreCampaignSettingModel()
-                        {
-                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
-                            CampaignName = ds.Tables[0].Rows[i]["CampaignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignName"]),
-                            CampaignCode = ds.Tables[0].Rows[i]["CampaignCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignCode"]),
-                            Programcode = ds.Tables[0].Rows[i]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Programcode"]),
+                //if (ds != null && ds.Tables[0] != null)
+                //{
+                    //for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    //{
+                    //    StoreCampaignSettingModel storecampaign = new StoreCampaignSettingModel()
+                    //    {
+                    //        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                    //        CampaignName = ds.Tables[0].Rows[i]["CampaignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignName"]),
+                    //        CampaignCode = ds.Tables[0].Rows[i]["CampaignCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignCode"]),
+                    //        Programcode = ds.Tables[0].Rows[i]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Programcode"]),
                            
-                            SmsFlag = ds.Tables[0].Rows[i]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["SmsFlag"]),
-                            EmailFlag = ds.Tables[0].Rows[i]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["EmailFlag"]),
-                            MessengerFlag = ds.Tables[0].Rows[i]["MessengerFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["MessengerFlag"]),
-                            BotFlag = ds.Tables[0].Rows[i]["BotFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["BotFlag"]),  
+                    //        SmsFlag = ds.Tables[0].Rows[i]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["SmsFlag"]),
+                    //        EmailFlag = ds.Tables[0].Rows[i]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["EmailFlag"]),
+                    //        MessengerFlag = ds.Tables[0].Rows[i]["MessengerFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["MessengerFlag"]),
+                    //        BotFlag = ds.Tables[0].Rows[i]["BotFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["BotFlag"]),  
 
 
-                        };
-                        lstCampaignSetting.Add(storecampaign);
-                    }
+                    //    };
+                    //    lstCampaignSetting.Add(storecampaign);
+                    //}
 
                 
-                    campaignObj.CampaignSetting = lstCampaignSetting;
-                }
+                    //campaignObj.CampaignSetting = lstCampaignSetting;
+               // }
 
-                if (ds != null && ds.Tables[1] != null)
+                if (ds != null && ds.Tables[0] != null)
                 {
-                   if(ds.Tables[1].Rows.Count > 0)
+                   if(ds.Tables[0].Rows.Count > 0)
                     {
                        CampaignSettingTimer.ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID"]);
-                       CampaignSettingTimer.MaxClickAllowed = ds.Tables[1].Rows[0]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["MaxClickAllowed"]);
-                       CampaignSettingTimer.EnableClickAfterValue = ds.Tables[1].Rows[0]["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["EnableClickAfterValue"]);
-                        CampaignSettingTimer.EnableClickAfterDuration = ds.Tables[1].Rows[0]["EnableClickAfterDuration"] == DBNull.Value ?string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["EnableClickAfterDuration"]);
-                        CampaignSettingTimer.Programcode = ds.Tables[1].Rows[0]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["Programcode"]);
-
+                       CampaignSettingTimer.MaxClickAllowed = ds.Tables[0].Rows[0]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["MaxClickAllowed"]);
+                       CampaignSettingTimer.EnableClickAfterValue = ds.Tables[0].Rows[0]["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["EnableClickAfterValue"]);
+                        CampaignSettingTimer.EnableClickAfterDuration = ds.Tables[0].Rows[0]["EnableClickAfterDuration"] == DBNull.Value ?string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["EnableClickAfterDuration"]);
+                        CampaignSettingTimer.Programcode = ds.Tables[0].Rows[0]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Programcode"]);
+                        CampaignSettingTimer.SmsFlag = ds.Tables[0].Rows[0]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["SmsFlag"]);
+                        CampaignSettingTimer.EmailFlag = ds.Tables[0].Rows[0]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["EmailFlag"]);
+                        CampaignSettingTimer.MessengerFlag = ds.Tables[0].Rows[0]["MessengerFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["MessengerFlag"]);
+                        CampaignSettingTimer.BotFlag = ds.Tables[0].Rows[0]["BotFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["BotFlag"]);
                     }
 
                     campaignObj.CampaignSettingTimer = CampaignSettingTimer;
@@ -146,7 +149,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="CampaignModel"></param>
         /// <returns></returns>
-        public int UpdateCampaignMaxClickTimer(int TimerID, int MaxClick, int EnableClickAfter, string ClickAfterDuration, int ModifiedBy)
+        public int UpdateCampaignMaxClickTimer(StoreCampaignSettingTimer storeCampaignSettingTimer, int ModifiedBy)
         {
             int UpdateCount = 0;
             try
@@ -154,12 +157,15 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_HSUpdateCampaignMaxClickTimer", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@timerID", TimerID);
-                cmd.Parameters.AddWithValue("@_MaxClickAllowed", MaxClick);
-                cmd.Parameters.AddWithValue("@_EnableClickAfterValue", EnableClickAfter);
-                cmd.Parameters.AddWithValue("@_EnableClickAfterDuration", ClickAfterDuration);
+                cmd.Parameters.AddWithValue("@timerID", storeCampaignSettingTimer.ID);
+                cmd.Parameters.AddWithValue("@_MaxClickAllowed", storeCampaignSettingTimer.MaxClickAllowed);
+                cmd.Parameters.AddWithValue("@_EnableClickAfterValue", storeCampaignSettingTimer.EnableClickAfterValue);
+                cmd.Parameters.AddWithValue("@_EnableClickAfterDuration", storeCampaignSettingTimer.EnableClickAfterDuration);
                 cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
-
+                cmd.Parameters.AddWithValue("@_SmsFlag", Convert.ToInt16(storeCampaignSettingTimer.SmsFlag));
+                cmd.Parameters.AddWithValue("@_EmailFlag", Convert.ToInt16(storeCampaignSettingTimer.EmailFlag));
+                cmd.Parameters.AddWithValue("@_MessengerFlag", Convert.ToInt16(storeCampaignSettingTimer.MessengerFlag));
+                cmd.Parameters.AddWithValue("@_BotFlag", Convert.ToInt16(storeCampaignSettingTimer.BotFlag));
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());

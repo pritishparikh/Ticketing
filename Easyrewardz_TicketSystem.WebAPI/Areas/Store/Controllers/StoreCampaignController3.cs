@@ -34,7 +34,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objStoreCampaignSetting = storecampaigncaller.GetStoreCampignSetting(new StoreCampaignService(_connectioSting),
                     authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
                 statusCode =
-                   objStoreCampaignSetting.CampaignSetting.Count.Equals(0) ?
+                   objStoreCampaignSetting.CampaignSettingTimer.Equals(0) ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
@@ -103,7 +103,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateCampaignMaxClickTimer")]
-        public ResponseModel UpdateCampaignMaxClickTimer(int TimerID,int MaxClick, int EnableClickAfter, string ClickAfterDuration)
+        public ResponseModel UpdateCampaignMaxClickTimer([FromBody] StoreCampaignSettingTimer storeCampaignSettingTimer)
         {
 
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -118,8 +118,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                UpdateCount = storecampaigncaller.UpdateCampaignMaxClickTimer(new StoreCampaignService(_connectioSting), TimerID, MaxClick, EnableClickAfter,
-                    ClickAfterDuration, authenticate.UserMasterID);
+                UpdateCount = storecampaigncaller.UpdateCampaignMaxClickTimer(new StoreCampaignService(_connectioSting), storeCampaignSettingTimer, authenticate.UserMasterID);
                 statusCode = UpdateCount.Equals(0) ?
                            (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
 
