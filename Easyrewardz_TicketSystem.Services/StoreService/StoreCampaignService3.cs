@@ -72,6 +72,7 @@ namespace Easyrewardz_TicketSystem.Services
                        CampaignSettingTimer.ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID"]);
                        CampaignSettingTimer.MaxClickAllowed = ds.Tables[1].Rows[0]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["MaxClickAllowed"]);
                        CampaignSettingTimer.EnableClickAfterValue = ds.Tables[1].Rows[0]["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["EnableClickAfterValue"]);
+                        CampaignSettingTimer.EnableClickAfterDuration = ds.Tables[1].Rows[0]["EnableClickAfterDuration"] == DBNull.Value ?string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["EnableClickAfterDuration"]);
                         CampaignSettingTimer.Programcode = ds.Tables[1].Rows[0]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["Programcode"]);
 
                     }
