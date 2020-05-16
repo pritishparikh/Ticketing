@@ -59,7 +59,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateCampaignSetting")]
-        public ResponseModel GetCampaignDetails([FromBody] StoreCampaignSettingModel CampaignModel)
+        public ResponseModel UpdateCampaignSetting([FromBody] StoreCampaignSettingModel CampaignModel)
         {
 
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
