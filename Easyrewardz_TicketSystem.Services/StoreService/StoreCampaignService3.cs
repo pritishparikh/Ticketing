@@ -51,10 +51,10 @@ namespace Easyrewardz_TicketSystem.Services
                             CampaignCode = ds.Tables[0].Rows[i]["CampaignCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignCode"]),
                             Programcode = ds.Tables[0].Rows[i]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Programcode"]),
                            
-                            SmsFlag = ds.Tables[0].Rows[i]["Programcode"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["SmsFlag"]),
-                            EmailFlag = ds.Tables[0].Rows[i]["Programcode"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["EmailFlag"]),
-                            MessengerFlag = ds.Tables[0].Rows[i]["Programcode"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["MessengerFlag"]),
-                            BotFlag = ds.Tables[0].Rows[i]["Programcode"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["BotFlag"]),
+                            SmsFlag = ds.Tables[0].Rows[i]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["SmsFlag"]),
+                            EmailFlag = ds.Tables[0].Rows[i]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["EmailFlag"]),
+                            MessengerFlag = ds.Tables[0].Rows[i]["MessengerFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["MessengerFlag"]),
+                            BotFlag = ds.Tables[0].Rows[i]["BotFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["BotFlag"]),
 
 
                         };
@@ -71,7 +71,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                        CampaignSettingTimer.ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID"]);
                        CampaignSettingTimer.MaxClickAllowed = ds.Tables[1].Rows[0]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["MaxClickAllowed"]);
-                       CampaignSettingTimer.EnableClickAfterValue = ds.Tables[1].Rows[0]["CampaignCode"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["EnableClickAfterValue"]);
+                       CampaignSettingTimer.EnableClickAfterValue = ds.Tables[1].Rows[0]["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["EnableClickAfterValue"]);
                         CampaignSettingTimer.Programcode = ds.Tables[1].Rows[0]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["Programcode"]);
 
                     }
