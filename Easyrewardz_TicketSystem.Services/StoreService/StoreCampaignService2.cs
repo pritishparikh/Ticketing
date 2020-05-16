@@ -44,7 +44,10 @@ namespace Easyrewardz_TicketSystem.Services
             List<StoreCampaignModel2> lstCampaign = new List<StoreCampaignModel2>();
             try
             {
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 MySqlCommand cmd = new MySqlCommand("SP_HSGetCampaignList", conn)
                 {
                     CommandType = CommandType.StoredProcedure
@@ -244,7 +247,10 @@ namespace Easyrewardz_TicketSystem.Services
                 }
                 try
                 {
-                    conn.Open();
+                    if (conn != null && conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
                     MySqlCommand cmd = new MySqlCommand("SP_HSGetCampaignRecommendedList", conn)
                     {
                         CommandType = CommandType.StoredProcedure
@@ -297,7 +303,7 @@ namespace Easyrewardz_TicketSystem.Services
                         obj.campaignrecommended = objrecommended;
                     }
                 }
-                catch(Exception)
+                catch(Exception ex)
                 {
                     StoreCampaignRecommended RecommendedDetail = new StoreCampaignRecommended();
 
@@ -396,7 +402,10 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             try
             {
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
 
                 MySqlCommand cmd = new MySqlCommand("SP_HSGetKeyInsightAsChatBot", conn)
                 {
@@ -537,7 +546,10 @@ namespace Easyrewardz_TicketSystem.Services
             List<StoreCampaignLogo> lstCampaignLogo = new List<StoreCampaignLogo>();
             try
             {
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 MySqlCommand cmd = new MySqlCommand("SP_HSGetCampaignLogoList", conn)
                 {
                     CommandType = CommandType.StoredProcedure
@@ -600,7 +612,10 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Close();
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
 
                 MySqlCommand cmd = new MySqlCommand("SP_HScreateUserAtvDetails", conn)
                 {
