@@ -190,7 +190,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TenantID"></param>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        public int CampaignShareChatbot(ShareChatbotModel objRequest, string ClientAPIURL, int TenantID, int UserID)
+        public int CampaignShareChatbot(ShareChatbotModel objRequest, string ClientAPIURL, int TenantID, int UserID, string ProgramCode)
         {
             DataSet ds = new DataSet();
             int result = 0;
@@ -230,7 +230,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     SendFreeTextRequest sendFreeTextRequest = new SendFreeTextRequest
                     {
-                        To = objRequest.CustomerMobileNumber.Length > 10 ? objRequest.CustomerMobileNumber : "91" + objRequest.CustomerMobileNumber,
+                        To = objRequest.CustomerMobileNumber.TrimStart('0').Length > 10 ? objRequest.CustomerMobileNumber : "91" + objRequest.CustomerMobileNumber.TrimStart('0'),
                         ProgramCode = objRequest.ProgramCode,
                         TemplateName = "abc",
                         TemplateNamespace = "abc",
@@ -374,7 +374,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     ChatSendSMS chatSendSMS = new ChatSendSMS
                     {
-                        MobileNumber = objRequest.CustomerMobileNumber.Length > 10 ? objRequest.CustomerMobileNumber : "91" + objRequest.CustomerMobileNumber,
+                        MobileNumber = objRequest.CustomerMobileNumber.TrimStart('0').Length > 10 ? objRequest.CustomerMobileNumber : "91" + objRequest.CustomerMobileNumber.TrimStart('0'),
                         SenderId = SMSsenderId,
                         SmsText = Message
                     };

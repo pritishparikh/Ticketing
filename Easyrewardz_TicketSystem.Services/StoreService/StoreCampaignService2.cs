@@ -141,7 +141,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 try
                 {
-                     apiReq = JsonConvert.SerializeObject(objOrderSearch);
+                    apiReq = JsonConvert.SerializeObject(objOrderSearch);
                     apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetUserATVDetails", apiReq);
 
                     if (!string.IsNullOrEmpty(apiResponse))
@@ -154,23 +154,27 @@ namespace Easyrewardz_TicketSystem.Services
 
                             if (objpopupDetails != null)
                             {
-                                CustomerpopupDetails popupDetail = new CustomerpopupDetails();
-                                popupDetail.name = objpopupDetails.name;
-                                popupDetail.mobileNumber = objpopupDetails.mobileNumber;
-                                popupDetail.tiername = objpopupDetails.tiername;
-                                popupDetail.lifeTimeValue = objpopupDetails.lifeTimeValue;
-                                popupDetail.visitCount = objpopupDetails.visitCount;
+                                CustomerpopupDetails popupDetail = new CustomerpopupDetails
+                                {
+                                    name = objpopupDetails.name,
+                                    mobileNumber = objpopupDetails.mobileNumber,
+                                    tiername = objpopupDetails.tiername,
+                                    lifeTimeValue = objpopupDetails.lifeTimeValue,
+                                    visitCount = objpopupDetails.visitCount
+                                };
                                 obj.useratvdetails = popupDetail;
 
                             }
                             else
                             {
-                                CustomerpopupDetails popupDetail = new CustomerpopupDetails();
-                                popupDetail.name = "";
-                                popupDetail.mobileNumber = "";
-                                popupDetail.tiername = "";
-                                popupDetail.lifeTimeValue = "";
-                                popupDetail.visitCount = "";
+                                CustomerpopupDetails popupDetail = new CustomerpopupDetails
+                                {
+                                    name = "",
+                                    mobileNumber = "",
+                                    tiername = "",
+                                    lifeTimeValue = "",
+                                    visitCount = ""
+                                };
                                 obj.useratvdetails = popupDetail;
                             }
                         }
@@ -181,12 +185,14 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (obj.useratvdetails == null)
                     {
-                        CustomerpopupDetails popupDetail = new CustomerpopupDetails();
-                        popupDetail.name = "";
-                        popupDetail.mobileNumber = "";
-                        popupDetail.tiername = "";
-                        popupDetail.lifeTimeValue = "";
-                        popupDetail.visitCount = "";
+                        CustomerpopupDetails popupDetail = new CustomerpopupDetails
+                        {
+                            name = "",
+                            mobileNumber = "",
+                            tiername = "",
+                            lifeTimeValue = "",
+                            visitCount = ""
+                        };
                         obj.useratvdetails = popupDetail;
 
                     }
@@ -199,7 +205,7 @@ namespace Easyrewardz_TicketSystem.Services
                     if (!string.IsNullOrEmpty(apiResponse))
                     {
 
-                        if (!string.IsNullOrEmpty(apiResponse.Replace("[]","")))
+                        if (!string.IsNullOrEmpty(apiResponse.Replace("[]", "")))
                         {
                             objkeyinsight = JsonConvert.DeserializeObject<StoreCampaignKeyInsight>(((apiResponse)));
 
@@ -208,7 +214,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 StoreCampaignKeyInsight popupDetail = new StoreCampaignKeyInsight
                                 {
                                     mobileNumber = objkeyinsight.mobileNumber,
-                                    insightText = String.IsNullOrEmpty(objkeyinsight.insightText.Trim()) ? GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID) : objkeyinsight.insightText
+                                    insightText = objkeyinsight.insightText
                                 };
                                 obj.campaignkeyinsight = popupDetail;
                             }
@@ -216,8 +222,8 @@ namespace Easyrewardz_TicketSystem.Services
                             {
                                 StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight
                                 {
-                                    mobileNumber = mobileNumber,
-                                    insightText = GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID)
+                                    mobileNumber = "",
+                                    insightText = ""//GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID)
                                 };
                                 obj.campaignkeyinsight = KeyInsight;
                             }
@@ -226,13 +232,13 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight
                             {
-                                mobileNumber = mobileNumber,
-                                insightText = GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID)
+                                mobileNumber = "",
+                                insightText = ""//GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID)
                             };
                             obj.campaignkeyinsight = KeyInsight;
                         }
                     }
-                    }
+                }
                 catch (Exception)
                 {
                     if (obj.campaignkeyinsight == null)
@@ -245,7 +251,29 @@ namespace Easyrewardz_TicketSystem.Services
                         obj.campaignkeyinsight = KeyInsight;
                     }
                 }
-                try
+
+                if(obj.useratvdetails != null)
+                {
+                    if(string.IsNullOrEmpty(obj.useratvdetails.lifeTimeValue) && string.IsNullOrEmpty(obj.useratvdetails.visitCount))
+                    {
+                        if(obj.campaignkeyinsight != null)
+                        {
+                            if(string.IsNullOrEmpty(obj.campaignkeyinsight.insightText))
+                            {
+                                StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight
+                                {
+                                    mobileNumber = mobileNumber,
+                                    insightText = GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID),
+                                    ShowKeyInsights = false
+                                };
+                                obj.campaignkeyinsight = KeyInsight;
+                            }
+                        }
+                    }
+                }
+
+
+                    try
                 {
                     if (conn != null && conn.State == ConnectionState.Closed)
                     {

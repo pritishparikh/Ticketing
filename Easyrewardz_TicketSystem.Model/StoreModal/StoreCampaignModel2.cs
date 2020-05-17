@@ -102,6 +102,7 @@ namespace Easyrewardz_TicketSystem.Model
     {
         public string mobileNumber { get; set; }
         public string insightText { get; set; }
+        public bool ShowKeyInsights { get; set; } = true;
     }
 
     public class StoreCampaignRecommended

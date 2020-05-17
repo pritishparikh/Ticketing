@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.Interface
     {
         CampaignCustomerDetails GetCampaignCustomer(int tenantID, int userID, CampaingCustomerFilterRequest campaingCustomerFilterRequest);
         int UpdateCampaignStatusResponse(CampaignResponseInput objRequest, int TenantID, int UserID);
-        int CampaignShareChatbot(ShareChatbotModel objRequest, string ClientAPIURL, int TenantID, int UserID);
+        int CampaignShareChatbot(ShareChatbotModel objRequest, string ClientAPIURL, int TenantID, int UserID, string ProgramCode);
         string CampaignShareMassanger(ShareChatbotModel objRequest, int TenantID, int UserID);
         int CampaignShareSMS(ShareChatbotModel objRequest, string ClientAPIURL, string SMSsenderId, int TenantID, int UserID);
     }

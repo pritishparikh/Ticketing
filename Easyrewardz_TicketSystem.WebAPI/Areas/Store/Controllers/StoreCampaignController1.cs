@@ -139,7 +139,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 string ClientAPIURL = configuration.GetValue<string>("ClientAPIURL");
 
-                obj = storecampaigncaller.CampaignShareChatbot(new StoreCampaignService(_connectioSting), objRequest, ClientAPIURL, authenticate.TenantId, authenticate.UserMasterID);
+                obj = storecampaigncaller.CampaignShareChatbot(new StoreCampaignService(_connectioSting), objRequest, ClientAPIURL, authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
                 statusCode =
                    obj == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

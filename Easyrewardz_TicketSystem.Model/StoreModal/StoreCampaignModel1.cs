@@ -237,5 +237,13 @@ namespace Easyrewardz_TicketSystem.Model
         public List<string> AdditionalInfo { get; set; }
     }
 
-   
+    public class GetWhatsappMessageDetailsModal
+    {
+       
+        /// <summary>
+        /// ProgramCode
+        /// </summary>
+        public string ProgramCode { get; set; }
+        
+    }
 }
