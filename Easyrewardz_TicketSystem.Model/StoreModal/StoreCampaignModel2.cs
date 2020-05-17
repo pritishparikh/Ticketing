@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.Model
 {
     public class StoreCampaignModel2
     {
-    
+
         public int CampaignID { get; set; }
 
         public string CampaignName { get; set; }
@@ -15,9 +15,9 @@ namespace Easyrewardz_TicketSystem.Model
         public string CustomerCount { get; set; }
 
         public string ChatbotScript { get; set; }
-        
+
         public string SmsScript { get; set; }
-        
+
         public string CampaingPeriod { get; set; }
 
         public string Status { get; set; }
@@ -32,13 +32,13 @@ namespace Easyrewardz_TicketSystem.Model
 
         public int MaxClickAllowed { get; set; }
 
-        public int SmsClickCount { get; set; }
+        //public int SmsClickCount { get; set; }
 
-        public int EmailClickCount { get; set; }
+        //public int EmailClickCount { get; set; }
 
-        public int MessengerClickCount { get; set; }
+        //public int MessengerClickCount { get; set; }
 
-        public int BotClickCount { get; set; }
+        //public int BotClickCount { get; set; }
 
 
     }
@@ -78,8 +78,8 @@ namespace Easyrewardz_TicketSystem.Model
         public StoreCampaignKeyInsight campaignkeyinsight { get; set; }
         public List<StoreCampaignRecommended> campaignrecommended { get; set; }
         public StoreCampaignLastTransactionDetails lasttransactiondetails { get; set; }
- 
-        
+        public ShareCampaignViaSettingModal ShareCampaignViaSettingModal { get; set; }
+
     }
 
     public class CustomerpopupDetails
@@ -89,7 +89,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string tiername { get; set; }
         public string lifeTimeValue { get; set; }
         public string visitCount { get; set; }
-             
+
     }
 
     public class StoreCampaignLogo
@@ -126,14 +126,79 @@ namespace Easyrewardz_TicketSystem.Model
         public string amount { get; set; }
         public List<StoreCampaignLastTransactionitemDetailsDetails> itemDetails { get; set; }
     }
-  
+
     public class StoreCampaignLastTransactionitemDetailsDetails
     {
         public string mobileNo { get; set; }
         public string article { get; set; }
         public string quantity { get; set; }
         public string amount { get; set; }
-       
+
     }
 
+
+    public class ShareCampaignViaSettingModal
+    {
+        /// <summary>
+        /// CustomerName
+        /// </summary>
+        public string CustomerName { get; set; }
+        /// <summary>
+        /// CustomerNumber
+        /// </summary>
+        public string CustomerNumber { get; set; }
+        /// <summary>
+        /// SmsFlag
+        /// </summary>
+        public bool SmsFlag { get; set; }
+        /// <summary>
+        /// EmailFlag
+        /// </summary>
+        public bool EmailFlag { get; set; }
+        /// <summary>
+        /// MessengerFlag
+        /// </summary>
+        public bool MessengerFlag { get; set; }
+        /// <summary>
+        /// BotFlag
+        /// </summary>
+        public bool BotFlag { get; set; }
+        /// <summary>
+        /// MaxClickAllowed
+        /// </summary>
+        public int MaxClickAllowed { get; set; }
+        /// <summary>
+        /// SmsClickCount
+        /// </summary>
+        public int SmsClickCount { get; set; }
+        /// <summary>
+        /// EmailClickCount
+        /// </summary>
+        public int EmailClickCount { get; set; }
+        /// <summary>
+        /// MessengerClickCount
+        /// </summary>
+        public int MessengerClickCount { get; set; }
+        /// <summary>
+        /// BotClickCount
+        /// </summary>
+        public int BotClickCount { get; set; }
+        /// <summary>
+        /// SmsClickable
+        /// </summary>
+        public bool SmsClickable { get; set; }
+        /// <summary>
+        /// EmailClickable
+        /// </summary>
+        public bool EmailClickable { get; set; }
+        /// <summary>
+        /// MessengerClickable
+        /// </summary>
+        public bool MessengerClickable { get; set; }
+        /// <summary>
+        /// BotClickable
+        /// </summary>
+        public bool BotClickable { get; set; }
+    }
 }
+

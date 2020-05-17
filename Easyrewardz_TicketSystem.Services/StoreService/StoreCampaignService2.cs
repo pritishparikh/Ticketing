@@ -80,10 +80,10 @@ namespace Easyrewardz_TicketSystem.Services
                             BotFlag = Convert.ToBoolean(ds.Tables[0].Rows[i]["BotFlag"]),
                             Status = Convert.ToString((StoreCampaignStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"])),
                             MaxClickAllowed = ds.Tables[0].Rows[i]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MaxClickAllowed"]),
-                            SmsClickCount = ds.Tables[0].Rows[i]["SmsClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SmsClickCount"]),
-                            EmailClickCount = ds.Tables[0].Rows[i]["EmailClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["EmailClickCount"]),
-                            MessengerClickCount = ds.Tables[0].Rows[i]["MessengerClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MessengerClickCount"]),
-                            BotClickCount = ds.Tables[0].Rows[i]["BotClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BotClickCount"]),
+                          // SmsClickCount = ds.Tables[0].Rows[i]["SmsClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SmsClickCount"]),
+                          //  EmailClickCount = ds.Tables[0].Rows[i]["EmailClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["EmailClickCount"]),
+                          //  MessengerClickCount = ds.Tables[0].Rows[i]["MessengerClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MessengerClickCount"]),
+                          //  BotClickCount = ds.Tables[0].Rows[i]["BotClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BotClickCount"]),
                         };
                         lstCampaign.Add(storecampaign);
                     }
@@ -180,8 +180,8 @@ namespace Easyrewardz_TicketSystem.Services
                         }
                     }
 
-                    }
-               catch(Exception)
+                }
+                catch (Exception)
                 {
                     if (obj.useratvdetails == null)
                     {
@@ -197,6 +197,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                     }
                 }
+
                 try
                 {
                     apiResponse = string.Empty;
@@ -252,13 +253,13 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-                if(obj.useratvdetails != null)
+                if (obj.useratvdetails != null)
                 {
-                    if(string.IsNullOrEmpty(obj.useratvdetails.lifeTimeValue) && string.IsNullOrEmpty(obj.useratvdetails.visitCount))
+                    if (string.IsNullOrEmpty(obj.useratvdetails.lifeTimeValue) && string.IsNullOrEmpty(obj.useratvdetails.visitCount))
                     {
-                        if(obj.campaignkeyinsight != null)
+                        if (obj.campaignkeyinsight != null)
                         {
-                            if(string.IsNullOrEmpty(obj.campaignkeyinsight.insightText))
+                            if (string.IsNullOrEmpty(obj.campaignkeyinsight.insightText))
                             {
                                 StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight
                                 {
@@ -272,8 +273,7 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-
-                    try
+                try
                 {
                     if (conn != null && conn.State == ConnectionState.Closed)
                     {
@@ -331,7 +331,7 @@ namespace Easyrewardz_TicketSystem.Services
                         obj.campaignrecommended = objrecommended;
                     }
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     StoreCampaignRecommended RecommendedDetail = new StoreCampaignRecommended();
 
@@ -390,8 +390,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                         }
                     }
-                    }
-                 catch (Exception)
+                }
+                catch (Exception)
                 {
                     if (obj.lasttransactiondetails == null)
                     {
@@ -406,13 +406,103 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
+                try
+                {
+                    if (conn != null && conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+                    MySqlCommand cmd = new MySqlCommand("SP_HSGetShareCampaignViaSetting", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                    cmd.Parameters.AddWithValue("@User_ID", userID);
+                    cmd.Parameters.AddWithValue("@mobile_Number", mobileNumber);
+                    cmd.Parameters.AddWithValue("@program_Code", programCode);
+                    ds = new DataSet();
+                    MySqlDataAdapter da = new MySqlDataAdapter
+                    {
+                        SelectCommand = cmd
+                    };
+                    da.Fill(ds);
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
 
+                        ShareCampaignViaSettingModal shareCampaignViaSettingModal = new ShareCampaignViaSettingModal
+                        {
+                            CustomerName = ds.Tables[0].Rows[0]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CustomerName"]),
+                            CustomerNumber = ds.Tables[0].Rows[0]["CustomerNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CustomerNumber"]),
+                            SmsFlag = ds.Tables[0].Rows[0]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["SmsFlag"]),
+                            SmsClickCount = ds.Tables[0].Rows[0]["SmsClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["SmsClickCount"]),
+                            SmsClickable = ds.Tables[0].Rows[0]["SmsClickable"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["SmsClickable"]),
+                            EmailFlag = ds.Tables[0].Rows[0]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["EmailFlag"]),
+                            EmailClickCount = ds.Tables[0].Rows[0]["EmailClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["EmailClickCount"]),
+                            EmailClickable = ds.Tables[0].Rows[0]["EmailClickable"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["EmailClickable"]),
+                            MessengerFlag = ds.Tables[0].Rows[0]["MessengerFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["MessengerFlag"]),
+                            MessengerClickCount = ds.Tables[0].Rows[0]["MessengerClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["MessengerClickCount"]),
+                            MessengerClickable = ds.Tables[0].Rows[0]["MessengerClickable"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["MessengerClickable"]),
+                            BotFlag = ds.Tables[0].Rows[0]["BotFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["BotFlag"]),
+                            BotClickCount = ds.Tables[0].Rows[0]["BotClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["BotClickCount"]),
+                            BotClickable = ds.Tables[0].Rows[0]["BotClickable"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["BotClickable"]),
+                            MaxClickAllowed = ds.Tables[0].Rows[0]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["MaxClickAllowed"]),
+                        };
+
+                        obj.ShareCampaignViaSettingModal = shareCampaignViaSettingModal;
+                    }
+                    else
+                    {
+                        ShareCampaignViaSettingModal shareCampaignViaSettingModal = new ShareCampaignViaSettingModal
+                        {
+                            CustomerName = "",
+                            CustomerNumber = "",
+                            SmsFlag = false,
+                            SmsClickCount = 0,
+                            SmsClickable = false,
+                            EmailFlag = false,
+                            EmailClickCount = 0,
+                            EmailClickable = false,
+                            MessengerFlag = false,
+                            MessengerClickCount = 0,
+                            MessengerClickable = false,
+                            BotFlag = false,
+                            BotClickCount = 0,
+                            BotClickable = false,
+                            MaxClickAllowed = 0,
+                        };
+
+                        obj.ShareCampaignViaSettingModal = shareCampaignViaSettingModal;
+                    }
                 }
-            catch(Exception)
-            {
-               
+                catch (Exception)
+                {
+                    ShareCampaignViaSettingModal shareCampaignViaSettingModal = new ShareCampaignViaSettingModal
+                    {
+                        CustomerName = "",
+                        CustomerNumber = "",
+                        SmsFlag = false,
+                        SmsClickCount = 0,
+                        SmsClickable = false,
+                        EmailFlag = false,
+                        EmailClickCount = 0,
+                        EmailClickable = false,
+                        MessengerFlag = false,
+                        MessengerClickCount = 0,
+                        MessengerClickable = false,
+                        BotFlag = false,
+                        BotClickCount = 0,
+                        BotClickable = false,
+                        MaxClickAllowed = 0,
+                    };
+
+                    obj.ShareCampaignViaSettingModal = shareCampaignViaSettingModal;
+                }
             }
-           // InsertApiResponseData(obj, userID);
+            catch (Exception)
+            {
+
+            }
+            // InsertApiResponseData(obj, userID);
             return obj;
         }
 
