@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -255,7 +256,31 @@ namespace Easyrewardz_TicketSystem.Services
 
                 if (obj.useratvdetails != null)
                 {
-                    if (string.IsNullOrEmpty(obj.useratvdetails.lifeTimeValue) && string.IsNullOrEmpty(obj.useratvdetails.visitCount))
+                    bool lifeTimeValuehaszero = false;
+                    bool visitCounthaszero = false;
+
+                    if (!string.IsNullOrEmpty(obj.useratvdetails.lifeTimeValue))
+                    {
+                        if(decimal.TryParse(obj.useratvdetails.lifeTimeValue, out decimal result))
+                        {
+                            if(Convert.ToDouble(obj.useratvdetails.lifeTimeValue).Equals(0))
+                            {
+                                lifeTimeValuehaszero = true;
+                            }
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(obj.useratvdetails.visitCount))
+                    {
+                        if (decimal.TryParse(obj.useratvdetails.visitCount, out decimal result))
+                        {
+                            if (Convert.ToDouble(obj.useratvdetails.visitCount).Equals(0))
+                            {
+                                visitCounthaszero = true;
+                            }
+                        }
+                    }
+
+                    if ((string.IsNullOrEmpty(obj.useratvdetails.lifeTimeValue) && string.IsNullOrEmpty(obj.useratvdetails.visitCount) || (lifeTimeValuehaszero && visitCounthaszero)))
                     {
                         if (obj.campaignkeyinsight != null)
                         {
