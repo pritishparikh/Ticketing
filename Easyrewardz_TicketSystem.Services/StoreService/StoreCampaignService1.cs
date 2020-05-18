@@ -199,6 +199,54 @@ namespace Easyrewardz_TicketSystem.Services
             CampaignStatusResponse obj = new CampaignStatusResponse();
             try
             {
+                GetWhatsappMessageDetailsResponse getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
+
+                string strpostionNumber = "";
+                string strpostionName = "";
+                string additionalInfo = "";
+                try
+                {
+                    GetWhatsappMessageDetailsModal getWhatsappMessageDetailsModal = new GetWhatsappMessageDetailsModal()
+                    {
+                        ProgramCode = ProgramCode
+                    };
+
+                    string apiBotReq = JsonConvert.SerializeObject(getWhatsappMessageDetailsModal);
+                    string apiBotResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetWhatsappMessageDetails", apiBotReq);
+
+                    if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[","").Replace("]", "")))
+                    {
+                        getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
+                    }
+
+                }
+                catch (Exception)
+                {
+                    getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
+                }
+
+
+                if(getWhatsappMessageDetailsResponse != null)
+                {
+                    if(getWhatsappMessageDetailsResponse.Remarks != null)
+                    {
+                        string ObjRemark = getWhatsappMessageDetailsResponse.Remarks.Replace("\r\n", "");
+                        string[] ObjSplitComma = ObjRemark.Split(',');
+
+                        if (ObjSplitComma.Length > 0)
+                        {
+                            for(int i = 0; i < ObjSplitComma.Length; i++)
+                            {
+                                strpostionNumber += ObjSplitComma[i].Split('-')[0].Trim().Replace("{","").Replace("}","") + ",";
+                                strpostionName += ObjSplitComma[i].Split('-')[1].Trim() + ",";
+                            }
+                        }
+
+                        strpostionNumber = strpostionNumber.TrimEnd(',');
+                        strpostionName = strpostionName.TrimEnd(',');
+                    }
+                }
+
                 conn.Open();
 
                 MySqlCommand cmd = new MySqlCommand("SP_HSCampaignShareChatbot", conn)
@@ -213,6 +261,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_StoreManagerId", objRequest.StoreManagerId);
                 cmd.Parameters.AddWithValue("@_CampaignScriptID", objRequest.CampaignScriptID);
                 cmd.Parameters.AddWithValue("@_CreatedBy", UserID);
+                cmd.Parameters.AddWithValue("@_strpostionNumber", strpostionNumber);
+                cmd.Parameters.AddWithValue("@_strpostionName", strpostionName);
 
                 //result = Convert.ToInt32(cmd.ExecuteNonQuery());
                 MySqlDataAdapter da = new MySqlDataAdapter
@@ -224,40 +274,48 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     result = ds.Tables[0].Rows[0]["ChatID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["ChatID"]);
                     Message = ds.Tables[0].Rows[0]["Message"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Message"]);
+                    additionalInfo = ds.Tables[0].Rows[0]["additionalInfo"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["additionalInfo"]);
                 }
 
                 if (!String.IsNullOrEmpty(Message))
                 {
-                    SendFreeTextRequest sendFreeTextRequest = new SendFreeTextRequest
+                    try
                     {
-                        To = objRequest.CustomerMobileNumber.TrimStart('0').Length > 10 ? objRequest.CustomerMobileNumber : "91" + objRequest.CustomerMobileNumber.TrimStart('0'),
-                        ProgramCode = objRequest.ProgramCode,
-                        TemplateName = "abc",
-                        TemplateNamespace = "abc",
-                        AdditionalInfo = new List<string>()
+                        List<string> additionalList = new List<string>();
+                        if (additionalInfo != null)
                         {
-                            "abc","abcd"
+                            additionalList = additionalInfo.Split(",").ToList();
                         }
-                    };
+                        SendFreeTextRequest sendFreeTextRequest = new SendFreeTextRequest
+                        {
+                            To = objRequest.CustomerMobileNumber.TrimStart('0').Length > 10 ? objRequest.CustomerMobileNumber : "91" + objRequest.CustomerMobileNumber.TrimStart('0'),
+                            ProgramCode = ProgramCode,
+                            TemplateName = getWhatsappMessageDetailsResponse.TemplateName,
+                            AdditionalInfo = additionalList
+                        };
 
-                    string apiReq = JsonConvert.SerializeObject(sendFreeTextRequest);
-                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendCampaign", apiReq);
+                        string apiReq = JsonConvert.SerializeObject(sendFreeTextRequest);
+                        apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendCampaign", apiReq);
 
-                    //ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
+                        //ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
 
-                    //chatSendSMSResponse = JsonConvert.DeserializeObject<ChatSendSMSResponse>(apiResponse);
+                        //chatSendSMSResponse = JsonConvert.DeserializeObject<ChatSendSMSResponse>(apiResponse);
 
-                    //if (chatSendSMSResponse != null)
-                    //{
-                    //    resultApi = chatSendSMSResponse.Id;
-                    //}
+                        //if (chatSendSMSResponse != null)
+                        //{
+                        //    resultApi = chatSendSMSResponse.Id;
+                        //}
 
-                    if (apiResponse.Equals("true"))
+                        if (apiResponse.Equals("true"))
+                        {
+                            UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");
+                        }
+                    }
+                    catch (Exception)
                     {
-                        UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");
+                        
                     }
                 }
-
             }
             catch (Exception)
             {
