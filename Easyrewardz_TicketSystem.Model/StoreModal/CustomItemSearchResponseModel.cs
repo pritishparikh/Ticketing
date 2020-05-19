@@ -16,6 +16,31 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string uniqueItemCode { get; set; }
 
         /// <summary>
+        /// categoryName
+        /// </summary>
+        public string categoryName { get; set; }
+
+        /// <summary>
+        /// subCategoryName
+        /// </summary>
+        public string subCategoryName { get; set; }
+
+        /// <summary>
+        /// color
+        /// </summary>
+        public string color { get; set; }
+
+        /// <summary>
+        /// colorCode
+        /// </summary>
+        public string colorCode { get; set; }
+
+        /// <summary>
+        /// brandName
+        /// </summary>
+        public string brandName { get; set; }
+
+        /// <summary>
         /// Label
         /// </summary>
         public string price { get; set; }
@@ -35,6 +60,11 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// imageURL
         /// </summary>
         public string imageURL { get; set; }
+
+        /// <summary>
+        /// size
+        /// </summary>
+        public string size { get; set; }
 
 
 
