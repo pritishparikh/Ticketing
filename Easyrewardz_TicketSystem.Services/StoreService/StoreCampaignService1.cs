@@ -214,37 +214,38 @@ namespace Easyrewardz_TicketSystem.Services
                     string apiBotReq = JsonConvert.SerializeObject(getWhatsappMessageDetailsModal);
                     string apiBotResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetWhatsappMessageDetails", apiBotReq);
 
-                    if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[","").Replace("]", "")))
+                    if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
                     {
                         getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
                     }
 
+
+
+
+                    if (getWhatsappMessageDetailsResponse != null)
+                    {
+                        if (getWhatsappMessageDetailsResponse.Remarks != null)
+                        {
+                            string ObjRemark = getWhatsappMessageDetailsResponse.Remarks.Replace("\r\n", "");
+                            string[] ObjSplitComma = ObjRemark.Split(',');
+
+                            if (ObjSplitComma.Length > 0)
+                            {
+                                for (int i = 0; i < ObjSplitComma.Length; i++)
+                                {
+                                    strpostionNumber += ObjSplitComma[i].Split('-')[0].Trim().Replace("{", "").Replace("}", "") + ",";
+                                    strpostionName += ObjSplitComma[i].Split('-')[1].Trim() + ",";
+                                }
+                            }
+
+                            strpostionNumber = strpostionNumber.TrimEnd(',');
+                            strpostionName = strpostionName.TrimEnd(',');
+                        }
+                    }
                 }
                 catch (Exception)
                 {
                     getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
-                }
-
-
-                if(getWhatsappMessageDetailsResponse != null)
-                {
-                    if(getWhatsappMessageDetailsResponse.Remarks != null)
-                    {
-                        string ObjRemark = getWhatsappMessageDetailsResponse.Remarks.Replace("\r\n", "");
-                        string[] ObjSplitComma = ObjRemark.Split(',');
-
-                        if (ObjSplitComma.Length > 0)
-                        {
-                            for(int i = 0; i < ObjSplitComma.Length; i++)
-                            {
-                                strpostionNumber += ObjSplitComma[i].Split('-')[0].Trim().Replace("{","").Replace("}","") + ",";
-                                strpostionName += ObjSplitComma[i].Split('-')[1].Trim() + ",";
-                            }
-                        }
-
-                        strpostionNumber = strpostionNumber.TrimEnd(',');
-                        strpostionName = strpostionName.TrimEnd(',');
-                    }
                 }
 
                 conn.Open();
