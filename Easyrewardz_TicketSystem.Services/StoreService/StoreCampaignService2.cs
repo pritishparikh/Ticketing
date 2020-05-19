@@ -289,7 +289,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight
                                 {
                                     mobileNumber = mobileNumber,
-                                    insightText = GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID),
+                                    insightText = GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID, ClientAPIURL),
                                     ShowKeyInsights = false
                                 };
                                 obj.campaignkeyinsight = KeyInsight;
@@ -539,12 +539,60 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="tenantID"></param>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public string GetKeyInsightAsChatBot(string mobileNumber, string programCode, int tenantID, int userID)
+        public string GetKeyInsightAsChatBot(string mobileNumber, string programCode, int tenantID, int userID, string ClientAPIURL)
         {
             string obj = "";
             DataSet ds = new DataSet();
             try
             {
+                GetWhatsappMessageDetailsResponse getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
+                string strpostionNumber = "";
+                string strpostionName = "";
+                //string additionalInfo = "";
+                try
+                {
+                    GetWhatsappMessageDetailsModal getWhatsappMessageDetailsModal = new GetWhatsappMessageDetailsModal()
+                    {
+                        ProgramCode = programCode
+                    };
+
+                    string apiBotReq = JsonConvert.SerializeObject(getWhatsappMessageDetailsModal);
+                    string apiBotResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetWhatsappMessageDetails", apiBotReq);
+
+                    if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
+                    {
+                        getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
+                    }
+
+                }
+                catch (Exception)
+                {
+                    getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
+                }
+
+
+                if (getWhatsappMessageDetailsResponse != null)
+                {
+                    if (getWhatsappMessageDetailsResponse.Remarks != null)
+                    {
+                        string ObjRemark = getWhatsappMessageDetailsResponse.Remarks.Replace("\r\n", "");
+                        string[] ObjSplitComma = ObjRemark.Split(',');
+
+                        if (ObjSplitComma.Length > 0)
+                        {
+                            for (int i = 0; i < ObjSplitComma.Length; i++)
+                            {
+                                strpostionNumber += ObjSplitComma[i].Split('-')[0].Trim().Replace("{", "").Replace("}", "") + ",";
+                                strpostionName += ObjSplitComma[i].Split('-')[1].Trim() + ",";
+                            }
+                        }
+
+                        strpostionNumber = strpostionNumber.TrimEnd(',');
+                        strpostionName = strpostionName.TrimEnd(',');
+                    }
+                }
+
+
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
                     conn.Open();
@@ -558,6 +606,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_UserID", userID);
                 cmd.Parameters.AddWithValue("@_ProgramCode", programCode);
                 cmd.Parameters.AddWithValue("@_MobileNumber", mobileNumber);
+                cmd.Parameters.AddWithValue("@_strpostionNumber", strpostionNumber);
+                cmd.Parameters.AddWithValue("@_strpostionName", strpostionName);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
