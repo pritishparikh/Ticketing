@@ -21,7 +21,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return ImasterDepartment.GetStoreDepartmentList(TenantID);
         }
 
-      
+        public List<StoreDepartmentModel> GetDepartmentListBySearch(IStoreDepartment department, int TenantID,string DepartmentName)
+        {
+            ImasterDepartment = department;
+            return ImasterDepartment.GetStoreDepartmentBySearch(TenantID, DepartmentName);
+        }
+
         public List<StoreFunctionModel> GetStoreFunctionbyDepartment(IStoreDepartment function, int DepartmentID, int TenantID)
         {
             ImasterDepartment = function;

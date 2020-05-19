@@ -686,23 +686,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\suraj.kumthekar\\.nuget\\packages\\": {},
+    "C:\\Users\\shlok.barot\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Ticketing\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj",
+      "projectUniqueName": "D:\\Shlok Barot\\Projects\\Easy Rewardz\\Ticketing Web Api\\Ticketing-Store-API\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj",
       "projectName": "Easyrewardz_TicketSystem.Model",
-      "projectPath": "D:\\Ticketing\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj",
-      "packagesPath": "C:\\Users\\suraj.kumthekar\\.nuget\\packages\\",
-      "outputPath": "D:\\Ticketing\\Ticketing\\Easyrewardz_TicketSystem.Model\\obj\\",
+      "projectPath": "D:\\Shlok Barot\\Projects\\Easy Rewardz\\Ticketing Web Api\\Ticketing-Store-API\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj",
+      "packagesPath": "C:\\Users\\shlok.barot\\.nuget\\packages\\",
+      "outputPath": "D:\\Shlok Barot\\Projects\\Easy Rewardz\\Ticketing Web Api\\Ticketing-Store-API\\Easyrewardz_TicketSystem.Model\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\suraj.kumthekar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\shlok.barot\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

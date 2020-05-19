@@ -308,6 +308,47 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
+        /// Get Department By search
+        /// </summary>
+        /// <param name="DepartmentName"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreDepartmentBySearch")]
+        public ResponseModel GetStoreDepartmentBySearch(string DepartmentName)
+        {
+            List<StoreDepartmentModel> objDepartmentList = new List<StoreDepartmentModel>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+                StoreDepartmentCaller newMasterBrand = new StoreDepartmentCaller();
+
+                objDepartmentList = newMasterBrand.GetDepartmentListBySearch(new StoreDepartmentService(_connectioSting), authenticate.TenantId, DepartmentName);
+
+                StatusCode =
+                objDepartmentList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objDepartmentList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
         /// Get Function Name By Department ID
         /// </summary>
         /// <param name="DepartmentId"></param>

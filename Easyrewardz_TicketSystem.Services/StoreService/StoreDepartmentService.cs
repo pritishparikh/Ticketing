@@ -81,6 +81,59 @@ namespace Easyrewardz_TicketSystem.Services
             return departmentMasters;
         }
 
+        /// <summary>
+        /// Get Department By Search
+        /// </summary>
+        /// <param name="departmentName"></param>
+        /// <returns></returns>
+        public List<StoreDepartmentModel> GetStoreDepartmentBySearch(int tenantID, string departmentName)
+        {
+            DataSet ds = new DataSet();
+            List<StoreDepartmentModel> departmentMastersList = new List<StoreDepartmentModel>();
+
+            try
+            {
+               
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreDepartmentBySearch", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Tenant_Id", tenantID);
+                cmd.Parameters.AddWithValue("@_DepartmentName", departmentName);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreDepartmentModel department = new StoreDepartmentModel();
+                        {
+                            department.DepartmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["DepartmentID"]);
+                            department.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+
+                            department.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        }
+                        departmentMastersList.Add(department);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return departmentMastersList;
+        }
+
 
         /// <summary>
         /// Get Function By DepartmentID
