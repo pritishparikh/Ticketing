@@ -52,6 +52,7 @@ namespace Easyrewardz_TicketSystem.Services
                         hSSettingModel.TenantID = ds.Tables[0].Rows[i]["TenantID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
                         hSSettingModel.BrandID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
                         hSSettingModel.StoreID = ds.Tables[0].Rows[i]["StoreID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
+                        hSSettingModel.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
                         hSSettingModel.Suggestion = ds.Tables[0].Rows[i]["Suggestion"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Suggestion"]);
                         hSSettingModel.FreeText = ds.Tables[0].Rows[i]["FreeText"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["FreeText"]);
                         listHierarchy.Add(hSSettingModel);
