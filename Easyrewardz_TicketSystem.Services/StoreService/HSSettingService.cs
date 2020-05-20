@@ -45,6 +45,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
 
                         HSSettingModel hSSettingModel = new HSSettingModel();
+
                         hSSettingModel.AgentID = ds.Tables[0].Rows[i]["AgentID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["AgentID"]);
                         hSSettingModel.AgentName = ds.Tables[0].Rows[i]["AgentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AgentName"]);
                         hSSettingModel.EmailID = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
