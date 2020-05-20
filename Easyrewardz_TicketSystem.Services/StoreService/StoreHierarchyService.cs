@@ -75,9 +75,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception )
+            catch (Exception)
             {
-               throw;
+                throw;
             }
             finally
             {
@@ -248,9 +248,9 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                       
+
                         CustomHierarchymodel hierarchymodel = new CustomHierarchymodel();
-                        hierarchymodel.DesignationID = ds.Tables[0].Rows[i]["DesignationID"] == DBNull.Value ? 0: Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
+                        hierarchymodel.DesignationID = ds.Tables[0].Rows[i]["DesignationID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
                         hierarchymodel.DesignationName = ds.Tables[0].Rows[i]["DesignationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
                         hierarchymodel.ReportTo = ds.Tables[0].Rows[i]["ReportTo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReportTo"]);
                         hierarchymodel.Createdbyperson = ds.Tables[0].Rows[i]["Createdby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]);
@@ -316,6 +316,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return success;
         }
-    }       
+    }
 }
 
