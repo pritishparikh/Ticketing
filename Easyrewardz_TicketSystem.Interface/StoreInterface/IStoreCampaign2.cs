@@ -9,7 +9,7 @@ namespace Easyrewardz_TicketSystem.Interface
     {
         List<StoreCampaignModel2> GetStoreCampaign(int tenantID, int userID, string campaignName, string statusId);
 
-        StoresCampaignStatusResponse GetCustomerpopupDetailsList(string mobileNumber, string programCode, int tenantID, int userID, string ClientAPIURL);
+        StoresCampaignStatusResponse GetCustomerpopupDetailsList(string mobileNumber, string programCode, string campaignID, int tenantID, int userID, string ClientAPIURL);
 
         List<StoreCampaignLogo> GetCampaignDetailsLogo(int tenantID, int userID);
     }

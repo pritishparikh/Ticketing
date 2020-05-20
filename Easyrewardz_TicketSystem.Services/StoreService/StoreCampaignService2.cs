@@ -120,7 +120,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="mobileNumber"></param>
         /// <param name="programCode"></param>
         /// <returns></returns>
-        public StoresCampaignStatusResponse GetCustomerpopupDetailsList(string mobileNumber, string programCode, int tenantID, int userID, string ClientAPIURL)
+        public StoresCampaignStatusResponse GetCustomerpopupDetailsList(string mobileNumber, string programCode, string campaignID, int tenantID, int userID, string ClientAPIURL)
         {
             StoresCampaignStatusResponse obj = new StoresCampaignStatusResponse();
             StoreCampaignSearchOrder objOrderSearch = new StoreCampaignSearchOrder();
@@ -289,7 +289,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight
                                 {
                                     mobileNumber = mobileNumber,
-                                    insightText = GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID, ClientAPIURL),
+                                    insightText = GetKeyInsightAsChatBot(mobileNumber, programCode, campaignID, tenantID, userID, ClientAPIURL),
                                     ShowKeyInsights = false
                                 };
                                 obj.campaignkeyinsight = KeyInsight;
@@ -539,7 +539,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="tenantID"></param>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public string GetKeyInsightAsChatBot(string mobileNumber, string programCode, int tenantID, int userID, string ClientAPIURL)
+        public string GetKeyInsightAsChatBot(string mobileNumber, string programCode, string campaignID, int tenantID, int userID, string ClientAPIURL)
         {
             string obj = "";
             DataSet ds = new DataSet();
@@ -606,6 +606,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_UserID", userID);
                 cmd.Parameters.AddWithValue("@_ProgramCode", programCode);
                 cmd.Parameters.AddWithValue("@_MobileNumber", mobileNumber);
+                cmd.Parameters.AddWithValue("@_CampaignID", campaignID);
                 cmd.Parameters.AddWithValue("@_strpostionNumber", strpostionNumber);
                 cmd.Parameters.AddWithValue("@_strpostionName", strpostionName);
 
