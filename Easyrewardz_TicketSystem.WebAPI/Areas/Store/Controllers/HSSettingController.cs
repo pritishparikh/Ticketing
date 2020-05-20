@@ -42,7 +42,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         // GET: api/<controller>
         [HttpPost]
         [Route("GetStoreAgentList")]
-        public ResponseModel GetStoreAgentList(int BrandID, string StoreCode)
+        public ResponseModel GetStoreAgentList(int BrandID, int StoreID)
         {
             List<HSSettingModel> customHierarchymodels = new List<HSSettingModel>();
             HSSettingCaller HSSettingCaller = new HSSettingCaller();
@@ -54,7 +54,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-                customHierarchymodels = HSSettingCaller.GetStoreAgentList(new HSSettingService(_connectionSting), authenticate.TenantId, BrandID, StoreCode);
+                customHierarchymodels = HSSettingCaller.GetStoreAgentList(new HSSettingService(_connectionSting), authenticate.TenantId, BrandID, StoreID);
                 statusCode =
                    customHierarchymodels.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

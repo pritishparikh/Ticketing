@@ -1,21 +1,14 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
-using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Newtonsoft.Json;
-using System;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.WebAPI
 {
@@ -95,7 +88,6 @@ namespace Easyrewardz_TicketSystem.WebAPI
                 app.UseHsts();
             }
 
-            app.UseEndpointRouting();
             
             string CurrentDirectory = Directory.GetCurrentDirectory();
 
@@ -240,6 +232,7 @@ namespace Easyrewardz_TicketSystem.WebAPI
                 RequestPath = "/" + BulkUpload
             });
 
+            /*Ticketing bulk upload*/
 
             string BulkUploadErrorFilePath = "BulkUpload/Downloadfile/Ticketing/Error";
             string BulkUploadErrorFilePathURL = Path.Combine(CurrentDirectory, BulkUploadErrorFilePath);
@@ -278,100 +271,52 @@ namespace Easyrewardz_TicketSystem.WebAPI
                 RequestPath = "/" + BulkUploadSuccessFilePath
             });
 
+            /*-----------------------------*/
 
+            /*store bulk upload*/
+
+            string BulkUploadStoreErrorFilePath = "BulkUpload/Downloadfile/Store/Error";
+            string BulkUploadStoreErrorFilePathURL = Path.Combine(CurrentDirectory, BulkUploadErrorFilePath);
+            if (!Directory.Exists(BulkUploadErrorFilePathURL))
+            {
+                Directory.CreateDirectory(BulkUploadErrorFilePathURL);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(BulkUploadStoreErrorFilePathURL),
+                RequestPath = "/" + BulkUploadStoreErrorFilePath
+            });
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(BulkUploadStoreErrorFilePathURL),
+                RequestPath = "/" + BulkUploadStoreErrorFilePath
+            });
+
+
+            string BulkUploadStoreSuccessFilePath = "BulkUpload/Downloadfile/Store/Success";
+            string BulkUploadStoreSuccessFilePathURL = Path.Combine(CurrentDirectory, BulkUploadSuccessFilePath);
+            if (!Directory.Exists(BulkUploadStoreSuccessFilePathURL))
+            {
+                Directory.CreateDirectory(BulkUploadStoreSuccessFilePathURL);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(BulkUploadStoreSuccessFilePathURL),
+                RequestPath = "/" + BulkUploadStoreSuccessFilePath
+            });
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(BulkUploadStoreSuccessFilePathURL),
+                RequestPath = "/" + BulkUploadStoreSuccessFilePath
+            });
+
+            /*-----------------------------*/
 
             app.UseMvc();
         }
 
-        public Authenticate GetAuthenticateDataFromToken(string _radisCacheServerAddress, string _token)
-        {
-            Authenticate authenticate = new Authenticate();
-
-            try
-            {
-                RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
-                if (cacheService.Exists(_token))
-                {
-                    string _data = cacheService.Get(_token);
-                    authenticate = JsonConvert.DeserializeObject<Authenticate>(_data);
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            return authenticate;
-        }
-
-        public string DecryptStringAES(string cipherText)
-        {
-
-            var keybytes = Encoding.UTF8.GetBytes("sblw-3hn8-sqoy19");
-            var iv = Encoding.UTF8.GetBytes("sblw-3hn8-sqoy19");
-
-            var encrypted = Convert.FromBase64String(cipherText);
-            var decriptedFromJavascript = Decrypt(encrypted, keybytes, iv);
-            return string.Format(decriptedFromJavascript);
-        }
-
-        private string Decrypt(byte[] cipherText, byte[] key, byte[] iv)
-        {
-            // Check arguments.
-            if (cipherText == null || cipherText.Length <= 0)
-            {
-                throw new ArgumentNullException("cipherText");
-            }
-            if (key == null || key.Length <= 0)
-            {
-                throw new ArgumentNullException("key");
-            }
-            if (iv == null || iv.Length <= 0)
-            {
-                throw new ArgumentNullException("key");
-            }
-
-            // Declare the string used to hold
-            // the decrypted text.
-            string plaintext = null;
-
-            // Create an RijndaelManaged object
-            // with the specified key and IV.
-            using (var rijAlg = new RijndaelManaged())
-            {
-                //Settings
-                rijAlg.Mode = CipherMode.CBC;
-                rijAlg.Padding = PaddingMode.PKCS7;
-                rijAlg.FeedbackSize = 128;
-
-                rijAlg.Key = key;
-                rijAlg.IV = iv;
-
-                // Create a decrytor to perform the stream transform.
-                var decryptor = rijAlg.CreateDecryptor(rijAlg.Key, rijAlg.IV);
-                try
-                {
-                    using (var msDecrypt = new MemoryStream(cipherText))
-                    {
-                        using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                        {
-
-                            using (var srDecrypt = new StreamReader(csDecrypt))
-                            {
-                                plaintext = srDecrypt.ReadToEnd();
-
-                            }
-
-                        }
-                    }
-                }
-                catch
-                {
-                    plaintext = "keyError";
-                }
-            }
-
-            return plaintext;
-        }
+     
     }
 }
