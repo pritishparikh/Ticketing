@@ -262,7 +262,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// Bullk Upload  SLA
+        /// Bullk Upload  CRMRole
         /// </summary>
         /// <returns></returns>
         [HttpPost]
