@@ -24,7 +24,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
         private readonly string rootPath;
-        private readonly string _UploadedBulkFile;
+        private readonly string BulkUpload;
+        private readonly string UploadFiles;
+        private readonly string DownloadFile;
         #endregion
 
         #region Constructor
@@ -33,8 +35,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
-            _UploadedBulkFile = configuration.GetValue<string>("FileUploadLocation");
             rootPath = configuration.GetValue<string>("APIURL");
+            BulkUpload = configuration.GetValue<string>("BulkUpload");
+            UploadFiles = configuration.GetValue<string>("Uploadfiles");
+            DownloadFile = configuration.GetValue<string>("Downloadfile");
         }
         #endregion
 
@@ -47,66 +51,74 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadItem")]
-        public ResponseModel BulkUploadItem()
+        public ResponseModel BulkUploadItem(int ItemFor = 3)
         {
-            string downloadFilePath = string.Empty;
-            string bulkUploadFilesPath = string.Empty;
-            bool errorFileSaved = false;
-            bool successFileSaved = false;
+            string DownloadFilePath = string.Empty;
+            string BulkUploadFilesPath = string.Empty;
+            bool errorfilesaved = false;
+            bool successfilesaved = false;
             int count = 0;
-
             MasterCaller masterCaller = new MasterCaller();
             StoreFileUploadCaller fileU = new StoreFileUploadCaller();
             ResponseModel objResponseModel = new ResponseModel();
-            int statusCode = 0;
+            int StatusCode = 0;
             string statusMessage = "";
-            DataSet dataSetCSV = new DataSet();
+            DataSet DataSetCSV = new DataSet();
+            List<string> CSVlist = new List<string>();
             string fileName = "";
             string finalAttchment = "";
-            string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
-            List<string> CSVlist = new List<string>();
 
-            int ItemFor = 3;
 
             try
             {
-
-                var exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
-                string appRoot = appPathMatcher.Match(exePath).Value;
-                string folderpath = appRoot;
-
                 var files = Request.Form.Files;
+                string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
+
+                if (files.Count > 0)
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
+                    }
+                    finalAttchment = fileName.TrimEnd(',');
+                }
+                var Keys = Request.Form;
+
+                //var exePath = Path.GetDirectoryName(System.Reflection
+                //     .Assembly.GetExecutingAssembly().CodeBase);
+                //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+                //var appRoot = appPathMatcher.Match(exePath).Value;
+                //string Folderpath = appRoot + "\\" + _UploadedBulkFile;
+
+
 
                 #region FilePath
-                bulkUploadFilesPath = folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)ItemFor);
-                downloadFilePath = folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)ItemFor);
+                string Folderpath = Directory.GetCurrentDirectory();
+                string[] filesName = finalAttchment.Split(",");
 
-               #endregion
+
+                BulkUploadFilesPath = Path.Combine(Folderpath, BulkUpload, UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)ItemFor));
+                DownloadFilePath = Path.Combine(Folderpath, BulkUpload, DownloadFile, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)ItemFor));
+
+
+                if (!Directory.Exists(BulkUploadFilesPath))
+                {
+                    Directory.CreateDirectory(BulkUploadFilesPath);
+                }
+
 
 
                 if (files.Count > 0)
                 {
-                    bulkUploadFilesPath = bulkUploadFilesPath + "\\Item\\";
-
-                    if (!Directory.Exists(bulkUploadFilesPath))
-                    {
-                        Directory.CreateDirectory(bulkUploadFilesPath);
-                    }
 
                     for (int i = 0; i < files.Count; i++)
                     {
-                        fileName = files[i].FileName.Replace(".", timeStamp + ".") + ",";
-                        fileName = fileName.TrimEnd(',');
-
-                        finalAttchment = fileName;
-
                         using (var ms = new MemoryStream())
                         {
                             files[i].CopyTo(ms);
                             var fileBytes = ms.ToArray();
                             MemoryStream msfile = new MemoryStream(fileBytes);
-                            FileStream docFile = new FileStream(bulkUploadFilesPath + "\\" + fileName, FileMode.Create, FileAccess.Write);
+                            FileStream docFile = new FileStream(Path.Combine(BulkUploadFilesPath, filesName[i]), FileMode.Create, FileAccess.Write);
                             msfile.WriteTo(docFile);
                             docFile.Close();
                             ms.Close();
@@ -114,51 +126,48 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                             string s = Convert.ToBase64String(fileBytes);
                             byte[] a = Convert.FromBase64String(s);
                             // act on the Base64 data
+
                         }
                     }
                 }
-                else
-                {
-                    statusCode = (int)EnumMaster.StatusCode.ButNoBody;
-                    statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode.ButNoBody));
-                    objResponseModel.Status = false;
-                    objResponseModel.StatusCode = statusCode;
-                    objResponseModel.Message = statusMessage;
-                    objResponseModel.ResponseData = 0;
 
-                    return objResponseModel;
-                }
-
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
-               
-
-                dataSetCSV = CommonService.csvToDataSet(bulkUploadFilesPath + "\\" + finalAttchment);
-                CSVlist = masterCaller.ItemBulkUpload(new ItemService(_connectioSting),authenticate.TenantId, authenticate.UserMasterID, ItemFor, dataSetCSV);
-
-                #region Create Error and Succes files and  Insert in FileUploadLog
-
-                if (!string.IsNullOrEmpty(CSVlist[0]))
-                    successFileSaved = CommonService.SaveFile(downloadFilePath + "\\Item\\Success" + "\\" + "ItemSuccessFile.csv", CSVlist[1]);
-
-                if (!string.IsNullOrEmpty(CSVlist[1]))
-                    errorFileSaved = CommonService.SaveFile(downloadFilePath + "\\Item\\Error" + "\\" + "ItemErrorFile.csv", CSVlist[0]);
-
-
-
-                count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorFileSaved,
-                                   "CategoryErrorFile.csv", "CategorySuccessFile.csv", authenticate.UserMasterID, "Item",
-                                   downloadFilePath + "\\Item\\Error" + "\\" + "ItemErrorFile.csv",
-                                   downloadFilePath + "\\Item\\Success" + "\\" + "ItemSuccessFile.csv", ItemFor
-                                   );
                 #endregion
 
-                statusCode = successFileSaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+
+
+
+                DataSetCSV = CommonService.csvToDataSet(Path.Combine(BulkUploadFilesPath, filesName[0]));
+
+                CSVlist = masterCaller.ItemBulkUpload(new ItemService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, ItemFor, DataSetCSV);
+
+                #region Create Error and Success files and  Insert in FileUploadLog
+
+                string SuccessFileName = "Store_ItemSuccessFile_" + timeStamp + ".csv";
+                string ErrorFileName = "Store_ItemErrorFile_" + timeStamp + ".csv";
+
+                string SuccessFileUrl = !string.IsNullOrEmpty(CSVlist[0]) ?
+                   rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)ItemFor) + "/Success/" + SuccessFileName : string.Empty;
+                string ErrorFileUrl = !string.IsNullOrEmpty(CSVlist[1]) ?
+                    rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)ItemFor) + "/Error/" + ErrorFileName : string.Empty;
+
+
+                if (!string.IsNullOrEmpty(CSVlist[0]))
+                    successfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Success", SuccessFileName), CSVlist[0]);
+
+                if (!string.IsNullOrEmpty(CSVlist[1]))
+                    errorfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Error", ErrorFileName), CSVlist[1]);
+
+                count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, filesName[0], true,
+                                 ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store_Item", SuccessFileUrl, ErrorFileUrl, ItemFor);
+                #endregion
+
+                StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = statusCode;
+                objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = CSVlist.Count;
 
