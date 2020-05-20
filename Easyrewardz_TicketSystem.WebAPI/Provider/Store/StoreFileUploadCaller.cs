@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
     public class StoreFileUploadCaller
     {
         #region Variable declaration
-        
+
         private IStoreFileUpload _FileUpload;
         #endregion
 

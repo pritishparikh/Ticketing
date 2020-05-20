@@ -21,14 +21,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private IConfiguration configuration;
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
+        private readonly string rootPath;
         #endregion
 
         #region Constructor
 
-        
+
         public StoreFileController(IConfiguration _iConfig)
         {
             configuration = _iConfig;
+            rootPath = configuration.GetValue<string>("APIURL");
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
@@ -56,7 +58,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 StoreFileUploadCaller storeFileUploadCaller = new StoreFileUploadCaller();
-                objresponseModel = storeFileUploadCaller.GetFileUploadLogs(new StoreFileUploadService(_connectioSting), authenticate.TenantId, fileuploadFor);
+                objresponseModel = storeFileUploadCaller.GetFileUploadLogs(new StoreFileUploadService(_connectioSting, rootPath), authenticate.TenantId, fileuploadFor);
                 statusCode = objresponseModel.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
@@ -75,6 +77,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
         #endregion
 
-    
+
     }
 }
