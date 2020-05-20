@@ -7,9 +7,11 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
 {
     public interface IStoreReport
     {
-         int GetStoreReportSearch(StoreReportModel searchModel);
+        int GetStoreReportSearch(StoreReportModel searchModel, List<StoreUserListing> StoreUserList);
 
-        string DownloadStoreReportSearch(int SchedulerID, int UserID, int TenantID);
+        string DownloadStoreReportSearch(int ReportID, int UserID, int TenantID, List<StoreUserListing> StoreUserList);
+
+        bool CheckIfReportNameExists(int ReportID, string ReportName, int TenantID);
 
         int ScheduleStoreReport(ScheduleMaster scheduleMaster, int TenantID, int UserID);
 

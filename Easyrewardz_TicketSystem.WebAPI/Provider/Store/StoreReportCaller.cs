@@ -17,18 +17,24 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #endregion
 
-        public int StoreReportSearch(IStoreReport Report, StoreReportModel searchModel)
+        public int StoreReportSearch(IStoreReport Report, StoreReportModel searchModel, List<StoreUserListing> StoreUserList)
         {
             _Reports = Report;
-            return _Reports.GetStoreReportSearch(searchModel);
+            return _Reports.GetStoreReportSearch(searchModel, StoreUserList);
         }
 
-        public string DownloadStoreReportSearch(IStoreReport Report, int SchedulerID, int UserID, int TenantID)
+        public string DownloadStoreReportSearch(IStoreReport Report, int ReportID, int UserID, int TenantID, List<StoreUserListing> StoreUserList)
         {
             _Reports = Report;
-            return _Reports.DownloadStoreReportSearch(SchedulerID, UserID, TenantID); 
+            return _Reports.DownloadStoreReportSearch(ReportID, UserID, TenantID, StoreUserList);
         }
 
+
+        public bool CheckIfReportNameExists(IStoreReport Report, int ReportID, string ReportName, int TenantID)
+        {
+            _Reports = Report;
+            return _Reports.CheckIfReportNameExists(ReportID, ReportName, TenantID);
+        }
 
         public int ScheduleStoreReport(IStoreReport Report, ScheduleMaster scheduleMaster, int TenantID, int UserID)
         {

@@ -22,9 +22,11 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public bool IsTaskWithClaim { get; set; }
         public int? TaskClaimID { get; set; }
         public string TaskCreatedDate { get; set; }
-        public int? TaskCreatedBy { get; set; }
-        public int? TaskAssignedId { get; set; }
+        //public int? TaskCreatedBy { get; set; }
+        //public int? TaskAssignedId { get; set; }
 
+        public string TaskCreatedBy { get; set; }
+        public string TaskAssignedId { get; set; }
         //ends here
 
         // claim search params
@@ -39,19 +41,22 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public bool IsClaimWithTask { get; set; }
         public int? ClaimTaskID { get; set; }
         public string ClaimCreatedDate { get; set; }
-        public int? ClaimCreatedBy { get; set; }
-        public int? ClaimAssignedId { get; set; } 
+        //public int? ClaimCreatedBy { get; set; }
+        //public int? ClaimAssignedId { get; set; }
+
+        public string ClaimCreatedBy { get; set; }
+        public string ClaimAssignedId { get; set; }
 
         //ends here
 
 
         // campaign search params
         public string CampaignName { get; set; }
-        public int? CampaignAssignedIds { get; set; }
+        //public int? CampaignAssignedIds { get; set; }
         public string CampaignStartDate { get; set; }
         public string CampaignEndDate { get; set; }
         public string CampaignStatusids { get; set; }
-
+        public string CampaignAssignedIds { get; set; }
         //ends here
 
     }

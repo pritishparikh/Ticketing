@@ -54,6 +54,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string statusMessage = "";
             int resultCount = 0;
             StoreReportCaller dbsearchMaster = new StoreReportCaller();
+            List<StoreUserListing> StoreUserList = new List<StoreUserListing>();
             try
             {
 
@@ -64,7 +65,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 SearchParams.TenantID = authenticate.TenantId; // add tenantID to request
                                                                // searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
 
-                resultCount = dbsearchMaster.StoreReportSearch(new StoreReportService(_connectioSting), SearchParams);
+                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
+
+                resultCount = dbsearchMaster.StoreReportSearch(new StoreReportService(_connectioSting), SearchParams, StoreUserList);
 
                 StatusCode = resultCount > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -88,7 +91,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("DownloadStoreReport")]
-        public ResponseModel DownloadStoreReportSearch(int SchedulerID)
+        public ResponseModel DownloadStoreReportSearch(int ReportID)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -98,19 +101,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string Folderpath = string.Empty;
             string URLPath = string.Empty;
             StoreReportCaller dbsearchMaster = new StoreReportCaller();
+            List<StoreUserListing> StoreUserList = new List<StoreUserListing>();
             try
             {
 
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                Authenticate authenticate = new Authenticate(); 
+                Authenticate authenticate = new Authenticate();
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
-                CSVReport = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), SchedulerID, authenticate.UserMasterID, authenticate.TenantId);
+                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
+                CSVReport = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), ReportID, authenticate.UserMasterID, authenticate.TenantId, StoreUserList);
 
                 appRoot = Directory.GetCurrentDirectory();
 
-                string CSVFileName = "StoreReport_" + SchedulerID + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".csv";
+                string CSVFileName = "StoreReport_" + ReportID + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".csv";
 
                 Folderpath = Path.Combine(appRoot, "ReportDownload");
                 if (!Directory.Exists(Folderpath))
@@ -142,6 +146,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
 
+        /// <summary>
+        /// Check If Report Name Exists
+        /// </summary>
+        /// <param name="ReportID"></param>
+        /// <param name="ReportName"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CheckIfReportNameExists")]
+        public ResponseModel CheckIfReportNameExists(int ReportID, string ReportName)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            bool IsExists = false;
+            StoreReportCaller dbsearchMaster = new StoreReportCaller();
+            List<StoreUserListing> StoreUserList = new List<StoreUserListing>();
+            try
+            {
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
+                IsExists = dbsearchMaster.CheckIfReportNameExists(new StoreReportService(_connectioSting), ReportID, ReportName, authenticate.TenantId);
+
+                StatusCode = IsExists ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = IsExists;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
 
         /// <summary>
         /// Schedule Store Report
@@ -165,8 +208,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 int result = reportCaller.ScheduleStoreReport(new StoreReportService(_connectioSting), scheduleMaster, authenticate.TenantId, authenticate.UserMasterID);
                 StatusCode =
-                result >= 0 ?
-                       (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                result > 0 ?
+                       (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
                 objResponseModel.Status = true;

@@ -29,18 +29,66 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="StoreReportModel"></param>
         /// <returns></returns>
-        public int GetStoreReportSearch(StoreReportModel searchModel)
+        public int GetStoreReportSearch(StoreReportModel searchModel, List<StoreUserListing> StoreUserList)
         {
 
             MySqlCommand cmd = new MySqlCommand();
-            int resultCount = 0; 
-            
+            int resultCount = 0;
+
+            string UserList = "";
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
                     conn.Open();
                 }
+
+                // get all users if created by =0 and assigned user =0
+
+                if (StoreUserList.Count > 0)
+                {
+                    UserList = string.Join(',', StoreUserList.AsEnumerable().Select(x => x.UserID).ToList());
+                }
+
+                if (searchModel.ActiveTabId.Equals(1))
+                {
+
+                    if (searchModel.TaskCreatedBy.Equals("0"))
+                    {
+                        searchModel.TaskCreatedBy = UserList;
+                    }
+
+                    if (searchModel.TaskAssignedId.Equals("0"))
+                    {
+                        searchModel.TaskAssignedId = UserList;
+                    }
+                }
+
+                else if (searchModel.ActiveTabId.Equals(2))
+                {
+                    if (searchModel.ClaimCreatedBy.Equals("0"))
+                    {
+                        searchModel.ClaimCreatedBy = UserList;
+                    }
+
+                    if (searchModel.ClaimAssignedId.Equals("0"))
+                    {
+                        searchModel.ClaimAssignedId = UserList;
+                    }
+                }
+
+                else
+                {
+                    if (searchModel.CampaignAssignedIds.Equals("0"))
+                    {
+                        searchModel.CampaignAssignedIds = UserList;
+                    }
+                }
+
+
+
+                //--------
+
 
                 cmd = new MySqlCommand("SP_GetStoreReportCount", conn);
                 cmd.Connection = conn;
@@ -50,17 +98,17 @@ namespace Easyrewardz_TicketSystem.Services
                 /*------------------ TASK PARAMETERS ------------------------------*/
 
                 cmd.Parameters.AddWithValue("@_TaskTitle", string.IsNullOrEmpty(searchModel.TaskTitle) ? "" : searchModel.TaskTitle);
-                cmd.Parameters.AddWithValue("@_TaskStatus", string.IsNullOrEmpty(searchModel.TaskStatus) ? "" :  searchModel.TaskStatus);
-                cmd.Parameters.AddWithValue("@_IsTaskWithTicket",Convert.ToInt16( searchModel.IsTaskWithTicket));
-                cmd.Parameters.AddWithValue("@_TaskTicketID", searchModel.TaskTicketID);
+                cmd.Parameters.AddWithValue("@_TaskStatus", string.IsNullOrEmpty(searchModel.TaskStatus) ? "" : searchModel.TaskStatus);
+                cmd.Parameters.AddWithValue("@_IsTaskWithTicket", Convert.ToInt16(searchModel.IsTaskWithTicket));
+                cmd.Parameters.AddWithValue("@_TaskTicketID", searchModel.TaskTicketID == null ? 0 : searchModel.TaskTicketID);
                 cmd.Parameters.AddWithValue("@_DepartmentIds", string.IsNullOrEmpty(searchModel.DepartmentIds) ? "" : searchModel.DepartmentIds);
                 cmd.Parameters.AddWithValue("@_FunctionIds", string.IsNullOrEmpty(searchModel.FunctionIds) ? "" : searchModel.FunctionIds);
-                cmd.Parameters.AddWithValue("@_PriorityIds", string.IsNullOrEmpty(searchModel.PriorityIds) ? "" :  searchModel.PriorityIds);
+                cmd.Parameters.AddWithValue("@_PriorityIds", string.IsNullOrEmpty(searchModel.PriorityIds) ? "" : searchModel.PriorityIds);
                 cmd.Parameters.AddWithValue("@_IsTaskWithClaim", Convert.ToInt16(searchModel.IsTaskWithClaim));
-                cmd.Parameters.AddWithValue("@_TaskClaimID", searchModel.TaskClaimID);
-                cmd.Parameters.AddWithValue("@_TaskCreatedDate", searchModel.TaskCreatedDate);
-                cmd.Parameters.AddWithValue("@_TaskCreatedBy", searchModel.TaskCreatedBy);
-                cmd.Parameters.AddWithValue("@_TaskAssignedId", searchModel.TaskAssignedId);
+                cmd.Parameters.AddWithValue("@_TaskClaimID", searchModel.TaskClaimID == null ? 0 : searchModel.TaskClaimID);
+                cmd.Parameters.AddWithValue("@_TaskCreatedDate", string.IsNullOrEmpty(searchModel.TaskCreatedDate) ? "" : searchModel.TaskCreatedDate);
+                cmd.Parameters.AddWithValue("@_TaskCreatedBy", string.IsNullOrEmpty(searchModel.TaskCreatedBy) ? "" : searchModel.TaskCreatedBy);
+                cmd.Parameters.AddWithValue("@_TaskAssignedId", string.IsNullOrEmpty(searchModel.TaskAssignedId) ? "" : searchModel.TaskAssignedId);
 
                 /*------------------ ENDS HERE-------------------------------*/
 
@@ -69,22 +117,22 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ClaimID", searchModel.ClaimID);
                 cmd.Parameters.AddWithValue("@_ClaimStatus", string.IsNullOrEmpty(searchModel.ClaimStatus) ? "" : searchModel.ClaimStatus);
                 cmd.Parameters.AddWithValue("@_IsClaimWithTicket", Convert.ToInt16(searchModel.IsClaimWithTicket));
-                cmd.Parameters.AddWithValue("@_ClaimTicketID", searchModel.ClaimTicketID);
+                cmd.Parameters.AddWithValue("@_ClaimTicketID", searchModel.ClaimTicketID == null ? 0 : searchModel.ClaimTicketID);
                 cmd.Parameters.AddWithValue("@_ClaimCategoryIds", string.IsNullOrEmpty(searchModel.ClaimCategoryIds) ? "" : searchModel.ClaimCategoryIds);
                 cmd.Parameters.AddWithValue("@_ClaimSubCategoryIds", string.IsNullOrEmpty(searchModel.ClaimSubCategoryIds) ? "" : searchModel.ClaimSubCategoryIds);
                 cmd.Parameters.AddWithValue("@_ClaimIssuetypeIds", string.IsNullOrEmpty(searchModel.ClaimIssuetypeIds) ? "" : searchModel.ClaimIssuetypeIds);
                 cmd.Parameters.AddWithValue("@_IsClaimWithTask", Convert.ToInt16(searchModel.IsClaimWithTask));
-                cmd.Parameters.AddWithValue("@_ClaimTaskID", searchModel.ClaimTaskID);
-                cmd.Parameters.AddWithValue("@_ClaimCreatedDate", searchModel.ClaimCreatedDate);
-                cmd.Parameters.AddWithValue("@_ClaimCreatedBy", searchModel.ClaimCreatedBy);
-                cmd.Parameters.AddWithValue("@_ClaimAssignedId", searchModel.ClaimAssignedId);
+                cmd.Parameters.AddWithValue("@_ClaimTaskID", searchModel.ClaimTaskID == null ? 0 : searchModel.ClaimTaskID);
+                cmd.Parameters.AddWithValue("@_ClaimCreatedDate", string.IsNullOrEmpty(searchModel.ClaimCreatedDate) ? "" : searchModel.ClaimCreatedDate);
+                cmd.Parameters.AddWithValue("@_ClaimCreatedBy", string.IsNullOrEmpty(searchModel.ClaimCreatedBy) ? "" : searchModel.ClaimCreatedBy);
+                cmd.Parameters.AddWithValue("@_ClaimAssignedId", string.IsNullOrEmpty(searchModel.ClaimAssignedId) ? "" : searchModel.ClaimAssignedId);
 
 
 
                 /*------------------ CAMPAIGN  PARAMETERS------------------------------*/
 
                 cmd.Parameters.AddWithValue("@_CampaignName", string.IsNullOrEmpty(searchModel.CampaignName) ? "" : searchModel.CampaignName);
-                cmd.Parameters.AddWithValue("@_CampaignAssignedId", searchModel.CampaignAssignedIds);
+                cmd.Parameters.AddWithValue("@_CampaignAssignedId", string.IsNullOrEmpty(searchModel.CampaignAssignedIds) ? "" : searchModel.CampaignAssignedIds);
                 cmd.Parameters.AddWithValue("@_CampaignStartDate", string.IsNullOrEmpty(searchModel.CampaignStartDate) ? "" : searchModel.CampaignStartDate);
                 cmd.Parameters.AddWithValue("@_CampaignEndDate", string.IsNullOrEmpty(searchModel.CampaignEndDate) ? "" : searchModel.CampaignEndDate);
                 cmd.Parameters.AddWithValue("@_CampaignStatusids", string.IsNullOrEmpty(searchModel.CampaignStatusids) ? "" : searchModel.CampaignStatusids);
@@ -96,7 +144,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 resultCount = Convert.ToInt32(cmd.ExecuteScalar());
 
-                resultCount = 10;
+
             }
             catch (Exception)
             {
@@ -118,7 +166,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///  <param name="UserId"></param>
         ///   <param name="TenantId"></param>
         /// <returns></returns>
-        public string DownloadStoreReportSearch(int SchedulerID, int UserID, int TenantID)
+        public string DownloadStoreReportSearch(int ReportID, int UserID, int TenantID, List<StoreUserListing> StoreUserList)
         {
             MySqlCommand cmd = new MySqlCommand();
             string SearchInputParams = string.Empty;
@@ -140,24 +188,24 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd = new MySqlCommand("SP_DownloadStoreReportSearch", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
-                cmd.Parameters.AddWithValue("@Schedule_ID", SchedulerID);
+                cmd.Parameters.AddWithValue("@Report_ID", ReportID);
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                SearchInputParams = Convert.ToString(cmd.ExecuteScalar()); 
+                SearchInputParams = Convert.ToString(cmd.ExecuteScalar());
 
                 if (!string.IsNullOrEmpty(SearchInputParams))
                 {
                     SearchModel = JsonConvert.DeserializeObject<StoreReportModel>(SearchInputParams);
                     SearchModel.TenantID = TenantID;
-                    ReportDownloadList = GetStoreReportSearchList(SearchModel);
+                    ReportDownloadList = GetStoreReportSearchList(SearchModel, StoreUserList);
 
                     if (ReportDownloadList != null)
                     {
                         if (SearchModel.ActiveTabId.Equals(1))
                         {
                             TaskReport = ReportDownloadList.TaskReport;
-                            CSVReport = TaskReport!=null &&  TaskReport.Count > 0 ? CommonService.ListToCSV(TaskReport) : string.Empty;
+                            CSVReport = TaskReport != null && TaskReport.Count > 0 ? CommonService.ListToCSV(TaskReport) : string.Empty;
                         }
                         else if (SearchModel.ActiveTabId.Equals(2))
                         {
@@ -193,7 +241,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="StoreReportModel"></param>
         /// <returns></returns>
-        public SearchStoreResponseReport GetStoreReportSearchList(StoreReportModel searchModel)
+        public SearchStoreResponseReport GetStoreReportSearchList(StoreReportModel searchModel, List<StoreUserListing> StoreUserList)
         {
             List<string> ReportDownloadList = new List<string>();
             MySqlCommand cmd = new MySqlCommand();
@@ -204,12 +252,61 @@ namespace Easyrewardz_TicketSystem.Services
             List<SearchStoreClaimReportResponse> ClaimReport = new List<SearchStoreClaimReportResponse>();
             List<SearchStoreCampaignReportResponse> CampaignReport = new List<SearchStoreCampaignReportResponse>();
 
+            string UserList = "";
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
                     conn.Open();
                 }
+
+
+
+                // get all users if created by =0 and assigned user =0
+
+                if (StoreUserList.Count > 0)
+                {
+                    UserList = string.Join(',', StoreUserList.AsEnumerable().Select(x => x.UserID).ToList());
+                }
+
+                if (searchModel.ActiveTabId.Equals(1))
+                {
+
+                    if (searchModel.TaskCreatedBy.Equals("0"))
+                    {
+                        searchModel.TaskCreatedBy = UserList;
+                    }
+
+                    if (searchModel.TaskAssignedId.Equals("0"))
+                    {
+                        searchModel.TaskAssignedId = UserList;
+                    }
+                }
+
+                else if (searchModel.ActiveTabId.Equals(2))
+                {
+                    if (searchModel.ClaimCreatedBy.Equals("0"))
+                    {
+                        searchModel.ClaimCreatedBy = UserList;
+                    }
+
+                    if (searchModel.ClaimAssignedId.Equals("0"))
+                    {
+                        searchModel.ClaimAssignedId = UserList;
+                    }
+                }
+
+                else
+                {
+                    if (searchModel.CampaignAssignedIds.Equals("0"))
+                    {
+                        searchModel.CampaignAssignedIds = UserList;
+                    }
+                }
+
+
+
+                //--------
 
                 cmd = new MySqlCommand("SP_ScheduleStoreReportForDownload", conn);
                 cmd.Connection = conn;
@@ -228,8 +325,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_IsTaskWithClaim", Convert.ToInt16(searchModel.IsTaskWithClaim));
                 cmd.Parameters.AddWithValue("@_TaskClaimID", searchModel.TaskClaimID == null ? 0 : searchModel.TaskClaimID);
                 cmd.Parameters.AddWithValue("@_TaskCreatedDate", string.IsNullOrEmpty(searchModel.TaskCreatedDate) ? "" : searchModel.TaskCreatedDate);
-                cmd.Parameters.AddWithValue("@_TaskCreatedBy", searchModel.TaskCreatedBy == null ? 0 : searchModel.TaskCreatedBy);
-                cmd.Parameters.AddWithValue("@_TaskAssignedId", searchModel.TaskAssignedId == null ? 0 : searchModel.TaskAssignedId);
+                cmd.Parameters.AddWithValue("@_TaskCreatedBy", string.IsNullOrEmpty(searchModel.TaskCreatedBy) ? "" : searchModel.TaskCreatedBy);
+                cmd.Parameters.AddWithValue("@_TaskAssignedId", string.IsNullOrEmpty(searchModel.TaskAssignedId) ? "" : searchModel.TaskAssignedId);
 
                 /*------------------ ENDS HERE-------------------------------*/
 
@@ -245,15 +342,15 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_IsClaimWithTask", Convert.ToInt16(searchModel.IsClaimWithTask));
                 cmd.Parameters.AddWithValue("@_ClaimTaskID", searchModel.ClaimTaskID == null ? 0 : searchModel.ClaimTaskID);
                 cmd.Parameters.AddWithValue("@_ClaimCreatedDate", string.IsNullOrEmpty(searchModel.ClaimCreatedDate) ? "" : searchModel.ClaimCreatedDate);
-                cmd.Parameters.AddWithValue("@_ClaimCreatedBy", searchModel.ClaimCreatedBy == null ? 0 : searchModel.ClaimCreatedBy);
-                cmd.Parameters.AddWithValue("@_ClaimAssignedId", searchModel.ClaimAssignedId == null ? 0 : searchModel.ClaimAssignedId);
+                cmd.Parameters.AddWithValue("@_ClaimCreatedBy", string.IsNullOrEmpty(searchModel.ClaimCreatedBy) ? "" : searchModel.ClaimCreatedBy);
+                cmd.Parameters.AddWithValue("@_ClaimAssignedId", string.IsNullOrEmpty(searchModel.ClaimAssignedId) ? "" : searchModel.ClaimAssignedId);
 
 
 
                 /*------------------ CAMPAIGN  PARAMETERS------------------------------*/
 
                 cmd.Parameters.AddWithValue("@_CampaignName", string.IsNullOrEmpty(searchModel.CampaignName) ? "" : searchModel.CampaignName);
-                cmd.Parameters.AddWithValue("@_CampaignAssignedId", searchModel.CampaignAssignedIds == null ? 0 : searchModel.CampaignAssignedIds);
+                cmd.Parameters.AddWithValue("@_CampaignAssignedId", string.IsNullOrEmpty(searchModel.CampaignAssignedIds) ? "" : searchModel.CampaignAssignedIds);
                 cmd.Parameters.AddWithValue("@_CampaignStartDate", string.IsNullOrEmpty(searchModel.CampaignStartDate) ? "" : searchModel.CampaignStartDate);
                 cmd.Parameters.AddWithValue("@_CampaignEndDate", string.IsNullOrEmpty(searchModel.CampaignEndDate) ? "" : searchModel.CampaignEndDate);
                 cmd.Parameters.AddWithValue("@_CampaignStatusids", string.IsNullOrEmpty(searchModel.CampaignStatusids) ? "" : searchModel.CampaignStatusids);
@@ -312,8 +409,8 @@ namespace Easyrewardz_TicketSystem.Services
                                 SearchStoreClaimReportResponse obj = new SearchStoreClaimReportResponse()
                                 {
                                     ClaimID = Convert.ToInt32(dr["ClaimID"]),
-                                    ClaimTitle = dr["ClaimTitle"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimTitle"]),
-                                    ClaimDescription = dr["ClaimDescription"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimDescription"]),
+                                    //  ClaimTitle = dr["ClaimTitle"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimTitle"]),
+                                    // ClaimDescription = dr["ClaimDescription"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimDescription"]),
                                     BrandID = dr["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["BrandID"]),
                                     BrandName = dr["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["BrandName"]),
                                     CategoryID = dr["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CategoryID"]),
@@ -336,7 +433,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                                     IsActive = dr["IsActive"] == DBNull.Value ? string.Empty : Convert.ToString(dr["IsActive"]),
                                     ClaimApproved = dr["ClaimApproved"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimApproved"]),
-                                    ClaimRejected = dr["ClaimRejected"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimRejected"]),
+                                    // ClaimRejected = dr["ClaimRejected"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ClaimRejected"]),
                                     CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CreatedBy"]),
                                     CreatedByName = dr["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedByName"]),
                                     CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),
@@ -344,8 +441,8 @@ namespace Easyrewardz_TicketSystem.Services
                                     ModifiedByName = dr["ModifiedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifiedByName"]),
                                     ModifiedDate = dr["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifiedDate"]),
                                     IsClaimEscalated = dr["IsClaimEscalated"] == DBNull.Value ? string.Empty : Convert.ToString(dr["IsClaimEscalated"]),
-                                    IsCustomerResponseDone = dr["IsCustomerResponseDone"] == DBNull.Value ? string.Empty : Convert.ToString(dr["IsCustomerResponseDone"]),
-                                    CustomerResponsedOn = dr["CustomerResponsedOn"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerResponsedOn"]),
+                                    // IsCustomerResponseDone = dr["IsCustomerResponseDone"] == DBNull.Value ? string.Empty : Convert.ToString(dr["IsCustomerResponseDone"]),
+                                    // CustomerResponsedOn = dr["CustomerResponsedOn"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerResponsedOn"]),
                                     FinalClaimPercent = dr["FinalClaimPercent"] == DBNull.Value ? string.Empty : Convert.ToString(dr["FinalClaimPercent"]),
                                     TicketDescription = dr["TicketDescription"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TicketDescription"]),
                                     TaskDescription = dr["TaskDescription"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TaskDescription"]),
@@ -399,6 +496,44 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
+        /// <summary>
+        /// Check If Report Name Exists
+        /// </summary>
+        /// <param name="ReportID"></param>
+        /// <param name="ReportName"></param>
+        /// <returns></returns>
+        public bool CheckIfReportNameExists(int ReportID, string ReportName, int TenantID)
+        {
+
+
+            bool Isexists = false;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_CheckIfStoreReportNameAlreadyExsists", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@Report_ID", ReportID);
+                cmd.Parameters.AddWithValue("@Report_Name", string.IsNullOrEmpty(ReportName) ? "" : ReportName.ToLower());
+
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                Isexists = Convert.ToBoolean(Convert.ToInt32(cmd.ExecuteScalar()));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return Isexists;
+        }
 
         /// <summary>
         /// Schedule
@@ -484,12 +619,55 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
-
+                DateTime date = new DateTime();
                 if (ds != null && ds.Tables != null)
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
 
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            ReportModel Report = new ReportModel();
+                            Report.ReportID = ds.Tables[0].Rows[i]["ReportID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ReportID"]);
+                            Report.ScheduleID = ds.Tables[0].Rows[i]["ScheduleID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ScheduleID"]);
+                            Report.ScheduleType = ds.Tables[0].Rows[i]["ScheduleType"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ScheduleType"]);
+                            Report.ReportSearchParams = ds.Tables[0].Rows[i]["StoreReportSearchParams"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreReportSearchParams"]);
+                            Report.IsDownloaded = ds.Tables[0].Rows[i]["IsDownloaded"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IsDownloaded"]);
+                            Report.ReportName = ds.Tables[0].Rows[i]["ReportName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReportName"]);
+                            Report.ReportStatus = ds.Tables[0].Rows[i]["ReportStatus"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReportStatus"]);
+                            Report.ScheduleStatus = ds.Tables[0].Rows[i]["ScheduleStatus"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ScheduleStatus"]);
+                            Report.CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                            Report.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
+                            Report.ModifiedBy = ds.Tables[0].Rows[i]["UpdatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedBy"]);
+                            Report.ModifiedDate = ds.Tables[0].Rows[i]["UpdatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedDate"]);
+                            Report.ScheduleFor = ds.Tables[0].Rows[i]["ScheduleFor"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ScheduleFor"]);
+                            Report.ScheduleTime = ds.Tables[0].Rows[i]["ScheduleTime"] == DBNull.Value || Convert.ToString(ds.Tables[0].Rows[i]["ScheduleTime"]) == ""
+                                ? date : new DateTime().Add(TimeSpan.Parse(Convert.ToString(ds.Tables[0].Rows[i]["ScheduleTime"])));
+                            Report.IsDaily = ds.Tables[0].Rows[i]["IsDaily"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsDaily"]);
+                            Report.NoOfDay = ds.Tables[0].Rows[i]["NoOfDay"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfDay"]);
+                            Report.IsWeekly = ds.Tables[0].Rows[i]["IsWeekly"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsWeekly"]);
+                            Report.NoOfWeek = ds.Tables[0].Rows[i]["NoOfWeek"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfWeek"]);
+                            Report.DayIds = ds.Tables[0].Rows[i]["DayIds"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayIds"]);
+                            Report.IsDailyForMonth = ds.Tables[0].Rows[i]["IsDailyForMonth"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsDailyForMonth"]);
+                            Report.NoOfDaysForMonth = ds.Tables[0].Rows[i]["NoOfDaysForMonth"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfDaysForMonth"]);
+                            Report.NoOfMonthForMonth = ds.Tables[0].Rows[i]["NoOfMonthForMonth"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfMonthForMonth"]);
+                            Report.IsWeeklyForMonth = ds.Tables[0].Rows[i]["IsWeeklyForMonth"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsWeeklyForMonth"]);
+                            Report.NoOfMonthForWeek = ds.Tables[0].Rows[i]["NoOfMonthForWeek"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfMonthForWeek"]);
+                            Report.NoOfWeekForWeek = ds.Tables[0].Rows[i]["NoOfWeekForWeek"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfWeekForWeek"]);
+                            Report.NameOfDayForYear = ds.Tables[0].Rows[i]["NameOfDayForYear"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NameOfDayForYear"]);
+                            Report.NameOfDayForWeek = ds.Tables[0].Rows[i]["NameOfDayForWeek"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NameOfDayForWeek"]);
+                            Report.NoOfWeekForYear = ds.Tables[0].Rows[i]["NoOfWeekForYear"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfWeekForYear"]);
+                            Report.NameOfMonthForYear = ds.Tables[0].Rows[i]["NameOfMonthForYear"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NameOfMonthForYear"]);
+                            Report.IsDailyForYear = ds.Tables[0].Rows[i]["IsDailyForYear"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsDailyForYear"]);
+                            Report.NameOfMonthForDailyYear = ds.Tables[0].Rows[i]["NameOfMonthForDailyYear"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NameOfMonthForDailyYear"]);
+                            Report.NoOfDayForDailyYear = ds.Tables[0].Rows[i]["NoOfDayForDailyYear"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NoOfDayForDailyYear"]);
+
+                            objReportLst.Add(Report);
+                        }
+
+
+                        #region old store report mapping mapping 
+                        /*
                         objReportLst = ds.Tables[0].AsEnumerable().Select(r => new ReportModel()
                         {
                             ReportID = Convert.ToInt32(r.Field<object>("ReportID")),
@@ -525,6 +703,10 @@ namespace Easyrewardz_TicketSystem.Services
                             NoOfDayForDailyYear = Convert.ToInt32(r.Field<object>("NoOfDayForDailyYear") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("NoOfDayForDailyYear")))
 
                         }).ToList();
+
+                        */
+                        #endregion
+
                     }
 
 
