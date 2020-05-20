@@ -18,12 +18,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider.Store
         /// <param name="hSSetting"></param>
         /// <param name="tenantID"></param>
         /// <returns></returns>
-        public List<HSSettingModel> GetStoreAgentList(IHSSetting hSSetting, int tenantID, int BrandID, int StoreID)
+        public List<HSSettingModel> GetStoreAgentList(IHSSetting hSSetting, int tenantID, int BrandID , int StoreID)
         {
             _IHSettingRepository = hSSetting;
             return _IHSettingRepository.GetStoreAgentList(tenantID, BrandID, StoreID);
         }
 
+        /// <summary>
+        /// Insert and Update Agent Data
+        /// </summary>
+        /// <param name="hSSetting"></param>
+        /// <param name="hSSettingModel"></param>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
         public int InsertUpdateAgentDetails(IHSSetting hSSetting, HSSettingModel hSSettingModel, int tenantID)
         {
             _IHSettingRepository = hSSetting;
