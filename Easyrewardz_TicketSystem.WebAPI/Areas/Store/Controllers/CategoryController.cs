@@ -24,7 +24,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
         private readonly string rootPath;
-        private readonly string _UploadedBulkFile;
+        private readonly string BulkUpload;
+        private readonly string UploadFiles;
+        private readonly string DownloadFile;
         #endregion
 
         #region Constructor
@@ -33,8 +35,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
-            _UploadedBulkFile = configuration.GetValue<string>("FileUploadLocation");
             rootPath = configuration.GetValue<string>("APIURL");
+            BulkUpload = configuration.GetValue<string>("BulkUpload");
+            UploadFiles = configuration.GetValue<string>("Uploadfiles");
+            DownloadFile = configuration.GetValue<string>("Downloadfile");
         }
         #endregion
 
@@ -197,7 +201,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             try
             {
 
-                if (BrandID == 0 || String.IsNullOrEmpty(CategoryName))
+                if (String.IsNullOrEmpty(CategoryName))
                 {
                     objResponseModel.Status = false;
                     objResponseModel.StatusCode = statusCode;
@@ -269,6 +273,43 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        [HttpPost]
+        [Route("GetClaimSubCategoryByCategoryOnSearch")]
+        public ResponseModel GetClaimSubCategoryByCategoryOnSearch(int CategoryID, string searchText)
+        {
+            List<SubCategory> objSubCategory = new List<SubCategory>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                MasterCaller newMasterSubCat = new MasterCaller();
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                objSubCategory = newMasterSubCat.GetClaimSubCategoryByCategoryOnSearch(new CategoryServices(_connectioSting), authenticate.TenantId, CategoryID, searchText);
+
+                StatusCode =
+                objSubCategory.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objSubCategory;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
 
         /// <summary>
         /// Add Claim Sub Category
@@ -334,6 +375,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 MasterCaller newMasterBrand = new MasterCaller();
 
                 objIssueTypeList = newMasterBrand.GetClaimIssueTypeList(new CategoryServices(_connectioSting), authenticate.TenantId, SubCategoryID);
+
+                StatusCode =
+                objIssueTypeList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objIssueTypeList;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// GetClaimIssueTypeOnSearch
+        /// </summary>
+        /// <param name="SubCategoryID"></param>
+        /// <param name="searchText"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetClaimIssueTypeOnSearch")]
+        public ResponseModel GetClaimIssueTypeOnSearch(int SubCategoryID, string searchText)
+        {
+            List<IssueType> objIssueTypeList = new List<IssueType>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                MasterCaller newMasterBrand = new MasterCaller();
+
+                objIssueTypeList = newMasterBrand.GetClaimIssueTypeOnSearch(new CategoryServices(_connectioSting), authenticate.TenantId, SubCategoryID, searchText);
 
                 StatusCode =
                 objIssueTypeList.Count == 0 ?
@@ -495,14 +581,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadClaimCategory")]
-        public ResponseModel BulkUploadClaimCategory()
+        public ResponseModel BulkUploadClaimCategory(int CategoryFor = 3)
         {
-            string downloadFilePath = string.Empty;
-            string bulkUploadFilesPath = string.Empty;
+            string DownloadFilePath = string.Empty;
+            string BulkUploadFilesPath = string.Empty;
             bool errorFileSaved = false;
             bool successFileSaved = false;
             int count = 0;
-
             MasterCaller masterCaller = new MasterCaller();
             StoreFileUploadCaller fileU = new StoreFileUploadCaller();
             ResponseModel objResponseModel = new ResponseModel();
@@ -512,94 +597,99 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string fileName = "";
             string finalAttchment = "";
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
-
+            string[] filesName = null;
             List<string> CSVlist = new List<string>();
-
-            int CategoryFor = 3;
 
             try
             {
                 var files = Request.Form.Files;
 
-                var exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
-                var appRoot = appPathMatcher.Match(exePath).Value;
-                string folderpath = appRoot;
+                if (files.Count > 0)
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
+                    }
+                    finalAttchment = fileName.TrimEnd(',');
+                }
+                var Keys = Request.Form;
 
+
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 #region FilePath
-                bulkUploadFilesPath = folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
-                downloadFilePath = folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor);
+                string Folderpath = Directory.GetCurrentDirectory();
+                filesName = finalAttchment.Split(",");
 
-                #endregion
+
+                BulkUploadFilesPath = Path.Combine(Folderpath, BulkUpload, UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor));
+                DownloadFilePath = Path.Combine(Folderpath, BulkUpload, DownloadFile, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor));
+
+
+                if (!Directory.Exists(BulkUploadFilesPath))
+                {
+                    Directory.CreateDirectory(BulkUploadFilesPath);
+                }
+
+
 
                 if (files.Count > 0)
                 {
-                    bulkUploadFilesPath = bulkUploadFilesPath + "\\Category\\";
-
-                    if (!Directory.Exists(bulkUploadFilesPath))
-                    {
-                        Directory.CreateDirectory(bulkUploadFilesPath);
-                    }
 
                     for (int i = 0; i < files.Count; i++)
                     {
-                        fileName = files[i].FileName.Replace(".", timeStamp + ".") + ",";
-                        fileName = fileName.TrimEnd(',');
-                        finalAttchment = fileName;
-
                         using (var ms = new MemoryStream())
                         {
                             files[i].CopyTo(ms);
                             var fileBytes = ms.ToArray();
                             MemoryStream msfile = new MemoryStream(fileBytes);
-                            FileStream docFile = new FileStream(bulkUploadFilesPath + "\\" + fileName, FileMode.Create, FileAccess.Write);
+                            FileStream docFile = new FileStream(Path.Combine(BulkUploadFilesPath, filesName[i]), FileMode.Create, FileAccess.Write);
                             msfile.WriteTo(docFile);
                             docFile.Close();
                             ms.Close();
                             msfile.Close();
                             string s = Convert.ToBase64String(fileBytes);
                             byte[] a = Convert.FromBase64String(s);
+                            // act on the Base64 data
+
                         }
                     }
                 }
-                else
-                {
-                    statusCode = (int)EnumMaster.StatusCode.ButNoBody;
-                    statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode.ButNoBody));
-                    objResponseModel.Status = false;
-                    objResponseModel.StatusCode = statusCode;
-                    objResponseModel.Message = statusMessage;
-                    objResponseModel.ResponseData = 0;
 
-                    return objResponseModel;
-                }
+                #endregion
 
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-               
-                dataSetCSV = CommonService.csvToDataSet(bulkUploadFilesPath + "\\" + finalAttchment);
-                CSVlist = masterCaller.ClaimCategoryBulkUpload(new CategoryServices(_connectioSting),authenticate.TenantId, authenticate.UserMasterID, CategoryFor, dataSetCSV);
+                dataSetCSV = CommonService.csvToDataSet(Path.Combine(BulkUploadFilesPath, filesName[0]));
+                CSVlist = masterCaller.ClaimCategoryBulkUpload(new CategoryServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, CategoryFor, dataSetCSV);
 
-                #region Create Error and Succes files and  Insert in FileUploadLog
+
+
+                #region Create Error and Success files and  Insert in FileUploadLog
+
+                string SuccessFileName = "Store_CategorySuccessFile_" + timeStamp + ".csv";
+                string ErrorFileName = "Store_CategoryErrorFile_" + timeStamp + ".csv";
+
+                string SuccessFileUrl = !string.IsNullOrEmpty(CSVlist[0]) ?
+                  rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor) + "/Success/" + SuccessFileName : string.Empty;
+                string ErrorFileUrl = !string.IsNullOrEmpty(CSVlist[1]) ?
+                    rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)CategoryFor) + "/Error/" + ErrorFileName : string.Empty;
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
-                    successFileSaved = CommonService.SaveFile(downloadFilePath + "\\Category\\Success" + "\\" + "CategorySuccessFile.csv", CSVlist[0]);
+                    successFileSaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Success", SuccessFileName), CSVlist[0]);
 
                 if (!string.IsNullOrEmpty(CSVlist[1]))
-                    errorFileSaved = CommonService.SaveFile(downloadFilePath + "\\Category\\Error" + "\\" + "CategoryErrorFile.csv", CSVlist[1]);
+                    errorFileSaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Error", ErrorFileName), CSVlist[1]);
 
-
-
-                count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorFileSaved,
-                                   "CategoryErrorFile.csv", "CategorySuccessFile.csv", authenticate.UserMasterID, "Category",
-                                   downloadFilePath + "\\Category\\Error" + "\\" + "CategoryErrorFile.csv",
-                                   downloadFilePath + "\\Category\\Success" + "\\" + "CategorySuccessFile.csv", CategoryFor
-                                   );
+                count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, filesName[0], true,
+                                 ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store_Category", SuccessFileUrl, ErrorFileUrl, CategoryFor);
                 #endregion
-                statusCode = successFileSaved ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+
+
+
+                statusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
@@ -612,7 +702,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 throw;
             }
             return objResponseModel;
-
 
         }
 

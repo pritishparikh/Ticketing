@@ -21,9 +21,13 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<SubCategory> GetClaimSubCategoryByCategoryID(int CategoryID, int TypeId);
 
+        List<SubCategory> GetClaimSubCategoryByCategoryOnSearch(int tenantID, int CategoryID, string searchText);
+
         int AddClaimSubCategory(int CategoryID, string category, int TenantID, int UserID);
 
         List<IssueType> GetClaimIssueTypeList(int TenantID, int SubCategoryID);
+
+        List<IssueType> GetClaimIssueTypeOnSearch(int TenantID, int SubCategoryID, string searchText);
 
         int AddClaimIssueType(int SubcategoryID, string IssuetypeName, int TenantID, int UserID);
 
