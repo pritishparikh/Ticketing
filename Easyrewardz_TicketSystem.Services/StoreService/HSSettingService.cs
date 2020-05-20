@@ -19,7 +19,7 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
 
         #region Custom Methods
-        public List<HSSettingModel> GetStoreAgentList(int tenantID, int BrandID, string StoreCode)
+        public List<HSSettingModel> GetStoreAgentList(int tenantID, int BrandID, int StoreID)
         {
             DataSet ds = new DataSet();
             List<HSSettingModel> listHierarchy = new List<HSSettingModel>();
@@ -32,7 +32,7 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@Brand_ID", BrandID);
-                cmd.Parameters.AddWithValue("@Store_Code", (string.IsNullOrEmpty(StoreCode) ? string.Empty : StoreCode));
+                cmd.Parameters.AddWithValue("@Store_ID", StoreID);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -50,7 +50,7 @@ namespace Easyrewardz_TicketSystem.Services
                         hSSettingModel.EmailID = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
                         hSSettingModel.TenantID = ds.Tables[0].Rows[i]["TenantID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
                         hSSettingModel.BrandID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
-                        hSSettingModel.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                        hSSettingModel.StoreID = ds.Tables[0].Rows[i]["StoreID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
                         hSSettingModel.Suggestion = ds.Tables[0].Rows[i]["Suggestion"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Suggestion"]);
                         hSSettingModel.FreeText = ds.Tables[0].Rows[i]["FreeText"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["FreeText"]);
                         listHierarchy.Add(hSSettingModel);
