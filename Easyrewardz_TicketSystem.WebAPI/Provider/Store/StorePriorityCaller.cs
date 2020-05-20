@@ -46,7 +46,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _priorityList = _priority;
             return _priorityList.ValidatePriority(priorityName, tenantID);
-
         }
         #endregion
     }

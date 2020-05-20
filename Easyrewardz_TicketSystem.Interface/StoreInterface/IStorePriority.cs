@@ -5,6 +5,7 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public interface IStorePriority
     {
+
         List<Priority> GetPriorityList(int tenantID);
         int AddPriority(string PriorityName, int status, int tenantID, int UserID);
         int UpdatePriority(int PriorityID, string PriorityName, int status, int tenantID, int UserID);
