@@ -30,7 +30,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="usermasterID"></param>
         /// <param name="tenantID"></param>
         /// /// <returns></returns>
-        int DeleteStoreHierarchy(int designationID,int userMasterID,int tenantID);
+        int DeleteStoreHierarchy(int designationID, int userMasterID, int tenantID);
 
         /// <summary>
         /// List Store Hierarchy

@@ -42,7 +42,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="usermasterID"></param>
         /// <param name="tenantID"></param>
         /// /// <returns></returns>
-        public int DeleteStoreHierarchy(IStoreHierarchy Hierarchy, int designationID, int usermasterID,int tenantID)
+        public int DeleteStoreHierarchy(IStoreHierarchy Hierarchy, int designationID, int usermasterID, int tenantID)
         {
             _HierarchyRepository = Hierarchy;
             return _HierarchyRepository.DeleteStoreHierarchy(designationID, usermasterID, tenantID);
@@ -78,7 +78,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name="TenantId"></param>
         /// <returns></returns>
-        public List<DesignationMaster> GetDesignations(IStoreHierarchy  hierarchy, int tenantId)
+        public List<DesignationMaster> GetDesignations(IStoreHierarchy hierarchy, int tenantId)
         {
             _HierarchyRepository = hierarchy;
             return _HierarchyRepository.GetDesignations(tenantId);
