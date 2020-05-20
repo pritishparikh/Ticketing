@@ -200,7 +200,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@tenant_ID", SLA.TenantID);
                 cmd.Parameters.AddWithValue("@modified_By", SLA.CreatedBy);
                 cmd.Parameters.AddWithValue("@SLA_ID", SLA.SlaID);
-                cmd.Parameters.AddWithValue("@Is_Active", SLA.isSLAActive);
+                cmd.Parameters.AddWithValue("@Is_Active", Convert.ToInt16(SLA.isSLAActive));
                 cmd.ExecuteScalar();
 
                 if (SLA != null)
@@ -312,6 +312,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         objSLALst = ds.Tables[0].AsEnumerable().Select(r => new StoreSLAResponseModel()
                         {
+                            /*
                             SLAID = Convert.ToInt32(r.Field<object>("SlaId")),
 
                             FunctionID = r.Field<object>("FunctionID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("FunctionID")),
@@ -323,6 +324,19 @@ namespace Easyrewardz_TicketSystem.Services
                             StoreName = r.Field<object>("StoreName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("StoreName")),
                             DepartmentID = r.Field<object>("DepartmentID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("DepartmentID")),
                             DepartmentName = r.Field<object>("DepartmentName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("DepartmentName")),
+                            isSLAActive = r.Field<object>("SLAStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SLAStatus")),
+                            CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
+                            CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
+                            ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
+                            ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
+                            */
+
+                            SLAID = Convert.ToInt32(r.Field<object>("SlaId")),
+
+                            FunctionID = r.Field<object>("FunctionID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("FunctionID")),
+                            FunctionName = r.Field<object>("FunctionName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("FunctionName")),
+
+
                             isSLAActive = r.Field<object>("SLAStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SLAStatus")),
                             CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
