@@ -780,7 +780,7 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
 
 
-        #region Claim CategoryMapping
+        #region Claim CategoryMapping 
 
         /// <summary>
         /// Get Claim Category List by muliptle brandID
