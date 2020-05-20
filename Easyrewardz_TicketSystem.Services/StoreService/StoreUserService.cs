@@ -357,7 +357,10 @@ namespace Easyrewardz_TicketSystem.Services
             List<StoreUserListing> UsermasterList = new List<StoreUserListing>();
             try
             {
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreUserList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
