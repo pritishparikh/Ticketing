@@ -44,7 +44,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Priority_ID", taskMaster.PriorityID);
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantID);
                 cmd.Parameters.AddWithValue("@Created_By", UserID);
-                
+
                 taskId = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
@@ -83,7 +83,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@tab_For", tabFor);
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@user_ID", userID);
-                
+
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
@@ -220,7 +220,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TenantID"></param>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        public int AddStoreTaskComment (StoreTaskComment TaskComment, int TenantID, int UserID)
+        public int AddStoreTaskComment(StoreTaskComment TaskComment, int TenantID, int UserID)
         {
             int taskId = 0;
             try
@@ -236,7 +236,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_CommentBy", UserID);
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
 
-                
+
                 taskId = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
@@ -375,7 +375,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return ListTaskHistory;
         }
-        
+
         /// <summary>
         /// Update Task Status
         /// </summary>
@@ -400,7 +400,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@TaskStatus_ID", taskMaster.TaskStatusId);
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
-                
+
                 i = cmd.ExecuteNonQuery();
             }
             catch (Exception)
@@ -499,7 +499,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_CommentOnAssign", assignTaskModel.CommentOnAssign);
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantID);
                 cmd.Parameters.AddWithValue("@Created_By", UserID);
-                
+
                 cmd.CommandType = CommandType.StoredProcedure;
                 i = cmd.ExecuteNonQuery();
             }
@@ -655,7 +655,7 @@ namespace Easyrewardz_TicketSystem.Services
                         }
                     }
                 }
-                
+
                 if (ds != null && ds.Tables[1] != null)
                 {
                     if (ds.Tables[1].Rows.Count > 0)
@@ -674,6 +674,10 @@ namespace Easyrewardz_TicketSystem.Services
                             CategoryName = ds.Tables[1].Rows[0]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["CategoryName"]),
                             SubCategoryName = ds.Tables[1].Rows[0]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["SubCategoryName"]),
                             IssueTypeName = ds.Tables[1].Rows[0]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["IssueTypeName"]),
+                            StoreID = ds.Tables[1].Rows[0]["StoreID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["StoreID"]),
+                            StoreNames = ds.Tables[1].Rows[0]["StoreName"] == DBNull.Value ? "NA" : Convert.ToString(ds.Tables[1].Rows[0]["StoreName"]),
+                            ProductID = ds.Tables[1].Rows[0]["OrderItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["OrderItemID"]),
+                            ProductNames = ds.Tables[1].Rows[0]["SKUName"] == DBNull.Value ? "NA" : Convert.ToString(ds.Tables[1].Rows[0]["SKUName"]),
                         };
 
                     }
@@ -878,7 +882,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_IsCommentOnAssign", assignTaskModel.IsCommentOnAssign);
                 cmd.Parameters.AddWithValue("@_CommentOnAssign", assignTaskModel.CommentOnAssign);
 
-                
+
                 i = cmd.ExecuteNonQuery();
             }
             catch (Exception)
@@ -962,7 +966,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                             }).ToList()
 
-                    }).ToList();
+                        }).ToList();
 
                         objList.Add(obj);
                     }
@@ -994,13 +998,13 @@ namespace Easyrewardz_TicketSystem.Services
             string GMT = " GMT+05:30 (" + TimeZoneInfo.Local.StandardName + ")";
             try
             {
-                if(!String.IsNullOrEmpty(DateInString))
+                if (!String.IsNullOrEmpty(DateInString))
                 {
                     result = DateInString + GMT;
                 }
-               
+
             }
-            catch(Exception)
+            catch (Exception)
             {
 
             }
@@ -1027,7 +1031,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                
+
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
@@ -1440,29 +1444,31 @@ namespace Easyrewardz_TicketSystem.Services
         public List<TaskFilterTicketByResponseModel> GetTaskTicketData(TaskFilterTicketByModel model)
         {
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
             List<TaskFilterTicketByResponseModel> ticketByTask = new List<TaskFilterTicketByResponseModel>();
             try
             {
                 conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetTaskbyTicketData", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@objtaskID", model.taskid);
-                cmd1.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
-                cmd1.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
-                cmd1.Parameters.AddWithValue("@objticketID", model.ticketID);
-                cmd1.Parameters.AddWithValue("@objDepartment", model.Department);
-                cmd1.Parameters.AddWithValue("@objfuncation", model.functionID);
-                cmd1.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
-                cmd1.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
-                cmd1.Parameters.AddWithValue("@objassignTo", model.AssigntoId);
-                cmd1.Parameters.AddWithValue("@objtaskCreatedBy", model.createdID);
-                cmd1.Parameters.AddWithValue("@objtaskwithclaim", model.taskwithClaim);
-                cmd1.Parameters.AddWithValue("@objclaimID", model.claimID);
-                cmd1.Parameters.AddWithValue("@objtaskPriority", model.Priority);
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                MySqlCommand cmd = new MySqlCommand("SP_GetTaskbyTicketData", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@objtaskID", model.taskid);
+                cmd.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
+                cmd.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
+                cmd.Parameters.AddWithValue("@objticketID", model.ticketID);
+                cmd.Parameters.AddWithValue("@objDepartment", model.Department);
+                cmd.Parameters.AddWithValue("@objfuncation", model.functionID);
+                cmd.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
+                cmd.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
+                cmd.Parameters.AddWithValue("@objassignTo", model.AssigntoId);
+                cmd.Parameters.AddWithValue("@objtaskCreatedBy", model.createdID);
+                cmd.Parameters.AddWithValue("@objtaskwithclaim", model.taskwithClaim);
+                cmd.Parameters.AddWithValue("@objclaimID", model.claimID);
+                cmd.Parameters.AddWithValue("@objtaskPriority", model.Priority);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
@@ -1472,20 +1478,23 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
 
-                        TaskFilterTicketByResponseModel taskTicket = new TaskFilterTicketByResponseModel();
-                        taskTicket.totalCount = ds.Tables[0].Rows.Count;
-                        taskTicket.StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        taskTicket.TaskStatus = TaskStatusName;
-                        taskTicket.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        taskTicket.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
-                        taskTicket.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        taskTicket.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
-                        taskTicket.PriorityName = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
-                        taskTicket.CreationOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
-                        taskTicket.Assignto = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
-                        taskTicket.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        taskTicket.Updatedago = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
-                        taskTicket.UpdatedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        TaskFilterTicketByResponseModel taskTicket = new TaskFilterTicketByResponseModel
+                        {
+                            totalCount = ds.Tables[0].Rows.Count,
+                            StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            TaskStatus = TaskStatusName,
+                            TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]),
+                            TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]),
+                            DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]),
+                            StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
+                            StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
+                            PriorityName = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]),
+                            CreationOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            Assignto = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
+                            CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
+                            Updatedago = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]),
+                            UpdatedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"])
+                        };
                         ticketByTask.Add(taskTicket);
                     }
                 }
