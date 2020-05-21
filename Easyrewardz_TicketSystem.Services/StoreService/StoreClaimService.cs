@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-    public class StoreClaimService: IStoreClaim
+    public class StoreClaimService : IStoreClaim
     {
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
@@ -195,7 +195,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="userID"></param>
         /// <param name="url"></param>
         /// <returns></returns>
-        public CustomClaimByID GetClaimByID(int claimID, int tenantID, int userID,string url)
+        public CustomClaimByID GetClaimByID(int claimID, int tenantID, int userID, string url)
         {
             DataSet ds = new DataSet();
             CustomClaimByID customClaimList = new CustomClaimByID();
@@ -230,14 +230,14 @@ namespace Easyrewardz_TicketSystem.Services
                         customClaimList.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
                         customClaimList.IssueTypeID = ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
                         customClaimList.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
-                        customClaimList.CustomerID= ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
-                        customClaimList.CustomerName= ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
+                        customClaimList.CustomerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
+                        customClaimList.CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
                         customClaimList.CustomerPhoneNumber = ds.Tables[0].Rows[i]["CustomerPhoneNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerPhoneNumber"]);
                         customClaimList.CustomerAlternateNumber = ds.Tables[0].Rows[i]["AltNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AltNumber"]);
                         customClaimList.EmailID = ds.Tables[0].Rows[i]["CustomerEmailId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerEmailId"]);
                         customClaimList.AlternateEmailID = ds.Tables[0].Rows[i]["AltEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AltEmailID"]);
                         customClaimList.Gender = ds.Tables[0].Rows[i]["Gender"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Gender"]);
-                        customClaimList.ClaimAskFor= ds.Tables[0].Rows[i]["ClaimPercent"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ClaimPercent"]);
+                        customClaimList.ClaimAskFor = ds.Tables[0].Rows[i]["ClaimPercent"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["ClaimPercent"]);
                         customClaimList.TargetClouserDate = ds.Tables[0].Rows[i]["ClosureDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureDate"]);
                         customClaimList.TicketID = ds.Tables[0].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
                         customClaimList.TicketingTaskID = ds.Tables[0].Rows[i]["TicketingTaskID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketingTaskID"]);
@@ -256,7 +256,7 @@ namespace Easyrewardz_TicketSystem.Services
                             OldAgentName = x.Field<object>("OldAgentName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("OldAgentName")),
                             NewAgentID = x.Field<object>("NewAgentID") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("NewAgentID")),
                             NewAgentName = x.Field<object>("NewAgentName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("NewAgentName")),
-                            IsTicketingComment= x.Field<object>("iSTicketingComment") == DBNull.Value ? false : Convert.ToBoolean(x.Field<object>("iSTicketingComment"))
+                            IsTicketingComment = x.Field<object>("iSTicketingComment") == DBNull.Value ? false : Convert.ToBoolean(x.Field<object>("iSTicketingComment"))
                         }).ToList();
 
                         customClaimList.CommentByApprovels = ds.Tables[3].AsEnumerable().Select(x => new CommentByApprovel()
@@ -280,7 +280,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 customOrderMaster.InvoiceNumber = ds.Tables[4].Rows[i]["InvoiceNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[i]["InvoiceNumber"]);
                                 customOrderMaster.InvoiceDate = Convert.ToDateTime(ds.Tables[4].Rows[i]["InvoiceDate"]);
                                 customOrderMaster.OrdeItemPrice = ds.Tables[4].Rows[i]["OrderPrice"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[4].Rows[i]["OrderPrice"]);
-                                customOrderMaster.OrderPricePaid = ds.Tables[4].Rows[i]["PricePaid"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[4].Rows[i]["PricePaid"]);                            
+                                customOrderMaster.OrderPricePaid = ds.Tables[4].Rows[i]["PricePaid"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[4].Rows[i]["PricePaid"]);
                                 customOrderMaster.DateFormat = customOrderMaster.InvoiceDate.ToString("dd/MMM/yyyy");
                                 customOrderMaster.StoreCode = ds.Tables[4].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[i]["StoreCode"]);
                                 customOrderMaster.StoreAddress = ds.Tables[4].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[4].Rows[i]["Address"]);
@@ -298,7 +298,7 @@ namespace Easyrewardz_TicketSystem.Services
                                     PricePaid = x.Field<object>("PricePaid") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("PricePaid")),
                                     Discount = x.Field<object>("Discount") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Discount")),
                                     RequireSize = x.Field<object>("RequireSize") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("RequireSize")),
-                                    PaymentMode= x.Field<object>("PaymentMode") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("PaymentMode")),
+                                    PaymentMode = x.Field<object>("PaymentMode") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("PaymentMode")),
                                 }).ToList();
                                 customOrderMaster.ItemCount = customOrderMaster.OrderItems.Count();
                                 customOrderMaster.ItemPrice = customOrderMaster.OrderItems.Sum(item => item.ItemPrice);
@@ -410,8 +410,8 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CommentByApprovel userComment = new CommentByApprovel();
-                        userComment.Name = ds.Tables[0].Rows[i]["Name"]== DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
-                        userComment.Comment = ds.Tables[0].Rows[i]["Comment"]== DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Comment"]);
+                        userComment.Name = ds.Tables[0].Rows[i]["Name"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
+                        userComment.Comment = ds.Tables[0].Rows[i]["Comment"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Comment"]);
                         userComment.CommentDate = ds.Tables[0].Rows[i]["CommentDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentDate"]);
                         userComment.IsRejectComment = ds.Tables[0].Rows[i]["IsRejectComment"] == DBNull.Value ? false : Convert.ToBoolean(Convert.ToInt16(ds.Tables[0].Rows[i]["IsRejectComment"]));
                         lstClaimComment.Add(userComment);
@@ -466,16 +466,16 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CustomClaimList customClaimList = new CustomClaimList();
-                        customClaimList.ClaimID = ds.Tables[0].Rows[i]["ClaimID"]== DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ClaimID"]);
+                        customClaimList.ClaimID = ds.Tables[0].Rows[i]["ClaimID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ClaimID"]);
                         customClaimList.Status = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.ClaimStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
                         customClaimList.AssignTo = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
-                        customClaimList.BrandID= ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
-                        customClaimList.BrandName= ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                        customClaimList.BrandID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
+                        customClaimList.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
                         customClaimList.CategoryID = ds.Tables[0].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
-                        customClaimList.CategoryName= ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        customClaimList.CategoryName = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
                         customClaimList.SubCategoryID = ds.Tables[0].Rows[i]["SubCategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
                         customClaimList.SubCategoryName = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
-                        customClaimList.IssueTypeID= ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
+                        customClaimList.IssueTypeID = ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
                         customClaimList.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
                         customClaimList.RaiseBy = ds.Tables[0].Rows[i]["RaiseBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RaiseBy"]);
                         customClaimList.CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
@@ -655,12 +655,12 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@SubCategory_ID", storeClaimMaster.SubCategoryID);
                 cmd.Parameters.AddWithValue("@IssueType_ID", storeClaimMaster.IssueTypeID);
                 cmd.Parameters.AddWithValue("@Order_IDs", string.IsNullOrEmpty(storeClaimMaster.OrderItemID) ? "" : storeClaimMaster.OrderItemID);
-                cmd.Parameters.AddWithValue("@Claim_Percent", storeClaimMaster.ClaimPercent); 
+                cmd.Parameters.AddWithValue("@Claim_Percent", storeClaimMaster.ClaimPercent);
                 cmd.Parameters.AddWithValue("@Customer_ID", storeClaimMaster.CustomerID);
                 cmd.Parameters.AddWithValue("@Ticket_ID", storeClaimMaster.TicketID);
                 cmd.Parameters.AddWithValue("@Ticketing_TaskID", storeClaimMaster.TaskID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                ClaimID = Convert.ToInt32(cmd.ExecuteScalar());            
+                ClaimID = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception)
             {

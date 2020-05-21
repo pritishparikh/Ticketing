@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
+
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -25,6 +25,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private readonly string _radisCacheServerAddress;
         private readonly string _connectionSting;
         private readonly string _ClaimProductImage;
+        private readonly string rootPath;
         #endregion
 
         #region Constructor
@@ -34,6 +35,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             _connectionSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
             _ClaimProductImage = configuration.GetValue<string>("RaiseClaimProductImage");
+            rootPath = configuration.GetValue<string>("APIURL");
         }
         #endregion
 
@@ -55,6 +57,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
             string fileName = "";
             string finalAttchment = "";
+            string ImagePath = string.Empty;
 
             if (files.Count > 0)
             {
@@ -70,11 +73,22 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             orderDetails = JsonConvert.DeserializeObject<OrderMaster>(Keys["orderDetails"]);
             OrderItemDetails = JsonConvert.DeserializeObject<List<OrderItem>>(Keys["orderItemDetails"]);
 
-            var exePath = Path.GetDirectoryName(System.Reflection
-                    .Assembly.GetExecutingAssembly().CodeBase);
-            Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
-            var appRoot = appPathMatcher.Match(exePath).Value;
-            string folderpath = appRoot + "\\" + _ClaimProductImage;
+            //var exePath = Path.GetDirectoryName(System.Reflection
+            //        .Assembly.GetExecutingAssembly().CodeBase);
+            //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+            //var appRoot = appPathMatcher.Match(exePath).Value;
+            // string folderpath = rootPath + _ClaimProductImage;
+            string Folderpath = Directory.GetCurrentDirectory();
+            string[] filesName = finalAttchment.Split(",");
+
+
+            ImagePath = Path.Combine(Folderpath, _ClaimProductImage);
+
+            if (!Directory.Exists(ImagePath))
+            {
+                Directory.CreateDirectory(ImagePath);
+            }
+
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
             string statusMessage = "";
@@ -136,31 +150,55 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 }
                 #endregion
+
                 StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
                 storeClaimMaster.TenantID = authenticate.TenantId;
                 storeClaimMaster.CreatedBy = authenticate.UserMasterID;
                 int result = storeClaimCaller.InsertRaiseClaim(new StoreClaimService(_connectionSting), storeClaimMaster, finalAttchment);
                 if (result > 0)
                 {
+
                     if (files.Count > 0)
                     {
-                        string[] filesName = finalAttchment.Split(",");
+                        //string[] filesName = finalAttchment.Split(",");
                         for (int i = 0; i < files.Count; i++)
                         {
-                            using (var ms = new MemoryStream())
+                            try
                             {
-                                files[i].CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                MemoryStream msfile = new MemoryStream(fileBytes);
-                                FileStream docFile = new FileStream(folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
-                                msfile.WriteTo(docFile);
-                                docFile.Close();
-                                ms.Close();
-                                msfile.Close();
-                                string s = Convert.ToBase64String(fileBytes);
-                                byte[] a = Convert.FromBase64String(s);
-                                // act on the Base64 data
+                                using (var ms = new MemoryStream())
+                                {
+                                    files[i].CopyTo(ms);
+                                    var fileBytes = ms.ToArray();
+                                    MemoryStream msfile = new MemoryStream(fileBytes);
+                                    FileStream docFile = new FileStream(Path.Combine(ImagePath, filesName[i]), FileMode.Create, FileAccess.Write);
+                                    msfile.WriteTo(docFile);
+                                    docFile.Close();
+                                    ms.Close();
+                                    msfile.Close();
+                                    string s = Convert.ToBase64String(fileBytes);
+                                    byte[] a = Convert.FromBase64String(s);
+                                    // act on the Base64 data
 
+                                }
+                                //using (var ms = new MemoryStream())
+                                //{
+                                //    files[i].CopyTo(ms);
+                                //    var fileBytes = ms.ToArray();
+                                //    MemoryStream msfile = new MemoryStream(fileBytes);
+                                //    FileStream docFile = new FileStream(folderpath + "/" + filesName[i], FileMode.Create, FileAccess.Write);
+                                //    msfile.WriteTo(docFile);
+                                //    docFile.Close();
+                                //    ms.Close();
+                                //    msfile.Close();
+                                //    string s = Convert.ToBase64String(fileBytes);
+                                //    byte[] a = Convert.FromBase64String(s);
+                                //    // act on the Base64 data
+
+                                //}
+                            }
+                            catch (Exception)
+                            {
+                                throw;
                             }
                         }
                     }
@@ -191,7 +229,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("AddStoreClaimComment")]
-        public ResponseModel AddStoreClaimComment(int claimID, string comment, int oldAssignID, int newAssignID,bool iSTicketingComment)
+        public ResponseModel AddStoreClaimComment(int claimID, string comment, int oldAssignID, int newAssignID, bool iSTicketingComment)
         {
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
@@ -228,7 +266,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         [Route("GetClaimCommentByClaimID")]
         public ResponseModel GetClaimCommentByClaimID(int claimID)
         {
-            List<UserComment> objClaimComment= new List<UserComment>();
+            List<UserComment> objClaimComment = new List<UserComment>();
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
@@ -240,7 +278,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 objClaimComment = storeClaimCaller.GetClaimComment(new StoreClaimService(_connectionSting), claimID);
                 statusCode =
-                   objClaimComment.Count==0?
+                   objClaimComment.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
@@ -344,7 +382,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("StoreClaimCommentByApprovel")]
-        public ResponseModel StoreClaimCommentByApprovel(int claimID, string comment,bool iSRejectComment)
+        public ResponseModel StoreClaimCommentByApprovel(int claimID, string comment, bool iSRejectComment)
         {
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
@@ -393,7 +431,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 objClaimComment = storeClaimCaller.GetClaimCommentForApprovel(new StoreClaimService(_connectionSting), claimID);
                 statusCode =
-                   objClaimComment.Count==0 ?
+                   objClaimComment.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
@@ -420,7 +458,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("IsClaimApprove")]
-        public ResponseModel IsClaimApprove(int claimID,double finalClaimAsked ,bool IsApprove)
+        public ResponseModel IsClaimApprove(int claimID, double finalClaimAsked, bool IsApprove)
         {
             StoreClaimCaller storeClaimCaller = new StoreClaimCaller();
             ResponseModel objResponseModel = new ResponseModel();
@@ -470,7 +508,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                int result = storeClaimCaller.AssignClaim(new StoreClaimService(_connectionSting), claimID, assigneeID,  authenticate.UserMasterID, authenticate.TenantId);
+                int result = storeClaimCaller.AssignClaim(new StoreClaimService(_connectionSting), claimID, assigneeID, authenticate.UserMasterID, authenticate.TenantId);
                 statusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -551,7 +589,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                objUserList = storeClaimCaller.UserList(new StoreClaimService(_connectionSting),assignID, authenticate.TenantId);
+                objUserList = storeClaimCaller.UserList(new StoreClaimService(_connectionSting), assignID, authenticate.TenantId);
                 statusCode =
                 objUserList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
