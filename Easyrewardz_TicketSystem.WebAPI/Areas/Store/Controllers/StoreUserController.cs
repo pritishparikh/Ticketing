@@ -80,9 +80,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 storeUser.TenantID = authenticate.TenantId;
                 int Result = userCaller.CreateStoreUserPersonaldetail(new StoreUserService(_connectioSting), storeUser);
 
-                StatusCode =
-               Result == 0 ?
-                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                StatusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : Result < 0 ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
                 objResponseModel.Status = true;
