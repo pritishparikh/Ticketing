@@ -242,7 +242,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.ExecuteScalar();
                 isUpdated = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }

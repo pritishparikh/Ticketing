@@ -1125,7 +1125,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     emailProgramCode.ProgramCode = ProgramCode;
                     string jsonData = JsonConvert.SerializeObject(emailProgramCode);
 
-                    string encryptedEmailId = SecurityService.Encrypt(jsonData);
+                    string encryptedEmailId = commonService.Encrypt(jsonData);
+                    //string encryptedEmailId = SecurityService.Encrypt(jsonData);
 
                     string decriptedPassword = SecurityService.DecryptStringAES(customChangePassword.Password);
                     string url = X_Authorized_Domainname.TrimEnd('/') + "/StoreChangePassword";
@@ -1236,9 +1237,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 if (customChangePassword.ChangePasswordType.Equals("mail"))
                 {
                     //customChangePassword.EmailID = SecurityService.DecryptStringAES(customChangePassword.EmailID);
-                    string cipherEmailId = SecurityService.DecryptStringAES(customChangePassword.EmailID);
+                    //string cipherEmailId = SecurityService.DecryptStringAES(customChangePassword.EmailID);
 
-                    string encryptedEmailId = commonService.Decrypt(cipherEmailId);
+                    string encryptedEmailId = commonService.Decrypt(customChangePassword.EmailID);
                     if (encryptedEmailId != null)
                     {
                         bsObj = JsonConvert.DeserializeObject<EmailProgramCode>(encryptedEmailId);

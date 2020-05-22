@@ -155,7 +155,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 string _data = "";
                 if (bsObj.ProgramCode != null)
                 {
-                    bsObj.ProgramCode = SecurityService.DecryptStringAES(bsObj.ProgramCode);
+                   // bsObj.ProgramCode = SecurityService.DecryptStringAES(bsObj.ProgramCode);
 
                     RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
                     if (cacheService.Exists("Con" + bsObj.ProgramCode))
