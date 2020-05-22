@@ -50,25 +50,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             try
             {
-                /////Validate User
-                StoreSecurityCaller securityCaller = new StoreSecurityCaller();
-                Authenticate authenticate = securityCaller.validateUserEmailId(new StoreSecurityService(_connectioSting, _radisCacheServerAddress), EmailId);
+                string X_Authorized_Programcode = Convert.ToString(Request.Headers["X-Authorized-Programcode"]);
+                string X_Authorized_Domainname = Convert.ToString(Request.Headers["X-Authorized-Domainname"]);
+                string _data = "";
+                if (X_Authorized_Programcode != null)
+                {
+                    X_Authorized_Programcode = SecurityService.DecryptStringAES(X_Authorized_Programcode);
+
+                    RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                    if (cacheService.Exists("Con" + X_Authorized_Programcode))
+                    {
+                        _data = cacheService.Get("Con" + X_Authorized_Programcode);
+                        _data = JsonConvert.DeserializeObject<string>(_data);
+                    }
+                }
+
+                if (X_Authorized_Domainname != null)
+                {
+                    X_Authorized_Domainname = SecurityService.DecryptStringAES(X_Authorized_Domainname);
+                }
+                    /////Validate User
+                    StoreSecurityCaller securityCaller = new StoreSecurityCaller();
+                Authenticate authenticate = securityCaller.validateUserEmailId(new StoreSecurityService(_data, _radisCacheServerAddress), EmailId);
                 if (authenticate.UserMasterID > 0)
                 {
                     MasterCaller masterCaller = new MasterCaller();
-                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
+                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_data), authenticate.TenantId);
+
+                    EmailProgramCode emailProgramCode = new EmailProgramCode();
+                    emailProgramCode.EmailID = EmailId;
+                    emailProgramCode.ProgramCode= X_Authorized_Programcode;
+                    string jsonData = JsonConvert.SerializeObject(emailProgramCode);
+
 
                     CommonService commonService = new CommonService();
-                    string encryptedEmailId = commonService.Encrypt(EmailId);
-                    string url = configuration.GetValue<string>("websiteURL") + "/storeUserforgotPassword?Id:" + encryptedEmailId;
+                    string encryptedEmailId = commonService.Encrypt(jsonData);
+                    // string url = configuration.GetValue<string>("websiteURL") + "/storeUserforgotPassword?Id:" + encryptedEmailId;
+                    string url = X_Authorized_Domainname.TrimEnd('/') + "/storeUserforgotPassword?Id:" + encryptedEmailId;
                     // string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url;
 
                     string content = "";
                     string subject = "";
 
-                    securityCaller.GetForgetPassowrdMailContent(new StoreSecurityService(_connectioSting), authenticate.TenantId, url, EmailId, out content, out subject);
+                    securityCaller.GetForgetPassowrdMailContent(new StoreSecurityService(_data), authenticate.TenantId, url, EmailId, out content, out subject);
 
-                    bool isUpdate = securityCaller.sendMail(new StoreSecurityService(_connectioSting), sMTPDetails, EmailId, subject, content, authenticate.TenantId);
+                    bool isUpdate = securityCaller.sendMail(new StoreSecurityService(_data), sMTPDetails, EmailId, subject, content, authenticate.TenantId);
 
                     if (isUpdate)
                     {
@@ -118,10 +144,27 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 StoreSecurityCaller newSecurityCaller = new StoreSecurityCaller();
 
                 CommonService commonService = new CommonService();
+
+                EmailProgramCode bsObj= new EmailProgramCode();
                 string encryptedEmailId = commonService.Decrypt(cipherEmailId);
+                if(encryptedEmailId !=null)
+                {
+                     bsObj = JsonConvert.DeserializeObject<EmailProgramCode>(encryptedEmailId);
+                }
 
+                string _data = "";
+                if (bsObj.ProgramCode != null)
+                {
+                    bsObj.ProgramCode = SecurityService.DecryptStringAES(bsObj.ProgramCode);
 
-                bool isUpdate = newSecurityCaller.UpdatePassword(new StoreSecurityService(_connectioSting), encryptedEmailId, Password);
+                    RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                    if (cacheService.Exists("Con" + bsObj.ProgramCode))
+                    {
+                        _data = cacheService.Get("Con" + bsObj.ProgramCode);
+                        _data = JsonConvert.DeserializeObject<string>(_data);
+                    }
+                }
+                bool isUpdate = newSecurityCaller.UpdatePassword(new StoreSecurityService(_data), bsObj.EmailID, Password);
 
                 if (isUpdate)
                 {

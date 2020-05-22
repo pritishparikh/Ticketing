@@ -1097,21 +1097,40 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
+                string _data = "";
+                string ProgramCode = authenticate.ProgramCode;
+                RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                if (cacheService.Exists("Con" + ProgramCode))
+                {
+                    _data = cacheService.Get("Con" + ProgramCode);
+                    _data = JsonConvert.DeserializeObject<string>(_data);
+                }
+                string X_Authorized_Domainname = Convert.ToString(Request.Headers["X-Authorized-Domainname"]);
+                if (X_Authorized_Domainname != null)
+                {
+                    X_Authorized_Domainname = SecurityService.DecryptStringAES(X_Authorized_Domainname);
+                }
                 StoreUserCaller userCaller = new StoreUserCaller();
 
-                customChangePassword = userCaller.GetStoreUserCredentails(new StoreUserService(_connectioSting), userID, authenticate.TenantId, IsStoreUser);
+                customChangePassword = userCaller.GetStoreUserCredentails(new StoreUserService(_data), userID, authenticate.TenantId, IsStoreUser);
                 if (customChangePassword.UserID > 0 && !string.IsNullOrEmpty(customChangePassword.Password) && !string.IsNullOrEmpty(customChangePassword.EmailID))
                 {
                     MasterCaller masterCaller = new MasterCaller();
-                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
+                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_data), authenticate.TenantId);
                     StoreSecurityCaller _securityCaller = new StoreSecurityCaller();
                     CommonService commonService = new CommonService();
-                    string encryptedEmailId = SecurityService.Encrypt(customChangePassword.EmailID);
+
+                    EmailProgramCode emailProgramCode = new EmailProgramCode();
+                    emailProgramCode.EmailID = customChangePassword.EmailID;
+                    emailProgramCode.ProgramCode = ProgramCode;
+                    string jsonData = JsonConvert.SerializeObject(emailProgramCode);
+
+                    string encryptedEmailId = SecurityService.Encrypt(jsonData);
 
                     string decriptedPassword = SecurityService.DecryptStringAES(customChangePassword.Password);
-                    string url = configuration.GetValue<string>("websiteURL") + "/StoreChangePassword";
+                    string url = X_Authorized_Domainname.TrimEnd('/') + "/StoreChangePassword";
                     string body = "Dear User, <br/>Please find the below details.  <br/><br/>" + "Your Email ID  : " + customChangePassword.EmailID + "<br/>" + "Your Password : " + decriptedPassword + "<br/><br/>" + "Click on Below link to change the Password <br/>" + url + "?Id:" + encryptedEmailId;
-                    bool isUpdate = _securityCaller.sendMailForChangePassword(new StoreSecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID, body, authenticate.TenantId);
+                    bool isUpdate = _securityCaller.sendMailForChangePassword(new StoreSecurityService(_data), sMTPDetails, customChangePassword.EmailID, body, authenticate.TenantId);
                     if (isUpdate)
                     {
                         objResponseModel.Status = true;
@@ -1187,31 +1206,64 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <param name="customChangePassword"></param>
         /// 
+        [AllowAnonymous]
         [HttpPost]
         [Route("StoreChangePassword")]
         public ResponseModel StoreChangePassword([FromBody] CustomChangePassword customChangePassword)
         {
 
+            string _data = "";
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
+            string programCode = "";
             string statusMessage = "";
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
+                // authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                if (!string.IsNullOrEmpty(token))
+                {
+                    _data = _connectioSting;
+                    authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                    programCode = authenticate.ProgramCode;
+                }
                 StoreSecurityCaller _securityCaller = new StoreSecurityCaller();
                 CommonService commonService = new CommonService();
 
+                EmailProgramCode bsObj = new EmailProgramCode();
+
                 if (customChangePassword.ChangePasswordType.Equals("mail"))
                 {
-                    customChangePassword.EmailID = SecurityService.DecryptStringAES(customChangePassword.EmailID);
+                    //customChangePassword.EmailID = SecurityService.DecryptStringAES(customChangePassword.EmailID);
+                    string cipherEmailId = SecurityService.DecryptStringAES(customChangePassword.EmailID);
+
+                    string encryptedEmailId = commonService.Decrypt(cipherEmailId);
+                    if (encryptedEmailId != null)
+                    {
+                        bsObj = JsonConvert.DeserializeObject<EmailProgramCode>(encryptedEmailId);
+                    }
+                    customChangePassword.EmailID = bsObj.EmailID;
+                    customChangePassword.ProgramCode = bsObj.ProgramCode;
+                    programCode = bsObj.ProgramCode;
                 }
+
+                if (programCode != null)
+                {
+
+
+                    RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                    if (cacheService.Exists("Con" + programCode))
+                    {
+                        _data = cacheService.Get("Con" + programCode);
+                        _data = JsonConvert.DeserializeObject<string>(_data);
+                    }
+                }
+
                 customChangePassword.Password = SecurityService.Encrypt(customChangePassword.Password);
 
 
-                bool Result = _securityCaller.ChangePassword(new StoreSecurityService(_connectioSting), customChangePassword, authenticate.TenantId, authenticate.UserMasterID);
+                bool Result = _securityCaller.ChangePassword(new StoreSecurityService(_data), customChangePassword, authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =
                Result == false ?
