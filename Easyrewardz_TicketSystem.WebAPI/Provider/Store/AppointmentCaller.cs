@@ -26,7 +26,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _AppointmentRepository = appointment;
             return _AppointmentRepository.SearchAppointment(tenantID, UserId, searchText, appointmentDate);
         }
+        public int GenerateOTP(IAppointment appointment, int tenantID, int UserId, string mobileNumber )
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.GenerateOTP(tenantID, UserId, mobileNumber);
+        }
 
+        public int VarifyOTP(IAppointment appointment, int tenantID, int UserId, int otpID, string otp)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.VarifyOTP(tenantID, UserId, otpID, otp);
+        }
         /// <summary>
         ///     
         /// </summary>

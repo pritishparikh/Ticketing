@@ -192,6 +192,93 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+
+        /// <summary>
+        /// Generate OTP
+        /// </summary>
+        /// <param name="mobileNumber"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GenerateOTP")]
+        public ResponseModel GenerateOTP(string mobileNumber)
+        {         
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+
+                ////Get token (Double encrypted) and get the tenant id 
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                AppointmentCaller newAppointment = new AppointmentCaller();
+
+                int isSent = newAppointment.GenerateOTP(new AppointmentServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, mobileNumber);
+                statusCode =
+                isSent== 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = isSent;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Varify OTP
+        /// </summary>
+        /// <param name="otp"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("VarifyOTP")]
+        public ResponseModel VarifyOTP(int otpID ,string otp)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+
+                ////Get token (Double encrypted) and get the tenant id 
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                AppointmentCaller newAppointment = new AppointmentCaller();
+
+                int isSent = newAppointment.VarifyOTP(new AppointmentServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, otpID, otp);
+                statusCode =
+                isSent == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = isSent;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
         #endregion
     }
 }

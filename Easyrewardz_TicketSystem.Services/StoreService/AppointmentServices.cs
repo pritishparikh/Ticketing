@@ -235,5 +235,88 @@ namespace Easyrewardz_TicketSystem.Services
 
             return appointments;
         }
+
+        public int GenerateOTP(int TenantID, int UserId, string mobileNumber)
+        {
+            int OTPID = 0;
+            try
+            {
+                //For generating OTP
+                Random r = new Random();
+                string OTP = r.Next(1000, 9999).ToString();
+
+                //Send message
+                //string Username = "";
+                //string APIKey = "";//This may vary api to api. like ite may be password, secrate key, hash etc
+                //string SenderName = "";
+                //string Number = mobileNumber;
+                //string Message = "Your OTP code is - " + OTP;
+                ////string URL = "http://api.urlname.in/send/?username=" + Username + "&hash=" + APIKey + "&sender=" + SenderName + "&numbers=" + Number + "&message=" + Message;
+                //HttpWebRequest req = (HttpWebRequest)WebRequest.Create(URL);
+                //HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+                //StreamReader sr = new StreamReader(resp.GetResponseStream());
+                //string results = sr.ReadToEnd();
+                //sr.Close();
+                    MySqlCommand cmd = new MySqlCommand();
+                     
+                    conn.Open();
+                    cmd.Connection = conn;
+                    MySqlCommand cmd1 = new MySqlCommand("SP_HSSaveGenerateOTP", conn);
+                    cmd1.Parameters.AddWithValue("@User_Id", UserId);
+                    cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                    cmd1.Parameters.AddWithValue("@mobile_OTP", OTP);
+                    cmd1.Parameters.AddWithValue("@mobile_Number", mobileNumber);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                   OTPID = Convert.ToInt32(cmd1.ExecuteScalar());
+                    conn.Close();
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return OTPID;
+        }
+
+        public int VarifyOTP(int TenantID, int UserId, int otpID, string otp)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("", conn);
+                cmd1.Parameters.AddWithValue("@UserId", UserId);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@otp_ID", otpID);
+                cmd1.Parameters.AddWithValue("@_otp", otp);
+
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = Convert.ToInt32(cmd1.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
     }
 }
