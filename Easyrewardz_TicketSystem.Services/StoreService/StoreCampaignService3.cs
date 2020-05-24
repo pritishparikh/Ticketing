@@ -305,5 +305,91 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return storeAppointmentConfiguration;
         }
+
+        /// <summary>
+        /// Update Broadcast Configuration
+        /// </summary>
+        /// <param name="storeBroadcastConfiguration"></param>
+        /// <param name="modifiedBy"></param>
+        /// <returns></returns>
+        public int UpdateBroadcastConfiguration(StoreBroadcastConfiguration storeBroadcastConfiguration, int modifiedBy)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateBroadcastConfiguration", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_ID", storeBroadcastConfiguration.ID);
+                cmd.Parameters.AddWithValue("@_MaxClickAllowed", storeBroadcastConfiguration.MaxClickAllowed);
+                cmd.Parameters.AddWithValue("@_EnableClickAfterValue", storeBroadcastConfiguration.EnableClickAfterValue);
+                cmd.Parameters.AddWithValue("@_EnableClickAfterDuration", storeBroadcastConfiguration.EnableClickAfterDuration);
+                cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
+                cmd.Parameters.AddWithValue("@_SmsFlag", Convert.ToInt16(storeBroadcastConfiguration.SmsFlag));
+                cmd.Parameters.AddWithValue("@_EmailFlag", Convert.ToInt16(storeBroadcastConfiguration.EmailFlag));
+                cmd.Parameters.AddWithValue("@_WhatsappFlag", Convert.ToInt16(storeBroadcastConfiguration.WhatsappFlag));
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
+
+        /// <summary>
+        /// Update Appointment Configuration
+        /// </summary>
+        /// <param name="storeAppointmentConfiguration"></param>
+        /// <param name="modifiedBy"></param>
+        /// <returns></returns>
+        public int UpdateAppointmentConfiguration(StoreAppointmentConfiguration storeAppointmentConfiguration, int modifiedBy)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateAppointmentConfiguration", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_ID", storeAppointmentConfiguration.ID);
+                cmd.Parameters.AddWithValue("@_GenerateOTP", Convert.ToInt16(storeAppointmentConfiguration.GenerateOTP));
+                cmd.Parameters.AddWithValue("@_CardQRcode", Convert.ToInt16(storeAppointmentConfiguration.CardQRcode));
+                cmd.Parameters.AddWithValue("@_CardBarcode", Convert.ToInt16(storeAppointmentConfiguration.CardBarcode));
+                cmd.Parameters.AddWithValue("@_OnlyCard", Convert.ToInt16(storeAppointmentConfiguration.OnlyCard));
+                cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
+              
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
     }
 }

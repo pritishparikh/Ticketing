@@ -16,5 +16,9 @@ namespace Easyrewardz_TicketSystem.Interface
         StoreBroadcastConfiguration GetBroadcastConfiguration(int tenantId, int userId, string programCode);
 
         StoreAppointmentConfiguration GetAppointmentConfiguration(int tenantId, int userId, string programCode);
+
+        int UpdateBroadcastConfiguration(StoreBroadcastConfiguration storeBroadcastConfiguration, int modifiedBy);
+
+        int UpdateAppointmentConfiguration(StoreAppointmentConfiguration storeAppointmentConfiguration, int modifiedBy);
     }
 }
