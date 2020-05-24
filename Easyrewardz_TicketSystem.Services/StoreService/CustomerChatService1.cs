@@ -135,7 +135,7 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
                 cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
-                cmd1.Parameters.AddWithValue("@search", Search==null?"": Search);
+                cmd1.Parameters.AddWithValue("@search", string.IsNullOrEmpty(Search)? "": Search);
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd1
@@ -155,6 +155,7 @@ namespace Easyrewardz_TicketSystem.Services
                         customerChatMaster.ProgramCode = ds.Tables[0].Rows[i]["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ProgramCode"]);
                         customerChatMaster.StoreID = ds.Tables[0].Rows[i]["StoreID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreID"]);
                         customerChatMaster.StoreManagerId = ds.Tables[0].Rows[i]["StoreManagerId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreManagerId"]);
+                        customerChatMaster.StoreManagerName= ds.Tables[0].Rows[i]["StoreManagerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreManagerName"]);
                         lstCustomerChatMaster.Add(customerChatMaster);
                     }
                 }
