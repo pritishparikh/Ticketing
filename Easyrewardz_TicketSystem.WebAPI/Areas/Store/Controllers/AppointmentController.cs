@@ -147,6 +147,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Search Appointment
+        /// </summary>
+        /// <param name="searchText"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("SearchAppointment")]
+        public ResponseModel SearchAppointment(string searchText)
+        {
+            List<AppointmentModel> objAppointmentList = new List<AppointmentModel>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                AppointmentCaller newAppointment = new AppointmentCaller();
+
+                objAppointmentList = newAppointment.SearchAppointment(new AppointmentServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, searchText);
+
+                statusCode =
+                objAppointmentList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objAppointmentList;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
         #endregion
     }
 }

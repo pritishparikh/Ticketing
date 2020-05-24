@@ -167,5 +167,72 @@ namespace Easyrewardz_TicketSystem.Services
             return i;
         }
 
+        /// <summary>
+        /// Search Appointment
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public List<AppointmentModel> SearchAppointment(int TenantID, int UserId, string searchText)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<AppointmentModel> appointments = new List<AppointmentModel>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSAppointmentDeatils", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.Parameters.AddWithValue("@User_Id", UserId);
+                cmd1.Parameters.AddWithValue("@search_Text", searchText);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        AppointmentModel obj = new AppointmentModel
+                        {
+                            AppointmentDate = Convert.ToString(ds.Tables[0].Rows[i]["AppointmentDate"]),
+                            SlotId = Convert.ToInt32(ds.Tables[0].Rows[i]["SlotId"]),
+                            TimeSlot = Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]),
+                            NOofPeople = Convert.ToInt32(ds.Tables[0].Rows[i]["NOofPeople"]),
+                            MaxCapacity = Convert.ToInt32(ds.Tables[0].Rows[i]["MaxCapacity"]),
+                            AppointmentCustomerList = new List<AppointmentCustomer>()
+                        };
+
+
+                        obj.AppointmentCustomerList = ds.Tables[1].AsEnumerable().Where(x => (x.Field<string>("AppointmentDate")).
+                        Equals(obj.AppointmentDate) && (x.Field<int>("SlotId")).Equals(obj.SlotId)).Select(x => new AppointmentCustomer()
+                        {
+                            AppointmentID = Convert.ToInt32(x.Field<int>("AppointmentID")),
+                            CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
+                            CustomerNumber = Convert.ToString(x.Field<string>("CustomerNumber")),
+                            NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),
+                            Status = x.Field<int?>("Status").ToString() == "" ? "" :
+                        Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
+                        Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
+                        }).ToList();
+
+                        appointments.Add(obj);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return appointments;
+        }
     }
 }

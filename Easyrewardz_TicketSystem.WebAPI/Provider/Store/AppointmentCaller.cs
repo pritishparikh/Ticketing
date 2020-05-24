@@ -21,7 +21,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _AppointmentRepository.GetAppointmentList(tenantID, UserId, AppDate);
         }
 
-        
+        public List<AppointmentModel> SearchAppointment(IAppointment appointment, int tenantID, int UserId, string searchText)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.SearchAppointment(tenantID, UserId, searchText);
+        }
+
         /// <summary>
         ///     
         /// </summary>
