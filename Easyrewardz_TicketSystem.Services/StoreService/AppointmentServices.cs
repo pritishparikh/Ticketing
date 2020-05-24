@@ -172,7 +172,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        public List<AppointmentModel> SearchAppointment(int TenantID, int UserId, string searchText)
+        public List<AppointmentModel> SearchAppointment(int TenantID, int UserId, string searchText, string appointmentDate)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -186,6 +186,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
                 cmd1.Parameters.AddWithValue("@User_Id", UserId);
                 cmd1.Parameters.AddWithValue("@search_Text", searchText);
+                cmd1.Parameters.AddWithValue("@appointment_Date", appointmentDate);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
