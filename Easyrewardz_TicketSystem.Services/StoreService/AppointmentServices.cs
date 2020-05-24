@@ -181,7 +181,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSAppointmentDeatils", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSSearchAppointment", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
                 cmd1.Parameters.AddWithValue("@User_Id", UserId);
