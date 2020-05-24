@@ -62,7 +62,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
-            ChatSessionModel ChatSession = new ChatSessionModel;
+            ChatSessionModel ChatSession = new ChatSessionModel();
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
