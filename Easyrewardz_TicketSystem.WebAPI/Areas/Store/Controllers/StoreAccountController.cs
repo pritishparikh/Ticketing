@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.IO;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -22,6 +23,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private readonly string _connectioSting;
         private readonly string _ErconnectioSting;
         private readonly string _radisCacheServerAddress;
+        private readonly string BulkUpload;
+        private readonly string UploadFiles;
         #endregion
 
         #region Constructor
@@ -31,6 +34,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _ErconnectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessErMasterMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            BulkUpload = configuration.GetValue<string>("BulkUpload");
+            UploadFiles = configuration.GetValue<string>("Uploadfiles");
         }
         #endregion
         #region Custom Methos 
@@ -297,18 +302,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             string X_Authorized_Programcode = Convert.ToString(Request.Headers["X-Authorized-Programcode"]);
             string X_Authorized_Domainname = Convert.ToString(Request.Headers["X-Authorized-Domainname"]);
-
+            
             ResponseModel resp = new ResponseModel();
             try
             {
+                //CreateFile("1 "+ X_Authorized_Programcode);
                 StoreSecurityCaller newSecurityCaller = new StoreSecurityCaller();
                 string programCode = X_Authorized_Programcode.Replace(' ', '+');
                 string domainName = X_Authorized_Domainname.Replace(' ', '+');
-
+                //CreateFile("2 " + X_Authorized_Domainname);
                 if (!string.IsNullOrEmpty(programCode) && !string.IsNullOrEmpty(domainName))
                 {
+                    //CreateFile("3 " + _ErconnectioSting);
                     bool isValid = newSecurityCaller.validateProgramCode(new StoreSecurityService(_ErconnectioSting, _radisCacheServerAddress), programCode, domainName);
-
+                    //CreateFile("4 isValid");
                     if (isValid)
                     {
                         resp.Status = true;
@@ -331,11 +338,38 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                     resp.Message = "In-valid Program code";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                //CreateFile(ex.ToString());
                 throw;
             }
             return resp;
+        }
+
+        public void CreateFile(string contenttoprint)
+        {
+            string FilesPath = string.Empty;
+            try
+            {
+                string Folderpath = Directory.GetCurrentDirectory();
+                FilesPath = Path.Combine(Folderpath, BulkUpload, UploadFiles);
+
+                if (!Directory.Exists(FilesPath))
+                {
+                    Directory.CreateDirectory(FilesPath);
+                }
+
+                string fileName = FilesPath + "/File_"+ DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss")+".txt";
+                //DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss")
+
+                CommonService.SaveFile(fileName, contenttoprint);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         #endregion
