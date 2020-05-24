@@ -174,7 +174,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public List<AppointmentModel> SearchAppointment(int TenantID, int UserId, string searchText, string appointmentDate)
         {
-
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<AppointmentModel> appointments = new List<AppointmentModel>();

@@ -172,7 +172,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 AppointmentCaller newAppointment = new AppointmentCaller();
 
                 objAppointmentList = newAppointment.SearchAppointment(new AppointmentServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, searchText, appointmentDate);
-
                 statusCode =
                 objAppointmentList.Count == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
