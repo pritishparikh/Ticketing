@@ -163,6 +163,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string statusMessage = "";
             try
             {
+
                 ////Get token (Double encrypted) and get the tenant id 
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();

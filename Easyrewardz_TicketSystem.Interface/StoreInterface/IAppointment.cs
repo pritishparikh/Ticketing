@@ -14,6 +14,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId);
 
+
         List<AppointmentModel> SearchAppointment(int TenantID, int UserId, string searchText, string appointmentDate);
     }
 }
