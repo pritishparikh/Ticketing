@@ -86,7 +86,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// ProviderName
         /// </summary>
-        public string ProviderName { get; set; }
+        public string ProviderName { get; set; } = "";
 
     }
 
