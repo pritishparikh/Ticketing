@@ -686,23 +686,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\devesh.padmashali\\.nuget\\packages\\": {},
+    "C:\\Users\\rashmi.salaria\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj",
+      "projectUniqueName": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj",
       "projectName": "Easyrewardz_TicketSystem.Model",
-      "projectPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj",
-      "packagesPath": "C:\\Users\\devesh.padmashali\\.nuget\\packages\\",
-      "outputPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Model\\obj\\",
+      "projectPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj",
+      "packagesPath": "C:\\Users\\rashmi.salaria\\.nuget\\packages\\",
+      "outputPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.Model\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\devesh.padmashali\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\rashmi.salaria\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

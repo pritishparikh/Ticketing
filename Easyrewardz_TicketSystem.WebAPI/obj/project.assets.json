@@ -8705,7 +8705,7 @@
       ]
     },
     "runtime.native.System.Security.Cryptography.Apple/4.3.0": {
-      "sha512": "jwjwlEL0Elv6gwoyaokRn12nv/JE+UW/DXJEbzhjCPvGbef36StnHKc9XaZD/rGWqYicrphZ7eumR/jdmNcjRg==",
+      "sha512": "DloMk88juo0OuOWr56QG7MNchmafTLYWvABy36izkrLI5VledI0rq28KGs1i9wbpeT9NPQrx/wTf8U2vazqQ3Q==",
       "type": "package",
       "path": "runtime.native.system.security.cryptography.apple/4.3.0",
       "files": [
@@ -8744,7 +8744,7 @@
       ]
     },
     "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
-      "sha512": "G2+96gYRbzp1JZCID6B+u2XJ0bs2wCubd6rE3+Tj436dKfnciF7YgsLi2VvLeJq6kxYyU4IJrVrpCvC8Yf6bhA==",
+      "sha512": "KeLz4HClKf+nFS7p/6Fi/CqyLXh81FpiGzcmuS8DGi9lUqSnZ6Es23/gv2O+1XVGfrbNmviF7CckBpavkBoIFQ==",
       "type": "package",
       "path": "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
       "files": [
@@ -8757,11 +8757,12 @@
       ]
     },
     "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple/4.3.0": {
-      "sha512": "Kh9W4agE0r/hK8AX1LvyQI2NrKHBL8pO0gRoDTdDb0LL6Ta1Z2OtFx3lOaAE0ZpCUc/dt9Wzs3rA7a3IsKdOVA==",
+      "sha512": "kVXCuMTrTlxq4XOOMAysuNwsXWpYeboGddNGpIgNSZmv1b6r/s/DPk0fYMB7Q5Qo4bY68o48jt4T4y5BVecbCQ==",
       "type": "package",
       "path": "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple/4.3.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple.4.3.0.nupkg.sha512",
@@ -8770,7 +8771,7 @@
       ]
     },
     "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
-      "sha512": "X7IdhILzr4ROXd8mI1BUCQMSHSQwelUlBjF1JyTKCjXaOGn2fB4EKBxQbCK2VjO3WaWIdlXZL3W6TiIVnrhX4g==",
+      "sha512": "/p8IQT2brFMDa7BHMH71LV+w5Tb3OxoLHxhn6+MGqN5xeqhM2HRHmj+7xQGJnaRn73d7ZTvp6yRCFMvolws4wA==",
       "type": "package",
       "path": "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
       "files": [
@@ -8783,7 +8784,7 @@
       ]
     },
     "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
-      "sha512": "T5NvFgmHX0WH4c7lP72krsnk+IJI10vJf2j2twGE+5QBRA4RyRAgD+ZjEgdmpLOjW4B+nZGaadewTCUcR899OQ==",
+      "sha512": "nyFNiCk/r+VOiIqreLix8yN+q3Wga9+SE8BCgkf+2BwEKiNx6DyvFjCgkfV743/grxv8jHJ8gUK4XEQw7yzRYg==",
       "type": "package",
       "path": "runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
       "files": [
@@ -9197,11 +9198,12 @@
       ]
     },
     "System.Collections.NonGeneric/4.3.0": {
-      "sha512": "LE/oChpRvkSi3U25u0KnJcI44JeDZ1QJCyN4qFDx2uusEypdqR24w7lKYw21eYe5esuCBuc862wRmpF63Yy1KQ==",
+      "sha512": "prtjIEMhGUnQq6RnPEYLpFt8AtLbp9yq2zxOSrY7KJJZrw25Fi97IzBqY7iqssbM61Ek5b8f3MG/sG1N2sN5KA==",
       "type": "package",
       "path": "system.collections.nongeneric/4.3.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -9235,7 +9237,7 @@
       ]
     },
     "System.Collections.Specialized/4.3.0": {
-      "sha512": "Epx8PoVZR0iuOnJJDzp7pWvdfMMOAvpUo95pC4ScH2mJuXkKA2Y4aR3cG9qt2klHgSons1WFh4kcGW7cSXvrxg==",
+      "sha512": "NoPBj0ykejqAWW4p4gGtrrL+3c84ZLSvGnHgq422ew1Rj4WKj1FA8/BCybqC111EtgcqUl6ZJNFYYS22HLgbjA==",
       "type": "package",
       "path": "system.collections.specialized/4.3.0",
       "files": [
@@ -9747,11 +9749,12 @@
       ]
     },
     "System.Diagnostics.FileVersionInfo/4.3.0": {
-      "sha512": "6WVi7gArhxRiC+3qI5V2mFe1gHENj/F7xT5PQiy/lI/RsxXeivrt09WF0huwSQK2ubnmyyRFeA9z3w743/w32A==",
+      "sha512": "omCF64wzQ3Q2CeIqkD6lmmxeMZtGHUmzgFMPjfVaOsyqpR66p/JaZzManMw1s33osoAb5gqpncsjie67+yUPHQ==",
       "type": "package",
       "path": "system.diagnostics.fileversioninfo/4.3.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -12118,11 +12121,12 @@
       ]
     },
     "System.Runtime.Serialization.Primitives/4.3.0": {
-      "sha512": "2Z5t70a2SwMsfQDp9KOclaZNyQhfIga2gppq9lIUDM1A4ohTshn4JqT7ir8bvIhXgorWKYDAr6rPzEbi/nTGKg==",
+      "sha512": "Wz+0KOukJGAlXjtKr+5Xpuxf8+c8739RI1C+A2BoQZT+wMCCoMDDdO8/4IRHfaVINqL78GO8dW8G2lW/e45Mcw==",
       "type": "package",
       "path": "system.runtime.serialization.primitives/4.3.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -13700,7 +13704,7 @@
       ]
     },
     "System.Xml.XmlSerializer/4.3.0": {
-      "sha512": "VShQJhOxgD/5M2Z1IWm1vMaSqlbjo1zdFf8H7Ahte6bTvSUhUko/gDpAVVhGgGgTDeue4QyNg1fu1Zz2GKSEuQ==",
+      "sha512": "MYoTCP7EZ98RrANESW05J5ZwskKDoN0AuZ06ZflnowE50LTpbR5yRg3tHckTVm5j/m47stuGgCrCHWePyHS70Q==",
       "type": "package",
       "path": "system.xml.xmlserializer/4.3.0",
       "files": [
@@ -13923,23 +13927,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\devesh.padmashali\\.nuget\\packages\\": {},
+    "C:\\Users\\rashmi.salaria\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.WebAPI\\Easyrewardz_TicketSystem.WebAPI.csproj",
+      "projectUniqueName": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.WebAPI\\Easyrewardz_TicketSystem.WebAPI.csproj",
       "projectName": "Easyrewardz_TicketSystem.WebAPI",
-      "projectPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.WebAPI\\Easyrewardz_TicketSystem.WebAPI.csproj",
-      "packagesPath": "C:\\Users\\devesh.padmashali\\.nuget\\packages\\",
-      "outputPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.WebAPI\\obj\\",
+      "projectPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.WebAPI\\Easyrewardz_TicketSystem.WebAPI.csproj",
+      "packagesPath": "C:\\Users\\rashmi.salaria\\.nuget\\packages\\",
+      "outputPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\devesh.padmashali\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\rashmi.salaria\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -13952,17 +13956,17 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj": {
-              "projectPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj"
+            "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj": {
+              "projectPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj"
             },
-            "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj": {
-              "projectPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj"
+            "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj": {
+              "projectPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj"
             },
-            "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj": {
-              "projectPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj"
+            "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj": {
+              "projectPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.Interface\\Easyrewardz_TicketSystem.Interface.csproj"
             },
-            "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj": {
-              "projectPath": "D:\\Devesh\\Devesh\\Ticketing\\Ticketings\\HomeshopAPI\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj"
+            "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj": {
+              "projectPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.Services\\Easyrewardz_TicketSystem.Services.csproj"
             }
           }
         }
