@@ -66,17 +66,18 @@ namespace Easyrewardz_TicketSystem.Services
 
                 if (ds != null && ds.Tables[0] != null)
                 {
-                   if(ds.Tables[0].Rows.Count > 0)
+                    if (ds.Tables[0].Rows.Count > 0)
                     {
-                       CampaignSettingTimer.ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID"]);
-                       CampaignSettingTimer.MaxClickAllowed = ds.Tables[0].Rows[0]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["MaxClickAllowed"]);
-                       CampaignSettingTimer.EnableClickAfterValue = ds.Tables[0].Rows[0]["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["EnableClickAfterValue"]);
-                        CampaignSettingTimer.EnableClickAfterDuration = ds.Tables[0].Rows[0]["EnableClickAfterDuration"] == DBNull.Value ?string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["EnableClickAfterDuration"]);
+                        CampaignSettingTimer.ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID"]);
+                        CampaignSettingTimer.MaxClickAllowed = ds.Tables[0].Rows[0]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["MaxClickAllowed"]);
+                        CampaignSettingTimer.EnableClickAfterValue = ds.Tables[0].Rows[0]["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["EnableClickAfterValue"]);
+                        CampaignSettingTimer.EnableClickAfterDuration = ds.Tables[0].Rows[0]["EnableClickAfterDuration"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["EnableClickAfterDuration"]);
                         CampaignSettingTimer.Programcode = ds.Tables[0].Rows[0]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Programcode"]);
                         CampaignSettingTimer.SmsFlag = ds.Tables[0].Rows[0]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["SmsFlag"]);
                         CampaignSettingTimer.EmailFlag = ds.Tables[0].Rows[0]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["EmailFlag"]);
                         CampaignSettingTimer.MessengerFlag = ds.Tables[0].Rows[0]["MessengerFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["MessengerFlag"]);
                         CampaignSettingTimer.BotFlag = ds.Tables[0].Rows[0]["BotFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["BotFlag"]);
+                        CampaignSettingTimer.ProviderName = ds.Tables[0].Rows[0]["ProviderName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ProviderName"]);
                     }
 
                     campaignObj.CampaignSettingTimer = CampaignSettingTimer;
@@ -166,6 +167,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_EmailFlag", Convert.ToInt16(storeCampaignSettingTimer.EmailFlag));
                 cmd.Parameters.AddWithValue("@_MessengerFlag", Convert.ToInt16(storeCampaignSettingTimer.MessengerFlag));
                 cmd.Parameters.AddWithValue("@_BotFlag", Convert.ToInt16(storeCampaignSettingTimer.BotFlag));
+                cmd.Parameters.AddWithValue("@_ProviderName", Convert.ToInt16(storeCampaignSettingTimer.ProviderName));
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());

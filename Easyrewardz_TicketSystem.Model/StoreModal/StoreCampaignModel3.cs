@@ -83,6 +83,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// BotFlag
         /// </summary>
         public bool BotFlag { get; set; }
+        /// <summary>
+        /// ProviderName
+        /// </summary>
+        public string ProviderName { get; set; }
 
     }
 
