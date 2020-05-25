@@ -185,5 +185,211 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UpdateCount;
         }
+
+        /// <summary>
+        /// GetBroadcastConfiguration
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="ProgramCode"></param>
+        /// <returns></returns>
+        public StoreBroadcastConfiguration GetBroadcastConfiguration(int tenantId, int userId, string programCode)
+        {
+            DataSet ds = new DataSet();
+            StoreBroadcastConfiguration storeBroadcastConfiguration = new StoreBroadcastConfiguration();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSGetBroadcastConfigurationList", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_tenantID", tenantId);
+                cmd.Parameters.AddWithValue("@UserID", userId);
+                cmd.Parameters.AddWithValue("@_prgramCode", programCode);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        storeBroadcastConfiguration.ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID"]);
+                        storeBroadcastConfiguration.MaxClickAllowed = ds.Tables[0].Rows[0]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["MaxClickAllowed"]);
+                        storeBroadcastConfiguration.EnableClickAfterValue = ds.Tables[0].Rows[0]["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["EnableClickAfterValue"]);
+                        storeBroadcastConfiguration.EnableClickAfterDuration = ds.Tables[0].Rows[0]["EnableClickAfterDuration"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["EnableClickAfterDuration"]);
+                        storeBroadcastConfiguration.Programcode = ds.Tables[0].Rows[0]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Programcode"]);
+                        storeBroadcastConfiguration.SmsFlag = ds.Tables[0].Rows[0]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["SmsFlag"]);
+                        storeBroadcastConfiguration.EmailFlag = ds.Tables[0].Rows[0]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["EmailFlag"]);
+                        storeBroadcastConfiguration.WhatsappFlag = ds.Tables[0].Rows[0]["WhatsappFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["WhatsappFlag"]);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return storeBroadcastConfiguration;
+        }
+
+        /// <summary>
+        /// GetAppointmentConfiguration
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="ProgramCode"></param>
+        /// <returns></returns>
+        public StoreAppointmentConfiguration GetAppointmentConfiguration(int tenantId, int userId, string programCode)
+        {
+            DataSet ds = new DataSet();
+            StoreAppointmentConfiguration storeAppointmentConfiguration = new StoreAppointmentConfiguration();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSGetAppointmentConfigurationList", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_tenantID", tenantId);
+                cmd.Parameters.AddWithValue("@UserID", userId);
+                cmd.Parameters.AddWithValue("@_prgramCode", programCode);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        storeAppointmentConfiguration.ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID"]);
+                        storeAppointmentConfiguration.GenerateOTP = ds.Tables[0].Rows[0]["GenerateOTP"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["GenerateOTP"]);
+                        storeAppointmentConfiguration.CardQRcode = ds.Tables[0].Rows[0]["CardQRcode"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CardQRcode"]);
+                        storeAppointmentConfiguration.CardBarcode = ds.Tables[0].Rows[0]["CardBarcode"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CardBarcode"]);
+                        storeAppointmentConfiguration.OnlyCard = ds.Tables[0].Rows[0]["OnlyCard"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["OnlyCard"]);
+                        storeAppointmentConfiguration.Programcode = ds.Tables[0].Rows[0]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Programcode"]);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return storeAppointmentConfiguration;
+        }
+
+        /// <summary>
+        /// Update Broadcast Configuration
+        /// </summary>
+        /// <param name="storeBroadcastConfiguration"></param>
+        /// <param name="modifiedBy"></param>
+        /// <returns></returns>
+        public int UpdateBroadcastConfiguration(StoreBroadcastConfiguration storeBroadcastConfiguration, int modifiedBy)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateBroadcastConfiguration", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_ID", storeBroadcastConfiguration.ID);
+                cmd.Parameters.AddWithValue("@_MaxClickAllowed", storeBroadcastConfiguration.MaxClickAllowed);
+                cmd.Parameters.AddWithValue("@_EnableClickAfterValue", storeBroadcastConfiguration.EnableClickAfterValue);
+                cmd.Parameters.AddWithValue("@_EnableClickAfterDuration", storeBroadcastConfiguration.EnableClickAfterDuration);
+                cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
+                cmd.Parameters.AddWithValue("@_SmsFlag", Convert.ToInt16(storeBroadcastConfiguration.SmsFlag));
+                cmd.Parameters.AddWithValue("@_EmailFlag", Convert.ToInt16(storeBroadcastConfiguration.EmailFlag));
+                cmd.Parameters.AddWithValue("@_WhatsappFlag", Convert.ToInt16(storeBroadcastConfiguration.WhatsappFlag));
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
+
+        /// <summary>
+        /// Update Appointment Configuration
+        /// </summary>
+        /// <param name="storeAppointmentConfiguration"></param>
+        /// <param name="modifiedBy"></param>
+        /// <returns></returns>
+        public int UpdateAppointmentConfiguration(StoreAppointmentConfiguration storeAppointmentConfiguration, int modifiedBy)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateAppointmentConfiguration", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_ID", storeAppointmentConfiguration.ID);
+                cmd.Parameters.AddWithValue("@_GenerateOTP", Convert.ToInt16(storeAppointmentConfiguration.GenerateOTP));
+                cmd.Parameters.AddWithValue("@_CardQRcode", Convert.ToInt16(storeAppointmentConfiguration.CardQRcode));
+                cmd.Parameters.AddWithValue("@_CardBarcode", Convert.ToInt16(storeAppointmentConfiguration.CardBarcode));
+                cmd.Parameters.AddWithValue("@_OnlyCard", Convert.ToInt16(storeAppointmentConfiguration.OnlyCard));
+                cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
+              
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
     }
 }

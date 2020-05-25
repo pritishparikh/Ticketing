@@ -32,6 +32,28 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-        
+        public StoreBroadcastConfiguration GetBroadcastConfiguration(IStoreCampaign Campaign, int tenantId, int userId, string programCode)
+        {
+            _CampaignRepository = Campaign;
+            return _CampaignRepository.GetBroadcastConfiguration(tenantId, userId, programCode);
+        }
+
+        public StoreAppointmentConfiguration GetAppointmentConfiguration(IStoreCampaign Campaign, int tenantId, int userId, string programCode)
+        {
+            _CampaignRepository = Campaign;
+            return _CampaignRepository.GetAppointmentConfiguration(tenantId, userId, programCode);
+        }
+
+        public int UpdateBroadcastConfiguration(IStoreCampaign Campaign, StoreBroadcastConfiguration storeBroadcastConfiguration, int modifiedBy)
+        {
+            _CampaignRepository = Campaign;
+            return _CampaignRepository.UpdateBroadcastConfiguration(storeBroadcastConfiguration, modifiedBy);
+        }
+
+        public int UpdateAppointmentConfiguration(IStoreCampaign Campaign, StoreAppointmentConfiguration storeAppointmentConfiguration, int modifiedBy)
+        {
+            _CampaignRepository = Campaign;
+            return _CampaignRepository.UpdateAppointmentConfiguration(storeAppointmentConfiguration, modifiedBy);
+        }
     }
 }

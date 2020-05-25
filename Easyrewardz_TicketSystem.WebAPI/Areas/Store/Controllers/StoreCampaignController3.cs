@@ -137,5 +137,163 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
 
+        /// <summary>
+        /// Get Broadcast Configuration
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetBroadcastConfiguration")]
+        public ResponseModel GetBroadcastConfiguration()
+        {
+            StoreBroadcastConfiguration StoreBroadcastConfiguration = new StoreBroadcastConfiguration();
+            StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreBroadcastConfiguration = storecampaigncaller.GetBroadcastConfiguration(new StoreCampaignService(_connectioSting),
+                    authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
+                statusCode =
+                   StoreBroadcastConfiguration.ID.Equals(0) ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = StoreBroadcastConfiguration;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Get Appointment Configuration
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetAppointmentConfiguration")]
+        public ResponseModel GetAppointmentConfiguration()
+        {
+            StoreAppointmentConfiguration StoreBroadcastConfiguration = new StoreAppointmentConfiguration();
+            StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreBroadcastConfiguration = storecampaigncaller.GetAppointmentConfiguration(new StoreCampaignService(_connectioSting),
+                    authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
+                statusCode =
+                   StoreBroadcastConfiguration.ID.Equals(0) ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = StoreBroadcastConfiguration;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Update Broadcast Configuration
+        /// </summary>
+        /// <param name="storeBroadcastConfiguration"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateBroadcastConfiguration")]
+        public ResponseModel UpdateBroadcastConfiguration([FromBody]StoreBroadcastConfiguration storeBroadcastConfiguration)
+        {
+            int UpdateCount = 0;
+            StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                UpdateCount = storecampaigncaller.UpdateBroadcastConfiguration(new StoreCampaignService(_connectioSting),
+                    storeBroadcastConfiguration, authenticate.UserMasterID);
+                statusCode =
+                   UpdateCount.Equals(0) ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = UpdateCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Update Appointment Configuration
+        /// </summary>
+        /// <param name="storeAppointmentConfiguration"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateAppointmentConfiguration")]
+        public ResponseModel UpdateAppointmentConfiguration([FromBody]StoreAppointmentConfiguration storeAppointmentConfiguration)
+        {
+            int UpdateCount = 0;
+            StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                UpdateCount = storecampaigncaller.UpdateAppointmentConfiguration(new StoreCampaignService(_connectioSting),
+                    storeAppointmentConfiguration, authenticate.UserMasterID);
+                statusCode =
+                   UpdateCount.Equals(0) ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = UpdateCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
     }
 }

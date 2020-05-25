@@ -86,7 +86,67 @@ namespace Easyrewardz_TicketSystem.Model
 
     }
 
+    public class StoreBroadcastConfiguration
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
+        /// Programcode
+        /// </summary>
+        public string Programcode { get; set; }
+        /// <summary>
+        /// MaxClickAllowed
+        /// </summary>
+        public int MaxClickAllowed { get; set; }
+        /// <summary>
+        /// EnableClickAfterValue
+        /// </summary>
+        public int EnableClickAfterValue { get; set; }
+        /// <summary>
+        /// EnableClickAfterDuration
+        /// </summary>
+        public string EnableClickAfterDuration { get; set; }
+        /// <summary>
+        /// SmsFlag
+        /// </summary>
+        public bool SmsFlag { get; set; }
+        /// <summary>
+        /// EmailFlag
+        /// </summary>
+        public bool EmailFlag { get; set; }
+        /// <summary>
+        /// WhatsappFlag
+        /// </summary>
+        public bool WhatsappFlag { get; set; }
+    }
 
-
-
+    public class StoreAppointmentConfiguration
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
+        /// Programcode
+        /// </summary>
+        public string Programcode { get; set; }
+        /// <summary>
+        /// GenerateOTP
+        /// </summary>
+        public bool GenerateOTP { get; set; }
+        /// <summary>
+        /// CardQRcode
+        /// </summary>
+        public bool CardQRcode { get; set; }
+        /// <summary>
+        /// CardBarcode
+        /// </summary>
+        public bool CardBarcode { get; set; }
+        /// <summary>
+        /// OnlyCard
+        /// </summary>
+        public bool OnlyCard { get; set; }
+    }
 }
