@@ -683,7 +683,6 @@ namespace Easyrewardz_TicketSystem.Services
 
 
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
             try
             {
 
@@ -691,11 +690,12 @@ namespace Easyrewardz_TicketSystem.Services
                 Domainname = DecryptStringAES(Domainname);
 
                 conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_validateProgramCode", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Program_code", Programcode);
-                cmd1.Parameters.AddWithValue("@Domain_name", Domainname);
+                MySqlCommand cmd = new MySqlCommand("SP_validateProgramCode", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Program_code", Programcode);
+                cmd.Parameters.AddWithValue("@Domain_name", Domainname);
                 //isValid = Convert.ToBoolean(cmd1.ExecuteScalar());
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd)
                 {

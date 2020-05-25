@@ -90,6 +90,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// StoreManagerId 
         /// </summary>
         public int StoreManagerId { get; set; }
+
+        /// <summary>
+        /// StoreManager Name
+        /// </summary>
+        public string StoreManagerName { get; set; }
     }
 
     public class CustomerChatMessages

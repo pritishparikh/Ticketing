@@ -231,5 +231,156 @@ namespace Easyrewardz_TicketSystem.Services
             return lstAppointmentDetails;
         }
 
+        /// <summary>
+        /// Search Appointment
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public List<AppointmentModel> SearchAppointment(int TenantID, int UserId, string searchText, string appointmentDate)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<AppointmentModel> appointments = new List<AppointmentModel>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSSearchAppointment", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.Parameters.AddWithValue("@User_Id", UserId);
+                cmd1.Parameters.AddWithValue("@search_Text", searchText);
+                cmd1.Parameters.AddWithValue("@appointment_Date", appointmentDate);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        AppointmentModel obj = new AppointmentModel
+                        {
+                            AppointmentDate = Convert.ToString(ds.Tables[0].Rows[i]["AppointmentDate"]),
+                            SlotId = Convert.ToInt32(ds.Tables[0].Rows[i]["SlotId"]),
+                            TimeSlot = Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]),
+                            NOofPeople = Convert.ToInt32(ds.Tables[0].Rows[i]["NOofPeople"]),
+                            MaxCapacity = Convert.ToInt32(ds.Tables[0].Rows[i]["MaxCapacity"]),
+                            AppointmentCustomerList = new List<AppointmentCustomer>()
+                        };
+
+
+                        obj.AppointmentCustomerList = ds.Tables[1].AsEnumerable().Where(x => (x.Field<string>("AppointmentDate")).
+                        Equals(obj.AppointmentDate) && (x.Field<int>("SlotId")).Equals(obj.SlotId)).Select(x => new AppointmentCustomer()
+                        {
+                            AppointmentID = Convert.ToInt32(x.Field<int>("AppointmentID")),
+                            CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
+                            CustomerNumber = Convert.ToString(x.Field<string>("CustomerNumber")),
+                            NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),
+                            Status = x.Field<int?>("Status").ToString() == "" ? "" :
+                        Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
+                        Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
+                        }).ToList();
+
+                        appointments.Add(obj);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return appointments;
+        }
+
+        public int GenerateOTP(int TenantID, int UserId, string mobileNumber)
+        {
+            int OTPID = 0;
+            try
+            {
+                //For generating OTP
+                Random r = new Random();
+                string OTP = r.Next(1000, 9999).ToString();
+
+                //Send message
+                //string Username = "";
+                //string APIKey = "";//This may vary api to api. like ite may be password, secrate key, hash etc
+                //string SenderName = "";
+                //string Number = mobileNumber;
+                //string Message = "Your OTP code is - " + OTP;
+                ////string URL = "http://api.urlname.in/send/?username=" + Username + "&hash=" + APIKey + "&sender=" + SenderName + "&numbers=" + Number + "&message=" + Message;
+                //HttpWebRequest req = (HttpWebRequest)WebRequest.Create(URL);
+                //HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+                //StreamReader sr = new StreamReader(resp.GetResponseStream());
+                //string results = sr.ReadToEnd();
+                //sr.Close();
+                    MySqlCommand cmd = new MySqlCommand();
+                     
+                    conn.Open();
+                    cmd.Connection = conn;
+                    MySqlCommand cmd1 = new MySqlCommand("SP_HSSaveGenerateOTP", conn);
+                    cmd1.Parameters.AddWithValue("@User_Id", UserId);
+                    cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                    cmd1.Parameters.AddWithValue("@mobile_OTP", OTP);
+                    cmd1.Parameters.AddWithValue("@mobile_Number", mobileNumber);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                   OTPID = Convert.ToInt32(cmd1.ExecuteScalar());
+                    conn.Close();
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return OTPID;
+        }
+
+        public int VarifyOTP(int TenantID, int UserId, int otpID, string otp)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("", conn);
+                cmd1.Parameters.AddWithValue("@UserId", UserId);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@otp_ID", otpID);
+                cmd1.Parameters.AddWithValue("@_otp", otp);
+
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = Convert.ToInt32(cmd1.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
     }
 }

@@ -47,4 +47,21 @@ namespace Easyrewardz_TicketSystem.Model
             }
         }
     }
+
+
+    public class ChatSessionModel
+    {
+        public string ProgramCode { get; set; }
+        public int TenantID { get; set; }
+        public int ChatSessionValue { get; set; }
+        public string ChatSessionDuration { get; set; }
+        public int ChatDisplayValue { get; set; }
+        public string ChatDisplayDuration { get; set; }
+        public int CreatedBy { get; set; }
+        public string CreatedDate { get; set; }
+        public int ModifiedBy { get; set; }
+        public string ModifiedDate { get; set; }
+    }
+
+
 }

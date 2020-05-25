@@ -75,9 +75,9 @@ namespace Easyrewardz_TicketSystem.Services
 
                 isMailSent = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ;
             }
             return isMailSent;
         }
