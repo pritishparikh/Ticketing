@@ -167,7 +167,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_EmailFlag", Convert.ToInt16(storeCampaignSettingTimer.EmailFlag));
                 cmd.Parameters.AddWithValue("@_MessengerFlag", Convert.ToInt16(storeCampaignSettingTimer.MessengerFlag));
                 cmd.Parameters.AddWithValue("@_BotFlag", Convert.ToInt16(storeCampaignSettingTimer.BotFlag));
-                cmd.Parameters.AddWithValue("@_ProviderName", Convert.ToInt16(storeCampaignSettingTimer.ProviderName));
+                cmd.Parameters.AddWithValue("@_ProviderName", Convert.ToString(storeCampaignSettingTimer.ProviderName));
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
@@ -228,6 +228,7 @@ namespace Easyrewardz_TicketSystem.Services
                         storeBroadcastConfiguration.SmsFlag = ds.Tables[0].Rows[0]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["SmsFlag"]);
                         storeBroadcastConfiguration.EmailFlag = ds.Tables[0].Rows[0]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["EmailFlag"]);
                         storeBroadcastConfiguration.WhatsappFlag = ds.Tables[0].Rows[0]["WhatsappFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["WhatsappFlag"]);
+                        storeBroadcastConfiguration.ProviderName = ds.Tables[0].Rows[0]["ProviderName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ProviderName"]);
                     }
                 }
             }
@@ -332,6 +333,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_SmsFlag", Convert.ToInt16(storeBroadcastConfiguration.SmsFlag));
                 cmd.Parameters.AddWithValue("@_EmailFlag", Convert.ToInt16(storeBroadcastConfiguration.EmailFlag));
                 cmd.Parameters.AddWithValue("@_WhatsappFlag", Convert.ToInt16(storeBroadcastConfiguration.WhatsappFlag));
+                cmd.Parameters.AddWithValue("@_ProviderName", Convert.ToString(storeBroadcastConfiguration.ProviderName));
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());

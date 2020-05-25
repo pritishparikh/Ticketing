@@ -124,6 +124,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// WhatsappFlag
         /// </summary>
         public bool WhatsappFlag { get; set; }
+        /// <summary>
+        /// ProviderName
+        /// </summary>
+        public string ProviderName { get; set; } = "";
     }
 
     public class StoreAppointmentConfiguration
