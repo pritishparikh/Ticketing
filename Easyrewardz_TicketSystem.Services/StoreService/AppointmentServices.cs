@@ -167,5 +167,69 @@ namespace Easyrewardz_TicketSystem.Services
             return i;
         }
 
+
+        /// <summary>
+        /// Create Appointment
+        /// </summary>
+        /// <param name="appointmentMaster"></param>
+        /// <returns></returns>
+        public List<AppointmentDetails> CreateAppointment(AppointmentMaster appointmentMaster)
+        {
+            int message;
+            DataSet ds = new DataSet();
+            List<AppointmentDetails> lstAppointmentDetails = new List<AppointmentDetails>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSCreateAppointment", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@Appointment_Date", appointmentMaster.AppointmentDate);
+                cmd.Parameters.AddWithValue("@CustomerName", appointmentMaster.CustomerName);
+                cmd.Parameters.AddWithValue("@TimeSlot", appointmentMaster.TimeSlot);
+                cmd.Parameters.AddWithValue("@Tenant_ID", appointmentMaster.TenantID);
+                cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
+                cmd.Parameters.AddWithValue("@NOof_People", appointmentMaster.NOofPeople);
+                cmd.Parameters.AddWithValue("@Mobile_No", appointmentMaster.MobileNo);
+                cmd.CommandType = CommandType.StoredProcedure;
+                //message = Convert.ToInt32(cmd.ExecuteScalar());
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        AppointmentDetails appointmentDetails = new AppointmentDetails();
+                        appointmentDetails.AppointmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["AppointmentID"]);
+                        appointmentDetails.CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
+                        appointmentDetails.MobileNo = ds.Tables[0].Rows[i]["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                        appointmentDetails.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        appointmentDetails.StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
+                        appointmentDetails.NoOfPeople = ds.Tables[0].Rows[i]["NOofPeople"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NOofPeople"]);
+
+                        lstAppointmentDetails.Add(appointmentDetails);
+                    }
+                }
+
+                // int response = SendMessageToCustomer( /*ChatID*/0, appointmentMaster.MobileNo, appointmentMaster.ProgramCode, appointmentMaster.MessageToReply,/*ClientAPIURL*/"",appointmentMaster.CreatedBy);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return lstAppointmentDetails;
+        }
+
     }
 }

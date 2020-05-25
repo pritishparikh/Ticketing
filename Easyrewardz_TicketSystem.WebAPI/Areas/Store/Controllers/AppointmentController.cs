@@ -147,6 +147,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        [HttpPost]
+        [Route("CreateAppointment")]
+        public ResponseModel CreateAppointment([FromBody]AppointmentMaster appointmentMaster)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<AppointmentDetails> appointmentDetails = new List<AppointmentDetails>();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                appointmentMaster.CreatedBy = authenticate.UserMasterID;
+                appointmentMaster.TenantID = authenticate.TenantId;
+                AppointmentCaller newAppointment = new AppointmentCaller();
+
+                appointmentDetails = newAppointment.CreateAppointment(new AppointmentServices(_connectioSting), appointmentMaster);
+
+                statusCode =
+              appointmentDetails.Count == 0 ?
+                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = appointmentDetails;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
         #endregion
     }
 }
