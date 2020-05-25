@@ -245,6 +245,19 @@ namespace Easyrewardz_TicketSystem.Services
                 Random r = new Random();
                 string OTP = r.Next(1000, 9999).ToString();
 
+                MySqlCommand cmd = new MySqlCommand();
+
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSSaveGenerateOTP", conn);
+                cmd1.Parameters.AddWithValue("@User_Id", UserId);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@mobile_OTP", OTP);
+                cmd1.Parameters.AddWithValue("@mobile_Number", mobileNumber);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                OTPID = Convert.ToInt32(cmd1.ExecuteScalar());
+
+
                 //Send message
                 //string Username = "";
                 //string APIKey = "";//This may vary api to api. like ite may be password, secrate key, hash etc
@@ -257,20 +270,7 @@ namespace Easyrewardz_TicketSystem.Services
                 //StreamReader sr = new StreamReader(resp.GetResponseStream());
                 //string results = sr.ReadToEnd();
                 //sr.Close();
-                    MySqlCommand cmd = new MySqlCommand();
-                     
-                    conn.Open();
-                    cmd.Connection = conn;
-                    MySqlCommand cmd1 = new MySqlCommand("SP_HSSaveGenerateOTP", conn);
-                    cmd1.Parameters.AddWithValue("@User_Id", UserId);
-                    cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
-                    cmd1.Parameters.AddWithValue("@mobile_OTP", OTP);
-                    cmd1.Parameters.AddWithValue("@mobile_Number", mobileNumber);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                   OTPID = Convert.ToInt32(cmd1.ExecuteScalar());
-                    conn.Close();
-
-
+                conn.Close();
             }
             catch (Exception)
             {
@@ -294,7 +294,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSVarifyOTP", conn);
                 cmd1.Parameters.AddWithValue("@UserId", UserId);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd1.Parameters.AddWithValue("@otp_ID", otpID);
