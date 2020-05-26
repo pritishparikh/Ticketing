@@ -531,7 +531,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_GetBroadcastConfiguration", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_HSGetBroadcastConfiguration", conn)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
