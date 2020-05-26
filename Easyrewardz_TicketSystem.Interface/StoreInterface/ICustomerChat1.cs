@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public partial interface ICustomerChat
     {     
-        List<CustomerChatMaster> OngoingChat(int userMasterID,int tenantID, string Search);
+        List<CustomerChatMaster> OngoingChat(int userMasterID,int tenantID, string Search, int StoreManagerID);
 
         List<CustomerChatMaster> NewChat(int userMasterID, int tenantID);
 

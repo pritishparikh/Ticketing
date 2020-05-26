@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Linq;
+using Easyrewardz_TicketSystem.CustomModel;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -63,9 +64,10 @@ namespace Easyrewardz_TicketSystem.Services
                             CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
                             CustomerNumber = Convert.ToString(x.Field<string>("CustomerNumber")),
                             NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),
-                            Status = x.Field<int?>("Status").ToString() == "" ? "" :
-                        Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
-                        Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
+                            Status = Convert.ToString(x.Field<string>("Status")),
+                        //    Status = x.Field<int?>("Status").ToString() == "" ? "" :
+                        //Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
+                        //Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
                         }).ToList();
 
                         appointments.Add(obj);
@@ -341,9 +343,10 @@ namespace Easyrewardz_TicketSystem.Services
                             CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
                             CustomerNumber = Convert.ToString(x.Field<string>("CustomerNumber")),
                             NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),
-                            Status = x.Field<int?>("Status").ToString() == "" ? "" :
-                        Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
-                        Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
+                            Status = Convert.ToString(x.Field<string>("Status")),
+                            //    Status = x.Field<int?>("Status").ToString() == "" ? "" :
+                            //Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
+                            //Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
                         }).ToList();
 
                         appointments.Add(obj);
@@ -374,6 +377,19 @@ namespace Easyrewardz_TicketSystem.Services
                 Random r = new Random();
                 string OTP = r.Next(1000, 9999).ToString();
 
+                MySqlCommand cmd = new MySqlCommand();
+
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSSaveGenerateOTP", conn);
+                cmd1.Parameters.AddWithValue("@User_Id", UserId);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.Parameters.AddWithValue("@mobile_OTP", OTP);
+                cmd1.Parameters.AddWithValue("@mobile_Number", mobileNumber);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                OTPID = Convert.ToInt32(cmd1.ExecuteScalar());
+
+
                 //Send message
                 //string Username = "";
                 //string APIKey = "";//This may vary api to api. like ite may be password, secrate key, hash etc
@@ -386,20 +402,7 @@ namespace Easyrewardz_TicketSystem.Services
                 //StreamReader sr = new StreamReader(resp.GetResponseStream());
                 //string results = sr.ReadToEnd();
                 //sr.Close();
-                    MySqlCommand cmd = new MySqlCommand();
-                     
-                    conn.Open();
-                    cmd.Connection = conn;
-                    MySqlCommand cmd1 = new MySqlCommand("SP_HSSaveGenerateOTP", conn);
-                    cmd1.Parameters.AddWithValue("@User_Id", UserId);
-                    cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
-                    cmd1.Parameters.AddWithValue("@mobile_OTP", OTP);
-                    cmd1.Parameters.AddWithValue("@mobile_Number", mobileNumber);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                   OTPID = Convert.ToInt32(cmd1.ExecuteScalar());
-                    conn.Close();
-
-
+                conn.Close();
             }
             catch (Exception)
             {
@@ -423,7 +426,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSVarifyOTP", conn);
                 cmd1.Parameters.AddWithValue("@UserId", UserId);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd1.Parameters.AddWithValue("@otp_ID", otpID);
@@ -431,6 +434,44 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = Convert.ToInt32(cmd1.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
+
+        public int UpdateAppointment(CustomUpdateAppointment appointmentCustomer)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSUpdateAppointment", conn);
+                cmd1.Parameters.AddWithValue("@Appointment_ID", appointmentCustomer.AppointmentID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", appointmentCustomer.TenantID);
+                cmd1.Parameters.AddWithValue("@_Status", appointmentCustomer.Status);
+                cmd1.Parameters.AddWithValue("@_NOofPeople", appointmentCustomer.NOofPeople);
+                cmd1.Parameters.AddWithValue("@Program_Code", appointmentCustomer.ProgramCode);
+                cmd1.Parameters.AddWithValue("@Slot_Id", appointmentCustomer.SlotId);
+                cmd1.Parameters.AddWithValue("@Slot_date", string.IsNullOrEmpty(appointmentCustomer.Slotdate) ? string.Empty : appointmentCustomer.Slotdate);
+                cmd1.Parameters.AddWithValue("@User_ID", appointmentCustomer.UserID);
+                cmd1.Parameters.AddWithValue("@Checkin_flag", appointmentCustomer.Checkinflag);
+
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = cmd1.ExecuteNonQuery();
                 conn.Close();
             }
             catch (Exception)
@@ -500,6 +541,37 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return lstAlreadyScheduleDetail;
+        }
+
+        public int ValidateMobileNo(int TenantID, int UserId, string mobileNumber)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int message;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("Sp_HSValidateMobileNo", conn);
+                cmd1.Parameters.AddWithValue("@mobile_Number", mobileNumber);
+                cmd1.Parameters.AddWithValue("@User_Id", UserId);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                message = Convert.ToInt32(cmd1.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return message;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
@@ -66,6 +67,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public List<AppointmentDetails> CreateNonExistCustAppointment(IAppointment appointment, AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty)
         {
             _AppointmentRepository = appointment;
+        public int AppoinmentStatus(IAppointment appointment, CustomUpdateAppointment appointmentCustomer)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.UpdateAppointment(appointmentCustomer);
+        }
 
             return _AppointmentRepository.CreateNonExistCustAppointment(appointmentMaster, IsSMS, IsLoyalty);
         }
@@ -75,6 +81,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _AppointmentRepository = appointment;
 
             return _AppointmentRepository.GetTimeSlotDetail(userMasterID, tenantID, AppDate);
+        }
+        public int ValidateMobileNo(IAppointment appointment, int tenantID, int UserId, string mobileNumber)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.ValidateMobileNo(tenantID, UserId, mobileNumber);
         }
         #endregion
 

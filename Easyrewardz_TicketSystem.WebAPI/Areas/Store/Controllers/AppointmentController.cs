@@ -74,7 +74,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
         [HttpPost]
         [Route("GetAppointmentCount")]
         public ResponseModel GetAppointmentCount()
@@ -271,7 +270,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
         /// <summary>
         /// Generate OTP
         /// </summary>
@@ -314,7 +312,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             return objResponseModel;
         }
-
 
         /// <summary>
         /// Varify OTP
@@ -396,6 +393,88 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Update Appointment
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateAppointment")]
+        public ResponseModel UpdateAppointment([FromBody]CustomUpdateAppointment appointment)
+        {
+            AppointmentCaller newAppointment = new AppointmentCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                appointment.TenantID = authenticate.TenantId;
+                appointment.UserID = authenticate.UserMasterID;
+                appointment.ProgramCode = authenticate.ProgramCode;
+                int result = newAppointment.AppoinmentStatus(new AppointmentServices(_connectioSting), appointment);
+                StatusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Validate Mobile Number Exist
+        /// </summary>
+        /// <param name="mobileNumber"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("ValidateMobilenoExist")]
+        public ResponseModel ValidateMobilenoExist(string mobileNumber)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+
+                ////Get token (Double encrypted) and get the tenant id 
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                AppointmentCaller newAppointment = new AppointmentCaller();
+
+                int isexist = newAppointment.ValidateMobileNo(new AppointmentServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, mobileNumber);
+                statusCode =
+                isexist == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = isexist;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
         #endregion
     }
 }
