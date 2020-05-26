@@ -512,5 +512,93 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return result;
         }
+
+        /// <summary>
+        /// GetBroadcastConfigurationResponses
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <param name="programcode"></param>
+        /// <param name="storeCode"></param>
+        /// <param name="campaignCode"></param>
+        /// <returns></returns>
+        public BroadcastDetails GetBroadcastConfigurationResponses(int tenantID, int userID, string programcode, string storeCode, string campaignCode)
+        {
+            DataSet ds = new DataSet();
+            BroadcastDetails broadcastDetails = new BroadcastDetails();
+            List<CampaignExecutionDetailsResponse> objList = new List<CampaignExecutionDetailsResponse>();
+            BroadcastConfigurationResponse BroadcastConfigurationResponse = new BroadcastConfigurationResponse();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetBroadcastConfiguration", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantID);
+                cmd.Parameters.AddWithValue("@_UserID", userID);
+                cmd.Parameters.AddWithValue("@_Programcode", programcode);
+                cmd.Parameters.AddWithValue("@_StoreCode", storeCode);
+                cmd.Parameters.AddWithValue("@_CampaignCode", campaignCode);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            CampaignExecutionDetailsResponse obj = new CampaignExecutionDetailsResponse
+                            {
+                                ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                                Programcode = ds.Tables[0].Rows[i]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Programcode"]),
+                                StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]),
+                                CampaignCode = ds.Tables[0].Rows[i]["CampaignCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignCode"]),
+                                ChannelType = ds.Tables[0].Rows[i]["ChannelType"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ChannelType"]),
+                                ExecutionDate = ds.Tables[0].Rows[i]["ExecutionDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ExecutionDate"]),
+                            };
+                            objList.Add(obj);
+                        }
+                    }
+                }
+                if (ds != null && ds.Tables[1] != null)
+                {
+                    BroadcastConfigurationResponse.ID = ds.Tables[1].Rows[0]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["ID"]);
+                    BroadcastConfigurationResponse.MaxClickAllowed = ds.Tables[1].Rows[0]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["MaxClickAllowed"]);
+                    BroadcastConfigurationResponse.SmsFlag = ds.Tables[1].Rows[0]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[1].Rows[0]["SmsFlag"]);
+                    BroadcastConfigurationResponse.EmailFlag = ds.Tables[1].Rows[0]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[1].Rows[0]["EmailFlag"]);
+                    BroadcastConfigurationResponse.WhatsappFlag = ds.Tables[1].Rows[0]["WhatsappFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[1].Rows[0]["WhatsappFlag"]);
+                    BroadcastConfigurationResponse.DisableSMS = ds.Tables[1].Rows[0]["HideSMS"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[1].Rows[0]["HideSMS"]);
+                    BroadcastConfigurationResponse.DisableEmail = ds.Tables[1].Rows[0]["HideEmail"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[1].Rows[0]["HideEmail"]);
+                    BroadcastConfigurationResponse.DisableWhatsapp = ds.Tables[1].Rows[0]["HideWhatsapp"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[1].Rows[0]["HideWhatsapp"]);
+                    BroadcastConfigurationResponse.SMSClickCount = ds.Tables[1].Rows[0]["SMSClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["SMSClickCount"]);
+                    BroadcastConfigurationResponse.EmailClickCount = ds.Tables[1].Rows[0]["EmailClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["EmailClickCount"]);
+                    BroadcastConfigurationResponse.WhatsappClickCount = ds.Tables[1].Rows[0]["WhatsappClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["WhatsappClickCount"]);
+                }
+                broadcastDetails.CampaignExecutionDetailsResponse = objList;
+                broadcastDetails.BroadcastConfigurationResponse = BroadcastConfigurationResponse;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return broadcastDetails;
+
+        }
     }
 }

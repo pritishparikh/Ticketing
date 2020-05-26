@@ -276,4 +276,86 @@ namespace Easyrewardz_TicketSystem.Model
         public string Remarks { get; set; }
 
     }
+
+    public class BroadcastDetails
+    {
+        public List<CampaignExecutionDetailsResponse> CampaignExecutionDetailsResponse { get; set; }
+        public BroadcastConfigurationResponse BroadcastConfigurationResponse { get; set; }
+    }
+
+    public class CampaignExecutionDetailsResponse
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
+        /// Programcode
+        /// </summary>
+        public string Programcode { get; set; }
+        /// <summary>
+        /// StoreCode
+        /// </summary>
+        public string StoreCode { get; set; }
+        /// <summary>
+        /// CampaignCode
+        /// </summary>
+        public string CampaignCode { get; set; }
+        /// <summary>
+        /// ChannelType
+        /// </summary>
+        public string ChannelType { get; set; }
+        /// <summary>
+        /// ExecutionDate
+        /// </summary>
+        public string ExecutionDate { get; set; }
+    }
+
+    public class BroadcastConfigurationResponse
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
+        /// SmsFlag
+        /// </summary>
+        public bool SmsFlag { get; set; }
+        /// <summary>
+        /// EmailFlag
+        /// </summary>
+        public bool EmailFlag { get; set; }
+        /// <summary>
+        /// WhatsappFlag
+        /// </summary>
+        public bool WhatsappFlag { get; set; }
+        /// <summary>
+        /// MaxClickAllowed
+        /// </summary>
+        public int MaxClickAllowed { get; set; }
+        /// <summary>
+        /// SMSClickCount
+        /// </summary>
+        public int SMSClickCount { get; set; }
+        /// <summary>
+        /// EmailClickCount
+        /// </summary>
+        public int EmailClickCount { get; set; }
+        /// <summary>
+        /// WhatsappClickCount
+        /// </summary>
+        public int WhatsappClickCount { get; set; }
+        /// <summary>
+        /// HideSMS
+        /// </summary>
+        public bool DisableSMS { get; set; }
+        /// <summary>
+        /// HideEmail
+        /// </summary>
+        public bool DisableEmail { get; set; }
+        /// <summary>
+        /// HideWhatsapp
+        /// </summary>
+        public bool DisableWhatsapp { get; set; }
+    }
 }

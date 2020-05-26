@@ -241,5 +241,46 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// GetBroadcastConfigurationResponses
+        /// </summary>
+        /// <param name="storeCode"></param>
+        /// <param name="campaignCode"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetBroadcastConfigurationResponses")]
+        public ResponseModel GetBroadcastConfigurationResponses(string storeCode, string campaignCode)
+        {
+            BroadcastDetails broadcastDetails = new BroadcastDetails();
+            StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                broadcastDetails = storecampaigncaller.GetBroadcastConfigurationResponses(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, storeCode, campaignCode);
+                statusCode =
+                   broadcastDetails.BroadcastConfigurationResponse.ID == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = broadcastDetails;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
     }
 }
