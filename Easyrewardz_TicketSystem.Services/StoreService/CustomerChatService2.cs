@@ -463,7 +463,7 @@ namespace Easyrewardz_TicketSystem.Services
             ClientCustomSendImageModel SendImageRequest = new ClientCustomSendImageModel();
             string ClientAPIResponse = string.Empty;
             string ClientImageAPIResponse = string.Empty;
-            bool isMessageSent = false;
+            //bool isMessageSent = false;
 
             try
             {

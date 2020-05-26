@@ -57,7 +57,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// get customer chat session
         /// </summary>
-      
         /// <returns></returns>
         public ChatSessionModel GetChatSession()
         {
@@ -182,6 +181,73 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return RecentChatsList;
+        }
+
+
+        /// <summary>
+        /// Get Agent List For Ongoin Chat
+        /// </summary>
+        /// 
+        public List<AgentRecentChatHistory> GetAgentList(int TenantID)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            List<AgentRecentChatHistory> AgentList = new List<AgentRecentChatHistory>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSGetStoreManagerList", conn);
+                cmd.Parameters.AddWithValue("@_tenantID", TenantID);
+                cmd.Connection = conn;
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            AgentRecentChatHistory obj = new AgentRecentChatHistory()
+                            {
+                              
+                                StoreManagerID = dr["StoreManagerId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreManagerId"]),
+                                AgentName = dr["StoreManagerName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreManagerName"]),
+                               
+
+                            };
+
+                            AgentList.Add(obj);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return AgentList;
         }
 
     }

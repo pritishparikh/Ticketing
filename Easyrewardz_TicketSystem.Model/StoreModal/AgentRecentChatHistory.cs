@@ -14,4 +14,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string TimeAgo { get; set; }
     
     }
+
+
+
 }
