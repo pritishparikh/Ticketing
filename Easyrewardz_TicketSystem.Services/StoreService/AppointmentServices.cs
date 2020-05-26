@@ -214,9 +214,10 @@ namespace Easyrewardz_TicketSystem.Services
                             CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
                             CustomerNumber = Convert.ToString(x.Field<string>("CustomerNumber")),
                             NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),
-                            Status = x.Field<int?>("Status").ToString() == "" ? "" :
-                        Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
-                        Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
+                            Status = Convert.ToString(x.Field<string>("Status")),
+                            //    Status = x.Field<int?>("Status").ToString() == "" ? "" :
+                            //Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
+                            //Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
                         }).ToList();
 
                         appointments.Add(obj);
