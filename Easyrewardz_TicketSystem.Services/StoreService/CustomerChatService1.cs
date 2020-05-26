@@ -121,7 +121,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="tenantID"></param>
         /// <param name="userMasterID"></param>
         /// <returns></returns>
-        public List<CustomerChatMaster> OngoingChat(int userMasterID, int tenantID, string Search)
+        public List<CustomerChatMaster> OngoingChat(int userMasterID, int tenantID, string Search, int StoreManagerID)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -137,6 +137,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
                 cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd1.Parameters.AddWithValue("@search", string.IsNullOrEmpty(Search)? "": Search);
+                cmd1.Parameters.AddWithValue("@StoreMgr_ID", StoreManagerID);
+                
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd1

@@ -46,7 +46,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetOngoingChat")]
-        public ResponseModel GetOngoingChat(string Search)
+        public ResponseModel GetOngoingChat(string Search, int StoreManagerID)
         {
             List<CustomerChatMaster> customerChatMaster = new List<CustomerChatMaster>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -60,7 +60,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                customerChatMaster = customerChatCaller.OngoingChat(new CustomerChatService(_connectionString), authenticate.UserMasterID, authenticate.TenantId, Search);
+                customerChatMaster = customerChatCaller.OngoingChat(new CustomerChatService(_connectionString), authenticate.UserMasterID, authenticate.TenantId, Search, StoreManagerID);
 
                 statusCode =
                customerChatMaster.Count == 0 ?
