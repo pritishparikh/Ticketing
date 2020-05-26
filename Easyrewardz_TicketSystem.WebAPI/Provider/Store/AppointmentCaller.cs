@@ -63,6 +63,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _AppointmentRepository.CreateAppointment(appointmentMaster);
         }
 
+        public List<AppointmentDetails> CreateNonExistCustAppointment(IAppointment appointment, AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty)
+        {
+            _AppointmentRepository = appointment;
+
+            return _AppointmentRepository.CreateNonExistCustAppointment(appointmentMaster, IsSMS, IsLoyalty);
+        }
+
+        public List<AlreadyScheduleDetail> GetTimeSlotDetail(IAppointment appointment, int userMasterID, int tenantID, string AppDate)
+        {
+            _AppointmentRepository = appointment;
+
+            return _AppointmentRepository.GetTimeSlotDetail(userMasterID, tenantID, AppDate);
+        }
         #endregion
 
     }  

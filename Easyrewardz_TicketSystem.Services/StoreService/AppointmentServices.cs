@@ -232,6 +232,71 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
+        /// Create Appointment for non existing customer
+        /// </summary>
+        /// <param name="appointmentMaster"></param>
+        /// <returns></returns>
+        public List<AppointmentDetails> CreateNonExistCustAppointment(AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty)
+        {
+            int message;
+            DataSet ds = new DataSet();
+            List<AppointmentDetails> lstAppointmentDetails = new List<AppointmentDetails>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSCreateNonExistAppointment", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@Appointment_Date", appointmentMaster.AppointmentDate);
+                cmd.Parameters.AddWithValue("@CustomerName", appointmentMaster.CustomerName);
+                cmd.Parameters.AddWithValue("@Time_Slot", appointmentMaster.TimeSlot);
+                cmd.Parameters.AddWithValue("@Tenant_ID", appointmentMaster.TenantID);
+                cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
+                cmd.Parameters.AddWithValue("@NOof_People", appointmentMaster.NOofPeople);
+                cmd.Parameters.AddWithValue("@Mobile_No", appointmentMaster.MobileNo);
+                cmd.Parameters.AddWithValue("@Is_SMS", IsSMS);
+                cmd.Parameters.AddWithValue("@Is_Loyalty", IsLoyalty);
+                cmd.CommandType = CommandType.StoredProcedure;
+                //message = Convert.ToInt32(cmd.ExecuteScalar());
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        AppointmentDetails appointmentDetails = new AppointmentDetails();
+                        appointmentDetails.AppointmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["AppointmentID"]);
+                        appointmentDetails.CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
+                        appointmentDetails.MobileNo = ds.Tables[0].Rows[i]["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                        appointmentDetails.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        appointmentDetails.StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
+                        appointmentDetails.NoOfPeople = ds.Tables[0].Rows[i]["NOofPeople"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NOofPeople"]);
+
+                        lstAppointmentDetails.Add(appointmentDetails);
+                    }
+                }
+
+                // int response = SendMessageToCustomer( /*ChatID*/0, appointmentMaster.MobileNo, appointmentMaster.ProgramCode, appointmentMaster.MessageToReply,/*ClientAPIURL*/"",appointmentMaster.CreatedBy);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return lstAppointmentDetails;
+        }
+
+        /// <summary>
         /// Search Appointment
         /// </summary>
         /// <param name=""></param>
@@ -381,6 +446,60 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return i;
+        }
+
+        public List<AlreadyScheduleDetail> GetTimeSlotDetail(int userMasterID, int tenantID, string AppDate)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<AlreadyScheduleDetail> lstAlreadyScheduleDetail = new List<AlreadyScheduleDetail>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetTimeSlotsDetails", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd1.Parameters.AddWithValue("@User_ID", userMasterID);
+                cmd1.Parameters.AddWithValue("@Apt_Date", AppDate);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                                AlreadyScheduleDetail alreadyScheduleDetail = new AlreadyScheduleDetail();
+                                alreadyScheduleDetail.TimeSlotId = ds.Tables[0].Rows[i]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SlotId"]);
+                                alreadyScheduleDetail.AppointmentDate = ds.Tables[0].Rows[i]["AppointmentDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AppointmentDate"]);
+                                alreadyScheduleDetail.VisitedCount = ds.Tables[0].Rows[i]["VisitedCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["VisitedCount"]);
+                                alreadyScheduleDetail.MaxCapacity = ds.Tables[0].Rows[i]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MaxCapacity"]);
+                                alreadyScheduleDetail.Remaining = ds.Tables[0].Rows[i]["Remaining"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Remaining"]);
+                                alreadyScheduleDetail.TimeSlot = ds.Tables[0].Rows[i]["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]);
+                                alreadyScheduleDetail.StoreId = ds.Tables[0].Rows[i]["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreId"]);
+                                lstAlreadyScheduleDetail.Add(alreadyScheduleDetail);
+                         
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return lstAlreadyScheduleDetail;
         }
     }
 }

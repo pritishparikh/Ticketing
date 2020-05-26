@@ -16,10 +16,14 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<AppointmentDetails> CreateAppointment(AppointmentMaster appointmentMaster);
 
+        List<AppointmentDetails> CreateNonExistCustAppointment(AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty);
+
         List<AppointmentModel> SearchAppointment(int TenantID, int UserId, string searchText, string appointmentDate);
 
         int GenerateOTP(int TenantID, int UserId, string mobileNumber);
 
         int VarifyOTP(int TenantID, int UserId, int otpID, string otp);
+
+        List<AlreadyScheduleDetail> GetTimeSlotDetail(int userMasterID, int tenantID, string AppDate);
     }
 }
