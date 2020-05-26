@@ -29,6 +29,11 @@ namespace Easyrewardz_TicketSystem.Model
         public string TotalWorkingTime { get; set; }
         public string workingMinute { get; set; }
 
+
+        public int StoreID { get; set; }
+        public string ProgramCode { get; set; }
+        public string StoreCode { get; set; }
+
     }
 
     public class ChatStatus
