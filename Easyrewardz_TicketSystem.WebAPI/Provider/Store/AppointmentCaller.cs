@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
@@ -56,8 +57,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _AppointmentRepository.UpdateAppointmentStatus(appointmentCustomer, TenantId);
         }
 
+        public int AppoinmentStatus(IAppointment appointment, CustomUpdateAppointment appointmentCustomer)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.UpdateAppointment(appointmentCustomer);
+        }
 
-
+        public int ValidateMobileNo(IAppointment appointment, int tenantID, int UserId, string mobileNumber)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.ValidateMobileNo(tenantID, UserId, mobileNumber);
+        }
         #endregion
 
     }  

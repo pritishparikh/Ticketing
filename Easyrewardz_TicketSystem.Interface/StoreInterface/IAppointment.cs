@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Model;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,5 +20,9 @@ namespace Easyrewardz_TicketSystem.Interface
         int GenerateOTP(int TenantID, int UserId, string mobileNumber);
 
         int VarifyOTP(int TenantID, int UserId, int otpID, string otp);
+
+        int UpdateAppointment(CustomUpdateAppointment appointmentCustomer);
+
+        int ValidateMobileNo(int TenantID, int UserId, string mobileNumber);
     }
 }
