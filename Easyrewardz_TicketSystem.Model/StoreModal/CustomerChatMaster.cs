@@ -176,7 +176,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string CustomerProfilePic { get; set; }
 
-
+        /// <summary>
+        /// IsBotReply
+        /// </summary>
+        /// 
+        public bool IsBotReply { get; set; }
 
     }
 
