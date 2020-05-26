@@ -114,6 +114,15 @@ namespace Easyrewardz_TicketSystem.Services
                         loggedInAcc.workingMinute = Convert.ToString(ds.Tables[1].Rows[0]["workingMinute"]);
                     }
 
+                    if (ds.Tables[2] != null && ds.Tables[2].Rows.Count > 0)
+                    {
+
+                        loggedInAcc.ProgramCode = ds.Tables[2].Rows[0]["ProgramCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[0]["ProgramCode"]);
+                        loggedInAcc.StoreID = ds.Tables[2].Rows[0]["StoreID"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["StoreID"]);
+                        loggedInAcc.StoreCode = ds.Tables[2].Rows[0]["StoreCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[2].Rows[0]["StoreCode"]);
+                    }
+
+
 
                 }
             }
