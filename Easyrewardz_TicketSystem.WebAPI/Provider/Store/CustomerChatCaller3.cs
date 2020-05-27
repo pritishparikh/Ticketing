@@ -31,6 +31,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
+        public List<AgentCustomerChatHistory> GetAgentChatHistory(ICustomerChat customerChat, int TenantId, int StoreManagerID, string ProgramCode)
+        {
+            _customerChat = customerChat;
+            return _customerChat.GetAgentChatHistory( TenantId,  StoreManagerID,  ProgramCode);
+
+        }
+
         public List<AgentRecentChatHistory> GetAgentList(ICustomerChat customerChat, int TenantID)
         {
             _customerChat = customerChat;
