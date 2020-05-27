@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,6 +83,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _AppointmentRepository = appointment;
             return _AppointmentRepository.StartVisit(appointmentCustomer);
         }
+
         public List<AlreadyScheduleDetail> GetTimeSlotDetail(IAppointment appointment, int userMasterID, int tenantID, string AppDate)
         {
             _AppointmentRepository = appointment;
@@ -93,7 +95,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _AppointmentRepository = appointment;
             return _AppointmentRepository.ValidateMobileNo(tenantID, UserId, mobileNumber);
         }
+
+
+        #region TimeSlotMaster CRUD
+
+        public int InsertUpdateTimeSlotMaster(IAppointment appointment, StoreTimeSlotInsertUpdate Slot)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.InsertUpdateTimeSlotMaster(Slot);
+        }
+
+        public int DeleteTimeSlotMaster(IAppointment appointment, int SlotID, int TenantID)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.DeleteTimeSlotMaster(SlotID, TenantID);
+        }
+
         #endregion
 
-    }  
+        #endregion
+
+    }
 }

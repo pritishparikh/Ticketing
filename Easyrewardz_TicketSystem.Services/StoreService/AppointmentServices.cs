@@ -7,6 +7,7 @@ using System.Data;
 using System.Text;
 using System.Linq;
 using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -610,5 +611,104 @@ namespace Easyrewardz_TicketSystem.Services
 
             return i;
         }
+
+
+        #region TimeSlotMaster CRUD
+
+        /// <summary>
+        /// Insert/ Update HSTimeSlotMaster
+        /// </summary>
+        /// <param name="StoreTimeSlotInsertUpdate"></param>
+        /// <returns></returns>
+        /// 
+        public int InsertUpdateTimeSlotMaster(StoreTimeSlotInsertUpdate Slot)
+        {
+
+            int Result = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+
+                MySqlCommand cmd = new MySqlCommand("SP_HSInsertUpdateHSStoreTimeSlotMaster", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_SlotId", Slot.SlotId);
+                cmd.Parameters.AddWithValue("@_TenantId", Slot.TenantId);
+                cmd.Parameters.AddWithValue("@_StoreId", Slot.StoreId);
+                cmd.Parameters.AddWithValue("@_ProgramCode", Slot.ProgramCode); 
+                cmd.Parameters.AddWithValue("@_TimeSlot", string.IsNullOrEmpty(Slot.TimeSlot) ? "" :Slot.TimeSlot);
+                cmd.Parameters.AddWithValue("@_MaxCapacity", Slot.MaxCapacity);
+                cmd.Parameters.AddWithValue("@_OrderNo", Slot.OrderNumber); 
+                cmd.Parameters.AddWithValue("@_CreatedBy", Slot.CreatedBy); 
+                cmd.Parameters.AddWithValue("@_ModifyBy", Slot.ModifyBy);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                Result = Convert.ToInt32(cmd.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Delete HSTimeSlotMaster
+        /// </summary>
+        /// <param name="SlotID"></param>
+        /// <returns></returns>
+        public int DeleteTimeSlotMaster(int SlotID, int TenantID)
+        {
+
+            int Result = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+
+                MySqlCommand cmd = new MySqlCommand("SP_DeleteStoreTimeSlotMaster", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_SlotId", SlotID);
+                cmd.Parameters.AddWithValue("@_TenantId", TenantID);
+               
+                cmd.CommandType = CommandType.StoredProcedure;
+                Result = Convert.ToInt32(cmd.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return Result;
+        }
+
+
+        #endregion
     }
+
+
+
 }

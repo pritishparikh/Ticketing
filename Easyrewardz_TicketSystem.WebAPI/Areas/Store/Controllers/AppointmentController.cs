@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
@@ -512,6 +513,99 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+
+
+        #region TimeSlotMaster CRUD
+
+
+        /// <summary>
+        /// Insert/ Update HSTimeSlotMaster
+        /// </summary>
+        /// <param name="StoreTimeSlotInsertUpdate"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("InsertUpdateTimeSlotMaster")]
+        public ResponseModel InsertUpdateTimeSlotMaster([FromBody]StoreTimeSlotInsertUpdate Slot)
+        {
+            List<AlreadyScheduleDetail> alreadyScheduleDetails = new List<AlreadyScheduleDetail>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0; int ResultCount = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                Slot.TenantId = authenticate.TenantId;
+                Slot.ProgramCode = authenticate.ProgramCode;
+
+                AppointmentCaller newAppointment = new AppointmentCaller();
+
+                ResultCount = newAppointment.InsertUpdateTimeSlotMaster(new AppointmentServices(_connectioSting), Slot);
+
+                statusCode =  ResultCount .Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = ResultCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Delete HSTimeSlotMaster
+        /// </summary>
+        /// <param name="SlotID"></param>
+        /// <returns></returns>
+
+        [HttpPost]
+        [Route("DeleteTimeSlotMaster")]
+        public ResponseModel DeleteTimeSlotMaster(int SlotID)
+        {
+            List<AlreadyScheduleDetail> alreadyScheduleDetails = new List<AlreadyScheduleDetail>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0; int ResultCount = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                AppointmentCaller newAppointment = new AppointmentCaller();
+
+                ResultCount = newAppointment.DeleteTimeSlotMaster(new AppointmentServices(_connectioSting), SlotID,authenticate.TenantId);
+
+                statusCode = ResultCount.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = ResultCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        #endregion 
 
         #endregion
     }
