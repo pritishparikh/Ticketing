@@ -77,6 +77,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _AppointmentRepository.UpdateAppointment(appointmentCustomer);
         }
 
+        public int StartVisit(IAppointment appointment, CustomUpdateAppointment appointmentCustomer)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.StartVisit(appointmentCustomer);
+        }
         public List<AlreadyScheduleDetail> GetTimeSlotDetail(IAppointment appointment, int userMasterID, int tenantID, string AppDate)
         {
             _AppointmentRepository = appointment;

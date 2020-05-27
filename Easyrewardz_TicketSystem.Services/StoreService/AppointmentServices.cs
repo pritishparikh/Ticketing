@@ -468,7 +468,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Slot_Id", appointmentCustomer.SlotId);
                 cmd1.Parameters.AddWithValue("@Slot_date", string.IsNullOrEmpty(appointmentCustomer.Slotdate) ? string.Empty : appointmentCustomer.Slotdate);
                 cmd1.Parameters.AddWithValue("@User_ID", appointmentCustomer.UserID);
-                cmd1.Parameters.AddWithValue("@Checkin_flag", appointmentCustomer.Checkinflag);
 
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = cmd1.ExecuteNonQuery();
@@ -572,6 +571,44 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return message;
+        }
+
+        public int StartVisit(CustomUpdateAppointment appointmentCustomer)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSStartAppointmentVisit", conn);
+                cmd1.Parameters.AddWithValue("@Appointment_ID", appointmentCustomer.AppointmentID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", appointmentCustomer.TenantID);
+                cmd1.Parameters.AddWithValue("@_Status", appointmentCustomer.Status);
+                cmd1.Parameters.AddWithValue("@_NOofPeople", appointmentCustomer.NOofPeople);
+                cmd1.Parameters.AddWithValue("@Program_Code", appointmentCustomer.ProgramCode);
+                cmd1.Parameters.AddWithValue("@Slot_Id", appointmentCustomer.SlotId);
+                cmd1.Parameters.AddWithValue("@Slot_date", string.IsNullOrEmpty(appointmentCustomer.Slotdate) ? string.Empty : appointmentCustomer.Slotdate);
+                cmd1.Parameters.AddWithValue("@User_ID", appointmentCustomer.UserID);
+                cmd1.Parameters.AddWithValue("@Customer_Number", appointmentCustomer.CustomerNumber);
+
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = cmd1.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
         }
     }
 }

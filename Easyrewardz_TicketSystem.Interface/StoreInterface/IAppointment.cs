@@ -30,5 +30,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateAppointment(CustomUpdateAppointment appointmentCustomer);
 
         int ValidateMobileNo(int TenantID, int UserId, string mobileNumber);
+
+        int StartVisit(CustomUpdateAppointment appointmentCustomer);
     }
 }
