@@ -705,6 +705,88 @@ namespace Easyrewardz_TicketSystem.Services
             return Result;
         }
 
+        /// <summary>
+        /// Get HSTimeSlotMaster List
+        /// </summary>
+        /// <returns></returns>
+        public List<StoreTimeSlotMasterModel> StoreTimeSlotMasterList(int TenantID, string ProgramCode)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<StoreTimeSlotMasterModel> TimeSlotList = new List<StoreTimeSlotMasterModel>();
+            try
+            {
+
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreTimeSlotDetails", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_TenantId", TenantID);
+                cmd1.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            TimeSlotList.Add(new StoreTimeSlotMasterModel()
+                            {
+
+                                SlotId = dr["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotId"]),
+                                TenantId = dr["TenantId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TenantId"]),
+                                ProgramCode = dr["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ProgramCode"]),
+                                StoreId = dr["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreId"]),
+                                StoreCode = dr["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreCode"]),
+                                StoreName = dr["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreName"]),
+                                TimeSlot = dr["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TimeSlot"]),
+                                OrderNumber = dr["OrderNumber"] == DBNull.Value ? 0 : Convert.ToInt32(dr["OrderNumber"]),
+                                MaxCapacity = dr["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(dr["MaxCapacity"]),
+                                CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CreatedBy"]),
+                                CreatedByName = dr["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedByName"]),
+                                CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),
+                                ModifyBy = dr["ModifyBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ModifyBy"]),
+                                ModifyByName = dr["ModifyByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyByName"]),
+                                ModifyDate = dr["ModifyDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyDate"]),
+
+
+
+                            });
+
+                              
+                        }
+                    }
+                }
+
+                
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return TimeSlotList;
+
+        }
+
 
         #endregion
     }

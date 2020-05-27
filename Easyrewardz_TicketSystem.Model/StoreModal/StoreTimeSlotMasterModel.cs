@@ -11,6 +11,8 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public int TenantId { get; set; }
         public string ProgramCode { get; set; }
         public int StoreId { get; set; }
+        public string StoreCode { get; set; }
+        public string StoreName { get; set; }
         public string TimeSlot { get; set; }
         public int OrderNumber { get; set; }
         public int MaxCapacity { get; set; }

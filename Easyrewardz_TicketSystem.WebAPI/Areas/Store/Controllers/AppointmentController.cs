@@ -540,6 +540,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 Slot.TenantId = authenticate.TenantId;
                 Slot.ProgramCode = authenticate.ProgramCode;
+                Slot.CreatedBy = authenticate.UserMasterID;
+                Slot.ModifyBy= authenticate.UserMasterID;
 
                 AppointmentCaller newAppointment = new AppointmentCaller();
 
@@ -596,6 +598,47 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = ResultCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Get HSTimeSlotMaster List
+        /// </summary>
+        /// <returns></returns>
+
+        [HttpPost]
+        [Route("GetStoreTimeSlotMasterList")]
+        public ResponseModel GetStoreTimeSlotMasterList()
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            List<StoreTimeSlotMasterModel> TimeSlotList = new List<StoreTimeSlotMasterModel>();
+           string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                AppointmentCaller newAppointment = new AppointmentCaller();
+
+                TimeSlotList = newAppointment.GetStoreTimeSlotMasterList(new AppointmentServices(_connectioSting), authenticate.TenantId,authenticate.ProgramCode);
+
+                statusCode = TimeSlotList.Count.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = TimeSlotList;
             }
             catch (Exception)
             {
