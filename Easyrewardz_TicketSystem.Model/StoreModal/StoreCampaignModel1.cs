@@ -257,7 +257,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// TemplateName
         /// </summary>
-        public string TemplateName { get; set; }
+        public string TemplateName { get; set; } = "";
         /// <summary>
         /// TemplateNamespace
         /// </summary>

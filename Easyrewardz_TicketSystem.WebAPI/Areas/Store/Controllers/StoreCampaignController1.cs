@@ -305,7 +305,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                result = storecampaigncaller.InsertBroadCastDetails(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, storeCode, campaignCode, channelType);
+                string clientAPIURL = configuration.GetValue<string>("ClientAPIURL");
+
+                result = storecampaigncaller.InsertBroadCastDetails(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, storeCode, campaignCode, channelType, clientAPIURL);
                 statusCode =
                    result == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
