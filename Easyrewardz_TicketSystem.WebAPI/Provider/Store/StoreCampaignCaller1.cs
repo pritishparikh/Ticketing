@@ -42,5 +42,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _CampaignRepository.GetBroadcastConfigurationResponses(tenantID, userID, programcode, storeCode, campaignCode);
         }
 
+        public int InsertBroadCastDetails(IStoreCampaign Campaign, int tenantID, int userID, string programcode, string storeCode, string campaignCode, string channelType)
+        {
+            _CampaignRepository = Campaign;
+            return _CampaignRepository.InsertBroadCastDetails(tenantID, userID, programcode, storeCode, campaignCode, channelType);
+        }
+
     }
 }

@@ -600,5 +600,54 @@ namespace Easyrewardz_TicketSystem.Services
             return broadcastDetails;
 
         }
+
+        /// <summary>
+        /// InsertBroadCastDetails
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <param name="programcode"></param>
+        /// <param name="storeCode"></param>
+        /// <param name="campaignCode"></param>
+        /// <param name="channelType"></param>
+        /// <returns></returns>
+        public int InsertBroadCastDetails(int tenantID, int userID, string programcode, string storeCode, string campaignCode, string channelType)
+        {
+
+            int result = 0;
+            CampaignStatusResponse obj = new CampaignStatusResponse();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_HSInsertBroadCastDetails", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_Programcode", programcode);
+                cmd.Parameters.AddWithValue("@_StoreCode", storeCode);
+                cmd.Parameters.AddWithValue("@_CampaignCode", campaignCode);
+                cmd.Parameters.AddWithValue("@_ChannelType", channelType);
+                cmd.Parameters.AddWithValue("@_strpostionNumber", "");
+                cmd.Parameters.AddWithValue("@_strpostionName", "");
+                cmd.Parameters.AddWithValue("@_TemplateName", "");
+                cmd.Parameters.AddWithValue("@_TenantID", tenantID);
+                cmd.Parameters.AddWithValue("@_UserID", userID);
+
+                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+        }
     }
 }
