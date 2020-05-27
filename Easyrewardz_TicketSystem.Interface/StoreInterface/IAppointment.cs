@@ -15,7 +15,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId);
 
-        List<AppointmentDetails> CreateAppointment(AppointmentMaster appointmentMaster);
+        List<AppointmentDetails> CreateAppointment(AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty);
 
         List<AppointmentDetails> CreateNonExistCustAppointment(AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty);
 

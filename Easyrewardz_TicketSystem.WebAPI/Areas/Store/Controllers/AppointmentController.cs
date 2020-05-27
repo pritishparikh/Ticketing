@@ -149,7 +149,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
         [HttpPost]
         [Route("CreateAppointment")]
-        public ResponseModel CreateAppointment([FromBody]AppointmentMaster appointmentMaster)
+        public ResponseModel CreateAppointment([FromBody]AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty)
         {
             ResponseModel objResponseModel = new ResponseModel();
             List<AppointmentDetails> appointmentDetails = new List<AppointmentDetails>();
@@ -165,7 +165,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 appointmentMaster.TenantID = authenticate.TenantId;
                 AppointmentCaller newAppointment = new AppointmentCaller();
 
-                appointmentDetails = newAppointment.CreateAppointment(new AppointmentServices(_connectioSting), appointmentMaster);
+                appointmentDetails = newAppointment.CreateAppointment(new AppointmentServices(_connectioSting), appointmentMaster, IsSMS, IsLoyalty);
 
                 statusCode =
               appointmentDetails.Count == 0 ?

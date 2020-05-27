@@ -175,7 +175,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="appointmentMaster"></param>
         /// <returns></returns>
-        public List<AppointmentDetails> CreateAppointment(AppointmentMaster appointmentMaster)
+        public List<AppointmentDetails> CreateAppointment(AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty)
         {
             int message;
             DataSet ds = new DataSet();
@@ -189,11 +189,13 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@Appointment_Date", appointmentMaster.AppointmentDate);
                 cmd.Parameters.AddWithValue("@CustomerName", appointmentMaster.CustomerName);
-                cmd.Parameters.AddWithValue("@Time_Slot", appointmentMaster.TimeSlot);
+                cmd.Parameters.AddWithValue("@Slot_ID", appointmentMaster.SlotID);
                 cmd.Parameters.AddWithValue("@Tenant_ID", appointmentMaster.TenantID);
                 cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
                 cmd.Parameters.AddWithValue("@NOof_People", appointmentMaster.NOofPeople);
                 cmd.Parameters.AddWithValue("@Mobile_No", appointmentMaster.MobileNo);
+                cmd.Parameters.AddWithValue("@Is_SMS", IsSMS);
+                cmd.Parameters.AddWithValue("@Is_Loyalty", IsLoyalty);
                 cmd.CommandType = CommandType.StoredProcedure;
                 //message = Convert.ToInt32(cmd.ExecuteScalar());
                 MySqlDataAdapter da = new MySqlDataAdapter

@@ -57,11 +57,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _AppointmentRepository.UpdateAppointmentStatus(appointmentCustomer, TenantId);
         }
 
-        public List<AppointmentDetails> CreateAppointment(IAppointment appointment, AppointmentMaster appointmentMaster)
+        public List<AppointmentDetails> CreateAppointment(IAppointment appointment, AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty)
         {
             _AppointmentRepository = appointment;
 
-            return _AppointmentRepository.CreateAppointment(appointmentMaster);
+            return _AppointmentRepository.CreateAppointment(appointmentMaster, IsSMS, IsLoyalty);
         }
 
         public List<AppointmentDetails> CreateNonExistCustAppointment(IAppointment appointment, AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty)
