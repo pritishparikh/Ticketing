@@ -11,5 +11,6 @@ namespace Easyrewardz_TicketSystem.Interface
         string CampaignShareMassanger(ShareChatbotModel objRequest, int TenantID, int UserID);
         int CampaignShareSMS(ShareChatbotModel objRequest, string ClientAPIURL, string SMSsenderId, int TenantID, int UserID);
         BroadcastDetails GetBroadcastConfigurationResponses(int tenantID, int userID, string programcode, string storeCode, string campaignCode);
+        int InsertBroadCastDetails(int tenantID, int userID, string programcode, string storeCode, string campaignCode, string channelType);
     }
 }

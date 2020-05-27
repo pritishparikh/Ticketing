@@ -7,6 +7,7 @@ using System.Data;
 using System.Text;
 using System.Linq;
 using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -470,7 +471,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Slot_Id", appointmentCustomer.SlotId);
                 cmd1.Parameters.AddWithValue("@Slot_date", string.IsNullOrEmpty(appointmentCustomer.Slotdate) ? string.Empty : appointmentCustomer.Slotdate);
                 cmd1.Parameters.AddWithValue("@User_ID", appointmentCustomer.UserID);
-                cmd1.Parameters.AddWithValue("@Checkin_flag", appointmentCustomer.Checkinflag);
 
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = cmd1.ExecuteNonQuery();
@@ -575,5 +575,224 @@ namespace Easyrewardz_TicketSystem.Services
 
             return message;
         }
+
+        public int StartVisit(CustomUpdateAppointment appointmentCustomer)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int i = 0;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSStartAppointmentVisit", conn);
+                cmd1.Parameters.AddWithValue("@Appointment_ID", appointmentCustomer.AppointmentID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", appointmentCustomer.TenantID);
+                cmd1.Parameters.AddWithValue("@_Status", appointmentCustomer.Status);
+                cmd1.Parameters.AddWithValue("@_NOofPeople", appointmentCustomer.NOofPeople);
+                cmd1.Parameters.AddWithValue("@Program_Code", appointmentCustomer.ProgramCode);
+                cmd1.Parameters.AddWithValue("@Slot_Id", appointmentCustomer.SlotId);
+                cmd1.Parameters.AddWithValue("@Slot_date", string.IsNullOrEmpty(appointmentCustomer.Slotdate) ? string.Empty : appointmentCustomer.Slotdate);
+                cmd1.Parameters.AddWithValue("@User_ID", appointmentCustomer.UserID);
+                cmd1.Parameters.AddWithValue("@Customer_Number", appointmentCustomer.CustomerNumber);
+
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = cmd1.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return i;
+        }
+
+
+        #region TimeSlotMaster CRUD
+
+        /// <summary>
+        /// Insert/ Update HSTimeSlotMaster
+        /// </summary>
+        /// <param name="StoreTimeSlotInsertUpdate"></param>
+        /// <returns></returns>
+        /// 
+        public int InsertUpdateTimeSlotMaster(StoreTimeSlotInsertUpdate Slot)
+        {
+
+            int Result = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+
+                MySqlCommand cmd = new MySqlCommand("SP_HSInsertUpdateHSStoreTimeSlotMaster", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_SlotId", Slot.SlotId);
+                cmd.Parameters.AddWithValue("@_TenantId", Slot.TenantId);
+                cmd.Parameters.AddWithValue("@_StoreId", Slot.StoreId);
+                cmd.Parameters.AddWithValue("@_ProgramCode", Slot.ProgramCode); 
+                cmd.Parameters.AddWithValue("@_TimeSlot", string.IsNullOrEmpty(Slot.TimeSlot) ? "" :Slot.TimeSlot);
+                cmd.Parameters.AddWithValue("@_MaxCapacity", Slot.MaxCapacity);
+                cmd.Parameters.AddWithValue("@_OrderNo", Slot.OrderNumber); 
+                cmd.Parameters.AddWithValue("@_CreatedBy", Slot.CreatedBy); 
+                cmd.Parameters.AddWithValue("@_ModifyBy", Slot.ModifyBy);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                Result = Convert.ToInt32(cmd.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Delete HSTimeSlotMaster
+        /// </summary>
+        /// <param name="SlotID"></param>
+        /// <returns></returns>
+        public int DeleteTimeSlotMaster(int SlotID, int TenantID)
+        {
+
+            int Result = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+
+                MySqlCommand cmd = new MySqlCommand("SP_DeleteStoreTimeSlotMaster", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_SlotId", SlotID);
+                cmd.Parameters.AddWithValue("@_TenantId", TenantID);
+               
+                cmd.CommandType = CommandType.StoredProcedure;
+                Result = Convert.ToInt32(cmd.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Get HSTimeSlotMaster List
+        /// </summary>
+        /// <returns></returns>
+        public List<StoreTimeSlotMasterModel> StoreTimeSlotMasterList(int TenantID, string ProgramCode)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<StoreTimeSlotMasterModel> TimeSlotList = new List<StoreTimeSlotMasterModel>();
+            try
+            {
+
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreTimeSlotDetails", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_TenantId", TenantID);
+                cmd1.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            TimeSlotList.Add(new StoreTimeSlotMasterModel()
+                            {
+
+                                SlotId = dr["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotId"]),
+                                TenantId = dr["TenantId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TenantId"]),
+                                ProgramCode = dr["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ProgramCode"]),
+                                StoreId = dr["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreId"]),
+                                StoreCode = dr["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreCode"]),
+                                StoreName = dr["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreName"]),
+                                TimeSlot = dr["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TimeSlot"]),
+                                OrderNumber = dr["OrderNumber"] == DBNull.Value ? 0 : Convert.ToInt32(dr["OrderNumber"]),
+                                MaxCapacity = dr["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(dr["MaxCapacity"]),
+                                CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CreatedBy"]),
+                                CreatedByName = dr["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedByName"]),
+                                CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),
+                                ModifyBy = dr["ModifyBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ModifyBy"]),
+                                ModifyByName = dr["ModifyByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyByName"]),
+                                ModifyDate = dr["ModifyDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyDate"]),
+
+
+
+                            });
+
+                              
+                        }
+                    }
+                }
+
+                
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return TimeSlotList;
+
+        }
+
+
+        #endregion
     }
+
+
+
 }

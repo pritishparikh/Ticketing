@@ -1,5 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,5 +31,19 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateAppointment(CustomUpdateAppointment appointmentCustomer);
 
         int ValidateMobileNo(int TenantID, int UserId, string mobileNumber);
+
+        int StartVisit(CustomUpdateAppointment appointmentCustomer);
+
+
+        #region TimeSlotMaster CRUD
+
+        int InsertUpdateTimeSlotMaster(StoreTimeSlotInsertUpdate Slot);
+
+
+        int DeleteTimeSlotMaster(int SlotID, int TenantID);
+
+        List<StoreTimeSlotMasterModel> StoreTimeSlotMasterList(int TenantID, string ProgramCode);
+
+        #endregion
     }
 }

@@ -81,10 +81,12 @@ namespace Easyrewardz_TicketSystem.Services
                             BotFlag = Convert.ToBoolean(ds.Tables[0].Rows[i]["BotFlag"]),
                             Status = Convert.ToString((StoreCampaignStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"])),
                             MaxClickAllowed = ds.Tables[0].Rows[i]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MaxClickAllowed"]),
-                          // SmsClickCount = ds.Tables[0].Rows[i]["SmsClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SmsClickCount"]),
-                          //  EmailClickCount = ds.Tables[0].Rows[i]["EmailClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["EmailClickCount"]),
-                          //  MessengerClickCount = ds.Tables[0].Rows[i]["MessengerClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MessengerClickCount"]),
-                          //  BotClickCount = ds.Tables[0].Rows[i]["BotClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BotClickCount"]),
+                            StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]),
+                            CampaignCode = ds.Tables[0].Rows[i]["CampaignCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignCode"]),
+                            // SmsClickCount = ds.Tables[0].Rows[i]["SmsClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SmsClickCount"]),
+                            //  EmailClickCount = ds.Tables[0].Rows[i]["EmailClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["EmailClickCount"]),
+                            //  MessengerClickCount = ds.Tables[0].Rows[i]["MessengerClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MessengerClickCount"]),
+                            //  BotClickCount = ds.Tables[0].Rows[i]["BotClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BotClickCount"]),
                         };
                         lstCampaign.Add(storecampaign);
                     }

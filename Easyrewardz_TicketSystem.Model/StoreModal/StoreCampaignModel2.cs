@@ -7,30 +7,62 @@ namespace Easyrewardz_TicketSystem.Model
 {
     public class StoreCampaignModel2
     {
-
+        /// <summary>
+        /// CampaignID
+        /// </summary>
         public int CampaignID { get; set; }
-
+        /// <summary>
+        /// CampaignName
+        /// </summary>
         public string CampaignName { get; set; }
-
+        /// <summary>
+        /// CustomerCount
+        /// </summary>
         public string CustomerCount { get; set; }
-
+        /// <summary>
+        /// ChatbotScript
+        /// </summary>
         public string ChatbotScript { get; set; }
-
+        /// <summary>
+        /// SmsScript
+        /// </summary>
         public string SmsScript { get; set; }
-
+        /// <summary>
+        /// CampaingPeriod
+        /// </summary>
         public string CampaingPeriod { get; set; }
-
+        /// <summary>
+        /// Status
+        /// </summary>
         public string Status { get; set; }
-
+        /// <summary>
+        /// SmsFlag
+        /// </summary>
         public bool SmsFlag { get; set; }
-
+        /// <summary>
+        /// EmailFlag
+        /// </summary>
         public bool EmailFlag { get; set; }
-
+        /// <summary>
+        /// MessengerFlag
+        /// </summary>
         public bool MessengerFlag { get; set; }
-
+        /// <summary>
+        /// BotFlag
+        /// </summary>
         public bool BotFlag { get; set; }
-
+        /// <summary>
+        /// MaxClickAllowed
+        /// </summary>
         public int MaxClickAllowed { get; set; }
+        /// <summary>
+        /// StoreCode
+        /// </summary>
+        public string StoreCode { get; set; }
+        /// <summary>
+        /// CampaignCode
+        /// </summary>
+        public string CampaignCode { get; set; }
 
         //public int SmsClickCount { get; set; }
 
