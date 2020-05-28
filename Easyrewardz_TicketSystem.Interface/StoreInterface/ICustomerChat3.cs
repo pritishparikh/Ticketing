@@ -15,6 +15,8 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<AgentRecentChatHistory> GetAgentRecentChat();
 
+        List<AgentCustomerChatHistory> GetAgentChatHistory(int TenantId, int StoreManagerID, string ProgramCode);
+
         List<AgentRecentChatHistory> GetAgentList(int TenantID);
     }
 }

@@ -106,7 +106,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// get customer chat session
+        /// Get Agent Recent Chat List
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -136,6 +136,46 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = RecentChatsList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Get Agent Chat History
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetAgentChatHistory")]
+        public ResponseModel GetAgentChatHistory()
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            List<AgentCustomerChatHistory> ChatsList = new List<AgentCustomerChatHistory>();
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                ChatsList = customerChatCaller.GetAgentChatHistory(new CustomerChatService(_connectionString),authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
+
+                statusCode = ChatsList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = ChatsList;
             }
             catch (Exception)
             {
