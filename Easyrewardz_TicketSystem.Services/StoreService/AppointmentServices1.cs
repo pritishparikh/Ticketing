@@ -799,7 +799,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetCustomerInStore", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetCustomerInStore", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
                 cmd1.Parameters.AddWithValue("@User_Id", UserId);
@@ -811,9 +811,9 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CustomerCountDetail customerCountDetail = new CustomerCountDetail();
-                        customerCountDetail.SlotId = Convert.ToInt32(ds.Tables[0].Rows[i][""]);
-                        customerCountDetail.InStoreCount = ds.Tables[0].Rows[i][""] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i][""]);
-                        customerCountDetail.TimeSlot= ds.Tables[0].Rows[i][""] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i][""]);
+                        customerCountDetail.SlotId = Convert.ToInt32(ds.Tables[0].Rows[i]["SlotId"]);
+                        customerCountDetail.InStoreCount = ds.Tables[0].Rows[i]["InStoreCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["InStoreCount"]);
+                        customerCountDetail.TimeSlot= ds.Tables[0].Rows[i]["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]);
                         appointments.Add(customerCountDetail);
                     }
                 }
@@ -831,6 +831,55 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return appointments;
+        }
+
+        public CustomCustomerInStore CustomerInStore(int TenantID, int UserId, string programCode)
+        {
+            DataSet ds = new DataSet();
+            CustomCustomerInStore customerCountDetail = new CustomCustomerInStore();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSTrackCustomerInStore", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_tenantID", TenantID);
+                cmd1.Parameters.AddWithValue("@_PrgramCode", programCode);
+                cmd1.Parameters.AddWithValue("@userMaster_ID", UserId);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        
+                        customerCountDetail.AppointmentID = ds.Tables[0].Rows[i]["AppointmentID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["AppointmentID"]);
+                        customerCountDetail.MaxCapacity = ds.Tables[0].Rows[i]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MaxCapacity"]);
+                        customerCountDetail.VisitedCount = ds.Tables[0].Rows[i]["VisitedCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["VisitedCount"]);
+                        customerCountDetail.StoreID = ds.Tables[0].Rows[i]["Store_ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Store_ID"]);
+                        customerCountDetail.SlotID = ds.Tables[0].Rows[i]["Store_ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Store_ID"]);
+                        customerCountDetail.TimeSlot = ds.Tables[0].Rows[i]["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]);
+                        customerCountDetail.RemainingCount = ds.Tables[0].Rows[i]["RemainingCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["RemainingCount"]);
+                        customerCountDetail.CustomerInStorePercentage = ds.Tables[0].Rows[i]["CustomerInStorePercentage"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerInStorePercentage"]);
+                        customerCountDetail.StoreCode = ds.Tables[0].Rows[i]["Store_Code"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Store_Code"]);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return customerCountDetail;
         }
 
 

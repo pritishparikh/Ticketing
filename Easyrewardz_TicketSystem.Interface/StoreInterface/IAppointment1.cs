@@ -36,6 +36,8 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<CustomerCountDetail> GetCustomerInStore(int TenantID, int UserId);
 
+        CustomCustomerInStore CustomerInStore(int TenantID, int UserId,string programCode);
+
         #region TimeSlotMaster CRUD
 
         int InsertUpdateTimeSlotMaster(StoreTimeSlotInsertUpdate Slot);
