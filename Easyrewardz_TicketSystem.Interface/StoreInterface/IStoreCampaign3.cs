@@ -26,5 +26,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int InsertLanguageDetails(int tenantId, int userId, string programCode, int languageID);
 
         List<SelectedLanguages> GetSelectedLanguageDetails(int tenantId, int userId, string programCode);
+
+        int DeleteSelectedLanguage(int tenantId, int userId, string programCode, int selectedLanguageID);
     }
 }
