@@ -790,6 +790,49 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        public List<CustomerCountDetail> GetCustomerInStore(int TenantID, int UserId)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<CustomerCountDetail> appointments = new List<CustomerCountDetail>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetCustomerInStore", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.Parameters.AddWithValue("@User_Id", UserId);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomerCountDetail customerCountDetail = new CustomerCountDetail();
+                        customerCountDetail.SlotId = Convert.ToInt32(ds.Tables[0].Rows[i][""]);
+                        customerCountDetail.InStoreCount = ds.Tables[0].Rows[i][""] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i][""]);
+                        customerCountDetail.TimeSlot= ds.Tables[0].Rows[i][""] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i][""]);
+                        appointments.Add(customerCountDetail);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return appointments;
+        }
+
 
         #endregion
     }

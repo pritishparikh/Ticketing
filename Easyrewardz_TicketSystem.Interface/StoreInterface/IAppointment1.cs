@@ -34,6 +34,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int StartVisit(CustomUpdateAppointment appointmentCustomer);
 
+        List<CustomerCountDetail> GetCustomerInStore(int TenantID, int UserId);
 
         #region TimeSlotMaster CRUD
 
