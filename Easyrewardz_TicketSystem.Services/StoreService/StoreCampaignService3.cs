@@ -459,5 +459,47 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return languageslist;
         }
+
+        /// <summary>
+        /// InsertLanguageDetails
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="programCode"></param>
+        /// <param name="languageID"></param>
+        /// <returns></returns>
+        public int InsertLanguageDetails(int tenantId, int userId, string programCode, int languageID)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSInsertLanguageDetails", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_Programcode", programCode);
+                cmd.Parameters.AddWithValue("@_LanguageID", languageID);
+                
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
     }
 }

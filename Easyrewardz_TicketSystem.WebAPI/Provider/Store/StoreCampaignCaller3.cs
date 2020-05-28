@@ -61,5 +61,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _CampaignRepository = Campaign;
             return _CampaignRepository.GetLanguageDetails(tenantId, userId, programCode);
         }
+
+        public int InsertLanguageDetails(IStoreCampaign Campaign, int tenantId, int userId, string programCode, int languageID)
+        {
+            _CampaignRepository = Campaign;
+            return _CampaignRepository.InsertLanguageDetails(tenantId, userId, programCode, languageID);
+        }
     }
 }

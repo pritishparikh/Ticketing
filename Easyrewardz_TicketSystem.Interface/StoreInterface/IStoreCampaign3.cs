@@ -22,5 +22,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateAppointmentConfiguration(StoreAppointmentConfiguration storeAppointmentConfiguration, int modifiedBy);
 
         List<Languages> GetLanguageDetails(int tenantId, int userId, string programCode);
+
+        int InsertLanguageDetails(int tenantId, int userId, string programCode, int languageID);
     }
 }
