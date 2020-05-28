@@ -501,5 +501,72 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UpdateCount;
         }
+
+        /// <summary>
+        /// GetSelectedLanguageDetails
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
+        public List<SelectedLanguages> GetSelectedLanguageDetails(int tenantId, int userId, string programCode)
+        {
+            DataSet ds = new DataSet();
+            List<SelectedLanguages> languageslist = new List<SelectedLanguages>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSGetListLanguageSelected", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_Programcode", programCode);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            SelectedLanguages languages = new SelectedLanguages()
+                            {
+                                ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                                LanguageID = ds.Tables[0].Rows[i]["LanguageID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["LanguageID"]),
+                                CreatedOn = ds.Tables[0].Rows[i]["CreatedOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedOn"]),
+                                CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CreatedBy"]),
+                                Language = ds.Tables[0].Rows[i]["Language"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Language"]),
+                                IsActive = ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]),
+                                CreaterName = ds.Tables[0].Rows[i]["CreaterName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreaterName"]),
+                            };
+                            languageslist.Add(languages);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return languageslist;
+        }
     }
 }

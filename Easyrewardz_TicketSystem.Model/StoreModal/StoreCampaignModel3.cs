@@ -173,4 +173,36 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public bool IsActive { get; set; }
     }
+
+    public class SelectedLanguages
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
+        /// LanguageID
+        /// </summary>
+        public int LanguageID { get; set; }
+        /// <summary>
+        /// CreatedOn
+        /// </summary>
+        public string CreatedOn { get; set; }
+        /// <summary>
+        /// CreatedBy
+        /// </summary>
+        public int CreatedBy { get; set; }
+        /// <summary>
+        /// Language
+        /// </summary>
+        public string Language { get; set; }
+        /// <summary>
+        /// IsActive
+        /// </summary>
+        public bool IsActive { get; set; }
+        /// <summary>
+        /// CreaterName
+        /// </summary>
+        public string CreaterName { get; set; }
+    }
 }
