@@ -55,5 +55,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _CampaignRepository = Campaign;
             return _CampaignRepository.UpdateAppointmentConfiguration(storeAppointmentConfiguration, modifiedBy);
         }
+
+        public List<Languages> GetLanguageDetails(IStoreCampaign Campaign, int tenantId, int userId, string programCode)
+        {
+            _CampaignRepository = Campaign;
+            return _CampaignRepository.GetLanguageDetails(tenantId, userId, programCode);
+        }
     }
 }

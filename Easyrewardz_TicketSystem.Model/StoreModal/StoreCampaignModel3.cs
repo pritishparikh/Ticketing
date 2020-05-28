@@ -157,4 +157,20 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public bool OnlyCard { get; set; }
     }
+
+    public class Languages
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
+        /// Language
+        /// </summary>
+        public string Language { get; set; }
+        /// <summary>
+        /// IsActive
+        /// </summary>
+        public bool IsActive { get; set; }
+    }
 }

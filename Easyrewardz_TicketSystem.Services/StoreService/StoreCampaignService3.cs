@@ -395,5 +395,69 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UpdateCount;
         }
+
+        /// <summary>
+        /// GetLanguageDetails
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
+        public List<Languages> GetLanguageDetails(int tenantId, int userId, string programCode)
+        {
+            DataSet ds = new DataSet();
+            List<Languages> languageslist = new List<Languages>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSGetLanguageDetails", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_Programcode", programCode);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            Languages languages = new Languages()
+                            {
+                                ID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                                Language = ds.Tables[0].Rows[i]["Language"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Language"]),
+                                IsActive = ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]),
+                                
+                            };
+                            languageslist.Add(languages);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return languageslist;
+        }
     }
 }
