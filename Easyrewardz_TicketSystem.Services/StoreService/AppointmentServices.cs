@@ -65,6 +65,8 @@ namespace Easyrewardz_TicketSystem.Services
                             CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
                             CustomerNumber = Convert.ToString(x.Field<string>("CustomerNumber")),
                             NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),
+                            PeopleEntered = x.Field<int?>("PeopleEntered") == null ? 0 : Convert.ToInt32(x.Field<int>("PeopleEntered")),
+                            PeopleCheckout = x.Field<int?>("PeopleCheckout") == null ? 0 : Convert.ToInt32(x.Field<int>("PeopleCheckout")),
                             Status = Convert.ToString(x.Field<string>("Status")),
                         //    Status = x.Field<int?>("Status").ToString() == "" ? "" :
                         //Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
@@ -150,7 +152,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Appointment_ID", appointmentCustomer.AppointmentID);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
                 cmd1.Parameters.AddWithValue("@_Status", appointmentCustomer.Status);
-               
+                cmd1.Parameters.AddWithValue("@_PeopleCheckout", appointmentCustomer.PeopleCheckout);
+
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = cmd1.ExecuteNonQuery();
                 conn.Close();
@@ -589,9 +592,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Tenant_ID", appointmentCustomer.TenantID);
                 cmd1.Parameters.AddWithValue("@_Status", appointmentCustomer.Status);
                 cmd1.Parameters.AddWithValue("@_NOofPeople", appointmentCustomer.NOofPeople);
-                cmd1.Parameters.AddWithValue("@Program_Code", appointmentCustomer.ProgramCode);
                 cmd1.Parameters.AddWithValue("@Slot_Id", appointmentCustomer.SlotId);
-                cmd1.Parameters.AddWithValue("@Slot_date", string.IsNullOrEmpty(appointmentCustomer.Slotdate) ? string.Empty : appointmentCustomer.Slotdate);
                 cmd1.Parameters.AddWithValue("@User_ID", appointmentCustomer.UserID);
                 cmd1.Parameters.AddWithValue("@Customer_Number", appointmentCustomer.CustomerNumber);
 

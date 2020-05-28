@@ -22,6 +22,8 @@ namespace Easyrewardz_TicketSystem.Model
         public string CustomerName { get; set; }
         public string CustomerNumber { get; set; }
         public int NOofPeople { get; set; }
+        public int PeopleEntered { get; set; }
+        public int PeopleCheckout { get; set; }
         public string Status { get; set; }
        
     }
