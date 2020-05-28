@@ -11,7 +11,7 @@ using Easyrewardz_TicketSystem.Model.StoreModal;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-    public class AppointmentServices : IAppointment
+    public partial class AppointmentServices : IAppointment
     {
         MySqlConnection conn = new MySqlConnection();
 

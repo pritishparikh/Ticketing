@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
-    public class AppointmentCaller
+    public partial class AppointmentCaller
     {
 
         #region Variable
