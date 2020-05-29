@@ -484,7 +484,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_LanguageID", languageID);
                 
                 cmd.CommandType = CommandType.StoredProcedure;
-                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+                UpdateCount = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
             catch (Exception)
