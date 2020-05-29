@@ -357,7 +357,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 UpdateCount = storecampaigncaller.InsertLanguageDetails(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, languageID);
                 statusCode =
                    UpdateCount == 0 ?
-                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                           (int)EnumMaster.StatusCode.RecordNotFound : UpdateCount == 2 ? (int)EnumMaster.StatusCode.RecordAlreadyExists :  (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
