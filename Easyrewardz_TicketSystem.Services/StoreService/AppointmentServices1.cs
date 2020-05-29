@@ -70,6 +70,7 @@ namespace Easyrewardz_TicketSystem.Services
                             Status = x.Field<int?>("Status").ToString() == "" ? "" :
                         Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
                         Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
+
                         }).ToList();
 
                         appointments.Add(obj);
