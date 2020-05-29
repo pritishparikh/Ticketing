@@ -67,10 +67,9 @@ namespace Easyrewardz_TicketSystem.Services
                             NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),
                             PeopleEntered = x.Field<int?>("PeopleEntered") == null ? 0 : Convert.ToInt32(x.Field<int>("PeopleEntered")),
                             PeopleCheckout = x.Field<int?>("PeopleCheckout") == null ? 0 : Convert.ToInt32(x.Field<int>("PeopleCheckout")),
-                            Status = Convert.ToString(x.Field<string>("Status")),
-                        //    Status = x.Field<int?>("Status").ToString() == "" ? "" :
-                        //Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
-                        //Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
+                            Status = x.Field<int?>("Status").ToString() == "" ? "" :
+                        Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
+                        Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
                         }).ToList();
 
                         appointments.Add(obj);
