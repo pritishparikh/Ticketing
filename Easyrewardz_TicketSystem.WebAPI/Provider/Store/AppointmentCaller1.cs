@@ -22,33 +22,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _AppointmentRepository = appointment;
             return _AppointmentRepository.GetAppointmentList(tenantID, UserId, AppDate);
         }
-
-        public List<CustomerCountDetail> GetCustomerInStore(IAppointment appointment, int tenantID, int UserId)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.GetCustomerInStore(tenantID, UserId);
-        }
-        public CustomCustomerInStore CustomerInStore(IAppointment appointment, int tenantID, int UserId,string programCode)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.CustomerInStore(tenantID, UserId, programCode);
-        }
-        public List<AppointmentModel> SearchAppointment(IAppointment appointment, int tenantID, int UserId, string searchText, string appointmentDate)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.SearchAppointment(tenantID, UserId, searchText, appointmentDate);
-        }
-        public int GenerateOTP(IAppointment appointment, int tenantID, int UserId, string mobileNumber )
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.GenerateOTP(tenantID, UserId, mobileNumber);
-        }
-
-        public int VarifyOTP(IAppointment appointment, int tenantID, int UserId, int otpID, string otp)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.VarifyOTP(tenantID, UserId, otpID, otp);
-        }
+             
         /// <summary>
         ///     
         /// </summary>
@@ -68,43 +42,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _AppointmentRepository.UpdateAppointmentStatus(appointmentCustomer, TenantId);
         }
 
-        public List<AppointmentDetails> CreateAppointment(IAppointment appointment, AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty)
-        {
-            _AppointmentRepository = appointment;
-
-            return _AppointmentRepository.CreateAppointment(appointmentMaster, IsSMS, IsLoyalty);
-        }
-
-        public List<AppointmentDetails> CreateNonExistCustAppointment(IAppointment appointment, AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty)
-        {
-            _AppointmentRepository = appointment;
-
-            return _AppointmentRepository.CreateNonExistCustAppointment(appointmentMaster, IsSMS, IsLoyalty);
-        }
-
-        public int AppoinmentStatus(IAppointment appointment, CustomUpdateAppointment appointmentCustomer)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.UpdateAppointment(appointmentCustomer);
-        }
-
-        public int StartVisit(IAppointment appointment, CustomUpdateAppointment appointmentCustomer)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.StartVisit(appointmentCustomer);
-        }
-
+       
         public List<AlreadyScheduleDetail> GetTimeSlotDetail(IAppointment appointment, int userMasterID, int tenantID, string AppDate)
         {
             _AppointmentRepository = appointment;
 
             return _AppointmentRepository.GetTimeSlotDetail(userMasterID, tenantID, AppDate);
         }
-        public int ValidateMobileNo(IAppointment appointment, int tenantID, int UserId, string mobileNumber)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.ValidateMobileNo(tenantID, UserId, mobileNumber);
-        }
+       
 
 
         #region TimeSlotMaster CRUD

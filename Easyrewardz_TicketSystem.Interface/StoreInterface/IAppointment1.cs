@@ -16,27 +16,8 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId);
 
-        List<AppointmentDetails> CreateAppointment(AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty);
-
-        List<AppointmentDetails> CreateNonExistCustAppointment(AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty);
-
-        List<AppointmentModel> SearchAppointment(int TenantID, int UserId, string searchText, string appointmentDate);
-
-        int GenerateOTP(int TenantID, int UserId, string mobileNumber);
-
-        int VarifyOTP(int TenantID, int UserId, int otpID, string otp);
-
         List<AlreadyScheduleDetail> GetTimeSlotDetail(int userMasterID, int tenantID, string AppDate);
 
-        int UpdateAppointment(CustomUpdateAppointment appointmentCustomer);
-
-        int ValidateMobileNo(int TenantID, int UserId, string mobileNumber);
-
-        int StartVisit(CustomUpdateAppointment appointmentCustomer);
-
-        List<CustomerCountDetail> GetCustomerInStore(int TenantID, int UserId);
-
-        CustomCustomerInStore CustomerInStore(int TenantID, int UserId,string programCode);
 
         #region TimeSlotMaster CRUD
 
