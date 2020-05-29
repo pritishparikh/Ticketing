@@ -42,14 +42,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _AppointmentRepository.UpdateAppointmentStatus(appointmentCustomer, TenantId);
         }
 
-       
-        public List<AlreadyScheduleDetail> GetTimeSlotDetail(IAppointment appointment, int userMasterID, int tenantID, string AppDate)
-        {
-            _AppointmentRepository = appointment;
-
-            return _AppointmentRepository.GetTimeSlotDetail(userMasterID, tenantID, AppDate);
-        }
-       
 
 
         #region TimeSlotMaster CRUD

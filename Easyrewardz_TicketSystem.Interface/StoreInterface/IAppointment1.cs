@@ -16,8 +16,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId);
 
-        List<AlreadyScheduleDetail> GetTimeSlotDetail(int userMasterID, int tenantID, string AppDate);
-
 
         #region TimeSlotMaster CRUD
 
