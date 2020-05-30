@@ -327,5 +327,185 @@ namespace Easyrewardz_TicketSystem.Services
             return AgentList;
         }
 
+        /// <summary>
+        /// Insert Card Image Upload
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        ///  <param name="ItemID"></param>
+        ///   <param name="ImageUrl"></param>
+        ///    <param name="CreatedBy"></param>
+        /// <returns></returns>
+        /// 
+        public int InsertCardImageUpload(int TenantID, string ProgramCode, string ItemID, string ImageUrl, int CreatedBy)
+        {
+            int success = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand
+                {
+                    Connection = conn,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SP_HSInsertCardImageUpload"
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_ItemID", ItemID);
+                cmd.Parameters.AddWithValue("@_ImageUrl",string.IsNullOrEmpty(ImageUrl) ? "" : ImageUrl);
+                cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
+
+                success = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return success;
+        }
+
+        /// <summary>
+        /// Approve Reject Card Image
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        ///  <param name="ItemID"></param>
+        ///   <param name="AddToLibrary"></param>
+        ///   <param name="ModifiedBy"></param>
+        /// <returns></returns>
+        public int ApproveRejectCardImage(int ID,int TenantID, string ProgramCode, string ItemID, bool AddToLibrary, int ModifiedBy)
+        {
+            int success = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand
+                {
+                    Connection = conn,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SP_HSApproveRejectCardImage"
+                };
+                cmd.Parameters.AddWithValue("@_ID", ID);
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_ItemID", ItemID);
+                cmd.Parameters.AddWithValue("@_IsAddToLibrary", Convert.ToInt16(AddToLibrary));
+                cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
+
+                success = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return success;
+        }
+
+        /// <summary>
+        /// Get Card Image Upload log
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// </summary>
+        /// <returns></returns>
+        public List<ChatCardImageUploadModel> GetCardImageUploadlog(int TenantID, string ProgramCode)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            List<ChatCardImageUploadModel> CardImageLog = new List<ChatCardImageUploadModel>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSGetCardImageUploadlog", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            ChatCardImageUploadModel obj = new ChatCardImageUploadModel()
+                            {
+                                ImageUploadLogID = dr["ImageUploadLogID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ImageUploadLogID"]),
+                                TenantID = dr["TenantID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TenantID"]),
+                                ProgramCode = dr["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ProgramCode"]),
+                                ItemID = dr["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ItemID"]),
+                                ImageURL = dr["ImageURL"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ImageURL"]),
+
+                                StoreID = dr["StoreID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreID"]),
+                                StoreCode = dr["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreCode"]),
+                                StoreName = dr["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreName"]),
+                                StoreAddress = dr["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreAddress"]),
+
+                                IsAddedToLibrary = dr["IsAddedToLibrary"] == DBNull.Value ?false: Convert.ToBoolean(dr["IsAddedToLibrary"]),
+                                CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CreatedBy"]),
+                                CreatedByName = dr["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedByName"]),
+                                CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),
+
+                                ModifyBy = dr["ModifyBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ModifyBy"]),
+                                ModifyByName = dr["ModifyByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyByName"]),
+                                ModifyDate = dr["ModifyDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyDate"]),
+                               
+
+                            };
+
+                            CardImageLog.Add(obj);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return CardImageLog;
+        }
+
     }
 }

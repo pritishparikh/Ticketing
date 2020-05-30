@@ -44,5 +44,26 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _customerChat.GetAgentList(TenantID);
 
         }
+
+        public List<ChatCardImageUploadModel> GetCardImageUploadlog(ICustomerChat customerChat, int TenantID, string ProgramCode)
+        {
+            _customerChat = customerChat;
+            return _customerChat.GetCardImageUploadlog( TenantID,  ProgramCode);
+
+        }
+
+        public int InsertCardImageUpload(ICustomerChat customerChat, int TenantID, string ProgramCode, string ItemID, string ImageUrl, int CreatedBy)
+        {
+            _customerChat = customerChat;
+            return _customerChat.InsertCardImageUpload( TenantID,  ProgramCode,  ItemID,  ImageUrl,  CreatedBy);
+
+        }
+
+        public int ApproveRejectCardImage(ICustomerChat customerChat, int ID, int TenantID, string ProgramCode, string ItemID, bool AddToLibrary, int ModifiedBy)
+        {
+            _customerChat = customerChat;
+            return _customerChat.ApproveRejectCardImage(ID, TenantID,  ProgramCode,  ItemID,  AddToLibrary,  ModifiedBy);
+
+        }
     }
 }
