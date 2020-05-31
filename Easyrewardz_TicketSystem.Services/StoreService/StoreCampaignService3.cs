@@ -577,7 +577,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="programCode"></param>
         /// <param name="SelectedLanguageID"></param>
         /// <returns></returns>
-        public int DeleteSelectedLanguage(int tenantId, int userId, string programCode, int selectedLanguageID)
+        public int DeleteSelectedLanguage(int tenantId, int userId, string programCode, int selectedLanguageID, bool isActive)
         {
             int UpdateCount = 0;
             try
@@ -591,6 +591,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_UserID", userId);
                 cmd.Parameters.AddWithValue("@_Programcode", programCode);
                 cmd.Parameters.AddWithValue("@_SelectedLanguageID", selectedLanguageID);
+                cmd.Parameters.AddWithValue("@_IsActive", isActive);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
