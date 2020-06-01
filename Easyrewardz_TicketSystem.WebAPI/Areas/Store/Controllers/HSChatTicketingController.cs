@@ -106,6 +106,129 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Get CategoryList
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetChatCategory")]
+        public ResponseModel GetChatCategory()
+        {
+            List<Category> objCategoryList = new List<Category>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
+                objCategoryList = chatTicketingCaller.GetCategoryList(new HSChatTicketingService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
+
+                statusCode = objCategoryList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objCategoryList.Count > 0 ? objCategoryList : null;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get SubCategoryBy CategoryID
+        /// </summary>
+        /// <param name="CategoryID"></param>
+        /// <param name="TypeId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetChatSubCategoryByCategoryID")]
+        public ResponseModel GetChatSubCategoryByCategoryID(int categoryID)
+        {
+            List<SubCategory> objSubCategory = new List<SubCategory>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
+
+                objSubCategory = chatTicketingCaller.GetChatSubCategoryByCategoryID(new HSChatTicketingService(_connectioSting), categoryID);
+
+                StatusCode =
+                objSubCategory.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objSubCategory;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Chat Issue Type By Subcategory
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetChatIssueTypeBySubcategory")]
+        public ResponseModel GetChatIssueTypeBySubcategory(int subCategoryID)
+        {
+            List<IssueType> objIssueTypeList = new List<IssueType>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
+
+                objIssueTypeList = chatTicketingCaller.GetIssueTypeList(new HSChatTicketingService(_connectioSting), authenticate.TenantId, subCategoryID);
+
+                StatusCode =
+                objIssueTypeList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objIssueTypeList;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
         #endregion
     }
 }

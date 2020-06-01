@@ -22,9 +22,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public List<TicketStatusModel> GetStatusCount(IHSChatTicketing _hSChatTicketing,int tenantID,int userID,string programCode)
         {
             hSChatTicketing = _hSChatTicketing;
-
+             
             return hSChatTicketing.TicketStatusCount(tenantID, userID, programCode);
-
         }
+        public List<Category> GetCategoryList(IHSChatTicketing _hSChatTicketing, int TenantID,int userID,string programCode)
+        {
+            hSChatTicketing = _hSChatTicketing;
+            return hSChatTicketing.GetCategoryList(TenantID, userID, programCode);
+        }
+        public List<SubCategory> GetChatSubCategoryByCategoryID(IHSChatTicketing _hSChatTicketing, int categoryID)
+        {
+            hSChatTicketing = _hSChatTicketing;
+            return hSChatTicketing.GetSubCategoryByCategoryID(categoryID);
+        }
+
+        public List<IssueType> GetIssueTypeList(IHSChatTicketing _hSChatTicketing, int tenantID, int subCategoryID)
+        {
+            hSChatTicketing = _hSChatTicketing;
+            return hSChatTicketing.GetIssueTypeList(tenantID, subCategoryID);
+        }
+
     }
 }

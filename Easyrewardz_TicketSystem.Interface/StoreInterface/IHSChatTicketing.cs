@@ -11,5 +11,11 @@ namespace Easyrewardz_TicketSystem.Interface
         List<CustomGetChatTickets> GetTicketsOnLoad(int statusID, int tenantID, int userMasterID, string programCode);
 
         List<TicketStatusModel> TicketStatusCount(int tenantID, int userID, string programCode);
+
+        List<Category> GetCategoryList(int tenantID, int userID,string programCode);
+
+        List<SubCategory> GetSubCategoryByCategoryID(int categoryID);
+
+        List<IssueType> GetIssueTypeList(int tenantID, int subCategoryID);
     }
 }

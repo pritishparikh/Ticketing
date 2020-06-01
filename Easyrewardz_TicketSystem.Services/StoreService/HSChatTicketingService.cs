@@ -18,6 +18,139 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
+        public List<Category> GetCategoryList(int tenantID, int userID, string programCode)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<Category> categoryList = new List<Category>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetChatCategory", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_Id", tenantID);
+                cmd1.Parameters.AddWithValue("@user_ID", userID);
+                cmd1.Parameters.AddWithValue("@program_Code", programCode);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        Category category = new Category();
+                        category.CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
+                        category.CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        categoryList.Add(category);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return categoryList;
+        }
+
+        public List<IssueType> GetIssueTypeList(int tenantID, int subCategoryID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<IssueType> objIssueType = new List<IssueType>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSChatIssueTypeBySubCaategoryID", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
+                cmd1.Parameters.AddWithValue("@SubCategory_ID", subCategoryID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        IssueType issueType = new IssueType();
+                        issueType.IssueTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
+                        issueType.IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        issueType.SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        objIssueType.Add(issueType);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return objIssueType;
+        }
+
+        public List<SubCategory> GetSubCategoryByCategoryID(int categoryID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<SubCategory> objSubCategory = new List<SubCategory>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetChatSubCategoryByCategoryID", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Category_ID", categoryID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        SubCategory SubCat = new SubCategory();
+                        SubCat.SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        SubCat.CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
+                        SubCat.SubCategoryName = Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        objSubCategory.Add(SubCat);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objSubCategory;
+        }
+
         public List<CustomGetChatTickets> GetTicketsOnLoad(int statusID, int tenantID, int userMasterID, string programCode)
         {
             DataSet ds = new DataSet();
