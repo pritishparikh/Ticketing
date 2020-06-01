@@ -74,10 +74,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _CampaignRepository.GetSelectedLanguageDetails(tenantId, userId, programCode);
         }
 
-        public int DeleteSelectedLanguage(IStoreCampaign Campaign, int tenantId, int userId, string programCode, int selectedLanguageID)
+        public int DeleteSelectedLanguage(IStoreCampaign Campaign, int tenantId, int userId, string programCode, int selectedLanguageID, bool isActive)
         {
             _CampaignRepository = Campaign;
-            return _CampaignRepository.DeleteSelectedLanguage(tenantId, userId, programCode, selectedLanguageID);
+            return _CampaignRepository.DeleteSelectedLanguage(tenantId, userId, programCode, selectedLanguageID, isActive);
         }
     }
 }

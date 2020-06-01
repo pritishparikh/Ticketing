@@ -418,7 +418,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("DeleteSelectedLanguage")]
-        public ResponseModel DeleteSelectedLanguage(int selectedLanguageID)
+        public ResponseModel DeleteSelectedLanguage(int selectedLanguageID, bool isActive)
         {
             int UpdateCount = 0;
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -431,7 +431,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                UpdateCount = storecampaigncaller.DeleteSelectedLanguage(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, selectedLanguageID);
+                UpdateCount = storecampaigncaller.DeleteSelectedLanguage(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, selectedLanguageID, isActive);
                 statusCode =
                    UpdateCount == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

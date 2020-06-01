@@ -65,12 +65,10 @@ namespace Easyrewardz_TicketSystem.Services
                             CustomerName = Convert.ToString(x.Field<string>("CustomerName")),
                             CustomerNumber = Convert.ToString(x.Field<string>("CustomerNumber")),
                             NOofPeople = Convert.ToInt32(x.Field<int>("NOofPeople")),
-                            PeopleEntered = x.Field<int?>("PeopleEntered") == null ? 0 : Convert.ToInt32(x.Field<int>("PeopleEntered")),
-                            PeopleCheckout = x.Field<int?>("PeopleCheckout") == null ? 0 : Convert.ToInt32(x.Field<int>("PeopleCheckout")),
-                            Status = Convert.ToString(x.Field<string>("Status")),
-                        //    Status = x.Field<int?>("Status").ToString() == "" ? "" :
-                        //Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
-                        //Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
+                            Status = x.Field<int?>("Status").ToString() == "" ? "" :
+                        Convert.ToInt32(x.Field<int?>("Status")) == 1 ? "Visited" :
+                        Convert.ToInt32(x.Field<int?>("Status")) == 2 ? "Not Visited" : "Cancel",
+
                         }).ToList();
 
                         appointments.Add(obj);
@@ -152,7 +150,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Appointment_ID", appointmentCustomer.AppointmentID);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
                 cmd1.Parameters.AddWithValue("@_Status", appointmentCustomer.Status);
-                cmd1.Parameters.AddWithValue("@_PeopleCheckout", appointmentCustomer.PeopleCheckout);
 
                 cmd1.CommandType = CommandType.StoredProcedure;
                 i = cmd1.ExecuteNonQuery();
@@ -171,61 +168,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return i;
-        }
-   
-
-        public List<AlreadyScheduleDetail> GetTimeSlotDetail(int userMasterID, int tenantID, string AppDate)
-        {
-            DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
-            List<AlreadyScheduleDetail> lstAlreadyScheduleDetail = new List<AlreadyScheduleDetail>();
-
-            try
-            {
-                conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetTimeSlotsDetails", conn)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantID);
-                cmd1.Parameters.AddWithValue("@User_ID", userMasterID);
-                cmd1.Parameters.AddWithValue("@Apt_Date", AppDate);
-                MySqlDataAdapter da = new MySqlDataAdapter
-                {
-                    SelectCommand = cmd1
-                };
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                                AlreadyScheduleDetail alreadyScheduleDetail = new AlreadyScheduleDetail();
-                                alreadyScheduleDetail.TimeSlotId = ds.Tables[0].Rows[i]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SlotId"]);
-                                alreadyScheduleDetail.AppointmentDate = ds.Tables[0].Rows[i]["AppointmentDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AppointmentDate"]);
-                                alreadyScheduleDetail.VisitedCount = ds.Tables[0].Rows[i]["VisitedCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["VisitedCount"]);
-                                alreadyScheduleDetail.MaxCapacity = ds.Tables[0].Rows[i]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MaxCapacity"]);
-                                alreadyScheduleDetail.Remaining = ds.Tables[0].Rows[i]["Remaining"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Remaining"]);
-                                alreadyScheduleDetail.TimeSlot = ds.Tables[0].Rows[i]["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]);
-                                alreadyScheduleDetail.StoreId = ds.Tables[0].Rows[i]["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreId"]);
-                                lstAlreadyScheduleDetail.Add(alreadyScheduleDetail);
-                         
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-            return lstAlreadyScheduleDetail;
         }
 
 
