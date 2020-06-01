@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
+using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -76,6 +76,54 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return lstGetChatTickets;
+        }
+
+        public List<TicketStatusModel> TicketStatusCount(int tenantID, int userID, string programCode)
+        {
+            List<TicketStatusModel> ticketCount = new List<TicketStatusModel>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+
+            try
+
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand sqlcmd = new MySqlCommand("SP_HSGetChatTicketCount", conn);
+                sqlcmd.CommandType = CommandType.StoredProcedure;
+
+                sqlcmd.Parameters.AddWithValue("tenantID", tenantID);
+                sqlcmd.Parameters.AddWithValue("user_ID", userID);
+                sqlcmd.Parameters.AddWithValue("program_Code", programCode);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = sqlcmd;
+                da.Fill(ds);
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+
+                        ticketCount = ds.Tables[0].AsEnumerable().Select(r => new TicketStatusModel()
+                        {
+                            ticketStatus = Convert.ToString(r.Field<object>("TicketStatus")),
+                            ticketCount = Convert.ToInt32(r.Field<object>("TicketStatusCount"))
+
+                        }).ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (ds != null)
+                    ds.Dispose();
+                conn.Close();
+            }
+
+            return ticketCount;
         }
     }
 }

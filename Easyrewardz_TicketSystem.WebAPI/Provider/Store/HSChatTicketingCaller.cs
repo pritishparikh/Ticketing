@@ -19,5 +19,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             hSChatTicketing = _hSChatTicketing;
             return hSChatTicketing.GetTicketsOnLoad(statusID, TenantID, userMasterID, programCode);
         }
+        public List<TicketStatusModel> GetStatusCount(IHSChatTicketing _hSChatTicketing,int tenantID,int userID,string programCode)
+        {
+            hSChatTicketing = _hSChatTicketing;
+
+            return hSChatTicketing.TicketStatusCount(tenantID, userID, programCode);
+
+        }
     }
 }

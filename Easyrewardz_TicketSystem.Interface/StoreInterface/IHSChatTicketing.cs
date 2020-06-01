@@ -9,5 +9,7 @@ namespace Easyrewardz_TicketSystem.Interface
     public interface IHSChatTicketing
     {
         List<CustomGetChatTickets> GetTicketsOnLoad(int statusID, int tenantID, int userMasterID, string programCode);
+
+        List<TicketStatusModel> TicketStatusCount(int tenantID, int userID, string programCode);
     }
 }
