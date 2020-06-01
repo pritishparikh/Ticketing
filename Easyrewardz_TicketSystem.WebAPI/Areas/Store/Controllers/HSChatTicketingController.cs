@@ -87,12 +87,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
             try
             {
-                SearchRequest searchparams = new SearchRequest();
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-                searchparams.tenantID = authenticate.TenantId; // add tenantID to request
-                searchparams.assignedTo = authenticate.UserMasterID;// add assignedID to request
 
                 searchResultList = chatTicketingCaller.GetStatusCount(new HSChatTicketingService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
 
