@@ -20,7 +20,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<AgentRecentChatHistory> GetAgentList(int TenantID);
 
 
-        List<ChatCardImageUploadModel> GetCardImageUploadlog(int TenantID, string ProgramCode);
+        List<ChatCardImageUploadModel> GetCardImageUploadlog(int ListingFor,int TenantID, string ProgramCode);
 
         int InsertCardImageUpload(int TenantID, string ProgramCode, string ItemID, string ImageUrl, int CreatedBy);
 

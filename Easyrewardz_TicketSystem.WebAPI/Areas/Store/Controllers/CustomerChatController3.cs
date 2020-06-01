@@ -230,7 +230,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetCardImageUploadlog")]
-        public ResponseModel GetCardImageUploadlog()
+        public ResponseModel GetCardImageUploadlog(int ListingFor=1) //1=asset Approval listing 2=upload log
+
         {
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
@@ -245,7 +246,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                CardImageLog = customerChatCaller.GetCardImageUploadlog(new CustomerChatService(_connectionString), authenticate.TenantId,authenticate.ProgramCode);
+                CardImageLog = customerChatCaller.GetCardImageUploadlog(new CustomerChatService(_connectionString), ListingFor, authenticate.TenantId,authenticate.ProgramCode);
 
                 statusCode = CardImageLog.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

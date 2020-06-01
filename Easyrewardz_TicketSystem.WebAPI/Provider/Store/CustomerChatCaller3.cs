@@ -45,10 +45,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-        public List<ChatCardImageUploadModel> GetCardImageUploadlog(ICustomerChat customerChat, int TenantID, string ProgramCode)
+        public List<ChatCardImageUploadModel> GetCardImageUploadlog(ICustomerChat customerChat,int ListingFor, int TenantID, string ProgramCode)
         {
             _customerChat = customerChat;
-            return _customerChat.GetCardImageUploadlog( TenantID,  ProgramCode);
+            return _customerChat.GetCardImageUploadlog(ListingFor,TenantID,  ProgramCode);
 
         }
 

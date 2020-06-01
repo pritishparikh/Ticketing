@@ -427,7 +427,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ProgramCode"></param>
         /// </summary>
         /// <returns></returns>
-        public List<ChatCardImageUploadModel> GetCardImageUploadlog(int TenantID, string ProgramCode)
+        public List<ChatCardImageUploadModel> GetCardImageUploadlog(int ListingFor, int TenantID, string ProgramCode)
         {
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
@@ -443,7 +443,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
-
+                cmd.Parameters.AddWithValue("@_ListingFor", ListingFor);
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
