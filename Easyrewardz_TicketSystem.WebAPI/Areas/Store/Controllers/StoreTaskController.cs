@@ -883,6 +883,42 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get Store Campaign Customer
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreCampaignCustomerByStatus")]
+        public ResponseModel GetStoreCampaignCustomerByStatus(string statusID)
+        {
+            List<StoreCampaign> objList = new List<StoreCampaign>();
+            StoreTaskCaller taskcaller = new StoreTaskCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                objList = taskcaller.GetStoreCampaignCustomerByStatus(new StoreTaskService(_connectionSting), statusID, authenticate.TenantId, authenticate.UserMasterID);
+                statusCode = (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
         #endregion
 
         #endregion

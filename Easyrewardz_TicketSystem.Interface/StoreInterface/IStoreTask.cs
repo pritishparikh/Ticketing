@@ -31,5 +31,6 @@ namespace Easyrewardz_TicketSystem.Interface
         List<TaskFilterAssignBymeResponseModel> GetAssignBYfiterData(TaskFilterAssignBymeModel model);
 
         List<TaskFilterTicketByResponseModel> GetTaskTicketData(TaskFilterTicketByModel model);
+        List<StoreCampaign> GetStoreCampaignCustomerByStatus(string statusID ,int TenantID, int UserID);
     }
 }

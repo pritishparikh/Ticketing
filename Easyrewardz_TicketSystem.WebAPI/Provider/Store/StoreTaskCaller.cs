@@ -100,6 +100,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _TaskRepository = task;
             return _TaskRepository.GetStoreCampaignCustomer(TenantID, UserID);
         }
+        public List<StoreCampaign> GetStoreCampaignCustomerByStatus(IStoreTask task, string statusID,int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetStoreCampaignCustomerByStatus(statusID,TenantID, UserID);
+        }
         public CampaignStatusResponse GetCampaignStatusResponse(IStoreTask task, int TenantID, int UserID)
         {
             _TaskRepository = task;

@@ -1515,6 +1515,92 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        public List<StoreCampaign> GetStoreCampaignCustomerByStatus(string statusID, int TenantID, int UserID)
+        {
+
+            DataSet ds = new DataSet();
+            List<StoreCampaign> objList = new List<StoreCampaign>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreCampaignCustomerByStatus", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@status_ID", string.IsNullOrEmpty(statusID) ? "" : statusID.TrimEnd(','));
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreCampaign obj = new StoreCampaign
+                        {
+                            CampaignTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["CampaignTypeID"]),
+                            CampaignName = ds.Tables[0].Rows[i]["CampaignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignName"]),
+                            CampaignScript = ds.Tables[0].Rows[i]["CampaignScript"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignScript"]),
+                            CampaignScriptLess = ds.Tables[0].Rows[i]["CampaignScript"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignScript"]).Length < 15 ? Convert.ToString(ds.Tables[0].Rows[i]["CampaignScript"]) : Convert.ToString(ds.Tables[0].Rows[i]["CampaignScript"]).Substring(0, 15),
+                            ContactCount = Convert.ToInt32(ds.Tables[0].Rows[i]["ContactCount"]),
+                            CampaignEndDate = ds.Tables[0].Rows[i]["CampaignEndDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignEndDate"]),
+                            StoreCampaignCustomerList = new List<StoreCampaignCustomer>()
+                        };
+
+                        obj.StoreCampaignCustomerList = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("CampaignTypeID")).
+                        Equals(obj.CampaignTypeID)).Select(x => new StoreCampaignCustomer()
+                        {
+                            CampaignCustomerID = Convert.ToInt32(x.Field<int>("CampaignCustomerID")),
+                            CustomerID = Convert.ToInt32(x.Field<int>("CustomerID")),
+                            CampaignTypeDate = x.Field<object>("CampaignTypeDate") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CampaignTypeDate")),
+                            CampaignTypeID = Convert.ToInt32(x.Field<int>("CampaignTypeID")),
+                            CampaignStatus = x.Field<object>("CampaignStatus") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("CampaignStatus")),
+                            Response = x.Field<object>("Response") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Response")),
+                            CallReScheduledTo = x.Field<object>("CallReScheduledTo") == DBNull.Value ? string.Empty : ConvertDatetimeToString(Convert.ToString(x.Field<object>("CallReScheduledTo"))),
+                            CustomerName = x.Field<object>("CustomerName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerName")),
+                            CustomerPhoneNumber = x.Field<object>("CustomerPhoneNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerPhoneNumber")),
+                            CustomerEmailId = x.Field<object>("CustomerEmailId") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerEmailId")),
+                            DOB = x.Field<object>("DOB") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("DOB")),
+                            NoOfTimesNotContacted = x.Field<object>("NoOfTimesNotContacted") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("NoOfTimesNotContacted")),
+                            CampaignResponseList = ds.Tables[2].AsEnumerable().Select(r => new CampaignResponse()
+                            {
+                                ResponseID = Convert.ToInt32(r.Field<object>("ResponseID")),
+                                Response = r.Field<object>("Response") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("Response")),
+                                StatusNameID = Convert.ToInt32(r.Field<object>("Status"))
+
+                            }).ToList()
+
+                        }).ToList();
+
+                        objList.Add(obj);
+                    }
+                }
+            }
+            catch (Exception)
+
+            {
+                throw;
+            }
+
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objList;
+        }
+
 
         #endregion
 

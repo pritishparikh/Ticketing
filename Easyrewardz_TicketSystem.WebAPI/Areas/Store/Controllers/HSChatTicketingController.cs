@@ -380,6 +380,44 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Get tickets On View Search click
+        /// </summary>
+        /// <param name="searchparams"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetChatTicketsOnSearch")]
+        public ResponseModel GetTicketsOnSearch([FromBody]ChatTicketSearch searchModel)
+        {
+            List<CustomGetChatTickets> searchResultList = null;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
+            try
+            {
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                searchModel.UserID = authenticate.UserMasterID;
+                searchModel.TenantID = authenticate.TenantId;
+                searchResultList = chatTicketingCaller.GetChatTicketsOnSearch(new HSChatTicketingService(_connectioSting), searchModel);
+
+                statusCode = searchResultList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = searchResultList.Count > 0 ? searchResultList : null;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
         #endregion
     }
 }
