@@ -36,7 +36,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSGetModuleConfiguration", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetModuleConfiguration", conn)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -84,7 +84,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateModuleConfiguration", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateModuleConfiguration", conn)
                 {
                     Connection = conn
                 };
@@ -120,7 +120,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSGetOrderConfiguration", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrderConfiguration", conn)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -168,7 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateOrderConfiguration", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateOrderConfiguration", conn)
                 {
                     Connection = conn
                 };
