@@ -25,7 +25,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
     public class GetChatTicketsByID 
     {
         public int TicketID { get; set; }
-        public string TicketStatus { get; set; }
+        public int ? TicketStatus { get; set; }
         public string Category { get; set; }
         public string SubCategory { get; set; }
         public string IssueType { get; set; }
