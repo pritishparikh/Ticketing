@@ -41,6 +41,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             hSChatTicketing = _hSChatTicketing;
             return hSChatTicketing.GetIssueTypeList(tenantID, subCategoryID);
         }
-
+        public GetChatTicketsByID GetTicketsByID(IHSChatTicketing _hSChatTicketing, int ticketID, int tenantID, int userMasterID, string programCode)
+        {
+            hSChatTicketing = _hSChatTicketing;
+            return hSChatTicketing.GetChatTicketsByID(ticketID, tenantID, userMasterID, programCode);
+        }
+        public int AddChatTicketNotes(IHSChatTicketing _hSChatTicketing, int ticketID, string comment, int userID, int tenantID,string programCode)
+        {
+            hSChatTicketing = _hSChatTicketing;
+            return hSChatTicketing.AddChatTicketNotes(ticketID, comment, userID, tenantID, programCode);
+        }
+        public List<ChatTicketNotes> GetChatticketNotes(IHSChatTicketing _hSChatTicketing, int ticketID)
+        {
+            hSChatTicketing = _hSChatTicketing;
+            return hSChatTicketing.GetChatticketNotes(ticketID);
+        }
     }
 }

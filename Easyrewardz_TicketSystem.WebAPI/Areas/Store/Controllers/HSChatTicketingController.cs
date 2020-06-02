@@ -229,6 +229,120 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Get Chat Tickets By ID
+        /// </summary>
+        /// <param name="statusID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetChatTicketsByID")]
+        public ResponseModel GetChatTicketsByID(int ticketID)
+        {
+            GetChatTicketsByID customGetChatTickets = null;
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
+            try
+            {
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                var temp = SecurityService.DecryptStringAES(token);
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                customGetChatTickets = chatTicketingCaller.GetTicketsByID(new HSChatTicketingService(_connectioSting), ticketID, authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
+
+                StatusCode = customGetChatTickets !=null ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = customGetChatTickets != null ? customGetChatTickets : null;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Add Chat Ticket Notes
+        /// </summary>
+        /// <param name="ticketID"></param>
+        /// <param name="comment"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddChatTicketNotes")]
+        public ResponseModel AddChatTicketNotes(int ticketID, string comment)
+        {
+            HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                int result = chatTicketingCaller.AddChatTicketNotes(new HSChatTicketingService(_connectioSting), ticketID, comment, authenticate.UserMasterID, authenticate.TenantId, authenticate.ProgramCode);
+                statusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Chat Ticket Notes
+        /// </summary>
+        /// <param name="ticketID"></param>
+        [HttpPost]
+        [Route("GetChatTicketNotes")]
+        public ResponseModel GetChatTicketNotes(int ticketID)
+        {
+            List<ChatTicketNotes> chatTicketNotes = new List<ChatTicketNotes>();
+            HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                chatTicketNotes = chatTicketingCaller.GetChatticketNotes(new HSChatTicketingService(_connectioSting), ticketID);
+                statusCode =
+                   chatTicketNotes.Count == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = chatTicketNotes;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
         #endregion
     }
 }

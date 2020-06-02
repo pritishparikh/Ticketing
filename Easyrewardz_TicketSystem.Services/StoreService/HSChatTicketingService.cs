@@ -18,6 +18,40 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
+        public int AddChatTicketNotes(int ticketID, string comment, int userID, int tenantID, string programCode)
+        {
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSAddChatTicketNotes", conn)
+                {
+                    Connection = conn
+                };
+                cmd1.Parameters.AddWithValue("@ticket_ID", ticketID);
+                cmd1.Parameters.AddWithValue("@_Comments", comment);
+                cmd1.Parameters.AddWithValue("@User_ID", userID);
+                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd1.Parameters.AddWithValue("@program_Code", programCode);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd1.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return success;
+        }
+
         public List<Category> GetCategoryList(int tenantID, int userID, string programCode)
         {
             DataSet ds = new DataSet();
@@ -59,6 +93,115 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return categoryList;
+        }
+
+        public List<ChatTicketNotes> GetChatticketNotes(int ticketID)
+        {
+            DataSet ds = new DataSet();
+            List<ChatTicketNotes> lstChatTicketNotes = new List<ChatTicketNotes>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_HSGetChatNotesByTicketID", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@ticket_ID", ticketID);
+                cmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        ChatTicketNotes chatTicketNotes = new ChatTicketNotes();
+                        chatTicketNotes.Name = ds.Tables[0].Rows[i]["Name"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
+                        chatTicketNotes.Comment = ds.Tables[0].Rows[i]["Comment"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Comment"]);
+                        chatTicketNotes.CommentDate= ds.Tables[0].Rows[i]["CommentDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentDate"]);
+                        lstChatTicketNotes.Add(chatTicketNotes);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return lstChatTicketNotes;
+        }
+
+        public GetChatTicketsByID GetChatTicketsByID(int ticketID, int tenantID, int userMasterID, string programCode)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            GetChatTicketsByID customGetChatTickets= new GetChatTicketsByID() ;
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand sqlcmd = new MySqlCommand("SP_HSGetChatTicketsByID", conn);
+                sqlcmd.CommandType = CommandType.StoredProcedure;
+
+                sqlcmd.Parameters.AddWithValue("ticket_ID", ticketID);
+                sqlcmd.Parameters.AddWithValue("Tenant_ID", tenantID);
+                sqlcmd.Parameters.AddWithValue("UserMaster_ID", userMasterID);
+                sqlcmd.Parameters.AddWithValue("program_Code", programCode);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = sqlcmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+
+                        customGetChatTickets.TicketID = ds.Tables[0].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
+                        customGetChatTickets.TicketStatus = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TicketStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]));
+                        customGetChatTickets.TicketTitle = ds.Tables[0].Rows[i]["TicketTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"]);
+                        customGetChatTickets.TicketDescription = ds.Tables[0].Rows[i]["TicketDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketDescription"]);
+                        customGetChatTickets.CategoryID = ds.Tables[0].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
+                        customGetChatTickets.Category = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        customGetChatTickets.SubCategoryID = ds.Tables[0].Rows[i]["SubCategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        customGetChatTickets.SubCategory = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        customGetChatTickets.IssueTypeID = ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
+                        customGetChatTickets.IssueType = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
+                        customGetChatTickets.AssignTo = ds.Tables[0].Rows[i]["Assignee"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignee"]);
+                        customGetChatTickets.Priority = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);
+                        customGetChatTickets.CustomerMobileNumber = ds.Tables[0].Rows[i]["CustomerMobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerMobileNumber"]);
+                        customGetChatTickets.Brand = ds.Tables[0].Rows[i]["Brand"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Brand"]);
+
+                        customGetChatTickets.ChatTicketNote = ds.Tables[1].AsEnumerable().Select(x => new ChatTicketNotes()
+                        {
+                            Name = x.Field<object>("Name") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Name")),
+                            Comment = x.Field<object>("Comment") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Comment")),
+                            CommentDate = x.Field<object>("CommentDate") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CommentDate"))
+                        }).ToList();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return customGetChatTickets;
         }
 
         public List<IssueType> GetIssueTypeList(int tenantID, int subCategoryID)

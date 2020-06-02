@@ -17,5 +17,11 @@ namespace Easyrewardz_TicketSystem.Interface
         List<SubCategory> GetSubCategoryByCategoryID(int categoryID);
 
         List<IssueType> GetIssueTypeList(int tenantID, int subCategoryID);
+
+        GetChatTicketsByID GetChatTicketsByID(int ticketID, int tenantID, int userMasterID, string programCode);
+
+        int AddChatTicketNotes(int ticketID, string comment, int userID, int tenantID, string programCode);
+
+        List<ChatTicketNotes> GetChatticketNotes(int ticketID);
     }
 }
