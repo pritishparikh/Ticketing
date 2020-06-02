@@ -354,6 +354,37 @@ namespace Easyrewardz_TicketSystem.Services
             return lstGetChatTickets;
         }
 
+        public int SubmitChatTicket(int ticketID,int statusID, int userID)
+        {
+            int success = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSUpdateChatTicketStatus", conn)
+                {
+                    Connection = conn
+                };
+                cmd1.Parameters.AddWithValue("@ticket_ID", ticketID);
+                cmd1.Parameters.AddWithValue("@status_ID", statusID);
+                cmd1.Parameters.AddWithValue("@User_ID", userID);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                success = Convert.ToInt32(cmd1.ExecuteNonQuery());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return success;
+        }
+
         public List<TicketStatusModel> TicketStatusCount(int tenantID, int userID, string programCode)
         {
             List<TicketStatusModel> ticketCount = new List<TicketStatusModel>();

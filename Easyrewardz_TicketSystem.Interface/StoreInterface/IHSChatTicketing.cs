@@ -23,5 +23,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int AddChatTicketNotes(int ticketID, string comment, int userID, int tenantID, string programCode);
 
         List<ChatTicketNotes> GetChatticketNotes(int ticketID);
+
+        int SubmitChatTicket(int ticketID,int statusID, int userID);
     }
 }

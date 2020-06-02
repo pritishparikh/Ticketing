@@ -297,7 +297,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
-
+                objResponseModel.ResponseData = result;
             }
             catch (Exception)
             {
@@ -336,6 +336,43 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = chatTicketNotes;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Update Chat Ticket Status
+        /// </summary>
+        /// <param name="ticketID"></param>
+        /// <param name="statusID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateChatTicketStatus")]
+        public ResponseModel UpdateChatTicketStatus(int ticketID,int statusID)
+        {
+            HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                int result = chatTicketingCaller.SubmitChatTicket(new HSChatTicketingService(_connectioSting), ticketID, statusID, authenticate.UserMasterID);
+                statusCode =
+                result == 0 ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
             }
             catch (Exception)
             {
