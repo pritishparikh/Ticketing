@@ -388,7 +388,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetChatTicketsOnSearch")]
-        public ResponseModel GetTicketsOnSearch([FromBody]ChatTicketSearch searchModel)
+        public ResponseModel GetChatTicketsOnSearch([FromBody]ChatTicketSearch searchModel)
         {
             List<CustomGetChatTickets> searchResultList = null;
             ResponseModel objResponseModel = new ResponseModel();
