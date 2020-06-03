@@ -95,6 +95,56 @@ namespace Easyrewardz_TicketSystem.Services
             return categoryList;
         }
 
+        /// <summary>
+        /// Get Chat Ticket history
+        /// </summary>
+        /// <param name="TicketID"></param>
+        /// <returns></returns>
+        public List<CustomTicketHistory> GetChatTickethistory(int ticketID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<CustomTicketHistory> ListTicketHistory = new List<CustomTicketHistory>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetHistoryOfChatTicket", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Ticket_Id", ticketID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomTicketHistory TicketHistory = new CustomTicketHistory();
+                        TicketHistory.Name = ds.Tables[0].Rows[i]["Name"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
+                        TicketHistory.Action = ds.Tables[0].Rows[i]["Action"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Action"]);
+                        TicketHistory.DateandTime = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
+                        ListTicketHistory.Add(TicketHistory);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return ListTicketHistory;
+        }
+
         public List<ChatTicketNotes> GetChatticketNotes(int ticketID)
         {
             DataSet ds = new DataSet();

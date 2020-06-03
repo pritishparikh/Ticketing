@@ -66,5 +66,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             hSChatTicketing = _hSChatTicketing;
             return hSChatTicketing.GetTicketsOnSearch(searchModel);
         }
+        public List<CustomTicketHistory> GetChatTickethistory(IHSChatTicketing _hSChatTicketing, int ticketID)
+        {
+            hSChatTicketing = _hSChatTicketing;
+            return hSChatTicketing.GetChatTickethistory(ticketID);
+        }
     }
 }

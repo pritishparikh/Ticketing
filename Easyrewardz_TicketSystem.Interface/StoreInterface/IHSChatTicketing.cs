@@ -27,5 +27,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int SubmitChatTicket(int ticketID,int statusID, int userID);
 
         List<CustomGetChatTickets> GetTicketsOnSearch(ChatTicketSearch searchModel);
+
+        List<CustomTicketHistory> GetChatTickethistory(int ticketID);
     }
 }

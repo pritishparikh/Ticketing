@@ -418,6 +418,46 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Get Chat Ticket History
+        /// </summary>
+        /// <param name="ticketID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetChatTicketHistory")]
+        public ResponseModel GetChatTicketHistory(int ticketID)
+        {
+            List<CustomTicketHistory> objTicketHistory = new List<CustomTicketHistory>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                objTicketHistory = chatTicketingCaller.GetChatTickethistory(new HSChatTicketingService(_connectioSting), ticketID);
+                statusCode =
+               objTicketHistory == null ?
+                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objTicketHistory;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
         #endregion
     }
 }
