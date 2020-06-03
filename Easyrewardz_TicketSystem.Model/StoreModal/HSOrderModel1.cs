@@ -51,4 +51,49 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public bool Shipment { get; set; }
     }
+
+    public class OrderDelivered
+    {
+        public int ID { get; set; }
+
+        public string InvoiceNo { get; set; }
+
+        public string CustomerName { get; set; }
+
+        public string MobileNumber { get; set; }
+
+        public DateTime Date { get; set; }
+
+        public string StatusName { get; set; }
+
+        public string ActionTypeName { get; set; }
+
+        public List<OrderDeliveredItem> orderDeliveredItems { get; set; }
+    }
+
+    public class OrderDeliveredItem
+    {
+        public int ID { get; set; }
+
+        public string ItemID { get; set; }
+
+        public string ItemName { get; set; }
+
+        public double ItemPrice { get; set; }
+
+        public int Quantity { get; set; }
+
+        public int OrderID { get; set; }
+    }
+
+    public class OrderDeliveredFilterRequest
+    {
+        public string SearchText { get; set; }
+
+        public int PageNo { get; set; }
+
+        public int PageSize { get; set; }
+
+        public string FilterStatus { get; set; }
+    }
 }

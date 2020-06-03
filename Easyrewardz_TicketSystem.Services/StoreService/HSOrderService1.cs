@@ -6,6 +6,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -195,6 +196,78 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return UpdateCount;
+        }
+
+        public List<OrderDelivered> GetOrderDeliveredDetails(int tenantId, int userId, OrderDeliveredFilterRequest orderDeliveredFilter)
+        {
+            DataSet ds = new DataSet();
+            List<OrderDelivered> orderDelivered = new List<OrderDelivered>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrderDeliveredDetails", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_tenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_SearchText", orderDeliveredFilter.SearchText);
+                cmd.Parameters.AddWithValue("@_pageno", orderDeliveredFilter.PageNo);
+                cmd.Parameters.AddWithValue("@_pagesize", orderDeliveredFilter.PageSize);
+                cmd.Parameters.AddWithValue("@_FilterStatus", orderDeliveredFilter.FilterStatus);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        OrderDelivered obj = new OrderDelivered
+                        {
+                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            InvoiceNo = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
+                            CustomerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
+                            MobileNumber = Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
+                            Date = Convert.ToDateTime(ds.Tables[0].Rows[i]["Date"]),
+                            StatusName = Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]),
+                            ActionTypeName = Convert.ToString(ds.Tables[0].Rows[i]["ActionTypeName"]),
+                            orderDeliveredItems = new List<OrderDeliveredItem>()
+                        };
+
+
+                        obj.orderDeliveredItems = ds.Tables[1].AsEnumerable().Where(x => (x.Field<int>("OrderID")).Equals(obj.ID)).Select(x => new OrderDeliveredItem()
+                        {
+                            ItemID = Convert.ToString(x.Field<string>("ItemID")),
+                            ItemName = Convert.ToString(x.Field<string>("ItemName")),
+                            ItemPrice = x.Field<double>("ItemPrice"),
+                            Quantity = x.Field<int>("Quantity")
+
+                        }).ToList();
+
+                        orderDelivered.Add(obj);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return orderDelivered;
         }
     }
 }
