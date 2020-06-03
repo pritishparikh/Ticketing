@@ -26,6 +26,12 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int ApproveRejectCardImage(int ID,int TenantID, string ProgramCode, string ItemID, bool AddToLibrary, int ModifiedBy);
 
+        int InsertNewCardItemConfiguration(int TenantID, string ProgramCode, string CardItem, bool IsEnabled, int CreatedBy);
+
+        int UpdateCardItemConfiguration(int TenantID, string ProgramCode,string EnabledCardItems, string DisabledCardItems, int ModifiedBy);
+
+
+        List<ChatCardConfigurationModel> GetCardConfiguration(int TenantID, string ProgramCode);
     }
 }
  

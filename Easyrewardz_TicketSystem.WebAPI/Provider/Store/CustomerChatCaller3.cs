@@ -65,5 +65,29 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _customerChat.ApproveRejectCardImage(ID, TenantID,  ProgramCode,  ItemID,  AddToLibrary,  ModifiedBy);
 
         }
+
+
+        public int InsertNewCardItemConfiguration(ICustomerChat customerChat, int TenantID, string ProgramCode, string CardItem, bool IsEnabled, int CreatedBy)
+        {
+            _customerChat = customerChat;
+            return _customerChat.InsertNewCardItemConfiguration( TenantID,  ProgramCode,  CardItem,  IsEnabled,  CreatedBy);
+
+        }
+
+        public int UpdateCardItemConfiguration(ICustomerChat customerChat, int TenantID, string ProgramCode, string EnabledCardItems, string DisabledCardItems, int ModifiedBy)
+        {
+            _customerChat = customerChat;
+            return _customerChat.UpdateCardItemConfiguration( TenantID,  ProgramCode,  EnabledCardItems,  DisabledCardItems,  ModifiedBy);
+
+        }
+
+        public List<ChatCardConfigurationModel> GetCardConfiguration(ICustomerChat customerChat,  int TenantID, string ProgramCode)
+        {
+            _customerChat = customerChat;
+            return _customerChat.GetCardConfiguration( TenantID, ProgramCode);
+
+        }
+
+       
     }
 }

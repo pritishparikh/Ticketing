@@ -349,5 +349,130 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
 
+
+        /// <summary>
+        /// Insert New CardItem Configuration
+        /// </summary>
+        /// <param name="CardItem"></param>
+        /// <param name="IsEnabled"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("InsertCardItemConfiguration")]
+        public ResponseModel InsertCardItemConfiguration(string CardItem, bool IsEnabled)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int result = 0;
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                result = customerChatCaller.InsertNewCardItemConfiguration
+                    (new CustomerChatService(_connectionString), authenticate.TenantId, authenticate.ProgramCode, CardItem, IsEnabled, authenticate.UserMasterID);
+
+                statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Update CardItem Configuration
+        /// </summary>
+        /// <param name="EnabledCardItems"></param>
+        /// <param name="DisabledCardItems"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateCardItemConfiguration")]
+        public ResponseModel UpdateCardItemConfiguration(string EnabledCardItems, string DisabledCardItems)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int result = 0;
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                result = customerChatCaller.UpdateCardItemConfiguration(new CustomerChatService(_connectionString), authenticate.TenantId, authenticate.ProgramCode, 
+                    EnabledCardItems, DisabledCardItems, authenticate.UserMasterID);
+
+                statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Card Configuration List
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetCardConfiguration")]
+        public ResponseModel GetCardConfiguration()
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            List<ChatCardConfigurationModel> CardConfigList = new List<ChatCardConfigurationModel>();
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                CardConfigList = customerChatCaller.GetCardConfiguration(new CustomerChatService(_connectionString),  authenticate.TenantId, authenticate.ProgramCode);
+
+                statusCode = CardConfigList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = CardConfigList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
     }
 }

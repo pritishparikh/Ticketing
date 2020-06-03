@@ -507,5 +507,182 @@ namespace Easyrewardz_TicketSystem.Services
             return CardImageLog;
         }
 
+
+
+        /// <summary>
+        ///Insert New CardItem Configuration
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        ///  <param name="CardItem"></param>
+        ///   <param name="IsEnabled"></param>
+        ///    <param name="CreatedBy"></param>
+        /// <returns></returns>
+        /// 
+        public int InsertNewCardItemConfiguration(int TenantID, string ProgramCode, string CardItem, bool IsEnabled, int CreatedBy)
+        {
+            int success = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand
+                {
+                    Connection = conn,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SP_HSInsertCardItemConfiguration"
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_CardItem", CardItem);
+                cmd.Parameters.AddWithValue("@_IsEnabled", Convert.ToInt16(IsEnabled));
+                cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
+
+                success = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return success;
+        }
+
+
+        /// <summary>
+        ///Update Card Item Configuration
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        ///  <param name="EnabledCardItems"></param>
+        ///   <param name="DisabledCardItems"></param>
+        ///    <param name="ModifiedBy"></param>
+        /// <returns></returns>
+        /// 
+        public int UpdateCardItemConfiguration(int TenantID, string ProgramCode, string EnabledCardItems, string DisabledCardItems, int ModifiedBy)
+        {
+            int success = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand
+                {
+                    Connection = conn,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SP_HSUpdateCardItemConfiguration"
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_EnabledCardItems", string.IsNullOrEmpty(EnabledCardItems) ? "" : EnabledCardItems.TrimEnd(','));
+                cmd.Parameters.AddWithValue("@_DisabledCardItems", string.IsNullOrEmpty(DisabledCardItems) ? "" : DisabledCardItems.TrimEnd(','));
+                cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
+
+                success = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return success;
+        }
+
+        /// <summary>
+        ///Get Card Configuration List
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// </summary>
+        /// <returns></returns>
+        public List<ChatCardConfigurationModel> GetCardConfiguration(int TenantID, string ProgramCode)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            List<ChatCardConfigurationModel> CardConfigList = new List<ChatCardConfigurationModel>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSGetCardConfigurationList", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+              
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            ChatCardConfigurationModel obj = new ChatCardConfigurationModel()
+                            {
+                                CardItemID = dr["CardItemID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CardItemID"]),
+                                TenantID = dr["TenantID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TenantID"]),
+                                ProgramCode = dr["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ProgramCode"]),
+                                CardItem = dr["CardItem"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CardItem"]),
+
+                                IsEnabled = dr["IsEnabled"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsEnabled"]),
+                                CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CreatedBy"]),
+                                CreatedByName = dr["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedByName"]),
+                                CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),
+
+                                ModifyBy = dr["ModifyBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ModifyBy"]),
+                                ModifyByName = dr["ModifyByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyByName"]),
+                                ModifyDate = dr["ModifyDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyDate"]),
+
+
+                            };
+
+                            CardConfigList.Add(obj);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return CardConfigList;
+        }
+
     }
 }
