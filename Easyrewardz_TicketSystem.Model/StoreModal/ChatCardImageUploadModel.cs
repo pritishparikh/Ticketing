@@ -26,7 +26,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string ModifyDate { get; set; }
     }
 
-    public class ChatCardConfigurationModel
+    public class ChatCardConfigurationModel 
     {
         public int CardItemID { get; set; }
         public int TenantID { get; set; }

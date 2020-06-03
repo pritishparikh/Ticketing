@@ -31,7 +31,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateCardItemConfiguration(int TenantID, string ProgramCode,string EnabledCardItems, string DisabledCardItems, int ModifiedBy);
 
 
-        List<ChatCardConfigurationModel> GetCardConfiguration(int TenantID, string ProgramCode);
+        List<ChatCardConfigurationModel> GetCardConfiguration(int TenantID, string ProgramCode); 
     }
 }
  

@@ -472,7 +472,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 throw;
             }
             return objResponseModel;
-        }
+        } 
 
     }
 }

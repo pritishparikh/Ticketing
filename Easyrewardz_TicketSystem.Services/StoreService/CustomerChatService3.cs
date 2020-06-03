@@ -588,7 +588,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_DisabledCardItems", string.IsNullOrEmpty(DisabledCardItems) ? "" : DisabledCardItems.TrimEnd(','));
                 cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
 
-                success = Convert.ToInt32(cmd.ExecuteScalar());
+                success = Convert.ToInt32(cmd.ExecuteScalar());  
             }
             catch (Exception)
             {
