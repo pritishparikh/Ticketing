@@ -198,10 +198,13 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
-        public List<OrderDelivered> GetOrderDeliveredDetails(int tenantId, int userId, OrderDeliveredFilterRequest orderDeliveredFilter)
+        public OrderDeliveredDetails GetOrderDeliveredDetails(int tenantId, int userId, OrderDeliveredFilterRequest orderDeliveredFilter)
         {
             DataSet ds = new DataSet();
+            OrderDeliveredDetails objdetails = new OrderDeliveredDetails();
+
             List<OrderDelivered> orderDelivered = new List<OrderDelivered>();
+            int TotalCount = 0;
             try
             {
                 conn.Open();
@@ -232,7 +235,8 @@ namespace Easyrewardz_TicketSystem.Services
                             InvoiceNo = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
                             CustomerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
                             MobileNumber = Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
-                            Date = Convert.ToDateTime(ds.Tables[0].Rows[i]["Date"]),
+                            Date = Convert.ToString(ds.Tables[0].Rows[i]["Date"]),
+                            Time = Convert.ToString(ds.Tables[0].Rows[i]["Time"]),
                             StatusName = Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]),
                             ActionTypeName = Convert.ToString(ds.Tables[0].Rows[i]["ActionTypeName"]),
                             orderDeliveredItems = new List<OrderDeliveredItem>()
@@ -251,6 +255,14 @@ namespace Easyrewardz_TicketSystem.Services
                         orderDelivered.Add(obj);
                     }
                 }
+
+                if (ds != null && ds.Tables[2] != null)
+                {
+                    TotalCount = ds.Tables[2].Rows[0]["TotalOrder"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["TotalOrder"]);
+                }
+
+                objdetails.orderDelivereds = orderDelivered;
+                objdetails.TotalCount = TotalCount;
             }
             catch (Exception)
             {
@@ -267,7 +279,7 @@ namespace Easyrewardz_TicketSystem.Services
                     ds.Dispose();
                 }
             }
-            return orderDelivered;
+            return objdetails;
         }
     }
 }

@@ -183,7 +183,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         [Route("GetOrderDeliveredDetails")]
         public ResponseModel GetOrderDeliveredDetails(OrderDeliveredFilterRequest orderDeliveredFilter)
         {
-            List<OrderDelivered> orderDelivereds = new List<OrderDelivered>();
+            OrderDeliveredDetails orderDelivereds = new OrderDeliveredDetails();
             HSOrderCaller hSOrderCaller = new HSOrderCaller();
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
@@ -197,7 +197,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 orderDelivereds = hSOrderCaller.GetOrderDeliveredDetails(new HSOrderService(_connectionString),
                     authenticate.TenantId, authenticate.UserMasterID, orderDeliveredFilter);
                 statusCode =
-                   orderDelivereds.Count == 0 ?
+                   orderDelivereds.TotalCount == 0 ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

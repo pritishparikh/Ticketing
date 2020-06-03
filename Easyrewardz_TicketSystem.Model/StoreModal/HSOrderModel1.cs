@@ -62,7 +62,9 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string MobileNumber { get; set; }
 
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
+
+        public string Time { get; set; }
 
         public string StatusName { get; set; }
 
@@ -95,5 +97,12 @@ namespace Easyrewardz_TicketSystem.Model
         public int PageSize { get; set; }
 
         public string FilterStatus { get; set; }
+    }
+
+    public class OrderDeliveredDetails
+    {
+        public List<OrderDelivered> orderDelivereds { get; set; }
+
+        public int TotalCount { get; set; }
     }
 }

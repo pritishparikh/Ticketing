@@ -35,7 +35,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _OrderRepository.UpdateOrderConfiguration(orderConfiguration, modifiedBy);
         }
 
-        public List<OrderDelivered> GetOrderDeliveredDetails(IHSOrder order, int tenantId, int userId, OrderDeliveredFilterRequest orderDeliveredFilter)
+        public OrderDeliveredDetails GetOrderDeliveredDetails(IHSOrder order, int tenantId, int userId, OrderDeliveredFilterRequest orderDeliveredFilter)
         {
             _OrderRepository = order;
             return _OrderRepository.GetOrderDeliveredDetails(tenantId, userId, orderDeliveredFilter);

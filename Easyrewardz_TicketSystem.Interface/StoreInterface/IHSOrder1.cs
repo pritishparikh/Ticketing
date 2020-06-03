@@ -15,6 +15,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int UpdateOrderConfiguration(OrderConfiguration orderConfiguration, int modifiedBy);
 
-        List<OrderDelivered> GetOrderDeliveredDetails(int tenantId, int userId, OrderDeliveredFilterRequest orderDeliveredFilter);
+        OrderDeliveredDetails GetOrderDeliveredDetails(int tenantId, int userId, OrderDeliveredFilterRequest orderDeliveredFilter);
     }
 }
