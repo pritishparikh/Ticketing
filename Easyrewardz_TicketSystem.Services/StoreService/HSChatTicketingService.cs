@@ -230,7 +230,7 @@ namespace Easyrewardz_TicketSystem.Services
                         customGetChatTickets.Priority = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);
                         customGetChatTickets.CustomerMobileNumber = ds.Tables[0].Rows[i]["CustomerMobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerMobileNumber"]);
                         customGetChatTickets.Brand = ds.Tables[0].Rows[i]["Brand"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Brand"]);
-
+                        customGetChatTickets.CreatedDate = ds.Tables[0].Rows[i]["CreatedAgo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedAgo"]);
                         customGetChatTickets.ChatTicketNote = ds.Tables[1].AsEnumerable().Select(x => new ChatTicketNotes()
                         {
                             Name = x.Field<object>("Name") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Name")),
