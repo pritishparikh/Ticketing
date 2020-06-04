@@ -159,6 +159,7 @@ namespace Easyrewardz_TicketSystem.Services
                         customerChatMaster.StoreID = ds.Tables[0].Rows[i]["StoreID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreID"]);
                         customerChatMaster.StoreManagerId = ds.Tables[0].Rows[i]["StoreManagerId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreManagerId"]);
                         customerChatMaster.StoreManagerName= ds.Tables[0].Rows[i]["StoreManagerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreManagerName"]);
+                        customerChatMaster.IsCustEndChat= ds.Tables[0].Rows[i]["IsCustEndChat"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsCustEndChat"]);
                         lstCustomerChatMaster.Add(customerChatMaster);
                     }
                 }
