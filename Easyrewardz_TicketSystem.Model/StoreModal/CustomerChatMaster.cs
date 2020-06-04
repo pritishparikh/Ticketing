@@ -95,6 +95,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// StoreManager Name
         /// </summary>
         public string StoreManagerName { get; set; }
+
+        /// <summary>
+        /// IS Chat Ended from Customer
+        /// </summary>
+        public bool IsCustEndChat { get; set; }
     }
 
     public class CustomerChatMessages

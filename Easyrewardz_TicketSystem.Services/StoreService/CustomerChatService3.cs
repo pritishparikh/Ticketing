@@ -684,5 +684,52 @@ namespace Easyrewardz_TicketSystem.Services
             return CardConfigList;
         }
 
+
+        /// <summary>
+        // Update StoreManager chat status
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        ///  <param name="ChatID"></param>
+        ///   <param name="ChatStatusID"></param>
+        /// <returns></returns>
+        /// 
+        public int UpdateStoreManagerChatStatus(int TenantID, string ProgramCode, int ChatID, int ChatStatusID, int StoreManagerID)
+        {
+            int success = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand
+                {
+                    Connection = conn,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SP_UpdateStoreManagerChatStatus"
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_ChatID", ChatID);
+                cmd.Parameters.AddWithValue("@_ChatStatus", ChatStatusID);
+                cmd.Parameters.AddWithValue("@_StoreManagerID", StoreManagerID);
+
+                success = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return success;
+        }
+
     }
 }
