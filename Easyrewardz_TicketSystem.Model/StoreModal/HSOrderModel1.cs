@@ -117,6 +117,8 @@ namespace Easyrewardz_TicketSystem.Model
     {
         public string AWBNo { get; set; }
 
+        public string InvoiceNo { get; set; }
+
         public string CourierPartner { get; set; }
 
         public string ReferenceNo { get; set; }

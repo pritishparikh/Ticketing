@@ -346,7 +346,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrderDeliveredDetails", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrderShipmentAssigned", conn)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -370,6 +370,7 @@ namespace Easyrewardz_TicketSystem.Services
                         ShipmentAssigned obj = new ShipmentAssigned
                         {
                             AWBNo = Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
+                            InvoiceNo = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
                             CourierPartner = Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]),
                             ReferenceNo = Convert.ToString(ds.Tables[0].Rows[i]["ReferenceNo"]),
                             StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
