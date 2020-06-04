@@ -50,6 +50,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// Shipment
         /// </summary>
         public bool Shipment { get; set; }
+        /// <summary>
+        /// ShoppingBag
+        /// </summary>
+        public bool ShoppingBag { get; set; }
     }
 
     public class OrderDelivered
