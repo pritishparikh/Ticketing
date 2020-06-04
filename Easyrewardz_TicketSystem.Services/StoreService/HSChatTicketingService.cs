@@ -52,6 +52,45 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
+        public int CreateChatTicket(CreateChatTickets createChatTickets)
+        {
+            int TicketID = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSCreateChatTicket", conn)
+                {
+                    Connection = conn
+                };
+                cmd1.Parameters.AddWithValue("@Tenant_ID", createChatTickets.TenantID);
+                cmd1.Parameters.AddWithValue("@User_ID", createChatTickets.CreatedBy);
+                cmd1.Parameters.AddWithValue("@_Category", string.IsNullOrEmpty(createChatTickets.Category)? "" : createChatTickets.Category);
+                cmd1.Parameters.AddWithValue("@_SubCategory", string.IsNullOrEmpty(createChatTickets.SubCategory) ? "" : createChatTickets.SubCategory);
+                cmd1.Parameters.AddWithValue("@_IssueType", string.IsNullOrEmpty(createChatTickets.IssueType) ? "" : createChatTickets.IssueType);
+                cmd1.Parameters.AddWithValue("@Mobile_Number", string.IsNullOrEmpty(createChatTickets.CustomerMobileNumber) ? "" : createChatTickets.CustomerMobileNumber);
+                cmd1.Parameters.AddWithValue("@_Brand", createChatTickets.Brand);
+                cmd1.Parameters.AddWithValue("@_Priority", string.IsNullOrEmpty(createChatTickets.Priority) ?"" : createChatTickets.Priority);
+                cmd1.Parameters.AddWithValue("@Ticket_Title", string.IsNullOrEmpty(createChatTickets.TicketTitle) ? "" : createChatTickets.TicketTitle);
+                cmd1.Parameters.AddWithValue("@Ticket_Description", string.IsNullOrEmpty(createChatTickets.TicketDescription) ? "" : createChatTickets.TicketDescription);
+                cmd1.Parameters.AddWithValue("@Store_Code", string.IsNullOrEmpty(createChatTickets.StoreCode) ? "" : createChatTickets.StoreCode);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                TicketID  = Convert.ToInt32(cmd1.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return TicketID;
+        }
+
         public List<Category> GetCategoryList(int tenantID, int userID, string programCode)
         {
             DataSet ds = new DataSet();

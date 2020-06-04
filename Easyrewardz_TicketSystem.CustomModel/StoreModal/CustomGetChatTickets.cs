@@ -52,4 +52,23 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string Comment { get; set; }
         public string CommentDate { get; set; }
     }
+
+    public class CreateChatTickets
+    {
+        public int TenantID { get; set; }
+        public int? TicketStatus { get; set; }
+        public string Category { get; set; }
+        public string SubCategory { get; set; }
+        public string IssueType { get; set; }
+        public string Brand { get; set; }
+        public string StoreCode { get; set; }
+        public string CustomerMobileNumber { get; set; }
+        public string Priority { get; set; }
+        public string TicketTitle { get; set; }
+        public string TicketDescription { get; set; }
+        public int CreatedBy { get; set; }
+        public string CreatedDate { get; set; }
+        public int UpdatedBy { get; set; }
+        public string UpdatedDate { get; set; }
+    }
 }
