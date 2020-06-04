@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Text;
+using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -152,32 +153,18 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="SearchText"></param>
         /// <returns></returns>
-        public List<CustomItemSearchResponseModel> ChatItemDetailsSearch(string ClientAPIURL, string SearchText, string ProgramCode)
+        public List<CustomItemSearchResponseModel> ChatItemDetailsSearch(int TenantID, string Programcode, string ClientAPIURL, string SearchText, string ProgramCode)
         {
 
             List<CustomItemSearchResponseModel> ItemList = new List<CustomItemSearchResponseModel>();
             ClientCustomGetItemOnSearch SearchItemRequest = new ClientCustomGetItemOnSearch();
+
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
             string ClientAPIResponse = string.Empty;
+            string CardItemsIds = string.Empty;
             try
             {
-
-                #region oldcode
-                /*
-                for(int i=0; i< 6; i++)
-                {
-                    ItemList.Add(new
-                 CustomItemSearchResponseModel
-                    {
-                        ItemID = i + 1,
-                        ImageURL = "https://img2.bata.in/0/images/product/854-6523_700x650_1.jpeg",
-                        Label = "Black Slipons for Men " + i.ToString(),
-                        AlternativeText = "Product Code: F854652300" + i.ToString(),
-                        RedirectionUrl = "https://www.bata.in/bataindia/pr-1463307_c-262/black-slipons-for-men.html"
-                    });
-                }
-                */
-
-                #endregion
 
                 #region call client api for getting item list
 
@@ -194,6 +181,77 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         ItemList = JsonConvert.DeserializeObject<List<CustomItemSearchResponseModel>>(ClientAPIResponse);
                     }
+
+                    if (ItemList.Count > 0)
+                    {
+                        if (conn != null && conn.State == ConnectionState.Closed)
+                        {
+                            conn.Open();
+                        }
+
+                        cmd = new MySqlCommand("SP_GetDisabledCardItemsConfiguration", conn);
+                        cmd.Connection = conn;
+                        cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                        cmd.Parameters.AddWithValue("@_ProgramCode", Programcode);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        MySqlDataAdapter da = new MySqlDataAdapter();
+                        da.SelectCommand = cmd;
+                        da.Fill(ds);
+
+                        if (ds != null && ds.Tables != null)
+                        {
+                            if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                            {
+                                CardItemsIds= ds.Tables[0].Rows[0]["CardItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CardItemID"]);
+
+                                if(!string.IsNullOrEmpty(CardItemsIds))
+                                {
+                                    string[] CardItemsIDArr = CardItemsIds.Split(new char[] { ',' });
+
+                                    if(CardItemsIDArr.Contains("1"))
+                                    ItemList = ItemList.Select(x => { x.uniqueItemCode = ""; return x; }).ToList();
+
+                                    if (CardItemsIDArr.Contains("2"))
+                                        ItemList = ItemList.Select(x => { x.categoryName = ""; return x; }).ToList();
+
+                                    if (CardItemsIDArr.Contains("3"))
+                                        ItemList = ItemList.Select(x => { x.subCategoryName = ""; return x; }).ToList();
+
+                                    if (CardItemsIDArr.Contains("4"))
+                                        ItemList = ItemList.Select(x => { x.brandName = ""; return x; }).ToList();
+
+                                    if (CardItemsIDArr.Contains("5"))
+                                        ItemList = ItemList.Select(x => { x.color = ""; return x; }).ToList();
+
+                                    if (CardItemsIDArr.Contains("6"))
+                                        ItemList = ItemList.Select(x => { x.size = ""; return x; }).ToList();
+
+                                    if (CardItemsIDArr.Contains("7"))
+                                        ItemList = ItemList.Select(x => { x.price = ""; return x; }).ToList();
+
+                                    if (CardItemsIDArr.Contains("8"))
+                                        ItemList = ItemList.Select(x => { x.url = ""; return x; }).ToList();
+
+                                    if (CardItemsIDArr.Contains("9"))
+                                        ItemList = ItemList.Select(x => { x.imageURL = ""; return x; }).ToList();
+
+                                    if (CardItemsIDArr.Contains("10"))
+                                        ItemList = ItemList.Select(x => { x.productName = ""; return x; }).ToList();
+
+                                    if (CardItemsIDArr.Contains("11"))
+                                        ItemList = ItemList.Select(x => { x.discount = ""; return x; }).ToList();
+
+                                    if (CardItemsIDArr.Contains("12"))
+                                        ItemList = ItemList.Select(x => { x.colorCode = ""; return x; }).ToList();
+
+
+                                }
+                            }
+                        }
+
+              
+                    }
+
                 }
                 catch(Exception )
                 {
@@ -335,7 +393,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="customerID"></param>
         /// <param name="mobileNo"></param>
         /// <returns></returns>
-        public int SendRecommendationsToCustomer(int CustomerID, string MobileNo, string ClientAPIURL, int CreatedBy)
+        public int SendRecommendationsToCustomer(int TenantID, string Programcode, int CustomerID, string MobileNo, string ClientAPIURL, int CreatedBy)
         {
             MySqlCommand cmd = new MySqlCommand();
             int resultCount = 0; int Chat_ID = 0;
@@ -354,6 +412,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd = new MySqlCommand("SP_HSGetRecomendationsByCustomerID", conn);
                 cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_prgCode", Programcode);
                 cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", MobileNo);
            

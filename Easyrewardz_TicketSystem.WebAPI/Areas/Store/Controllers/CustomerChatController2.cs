@@ -125,7 +125,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                ItemList = customerChatCaller.ChatItemSearch(new CustomerChatService(_connectionString),_ClientAPIUrl, SearchText, ProgramCode);
+                ItemList = customerChatCaller.ChatItemSearch(new CustomerChatService(_connectionString),authenticate.TenantId,authenticate.ProgramCode,
+                    _ClientAPIUrl, SearchText, ProgramCode);
                 statusCode = ItemList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
@@ -242,7 +243,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                result = customerChatCaller.SendRecommendationsToCustomer(new CustomerChatService(_connectionString), CustomerID, MobileNumber,_ClientAPIUrl,authenticate.UserMasterID);
+                result = customerChatCaller.SendRecommendationsToCustomer(new CustomerChatService(_connectionString), authenticate.TenantId,authenticate.ProgramCode,
+                    CustomerID, MobileNumber,_ClientAPIUrl,authenticate.UserMasterID);
 
                 statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

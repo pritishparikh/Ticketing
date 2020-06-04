@@ -13,14 +13,14 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int SaveChatMessages(CustomerChatModel ChatMessageDetails);
 
-        List<CustomItemSearchResponseModel>  ChatItemDetailsSearch(string ClientAPIURL,string SearchText, string ProgramCode);
+        List<CustomItemSearchResponseModel>  ChatItemDetailsSearch(int TenantID, string Programcode, string ClientAPIURL,string SearchText, string ProgramCode);
 
         int SaveCustomerChatMessageReply(CustomerChatReplyModel ChatReply); 
 
 
         List<CustomerChatSuggestionModel>  GetChatSuggestions(string SearchText);
 
-        int SendRecommendationsToCustomer(int CustomerID, string MobileNo, string ClientAPIURL, int CreatedBy);
+        int SendRecommendationsToCustomer(int TenantID, string Programcode, int CustomerID, string MobileNo, string ClientAPIURL, int CreatedBy);
 
         int SendMessageToCustomer(int ChatID, string MobileNo,string ProgramCode,string Message, string WhatsAppMessage, string ImageURL, string ClientAPIURL,int CreatedBy, int InsertChat);
 
