@@ -43,7 +43,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             List<CustomGetChatTickets> customGetChatTickets = null;
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
             try
@@ -51,16 +51,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-
-                var temp = SecurityService.DecryptStringAES(token);
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 customGetChatTickets = chatTicketingCaller.GetTicketsOnLoad(new HSChatTicketingService(_connectioSting), statusID, authenticate.TenantId, authenticate.UserMasterID,authenticate.ProgramCode);
 
-                StatusCode = customGetChatTickets.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = customGetChatTickets.Count.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = customGetChatTickets.Count > 0 ? customGetChatTickets : null;
             }
@@ -93,7 +92,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 searchResultList = chatTicketingCaller.GetStatusCount(new HSChatTicketingService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
 
-                statusCode = searchResultList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusCode = searchResultList.Count.Equals(0)? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
@@ -129,7 +128,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
                 objCategoryList = chatTicketingCaller.GetCategoryList(new HSChatTicketingService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
 
-                statusCode = objCategoryList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusCode = objCategoryList.Count.Equals(0)? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
@@ -240,24 +239,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             GetChatTicketsByID customGetChatTickets = null;
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
             try
             {
-
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-
-                var temp = SecurityService.DecryptStringAES(token);
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 customGetChatTickets = chatTicketingCaller.GetTicketsByID(new HSChatTicketingService(_connectioSting), ticketID, authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
 
-                StatusCode = customGetChatTickets !=null ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusCode = customGetChatTickets !=null ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = customGetChatTickets != null ? customGetChatTickets : null;
             }
@@ -290,7 +286,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 int result = chatTicketingCaller.AddChatTicketNotes(new HSChatTicketingService(_connectioSting), ticketID, comment, authenticate.UserMasterID, authenticate.TenantId, authenticate.ProgramCode);
                 statusCode =
-                result == 0 ?
+                result.Equals(0)?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
@@ -325,7 +321,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 chatTicketNotes = chatTicketingCaller.GetChatticketNotes(new HSChatTicketingService(_connectioSting), ticketID);
                 statusCode =
-                   chatTicketNotes.Count == 0 ?
+                   chatTicketNotes.Count.Equals(0)?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
@@ -365,7 +361,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 int result = chatTicketingCaller.SubmitChatTicket(new HSChatTicketingService(_connectioSting), ticketID, statusID, authenticate.UserMasterID);
                 statusCode =
-                result == 0 ?
+                result.Equals(0) ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
@@ -404,7 +400,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 searchModel.TenantID = authenticate.TenantId;
                 searchResultList = chatTicketingCaller.GetChatTicketsOnSearch(new HSChatTicketingService(_connectioSting), searchModel);
 
-                statusCode = searchResultList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusCode = searchResultList.Count.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
@@ -441,7 +437,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 objTicketHistory = chatTicketingCaller.GetChatTickethistory(new HSChatTicketingService(_connectioSting), ticketID);
                 statusCode =
-               objTicketHistory == null ?
+               objTicketHistory.Count.Equals(0) ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
@@ -482,7 +478,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 //createChatTickets.Brand = authenticate.ProgramCode;
                 int TicketID = chatTicketingCaller.CreateChatTicket(new HSChatTicketingService(_connectioSting), createChatTickets);
 
-                statusCode = TicketID > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusCode = TicketID.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;

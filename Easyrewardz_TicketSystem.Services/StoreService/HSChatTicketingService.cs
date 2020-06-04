@@ -18,6 +18,15 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
         }
 
+        /// <summary>
+        /// Add Chat Ticket Notes
+        /// </summary>
+        /// <param name="ticketID"></param>
+        /// <param name="comment"></param>
+        /// <param name="userID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
         public int AddChatTicketNotes(int ticketID, string comment, int userID, int tenantID, string programCode)
         {
             int success = 0;
@@ -52,6 +61,11 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
+        /// <summary>
+        /// Create Chat Ticket
+        /// </summary>
+        /// <param name="searchparams"></param>
+        /// <returns></returns>
         public int CreateChatTicket(CreateChatTickets createChatTickets)
         {
             int TicketID = 0;
@@ -92,6 +106,13 @@ namespace Easyrewardz_TicketSystem.Services
             return TicketID;
         }
 
+        /// <summary>
+        /// Get CategoryList
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
         public List<Category> GetCategoryList(int tenantID, int userID, string programCode)
         {
             DataSet ds = new DataSet();
@@ -185,6 +206,10 @@ namespace Easyrewardz_TicketSystem.Services
             return ListTicketHistory;
         }
 
+        /// <summary>
+        /// Get Chat Ticket Notes
+        /// </summary>
+        /// <param name="ticketID"></param>
         public List<ChatTicketNotes> GetChatticketNotes(int ticketID)
         {
             DataSet ds = new DataSet();
@@ -231,6 +256,14 @@ namespace Easyrewardz_TicketSystem.Services
             return lstChatTicketNotes;
         }
 
+        /// <summary>
+        /// Get Chat Tickets By ID
+        /// </summary>
+        /// <param name="ticketID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="userMasterID"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
         public GetChatTicketsByID GetChatTicketsByID(int ticketID, int tenantID, int userMasterID, string programCode)
         {
             DataSet ds = new DataSet();
@@ -296,6 +329,12 @@ namespace Easyrewardz_TicketSystem.Services
             return customGetChatTickets;
         }
 
+        /// <summary>
+        /// Get IssueType List
+        /// </summary>
+        ///  <param name="tenantID"></param>
+        /// <param name="subCategoryID"></param>
+        /// <returns></returns>
         public List<IssueType> GetIssueTypeList(int tenantID, int subCategoryID)
         {
             DataSet ds = new DataSet();
@@ -340,6 +379,11 @@ namespace Easyrewardz_TicketSystem.Services
             return objIssueType;
         }
 
+        /// <summary>
+        /// Get SubCategoryBy Category ID
+        /// </summary>
+        /// <param name="CategoryID"></param>
+        /// <returns></returns>
         public List<SubCategory> GetSubCategoryByCategoryID(int categoryID)
         {
             DataSet ds = new DataSet();
@@ -386,6 +430,14 @@ namespace Easyrewardz_TicketSystem.Services
             return objSubCategory;
         }
 
+        /// <summary>
+        /// Get Chat Tickets
+        /// </summary>
+        /// <param name="statusID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="userMasterID"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
         public List<CustomGetChatTickets> GetTicketsOnLoad(int statusID, int tenantID, int userMasterID, string programCode)
         {
             DataSet ds = new DataSet();
@@ -446,6 +498,11 @@ namespace Easyrewardz_TicketSystem.Services
             return lstGetChatTickets;
         }
 
+        /// <summary>
+        /// Get tickets On View Search click
+        /// </summary>
+        /// <param name="searchparams"></param>
+        /// <returns></returns>
         public List<CustomGetChatTickets> GetTicketsOnSearch(ChatTicketSearch searchModel)
         {
             DataSet ds = new DataSet();
@@ -509,6 +566,13 @@ namespace Easyrewardz_TicketSystem.Services
             return lstGetChatTickets;
         }
 
+        /// <summary>
+        /// Update Chat Ticket Status
+        /// </summary>
+        /// <param name="ticketID"></param>
+        /// <param name="statusID"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public int SubmitChatTicket(int ticketID,int statusID, int userID)
         {
             int success = 0;
@@ -540,6 +604,13 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
+        /// <summary>
+        /// Get Chat Ticket Status Count
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
         public List<TicketStatusModel> TicketStatusCount(int tenantID, int userID, string programCode)
         {
             List<TicketStatusModel> ticketCount = new List<TicketStatusModel>();
