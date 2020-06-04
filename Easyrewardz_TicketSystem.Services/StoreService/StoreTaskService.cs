@@ -919,6 +919,7 @@ namespace Easyrewardz_TicketSystem.Services
                     CommandType = CommandType.StoredProcedure
                 };
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
 
 
                 MySqlDataAdapter da = new MySqlDataAdapter
@@ -1528,6 +1529,7 @@ namespace Easyrewardz_TicketSystem.Services
                     CommandType = CommandType.StoredProcedure
                 };
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
                 cmd.Parameters.AddWithValue("@status_ID", string.IsNullOrEmpty(statusID) ? "" : statusID.TrimEnd(','));
 
                 MySqlDataAdapter da = new MySqlDataAdapter
