@@ -67,6 +67,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@_Category", string.IsNullOrEmpty(createChatTickets.Category)? "" : createChatTickets.Category);
                 cmd1.Parameters.AddWithValue("@_SubCategory", string.IsNullOrEmpty(createChatTickets.SubCategory) ? "" : createChatTickets.SubCategory);
                 cmd1.Parameters.AddWithValue("@_IssueType", string.IsNullOrEmpty(createChatTickets.IssueType) ? "" : createChatTickets.IssueType);
+                cmd1.Parameters.AddWithValue("@Customer_ID", createChatTickets.CustomerID);
                 cmd1.Parameters.AddWithValue("@Mobile_Number", string.IsNullOrEmpty(createChatTickets.CustomerMobileNumber) ? "" : createChatTickets.CustomerMobileNumber);
                 cmd1.Parameters.AddWithValue("@_Brand", createChatTickets.Brand);
                 cmd1.Parameters.AddWithValue("@_Priority", string.IsNullOrEmpty(createChatTickets.Priority) ?"" : createChatTickets.Priority);
@@ -267,6 +268,8 @@ namespace Easyrewardz_TicketSystem.Services
                         customGetChatTickets.IssueType = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
                         customGetChatTickets.AssignTo = ds.Tables[0].Rows[i]["Assignee"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignee"]);
                         customGetChatTickets.Priority = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);
+                        customGetChatTickets.CustomerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
+                        customGetChatTickets.CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
                         customGetChatTickets.CustomerMobileNumber = ds.Tables[0].Rows[i]["CustomerMobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerMobileNumber"]);
                         customGetChatTickets.Brand = ds.Tables[0].Rows[i]["Brand"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Brand"]);
                         customGetChatTickets.CreatedDate = ds.Tables[0].Rows[i]["CreatedAgo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedAgo"]);

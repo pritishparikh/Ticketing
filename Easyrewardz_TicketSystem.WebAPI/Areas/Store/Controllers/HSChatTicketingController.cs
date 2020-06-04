@@ -146,8 +146,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get SubCategoryBy CategoryID
         /// </summary>
-        /// <param name="CategoryID"></param>
-        /// <param name="TypeId"></param>
+        /// <param name="categoryID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetChatSubCategoryByCategoryID")]
@@ -155,7 +154,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             List<SubCategory> objSubCategory = new List<SubCategory>();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -167,14 +166,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 objSubCategory = chatTicketingCaller.GetChatSubCategoryByCategoryID(new HSChatTicketingService(_connectioSting), categoryID);
 
-                StatusCode =
-                objSubCategory.Count == 0 ?
+                statusCode =
+                objSubCategory.Count.Equals(0) ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = objSubCategory;
 
@@ -190,7 +189,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Chat Issue Type By Subcategory
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name="subCategoryID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetChatIssueTypeBySubcategory")]
@@ -198,7 +197,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         {
             List<IssueType> objIssueTypeList = new List<IssueType>();
             ResponseModel objResponseModel = new ResponseModel();
-            int StatusCode = 0;
+            int statusCode = 0;
             string statusMessage = "";
             try
             {
@@ -210,14 +209,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 objIssueTypeList = chatTicketingCaller.GetIssueTypeList(new HSChatTicketingService(_connectioSting), authenticate.TenantId, subCategoryID);
 
-                StatusCode =
-                objIssueTypeList.Count == 0 ?
+                statusCode =
+                objIssueTypeList.Count.Equals(0) ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
                 objResponseModel.Status = true;
-                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = objIssueTypeList;
 

@@ -34,6 +34,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public int IssueTypeID { get; set; }
         public string Brand { get; set; }
         public string AssignTo { get; set; }
+        public int? CustomerID { get; set; }
+        public string CustomerName { get; set; }
         public string CustomerMobileNumber { get; set; }
         public string Priority { get; set; }
         public string CreatedOn { get; set; }
@@ -62,6 +64,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string IssueType { get; set; }
         public string Brand { get; set; }
         public string StoreCode { get; set; }
+        public int? CustomerID { get; set; }
         public string CustomerMobileNumber { get; set; }
         public string Priority { get; set; }
         public string TicketTitle { get; set; }

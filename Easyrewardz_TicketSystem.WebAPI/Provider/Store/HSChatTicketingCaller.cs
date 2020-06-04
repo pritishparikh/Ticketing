@@ -30,12 +30,22 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             hSChatTicketing = _hSChatTicketing;
             return hSChatTicketing.GetCategoryList(TenantID, userID, programCode);
         }
+        /// <summary>
+        /// Get SubCategoryBy CategoryID
+        /// </summary>
+        /// <param name="CategoryID"></param>
+        /// <returns></returns>
         public List<SubCategory> GetChatSubCategoryByCategoryID(IHSChatTicketing _hSChatTicketing, int categoryID)
         {
             hSChatTicketing = _hSChatTicketing;
             return hSChatTicketing.GetSubCategoryByCategoryID(categoryID);
         }
-
+        /// <summary>
+        /// Get IssueType List
+        /// </summary>
+        ///  <param name="tenantID"></param>
+        /// <param name="subCategoryID"></param>
+        /// <returns></returns>
         public List<IssueType> GetIssueTypeList(IHSChatTicketing _hSChatTicketing, int tenantID, int subCategoryID)
         {
             hSChatTicketing = _hSChatTicketing;
