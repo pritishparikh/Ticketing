@@ -112,4 +112,41 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string StatusName { get; set; }
     }
+
+    public class ShipmentAssigned
+    {
+        public string AWBNo { get; set; }
+
+        public string CourierPartner { get; set; }
+
+        public string ReferenceNo { get; set; }
+
+        public string StoreName { get; set; }
+
+        public string StaffName { get; set; }
+
+        public string MobileNumber { get; set; }
+
+        public bool IsProceed { get; set; }
+
+        public string ShipmentAWBID { get; set; }
+    }
+
+    public class ShipmentAssignedDetails
+    {
+        public List<ShipmentAssigned> shipmentAssigned { get; set; }
+
+        public int TotalCount { get; set; }
+    }
+
+    public class ShipmentAssignedFilterRequest
+    {
+        public string SearchText { get; set; }
+
+        public int PageNo { get; set; }
+
+        public int PageSize { get; set; }
+
+        public string FilterReferenceNo { get; set; }
+    }
 }

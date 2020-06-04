@@ -335,5 +335,78 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return orderStatusFilter;
         }
+
+        public ShipmentAssignedDetails GetShipmentAssignedDetails(int tenantId, int userId, ShipmentAssignedFilterRequest shipmentAssignedFilter)
+        {
+            DataSet ds = new DataSet();
+            ShipmentAssignedDetails objdetails = new ShipmentAssignedDetails();
+
+            List<ShipmentAssigned> shipmentAssigned = new List<ShipmentAssigned>();
+            int TotalCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrderDeliveredDetails", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_tenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_SearchText", shipmentAssignedFilter.SearchText);
+                cmd.Parameters.AddWithValue("@_pageno", shipmentAssignedFilter.PageNo);
+                cmd.Parameters.AddWithValue("@_pagesize", shipmentAssignedFilter.PageSize);
+                cmd.Parameters.AddWithValue("@_FilterReferenceNo", shipmentAssignedFilter.FilterReferenceNo);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        ShipmentAssigned obj = new ShipmentAssigned
+                        {
+                            AWBNo = Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
+                            CourierPartner = Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]),
+                            ReferenceNo = Convert.ToString(ds.Tables[0].Rows[i]["ReferenceNo"]),
+                            StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
+                            StaffName = Convert.ToString(ds.Tables[0].Rows[i]["StaffName"]),
+                            MobileNumber = Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
+                            IsProceed = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsProceed"]),
+                            ShipmentAWBID = Convert.ToString(ds.Tables[0].Rows[i]["ShipmentAWBID"])
+                        };
+
+                        shipmentAssigned.Add(obj);
+                    }
+                }
+
+                if (ds != null && ds.Tables[1] != null)
+                {
+                    TotalCount = ds.Tables[1].Rows[0]["TotalAssignedShipment"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["TotalAssignedShipment"]);
+                }
+
+                objdetails.shipmentAssigned = shipmentAssigned;
+                objdetails.TotalCount = TotalCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objdetails;
+        }
     }
 }

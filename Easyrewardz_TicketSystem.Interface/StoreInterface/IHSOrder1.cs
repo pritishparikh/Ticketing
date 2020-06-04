@@ -18,5 +18,7 @@ namespace Easyrewardz_TicketSystem.Interface
         OrderDeliveredDetails GetOrderDeliveredDetails(int tenantId, int userId, OrderDeliveredFilterRequest orderDeliveredFilter);
 
         List<OrderStatusFilter> GetOrderStatusFilter(int tenantId, int userId, int pageID);
+
+        ShipmentAssignedDetails GetShipmentAssignedDetails(int tenantId, int userId, ShipmentAssignedFilterRequest shipmentAssignedFilter);
     }
 }
