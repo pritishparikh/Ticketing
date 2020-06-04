@@ -472,7 +472,61 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 throw;
             }
             return objResponseModel;
-        } 
+        }
 
+
+
+        /// <summary>
+        /// Update StoreManager chat status
+        /// </summary>
+        /// <param name="ChatID"></param>
+        /// <param name="ChatStatusID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateStoreManagerChatStatus")]
+        public ResponseModel UpdateStoreManagerChatStatus(int ChatID, int ChatStatusID)
+        {
+            /*
+             * Dropped Chat -->1
+               Unanswered Chat -->2
+               Closed Chat -->3
+               Hold Chat -->4
+               UnHold Chat -->5
+               InActive Chat -->6
+ 
+             * */
+
+
+            ResponseModel objResponseModel = new ResponseModel();
+            int result = 0;
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                result = customerChatCaller.UpdateStoreManagerChatStatus(new CustomerChatService(_connectionString), authenticate.TenantId, authenticate.ProgramCode, ChatID, 
+                    ChatStatusID,authenticate.UserMasterID);
+
+                statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
     }
 }
