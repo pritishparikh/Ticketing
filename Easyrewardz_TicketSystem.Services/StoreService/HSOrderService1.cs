@@ -281,5 +281,59 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objdetails;
         }
+
+        public List<OrderStatusFilter> GetOrderStatusFilter(int tenantId, int userId, int pageID)
+        {
+            DataSet ds = new DataSet();
+            List<OrderStatusFilter> orderStatusFilter = new List<OrderStatusFilter>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrdersStatusFilter", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_PageID", pageID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        OrderStatusFilter obj = new OrderStatusFilter
+                        {
+                            StatusID = Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]),
+                            StatusName = Convert.ToString(ds.Tables[0].Rows[i]["StatusName"])
+                        };
+
+
+                        orderStatusFilter.Add(obj);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return orderStatusFilter;
+        }
     }
 }

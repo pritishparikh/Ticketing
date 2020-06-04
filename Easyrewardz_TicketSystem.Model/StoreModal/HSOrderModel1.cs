@@ -105,4 +105,11 @@ namespace Easyrewardz_TicketSystem.Model
 
         public int TotalCount { get; set; }
     }
+
+    public class OrderStatusFilter
+    {
+        public int StatusID { get; set; }
+
+        public string StatusName { get; set; }
+    }
 }
