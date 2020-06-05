@@ -6,8 +6,13 @@ namespace Easyrewardz_TicketSystem.Model
 {
     public class OrderResponseDetails
     {
+        /// <summary>
+        /// OrdersList
+        /// </summary>
         public List<Orders> OrdersList { get; set; }
-
+        /// <summary>
+        /// TotalCount
+        /// </summary>
         public int TotalCount { get; set; }
     }
 
@@ -92,7 +97,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// ItemPrice
         /// </summary>
-        public double ItemPrice { get; set; }
+        public string ItemPrice { get; set; }
         /// <summary>
         /// Quantity
         /// </summary>
@@ -120,7 +125,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// ItemPrice
         /// </summary>
-        public double ItemPrice { get; set; }
+        public string ItemPrice { get; set; }
         /// <summary>
         /// Quantity
         /// </summary>
@@ -149,6 +154,114 @@ namespace Easyrewardz_TicketSystem.Model
         /// FilterStatus
         /// </summary>
         public string FilterStatus { get; set; }
+        /// <summary>
+        /// FilterStatus
+        /// </summary>
+        public string FilterDelivery { get; set; }
     }
 
+
+    public class ShoppingBag
+    {
+        /// <summary>
+        /// ShoppingID
+        /// </summary>
+        public int ShoppingID { get; set; }
+        /// <summary>
+        /// ShoppingBagNo
+        /// </summary>
+        public string ShoppingBagNo { get; set; }
+        /// <summary>
+        /// Date
+        /// </summary>
+        public string Date { get; set; }
+        /// <summary>
+        /// Time
+        /// </summary>
+        public string Time { get; set; }
+        /// <summary>
+        /// CustomerName
+        /// </summary>
+        public string CustomerName { get; set; }
+        /// <summary>
+        /// MobileNumber
+        /// </summary>
+        public string MobileNumber { get; set; }
+        /// <summary>
+        /// Status
+        /// </summary>
+        public string Status { get; set; }
+        /// <summary>
+        /// StatusName
+        /// </summary>
+        public string StatusName { get; set; }
+        /// <summary>
+        /// DeliveryTypeName
+        /// </summary>
+        public string DeliveryTypeName { get; set; }
+        /// <summary>
+        /// PickupDate
+        /// </summary>
+        public string PickupDate { get; set; }
+        /// <summary>
+        /// PickupTime
+        /// </summary>
+        public string PickupTime { get; set; }
+        /// <summary>
+        /// Address
+        /// </summary>
+        public string Address { get; set; }
+        /// <summary>
+        /// ActionTypeName
+        /// </summary>
+        public string ActionTypeName { get; set; }
+        /// <summary>
+        /// Action
+        /// </summary>
+        public int Action { get; set; }
+        /// <summary>
+        /// IsCanceled
+        /// </summary>
+        public bool IsCanceled { get; set; }
+        /// <summary>
+        /// UserName
+        /// </summary>
+        public string UserName { get; set; }
+        /// <summary>
+        /// CanceledComment
+        /// </summary>
+        public string CanceledComment { get; set; }
+        /// <summary>
+        /// CanceledOn
+        /// </summary>
+        public string CanceledOn { get; set; }
+        /// <summary>
+        /// ShoppingBagItemList
+        /// </summary>
+        public List<ShoppingBagItem> ShoppingBagItemList { get; set; }
+    }
+
+    public class ShoppingBagResponseDetails
+    {
+        /// <summary>
+        /// OrdersList
+        /// </summary>
+        public List<ShoppingBag> ShoppingBagList { get; set; }
+        /// <summary>
+        /// TotalCount
+        /// </summary>
+        public int TotalShoppingBag { get; set; }
+    }
+
+    public class ShoppingBagDeliveryFilter
+    {
+        /// <summary>
+        /// DeliveryTypeID
+        /// </summary>
+        public int DeliveryTypeID { get; set; }
+        /// <summary>
+        /// DeliveryTypeName
+        /// </summary>
+        public string DeliveryTypeName { get; set; }
+    }
 }
