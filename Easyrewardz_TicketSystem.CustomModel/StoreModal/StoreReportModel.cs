@@ -169,6 +169,7 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public int CampaignCustomerID { get; set; }
         public int CustomerID { get; set; }
         public string CustomerName { get; set; }
+        public string CustomerMobileNumber { get; set; }
         public int CampaignTypeID { get; set; }
         public string CampaignName { get; set; }
         public string CampaignTypeDate { get; set; }

@@ -462,6 +462,7 @@ namespace Easyrewardz_TicketSystem.Services
                                     CampaignCustomerID = dr["CampaignCustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CampaignCustomerID"]),
                                     CustomerID = dr["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CustomerID"]),
                                     CustomerName = dr["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerName"]),
+                                    CustomerMobileNumber = dr["CustomerPhoneNumber"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerPhoneNumber"]),
                                     CampaignTypeID = dr["CampaignTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CampaignTypeID"]),
                                     CampaignName = dr["CampaignName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignName"]),
                                     CampaignTypeDate = dr["CampaignTypeDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignTypeDate"]),
