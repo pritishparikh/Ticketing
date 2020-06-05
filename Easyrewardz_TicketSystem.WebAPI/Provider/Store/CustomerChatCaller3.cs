@@ -88,6 +88,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-       
+        public int UpdateStoreManagerChatStatus(ICustomerChat customerChat, int TenantID, string ProgramCode, int ChatID, int ChatStatusID, int StoreManagerID)
+        {
+            _customerChat = customerChat;
+            return _customerChat.UpdateStoreManagerChatStatus( TenantID,  ProgramCode,  ChatID,  ChatStatusID, StoreManagerID);
+
+        }
+
     }
 }
