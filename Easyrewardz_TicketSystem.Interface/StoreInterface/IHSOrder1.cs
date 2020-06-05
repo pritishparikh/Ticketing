@@ -20,5 +20,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<OrderStatusFilter> GetOrderStatusFilter(int tenantId, int userId, int pageID);
 
         ShipmentAssignedDetails GetShipmentAssignedDetails(int tenantId, int userId, ShipmentAssignedFilterRequest shipmentAssignedFilter);
+
+        int UpdateMarkAsDelivered(int tenantId, int userId, int orderID);
     }
 }

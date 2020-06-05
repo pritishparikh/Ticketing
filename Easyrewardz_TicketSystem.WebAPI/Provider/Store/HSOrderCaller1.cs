@@ -52,5 +52,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.GetShipmentAssignedDetails(tenantId, userId, shipmentAssignedFilter);
         }
+
+        public int UpdateMarkAsDelivered(IHSOrder order, int tenantId, int userId, int orderID)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.UpdateMarkAsDelivered(tenantId, userId, orderID);
+        }
     }
 }
