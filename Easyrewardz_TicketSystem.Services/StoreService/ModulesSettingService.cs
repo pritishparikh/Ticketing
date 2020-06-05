@@ -335,7 +335,7 @@ namespace Easyrewardz_TicketSystem.Services
                         Targetcmd.Parameters.AddWithValue("@_CampaignNameID", Campaignscript.CampaignNameID);
                         Targetcmd.Parameters.AddWithValue("@_CampaignScript", Campaignscript.CampaignScript);
                         Targetcmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
-                        Targetcmd.Parameters.AddWithValue("@_Status", TenantId);
+                        Targetcmd.Parameters.AddWithValue("@_Status", Campaignscript.Status);
                         Targetcmd.Parameters.AddWithValue("@_TenantID", TenantId);
 
                         result = Targetcmd.ExecuteNonQuery();
