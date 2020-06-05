@@ -444,5 +444,41 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UpdateCount;
         }
+
+        public int UpdateShipmentAssignedData(ShipmentAssignedRequest shipmentAssignedRequest)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateShipmentAssignedData", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_ShipmentAWBID", shipmentAssignedRequest.ShipmentAWBID);
+                cmd.Parameters.AddWithValue("@_ReferenceNo", shipmentAssignedRequest.ReferenceNo);
+                cmd.Parameters.AddWithValue("@_StoreName", shipmentAssignedRequest.StoreName);
+                cmd.Parameters.AddWithValue("@_StaffName", shipmentAssignedRequest.StaffName);
+                cmd.Parameters.AddWithValue("@_MobileNumber", shipmentAssignedRequest.MobileNumber);
+                cmd.Parameters.AddWithValue("@_IsProceed", shipmentAssignedRequest.IsProceed);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
     }
 }
