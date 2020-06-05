@@ -95,5 +95,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
+
+        public List<CardImageApprovalModel> GetCardImageApprovalList(ICustomerChat customerChat, int TenantID, string ProgramCode)
+        {
+            _customerChat = customerChat;
+            return _customerChat.GetCardImageApprovalList(TenantID, ProgramCode);
+
+        }
+
+        public int UpdateCardImageApproval(ICustomerChat customerChat, int TenantID, string ProgramCode, int ID, int ModifiedBy)
+        {
+            _customerChat = customerChat;
+            return _customerChat.UpdateCardImageApproval(TenantID, ProgramCode, ID,  ModifiedBy);
+
+        }
+
     }
 }

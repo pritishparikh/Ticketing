@@ -487,6 +487,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         public ResponseModel UpdateStoreManagerChatStatus(int ChatID, int ChatStatusID)
         {
             /*
+             ******* ChatStatusID:*******
              * Dropped Chat -->1
                Unanswered Chat -->2
                Closed Chat -->3
@@ -528,5 +529,89 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+
+
+        /// <summary>
+        /// Update Card Image Approval
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateCardImageApproval")]
+        public ResponseModel UpdateCardImageApproval(int ID)
+        {
+           
+
+            ResponseModel objResponseModel = new ResponseModel();
+            int result = 0;
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                result = customerChatCaller.UpdateCardImageApproval(new CustomerChatService(_connectionString), authenticate.TenantId, authenticate.ProgramCode, ID,authenticate.UserMasterID);
+
+                statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// /Get Card Image Approval List
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetCardImageApproval")]
+        public ResponseModel GetCardImageApproval()
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            List<CardImageApprovalModel> CardApprovalist = new List<CardImageApprovalModel>();
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                CardApprovalist = customerChatCaller.GetCardImageApprovalList(new CustomerChatService(_connectionString), authenticate.TenantId, authenticate.ProgramCode);
+
+                statusCode = CardApprovalist.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = CardApprovalist;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
     }
 }
