@@ -22,5 +22,7 @@ namespace Easyrewardz_TicketSystem.Interface
         ShipmentAssignedDetails GetShipmentAssignedDetails(int tenantId, int userId, ShipmentAssignedFilterRequest shipmentAssignedFilter);
 
         int UpdateMarkAsDelivered(int tenantId, int userId, int orderID);
+
+        int UpdateShipmentAssignedData(ShipmentAssignedRequest shipmentAssignedRequest);
     }
 }

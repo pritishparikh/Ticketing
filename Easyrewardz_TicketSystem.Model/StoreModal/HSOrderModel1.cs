@@ -58,20 +58,44 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class OrderDelivered
     {
+        /// <summary>
+        /// OrderId
+        /// </summary>
         public int ID { get; set; }
 
+        /// <summary>
+        /// InvoiceNo
+        /// </summary>
         public string InvoiceNo { get; set; }
 
+        /// <summary>
+        /// CustomerName
+        /// </summary>
         public string CustomerName { get; set; }
 
+        /// <summary>
+        /// MobileNumber
+        /// </summary>
         public string MobileNumber { get; set; }
 
+        /// <summary>
+        /// Date
+        /// </summary>
         public string Date { get; set; }
 
+        /// <summary>
+        /// Time
+        /// </summary>
         public string Time { get; set; }
 
+        /// <summary>
+        /// StatusName
+        /// </summary>
         public string StatusName { get; set; }
 
+        /// <summary>
+        /// ActionTypeName
+        /// </summary>
         public string ActionTypeName { get; set; }
 
         public List<OrderDeliveredItem> orderDeliveredItems { get; set; }
@@ -79,16 +103,34 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class OrderDeliveredItem
     {
+        /// <summary>
+        /// ID
+        /// </summary>
         public int ID { get; set; }
 
+        /// <summary>
+        /// ItemID
+        /// </summary>
         public string ItemID { get; set; }
 
+        /// <summary>
+        /// ItemName
+        /// </summary>
         public string ItemName { get; set; }
 
+        /// <summary>
+        /// ItemPrice
+        /// </summary>
         public double ItemPrice { get; set; }
 
+        /// <summary>
+        /// Quantity
+        /// </summary>
         public int Quantity { get; set; }
 
+        /// <summary>
+        /// OrderID
+        /// </summary>
         public int OrderID { get; set; }
     }
 
@@ -154,5 +196,20 @@ namespace Easyrewardz_TicketSystem.Model
         public int PageSize { get; set; }
 
         public string FilterReferenceNo { get; set; }
+    }
+
+    public class ShipmentAssignedRequest
+    {
+        public string ShipmentAWBID { get; set; }
+
+        public string ReferenceNo { get; set; }
+
+        public string StoreName { get; set; }
+
+        public string StaffName { get; set; }
+
+        public string MobileNumber { get; set; }
+
+        public bool IsProceed { get; set; }
     }
 }
