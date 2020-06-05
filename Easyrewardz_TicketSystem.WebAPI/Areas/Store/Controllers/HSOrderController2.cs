@@ -133,5 +133,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// GetShipmentDetails
+        /// </summary>
+        /// <param name="ordersDataRequest"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetShipmentDetails")]
+        public ResponseModel GetShipmentDetails(OrdersDataRequest ordersDataRequest)
+        {
+            OrderResponseDetails orderResponseDetails = new OrderResponseDetails();
+            HSOrderCaller storecampaigncaller = new HSOrderCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                orderResponseDetails = storecampaigncaller.GetShipmentDetails(new HSOrderService(_connectionString),
+                    authenticate.TenantId, authenticate.UserMasterID, ordersDataRequest);
+                statusCode =
+                   orderResponseDetails.TotalCount.Equals(0) ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = orderResponseDetails;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
     }
 }

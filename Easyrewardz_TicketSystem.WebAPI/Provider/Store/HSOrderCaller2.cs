@@ -27,5 +27,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.GetShoppingBagDeliveryType(tenantId, userId, pageID);
         }
+
+        public OrderResponseDetails GetShipmentDetails(IHSOrder order, int tenantId, int userId, OrdersDataRequest ordersDataRequest)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.GetShipmentDetails(tenantId, userId, ordersDataRequest);
+        }
     }
 }

@@ -71,6 +71,38 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string ShoppingBagNo { get; set; }
         /// <summary>
+        /// DeliveryType
+        /// </summary>
+        public int DeliveryType { get; set; }
+        /// <summary>
+        /// DeliveryTypeName
+        /// </summary>
+        public string DeliveryTypeName { get; set; }
+        /// <summary>
+        /// PaymentLink
+        /// </summary>
+        public string PaymentLink { get; set; }
+        /// <summary>
+        /// ModeOfPayment
+        /// </summary>
+        public string ModeOfPayment { get; set; }
+        /// <summary>
+        /// PaymentVia
+        /// </summary>
+        public string PaymentVia { get; set; }
+        /// <summary>
+        /// TotalAmount
+        /// </summary>
+        public string TotalAmount { get; set; }
+        /// <summary>
+        /// PickupDate
+        /// </summary>
+        public string PickupDate { get; set; }
+        /// <summary>
+        /// PickupTime
+        /// </summary>
+        public string PickupTime { get; set; }
+        /// <summary>
         /// OrdersItemList
         /// </summary>
         public List<OrdersItem> OrdersItemList { get; set; }
