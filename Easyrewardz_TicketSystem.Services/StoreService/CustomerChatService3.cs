@@ -687,7 +687,6 @@ namespace Easyrewardz_TicketSystem.Services
 
         /// <summary>
         // Update StoreManager chat status
-        /// </summary>
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
         ///  <param name="ChatID"></param>
@@ -731,5 +730,130 @@ namespace Easyrewardz_TicketSystem.Services
             return success;
         }
 
+
+        /// <summary>
+        ///Update Card Image Approval
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        ///  <param name="ID"></param>
+        ///    <param name="ModifiedBy"></param>
+        /// <returns></returns>
+        /// 
+        public int UpdateCardImageApproval(int TenantID, string ProgramCode, int ID, int ModifiedBy)
+        {
+            int success = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand
+                {
+                    Connection = conn,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SP_HSUpdateCardImageApproval"
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_ID", ID);
+                cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
+
+                success = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return success;
+        }
+
+        /// <summary>
+        ///Get Card Image Approval List
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// </summary>
+        /// <returns></returns>
+        public List<CardImageApprovalModel> GetCardImageApprovalList(int TenantID, string ProgramCode)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            List<CardImageApprovalModel> CardApprovalist = new List<CardImageApprovalModel>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSGetCardImageApproval", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            CardImageApprovalModel obj = new CardImageApprovalModel()
+                            {
+                                ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]),
+                                TenantID = dr["TenantID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TenantID"]),
+                                ProgramCode = dr["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ProgramCode"]),
+                                ApprovalType = dr["ApprovalType"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ApprovalType"]),
+                                IsEnabled = dr["IsEnabled"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsEnabled"]),
+
+                                CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CreatedBy"]),
+                                CreatedByName = dr["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedByName"]),
+                                CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),
+
+                                ModifyBy = dr["ModifiedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ModifiedBy"]),
+                                ModifyByName = dr["ModifyByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyByName"]),
+                                ModifyDate = dr["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifiedDate"]),
+
+
+                            };
+
+                            CardApprovalist.Add(obj);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return CardApprovalist;
+        }
     }
 }

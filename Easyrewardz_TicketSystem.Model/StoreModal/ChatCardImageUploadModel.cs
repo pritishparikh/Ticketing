@@ -42,4 +42,21 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string ModifyDate { get; set; }
     }
 
+    public class CardImageApprovalModel
+    {
+        public int ID { get; set; }
+        public int TenantID { get; set; }
+        public string ProgramCode { get; set; }
+        public string ApprovalType { get; set; }
+        public bool IsEnabled { get; set; }
+        public int CreatedBy { get; set; }
+        public string CreatedByName { get; set; }
+        public string CreatedDate { get; set; }
+        public int ModifyBy { get; set; }
+        public string ModifyByName { get; set; }
+        public string ModifyDate { get; set; }
+
+
+    }
+
 }
