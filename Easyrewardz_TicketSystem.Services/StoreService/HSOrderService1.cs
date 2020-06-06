@@ -513,5 +513,36 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UpdateCount;
         }
+
+        public int UpdateShipmentPickupPendingData(int OrderID)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateShipmentPickupPending", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_OrderID", OrderID);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
     }
 }
