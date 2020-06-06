@@ -480,5 +480,38 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UpdateCount;
         }
+
+        public int UpdateShipmentBagCancelData(int shoppingID, string cancelComment, int userId)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateShipmentBagCancel", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_ShoppingID", shoppingID);
+                cmd.Parameters.AddWithValue("@_CancelComment", cancelComment);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
     }
 }

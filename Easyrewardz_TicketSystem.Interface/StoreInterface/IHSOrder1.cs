@@ -24,5 +24,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateMarkAsDelivered(int tenantId, int userId, int orderID);
 
         int UpdateShipmentAssignedData(ShipmentAssignedRequest shipmentAssignedRequest);
+
+        int UpdateShipmentBagCancelData(int shoppingID, string cancelComment, int userId);
     }
 }
