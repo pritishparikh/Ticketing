@@ -76,5 +76,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.UpdateShipmentPickupPendingData(OrderID);
         }
+
+        public int InsertOrderDetails(IHSOrder order, ConvertToOrder convertToOrder)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.InsertOrderDetails(convertToOrder);
+        }
     }
 }
