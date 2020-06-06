@@ -221,4 +221,21 @@ namespace Easyrewardz_TicketSystem.Model
 
         public double Amount { get; set; }
     }
+
+    public class AddressPendingRequest
+    {
+        public int OrderID { get; set; }
+
+        public string ShipmentAddress { get; set; }
+
+        public string Landmark { get; set; }
+
+        public string PinCode { get; set; }
+
+        public string City { get; set; }
+
+        public string State { get; set; }
+
+        public string Country { get; set; }
+    }
 }

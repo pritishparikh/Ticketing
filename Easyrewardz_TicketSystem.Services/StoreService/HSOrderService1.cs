@@ -577,5 +577,43 @@ namespace Easyrewardz_TicketSystem.Services
 
             return InsertCount;
         }
+
+
+        public int UpdateAddressPending(AddressPendingRequest addressPendingRequest)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateAddressPending", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_OrderID", addressPendingRequest.OrderID);
+                cmd.Parameters.AddWithValue("@_ShipmentAddress", addressPendingRequest.ShipmentAddress);
+                cmd.Parameters.AddWithValue("@_Landmark", addressPendingRequest.Landmark);
+                cmd.Parameters.AddWithValue("@_PinCode", addressPendingRequest.PinCode);
+                cmd.Parameters.AddWithValue("@_City", addressPendingRequest.City);
+                cmd.Parameters.AddWithValue("@_State", addressPendingRequest.State);
+                cmd.Parameters.AddWithValue("@_Country", addressPendingRequest.Country);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
     }
 }

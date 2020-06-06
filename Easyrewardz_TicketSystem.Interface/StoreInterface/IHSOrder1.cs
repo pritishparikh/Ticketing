@@ -30,5 +30,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateShipmentPickupPendingData(int OrderID);
 
         int InsertOrderDetails(ConvertToOrder convertToOrder);
+
+        int UpdateAddressPending(AddressPendingRequest addressPendingRequest);
     }
 }
