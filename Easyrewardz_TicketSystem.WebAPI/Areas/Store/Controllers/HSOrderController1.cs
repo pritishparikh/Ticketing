@@ -425,7 +425,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        [HttpPost]
         [Route("InsertOrderDetails")]
         public ResponseModel InsertOrderDetails([FromBody]ConvertToOrder convertToOrder)
         {
