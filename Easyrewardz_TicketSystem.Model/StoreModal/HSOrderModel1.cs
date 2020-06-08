@@ -212,4 +212,22 @@ namespace Easyrewardz_TicketSystem.Model
 
         public bool IsProceed { get; set; }
     }
+
+    public class ConvertToOrder
+    {
+        public int ShoppingID { get; set; }
+
+        public string InvoiceNo { get; set; }
+
+        public double Amount { get; set; }
+    }
+
+    public class ReturnShipmentDetails
+    {
+        public string AWBNumber { get; set; }
+
+        public string InvoiceNo { get; set; }
+
+        public string ItemIDs { get; set; }
+    }
 }

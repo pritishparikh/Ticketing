@@ -544,5 +544,38 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UpdateCount;
         }
+
+        public int InsertOrderDetails(ConvertToOrder convertToOrder)
+        {
+            int InsertCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYInsertOrderDetails", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_ShoppingID", convertToOrder.ShoppingID);
+                cmd.Parameters.AddWithValue("@_InvoiceNo", convertToOrder.InvoiceNo);
+                cmd.Parameters.AddWithValue("@_Amount", convertToOrder.Amount);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                InsertCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return InsertCount;
+        }
     }
 }

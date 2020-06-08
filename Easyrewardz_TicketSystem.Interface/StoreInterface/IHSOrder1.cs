@@ -28,5 +28,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateShipmentBagCancelData(int shoppingID, string cancelComment, int userId);
 
         int UpdateShipmentPickupPendingData(int OrderID);
+
+        int InsertOrderDetails(ConvertToOrder convertToOrder);
     }
 }
