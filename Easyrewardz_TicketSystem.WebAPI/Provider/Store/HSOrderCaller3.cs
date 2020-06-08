@@ -22,5 +22,31 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.CreateShipmentAWB(orderID, itemIDs, tenantID, userID);
         }
+
+        /// <summary>
+        /// GetItemDetailByOrderID
+        /// </summary>
+        /// <param name="orderID"></param>
+        ///  <param name="tenantID"></param>
+        ///  <param name="userID"></param>
+        /// <returns></returns>
+        public OrdersItemDetails GetItemDetailByOrderID(IHSOrder order, int orderID,int tenantID, int userID)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.GetItemDetailByOrderID(orderID, tenantID, userID);
+        }
+
+        /// <summary>
+        /// GetAWBInvoicenoDetails
+        /// </summary>
+        /// <param name="orderID"></param>
+        ///  <param name="tenantID"></param>
+        ///  <param name="userID"></param>
+        /// <returns></returns>
+        public List<ReturnShipmentDetails>GetAWBInvoicenoDetails(IHSOrder order, int orderID, int tenantID, int userID)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.GetAWBInvoicenoDetails(orderID, tenantID, userID);
+        }
     }
 }

@@ -77,5 +77,113 @@ namespace Easyrewardz_TicketSystem.Services
 
             return obj;
         }
+
+        public OrdersItemDetails GetItemDetailByOrderID(int orderID, int tenantID, int userID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<OrdersItem> lstOrdersItem = new List<OrdersItem>();
+            OrdersItemDetails ordersItemDetails = new OrdersItemDetails();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand sqlcmd = new MySqlCommand("SP_PHYGetItemDetailByOrderID", conn);
+                sqlcmd.CommandType = CommandType.StoredProcedure;
+
+                sqlcmd.Parameters.AddWithValue("order_ID", orderID);
+                sqlcmd.Parameters.AddWithValue("tenant_ID", tenantID);
+                sqlcmd.Parameters.AddWithValue("user_ID", userID);
+     
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = sqlcmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        OrdersItem ordersItems = new OrdersItem
+                        {
+                           ID= ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                           ItemID= ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),
+                           ItemName= ds.Tables[0].Rows[i]["ItemName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemName"]),
+                           ItemPrice= ds.Tables[0].Rows[i]["ItemPrice"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemPrice"]),
+                           Quantity= ds.Tables[0].Rows[i]["Quantity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Quantity"]),
+                           OrderID= ds.Tables[0].Rows[i]["OrderID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OrderID"]),
+                           Disable= ds.Tables[0].Rows[i]["Disable"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Disable"]),
+                        };
+
+                        lstOrdersItem.Add(ordersItems);
+                    }
+                    ordersItemDetails.OrdersItems = lstOrdersItem;             
+                }
+                if (ds != null && ds.Tables[1] != null)
+                {
+                    ordersItemDetails.InvoiceNumber = ds.Tables[1].Rows[0]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["InvoiceNo"]);
+                }
+                }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return ordersItemDetails;
+        }
+
+        public List<ReturnShipmentDetails> GetAWBInvoicenoDetails(int orderID, int tenantID, int userID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<ReturnShipmentDetails> lstReturnShipmentDetails = new List<ReturnShipmentDetails>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand sqlcmd = new MySqlCommand("SP_PHYGetAWBInvoiceDetails", conn);
+                sqlcmd.CommandType = CommandType.StoredProcedure;
+
+                sqlcmd.Parameters.AddWithValue("order_ID", orderID);
+                sqlcmd.Parameters.AddWithValue("tenant_ID", tenantID);
+                sqlcmd.Parameters.AddWithValue("user_ID", userID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = sqlcmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        ReturnShipmentDetails returnShipmentDetails = new ReturnShipmentDetails
+                        {
+                            InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
+                            ItemIDs= ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),
+                            AWBNumber= ds.Tables[0].Rows[i]["AWBNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
+                        };
+
+                        lstReturnShipmentDetails.Add(returnShipmentDetails);
+                    }
+                }             
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return lstReturnShipmentDetails;
+        }
     }
 }

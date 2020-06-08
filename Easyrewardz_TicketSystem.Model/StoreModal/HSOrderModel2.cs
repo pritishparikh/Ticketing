@@ -138,6 +138,9 @@ namespace Easyrewardz_TicketSystem.Model
         /// OrderID
         /// </summary>
         public int OrderID { get; set; }
+        /// OrderID
+        /// </summary>
+        public int Disable { get; set; }
     }
 
     public class ShoppingBagItem
@@ -295,5 +298,17 @@ namespace Easyrewardz_TicketSystem.Model
         /// DeliveryTypeName
         /// </summary>
         public string DeliveryTypeName { get; set; }
+    }
+
+    public class OrdersItemDetails
+    {
+        /// <summary>
+        ///list of OrdersItems 
+        /// </summary>
+        public List<OrdersItem> OrdersItems { get; set; }
+        /// <summary>
+        /// InvoiceNumber 
+        /// </summary>
+        public string InvoiceNumber { get; set; }
     }
 }

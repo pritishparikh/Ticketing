@@ -4,6 +4,7 @@ using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -41,6 +42,84 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = returnShipmentDetails;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// GetItemDetailByOrderID
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetItemDetailByOrderID")]
+        public ResponseModel GetItemDetailByOrderID(int orderID)
+        {
+            HSOrderCaller hSOrderCaller = new HSOrderCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            OrdersItemDetails ordersItems = new OrdersItemDetails();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                ordersItems = hSOrderCaller.GetItemDetailByOrderID(new HSOrderService(_connectionString), orderID, authenticate.TenantId, authenticate.UserMasterID);
+                statusCode =
+                ordersItems.OrdersItems.Count>0 ?
+                           (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = ordersItems;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// GetItemDetailByOrderID
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetAWBInvoiceDetails")]
+        public ResponseModel GetAWBInvoiceDetails(int orderID)
+        {
+            HSOrderCaller hSOrderCaller = new HSOrderCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            List<ReturnShipmentDetails> lstreturnShipmentDetails = new List<ReturnShipmentDetails>();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                lstreturnShipmentDetails = hSOrderCaller.GetAWBInvoicenoDetails(new HSOrderService(_connectionString), orderID, authenticate.TenantId, authenticate.UserMasterID);
+                statusCode =
+                lstreturnShipmentDetails.Count > 0 ?
+                           (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = lstreturnShipmentDetails;
             }
             catch (Exception)
             {
