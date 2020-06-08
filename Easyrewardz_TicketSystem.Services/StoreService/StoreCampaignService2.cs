@@ -242,6 +242,15 @@ namespace Easyrewardz_TicketSystem.Services
                             obj.campaignkeyinsight = KeyInsight;
                         }
                     }
+                    else
+                    {
+                        StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight
+                        {
+                            mobileNumber = "",
+                            insightText = ""
+                        };
+                        obj.campaignkeyinsight = KeyInsight;
+                    }
                 }
                 catch (Exception)
                 {
