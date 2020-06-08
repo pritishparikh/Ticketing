@@ -25,8 +25,9 @@ namespace Easyrewardz_TicketSystem.Services
         {
             DataSet ds = new DataSet();
             ReturnShipmentDetails obj=null;
-            Random generator = new Random();
+            Random generator = new Random();        
             var randomAWB= generator.Next(0, 1000000000).ToString("D10");
+            string CourierPartner = "Blue Dart";
             try
             {
                 conn.Open();
@@ -37,7 +38,8 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@order_ID", orderID);
                 cmd.Parameters.AddWithValue("@item_IDs", string.IsNullOrEmpty(itemIDs) ? "" :itemIDs.TrimEnd(','));
-                cmd.Parameters.AddWithValue("@random_AWB", randomAWB);
+                cmd.Parameters.AddWithValue("@random_AWB", randomAWB); 
+                cmd.Parameters.AddWithValue("@_CourierPartner", CourierPartner);
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@user_ID", userID);
 
@@ -53,9 +55,9 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                          obj = new ReturnShipmentDetails
                         {
-                            InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNumber"]),
-                            AWBNumber = ds.Tables[0].Rows[i]["random_AWB"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["random_AWB"]),
-                            ItemIDs = ds.Tables[0].Rows[i]["item_IDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["item_IDs"]),                            
+                            InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
+                            AWBNumber = ds.Tables[0].Rows[i]["AWBNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
+                            ItemIDs = ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),                            
                         };
                     }
                 }
