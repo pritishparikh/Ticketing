@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 
 namespace Easyrewardz_TicketSystem.Interface
@@ -35,5 +36,17 @@ namespace Easyrewardz_TicketSystem.Interface
         ///  <param name="userID"></param>
         /// <returns></returns>
         List<ReturnShipmentDetails> GetAWBInvoicenoDetails(int orderID, int tenantID, int userID);
+
+        /// <summary>
+        /// Generate payment Link
+        /// </summary>
+        /// <param name="SentPaymentLink"></param>
+        ///  <param name="clientAPIUrlForGenerateToken"></param>
+        ///  <param name="clientAPIUrlForGeneratePaymentLink"></param>
+        ///  <param name="tenantID"></param>
+        ///  <param name="userID"></param>
+        /// <returns></returns>
+        int GenerateLink(SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode);
+
     }
 }

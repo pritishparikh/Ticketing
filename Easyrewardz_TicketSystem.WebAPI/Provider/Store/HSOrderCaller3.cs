@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _OrderRepository = order;
             return _OrderRepository.GetAWBInvoicenoDetails(orderID, tenantID, userID);
+        }
+
+        public int GeneratePaymentLink(IHSOrder order, SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.GenerateLink(sentPaymentLink, clientAPIUrlForGenerateToken, clientAPIUrlForGeneratePaymentLink, tenantID, userID, programCode);
         }
     }
 }

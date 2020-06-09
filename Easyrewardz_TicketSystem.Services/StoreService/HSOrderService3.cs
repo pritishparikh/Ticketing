@@ -3,6 +3,7 @@ using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -185,5 +186,110 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return lstReturnShipmentDetails;
         }
+
+        /// <summary>
+        /// Campaign Share SMS
+        /// </summary>
+        /// <param name="objRequest"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public int GenerateLink(SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode)
+        {
+            int result = 0;
+            DataSet ds = new DataSet();
+            HSRequestGeneratePaymentLink hSRequestGeneratePaymentLink = null;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrderDetailForPaymentLink", conn)
+                {
+                    Connection = conn,
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Invoice_Number", sentPaymentLink.InvoiceNumber);
+                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@user_ID", userID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        hSRequestGeneratePaymentLink = new HSRequestGeneratePaymentLink
+                        {
+                            MerchantTxnID = ds.Tables[0].Rows[i]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
+                            BillDateTime = ds.Tables[0].Rows[i]["billDateTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["billDateTime"]),
+                            TerminalId = ds.Tables[0].Rows[i]["TerminalId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TerminalId"]),
+                            Name = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
+                            Email = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]),
+                            Mobile = ds.Tables[0].Rows[i]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
+                            Amount = ds.Tables[0].Rows[i]["Amount"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Amount"])
+                        };
+                    }
+                }
+                hSRequestGeneratePaymentLink.ProgramCode = programCode;
+                hSRequestGeneratePaymentLink.StoreCode = sentPaymentLink.StoreCode;
+
+                HSResponseGeneratePaymentLink responseGeneratePaymentLink = new HSResponseGeneratePaymentLink();
+
+                HSRequestGenerateToken hSRequestGenerateToken = new HSRequestGenerateToken();
+                string apiReq = JsonConvert.SerializeObject(hSRequestGenerateToken);
+                apiResponse = CommonService.SendApiRequestToken(clientAPIUrlForGenerateToken + "connect/token", apiReq);
+                HSResponseGenerateToken hSResponseGenerateToken = new HSResponseGenerateToken();
+                hSResponseGenerateToken = JsonConvert.DeserializeObject<HSResponseGenerateToken>(apiResponse);
+
+                if (!string.IsNullOrEmpty(hSResponseGenerateToken.access_Token))
+                {
+                    string apiReq1 = JsonConvert.SerializeObject(hSRequestGeneratePaymentLink);
+
+                    apiResponse1 = CommonService.SendApiRequestMerchantApi(clientAPIUrlForGeneratePaymentLink + "api/GeneratePaymentLink", apiReq1, hSResponseGenerateToken.access_Token);
+
+                    responseGeneratePaymentLink = JsonConvert.DeserializeObject<HSResponseGeneratePaymentLink>(apiResponse1);
+                }
+
+                if (responseGeneratePaymentLink.returnMessage == "Success")
+                {
+                    if (conn != null && conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+                    MySqlCommand cmd1 = new MySqlCommand("SP_PHYUpdateOrderDetailForPaymentLink", conn)
+                    {
+                        Connection = conn,
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd1.Parameters.AddWithValue("@Invoice_Number", sentPaymentLink.InvoiceNumber);
+                    cmd1.Parameters.AddWithValue("@access_Token", hSResponseGenerateToken.access_Token);
+                    cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
+                    cmd1.Parameters.AddWithValue("@user_ID", userID);
+                    cmd1.CommandType = CommandType.StoredProcedure;
+                    result = Convert.ToInt32(cmd.ExecuteNonQuery());
+                    conn.Close();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+
     }
 }

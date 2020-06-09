@@ -500,5 +500,72 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        public static string SendApiRequestToken(string url, string Request, string token = "")
+        {
+            string strresponse = "";
+            try
+            {
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+                httpWebRequest.Method = "POST";
+                httpWebRequest.Accept = "text/plain";
+
+                httpWebRequest.ContentType = "application/x-www-form-urlencoded";
+
+
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+                    if (!string.IsNullOrEmpty(Request))
+                        streamWriter.Write(Request);
+                }
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    strresponse = streamReader.ReadToEnd();
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return strresponse;
+
+        }
+
+        public static string SendApiRequestMerchantApi(string url, string Request, string token = "")
+        {
+            string strresponse = "";
+            try
+            {
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+                httpWebRequest.Method = "POST";
+                httpWebRequest.Accept = "text/plain";
+
+                //httpWebRequest.PreAuthenticate = true;
+                httpWebRequest.ContentType = "application/json ";
+                httpWebRequest.Headers.Add("Authorization", "Bearer " + token);
+
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+                    if (!string.IsNullOrEmpty(Request))
+                        streamWriter.Write(Request);
+                }
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    strresponse = streamReader.ReadToEnd();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return strresponse;
+
+        }
     }
 }
