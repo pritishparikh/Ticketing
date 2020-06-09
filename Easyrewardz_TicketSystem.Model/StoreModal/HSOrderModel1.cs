@@ -54,6 +54,14 @@ namespace Easyrewardz_TicketSystem.Model
         /// ShoppingBag
         /// </summary>
         public bool ShoppingBag { get; set; }
+        /// <summary>
+        /// EnableClickAfterValue
+        /// </summary>
+        public int EnableClickAfterValue { get; set; }
+        /// <summary>
+        /// EnableClickAfterDuration
+        /// </summary>
+        public string EnableClickAfterDuration { get; set; }
     }
 
     public class OrderDelivered
