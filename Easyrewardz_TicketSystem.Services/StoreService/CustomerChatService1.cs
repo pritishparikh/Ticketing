@@ -186,7 +186,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public List<AppointmentDetails> ScheduleVisit(AppointmentMaster appointmentMaster)
         {
-            int message;
+
             DataSet ds = new DataSet();
             List<AppointmentDetails> lstAppointmentDetails = new List<AppointmentDetails>();
             try
