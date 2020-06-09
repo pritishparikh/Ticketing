@@ -248,7 +248,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
         [HttpPost]
         [Route("GetStoreTimeSlotMasterList")]
-        public ResponseModel GetStoreTimeSlotMasterList(string StoreCode)
+        public ResponseModel GetStoreTimeSlotMasterList(string StoreCode=null)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;

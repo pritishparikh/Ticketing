@@ -284,7 +284,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_TenantId", TenantID);
                 cmd1.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
-                cmd1.Parameters.AddWithValue("@_ProgramCode", string.IsNullOrEmpty(StoreCode) ? "" : StoreCode.ToLower());
+                cmd1.Parameters.AddWithValue("@_StoreCode", string.IsNullOrEmpty(StoreCode) ? "" : StoreCode.ToLower());
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
