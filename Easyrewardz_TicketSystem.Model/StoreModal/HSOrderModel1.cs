@@ -238,4 +238,13 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string Country { get; set; }
     }
+
+    public class ReturnShipmentDetails
+    {
+        public string AWBNumber { get; set; }
+
+        public string InvoiceNo { get; set; }
+
+        public string ItemIDs { get; set; }
+    }
 }

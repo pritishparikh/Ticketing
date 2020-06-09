@@ -392,6 +392,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
 
+        [HttpPost]
         [Route("UpdateShipmentPickupPendingData")]
         public ResponseModel UpdateShipmentPickupPendingData(int OrderID)
         {
@@ -460,6 +461,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
 
+        [HttpPost]
         [Route("UpdateAddressPending")]
         public ResponseModel UpdateAddressPending([FromBody]AddressPendingRequest addressPendingRequest)
         {
