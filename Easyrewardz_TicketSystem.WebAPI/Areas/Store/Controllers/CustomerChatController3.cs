@@ -118,14 +118,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             List<AgentRecentChatHistory> RecentChatsList = new List<AgentRecentChatHistory>();
             try
             {
-                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                //Authenticate authenticate = new Authenticate();
-                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                RecentChatsList = customerChatCaller.GetAgentRecentChat(new CustomerChatService(_connectionString));
+                RecentChatsList = customerChatCaller.GetAgentRecentChat(new CustomerChatService(_connectionString),authenticate.TenantId,authenticate.ProgramCode);
 
                 statusCode = RecentChatsList.Count > 0? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

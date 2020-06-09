@@ -120,7 +120,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// get recent chat history of agents
         /// </summary>
         /// 
-        public List<AgentRecentChatHistory> GetAgentRecentChat()
+        public List<AgentRecentChatHistory> GetAgentRecentChat(int TenantId,string ProgramCode)
         {
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
@@ -133,6 +133,8 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
                 cmd = new MySqlCommand("SP_HSGetAgentRecentChat", conn);
+                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_programCode", ProgramCode);
                 cmd.Connection = conn;
 
                 cmd.CommandType = CommandType.StoredProcedure;
