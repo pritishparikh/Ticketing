@@ -256,7 +256,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
            string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]); 
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 

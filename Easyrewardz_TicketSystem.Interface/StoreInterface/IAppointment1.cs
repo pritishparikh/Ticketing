@@ -10,7 +10,7 @@ namespace Easyrewardz_TicketSystem.Interface
     public partial interface IAppointment
     {
         
-        List<AppointmentModel> GetAppointmentList(int TenantID, int UserId, string AppDate);
+        List<AppointmentModel> GetAppointmentList(int TenantID, int UserId, string AppDate); 
 
         List<AppointmentCount> GetAppointmentCount(int TenantID, int UserId);
 
