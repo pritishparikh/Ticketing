@@ -120,7 +120,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
                 if (ds != null && ds.Tables[1] != null)
                 {
-                    ordersItemDetails.InvoiceNumber = ds.Tables[1].Rows[0]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["InvoiceNo"]);
+                    ordersItemDetails.InvoiceNumber = ds.Tables[1].Rows[0]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["InvoiceNo"]);
                 }
                 }
             catch (Exception)

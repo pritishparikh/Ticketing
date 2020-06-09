@@ -346,7 +346,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         obj.OrdersItemList = ds.Tables[1].AsEnumerable().Where(x => (x.Field<int>("OrderID")).Equals(obj.ID)).Select(x => new OrdersItem()
                         {
-                            ID = Convert.ToInt32(x.Field<string>("ID")),
+                            ID = Convert.ToInt32(x.Field<int>("ID")),
                             ItemID = Convert.ToString(x.Field<string>("ItemID")),
                             ItemName = Convert.ToString(x.Field<string>("ItemName")),
                             ItemPrice = Convert.ToString(x.Field<string>("ItemPrice")),
