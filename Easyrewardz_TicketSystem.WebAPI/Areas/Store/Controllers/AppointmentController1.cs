@@ -248,7 +248,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
         [HttpPost]
         [Route("GetStoreTimeSlotMasterList")]
-        public ResponseModel GetStoreTimeSlotMasterList(string StoreCode=null)
+        public ResponseModel GetStoreTimeSlotMasterList(int StoreID=0)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
@@ -262,7 +262,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 AppointmentCaller newAppointment = new AppointmentCaller();
 
-                TimeSlotList = newAppointment.GetStoreTimeSlotMasterList(new AppointmentServices(_connectioSting), authenticate.TenantId,authenticate.ProgramCode, StoreCode);
+                TimeSlotList = newAppointment.GetStoreTimeSlotMasterList(new AppointmentServices(_connectioSting), authenticate.TenantId,authenticate.ProgramCode, StoreID);
 
                 statusCode = TimeSlotList.Count.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
