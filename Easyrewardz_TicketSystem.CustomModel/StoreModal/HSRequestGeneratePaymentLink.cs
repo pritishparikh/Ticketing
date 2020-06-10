@@ -6,15 +6,15 @@ namespace Easyrewardz_TicketSystem.CustomModel
 {
     public class HSRequestGeneratePaymentLink
     {
-        public string ProgramCode { get; set; }
-        public string StoreCode { get; set; }
-        public string BillDateTime { get; set; }
-        public string TerminalId { get; set; }
-        public string MerchantTxnID { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Mobile { get; set; }
-        public decimal Amount { get; set; }
+        public string programCode { get; set; }
+        public string storeCode  { get; set; }
+        public string billDateTime { get; set; }
+        public string terminalId { get; set; }
+        public string merchantTxnID { get; set; }
+        public string name { get; set; }
+        public string email { get; set; }
+        public string mobile { get; set; }
+        public decimal amount { get; set; }
     }
 
     public class HSResponseGeneratePaymentLink

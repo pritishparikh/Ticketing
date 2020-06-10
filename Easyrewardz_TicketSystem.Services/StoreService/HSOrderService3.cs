@@ -202,6 +202,7 @@ namespace Easyrewardz_TicketSystem.Services
             HSRequestGeneratePaymentLink hSRequestGeneratePaymentLink = null;
             try
             {
+
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
                     conn.Open();
@@ -227,18 +228,18 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         hSRequestGeneratePaymentLink = new HSRequestGeneratePaymentLink
                         {
-                            MerchantTxnID = ds.Tables[0].Rows[i]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
-                            BillDateTime = ds.Tables[0].Rows[i]["billDateTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["billDateTime"]),
-                            TerminalId = ds.Tables[0].Rows[i]["TerminalId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TerminalId"]),
-                            Name = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
-                            Email = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]),
-                            Mobile = ds.Tables[0].Rows[i]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
-                            Amount = ds.Tables[0].Rows[i]["Amount"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Amount"])
+                            merchantTxnID = ds.Tables[0].Rows[i]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
+                            billDateTime = ds.Tables[0].Rows[i]["billDateTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["billDateTime"]),
+                            terminalId = ds.Tables[0].Rows[i]["TerminalId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TerminalId"]),
+                            name = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
+                            email = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]),
+                            mobile = ds.Tables[0].Rows[i]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
+                            amount = ds.Tables[0].Rows[i]["Amount"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Amount"])
                         };
                     }
                 }
-                hSRequestGeneratePaymentLink.ProgramCode = programCode;
-                hSRequestGeneratePaymentLink.StoreCode = sentPaymentLink.StoreCode;
+                hSRequestGeneratePaymentLink.programCode = programCode;
+                hSRequestGeneratePaymentLink.storeCode = sentPaymentLink.StoreCode;
 
                 HSResponseGeneratePaymentLink responseGeneratePaymentLink = new HSResponseGeneratePaymentLink();
 
@@ -273,7 +274,7 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
                     cmd1.Parameters.AddWithValue("@user_ID", userID);
                     cmd1.CommandType = CommandType.StoredProcedure;
-                    result = Convert.ToInt32(cmd.ExecuteNonQuery());
+                    result = Convert.ToInt32(cmd1.ExecuteNonQuery());
                     conn.Close();
                 }
             }
