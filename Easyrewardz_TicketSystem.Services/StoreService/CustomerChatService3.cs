@@ -120,7 +120,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// get recent chat history of agents
         /// </summary>
         /// 
-        public List<AgentRecentChatHistory> GetAgentRecentChat(int TenantId,string ProgramCode)
+        public List<AgentRecentChatHistory> GetAgentRecentChat(int TenantId,string ProgramCode, int CustomerID)
         {
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
@@ -135,6 +135,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd = new MySqlCommand("SP_HSGetAgentRecentChat", conn);
                 cmd.Parameters.AddWithValue("@_TenantID", TenantId);
                 cmd.Parameters.AddWithValue("@_programCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
                 cmd.Connection = conn;
 
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -157,6 +158,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 AgentName = dr["Agent"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Agent"]),
                                 ChatCount = dr["ChatCount"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ChatCount"]),
                                 TimeAgo = dr["TimeAgo"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TimeAgo"]),
+                                ChatStatus = dr["ChatStatus"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ChatStatus"]),
 
                             };
 

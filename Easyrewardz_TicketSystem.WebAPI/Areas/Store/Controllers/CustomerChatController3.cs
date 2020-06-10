@@ -110,7 +110,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetAgentRecentChat")]
-        public ResponseModel GetAgentRecentChat()
+        public ResponseModel GetAgentRecentChat(int CustomerID)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
@@ -125,7 +125,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                RecentChatsList = customerChatCaller.GetAgentRecentChat(new CustomerChatService(_connectionString),authenticate.TenantId,authenticate.ProgramCode);
+                RecentChatsList = customerChatCaller.GetAgentRecentChat(new CustomerChatService(_connectionString),authenticate.TenantId,authenticate.ProgramCode, CustomerID);
 
                 statusCode = RecentChatsList.Count > 0? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
