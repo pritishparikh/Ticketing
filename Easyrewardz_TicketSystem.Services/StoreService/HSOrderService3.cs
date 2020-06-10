@@ -230,23 +230,24 @@ namespace Easyrewardz_TicketSystem.Services
 
                 if (ds != null && ds.Tables[0] != null)
                 {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
                         hSRequestGeneratePaymentLink = new HSRequestGeneratePaymentLink
                         {
-                            merchantTxnID = ds.Tables[0].Rows[i]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
-                            billDateTime = ds.Tables[0].Rows[i]["billDateTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["billDateTime"]),
-                            terminalId = ds.Tables[0].Rows[i]["TerminalId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TerminalId"]),
-                            name = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
-                            email = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]),
-                            mobile = ds.Tables[0].Rows[i]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
-                            amount = ds.Tables[0].Rows[i]["Amount"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Amount"])
+                            merchantTxnID = ds.Tables[0].Rows[0]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["InvoiceNo"]),
+                            billDateTime = ds.Tables[0].Rows[0]["billDateTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["billDateTime"]),
+                            terminalId = ds.Tables[0].Rows[0]["TerminalId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["TerminalId"]),
+                            name = ds.Tables[0].Rows[0]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CustomerName"]),
+                            email = ds.Tables[0].Rows[0]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
+                            mobile = ds.Tables[0].Rows[0]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["MobileNumber"]),
+                            amount = ds.Tables[0].Rows[0]["Amount"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[0]["Amount"])
                         };
-                    }
                 }
                 hSRequestGeneratePaymentLink.programCode = programCode;
                 hSRequestGeneratePaymentLink.storeCode = sentPaymentLink.StoreCode;
-
+                DateTime dateTime_billdatetime = Convert.ToDateTime(hSRequestGeneratePaymentLink.billDateTime);
+                var settings = new JsonSerializerSettings { DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ" };
+                var json = JsonConvert.SerializeObject(dateTime_billdatetime, settings);
+              var newdate=  JsonConvert.DeserializeObject<string>(json);
+                hSRequestGeneratePaymentLink.billDateTime = newdate;
                 HSResponseGeneratePaymentLink responseGeneratePaymentLink = new HSResponseGeneratePaymentLink();
 
                 HSRequestGenerateToken hSRequestGenerateToken = new HSRequestGenerateToken();
@@ -267,7 +268,8 @@ namespace Easyrewardz_TicketSystem.Services
                             billDateTime = hSRequestGeneratePaymentLink.billDateTime,
                             terminalId = hSRequestGeneratePaymentLink.terminalId,
                             merchantTxnID = hSRequestGeneratePaymentLink.merchantTxnID,
-                            mobile = hSRequestGeneratePaymentLink.mobile
+                            mobile = hSRequestGeneratePaymentLink.mobile,
+                            reason = "ABCD"
                         };
                          apiReq1 = JsonConvert.SerializeObject(hSRequestResendPaymentLink);
                         URLGeneratePaymentLink = clientAPIUrlForGeneratePaymentLink + "api/ResendPaymentLink";

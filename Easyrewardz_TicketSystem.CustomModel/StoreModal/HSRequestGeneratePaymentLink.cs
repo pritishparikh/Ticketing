@@ -55,6 +55,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string terminalId { get; set; }
         public string merchantTxnID { get; set; }
         public string mobile { get; set; }
-        public string reason { get; set; } = "ABCD";
+        public string reason { get; set; }
     }
 }
