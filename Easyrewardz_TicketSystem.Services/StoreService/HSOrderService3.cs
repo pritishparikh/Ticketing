@@ -113,6 +113,7 @@ namespace Easyrewardz_TicketSystem.Services
                            Quantity= ds.Tables[0].Rows[i]["Quantity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Quantity"]),
                            OrderID= ds.Tables[0].Rows[i]["OrderID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OrderID"]),
                            Disable= ds.Tables[0].Rows[i]["Disable"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Disable"]),
+                           Checked= ds.Tables[0].Rows[i]["Checked"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["Checked"]),
                         };
 
                         lstOrdersItem.Add(ordersItems);

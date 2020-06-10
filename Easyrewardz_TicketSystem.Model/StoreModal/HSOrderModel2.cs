@@ -141,6 +141,9 @@ namespace Easyrewardz_TicketSystem.Model
         /// OrderID
         /// </summary>
         public int Disable { get; set; }
+        /// OrderID
+        /// </summary>
+        public bool Checked { get; set; }
     }
 
     public class ShoppingBagItem
