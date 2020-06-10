@@ -43,5 +43,18 @@ namespace Easyrewardz_TicketSystem.CustomModel
     {
         public string InvoiceNumber { get; set; }
         public string StoreCode { get; set; }
+        public int SentPaymentLinkCount { get; set; }
+    }
+
+    public class HSRequestResendPaymentLink
+    {
+        public string tokenId { get; set; }
+        public string programCode { get; set; }    
+        public string storeCode { get; set; }
+        public string billDateTime { get; set; }
+        public string terminalId { get; set; }
+        public string merchantTxnID { get; set; }
+        public string mobile { get; set; }
+        public string reason { get; set; } = "ABCD";
     }
 }

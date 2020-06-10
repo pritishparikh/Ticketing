@@ -49,7 +49,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.GetAWBInvoicenoDetails(orderID, tenantID, userID);
         }
-
+        /// <summary>
+        ///Generate Link
+        /// </summary>
+        /// <param name="sentPaymentLink"></param>
+        /// <param name="clientAPIUrlForGenerateToken"></param>
+        /// <param name="clientAPIUrlForGeneratePaymentLink"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
         public int GeneratePaymentLink(IHSOrder order, SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode)
         {
             _OrderRepository = order;

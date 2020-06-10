@@ -38,13 +38,14 @@ namespace Easyrewardz_TicketSystem.Interface
         List<ReturnShipmentDetails> GetAWBInvoicenoDetails(int orderID, int tenantID, int userID);
 
         /// <summary>
-        /// Generate payment Link
+        ///Generate Link
         /// </summary>
-        /// <param name="SentPaymentLink"></param>
-        ///  <param name="clientAPIUrlForGenerateToken"></param>
-        ///  <param name="clientAPIUrlForGeneratePaymentLink"></param>
-        ///  <param name="tenantID"></param>
-        ///  <param name="userID"></param>
+        /// <param name="sentPaymentLink"></param>
+        /// <param name="clientAPIUrlForGenerateToken"></param>
+        /// <param name="clientAPIUrlForGeneratePaymentLink"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="programCode"></param>
         /// <returns></returns>
         int GenerateLink(SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode);
 

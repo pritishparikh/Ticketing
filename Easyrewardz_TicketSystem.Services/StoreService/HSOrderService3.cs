@@ -25,9 +25,9 @@ namespace Easyrewardz_TicketSystem.Services
         public ReturnShipmentDetails CreateShipmentAWB(int orderID, string itemIDs, int tenantID, int userID)
         {
             DataSet ds = new DataSet();
-            ReturnShipmentDetails obj=null;
-            Random generator = new Random();        
-            var randomAWB= generator.Next(0, 1000000000).ToString("D10");
+            ReturnShipmentDetails obj = null;
+            Random generator = new Random();
+            var randomAWB = generator.Next(0, 1000000000).ToString("D10");
             string CourierPartner = "Blue Dart";
             try
             {
@@ -38,8 +38,8 @@ namespace Easyrewardz_TicketSystem.Services
                     CommandType = CommandType.StoredProcedure
                 };
                 cmd.Parameters.AddWithValue("@order_ID", orderID);
-                cmd.Parameters.AddWithValue("@item_IDs", string.IsNullOrEmpty(itemIDs) ? "" :itemIDs.TrimEnd(','));
-                cmd.Parameters.AddWithValue("@random_AWB", randomAWB); 
+                cmd.Parameters.AddWithValue("@item_IDs", string.IsNullOrEmpty(itemIDs) ? "" : itemIDs.TrimEnd(','));
+                cmd.Parameters.AddWithValue("@random_AWB", randomAWB);
                 cmd.Parameters.AddWithValue("@_CourierPartner", CourierPartner);
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@user_ID", userID);
@@ -54,11 +54,11 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                         obj = new ReturnShipmentDetails
+                        obj = new ReturnShipmentDetails
                         {
                             InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
                             AWBNumber = ds.Tables[0].Rows[i]["AWBNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
-                            ItemIDs = ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),                            
+                            ItemIDs = ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),
                         };
                     }
                 }
@@ -95,7 +95,7 @@ namespace Easyrewardz_TicketSystem.Services
                 sqlcmd.Parameters.AddWithValue("order_ID", orderID);
                 sqlcmd.Parameters.AddWithValue("tenant_ID", tenantID);
                 sqlcmd.Parameters.AddWithValue("user_ID", userID);
-     
+
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = sqlcmd;
                 da.Fill(ds);
@@ -106,25 +106,25 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         OrdersItem ordersItems = new OrdersItem
                         {
-                           ID= ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
-                           ItemID= ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),
-                           ItemName= ds.Tables[0].Rows[i]["ItemName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemName"]),
-                           ItemPrice= ds.Tables[0].Rows[i]["ItemPrice"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemPrice"]),
-                           Quantity= ds.Tables[0].Rows[i]["Quantity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Quantity"]),
-                           OrderID= ds.Tables[0].Rows[i]["OrderID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OrderID"]),
-                           Disable= ds.Tables[0].Rows[i]["Disable"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Disable"]),
-                           Checked= ds.Tables[0].Rows[i]["Checked"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["Checked"]),
+                            ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            ItemID = ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),
+                            ItemName = ds.Tables[0].Rows[i]["ItemName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemName"]),
+                            ItemPrice = ds.Tables[0].Rows[i]["ItemPrice"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemPrice"]),
+                            Quantity = ds.Tables[0].Rows[i]["Quantity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Quantity"]),
+                            OrderID = ds.Tables[0].Rows[i]["OrderID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OrderID"]),
+                            Disable = ds.Tables[0].Rows[i]["Disable"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Disable"]),
+                            Checked = ds.Tables[0].Rows[i]["Checked"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["Checked"]),
                         };
 
                         lstOrdersItem.Add(ordersItems);
                     }
-                    ordersItemDetails.OrdersItems = lstOrdersItem;             
+                    ordersItemDetails.OrdersItems = lstOrdersItem;
                 }
                 if (ds != null && ds.Tables[1] != null)
                 {
                     ordersItemDetails.InvoiceNumber = ds.Tables[1].Rows[0]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["InvoiceNo"]);
                 }
-                }
+            }
             catch (Exception)
             {
                 throw;
@@ -166,13 +166,13 @@ namespace Easyrewardz_TicketSystem.Services
                         ReturnShipmentDetails returnShipmentDetails = new ReturnShipmentDetails
                         {
                             InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
-                            ItemIDs= ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),
-                            AWBNumber= ds.Tables[0].Rows[i]["AWBNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
+                            ItemIDs = ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),
+                            AWBNumber = ds.Tables[0].Rows[i]["AWBNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
                         };
 
                         lstReturnShipmentDetails.Add(returnShipmentDetails);
                     }
-                }             
+                }
             }
             catch (Exception)
             {
@@ -189,17 +189,22 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Campaign Share SMS
+        ///Generate Link
         /// </summary>
-        /// <param name="objRequest"></param>
-        /// <param name="ClientAPIURL"></param>
+        /// <param name="sentPaymentLink"></param>
+        /// <param name="clientAPIUrlForGenerateToken"></param>
+        /// <param name="clientAPIUrlForGeneratePaymentLink"></param>
         /// <param name="TenantID"></param>
         /// <param name="UserID"></param>
+        /// <param name="programCode"></param>
         /// <returns></returns>
         public int GenerateLink(SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode)
         {
             int result = 0;
+            string apiReq1 = "";
+            string URLGeneratePaymentLink = "";
             DataSet ds = new DataSet();
+            HSRequestResendPaymentLink hSRequestResendPaymentLink = null;
             HSRequestGeneratePaymentLink hSRequestGeneratePaymentLink = null;
             try
             {
@@ -252,9 +257,27 @@ namespace Easyrewardz_TicketSystem.Services
 
                 if (!string.IsNullOrEmpty(hSResponseGenerateToken.access_Token))
                 {
-                    string apiReq1 = JsonConvert.SerializeObject(hSRequestGeneratePaymentLink);
-
-                    apiResponse1 = CommonService.SendApiRequestMerchantApi(clientAPIUrlForGeneratePaymentLink + "api/GeneratePaymentLink", apiReq1, hSResponseGenerateToken.access_Token);
+                    if (sentPaymentLink.SentPaymentLinkCount > 0)
+                    {
+                        hSRequestResendPaymentLink = new HSRequestResendPaymentLink
+                        {
+                            programCode = programCode,
+                            tokenId = hSResponseGenerateToken.access_Token,
+                            storeCode = sentPaymentLink.StoreCode,
+                            billDateTime = hSRequestGeneratePaymentLink.billDateTime,
+                            terminalId = hSRequestGeneratePaymentLink.terminalId,
+                            merchantTxnID = hSRequestGeneratePaymentLink.merchantTxnID,
+                            mobile = hSRequestGeneratePaymentLink.mobile
+                        };
+                         apiReq1 = JsonConvert.SerializeObject(hSRequestResendPaymentLink);
+                        URLGeneratePaymentLink = clientAPIUrlForGeneratePaymentLink + "api/ResendPaymentLink";
+                    }
+                    else
+                    {
+                        apiReq1 = JsonConvert.SerializeObject(hSRequestGeneratePaymentLink);
+                        URLGeneratePaymentLink = clientAPIUrlForGeneratePaymentLink + "api/GeneratePaymentLink";
+                    }
+                    apiResponse1 = CommonService.SendApiRequestMerchantApi(URLGeneratePaymentLink, apiReq1, hSResponseGenerateToken.access_Token);
 
                     responseGeneratePaymentLink = JsonConvert.DeserializeObject<HSResponseGeneratePaymentLink>(apiResponse1);
                 }
