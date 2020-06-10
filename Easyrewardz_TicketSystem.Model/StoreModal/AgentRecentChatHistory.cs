@@ -12,7 +12,8 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string AgentName { get; set; }
         public int ChatCount { get; set; }
         public string TimeAgo { get; set; }
-    
+        public string ChatStatus { get; set; }
+
     }
 
     public class AgentCustomerChatHistory
@@ -25,6 +26,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string CustomerName { get; set; }
         public int ChatCount { get; set; }
         public string TimeAgo { get; set; }
+        public string ChatStatus { get; set; }
 
     }
 
