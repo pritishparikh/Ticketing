@@ -41,10 +41,11 @@ namespace Easyrewardz_TicketSystem.Model
 
         public int AppointmentID { get; set; }
         public string CustomerName { get; set; }
-        public string MobileNo { get; set; }
+        public string CustomerMobileNo { get; set; }
         public string StoreName { get; set; }
         public string StoreAddress { get; set; }
         public string NoOfPeople { get; set; }
+        public string StoreManagerMobile { get; set; }
     }
 
 }

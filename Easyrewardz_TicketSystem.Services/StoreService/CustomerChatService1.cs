@@ -189,7 +189,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             DataSet ds = new DataSet();
             List<AppointmentDetails> lstAppointmentDetails = new List<AppointmentDetails>();
-            try
+            try 
             {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_HSScheduleVisit", conn)
@@ -217,10 +217,11 @@ namespace Easyrewardz_TicketSystem.Services
                         AppointmentDetails appointmentDetails = new AppointmentDetails();
                         appointmentDetails.AppointmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["AppointmentID"]);
                         appointmentDetails.CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
-                        appointmentDetails.MobileNo = ds.Tables[0].Rows[i]["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                        appointmentDetails.CustomerMobileNo = ds.Tables[0].Rows[i]["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
                         appointmentDetails.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
                         appointmentDetails.StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
                         appointmentDetails.NoOfPeople = ds.Tables[0].Rows[i]["NOofPeople"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NOofPeople"]);
+                        appointmentDetails.StoreManagerMobile = ds.Tables[0].Rows[i]["StoreManagerMobile"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreManagerMobile"]);
 
                         lstAppointmentDetails.Add(appointmentDetails);
                     }
