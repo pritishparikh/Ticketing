@@ -54,6 +54,22 @@ namespace Easyrewardz_TicketSystem.Model
         /// ShoppingBag
         /// </summary>
         public bool ShoppingBag { get; set; }
+
+        /// <summary>
+        /// StoreDelivery
+        /// </summary>
+        public bool StoreDelivery { get; set; }
+
+        /// <summary>
+        /// AlertCommunicationviaWhtsup 
+        /// </summary>
+        public bool AlertCommunicationviaWhtsup { get; set; }
+
+        /// <summary>
+        /// AlertCommunicationviaSMS 
+        /// </summary>
+        public bool AlertCommunicationviaSMS { get; set; }
+
         /// <summary>
         /// EnableClickAfterValue
         /// </summary>

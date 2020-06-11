@@ -145,6 +145,9 @@ namespace Easyrewardz_TicketSystem.Services
                         moduleConfiguration.ShoppingBag = ds.Tables[0].Rows[0]["ShoppingBag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ShoppingBag"]);
                         moduleConfiguration.EnableClickAfterValue = ds.Tables[0].Rows[0]["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt16(ds.Tables[0].Rows[0]["EnableClickAfterValue"]);
                         moduleConfiguration.EnableClickAfterDuration = ds.Tables[0].Rows[0]["EnableClickAfterDuration"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["EnableClickAfterDuration"]);
+                        moduleConfiguration.StoreDelivery= ds.Tables[0].Rows[0]["StoreDelivery"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["StoreDelivery"]);
+                        moduleConfiguration.AlertCommunicationviaWhtsup= ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"]);
+                        moduleConfiguration.AlertCommunicationviaSMS= ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"]);
                     }
                 }   
             }
