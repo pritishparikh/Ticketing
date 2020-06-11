@@ -157,12 +157,15 @@ namespace Easyrewardz_TicketSystem.Services
         {
 
             List<CustomItemSearchResponseModel> ItemList = new List<CustomItemSearchResponseModel>();
+
+            List<CustomItemSearchResponseModel> ApprovedImageItemList = new List<CustomItemSearchResponseModel>();
             ClientCustomGetItemOnSearch SearchItemRequest = new ClientCustomGetItemOnSearch();
 
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
             string ClientAPIResponse = string.Empty;
             string CardItemsIds = string.Empty;
+            string SKUItemCodes = string.Empty;
             try
             {
 
@@ -184,6 +187,9 @@ namespace Easyrewardz_TicketSystem.Services
 
                     if (ItemList.Count > 0)
                     {
+                        SKUItemCodes = string.Join(',', ItemList.Where(x => string.IsNullOrEmpty(x.imageURL) && !string.IsNullOrEmpty(x.uniqueItemCode)).
+                            Select(x => x.uniqueItemCode).ToList());
+
                         if (conn != null && conn.State == ConnectionState.Closed)
                         {
                             conn.Open();
@@ -193,6 +199,7 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_TenantID", TenantID);
                         cmd.Parameters.AddWithValue("@_ProgramCode", Programcode);
+                        cmd.Parameters.AddWithValue("@_SKUItemCodes", string.IsNullOrEmpty(SKUItemCodes) ? "" : SKUItemCodes);
                         cmd.CommandType = CommandType.StoredProcedure;
                         MySqlDataAdapter da = new MySqlDataAdapter();
                         da.SelectCommand = cmd;
@@ -200,6 +207,9 @@ namespace Easyrewardz_TicketSystem.Services
 
                         if (ds != null && ds.Tables != null)
                         {
+
+                            #region disable card items from the API response
+
                             if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                             {
                                 CardItemsIds= ds.Tables[0].Rows[0]["CardItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CardItemID"]);
@@ -247,15 +257,48 @@ namespace Easyrewardz_TicketSystem.Services
 
                                 }
                             }
+
+                            #endregion
+
+                            #region update imageUrl of the items whose card iamge upload has been approved
+
+                            if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                            {
+
+                                foreach (DataRow dr in ds.Tables[1].Rows)
+                                {
+                                    ApprovedImageItemList.Add(new CustomItemSearchResponseModel()
+                                    {
+
+                                        uniqueItemCode = dr["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ItemID"]),
+                                        imageURL = dr["ImageURL"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ImageURL"]),
+
+                                    });
+                                }
+                                   
+                                if (ApprovedImageItemList.Count > 0)
+                                {
+                                    foreach (CustomItemSearchResponseModel carditem  in ItemList)
+                                    {
+                                            carditem.imageURL = ApprovedImageItemList.Where(x => x.uniqueItemCode.Equals(carditem.uniqueItemCode)).Select(x => x.imageURL).FirstOrDefault();
+                                    }
+
+                                }
+
+                            }
+
+
+                            #endregion
+
                         }
 
-              
+
                     }
 
                 }
                 catch(Exception )
                 {
-                    ClientAPIResponse = string.Empty;
+                    throw;
                 }
                 
 

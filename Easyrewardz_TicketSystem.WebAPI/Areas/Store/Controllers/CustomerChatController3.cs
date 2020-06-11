@@ -272,23 +272,76 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("InsertCardImageUpload")]
-        public ResponseModel InsertCardImageUpload(string ItemID, string ImageUrl)
+        public ResponseModel InsertCardImageUpload(string ItemID)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int result = 0;
             int statusCode = 0;
             string statusMessage = "";
+            string ImageFilePath = string.Empty;
+            string ImageUrl= string.Empty;
+            List<string> ImageList = new List<string>();
+
+
             try
             {
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
+                #region CardImage File Read and Save
 
-                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+                var files = Request.Form.Files;
+
+                if (files.Count > 0)
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        ImageList.Add (files[i].FileName.Replace(".",  "_" +  ItemID +"_"+  DateTime.Now.ToString("ddmmyyyyhhssfff") + ".") );
+                    }
+                   
+                }
+
+
+
+                ImageFilePath = Path.Combine(Directory.GetCurrentDirectory(), UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)4), "ChatBotCardImages");
+               
+
+                if (!Directory.Exists(ImageFilePath))
+                {
+                    Directory.CreateDirectory(ImageFilePath);
+                }
+
+                if(ImageList.Count > 0)
+                {
+                  
+                        using (var ms = new MemoryStream())
+                        {
+                            files[0].CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                            MemoryStream msfile = new MemoryStream(fileBytes);
+                            FileStream docFile = new FileStream(Path.Combine(ImageFilePath, ImageList[0]), FileMode.Create, FileAccess.Write);
+                            msfile.WriteTo(docFile);
+                            docFile.Close();
+                            ms.Close();
+                            msfile.Close();
+                            string s = Convert.ToBase64String(fileBytes);
+                            byte[] a = Convert.FromBase64String(s);
+                            // act on the Base64 data
+
+                        }
+                    
+                }
+
+                // ImageFilePath = Path.Combine(ImageFilePath, ImageList[0]);
+                ImageUrl = rootPath + UploadFiles + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)4) + "/ChatBotCardImages/" + ImageList[0];
+
+                #endregion
+
 
                 result = customerChatCaller.InsertCardImageUpload
-                    (new CustomerChatService(_connectionString), authenticate.TenantId,authenticate.ProgramCode, ItemID, ImageUrl,authenticate.UserMasterID);
+                    (new CustomerChatService(_connectionString), authenticate.TenantId,authenticate.ProgramCode, ItemID, ImageUrl, authenticate.UserMasterID);
 
                 statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

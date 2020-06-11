@@ -2,9 +2,11 @@
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Model.StoreModal;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -344,25 +346,64 @@ namespace Easyrewardz_TicketSystem.Services
         public int InsertCardImageUpload(int TenantID, string ProgramCode, string ItemID, string ImageUrl, int CreatedBy)
         {
             int success = 0;
+
+            //string ClientAPIResponse = string.Empty;
+            //Dictionary<string, string> DictFtp = new Dictionary<string, string>() ;
+            //string FTPUrl = string.Empty;
             try
             {
-                if (conn != null && conn.State == ConnectionState.Closed)
-                {
-                    conn.Open();
-                }
-                MySqlCommand cmd = new MySqlCommand
-                {
-                    Connection = conn,
-                    CommandType = CommandType.StoredProcedure,
-                    CommandText = "SP_HSInsertCardImageUpload"
-                };
-                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
-                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
-                cmd.Parameters.AddWithValue("@_ItemID", ItemID);
-                cmd.Parameters.AddWithValue("@_ImageUrl",string.IsNullOrEmpty(ImageUrl) ? "" : ImageUrl);
-                cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
 
-                success = Convert.ToInt32(cmd.ExecuteScalar());
+
+                #region call cardimage API for getting ftp link
+
+                //string JsonRequest = JsonConvert.SerializeObject(new { programCode = ProgramCode });
+
+                //ClientAPIResponse = CommonService.SendApiRequest(ClientAPIUrl + "api/ChatbotBell/GetItemImageUrl", JsonRequest);
+
+                //if (!string.IsNullOrEmpty(ClientAPIResponse))
+                //{
+                //    DictFtp = JsonConvert.DeserializeObject<Dictionary<string, string>>(ClientAPIResponse);
+
+                //    if (DictFtp.Count > 0)
+                //    {
+                //        FTPUrl = DictFtp["imageUrl"];
+                //        if (!string.IsNullOrEmpty(FTPUrl))
+                //        {
+                //            ImageUrl = FTPUrl + Path.GetFileName(ImageFilePath);
+
+                //        }
+                //    }
+                //}
+
+                #endregion
+
+
+                #region insert image log in DB
+
+                if (!string.IsNullOrEmpty(ImageUrl))
+                {
+                    if (conn != null && conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+                    MySqlCommand cmd = new MySqlCommand
+                    {
+                        Connection = conn,
+                        CommandType = CommandType.StoredProcedure,
+                        CommandText = "SP_HSInsertCardImageUpload"
+                    };
+                    cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                    cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                    cmd.Parameters.AddWithValue("@_ItemID", ItemID);
+                    cmd.Parameters.AddWithValue("@_ImageUrl", string.IsNullOrEmpty(ImageUrl) ? "" : ImageUrl);
+                    cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
+
+                    success = Convert.ToInt32(cmd.ExecuteScalar());
+
+                }
+
+                #endregion
+
             }
             catch (Exception)
             {
