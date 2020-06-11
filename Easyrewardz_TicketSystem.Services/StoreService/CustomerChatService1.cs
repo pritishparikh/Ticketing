@@ -445,6 +445,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 alreadyScheduleDetail.Remaining = dataTable.Rows[j]["Remaining"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["Remaining"]);
                                 alreadyScheduleDetail.TimeSlot = dataTable.Rows[j]["TimeSlot"] == DBNull.Value ? string.Empty: Convert.ToString(dataTable.Rows[j]["TimeSlot"]);
                                 alreadyScheduleDetail.StoreId = dataTable.Rows[j]["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["StoreId"]);
+                                alreadyScheduleDetail.IsDisabled = dataTable.Rows[j]["IsDisabled"] == DBNull.Value ? false : Convert.ToBoolean(dataTable.Rows[j]["IsDisabled"]);
                                 lstAlreadyScheduleDetail.Add(alreadyScheduleDetail);
                             }
                             dateofSchedule.AlreadyScheduleDetails = lstAlreadyScheduleDetail;

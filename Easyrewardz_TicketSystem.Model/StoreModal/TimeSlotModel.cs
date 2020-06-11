@@ -37,7 +37,7 @@ namespace Easyrewardz_TicketSystem.Model
         public int Remaining { get; set; }
         public int StoreId { get; set; }
         public string TimeSlot { get; set; }
-
+        public bool IsDisabled { get; set; }
 
     }
 
