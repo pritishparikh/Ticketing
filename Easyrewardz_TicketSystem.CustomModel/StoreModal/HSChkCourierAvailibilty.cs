@@ -15,5 +15,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
     {
         public string StatusCode { get; set; }
         public string Available  { get; set; }
+        public string Message { get; set; }
     }
 }
