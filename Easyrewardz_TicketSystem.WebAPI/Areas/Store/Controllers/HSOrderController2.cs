@@ -173,5 +173,44 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// GetOrderTabSettingDetails
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetOrderTabSettingDetails")]
+        public ResponseModel GetOrderTabSettingDetails()
+        {
+            OrderTabSetting orderResponseDetails = new OrderTabSetting();
+            HSOrderCaller storecampaigncaller = new HSOrderCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                orderResponseDetails = storecampaigncaller.GetOrderTabSettingDetails(new HSOrderService(_connectionString),
+                    authenticate.TenantId, authenticate.UserMasterID);
+                statusCode =
+                   orderResponseDetails.Exists.Equals(0) ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = orderResponseDetails;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
     }
 }

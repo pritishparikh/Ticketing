@@ -396,5 +396,61 @@ namespace Easyrewardz_TicketSystem.Services
             return objdetails;
         }
 
+        /// <summary>
+        /// GetOrderTabSettingDetails
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public OrderTabSetting GetOrderTabSettingDetails(int tenantId, int userId)
+        {
+            DataSet ds = new DataSet();
+            OrderTabSetting objdetails = new OrderTabSetting();
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrderTabSettingDetails", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    objdetails = new OrderTabSetting
+                    {
+                        PaymentVisible = ds.Tables[0].Rows[0]["Payment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Payment"]),
+                        ShoppingBagVisible = ds.Tables[0].Rows[0]["ShoppingBag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ShoppingBag"]),
+                        ShipmentVisible = ds.Tables[0].Rows[0]["Shipment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Shipment"]),
+                        Exists = ds.Tables[0].Rows[0]["Exists"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["Exists"])
+                    };
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objdetails;
+        }
+
     }
 }

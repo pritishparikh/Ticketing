@@ -322,4 +322,24 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string InvoiceNumber { get; set; }
     }
+
+    public class OrderTabSetting
+    {
+        /// <summary>
+        /// Payment
+        /// </summary>
+        public bool PaymentVisible { get; set; }
+        /// <summary>
+        /// Shipment
+        /// </summary>
+        public bool ShipmentVisible { get; set; }
+        /// <summary>
+        /// ShoppingBag
+        /// </summary>
+        public bool ShoppingBagVisible { get; set; }
+        /// <summary>
+        /// Exists
+        /// </summary>
+        public int Exists { get; set; }
+    }
 }
