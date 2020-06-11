@@ -79,6 +79,13 @@ namespace Easyrewardz_TicketSystem.Services
             return obj;
         }
 
+        /// <summary>
+        /// GetItemDetailByOrderID
+        /// </summary>
+        /// <param name="orderID"></param>
+        ///  <param name="tenantID"></param>
+        ///  <param name="userID"></param>
+        /// <returns></returns>
         public OrdersItemDetails GetItemDetailByOrderID(int orderID, int tenantID, int userID)
         {
             DataSet ds = new DataSet();
@@ -139,6 +146,13 @@ namespace Easyrewardz_TicketSystem.Services
             return ordersItemDetails;
         }
 
+        /// <summary>
+        /// GetAWBInvoicenoDetails
+        /// </summary>
+        /// <param name="orderID"></param>
+        ///  <param name="tenantID"></param>
+        ///  <param name="userID"></param>
+        /// <returns></returns>
         public List<ReturnShipmentDetails> GetAWBInvoicenoDetails(int orderID, int tenantID, int userID)
         {
             DataSet ds = new DataSet();
@@ -318,5 +332,36 @@ namespace Easyrewardz_TicketSystem.Services
             return result;
         }
 
+        /// <summary>
+        /// CheckPinCodeForCourierAvailibilty
+        /// </summary>
+        /// <param name="orderID"></param>
+        ///  <param name="tenantID"></param>
+        ///  <param name="userID"></param>
+        /// <returns></returns>
+        public ResponseCourierAvailibilty CheckPinCodeForCourierAvailibilty(HSChkCourierAvailibilty hSChkCourierAvailibilty, int tenantID, int userID, string clientAPIUrl)
+        {
+            ResponseCourierAvailibilty responseCourierAvailibilty = new ResponseCourierAvailibilty();
+            try
+            {
+                hSChkCourierAvailibilty.Cod = 0;
+                hSChkCourierAvailibilty.Weight = 1;
+                string apiReq = JsonConvert.SerializeObject(hSChkCourierAvailibilty);
+                apiResponse = CommonService.SendApiRequest(clientAPIUrl + "api/ShoppingBag/ChkCourierAvailibilty", apiReq);
+                responseCourierAvailibilty = JsonConvert.DeserializeObject<ResponseCourierAvailibilty>(apiResponse);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return responseCourierAvailibilty;
+        }
     }
 }

@@ -49,5 +49,15 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <returns></returns>
         int GenerateLink(SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode);
 
+        /// <summary>
+        /// CheckPinCodeForCourierAvailibilty
+        /// </summary>
+        /// <param name="HSChkCourierAvailibilty"></param>
+        ///  <param name="clientAPIUrl"></param>
+        ///  <param name="tenantID"></param>
+        ///  <param name="userID"></param>
+        /// <returns></returns>
+        ResponseCourierAvailibilty CheckPinCodeForCourierAvailibilty(HSChkCourierAvailibilty hSChkCourierAvailibilty, int tenantID, int userID, string clientAPIUrl);
+
     }
 }

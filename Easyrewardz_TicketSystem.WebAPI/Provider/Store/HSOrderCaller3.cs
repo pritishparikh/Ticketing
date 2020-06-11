@@ -64,5 +64,19 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.GenerateLink(sentPaymentLink, clientAPIUrlForGenerateToken, clientAPIUrlForGeneratePaymentLink, tenantID, userID, programCode);
         }
+
+        /// <summary>
+        /// CheckPinCodeForCourierAvailibilty
+        /// </summary>
+        ///  <param name="HSChkCourierAvailibilty"></param>
+        ///  <param name="tenantID"></param>
+        ///  <param name="userID"></param>
+        ///  <param name="clientAPIUrl"></param>
+        /// <returns></returns>
+        public ResponseCourierAvailibilty CheckPinCodeForCourierAvailibilty(IHSOrder order, HSChkCourierAvailibilty hSChkCourierAvailibilty, int tenantID, int userID,string clientAPIUrl)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.CheckPinCodeForCourierAvailibilty(hSChkCourierAvailibilty, tenantID, userID, clientAPIUrl);
+        }
     }
 }

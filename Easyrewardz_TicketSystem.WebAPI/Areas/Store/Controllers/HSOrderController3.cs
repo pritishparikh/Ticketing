@@ -165,5 +165,45 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+
+
+        /// <summary>
+        /// CheckCourierAvailibilty
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CheckCourierAvailibilty")]
+        public ResponseModel ChkCourierAvailibilty(HSChkCourierAvailibilty hSChkCourierAvailibilty)
+        {
+            HSOrderCaller hSOrderCaller = new HSOrderCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            ResponseCourierAvailibilty responseCourierAvailibilty = new ResponseCourierAvailibilty();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                responseCourierAvailibilty = hSOrderCaller.CheckPinCodeForCourierAvailibilty(new HSOrderService(_connectionString), hSChkCourierAvailibilty, authenticate.TenantId, authenticate.UserMasterID, _ClientAPIUrl);
+                statusCode =
+                responseCourierAvailibilty.StatusCode !="" ? 
+                           (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = responseCourierAvailibilty;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
     }
 }
