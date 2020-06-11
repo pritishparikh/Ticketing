@@ -88,5 +88,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.UpdateAddressPending(addressPendingRequest);
         }
+
+        public OrderReturnsDetails GetOrderReturnDetails(IHSOrder order, int tenantId, int userId, OrderReturnsFilterRequest orderReturnsFilter)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.GetOrderReturnDetails(tenantId, userId, orderReturnsFilter);
+        }
     }
 }

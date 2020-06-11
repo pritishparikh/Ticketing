@@ -271,4 +271,106 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string ItemIDs { get; set; }
     }
+
+    public class OrderReturns
+    {
+        /// <summary>
+        /// ReturnID
+        /// </summary>
+        public int ReturnID { get; set; }
+
+        /// <summary>
+        /// OrderID
+        /// </summary>
+        public int OrderID { get; set; }
+
+        /// <summary>
+        /// AWBNo
+        /// </summary>
+        public string AWBNo { get; set; }
+
+        /// <summary>
+        /// InvoiceNo
+        /// </summary>
+        public string InvoiceNo { get; set; }
+
+        /// <summary>
+        /// CustomerName
+        /// </summary>
+        public string CustomerName { get; set; }
+
+        /// <summary>
+        /// MobileNumber
+        /// </summary>
+        public string MobileNumber { get; set; }
+
+        /// <summary>
+        /// ReturnDate
+        /// </summary>
+        public string Date { get; set; }
+
+        /// <summary>
+        /// ReturnTime
+        /// </summary>
+        public string Time { get; set; }
+
+        /// <summary>
+        /// StatusName
+        /// </summary>
+        public string StatusName { get; set; }
+
+        public List<OrderReturnsItem> orderReturnsItems { get; set; }
+    }
+
+    public class OrderReturnsItem
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+
+        /// <summary>
+        /// ItemID
+        /// </summary>
+        public string ItemID { get; set; }
+
+        /// <summary>
+        /// ItemName
+        /// </summary>
+        public string ItemName { get; set; }
+
+        /// <summary>
+        /// ItemPrice
+        /// </summary>
+        public double ItemPrice { get; set; }
+
+        /// <summary>
+        /// Quantity
+        /// </summary>
+        public int Quantity { get; set; }
+
+        /// <summary>
+        /// OrderID
+        /// </summary>
+        public int OrderID { get; set; }
+
+    }
+
+    public class OrderReturnsDetails
+    {
+        public List<OrderReturns> orderReturns { get; set; }
+
+        public int TotalCount { get; set; }
+    }
+
+    public class OrderReturnsFilterRequest
+    {
+        public string SearchText { get; set; }
+
+        public int PageNo { get; set; }
+
+        public int PageSize { get; set; }
+
+        public string FilterStatus { get; set; }
+    }
 }

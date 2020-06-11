@@ -625,5 +625,90 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UpdateCount;
         }
+
+        public OrderReturnsDetails GetOrderReturnDetails(int tenantId, int userId, OrderReturnsFilterRequest orderReturnsFilter)
+        {
+            DataSet ds = new DataSet();
+            OrderReturnsDetails objdetails = new OrderReturnsDetails();
+
+            List<OrderReturns> orderReturns = new List<OrderReturns>();
+            int TotalCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrderReturnsDetails", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_tenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_SearchText", orderReturnsFilter.SearchText);
+                cmd.Parameters.AddWithValue("@_pageno", orderReturnsFilter.PageNo);
+                cmd.Parameters.AddWithValue("@_pagesize", orderReturnsFilter.PageSize);
+                cmd.Parameters.AddWithValue("@_FilterStatus", orderReturnsFilter.FilterStatus);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        OrderReturns obj = new OrderReturns
+                        {
+                            ReturnID = Convert.ToInt32(ds.Tables[0].Rows[i]["ReturnID"]),
+                            OrderID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderID"]),
+                            AWBNo = Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
+                            InvoiceNo = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
+                            CustomerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
+                            MobileNumber = Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
+                            Date = Convert.ToString(ds.Tables[0].Rows[i]["Date"]),
+                            Time = Convert.ToString(ds.Tables[0].Rows[i]["Time"]),
+                            StatusName = Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]),
+                            orderReturnsItems = new List<OrderReturnsItem>()
+                        };
+
+
+                        obj.orderReturnsItems = ds.Tables[1].AsEnumerable().Where(x => (x.Field<int>("OrderID")).Equals(obj.OrderID)).Select(x => new OrderReturnsItem()
+                        {
+                            ItemID = Convert.ToString(x.Field<string>("ItemID")),
+                            ItemName = Convert.ToString(x.Field<string>("ItemName")),
+                            ItemPrice = x.Field<double>("ItemPrice"),
+                            Quantity = x.Field<int>("Quantity")
+
+                        }).ToList();
+
+                        orderReturns.Add(obj);
+                    }
+                }
+
+                if (ds != null && ds.Tables[2] != null)
+                {
+                    TotalCount = ds.Tables[2].Rows[0]["TotalOrder"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["TotalOrder"]);
+                }
+
+                objdetails.orderReturns = orderReturns;
+                objdetails.TotalCount = TotalCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objdetails;
+        }
     }
 }
