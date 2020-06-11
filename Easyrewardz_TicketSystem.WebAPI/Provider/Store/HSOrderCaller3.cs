@@ -78,5 +78,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.CheckPinCodeForCourierAvailibilty(hSChkCourierAvailibilty, tenantID, userID, clientAPIUrl);
         }
+
+        /// <summary>
+        ///GetStorePinCodeByUserID
+        /// </summary>     
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public string GetStorePinCodeByUserID(IHSOrder order, int tenantID, int userID)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.GetStorePinCodeByUserID(tenantID, userID);
+        }
     }
 }

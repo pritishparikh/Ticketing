@@ -363,5 +363,48 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return responseCourierAvailibilty;
         }
+
+        /// <summary>
+        /// Get Store PinCode By UserID
+        /// </summary>
+        ///  <param name="tenantID"></param>
+        ///  <param name="userID"></param>
+        /// <returns></returns>
+        public string GetStorePinCodeByUserID(int tenantID, int userID)
+        {
+            string pinCode = "";
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand sqlcmd = new MySqlCommand("SP_PHYGetStorePinCodeByUserID", conn);
+                sqlcmd.CommandType = CommandType.StoredProcedure;
+                sqlcmd.Parameters.AddWithValue("tenant_ID", tenantID);
+                sqlcmd.Parameters.AddWithValue("user_ID", userID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = sqlcmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    pinCode = ds.Tables[0].Rows[0]["PincodeID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["PincodeID"]);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return pinCode;
+        }
     }
 }

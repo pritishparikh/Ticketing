@@ -59,5 +59,12 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <returns></returns>
         ResponseCourierAvailibilty CheckPinCodeForCourierAvailibilty(HSChkCourierAvailibilty hSChkCourierAvailibilty, int tenantID, int userID, string clientAPIUrl);
 
+        /// <summary>
+        /// GetStorePinCodeByUserID
+        /// </summary>
+        ///  <param name="tenantID"></param>
+        ///  <param name="userID"></param>
+        /// <returns></returns>
+        string GetStorePinCodeByUserID(int tenantID, int userID);
     }
 }
