@@ -314,6 +314,29 @@ namespace Easyrewardz_TicketSystem.WebAPI
 
             /*-----------------------------*/
 
+
+            /*chatbot card image upload */
+
+
+            string ChatBotCardImageUploadPath = "Uploadfiles/Chat/ChatBotCardImages";
+            string ChatBotCardImageUploadPathURL = Path.Combine(CurrentDirectory, ChatBotCardImageUploadPath);
+            if (!Directory.Exists(ChatBotCardImageUploadPathURL))
+            {
+                Directory.CreateDirectory(ChatBotCardImageUploadPathURL);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(ChatBotCardImageUploadPathURL),
+                RequestPath = "/" + ChatBotCardImageUploadPath
+            });
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(ChatBotCardImageUploadPathURL),
+                RequestPath = "/" + ChatBotCardImageUploadPath
+            });
+
+            /*-----------------------------*/
             app.UseMvc();
         }
 
