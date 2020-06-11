@@ -165,12 +165,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
-
         /// <summary>
         /// CheckCourierAvailibilty
         /// </summary>
-        /// <param name="orderID"></param>
+        /// <param name="HSChkCourierAvailibilty"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("CheckCourierAvailibilty")]
