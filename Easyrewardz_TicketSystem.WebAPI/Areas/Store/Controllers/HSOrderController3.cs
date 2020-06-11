@@ -172,7 +172,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CheckCourierAvailibilty")]
-        public ResponseModel ChkCourierAvailibilty(HSChkCourierAvailibilty hSChkCourierAvailibilty)
+        public ResponseModel CheckCourierAvailibilty(HSChkCourierAvailibilty hSChkCourierAvailibilty)
         {
             HSOrderCaller hSOrderCaller = new HSOrderCaller();
             ResponseModel objResponseModel = new ResponseModel();
