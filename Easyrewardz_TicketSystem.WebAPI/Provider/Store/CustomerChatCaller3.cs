@@ -52,10 +52,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-        public int InsertCardImageUpload(ICustomerChat customerChat, int TenantID, string ProgramCode, string ItemID,string ImageUrl, int CreatedBy)
+        public int InsertCardImageUpload(ICustomerChat customerChat, int TenantID, string ProgramCode, string ClientAPIUrl, string SearchText, string ItemID,string ImageUrl, int CreatedBy)
         {
             _customerChat = customerChat;
-            return _customerChat.InsertCardImageUpload( TenantID,  ProgramCode,  ItemID, ImageUrl,  CreatedBy);
+            return _customerChat.InsertCardImageUpload( TenantID,  ProgramCode,  ClientAPIUrl, SearchText, ItemID, ImageUrl,  CreatedBy);
 
         }
 

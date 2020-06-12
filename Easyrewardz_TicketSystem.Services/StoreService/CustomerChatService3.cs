@@ -6,12 +6,11 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
-using System.Text;
+using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
-   public partial class CustomerChatService: ICustomerChat
+    public partial class CustomerChatService: ICustomerChat
     {
         /// <summary>
         /// update customer chat session
@@ -343,12 +342,13 @@ namespace Easyrewardz_TicketSystem.Services
         ///    <param name="CreatedBy"></param>
         /// <returns></returns>
         /// 
-        public int InsertCardImageUpload(int TenantID, string ProgramCode, string ItemID, string ImageUrl, int CreatedBy)
+        public int InsertCardImageUpload(int TenantID, string ProgramCode,string ClientAPIUrl, string SearchText, string ItemID, string ImageUrl, int CreatedBy)
         {
             int success = 0;
+            List<CustomItemSearchResponseModel> ItemList = new List<CustomItemSearchResponseModel>();
+            CustomItemSearchResponseModel CardItemDetails = new CustomItemSearchResponseModel();
+            string ClientAPIResponse = string.Empty;
 
-            //string ClientAPIResponse = string.Empty;
-            //Dictionary<string, string> DictFtp = new Dictionary<string, string>() ;
             //string FTPUrl = string.Empty;
             try
             {
@@ -377,6 +377,25 @@ namespace Easyrewardz_TicketSystem.Services
 
                 #endregion
 
+                #region call client api for getting item list
+
+                string JsonRequest = JsonConvert.SerializeObject(new ClientCustomGetItemOnSearch() { programcode= ProgramCode , searchCriteria= SearchText });
+
+
+                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIUrl + "api/ChatbotBell/GetItemsByArticlesSKUID", JsonRequest);
+
+                if (!string.IsNullOrEmpty(ClientAPIResponse))
+                {
+                    ItemList = JsonConvert.DeserializeObject<List<CustomItemSearchResponseModel>>(ClientAPIResponse);
+
+                    if (ItemList.Count > 0)
+                    {
+                        CardItemDetails = ItemList.Where(x => x.uniqueItemCode.Equals(ItemID)).ToList().FirstOrDefault();
+                    }
+                }
+
+                #endregion
+
 
                 #region insert image log in DB
 
@@ -398,11 +417,28 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd.Parameters.AddWithValue("@_ImageUrl", string.IsNullOrEmpty(ImageUrl) ? "" : ImageUrl);
                     cmd.Parameters.AddWithValue("@_CreatedBy", CreatedBy);
 
+                    //the params below are for inserting the details in item_master_inventory table (client table)
+
+                    cmd.Parameters.AddWithValue("@_Category", string.IsNullOrEmpty(CardItemDetails.categoryName) ? "" : CardItemDetails.categoryName);
+                    cmd.Parameters.AddWithValue("@_SubCategoryName", string.IsNullOrEmpty(CardItemDetails.subCategoryName) ? "" : CardItemDetails.subCategoryName);
+                    cmd.Parameters.AddWithValue("@_BrandName", string.IsNullOrEmpty(CardItemDetails.brandName) ? "" : CardItemDetails.brandName);
+                    cmd.Parameters.AddWithValue("@_Colour", string.IsNullOrEmpty(CardItemDetails.color) ? "" : CardItemDetails.color);
+                    cmd.Parameters.AddWithValue("@_ColourCode", string.IsNullOrEmpty(CardItemDetails.colorCode) ? "" : CardItemDetails.colorCode);
+                    cmd.Parameters.AddWithValue("@_Price", string.IsNullOrEmpty(CardItemDetails.price) ? "" : CardItemDetails.price);
+                    cmd.Parameters.AddWithValue("@_Discount", string.IsNullOrEmpty(CardItemDetails.discount) ? "" : CardItemDetails.discount);
+                    cmd.Parameters.AddWithValue("@_Size", string.IsNullOrEmpty(CardItemDetails.size) ? "" : CardItemDetails.size);
+                    cmd.Parameters.AddWithValue("@_ItemName", string.IsNullOrEmpty(CardItemDetails.productName) ? "" : CardItemDetails.productName);
+                    cmd.Parameters.AddWithValue("@_ProductURL", string.IsNullOrEmpty(CardItemDetails.url) ? "" : CardItemDetails.url);
+
+
                     success = Convert.ToInt32(cmd.ExecuteScalar());
 
                 }
 
                 #endregion
+
+
+                
 
             }
             catch (Exception)

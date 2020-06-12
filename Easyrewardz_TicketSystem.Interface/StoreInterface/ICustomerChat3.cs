@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<ChatCardImageUploadModel> GetCardImageUploadlog(int ListingFor,int TenantID, string ProgramCode);
 
-        int InsertCardImageUpload(int TenantID, string ProgramCode, string ItemID, string ImageUrl, int CreatedBy);
+        int InsertCardImageUpload(int TenantID, string ProgramCode, string ClientAPIUrl, string SearchText, string ItemID, string ImageUrl, int CreatedBy);
 
         int ApproveRejectCardImage(int ID,int TenantID, string ProgramCode, string ItemID, bool AddToLibrary, int ModifiedBy);
 

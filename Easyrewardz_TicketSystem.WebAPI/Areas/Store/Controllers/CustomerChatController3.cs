@@ -272,7 +272,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("InsertCardImageUpload")]
-        public ResponseModel InsertCardImageUpload(string ItemID)
+        public ResponseModel InsertCardImageUpload(string ItemID, string SearchText)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int result = 0;
@@ -302,7 +302,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                     }
                    
                 }
-
 
 
                 ImageFilePath = Path.Combine(Directory.GetCurrentDirectory(), UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)4), "ChatBotCardImages");
@@ -341,7 +340,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
                 result = customerChatCaller.InsertCardImageUpload
-                    (new CustomerChatService(_connectionString), authenticate.TenantId,authenticate.ProgramCode, ItemID, ImageUrl, authenticate.UserMasterID);
+                    (new CustomerChatService(_connectionString), authenticate.TenantId,authenticate.ProgramCode, _ClientAPIUrl, SearchText, ItemID, ImageUrl, authenticate.UserMasterID);
 
                 statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
