@@ -12,5 +12,6 @@ namespace Easyrewardz_TicketSystem.Interface
         List<ShoppingBagDeliveryFilter> GetShoppingBagDeliveryType(int tenantId, int userId, int pageID);
         OrderResponseDetails GetShipmentDetails(int tenantId, int userId, OrdersDataRequest ordersDataRequest);
         OrderTabSetting GetOrderTabSettingDetails(int tenantId, int userId);
+        int SetOrderHasBeenReturn(int tenantId, int userId, int orderID);
     }
 }
