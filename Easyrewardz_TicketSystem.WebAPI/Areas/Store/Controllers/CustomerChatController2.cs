@@ -125,8 +125,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                ItemList = customerChatCaller.ChatItemSearch(new CustomerChatService(_connectionString),authenticate.TenantId,authenticate.ProgramCode,
-                    _ClientAPIUrl, SearchText, ProgramCode);
+                ItemList = customerChatCaller.ChatItemSearch(new CustomerChatService(_connectionString),authenticate.TenantId, ProgramCode,
+                    _ClientAPIUrl, SearchText);
                 statusCode = ItemList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 

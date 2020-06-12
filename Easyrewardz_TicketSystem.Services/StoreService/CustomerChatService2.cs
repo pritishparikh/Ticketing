@@ -153,7 +153,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="SearchText"></param>
         /// <returns></returns>
-        public List<CustomItemSearchResponseModel> ChatItemDetailsSearch(int TenantID, string Programcode, string ClientAPIURL, string SearchText, string ProgramCode)
+        public List<CustomItemSearchResponseModel> ChatItemDetailsSearch(int TenantID, string Programcode, string ClientAPIURL, string SearchText)
         {
 
             List<CustomItemSearchResponseModel> ItemList = new List<CustomItemSearchResponseModel>();
@@ -171,7 +171,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 #region call client api for getting item list
 
-                SearchItemRequest.programcode = ProgramCode;
+                SearchItemRequest.programcode = Programcode;
                SearchItemRequest.searchCriteria = SearchText;
 
                 try
