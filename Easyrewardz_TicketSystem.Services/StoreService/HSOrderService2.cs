@@ -430,6 +430,7 @@ namespace Easyrewardz_TicketSystem.Services
                         PaymentVisible = ds.Tables[0].Rows[0]["Payment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Payment"]),
                         ShoppingBagVisible = ds.Tables[0].Rows[0]["ShoppingBag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ShoppingBag"]),
                         ShipmentVisible = ds.Tables[0].Rows[0]["Shipment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Shipment"]),
+                        StoreDelivery = ds.Tables[0].Rows[0]["StoreDelivery"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["StoreDelivery"]),
                         Exists = ds.Tables[0].Rows[0]["Exists"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["Exists"])
                     };
                 }

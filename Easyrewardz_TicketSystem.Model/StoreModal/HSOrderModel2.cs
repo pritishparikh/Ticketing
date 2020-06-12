@@ -338,6 +338,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public bool ShoppingBagVisible { get; set; }
         /// <summary>
+        /// StoreDelivery
+        /// </summary>
+        public bool StoreDelivery { get; set; }
+        /// <summary>
         /// Exists
         /// </summary>
         public int Exists { get; set; }
