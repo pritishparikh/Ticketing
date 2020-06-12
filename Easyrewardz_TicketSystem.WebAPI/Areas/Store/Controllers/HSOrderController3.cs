@@ -135,7 +135,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GeneratePaymentLink")]
-        public ResponseModel GeneratePaymentLink(SentPaymentLink objRequest)
+        public ResponseModel GeneratePaymentLink([FromBody] SentPaymentLink objRequest)
         {
             int obj = 0;
             HSOrderCaller hSOrderCaller = new HSOrderCaller();
@@ -172,7 +172,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CheckCourierAvailibilty")]
-        public ResponseModel CheckCourierAvailibilty(HSChkCourierAvailibilty hSChkCourierAvailibilty)
+        public ResponseModel CheckCourierAvailibilty([FromBody] HSChkCourierAvailibilty hSChkCourierAvailibilty)
         {
             HSOrderCaller hSOrderCaller = new HSOrderCaller();
             ResponseModel objResponseModel = new ResponseModel();
