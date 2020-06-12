@@ -103,9 +103,13 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string PickupTime { get; set; }
         /// <summary>
-        /// PickupTime
+        /// StoreCode
         /// </summary>
         public string StoreCode { get; set; }
+        /// <summary>
+        /// Disablebutton
+        /// </summary>
+        public bool DisablePaymentlinkbutton { get; set; }
         /// <summary>
         /// CountSendPaymentLink
         /// </summary>
