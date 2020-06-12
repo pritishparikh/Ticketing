@@ -34,5 +34,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateAddressPending(AddressPendingRequest addressPendingRequest);
 
         OrderReturnsDetails GetOrderReturnDetails(int tenantId, int userId, OrderReturnsFilterRequest orderReturnsFilter);
+
+        int UpdateDeliveredByShipAssigned(int orderID);
     }
 }

@@ -71,6 +71,11 @@ namespace Easyrewardz_TicketSystem.Model
         public bool AlertCommunicationviaSMS { get; set; }
 
         /// <summary>
+        /// AlertCommunicationSMSText
+        /// </summary>
+        public string AlertCommunicationSMSText { get; set; }
+
+        /// <summary>
         /// EnableClickAfterValue
         /// </summary>
         public int EnableClickAfterValue { get; set; }
@@ -78,6 +83,57 @@ namespace Easyrewardz_TicketSystem.Model
         /// EnableClickAfterDuration
         /// </summary>
         public string EnableClickAfterDuration { get; set; }
+
+        /// <summary>
+        /// ShoppingBagConvertToOrder
+        /// </summary>
+        public bool ShoppingBagConvertToOrder { get; set; }
+
+        /// <summary>
+        /// ShoppingBagConvertToOrderText
+        /// </summary>
+        public string ShoppingBagConvertToOrderText { get; set; }
+
+        /// <summary>
+        /// AWBAssigned
+        /// </summary>
+        public bool AWBAssigned { get; set; }
+
+        /// <summary>
+        /// AWBAssignedText
+        /// </summary>
+        public string AWBAssignedText { get; set; }
+
+        /// <summary>
+        /// PickeupScheduled
+        /// </summary>
+        public bool PickupScheduled { get; set; }
+
+        /// <summary>
+        /// PickeupScheduledText
+        /// </summary>
+        public string PickupScheduledText { get; set; }
+
+        /// <summary>
+        /// Shipped
+        /// </summary>
+        public bool Shipped { get; set; }
+
+        /// <summary>
+        /// ShippedText
+        /// </summary>
+        public string ShippedText { get; set; }
+
+        /// <summary>
+        /// Delivered
+        /// </summary>
+        public bool Delivered { get; set; }
+
+        /// <summary>
+        /// DeliveredText
+        /// </summary>
+        public string DeliveredText { get; set; }
+
     }
 
     public class OrderDelivered
@@ -185,6 +241,8 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class ShipmentAssigned
     {
+        public int OrderID { get; set; }
+
         public string AWBNo { get; set; }
 
         public string InvoiceNo { get; set; }

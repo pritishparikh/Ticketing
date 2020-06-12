@@ -148,6 +148,17 @@ namespace Easyrewardz_TicketSystem.Services
                         moduleConfiguration.StoreDelivery= ds.Tables[0].Rows[0]["StoreDelivery"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["StoreDelivery"]);
                         moduleConfiguration.AlertCommunicationviaWhtsup= ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"]);
                         moduleConfiguration.AlertCommunicationviaSMS= ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"]);
+                        moduleConfiguration.AlertCommunicationSMSText = ds.Tables[0].Rows[0]["AlertCommunicationSMSText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["AlertCommunicationSMSText"]);
+                        moduleConfiguration.ShoppingBagConvertToOrder = ds.Tables[0].Rows[0]["ShoppingBagConvertToOrder"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ShoppingBagConvertToOrder"]);
+                        moduleConfiguration.ShoppingBagConvertToOrderText = ds.Tables[0].Rows[0]["ShoppingBagConvertToOrderText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["ShoppingBagConvertToOrderText"]);
+                        moduleConfiguration.AWBAssigned = ds.Tables[0].Rows[0]["AWBAssigned"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AWBAssigned"]);
+                        moduleConfiguration.AWBAssignedText = ds.Tables[0].Rows[0]["AWBAssignedText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["AWBAssignedText"]);
+                        moduleConfiguration.PickupScheduled = ds.Tables[0].Rows[0]["PickupScheduled"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["PickupScheduled"]);
+                        moduleConfiguration.PickupScheduledText = ds.Tables[0].Rows[0]["PickupScheduledText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["PickupScheduledText"]);
+                        moduleConfiguration.Shipped = ds.Tables[0].Rows[0]["Shipped"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Shipped"]);
+                        moduleConfiguration.ShippedText = ds.Tables[0].Rows[0]["ShippedText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["ShippedText"]);
+                        moduleConfiguration.Delivered = ds.Tables[0].Rows[0]["Delivered"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Delivered"]);
+                        moduleConfiguration.DeliveredText = ds.Tables[0].Rows[0]["DeliveredText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["DeliveredText"]);
                     }
                 }   
             }
@@ -187,8 +198,19 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_StoreDelivery", Convert.ToInt16(orderConfiguration.StoreDelivery));
                 cmd.Parameters.AddWithValue("@_AlertCommunicationviaWhtsup", Convert.ToInt16(orderConfiguration.AlertCommunicationviaWhtsup));
                 cmd.Parameters.AddWithValue("@_AlertCommunicationviaSMS", Convert.ToInt16(orderConfiguration.AlertCommunicationviaSMS));
+                cmd.Parameters.AddWithValue("@_AlertCommunicationviaSMSText", orderConfiguration.AlertCommunicationSMSText);
                 cmd.Parameters.AddWithValue("@_EnableClickAfterValue", Convert.ToInt16(orderConfiguration.EnableClickAfterValue));
                 cmd.Parameters.AddWithValue("@_EnableClickAfterDuration", orderConfiguration.EnableClickAfterDuration);
+                cmd.Parameters.AddWithValue("@_ShoppingBagConvertToOrder", Convert.ToInt16(orderConfiguration.ShoppingBagConvertToOrder));
+                cmd.Parameters.AddWithValue("@_ShoppingBagConvertToOrderText", orderConfiguration.ShoppingBagConvertToOrderText);
+                cmd.Parameters.AddWithValue("@_AWBAssigned", Convert.ToInt16(orderConfiguration.AWBAssigned));
+                cmd.Parameters.AddWithValue("@_AWBAssignedText", orderConfiguration.AWBAssignedText);
+                cmd.Parameters.AddWithValue("@_PickupScheduled", Convert.ToInt16(orderConfiguration.PickupScheduled));
+                cmd.Parameters.AddWithValue("@_PickupScheduledText", orderConfiguration.PickupScheduledText);
+                cmd.Parameters.AddWithValue("@_Shipped", Convert.ToInt16(orderConfiguration.Shipped));
+                cmd.Parameters.AddWithValue("@_ShippedText", orderConfiguration.ShippedText);
+                cmd.Parameters.AddWithValue("@_Delivered", Convert.ToInt16(orderConfiguration.Delivered));
+                cmd.Parameters.AddWithValue("@_DeliveredText", orderConfiguration.DeliveredText);
                 cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
 
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -381,6 +403,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         ShipmentAssigned obj = new ShipmentAssigned
                         {
+                            OrderID = Convert.ToInt16(ds.Tables[0].Rows[i]["OrderID"]),
                             AWBNo = Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
                             InvoiceNo = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
                             CourierPartner = Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]),
@@ -709,6 +732,37 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return objdetails;
+        }
+
+        public int UpdateDeliveredByShipAssigned(int orderID)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateDeliveredByShipAssigned", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_OrderID", orderID);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
         }
     }
 }
