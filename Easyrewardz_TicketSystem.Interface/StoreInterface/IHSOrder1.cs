@@ -35,6 +35,8 @@ namespace Easyrewardz_TicketSystem.Interface
 
         OrderReturnsDetails GetOrderReturnDetails(int tenantId, int userId, OrderReturnsFilterRequest orderReturnsFilter);
 
-        int UpdateDeliveredByShipAssigned(int orderID);
+        int UpdateShipmentAssignedDelivered(int orderID);
+
+        int UpdateShipmentAssignedRTO(int orderID);
     }
 }

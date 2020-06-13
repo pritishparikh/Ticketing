@@ -537,8 +537,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         [HttpPost]
-        [Route("UpdateDeliveredByShipAssigned")]
-        public ResponseModel UpdateDeliveredByShipAssigned(int orderID)
+        [Route("UpdateShipmentAssignedDelivered")]
+        public ResponseModel UpdateShipmentAssignedDelivered(int orderID)
         {
             int UpdateCount = 0;
             HSOrderCaller hSOrderCaller = new HSOrderCaller();
@@ -551,7 +551,42 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                UpdateCount = hSOrderCaller.UpdateDeliveredByShipAssigned(new HSOrderService(_connectionString), orderID);
+                UpdateCount = hSOrderCaller.UpdateShipmentAssignedDelivered(new HSOrderService(_connectionString), orderID);
+                statusCode =
+                   UpdateCount.Equals(0) ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = UpdateCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        [HttpPost]
+        [Route("UpdateShipmentAssignedRTO")]
+        public ResponseModel UpdateShipmentAssignedRTO(int orderID)
+        {
+            int UpdateCount = 0;
+            HSOrderCaller hSOrderCaller = new HSOrderCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                UpdateCount = hSOrderCaller.UpdateShipmentAssignedRTO(new HSOrderService(_connectionString), orderID);
                 statusCode =
                    UpdateCount.Equals(0) ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

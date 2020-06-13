@@ -95,10 +95,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _OrderRepository.GetOrderReturnDetails(tenantId, userId, orderReturnsFilter);
         }
 
-        public int UpdateDeliveredByShipAssigned(IHSOrder order, int orderID)
+        public int UpdateShipmentAssignedDelivered(IHSOrder order, int orderID)
         {
             _OrderRepository = order;
-            return _OrderRepository.UpdateDeliveredByShipAssigned(orderID);
+            return _OrderRepository.UpdateShipmentAssignedDelivered(orderID);
+        }
+
+        public int UpdateShipmentAssignedRTO(IHSOrder order, int orderID)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.UpdateShipmentAssignedRTO(orderID);
         }
     }
 }
