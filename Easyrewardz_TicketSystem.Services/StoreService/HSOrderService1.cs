@@ -578,7 +578,7 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
-        public int InsertOrderDetails(ConvertToOrder convertToOrder)
+        public int InsertOrderDetails(ConvertToOrder convertToOrder, int tenantId, int userId)
         {
             int InsertCount = 0;
             try
@@ -591,6 +591,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ShoppingID", convertToOrder.ShoppingID);
                 cmd.Parameters.AddWithValue("@_InvoiceNo", convertToOrder.InvoiceNo);
                 cmd.Parameters.AddWithValue("@_Amount", convertToOrder.Amount);
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 InsertCount = Convert.ToInt32(cmd.ExecuteNonQuery());
