@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ChatID"></param>
         /// <returns></returns>
         /// 
-        public List<CustomerChatMessages> GetChatMessageDetails(int tenantId, int ChatID)
+        public List<CustomerChatMessages> GetChatMessageDetails(int tenantId, int ChatID ,int ForRecentChat)
         {
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
@@ -38,6 +38,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_tenantID", tenantId);
                 cmd.Parameters.AddWithValue("@_chatID", ChatID);
+                cmd.Parameters.AddWithValue("@_ForRecentChat", ForRecentChat);
 
                 cmd.CommandType = CommandType.StoredProcedure;
 

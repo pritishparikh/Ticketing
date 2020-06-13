@@ -12,10 +12,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
     {
         #region Methods 
 
-        public List<CustomerChatMessages> GetChatmessageDetails(ICustomerChat customerChat, int TenantId, int ChatID)
+        public List<CustomerChatMessages> GetChatmessageDetails(ICustomerChat customerChat, int TenantId, int ChatID, int ForRecentChat)
         {
             _customerChat = customerChat;
-            return _customerChat.GetChatMessageDetails(TenantId, ChatID);
+            return _customerChat.GetChatMessageDetails(TenantId, ChatID,  ForRecentChat);
         }
 
         public int SaveChatMessages(ICustomerChat customerChat, CustomerChatModel ChatMessageDetails)
