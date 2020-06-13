@@ -339,7 +339,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 }
 
                 // ImageFilePath = Path.Combine(ImageFilePath, ImageList[0]);
-                ImageUrl = rootPath + UploadFiles + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)4) + "/ChatBotCardImages/" + ImageList[0];
+                ImageUrl = rootPath + UploadFiles +"/"+ CommonFunction.GetEnumDescription((EnumMaster.FileUpload)4) + "/ChatBotCardImages/" + ImageList[0];
 
                 #endregion
 
