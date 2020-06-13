@@ -614,7 +614,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-        public int UpdateAddressPending(AddressPendingRequest addressPendingRequest)
+        public int UpdateAddressPending(AddressPendingRequest addressPendingRequest, int tenantId, int userId)
         {
             int UpdateCount = 0;
             try
@@ -631,6 +631,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_City", addressPendingRequest.City);
                 cmd.Parameters.AddWithValue("@_State", addressPendingRequest.State);
                 cmd.Parameters.AddWithValue("@_Country", addressPendingRequest.Country);
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());

@@ -31,7 +31,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int InsertOrderDetails(ConvertToOrder convertToOrder, int tenantId, int userId);
 
-        int UpdateAddressPending(AddressPendingRequest addressPendingRequest);
+        int UpdateAddressPending(AddressPendingRequest addressPendingRequest, int tenantId, int userId);
 
         OrderReturnsDetails GetOrderReturnDetails(int tenantId, int userId, OrderReturnsFilterRequest orderReturnsFilter);
 
