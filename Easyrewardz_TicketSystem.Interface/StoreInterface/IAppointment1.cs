@@ -22,9 +22,9 @@ namespace Easyrewardz_TicketSystem.Interface
         int InsertUpdateTimeSlotMaster(StoreTimeSlotInsertUpdate Slot);
 
 
-        int DeleteTimeSlotMaster(int SlotID, int TenantID);
+        int DeleteTimeSlotMaster(int SlotID, int TenantID, string ProgramCode);
 
-        List<StoreTimeSlotMasterModel> StoreTimeSlotMasterList(int TenantID, string ProgramCode, int StoreID);
+        List<StoreTimeSlotSettingModel> GetStoreSettingTimeSlot(int TenantID, string ProgramCode, int StoreID);
 
         #endregion
     }
