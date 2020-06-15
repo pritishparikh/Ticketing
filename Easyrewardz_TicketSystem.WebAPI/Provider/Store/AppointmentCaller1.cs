@@ -49,7 +49,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public int InsertTimeSlotSetting(IAppointment appointment, StoreTimeSlotInsertUpdate Slot)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.s(Slot);
+            return _AppointmentRepository.InsertTimeSlotSetting(Slot);
         }
 
         public int DeleteTimeSlotMaster(IAppointment appointment, int SlotID, int TenantID, string ProgramCode)
