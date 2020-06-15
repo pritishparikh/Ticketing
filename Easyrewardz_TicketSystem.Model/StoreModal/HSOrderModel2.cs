@@ -119,6 +119,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public int CountSendPaymentLink { get; set; }
         /// <summary>
+        /// SourceOfOrder
+        /// </summary>
+        public string SourceOfOrder { get; set; }
+        /// <summary>
         /// OrdersItemList
         /// </summary>
         public List<OrdersItem> OrdersItemList { get; set; }

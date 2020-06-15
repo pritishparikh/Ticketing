@@ -71,6 +71,7 @@ namespace Easyrewardz_TicketSystem.Services
                             CountSendPaymentLink = ds.Tables[0].Rows[i]["CountSendPaymentLink"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CountSendPaymentLink"]),
                             StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]),
                             DisablePaymentlinkbutton = ds.Tables[0].Rows[i]["DisablePaymentlinkbutton"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["DisablePaymentlinkbutton"]),
+                            SourceOfOrder = ds.Tables[0].Rows[i]["SourceOfOrder"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SourceOfOrder"]),
                             OrdersItemList = new List<OrdersItem>(),
                             ShoppingBagItemList = new List<ShoppingBagItem>()
                         };
