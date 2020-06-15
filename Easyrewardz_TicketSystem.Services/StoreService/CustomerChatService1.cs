@@ -67,7 +67,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
-            List<CustomerChatMaster> lstCustomerChatMaster = new List<CustomerChatMaster>();
+            List<CustomerChatMaster> lstCustomerChatMaster = new List<CustomerChatMaster>(); 
 
             try
             {
