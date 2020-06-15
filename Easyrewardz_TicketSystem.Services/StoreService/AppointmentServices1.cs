@@ -281,7 +281,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Open();
                 }
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreTimeSlotDetails", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreTimeSlotSettingList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_TenantId", TenantID);
                 cmd1.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
