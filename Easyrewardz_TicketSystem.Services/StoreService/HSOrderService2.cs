@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -71,6 +72,7 @@ namespace Easyrewardz_TicketSystem.Services
                             CountSendPaymentLink = ds.Tables[0].Rows[i]["CountSendPaymentLink"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CountSendPaymentLink"]),
                             StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]),
                             DisablePaymentlinkbutton = ds.Tables[0].Rows[i]["DisablePaymentlinkbutton"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["DisablePaymentlinkbutton"]),
+                            SourceOfOrder = ds.Tables[0].Rows[i]["SourceOfOrder"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SourceOfOrder"]),
                             OrdersItemList = new List<OrdersItem>(),
                             ShoppingBagItemList = new List<ShoppingBagItem>()
                         };
@@ -342,6 +344,7 @@ namespace Easyrewardz_TicketSystem.Services
                             DeliveryTypeName = ds.Tables[0].Rows[i]["DeliveryTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DeliveryTypeName"]),
                             PickupDate = ds.Tables[0].Rows[i]["PickupDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PickupDate"]),
                             PickupTime = ds.Tables[0].Rows[i]["PickupTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PickupTime"]),
+                            CourierPartner = ds.Tables[0].Rows[i]["CourierPartner"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]),
                             OrdersItemList = new List<OrdersItem>(),
                             ShoppingBagItemList = new List<ShoppingBagItem>()
                         };
@@ -461,7 +464,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="userId"></param>
         /// <param name="orderID"></param>
         /// <returns></returns>
-        public int SetOrderHasBeenReturn(int tenantId, int userId, int orderID)
+        public int SetOrderHasBeenReturn(int tenantId, int userId, int orderID, string Returnby = "Order")
         {
             int UpdateCount = 0;
             try
@@ -474,6 +477,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_TenantID", tenantId);
                 cmd.Parameters.AddWithValue("@_UserID", userId);
                 cmd.Parameters.AddWithValue("@_OrderID", orderID);
+                cmd.Parameters.AddWithValue("@_Returnby", Returnby);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
@@ -492,6 +496,209 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return UpdateCount;
+        }
+
+        public int SmsWhatsUpDataSend(int tenantId, int userId, string ProgramCode, int orderId, string ClientAPIURL, string sMSWhtappTemplate)
+        {
+            int result = 0;
+            string Message = "";
+            DataSet ds = new DataSet();
+            OrdersSmsWhatsUpDataDetails ordersSmsWhatsUpDataDetails = new OrdersSmsWhatsUpDataDetails();
+            try
+            {
+
+                GetWhatsappMessageDetailsResponse getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
+
+                string strpostionNumber = "";
+                string strpostionName = "";
+                string additionalInfo = "";
+                try
+                {
+                    GetWhatsappMessageDetailsModal getWhatsappMessageDetailsModal = new GetWhatsappMessageDetailsModal()
+                    {
+                        ProgramCode = ProgramCode
+                    };
+
+                    string apiBotReq = JsonConvert.SerializeObject(getWhatsappMessageDetailsModal);
+                    string apiBotResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetWhatsappMessageDetails", apiBotReq);
+
+                    if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
+                    {
+                        getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
+                    }
+
+                    if (getWhatsappMessageDetailsResponse != null)
+                    {
+                        if (getWhatsappMessageDetailsResponse.Remarks != null)
+                        {
+                            string ObjRemark = getWhatsappMessageDetailsResponse.Remarks.Replace("\r\n", "");
+                            string[] ObjSplitComma = ObjRemark.Split(',');
+
+                            if (ObjSplitComma.Length > 0)
+                            {
+                                for (int i = 0; i < ObjSplitComma.Length; i++)
+                                {
+                                    strpostionNumber += ObjSplitComma[i].Split('-')[0].Trim().Replace("{", "").Replace("}", "") + ",";
+                                    strpostionName += ObjSplitComma[i].Split('-')[1].Trim() + ",";
+                                }
+                            }
+
+                            strpostionNumber = strpostionNumber.TrimEnd(',');
+                            strpostionName = strpostionName.TrimEnd(',');
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
+                }
+
+
+
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrderTabSettingDetails", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_OrderID", orderId);
+                cmd.Parameters.AddWithValue("@_strpostionNumber", strpostionNumber);
+                cmd.Parameters.AddWithValue("@_strpostionName", strpostionName);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    ordersSmsWhatsUpDataDetails = new OrdersSmsWhatsUpDataDetails()
+                    {
+                        OderID = ds.Tables[0].Rows[0]["OderID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["OderID"]),
+                        AlertCommunicationviaWhtsup = ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"]),
+                        AlertCommunicationviaSMS = ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"]),
+                        SMSSenderName = ds.Tables[0].Rows[0]["SMSSenderName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["SMSSenderName"]),
+                        ShoppingBagConvertToOrder = ds.Tables[0].Rows[0]["ShoppingBagConvertToOrder"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ShoppingBagConvertToOrder"]),
+                        ShoppingBagConvertToOrderText = ds.Tables[0].Rows[0]["ShoppingBagConvertToOrderText"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ShoppingBagConvertToOrderText"]),
+                        AWBAssigned = ds.Tables[0].Rows[0]["AWBAssigned"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AWBAssigned"]),
+                        AWBAssignedText = ds.Tables[0].Rows[0]["AWBAssignedText"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["AWBAssignedText"]),
+                        PickupScheduled = ds.Tables[0].Rows[0]["PickupScheduled"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["PickupScheduled"]),
+                        PickupScheduledText = ds.Tables[0].Rows[0]["PickupScheduledText"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["PickupScheduledText"]),
+                        Shipped = ds.Tables[0].Rows[0]["Shipped"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Shipped"]),
+                        ShippedText = ds.Tables[0].Rows[0]["ShippedText"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ShippedText"]),
+                        Delivered = ds.Tables[0].Rows[0]["Delivered"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Delivered"]),
+                        DeliveredText = ds.Tables[0].Rows[0]["DeliveredText"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["DeliveredText"]),
+                        InvoiceNo = ds.Tables[0].Rows[0]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["InvoiceNo"]),
+                        MobileNumber = ds.Tables[0].Rows[0]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["MobileNumber"]),
+                        AdditionalInfo = ds.Tables[1].Rows[0]["additionalInfo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["additionalInfo"]),
+                    };
+                    // result = ds.Tables[0].Rows[0]["ChatID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["ChatID"]);
+                    // Message = ds.Tables[0].Rows[0]["Message"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Message"]);
+                    // additionalInfo = ds.Tables[0].Rows[0]["additionalInfo"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["additionalInfo"]);
+                }
+
+
+
+                if (ordersSmsWhatsUpDataDetails.AlertCommunicationviaWhtsup)
+                {
+                    try
+                    {
+                        List<string> additionalList = new List<string>();
+                        if (additionalInfo != null)
+                        {
+                            additionalList = ordersSmsWhatsUpDataDetails.AdditionalInfo.Split(",").ToList();
+                        }
+                        SendFreeTextRequest sendFreeTextRequest = new SendFreeTextRequest
+                        {
+                            To = ordersSmsWhatsUpDataDetails.MobileNumber.TrimStart('0').Length > 10 ? ordersSmsWhatsUpDataDetails.MobileNumber : "91" + ordersSmsWhatsUpDataDetails.MobileNumber.TrimStart('0'),
+                            ProgramCode = ProgramCode,
+                            TemplateName = getWhatsappMessageDetailsResponse.TemplateName,
+                            AdditionalInfo = additionalList
+                        };
+
+                        string apiReq = JsonConvert.SerializeObject(sendFreeTextRequest);
+                        apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendCampaign", apiReq);
+
+                       
+                        //if (apiResponse.Equals("true"))
+                        //{
+                        //    UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");
+                        //}
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
+                else if (ordersSmsWhatsUpDataDetails.AlertCommunicationviaSMS)
+                {
+                    if(sMSWhtappTemplate == "ShoppingBagConvertToOrder" & ordersSmsWhatsUpDataDetails.ShoppingBagConvertToOrder)
+                    {
+                        Message = ordersSmsWhatsUpDataDetails.ShoppingBagConvertToOrderText;
+                    }
+                    else if (sMSWhtappTemplate == "AWBAssigned" & ordersSmsWhatsUpDataDetails.AWBAssigned)
+                    {
+                        Message = ordersSmsWhatsUpDataDetails.AWBAssignedText;
+                    }
+                    else if (sMSWhtappTemplate == "PickupScheduled" & ordersSmsWhatsUpDataDetails.PickupScheduled)
+                    {
+                        Message = ordersSmsWhatsUpDataDetails.PickupScheduledText;
+                    }
+                    else if (sMSWhtappTemplate == "Shipped" & ordersSmsWhatsUpDataDetails.Shipped)
+                    {
+                        Message = ordersSmsWhatsUpDataDetails.ShippedText;
+                    }
+                    else if (sMSWhtappTemplate == "Delivered" & ordersSmsWhatsUpDataDetails.Delivered)
+                    {
+                        Message = ordersSmsWhatsUpDataDetails.DeliveredText;
+                    }
+                    
+
+                    ChatSendSMS chatSendSMS = new ChatSendSMS
+                    {
+                        MobileNumber = ordersSmsWhatsUpDataDetails.MobileNumber.TrimStart('0').Length > 10 ? ordersSmsWhatsUpDataDetails.MobileNumber : "91" + ordersSmsWhatsUpDataDetails.MobileNumber.TrimStart('0'),
+                        SenderId = ordersSmsWhatsUpDataDetails.SMSSenderName,
+                        SmsText = Message
+                    };
+
+                    string apiReq = JsonConvert.SerializeObject(chatSendSMS);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendSMS", apiReq);
+
+                    ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
+
+                    chatSendSMSResponse = JsonConvert.DeserializeObject<ChatSendSMSResponse>(apiResponse);
+
+                    if (chatSendSMSResponse != null)
+                    {
+                        result = chatSendSMSResponse.Id;
+                    }
+
+                    //if (result > 0)
+                    //{
+                    //    UpdateResponseShare(objRequest.CustomerID, "Contacted Via SMS");
+                    //}
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return result;
         }
     }
 }

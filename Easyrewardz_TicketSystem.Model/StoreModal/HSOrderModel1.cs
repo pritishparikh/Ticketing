@@ -153,7 +153,6 @@ namespace Easyrewardz_TicketSystem.Model
         /// UnDeliverableText
         /// </summary>
         public string UnDeliverableText { get; set; }
-
     }
 
     public class OrderDelivered

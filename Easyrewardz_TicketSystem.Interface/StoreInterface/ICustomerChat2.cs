@@ -9,7 +9,7 @@ namespace Easyrewardz_TicketSystem.Interface
     public partial interface ICustomerChat
     {
 
-        List<CustomerChatMessages> GetChatMessageDetails(int tenantId, int ChatID);
+        List<CustomerChatMessages> GetChatMessageDetails(int tenantId, int ChatID, int ForRecentChat);
 
         int SaveChatMessages(CustomerChatModel ChatMessageDetails);
 

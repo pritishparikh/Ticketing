@@ -272,7 +272,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("InsertCardImageUpload")]
-        public ResponseModel InsertCardImageUpload(string ItemID, string SearchText)
+        public ResponseModel InsertCardImageUpload()
         {
             ResponseModel objResponseModel = new ResponseModel();
             int result = 0;
@@ -281,7 +281,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string ImageFilePath = string.Empty;
             string ImageUrl= string.Empty;
             List<string> ImageList = new List<string>();
-
+            string ItemID = string.Empty;
+            string SearchText = string.Empty;
 
             try
             {
@@ -293,6 +294,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 #region CardImage File Read and Save
 
                 var files = Request.Form.Files;
+
+                ItemID = Convert.ToString(Request.Form["ItemID"]);
+                SearchText = Convert.ToString(Request.Form["SearchText"]);
+
 
                 if (files.Count > 0)
                 {
@@ -334,7 +339,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 }
 
                 // ImageFilePath = Path.Combine(ImageFilePath, ImageList[0]);
-                ImageUrl = rootPath + UploadFiles + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)4) + "/ChatBotCardImages/" + ImageList[0];
+                ImageUrl = rootPath + UploadFiles +"/"+ CommonFunction.GetEnumDescription((EnumMaster.FileUpload)4) + "/ChatBotCardImages/" + ImageList[0];
 
                 #endregion
 

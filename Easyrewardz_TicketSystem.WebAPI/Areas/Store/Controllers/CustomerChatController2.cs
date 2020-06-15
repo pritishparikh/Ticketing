@@ -28,7 +28,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getChatMessagesList")]
-        public ResponseModel getChatMessagesList(int ChatID)
+        public ResponseModel getChatMessagesList(int ChatID, int ForRecentChat=0)
         {
             ResponseModel objResponseModel = new ResponseModel();
             List<CustomerChatMessages> ChatList = new List<CustomerChatMessages>();
@@ -43,7 +43,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                ChatList = customerChatCaller.GetChatmessageDetails(new CustomerChatService(_connectionString), authenticate.TenantId,ChatID);
+                ChatList = customerChatCaller.GetChatmessageDetails(new CustomerChatService(_connectionString), authenticate.TenantId,ChatID, ForRecentChat);
 
                 statusCode = ChatList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound  ;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

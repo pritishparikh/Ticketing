@@ -586,7 +586,7 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
-        public int InsertOrderDetails(ConvertToOrder convertToOrder)
+        public int InsertOrderDetails(ConvertToOrder convertToOrder, int tenantId, int userId)
         {
             int InsertCount = 0;
             try
@@ -599,6 +599,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ShoppingID", convertToOrder.ShoppingID);
                 cmd.Parameters.AddWithValue("@_InvoiceNo", convertToOrder.InvoiceNo);
                 cmd.Parameters.AddWithValue("@_Amount", convertToOrder.Amount);
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 InsertCount = Convert.ToInt32(cmd.ExecuteNonQuery());
@@ -620,7 +622,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-        public int UpdateAddressPending(AddressPendingRequest addressPendingRequest)
+        public int UpdateAddressPending(AddressPendingRequest addressPendingRequest, int tenantId, int userId)
         {
             int UpdateCount = 0;
             try
@@ -637,6 +639,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_City", addressPendingRequest.City);
                 cmd.Parameters.AddWithValue("@_State", addressPendingRequest.State);
                 cmd.Parameters.AddWithValue("@_Country", addressPendingRequest.Country);
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
