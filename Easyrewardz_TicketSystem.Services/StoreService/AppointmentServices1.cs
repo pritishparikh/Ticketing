@@ -179,7 +179,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="StoreTimeSlotInsertUpdate"></param>
         /// <returns></returns>
         /// 
-        public int InsertUpdateTimeSlotMaster(StoreTimeSlotInsertUpdate Slot)
+        public int InsertTimeSlotSetting(StoreTimeSlotInsertUpdate Slot)
         {
 
             int Result = 0;
@@ -193,18 +193,26 @@ namespace Easyrewardz_TicketSystem.Services
 
                 MySqlCommand cmd = new MySqlCommand("SP_HSInsertUpdateHSStoreTimeSlotMaster", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@_SlotId", Slot.SlotId);
                 cmd.Parameters.AddWithValue("@_TenantId", Slot.TenantId);
-                cmd.Parameters.AddWithValue("@_StoreId", Slot.StoreId);
-                cmd.Parameters.AddWithValue("@_ProgramCode", Slot.ProgramCode); 
-                cmd.Parameters.AddWithValue("@_TimeSlot", string.IsNullOrEmpty(Slot.TimeSlot) ? "" :Slot.TimeSlot);
-                cmd.Parameters.AddWithValue("@_MaxCapacity", Slot.MaxCapacity);
-                cmd.Parameters.AddWithValue("@_OrderNo", Slot.OrderNumber); 
-                cmd.Parameters.AddWithValue("@_CreatedBy", Slot.CreatedBy); 
-                cmd.Parameters.AddWithValue("@_ModifyBy", Slot.ModifyBy);
+                cmd.Parameters.AddWithValue("@_ProgramCode", Slot.ProgramCode);
+                cmd.Parameters.AddWithValue("@_StoreIds", string.IsNullOrEmpty(Slot.StoreIds) ? "" : Slot.StoreIds.TrimEnd(','));
+                cmd.Parameters.AddWithValue("@_StoreOpenValue", Slot.ProgramCode); 
+                cmd.Parameters.AddWithValue("@_StoreOpenAt", Slot.StoreOpenAt);
+                cmd.Parameters.AddWithValue("@_StoreCloseValue", Slot.StoreCloseAt);
+                cmd.Parameters.AddWithValue("@_StoreCloseAt", Slot.StoreCloseAt); 
+                cmd.Parameters.AddWithValue("@_Slotduration", Slot.Slotduration); 
+                cmd.Parameters.AddWithValue("@_SlotMaxCapacity", Slot.SlotMaxCapacity);
+
+                cmd.Parameters.AddWithValue("@_StoreNonOpFromValue", Slot.StoreNonOpFromValue);
+                cmd.Parameters.AddWithValue("@_StoreNonOpFromAt", Slot.StoreNonOpFromAt);
+                cmd.Parameters.AddWithValue("@_StoreNonOpToValue", Slot.StoreNonOpToValue);
+                cmd.Parameters.AddWithValue("@_StoreNonOpToAt", Slot.StoreNonOpToAt);
+                cmd.Parameters.AddWithValue("@_StoreTotalSlot", Slot.StoreTotalSlot);
+                cmd.Parameters.AddWithValue("@_AppointmentDays", Slot.AppointmentDays);
+                cmd.Parameters.AddWithValue("@_UserID", Slot.UserID);
 
                 cmd.CommandType = CommandType.StoredProcedure;
-                Result = Convert.ToInt32(cmd.ExecuteScalar());
+                Result = Convert.ToInt32(cmd.ExecuteNonQuery());
                 conn.Close();
             }
             catch (Exception)

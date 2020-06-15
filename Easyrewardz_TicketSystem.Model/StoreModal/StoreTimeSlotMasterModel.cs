@@ -34,12 +34,22 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public int SlotId { get; set; }
         public int TenantId { get; set; }
         public string ProgramCode { get; set; }
-        public int StoreId { get; set; }
-        public string TimeSlot { get; set; }
-        public int OrderNumber { get; set; }
-        public int MaxCapacity { get; set; }
-        public int CreatedBy { get; set; }
-        public int ModifyBy { get; set; }
+        public string StoreIds { get; set; }
+        public int StoreOpenValue { get; set; }
+        public string StoreOpenAt { get; set; }
+        public int StoreCloseValue { get; set; }
+        public string StoreCloseAt { get; set; }
+        public int Slotduration { get; set; }
+
+        public int SlotMaxCapacity { get; set; }
+        public int StoreNonOpFromValue { get; set; }
+        public string StoreNonOpFromAt { get; set; }
+        public int StoreNonOpToValue { get; set; }
+        public string StoreNonOpToAt { get; set; }
+        public int StoreTotalSlot { get; set; }
+        public int AppointmentDays { get; set; }
+        public int UserID { get; set; }
+
 
     }
 }
