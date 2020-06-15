@@ -116,6 +116,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public bool DisablePaymentlinkbutton { get; set; }
         /// <summary>
+        /// ShowPaymentLinkPopup
+        /// </summary>
+        public bool ShowPaymentLinkPopup { get; set; }
+        /// <summary>
         /// CountSendPaymentLink
         /// </summary>
         public int CountSendPaymentLink { get; set; }
