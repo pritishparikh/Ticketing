@@ -30,6 +30,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             RequestCouriersPartnerAndAWBCode requestCouriersPartnerAndAWBCode = null;
             ResponseCouriersPartnerAndAWBCode responseCouriersPartnerAndAWBCode = new ResponseCouriersPartnerAndAWBCode();
+            responseCouriersPartnerAndAWBCode.data = new Data();
             ResponseGeneratePickup responseGeneratePickup = new ResponseGeneratePickup();
             ResponseGenerateManifest responseGenerateManifest = new ResponseGenerateManifest();
             ReturnShipmentDetails obj = null;
@@ -136,27 +137,31 @@ namespace Easyrewardz_TicketSystem.Services
                     string apiReq = JsonConvert.SerializeObject(requestCouriersPartnerAndAWBCode);
                     apiResponse = CommonService.SendApiRequest(clientAPIURL + "api/ShoppingBag/GetCouriersPartnerAndAWBCode", apiReq);
                     responseCouriersPartnerAndAWBCode = JsonConvert.DeserializeObject<ResponseCouriersPartnerAndAWBCode>(apiResponse);
-                    if (responseCouriersPartnerAndAWBCode.data.awb_code == "" && responseCouriersPartnerAndAWBCode.data.courier_name == "")
+                    if (string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.awb_code) && string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.courier_name))
                     {
                         if (iSStoreDelivery == true)
                         {
                             //CouriersPartner =Store
                             responseCouriersPartnerAndAWBCode.data.courier_name = "Store";
-                            obj = CreateShipment( orderID,  itemIDs,  tenantID,userID, responseCouriersPartnerAndAWBCode);
+                            obj = CreateShipment(orderID, itemIDs, tenantID, userID, responseCouriersPartnerAndAWBCode);
                         }
                         else
                         {
                             // insert in PHYOrderReturn table (return tab)
-                            int result = SetOrderHasBeenReturn(tenantID, userID, orderID);
+                            int result = SetOrderHasBeenReturn(tenantID, userID, orderID, "Shipment");
                         }
                     }
-                    if (responseCouriersPartnerAndAWBCode.data.awb_code != "" || responseCouriersPartnerAndAWBCode.data.courier_name != "")
+                    else if (!string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.awb_code) || !string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.courier_name))
                     {
                         //Code for GeneratePickup 
                         // { "statusCode":"200","data":{ "awb_code":"141123201505566","order_id":"41363502","shipment_id":"41079500","courier_company_id":"51","courier_name":"Xpressbees Surface","rate":100,"is_custom_rate":"0","cod_multiplier":"0","cod_charges":"0","freight_charge":"100","rto_charges":"92","min_weight":"0.5","etd_hours":"112","etd":"Jun 19, 2020","estimated_delivery_days":"5"} }
-                        RequestGeneratePickup requestGeneratePickup = new RequestGeneratePickup();
-                        requestGeneratePickup.shipmentId = new List<int>();
-                        requestGeneratePickup.shipmentId.Add(Convert.ToInt32(responseCouriersPartnerAndAWBCode.data.shipment_id));
+                        RequestGeneratePickup requestGeneratePickup = new RequestGeneratePickup
+                        {
+                            shipmentId = new List<int>
+                            {
+                            Convert.ToInt32(responseCouriersPartnerAndAWBCode.data.shipment_id)
+                            }
+                        };
                         string apiReq1 = JsonConvert.SerializeObject(requestGeneratePickup);
                         apiResponse = CommonService.SendApiRequest(clientAPIURL + "/api/ShoppingBag/GeneratePickup", apiReq1);
                         responseGeneratePickup = JsonConvert.DeserializeObject<ResponseGeneratePickup>(apiResponse);

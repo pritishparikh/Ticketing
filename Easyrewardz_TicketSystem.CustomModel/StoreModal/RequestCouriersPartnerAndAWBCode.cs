@@ -72,7 +72,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
     {
         public string awb_code { get; set; }
         public string order_id { get; set; }
-        public string shipment_id { get; set; }
+        public string shipment_id { get; set; } = "0";
         public string courier_company_id { get; set; }
         public string courier_name { get; set; }
         public string rate { get; set; }
