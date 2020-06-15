@@ -179,6 +179,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                 else
                 {
+                    // need to write code if isAWBGenerated flag is true
+
                     //  code for return awb ,InvoiceNo.itemIDs need to write code (need to ask)
 
                     //if (responseCouriersPartnerAndAWBCode.data.awb_code != null)
