@@ -159,6 +159,10 @@ namespace Easyrewardz_TicketSystem.Services
                         moduleConfiguration.ShippedText = ds.Tables[0].Rows[0]["ShippedText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["ShippedText"]);
                         moduleConfiguration.Delivered = ds.Tables[0].Rows[0]["Delivered"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Delivered"]);
                         moduleConfiguration.DeliveredText = ds.Tables[0].Rows[0]["DeliveredText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["DeliveredText"]);
+                        moduleConfiguration.Cancel = ds.Tables[0].Rows[0]["Cancel"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Cancel"]);
+                        moduleConfiguration.CancelText = ds.Tables[0].Rows[0]["CancelText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["CancelText"]);
+                        moduleConfiguration.UnDeliverable = ds.Tables[0].Rows[0]["UnDeliverable"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["UnDeliverable"]);
+                        moduleConfiguration.UnDeliverableText = ds.Tables[0].Rows[0]["UnDeliverableText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["UnDeliverableText"]);
                     }
                 }   
             }
@@ -211,6 +215,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ShippedText", orderConfiguration.ShippedText);
                 cmd.Parameters.AddWithValue("@_Delivered", Convert.ToInt16(orderConfiguration.Delivered));
                 cmd.Parameters.AddWithValue("@_DeliveredText", orderConfiguration.DeliveredText);
+                cmd.Parameters.AddWithValue("@_Cancel", Convert.ToInt16(orderConfiguration.Cancel));
+                cmd.Parameters.AddWithValue("@_CancelText", orderConfiguration.CancelText);
+                cmd.Parameters.AddWithValue("@_UnDeliverable", Convert.ToInt16(orderConfiguration.UnDeliverable));
+                cmd.Parameters.AddWithValue("@_UnDeliverableText", orderConfiguration.UnDeliverableText);
                 cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
 
                 cmd.CommandType = CommandType.StoredProcedure;

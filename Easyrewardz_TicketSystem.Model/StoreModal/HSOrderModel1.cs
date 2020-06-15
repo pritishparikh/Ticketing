@@ -134,6 +134,26 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string DeliveredText { get; set; }
 
+        /// <summary>
+        /// Cancel
+        /// </summary>
+        public bool Cancel { get; set; }
+
+        /// <summary>
+        /// CancelText
+        /// </summary>
+        public string CancelText { get; set; }
+
+        /// <summary>
+        /// UnDeliverable
+        /// </summary>
+        public bool UnDeliverable { get; set; }
+
+        /// <summary>
+        /// UnDeliverableText
+        /// </summary>
+        public string UnDeliverableText { get; set; }
+
     }
 
     public class OrderDelivered
