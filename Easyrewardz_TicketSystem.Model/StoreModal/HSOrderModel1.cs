@@ -450,4 +450,16 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string FilterStatus { get; set; }
     }
+    public class AWbdetailModel
+    {
+        public string AWBNumber { get; set; }
+
+        public string InvoiceNo { get; set; }
+
+        public string ItemIDs { get; set; }
+
+        public string CourierPartner { get; set; }
+
+        public string Date { get; set; }
+    }
 }
