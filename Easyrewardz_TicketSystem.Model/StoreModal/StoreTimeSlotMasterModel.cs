@@ -40,7 +40,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string StoreOpenAt { get; set; }
         public int StoreCloseValue { get; set; }
         public string StoreCloseAt { get; set; }
-        public int Slotduration { get; set; }
+        public float Slotduration { get; set; }
 
         public int SlotMaxCapacity { get; set; }
         public int StoreNonOpFromValue { get; set; }
