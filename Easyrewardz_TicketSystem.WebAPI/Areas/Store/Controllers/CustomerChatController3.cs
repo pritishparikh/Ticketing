@@ -30,7 +30,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateChatSession")]
-        public ResponseModel UpdateChatSession(int ChatSessionValue, string ChatSessionDuration, int ChatDisplayValue, string ChatDisplayDuration)
+        public ResponseModel UpdateChatSession(int ChatSessionValue, string ChatSessionDuration, int ChatDisplayValue, string ChatDisplayDuration,int ChatCharLimit)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int result = 0;
@@ -45,8 +45,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                result = customerChatCaller.UpdateChatSession(new CustomerChatService(_connectionString), ChatSessionValue,  ChatSessionDuration,  ChatDisplayValue, 
-                    ChatDisplayDuration, authenticate.UserMasterID);
+                result = customerChatCaller.UpdateChatSession(new CustomerChatService(_connectionString),authenticate.TenantId,authenticate.ProgramCode,
+                    ChatSessionValue,  ChatSessionDuration,  ChatDisplayValue, ChatDisplayDuration, ChatCharLimit, authenticate.UserMasterID);
 
                 statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
@@ -78,14 +78,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             ChatSessionModel ChatSession = new ChatSessionModel();
             try
             {
-                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                //Authenticate authenticate = new Authenticate();
-                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                ChatSession = customerChatCaller.GetChatSession(new CustomerChatService(_connectionString) );
+                ChatSession = customerChatCaller.GetChatSession(new CustomerChatService(_connectionString), authenticate.TenantId, authenticate.ProgramCode );
 
                 statusCode = ChatSession!=null ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

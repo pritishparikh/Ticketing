@@ -20,7 +20,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ChatDisplayValue"></param>
         /// <param name="ChatDisplayDuration"></param>
         /// <returns></returns>
-        public int UpdateChatSession(int ChatSessionValue, string ChatSessionDuration, int ChatDisplayValue, string ChatDisplayDuration, int ModifiedBy)
+        public int UpdateChatSession(int TenantId, string ProgramCode, int ChatSessionValue, string ChatSessionDuration, int ChatDisplayValue, string ChatDisplayDuration, int ChatCharLimit, int ModifiedBy)
         {
             int success = 0;
             try
@@ -32,10 +32,14 @@ namespace Easyrewardz_TicketSystem.Services
                     CommandType = CommandType.StoredProcedure,
                     CommandText = "SP_UpdateChatSessionMaster"
                 };
+
+                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.Parameters.AddWithValue("@_ChatSessionValue", ChatSessionValue);
                 cmd.Parameters.AddWithValue("@_ChatSessionDuration", ChatSessionDuration);
                 cmd.Parameters.AddWithValue("@_ChatDisplayValue", ChatDisplayValue);
-                cmd.Parameters.AddWithValue("@_ChatDisplayDuration", ChatDisplayDuration);
+                cmd.Parameters.AddWithValue("@_ChatDisplayDuration", ChatDisplayDuration); 
+                cmd.Parameters.AddWithValue("@_ChatCharLimit", ChatCharLimit);
                 cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
 
                 success = Convert.ToInt32(cmd.ExecuteScalar());
@@ -59,7 +63,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// get customer chat session
         /// </summary>
         /// <returns></returns>
-        public ChatSessionModel GetChatSession()
+        public ChatSessionModel GetChatSession(int TenantId, string ProgramCode)
         {
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
@@ -73,7 +77,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd = new MySqlCommand("SP_GetChatSession", conn);
                 cmd.Connection = conn;
-
+                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -92,7 +97,7 @@ namespace Easyrewardz_TicketSystem.Services
                         ChatSession.ChatSessionDuration = ds.Tables[0].Rows[0]["ChatSessionDuration"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ChatSessionDuration"]);
                         ChatSession.ChatDisplayValue = ds.Tables[0].Rows[0]["ChatDisplayValue"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["ChatDisplayValue"]);
                         ChatSession.ChatDisplayDuration = ds.Tables[0].Rows[0]["ChatDisplayDuration"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ChatDisplayDuration"]);
-
+                        ChatSession.ChatCharLimit= ds.Tables[0].Rows[0]["ChatTextLimit"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["ChatTextLimit"]);
                     }
                 }
             }            

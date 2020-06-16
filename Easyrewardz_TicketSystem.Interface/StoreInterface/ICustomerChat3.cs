@@ -9,9 +9,10 @@ namespace Easyrewardz_TicketSystem.Interface
     public partial interface ICustomerChat
     {
 
-        int UpdateChatSession(int ChatSessionValue, string ChatSessionDuration, int ChatDisplayValue, string ChatDisplayDuration, int ModifiedBy);
+        int UpdateChatSession(int TenantId, string ProgramCode, int ChatSessionValue, string ChatSessionDuration, int ChatDisplayValue,
+                            string ChatDisplayDuration,int ChatCharLimit, int ModifiedBy);
 
-        ChatSessionModel GetChatSession();
+        ChatSessionModel GetChatSession(int TenantId, string ProgramCode);
 
         List<AgentRecentChatHistory> GetAgentRecentChat(int TenantId, string ProgramCode, int CustomerID);
 

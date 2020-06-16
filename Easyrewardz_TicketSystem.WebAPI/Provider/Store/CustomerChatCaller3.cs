@@ -10,17 +10,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
     public partial class CustomerChatCaller
     {
-        public int UpdateChatSession(ICustomerChat customerChat ,int ChatSessionValue, string ChatSessionDuration, int ChatDisplayValue, string ChatDisplayDuration,int ModifiedBy)
+        public int UpdateChatSession(ICustomerChat customerChat , int TenantId, string ProgramCode,
+            int ChatSessionValue, string ChatSessionDuration, int ChatDisplayValue, string ChatDisplayDuration, int ChatCharLimit, int ModifiedBy)
         {
             _customerChat = customerChat;
-            return _customerChat.UpdateChatSession( ChatSessionValue,  ChatSessionDuration,  ChatDisplayValue,  ChatDisplayDuration,  ModifiedBy);
+            return _customerChat.UpdateChatSession( TenantId,  ProgramCode, ChatSessionValue,  ChatSessionDuration,  ChatDisplayValue,  ChatDisplayDuration,  ChatCharLimit , ModifiedBy);
 
         }
 
-        public ChatSessionModel GetChatSession(ICustomerChat customerChat)
+        public ChatSessionModel GetChatSession(ICustomerChat customerChat, int TenantId, string ProgramCode)
         {
             _customerChat = customerChat;
-            return _customerChat.GetChatSession();
+            return _customerChat.GetChatSession( TenantId,  ProgramCode);
 
         }
 

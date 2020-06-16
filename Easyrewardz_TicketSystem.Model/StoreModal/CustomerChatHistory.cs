@@ -57,6 +57,7 @@ namespace Easyrewardz_TicketSystem.Model
         public string ChatSessionDuration { get; set; }
         public int ChatDisplayValue { get; set; }
         public string ChatDisplayDuration { get; set; }
+        public int ChatCharLimit { get; set; }
         public int CreatedBy { get; set; }
         public string CreatedDate { get; set; }
         public int ModifiedBy { get; set; }
