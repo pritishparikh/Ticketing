@@ -163,6 +163,7 @@ namespace Easyrewardz_TicketSystem.Services
                         moduleConfiguration.CancelText = ds.Tables[0].Rows[0]["CancelText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["CancelText"]);
                         moduleConfiguration.UnDeliverable = ds.Tables[0].Rows[0]["UnDeliverable"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["UnDeliverable"]);
                         moduleConfiguration.UnDeliverableText = ds.Tables[0].Rows[0]["UnDeliverableText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["UnDeliverableText"]);
+                        moduleConfiguration.StoreDeliveryText = ds.Tables[0].Rows[0]["StoreDeliveryText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["StoreDeliveryText"]);
                     }
                 }   
             }
@@ -219,6 +220,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_CancelText", orderConfiguration.CancelText);
                 cmd.Parameters.AddWithValue("@_UnDeliverable", Convert.ToInt16(orderConfiguration.UnDeliverable));
                 cmd.Parameters.AddWithValue("@_UnDeliverableText", orderConfiguration.UnDeliverableText);
+                cmd.Parameters.AddWithValue("@_StoreDeliveryText", orderConfiguration.StoreDeliveryText);
                 cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
 
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -586,7 +588,7 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
-        public int InsertOrderDetails(ConvertToOrder convertToOrder, int tenantId, int userId)
+        public int InsertOrderDetails(ConvertToOrder convertToOrder, int tenantId, int userId, string ProgramCode, string ClientAPIUrl)
         {
             int InsertCount = 0;
             try
@@ -603,7 +605,11 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_UserID", userId);
 
                 cmd.CommandType = CommandType.StoredProcedure;
-                InsertCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+                InsertCount = Convert.ToInt32(cmd.ExecuteScalar());
+                if(InsertCount > 0)
+                {
+                    SmsWhatsUpDataSend(tenantId, userId, ProgramCode, InsertCount, ClientAPIUrl, "ShoppingBagConvertToOrder");
+                }
 
             }
             catch (Exception)

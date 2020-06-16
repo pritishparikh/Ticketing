@@ -445,7 +445,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                InsertCount = hSOrderCaller.InsertOrderDetails(new HSOrderService(_connectionString), convertToOrder, authenticate.TenantId, authenticate.UserMasterID);
+                InsertCount = hSOrderCaller.InsertOrderDetails(new HSOrderService(_connectionString), convertToOrder, authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, _ClientAPIUrl);
                 statusCode =
                    InsertCount.Equals(0) ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

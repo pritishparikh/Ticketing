@@ -29,7 +29,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int UpdateShipmentPickupPendingData(int OrderID);
 
-        int InsertOrderDetails(ConvertToOrder convertToOrder, int tenantId, int userId);
+        int InsertOrderDetails(ConvertToOrder convertToOrder, int tenantId, int userId, string ProgramCode, string ClientAPIUrl);
 
         int UpdateAddressPending(AddressPendingRequest addressPendingRequest, int tenantId, int userId);
 

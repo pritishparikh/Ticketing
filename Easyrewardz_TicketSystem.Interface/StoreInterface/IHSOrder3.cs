@@ -47,7 +47,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="UserID"></param>
         /// <param name="programCode"></param>
         /// <returns></returns>
-        int GenerateLink(SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode);
+        int GenerateLink(SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode, string ClientAPIUrl);
 
         /// <summary>
         /// CheckPinCodeForCourierAvailibilty

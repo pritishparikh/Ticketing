@@ -348,7 +348,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="UserID"></param>
         /// <param name="programCode"></param>
         /// <returns></returns>
-        public int GenerateLink(SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode)
+        public int GenerateLink(SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode, string ClientAPIUrl)
         {
             int result = 0;
             string apiReq1 = "";
@@ -451,6 +451,10 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd1.Parameters.AddWithValue("@user_ID", userID);
                     cmd1.CommandType = CommandType.StoredProcedure;
                     result = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                    if (result > 0)
+                    {
+                        SmsWhatsUpDataSend(tenantID, userID, programCode, 0, ClientAPIUrl, "ShoppingBagConvertToOrder");
+                    }
                     conn.Close();
                 }
             }

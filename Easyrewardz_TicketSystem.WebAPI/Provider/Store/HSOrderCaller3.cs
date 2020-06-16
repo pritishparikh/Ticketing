@@ -59,10 +59,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="UserID"></param>
         /// <param name="programCode"></param>
         /// <returns></returns>
-        public int GeneratePaymentLink(IHSOrder order, SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode)
+        public int GeneratePaymentLink(IHSOrder order, SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode, string ClientAPIUrl)
         {
             _OrderRepository = order;
-            return _OrderRepository.GenerateLink(sentPaymentLink, clientAPIUrlForGenerateToken, clientAPIUrlForGeneratePaymentLink, tenantID, userID, programCode);
+            return _OrderRepository.GenerateLink(sentPaymentLink, clientAPIUrlForGenerateToken, clientAPIUrlForGeneratePaymentLink, tenantID, userID, programCode, ClientAPIUrl);
         }
 
         /// <summary>

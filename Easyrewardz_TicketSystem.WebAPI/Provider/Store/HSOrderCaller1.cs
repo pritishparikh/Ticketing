@@ -77,10 +77,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _OrderRepository.UpdateShipmentPickupPendingData(OrderID);
         }
 
-        public int InsertOrderDetails(IHSOrder order, ConvertToOrder convertToOrder, int tenantId, int userId)
+        public int InsertOrderDetails(IHSOrder order, ConvertToOrder convertToOrder, int tenantId, int userId, string ProgramCode, string ClientAPIUrl)
         {
             _OrderRepository = order;
-            return _OrderRepository.InsertOrderDetails(convertToOrder, tenantId, userId);
+            return _OrderRepository.InsertOrderDetails(convertToOrder, tenantId, userId, ProgramCode, ClientAPIUrl);
         }
 
         public int UpdateAddressPending(IHSOrder order, AddressPendingRequest addressPendingRequest, int tenantId, int userId)

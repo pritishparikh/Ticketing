@@ -553,10 +553,7 @@ namespace Easyrewardz_TicketSystem.Services
                     getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
                 }
 
-
-
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrderTabSettingDetails", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetSmsWhatsUpDataDetails", conn)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -565,6 +562,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_OrderID", orderId);
                 cmd.Parameters.AddWithValue("@_strpostionNumber", strpostionNumber);
                 cmd.Parameters.AddWithValue("@_strpostionName", strpostionName);
+                cmd.Parameters.AddWithValue("@_sMSWhtappTemplate", sMSWhtappTemplate);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -580,16 +578,8 @@ namespace Easyrewardz_TicketSystem.Services
                         AlertCommunicationviaWhtsup = ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"]),
                         AlertCommunicationviaSMS = ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"]),
                         SMSSenderName = ds.Tables[0].Rows[0]["SMSSenderName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["SMSSenderName"]),
-                        ShoppingBagConvertToOrder = ds.Tables[0].Rows[0]["ShoppingBagConvertToOrder"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ShoppingBagConvertToOrder"]),
-                        ShoppingBagConvertToOrderText = ds.Tables[0].Rows[0]["ShoppingBagConvertToOrderText"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ShoppingBagConvertToOrderText"]),
-                        AWBAssigned = ds.Tables[0].Rows[0]["AWBAssigned"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AWBAssigned"]),
-                        AWBAssignedText = ds.Tables[0].Rows[0]["AWBAssignedText"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["AWBAssignedText"]),
-                        PickupScheduled = ds.Tables[0].Rows[0]["PickupScheduled"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["PickupScheduled"]),
-                        PickupScheduledText = ds.Tables[0].Rows[0]["PickupScheduledText"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["PickupScheduledText"]),
-                        Shipped = ds.Tables[0].Rows[0]["Shipped"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Shipped"]),
-                        ShippedText = ds.Tables[0].Rows[0]["ShippedText"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ShippedText"]),
-                        Delivered = ds.Tables[0].Rows[0]["Delivered"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Delivered"]),
-                        DeliveredText = ds.Tables[0].Rows[0]["DeliveredText"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["DeliveredText"]),
+                        IsSend = ds.Tables[0].Rows[0]["IsSend"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["IsSend"]),
+                        MessageText = ds.Tables[0].Rows[0]["MessageText"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["MessageText"]),
                         InvoiceNo = ds.Tables[0].Rows[0]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["InvoiceNo"]),
                         MobileNumber = ds.Tables[0].Rows[0]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["MobileNumber"]),
                         AdditionalInfo = ds.Tables[1].Rows[0]["additionalInfo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["additionalInfo"]),
@@ -634,26 +624,26 @@ namespace Easyrewardz_TicketSystem.Services
                 }
                 else if (ordersSmsWhatsUpDataDetails.AlertCommunicationviaSMS)
                 {
-                    if(sMSWhtappTemplate == "ShoppingBagConvertToOrder" & ordersSmsWhatsUpDataDetails.ShoppingBagConvertToOrder)
+                    if(ordersSmsWhatsUpDataDetails.IsSend)
                     {
-                        Message = ordersSmsWhatsUpDataDetails.ShoppingBagConvertToOrderText;
+                        Message = ordersSmsWhatsUpDataDetails.MessageText;
                     }
-                    else if (sMSWhtappTemplate == "AWBAssigned" & ordersSmsWhatsUpDataDetails.AWBAssigned)
-                    {
-                        Message = ordersSmsWhatsUpDataDetails.AWBAssignedText;
-                    }
-                    else if (sMSWhtappTemplate == "PickupScheduled" & ordersSmsWhatsUpDataDetails.PickupScheduled)
-                    {
-                        Message = ordersSmsWhatsUpDataDetails.PickupScheduledText;
-                    }
-                    else if (sMSWhtappTemplate == "Shipped" & ordersSmsWhatsUpDataDetails.Shipped)
-                    {
-                        Message = ordersSmsWhatsUpDataDetails.ShippedText;
-                    }
-                    else if (sMSWhtappTemplate == "Delivered" & ordersSmsWhatsUpDataDetails.Delivered)
-                    {
-                        Message = ordersSmsWhatsUpDataDetails.DeliveredText;
-                    }
+                    //else if (sMSWhtappTemplate == "AWBAssigned" & ordersSmsWhatsUpDataDetails.AWBAssigned)
+                    //{
+                    //    Message = ordersSmsWhatsUpDataDetails.AWBAssignedText;
+                    //}
+                    //else if (sMSWhtappTemplate == "PickupScheduled" & ordersSmsWhatsUpDataDetails.PickupScheduled)
+                    //{
+                    //    Message = ordersSmsWhatsUpDataDetails.PickupScheduledText;
+                    //}
+                    //else if (sMSWhtappTemplate == "Shipped" & ordersSmsWhatsUpDataDetails.Shipped)
+                    //{
+                    //    Message = ordersSmsWhatsUpDataDetails.ShippedText;
+                    //}
+                    //else if (sMSWhtappTemplate == "Delivered" & ordersSmsWhatsUpDataDetails.Delivered)
+                    //{
+                    //    Message = ordersSmsWhatsUpDataDetails.DeliveredText;
+                    //}
                     
 
                     ChatSendSMS chatSendSMS = new ChatSendSMS
@@ -664,7 +654,7 @@ namespace Easyrewardz_TicketSystem.Services
                     };
 
                     string apiReq = JsonConvert.SerializeObject(chatSendSMS);
-                   // apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendSMS", apiReq);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendSMS", apiReq);
 
                     ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
 

@@ -366,16 +366,8 @@ namespace Easyrewardz_TicketSystem.Model
         public bool AlertCommunicationviaWhtsup { get; set; }
         public bool AlertCommunicationviaSMS { get; set; }
         public string SMSSenderName { get; set; }
-        public bool ShoppingBagConvertToOrder { get; set; }
-        public string ShoppingBagConvertToOrderText { get; set; }
-        public bool AWBAssigned { get; set; }
-        public string AWBAssignedText { get; set; }
-        public bool PickupScheduled { get; set; }
-        public string PickupScheduledText { get; set; }
-        public bool Shipped { get; set; }
-        public string ShippedText { get; set; }
-        public bool Delivered { get; set; }
-        public string DeliveredText { get; set; }
+        public bool IsSend { get; set; }
+        public string MessageText { get; set; }
         public string InvoiceNo { get; set; }
         public string AdditionalInfo { get; set; }
         public string MobileNumber { get; set; }
