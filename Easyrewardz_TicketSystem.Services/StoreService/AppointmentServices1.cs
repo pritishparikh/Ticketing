@@ -207,7 +207,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_TenantId", Slot.TenantId);
                 cmd.Parameters.AddWithValue("@_ProgramCode", Slot.ProgramCode);
                 
-                cmd.Parameters.AddWithValue("@_StoreOpenValue", Slot.ProgramCode); 
+                cmd.Parameters.AddWithValue("@_StoreOpenValue", Slot.StoreOpenValue); 
                 cmd.Parameters.AddWithValue("@_StoreOpenAt", Slot.StoreOpenAt);
                 cmd.Parameters.AddWithValue("@_StoreCloseValue", Slot.StoreCloseAt);
                 cmd.Parameters.AddWithValue("@_StoreCloseAt", Slot.StoreCloseAt); 
