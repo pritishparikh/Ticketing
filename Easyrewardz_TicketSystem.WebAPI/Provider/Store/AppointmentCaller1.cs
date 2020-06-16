@@ -46,22 +46,22 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region TimeSlotMaster CRUD
 
-        public int InsertUpdateTimeSlotMaster(IAppointment appointment, StoreTimeSlotInsertUpdate Slot)
+        public int InsertUpdateTimeSlotSetting(IAppointment appointment, StoreTimeSlotInsertUpdate Slot)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.InsertUpdateTimeSlotMaster(Slot);
+            return _AppointmentRepository.InsertUpdateTimeSlotSetting(Slot);
         }
 
-        public int DeleteTimeSlotMaster(IAppointment appointment, int SlotID, int TenantID)
+        public int DeleteTimeSlotMaster(IAppointment appointment, int SlotID, int TenantID, string ProgramCode)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.DeleteTimeSlotMaster(SlotID, TenantID);
+            return _AppointmentRepository.DeleteTimeSlotMaster(SlotID, TenantID,  ProgramCode);
         }
 
-        public List<StoreTimeSlotMasterModel> GetStoreTimeSlotMasterList(IAppointment appointment, int TenantID, string ProgramCode, int StoreID)
+        public List<StoreTimeSlotSettingModel> GetStoreSettingTimeSlot(IAppointment appointment, int TenantID, string ProgramCode, int SlotID)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.StoreTimeSlotMasterList( TenantID,  ProgramCode, StoreID); 
+            return _AppointmentRepository.GetStoreSettingTimeSlot( TenantID,  ProgramCode, SlotID); 
         }
 
         

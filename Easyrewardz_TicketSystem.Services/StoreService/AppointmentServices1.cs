@@ -174,12 +174,12 @@ namespace Easyrewardz_TicketSystem.Services
         #region TimeSlotMaster CRUD
 
         /// <summary>
-        /// Insert/ Update HSTimeSlotMaster
+        /// Insert/ Update Time Slot Setting
         /// </summary>
         /// <param name="StoreTimeSlotInsertUpdate"></param>
         /// <returns></returns>
         /// 
-        public int InsertUpdateTimeSlotMaster(StoreTimeSlotInsertUpdate Slot)
+        public int InsertUpdateTimeSlotSetting(StoreTimeSlotInsertUpdate Slot)
         {
 
             int Result = 0;
@@ -191,20 +191,39 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
 
-                MySqlCommand cmd = new MySqlCommand("SP_HSInsertUpdateHSStoreTimeSlotMaster", conn);
+                MySqlCommand cmd = new MySqlCommand(Slot.SlotId > 0 ? "SP_HSUpdateStoreTimeSlotSetting" : "SP_HSInsertStoreTimeSlotSetting", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@_SlotId", Slot.SlotId);
+
+                if(Slot.SlotId > 0)
+                {
+                    cmd.Parameters.AddWithValue("@_SlotSettingID", Slot.SlotId);
+                    cmd.Parameters.AddWithValue("@_StoreId", string.IsNullOrEmpty(Slot.StoreIds) ? 0 : Convert.ToInt32(Slot.StoreIds.TrimEnd(',')));
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@_StoreIds", string.IsNullOrEmpty(Slot.StoreIds) ? "" : Slot.StoreIds.TrimEnd(','));
+                }
+
                 cmd.Parameters.AddWithValue("@_TenantId", Slot.TenantId);
-                cmd.Parameters.AddWithValue("@_StoreId", Slot.StoreId);
-                cmd.Parameters.AddWithValue("@_ProgramCode", Slot.ProgramCode); 
-                cmd.Parameters.AddWithValue("@_TimeSlot", string.IsNullOrEmpty(Slot.TimeSlot) ? "" :Slot.TimeSlot);
-                cmd.Parameters.AddWithValue("@_MaxCapacity", Slot.MaxCapacity);
-                cmd.Parameters.AddWithValue("@_OrderNo", Slot.OrderNumber); 
-                cmd.Parameters.AddWithValue("@_CreatedBy", Slot.CreatedBy); 
-                cmd.Parameters.AddWithValue("@_ModifyBy", Slot.ModifyBy);
+                cmd.Parameters.AddWithValue("@_ProgramCode", Slot.ProgramCode);
+                
+                cmd.Parameters.AddWithValue("@_StoreOpenValue", Slot.StoreOpenValue); 
+                cmd.Parameters.AddWithValue("@_StoreOpenAt", Slot.StoreOpenAt);
+                cmd.Parameters.AddWithValue("@_StoreCloseValue", Slot.StoreCloseValue);
+                cmd.Parameters.AddWithValue("@_StoreCloseAt", Slot.StoreCloseAt); 
+                cmd.Parameters.AddWithValue("@_Slotduration", Slot.Slotduration); 
+                cmd.Parameters.AddWithValue("@_SlotMaxCapacity", Slot.SlotMaxCapacity);
+
+                cmd.Parameters.AddWithValue("@_StoreNonOpFromValue", Slot.StoreNonOpFromValue);
+                cmd.Parameters.AddWithValue("@_StoreNonOpFromAt", Slot.StoreNonOpFromAt);
+                cmd.Parameters.AddWithValue("@_StoreNonOpToValue", Slot.StoreNonOpToValue);
+                cmd.Parameters.AddWithValue("@_StoreNonOpToAt", Slot.StoreNonOpToAt);
+                cmd.Parameters.AddWithValue("@_StoreTotalSlot", Slot.StoreTotalSlot);
+                cmd.Parameters.AddWithValue("@_AppointmentDays", Slot.AppointmentDays);
+                cmd.Parameters.AddWithValue("@_UserID", Slot.UserID);
 
                 cmd.CommandType = CommandType.StoredProcedure;
-                Result = Convert.ToInt32(cmd.ExecuteScalar());
+                Result = Convert.ToInt32(cmd.ExecuteNonQuery());
                 conn.Close();
             }
             catch (Exception)
@@ -227,7 +246,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="SlotID"></param>
         /// <returns></returns>
-        public int DeleteTimeSlotMaster(int SlotID, int TenantID)
+        public int DeleteTimeSlotMaster(int SlotID, int TenantID, string ProgramCode)
         {
 
             int Result = 0;
@@ -241,9 +260,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteStoreTimeSlotMaster", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@_SlotId", SlotID);
+                cmd.Parameters.AddWithValue("@_SlotSettingID", SlotID);
                 cmd.Parameters.AddWithValue("@_TenantId", TenantID);
-               
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+
                 cmd.CommandType = CommandType.StoredProcedure;
                 Result = Convert.ToInt32(cmd.ExecuteScalar());
                 conn.Close();
@@ -267,11 +287,11 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get HSTimeSlotMaster List
         /// </summary>
         /// <returns></returns>
-        public List<StoreTimeSlotMasterModel> StoreTimeSlotMasterList(int TenantID, string ProgramCode,int StoreID)
+        public List<StoreTimeSlotSettingModel> GetStoreSettingTimeSlot(int TenantID, string ProgramCode,int SlotID)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
-            List<StoreTimeSlotMasterModel> TimeSlotList = new List<StoreTimeSlotMasterModel>();
+            List<StoreTimeSlotSettingModel> TimeSlotList = new List<StoreTimeSlotSettingModel>();
             try
             {
 
@@ -280,11 +300,11 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Open();
                 }
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreTimeSlotDetails", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreTimeSlotSettingList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_TenantId", TenantID);
                 cmd1.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
-                cmd1.Parameters.AddWithValue("@_StoreID", StoreID);
+                cmd1.Parameters.AddWithValue("@_SlotID", SlotID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -296,18 +316,20 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
-                            TimeSlotList.Add(new StoreTimeSlotMasterModel()
+                            TimeSlotList.Add(new StoreTimeSlotSettingModel()
                             {
 
-                                SlotId = dr["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotId"]),
+                                SlotSettingID = dr["SlotSettingID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotSettingID"]),
                                 TenantId = dr["TenantId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TenantId"]),
                                 ProgramCode = dr["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ProgramCode"]),
                                 StoreId = dr["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreId"]),
                                 StoreCode = dr["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreCode"]),
-                                StoreName = dr["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreName"]),
-                                TimeSlot = dr["TimeSlot"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TimeSlot"]),
-                                OrderNumber = dr["OrderNumber"] == DBNull.Value ? 0 : Convert.ToInt32(dr["OrderNumber"]),
+                                StoreTimimg = dr["StoreTimimg"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreTimimg"]),
+                                NonOperationalTimimg = dr["NonOperationalTimimg"] == DBNull.Value ? string.Empty : Convert.ToString(dr["NonOperationalTimimg"]),
+                                StoreSlotDuration = dr["StoreSlotDuration"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreSlotDuration"]),
                                 MaxCapacity = dr["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(dr["MaxCapacity"]),
+                                TotalSlot = dr["TotalSlot"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TotalSlot"]),
+                                AppointmentDays = dr["AppointmentDays"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AppointmentDays"]),
                                 CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CreatedBy"]),
                                 CreatedByName = dr["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedByName"]),
                                 CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),

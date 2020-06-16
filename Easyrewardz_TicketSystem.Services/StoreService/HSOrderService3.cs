@@ -28,6 +28,7 @@ namespace Easyrewardz_TicketSystem.Services
             bool isAWBGenerated = false;
             bool iSStoreDelivery = false;
             DataSet ds = new DataSet();
+            AWbdetailModel awbdetailModel = null;
             RequestCouriersPartnerAndAWBCode requestCouriersPartnerAndAWBCode = null;
             ResponseCouriersPartnerAndAWBCode responseCouriersPartnerAndAWBCode = new ResponseCouriersPartnerAndAWBCode();
             responseCouriersPartnerAndAWBCode.data = new Data();
@@ -131,6 +132,17 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     iSStoreDelivery = ds.Tables[4].Rows[0]["StoreDelivery"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[4].Rows[0]["StoreDelivery"]);
                 }
+                if (ds != null && ds.Tables[5] != null)
+                {
+                    awbdetailModel = new AWbdetailModel
+                    {
+                        InvoiceNo = ds.Tables[5].Rows[0]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[5].Rows[0]["InvoiceNo"]),
+                        AWBNumber = ds.Tables[5].Rows[0]["AWBNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[5].Rows[0]["AWBNo"]),
+                        ItemIDs = ds.Tables[5].Rows[0]["OrderItemIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[5].Rows[0]["OrderItemIDs"]),
+                        Date = ds.Tables[5].Rows[0]["Date"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[5].Rows[0]["Date"]),
+                        CourierPartner = ds.Tables[5].Rows[0]["CourierPartner"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[5].Rows[0]["CourierPartner"]),
+                    };
+                }
 
                 if (isAWBGenerated == false)
                 {
@@ -151,6 +163,7 @@ namespace Easyrewardz_TicketSystem.Services
                             int result = SetOrderHasBeenReturn(tenantID, userID, orderID, "Shipment");
                         }
                     }
+
                     else if (!string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.awb_code) || !string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.courier_name))
                     {
 
@@ -166,7 +179,7 @@ namespace Easyrewardz_TicketSystem.Services
                             }
                         };
                         string apiReq1 = JsonConvert.SerializeObject(requestGeneratePickup);
-                        apiResponse = CommonService.SendApiRequest(clientAPIURL + "/api/ShoppingBag/GeneratePickup", apiReq1);
+                        apiResponse = CommonService.SendApiRequest(clientAPIURL + "api/ShoppingBag/GeneratePickup", apiReq1);
                         responseGeneratePickup = JsonConvert.DeserializeObject<ResponseGeneratePickup>(apiResponse);
 
                         // need to write Code for update Status shipment pickup
@@ -175,13 +188,13 @@ namespace Easyrewardz_TicketSystem.Services
 
                         //Code for GenerateManifest need to move the code 
                         string apiReq2 = JsonConvert.SerializeObject(requestGeneratePickup);
-                        apiResponse = CommonService.SendApiRequest(clientAPIURL + "/api/ShoppingBag/GenerateManifest", apiReq2);
+                        apiResponse = CommonService.SendApiRequest(clientAPIURL + "api/ShoppingBag/GenerateManifest", apiReq2);
                         responseGenerateManifest = JsonConvert.DeserializeObject<ResponseGenerateManifest>(apiResponse);
 
                         // need to write Code for update Status smanifest created
                         //end Code for GenerateManifest need to move the code 
                         //}
-                        
+
                     }
                 }
 
@@ -198,6 +211,24 @@ namespace Easyrewardz_TicketSystem.Services
                     //        // call rabit MQ  and update the AWB in table
                     //    }
                     //}
+                    if (!string.IsNullOrEmpty(awbdetailModel.AWBNumber) || !string.IsNullOrEmpty(awbdetailModel.CourierPartner))
+                    {
+                        obj = new ReturnShipmentDetails
+                        {
+                            AWBNumber = awbdetailModel.AWBNumber,
+                            InvoiceNo = awbdetailModel.InvoiceNo,
+                            ItemIDs = awbdetailModel.ItemIDs,
+                        };
+                    }
+
+                    else
+                    {
+                        //    if (iSStoreDelivery == false)
+                        //    {
+                        //        // call rabit MQ  and update the AWB in table
+                        //    }
+                    }
+
                 }
             }
             catch (Exception)
@@ -580,7 +611,10 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             try
             {
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 MySqlCommand cmd = new MySqlCommand("SP_PHYCreateShipmentAWB", conn)
                 {
                     Connection = conn,

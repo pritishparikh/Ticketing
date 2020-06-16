@@ -154,13 +154,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// Insert/ Update HSTimeSlotMaster
+        /// Insert/ Update HSTimeSlot Setting
         /// </summary>
         /// <param name="StoreTimeSlotInsertUpdate"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("InsertUpdateTimeSlotMaster")]
-        public ResponseModel InsertUpdateTimeSlotMaster([FromBody]StoreTimeSlotInsertUpdate Slot)
+        [Route("InsertUpdateTimeSlotSetting")]
+        public ResponseModel InsertUpdateTimeSlotSetting([FromBody]StoreTimeSlotInsertUpdate Slot)
         {
             List<AlreadyScheduleDetail> alreadyScheduleDetails = new List<AlreadyScheduleDetail>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -174,14 +174,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 Slot.TenantId = authenticate.TenantId;
                 Slot.ProgramCode = authenticate.ProgramCode;
-                Slot.CreatedBy = authenticate.UserMasterID;
-                Slot.ModifyBy= authenticate.UserMasterID;
+                Slot.UserID = authenticate.UserMasterID;
+                
 
                 AppointmentCaller newAppointment = new AppointmentCaller();
 
-                ResultCount = newAppointment.InsertUpdateTimeSlotMaster(new AppointmentServices(_connectioSting), Slot);
+                ResultCount = newAppointment.InsertUpdateTimeSlotSetting(new AppointmentServices(_connectioSting), Slot);
 
-                statusCode =  ResultCount .Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode =  ResultCount .Equals(0) ? (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
@@ -221,7 +221,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 AppointmentCaller newAppointment = new AppointmentCaller();
 
-                ResultCount = newAppointment.DeleteTimeSlotMaster(new AppointmentServices(_connectioSting), SlotID,authenticate.TenantId);
+                ResultCount = newAppointment.DeleteTimeSlotMaster(new AppointmentServices(_connectioSting), SlotID,authenticate.TenantId,authenticate.ProgramCode);
 
                 statusCode = ResultCount.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -247,12 +247,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
 
         [HttpPost]
-        [Route("GetStoreTimeSlotMasterList")]
-        public ResponseModel GetStoreTimeSlotMasterList(int StoreID=0)
+        [Route("GetStoreSettingTimeSlot")]
+        public ResponseModel GetStoreSettingTimeSlot(int SlotID=0)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
-            List<StoreTimeSlotMasterModel> TimeSlotList = new List<StoreTimeSlotMasterModel>();
+            List<StoreTimeSlotSettingModel> TimeSlotList = new List<StoreTimeSlotSettingModel>();
            string statusMessage = "";
             try
             {
@@ -262,7 +262,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 AppointmentCaller newAppointment = new AppointmentCaller();
 
-                TimeSlotList = newAppointment.GetStoreTimeSlotMasterList(new AppointmentServices(_connectioSting), authenticate.TenantId,authenticate.ProgramCode, StoreID);
+                TimeSlotList = newAppointment.GetStoreSettingTimeSlot(new AppointmentServices(_connectioSting), authenticate.TenantId,authenticate.ProgramCode, SlotID);
 
                 statusCode = TimeSlotList.Count.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 

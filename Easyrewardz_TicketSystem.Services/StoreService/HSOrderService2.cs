@@ -72,7 +72,9 @@ namespace Easyrewardz_TicketSystem.Services
                             CountSendPaymentLink = ds.Tables[0].Rows[i]["CountSendPaymentLink"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CountSendPaymentLink"]),
                             StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]),
                             DisablePaymentlinkbutton = ds.Tables[0].Rows[i]["DisablePaymentlinkbutton"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["DisablePaymentlinkbutton"]),
+                            ShowPaymentLinkPopup = ds.Tables[0].Rows[i]["ShowPaymentLinkPopup"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["ShowPaymentLinkPopup"]),
                             SourceOfOrder = ds.Tables[0].Rows[i]["SourceOfOrder"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SourceOfOrder"]),
+                            PaymentBillDate= ds.Tables[0].Rows[i]["PaymentBillDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PaymentBillDate"]),
                             OrdersItemList = new List<OrdersItem>(),
                             ShoppingBagItemList = new List<ShoppingBagItem>()
                         };
@@ -498,6 +500,16 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="orderId"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <param name="sMSWhtappTemplate"></param>
+        /// <returns></returns>
         public int SmsWhatsUpDataSend(int tenantId, int userId, string ProgramCode, int orderId, string ClientAPIURL, string sMSWhtappTemplate)
         {
             int result = 0;
@@ -609,7 +621,7 @@ namespace Easyrewardz_TicketSystem.Services
                         };
 
                         string apiReq = JsonConvert.SerializeObject(sendFreeTextRequest);
-                        // apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendCampaign", apiReq);
+                        apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendCampaign", apiReq);
 
                        
                         //if (apiResponse.Equals("true"))

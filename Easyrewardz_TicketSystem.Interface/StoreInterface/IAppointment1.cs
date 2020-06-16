@@ -19,12 +19,12 @@ namespace Easyrewardz_TicketSystem.Interface
 
         #region TimeSlotMaster CRUD
 
-        int InsertUpdateTimeSlotMaster(StoreTimeSlotInsertUpdate Slot);
+        int InsertUpdateTimeSlotSetting(StoreTimeSlotInsertUpdate Slot);
 
 
-        int DeleteTimeSlotMaster(int SlotID, int TenantID);
+        int DeleteTimeSlotMaster(int SlotID, int TenantID, string ProgramCode);
 
-        List<StoreTimeSlotMasterModel> StoreTimeSlotMasterList(int TenantID, string ProgramCode, int StoreID);
+        List<StoreTimeSlotSettingModel> GetStoreSettingTimeSlot(int TenantID, string ProgramCode, int StoreID);
 
         #endregion
     }
