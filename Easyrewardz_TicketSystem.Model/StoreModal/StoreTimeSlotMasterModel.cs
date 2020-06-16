@@ -24,7 +24,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string CreatedDate { get; set; }
         public int ModifyBy { get; set; }
         public string ModifyByName { get; set; }
-        public string ModifyDate { get; set; }
+        public string ModifyDate { get; set; } 
        
         
     }
