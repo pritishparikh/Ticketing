@@ -98,8 +98,30 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
         }
         public void OnExceptioninanyclass(ErrorLog errorLog )
         {
-            ErrorLogCaller errorLogCaller = new ErrorLogCaller();
-            int result = errorLogCaller.AddErrorLog(new ErrorLogging(_ErconnectioSting), errorLog);
+            // ErrorLogCaller errorLogCaller = new ErrorLogCaller();
+            // int result = errorLogCaller.AddErrorLog(new ErrorLogging(_ErconnectioSting), errorLog);
+            try
+            {
+                string ClientAPIResponse = string.Empty;
+                ElasticErrorLogModel Elastic = new ElasticErrorLogModel
+                {
+                    applicationId = "2",
+                    actionName = errorLog.ActionName,
+                    controllerName = errorLog.ControllerName,
+                    tenantID = Convert.ToString(errorLog.TenantID),
+                    userID = Convert.ToString(errorLog.UserID),
+                    exceptions = errorLog.Exceptions,
+                    messageException = errorLog.MessageException,
+                    ipAddress = errorLog.IPAddress
+                };
+
+                ClientAPIResponse = CommonService.SendApiRequest(_ClientAPIUrl + "api/InsertApplicationLog", JsonConvert.SerializeObject(Elastic));
+
+            }
+            catch (Exception)
+            {
+
+            }
         }
     }
 }
