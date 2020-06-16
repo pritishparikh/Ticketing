@@ -14,10 +14,11 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string StoreCode { get; set; }
         public string StoreTimimg { get; set; }
         public string NonOperationalTimimg { get; set; }
-        public int StoreSlotDuration { get; set; }
+        public string StoreSlotDuration { get; set; }
         public int MaxCapacity { get; set; }
         public int TotalSlot { get; set; }
-        
+        public int AppointmentDays { get; set; }
+
         public int CreatedBy { get; set; }
         public string CreatedByName { get; set; }
         public string CreatedDate { get; set; }
