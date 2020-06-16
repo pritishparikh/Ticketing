@@ -209,7 +209,7 @@ namespace Easyrewardz_TicketSystem.Services
                 
                 cmd.Parameters.AddWithValue("@_StoreOpenValue", Slot.StoreOpenValue); 
                 cmd.Parameters.AddWithValue("@_StoreOpenAt", Slot.StoreOpenAt);
-                cmd.Parameters.AddWithValue("@_StoreCloseValue", Slot.StoreCloseAt);
+                cmd.Parameters.AddWithValue("@_StoreCloseValue", Slot.StoreCloseValue);
                 cmd.Parameters.AddWithValue("@_StoreCloseAt", Slot.StoreCloseAt); 
                 cmd.Parameters.AddWithValue("@_Slotduration", Slot.Slotduration); 
                 cmd.Parameters.AddWithValue("@_SlotMaxCapacity", Slot.SlotMaxCapacity);
