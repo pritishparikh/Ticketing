@@ -64,5 +64,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                     { "action", "ReturnException" }
              });
         }
+        public void OnExceptioninanyclass(ErrorLog errorLog )
+        {
+            ErrorLogCaller errorLogCaller = new ErrorLogCaller();
+            int result = errorLogCaller.AddErrorLog(new ErrorLogging(_ErconnectioSting), errorLog);
+        }
     }
 }

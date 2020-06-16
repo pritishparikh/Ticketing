@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
+using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -43,9 +44,28 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = returnShipmentDetails;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                objResponseModel.Status = false;
+                objResponseModel.StatusCode = 503;
+                objResponseModel.Message = "Service Unavailable";
+                objResponseModel.ResponseData = "";
+                CustomExceptionFilter customExceptionFilter = new CustomExceptionFilter(configuration);
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                ErrorLog errorLogs = new ErrorLog
+                {
+                    ActionName = ControllerContext.ActionDescriptor.ActionName,
+                    ControllerName = ControllerContext.ActionDescriptor.ControllerName,
+                    TenantID = authenticate.TenantId,
+                    UserID = authenticate.UserMasterID,
+                    Exceptions = ex.StackTrace,
+                    MessageException = ex.Message,
+                    IPAddress = ""
+                };
+                customExceptionFilter.OnExceptioninanyclass(errorLogs);
+                //throw;
             }
             return objResponseModel;
         }
