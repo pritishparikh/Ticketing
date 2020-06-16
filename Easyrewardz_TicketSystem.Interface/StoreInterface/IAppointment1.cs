@@ -24,7 +24,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int DeleteTimeSlotMaster(int SlotID, int TenantID, string ProgramCode);
 
-        List<StoreTimeSlotSettingModel> GetStoreSettingTimeSlot(int TenantID, string ProgramCode, int StoreID);
+        List<StoreTimeSlotSettingModel> GetStoreSettingTimeSlot(int TenantID, string ProgramCode, int SlotID, int StoreID);
 
         #endregion
     }

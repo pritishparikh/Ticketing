@@ -58,10 +58,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _AppointmentRepository.DeleteTimeSlotMaster(SlotID, TenantID,  ProgramCode);
         }
 
-        public List<StoreTimeSlotSettingModel> GetStoreSettingTimeSlot(IAppointment appointment, int TenantID, string ProgramCode, int SlotID)
+        public List<StoreTimeSlotSettingModel> GetStoreSettingTimeSlot(IAppointment appointment, int TenantID, string ProgramCode, int SlotID, int StoreID)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.GetStoreSettingTimeSlot( TenantID,  ProgramCode, SlotID); 
+            return _AppointmentRepository.GetStoreSettingTimeSlot( TenantID,  ProgramCode, SlotID, StoreID); 
         }
 
         

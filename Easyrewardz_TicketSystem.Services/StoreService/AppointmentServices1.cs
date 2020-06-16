@@ -226,7 +226,7 @@ namespace Easyrewardz_TicketSystem.Services
                 Result = Convert.ToInt32(cmd.ExecuteNonQuery());
                 conn.Close();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -287,7 +287,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get HSTimeSlotMaster List
         /// </summary>
         /// <returns></returns>
-        public List<StoreTimeSlotSettingModel> GetStoreSettingTimeSlot(int TenantID, string ProgramCode,int SlotID)
+        public List<StoreTimeSlotSettingModel> GetStoreSettingTimeSlot(int TenantID, string ProgramCode,int SlotID, int StoreID)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -305,6 +305,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@_TenantId", TenantID);
                 cmd1.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd1.Parameters.AddWithValue("@_SlotID", SlotID);
+                cmd1.Parameters.AddWithValue("@_StoreID", StoreID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
