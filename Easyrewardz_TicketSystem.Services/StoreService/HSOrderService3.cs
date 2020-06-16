@@ -163,6 +163,7 @@ namespace Easyrewardz_TicketSystem.Services
                             int result = SetOrderHasBeenReturn(tenantID, userID, orderID, "Shipment");
                         }
                     }
+
                     else if (!string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.awb_code) || !string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.courier_name))
                     {
 
@@ -178,7 +179,7 @@ namespace Easyrewardz_TicketSystem.Services
                             }
                         };
                         string apiReq1 = JsonConvert.SerializeObject(requestGeneratePickup);
-                        apiResponse = CommonService.SendApiRequest(clientAPIURL + "/api/ShoppingBag/GeneratePickup", apiReq1);
+                        apiResponse = CommonService.SendApiRequest(clientAPIURL + "api/ShoppingBag/GeneratePickup", apiReq1);
                         responseGeneratePickup = JsonConvert.DeserializeObject<ResponseGeneratePickup>(apiResponse);
 
                         // need to write Code for update Status shipment pickup
@@ -187,7 +188,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         //Code for GenerateManifest need to move the code 
                         string apiReq2 = JsonConvert.SerializeObject(requestGeneratePickup);
-                        apiResponse = CommonService.SendApiRequest(clientAPIURL + "/api/ShoppingBag/GenerateManifest", apiReq2);
+                        apiResponse = CommonService.SendApiRequest(clientAPIURL + "api/ShoppingBag/GenerateManifest", apiReq2);
                         responseGenerateManifest = JsonConvert.DeserializeObject<ResponseGenerateManifest>(apiResponse);
 
                         // need to write Code for update Status smanifest created
@@ -606,7 +607,10 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             try
             {
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 MySqlCommand cmd = new MySqlCommand("SP_PHYCreateShipmentAWB", conn)
                 {
                     Connection = conn,
