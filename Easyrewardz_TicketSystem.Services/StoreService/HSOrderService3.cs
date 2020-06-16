@@ -212,9 +212,12 @@ namespace Easyrewardz_TicketSystem.Services
                     //}
                     if (!string.IsNullOrEmpty(awbdetailModel.AWBNumber) || !string.IsNullOrEmpty(awbdetailModel.CourierPartner))
                     {
-                        obj.AWBNumber = awbdetailModel.AWBNumber;
-                        obj.InvoiceNo = awbdetailModel.InvoiceNo;
-                        obj.ItemIDs = awbdetailModel.ItemIDs;
+                        obj = new ReturnShipmentDetails
+                        {
+                            AWBNumber = awbdetailModel.AWBNumber,
+                            InvoiceNo = awbdetailModel.InvoiceNo,
+                            ItemIDs = awbdetailModel.ItemIDs,
+                        };
                     }
 
                     else
