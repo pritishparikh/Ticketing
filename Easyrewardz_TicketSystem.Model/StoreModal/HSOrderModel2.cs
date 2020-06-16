@@ -128,6 +128,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string SourceOfOrder { get; set; }
         /// <summary>
+        /// PaymentBillDate
+        /// </summary>
+        public string PaymentBillDate { get; set; }
+        /// <summary>
         /// OrdersItemList
         /// </summary>
         public List<OrdersItem> OrdersItemList { get; set; }
