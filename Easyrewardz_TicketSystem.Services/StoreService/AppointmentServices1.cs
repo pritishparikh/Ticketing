@@ -174,12 +174,12 @@ namespace Easyrewardz_TicketSystem.Services
         #region TimeSlotMaster CRUD
 
         /// <summary>
-        /// Insert/ Update HSTimeSlotMaster
+        /// Insert/ Update Time Slot Setting
         /// </summary>
         /// <param name="StoreTimeSlotInsertUpdate"></param>
         /// <returns></returns>
         /// 
-        public int InsertTimeSlotSetting(StoreTimeSlotInsertUpdate Slot)
+        public int InsertUpdateTimeSlotSetting(StoreTimeSlotInsertUpdate Slot)
         {
 
             int Result = 0;
@@ -191,11 +191,22 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
 
-                MySqlCommand cmd = new MySqlCommand("SP_HSInsertUpdateHSStoreTimeSlotMaster", conn);
+                MySqlCommand cmd = new MySqlCommand(Slot.SlotId > 0 ? "SP_HSUpdateStoreTimeSlotSetting" : "SP_HSInsertStoreTimeSlotSetting", conn);
                 cmd.Connection = conn;
+
+                if(Slot.SlotId > 0)
+                {
+                    cmd.Parameters.AddWithValue("@_SlotSettingID", Slot.SlotId);
+                    cmd.Parameters.AddWithValue("@_StoreId", string.IsNullOrEmpty(Slot.StoreIds) ? 0 : Convert.ToInt32(Slot.StoreIds.TrimEnd(',')));
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@_StoreIds", string.IsNullOrEmpty(Slot.StoreIds) ? "" : Slot.StoreIds.TrimEnd(','));
+                }
+
                 cmd.Parameters.AddWithValue("@_TenantId", Slot.TenantId);
                 cmd.Parameters.AddWithValue("@_ProgramCode", Slot.ProgramCode);
-                cmd.Parameters.AddWithValue("@_StoreIds", string.IsNullOrEmpty(Slot.StoreIds) ? "" : Slot.StoreIds.TrimEnd(','));
+                
                 cmd.Parameters.AddWithValue("@_StoreOpenValue", Slot.ProgramCode); 
                 cmd.Parameters.AddWithValue("@_StoreOpenAt", Slot.StoreOpenAt);
                 cmd.Parameters.AddWithValue("@_StoreCloseValue", Slot.StoreCloseAt);

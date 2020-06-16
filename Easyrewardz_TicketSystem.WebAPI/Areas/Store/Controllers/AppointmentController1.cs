@@ -154,13 +154,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// Insert/ Update HSTimeSlotMaster
+        /// Insert/ Update HSTimeSlot Setting
         /// </summary>
         /// <param name="StoreTimeSlotInsertUpdate"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("InsertTimeSlotSetting")]
-        public ResponseModel InsertTimeSlotSetting([FromBody]StoreTimeSlotInsertUpdate Slot)
+        [Route("InsertUpdateTimeSlotSetting")]
+        public ResponseModel InsertUpdateTimeSlotSetting([FromBody]StoreTimeSlotInsertUpdate Slot)
         {
             List<AlreadyScheduleDetail> alreadyScheduleDetails = new List<AlreadyScheduleDetail>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -179,7 +179,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 AppointmentCaller newAppointment = new AppointmentCaller();
 
-                ResultCount = newAppointment.InsertTimeSlotSetting(new AppointmentServices(_connectioSting), Slot);
+                ResultCount = newAppointment.InsertUpdateTimeSlotSetting(new AppointmentServices(_connectioSting), Slot);
 
                 statusCode =  ResultCount .Equals(0) ? (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
 
