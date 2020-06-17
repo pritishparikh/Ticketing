@@ -398,64 +398,56 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetTimeSlot", conn)
+               
+
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
+                    conn.Open();
+                }
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetTimeSlot", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
                 cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
-                //cmd1.Parameters.AddWithValue("@store_ID", storeID);
-                MySqlDataAdapter da = new MySqlDataAdapter
-                {
-                    SelectCommand = cmd1
-                };
+        
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
                 da.Fill(ds);
+
+
                 if (ds != null && ds.Tables[0] != null)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         DateofSchedule dateofSchedule = new DateofSchedule();
-                        dateofSchedule.Day = ds.Tables[0].Rows[i]["Today"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Today"]);
-                        dateofSchedule.Dates = ds.Tables[0].Rows[i]["Dates"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Dates"]);
+                        dateofSchedule.ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                        dateofSchedule.Day = ds.Tables[0].Rows[i]["DayName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayName"]);
+                        dateofSchedule.Dates = ds.Tables[0].Rows[i]["DateFormat"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DateFormat"]);
 
-                        DataTable dataTable = new DataTable();
 
-                        if(i==0)
+                        if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
                         {
-                            dataTable = ds.Tables[1];
-                        }
-                       else if (i == 1)
-                        {
-                            dataTable = ds.Tables[2];
-                        }
-                        else if (i == 2)
-                        {
-                            dataTable = ds.Tables[3];
+                            dateofSchedule.AlreadyScheduleDetails = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<object>("AID")).Equals(dateofSchedule.ID))
+                                .Select(x => new AlreadyScheduleDetail()
+                                {
+
+                                    TimeSlotId = x.Field<object>("SlotId") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("SlotId")),
+                                    AppointmentDate = x.Field<object>("AppointmentDate") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("AppointmentDate")),
+                                    VisitedCount = x.Field<object>("VisitedCount") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("VisitedCount")),
+                                    MaxCapacity = x.Field<object>("MaxCapacity") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("MaxCapacity")),
+                                    Remaining = x.Field<object>("Remaining") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Remaining")),
+                                    TimeSlot = x.Field<object>("TimeSlot") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("TimeSlot")),
+                                    StoreId = x.Field<object>("StoreId") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("StoreId")),
+                                    IsDisabled = x.Field<object>("IsDisabled") == System.DBNull.Value ? false : Convert.ToBoolean(x.Field<object>("IsDisabled")),
+
+                                }).ToList();
                         }
 
-                        List<AlreadyScheduleDetail> lstAlreadyScheduleDetail = new List<AlreadyScheduleDetail>();
-                        if (dataTable != null )
-                        {
-                            for (int j = 0; j < dataTable.Rows.Count; j++)
-                            {
-                                AlreadyScheduleDetail alreadyScheduleDetail = new AlreadyScheduleDetail();
-                                alreadyScheduleDetail.TimeSlotId= dataTable.Rows[j]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["SlotId"]);
-                                alreadyScheduleDetail.AppointmentDate= dataTable.Rows[j]["AppointmentDate"] == DBNull.Value ? string.Empty : Convert.ToString(dataTable.Rows[j]["AppointmentDate"]);
-                                alreadyScheduleDetail.VisitedCount = dataTable.Rows[j]["VisitedCount"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["VisitedCount"]);
-                                alreadyScheduleDetail.MaxCapacity = dataTable.Rows[j]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["MaxCapacity"]);
-                                alreadyScheduleDetail.Remaining = dataTable.Rows[j]["Remaining"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["Remaining"]);
-                                alreadyScheduleDetail.TimeSlot = dataTable.Rows[j]["TimeSlot"] == DBNull.Value ? string.Empty: Convert.ToString(dataTable.Rows[j]["TimeSlot"]);
-                                alreadyScheduleDetail.StoreId = dataTable.Rows[j]["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["StoreId"]);
-                                alreadyScheduleDetail.IsDisabled = dataTable.Rows[j]["IsDisabled"] == DBNull.Value ? false : Convert.ToBoolean(dataTable.Rows[j]["IsDisabled"]);
-                                lstAlreadyScheduleDetail.Add(alreadyScheduleDetail);
-                            }
-                            dateofSchedule.AlreadyScheduleDetails = lstAlreadyScheduleDetail;
-                        }
                         lstdateofSchedule.Add(dateofSchedule);
+
                     }
-                }
+
+                }  
             }
             catch (Exception)
             {
@@ -468,6 +460,12 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+                   
             }
             return lstdateofSchedule;
         }
@@ -485,6 +483,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 string textToReply = "Dear" + appointmentMaster.CustomerName + ",Your Visit for Our Store is schedule On" + appointmentMaster.AppointmentDate +
                     "On Time Between"+ appointmentMaster.TimeSlot;
+
                 #region call client api for sending message to customer
 
                 SendTextRequest.To = appointmentMaster.MobileNo;

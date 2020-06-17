@@ -29,7 +29,7 @@ namespace Easyrewardz_TicketSystem.Model
     }
     public class AlreadyScheduleDetail
     {
-
+        public int AID { get; set; }
         public int TimeSlotId { get; set; }
         public string AppointmentDate { get; set; }
         public int VisitedCount { get; set; }
@@ -43,6 +43,11 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class DateofSchedule
     {
+
+        /// <summary>
+        /// Day
+        /// </summary>
+        public int ID { get; set; }
 
         /// <summary>
         /// Day
