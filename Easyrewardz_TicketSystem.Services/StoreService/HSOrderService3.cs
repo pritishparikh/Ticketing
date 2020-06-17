@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///  <param name="tenantID"></param>
         ///  <param name="userID"></param>
         /// <returns></returns>
-        public ReturnShipmentDetails CreateShipmentAWB(int orderID, string itemIDs, int tenantID, int userID, string clientAPIURL)
+        public ReturnShipmentDetails CreateShipmentAWB(int orderID, string itemIDs, int tenantID, int userID, string clientAPIURL, string ProgramCode)
         {
 
             bool isAWBGenerated = false;
@@ -194,6 +194,9 @@ namespace Easyrewardz_TicketSystem.Services
                         // need to write Code for update Status smanifest created
                         //end Code for GenerateManifest need to move the code 
                         //}
+
+                       
+                        SmsWhatsUpDataSend(tenantID, userID,ProgramCode, orderID, clientAPIURL, "AWBAssigned");                      
 
                     }
                 }
@@ -413,6 +416,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     hSRequestGeneratePaymentLink = new HSRequestGeneratePaymentLink
                     {
+                        OrderId = ds.Tables[0].Rows[0]["Id"] == DBNull.Value ? 0 : Convert.ToInt16(ds.Tables[0].Rows[0]["Id"]),
                         merchantTxnID = ds.Tables[0].Rows[0]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["InvoiceNo"]),
                         billDateTime = ds.Tables[0].Rows[0]["billDateTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["billDateTime"]),
                         terminalId = ds.Tables[0].Rows[0]["TerminalId"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["TerminalId"]),
@@ -484,7 +488,7 @@ namespace Easyrewardz_TicketSystem.Services
                     result = Convert.ToInt32(cmd1.ExecuteNonQuery());
                     if (result > 0)
                     {
-                        SmsWhatsUpDataSend(tenantID, userID, programCode, 0, ClientAPIUrl, "ShoppingBagConvertToOrder");
+                        SmsWhatsUpDataSend(tenantID, userID, programCode, hSRequestGeneratePaymentLink.OrderId, ClientAPIUrl, "ShoppingBagConvertToOrder");
                     }
                     conn.Close();
                 }

@@ -308,6 +308,8 @@ namespace Easyrewardz_TicketSystem.Model
     {
         public string ShipmentAWBID { get; set; }
 
+        public int OrderID { get; set; }
+
         public string ReferenceNo { get; set; }
 
         public string StoreName { get; set; }

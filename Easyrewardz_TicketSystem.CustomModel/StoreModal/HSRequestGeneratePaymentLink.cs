@@ -6,6 +6,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
 {
     public class HSRequestGeneratePaymentLink
     {
+        public int OrderId { get; set; }
         public string programCode { get; set; }
         public string storeCode  { get; set; }
         public string billDateTime { get; set; }

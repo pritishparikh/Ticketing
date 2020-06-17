@@ -488,7 +488,7 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
-        public int UpdateShipmentAssignedData(ShipmentAssignedRequest shipmentAssignedRequest)
+        public int UpdateShipmentAssignedData(ShipmentAssignedRequest shipmentAssignedRequest, int tenantId, int userId, string programCode, string ClientAPIUrl)
         {
             int UpdateCount = 0;
             try
@@ -507,6 +507,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+                if (UpdateCount > 0)
+                {
+                    SmsWhatsUpDataSend(tenantId, userId, programCode, shipmentAssignedRequest.OrderID, ClientAPIUrl, "AWBAssignedStoreDelivery");
+                }
 
             }
             catch (Exception)
