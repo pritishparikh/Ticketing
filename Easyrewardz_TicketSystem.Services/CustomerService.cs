@@ -227,6 +227,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@CustomerPhoneNumber", customerMaster.CustomerPhoneNumber);
                 cmd1.Parameters.AddWithValue("@CustomerEmailId", customerMaster.CustomerEmailId);
                 cmd1.Parameters.AddWithValue("@GenderID", customerMaster.GenderID);
+                cmd1.Parameters.AddWithValue("@dateOfBirth", customerMaster.DateOfBirth);
                 cmd1.Parameters.AddWithValue("@AltNumber", customerMaster.AltNumber);
                 cmd1.Parameters.AddWithValue("@AltEmailID", customerMaster.AltEmailID);
                 cmd1.Parameters.AddWithValue("@IsActive", customerMaster.IsActive);
