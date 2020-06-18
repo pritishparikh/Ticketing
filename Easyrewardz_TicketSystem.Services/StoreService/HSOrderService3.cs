@@ -106,7 +106,7 @@ namespace Easyrewardz_TicketSystem.Services
                         giftwrap_charges = 0,
                         transaction_charges = 0,
                         total_discount = 0,
-                        sub_total = ds.Tables[2].Rows[0]["Amount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Amount"]),
+                        sub_total = 20, //ds.Tables[2].Rows[0]["Amount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Amount"]),
                         length = 10,
                         breadth = 10,
                         height = 2,
@@ -195,8 +195,12 @@ namespace Easyrewardz_TicketSystem.Services
                         //end Code for GenerateManifest need to move the code 
                         //}
 
-                       
-                        SmsWhatsUpDataSend(tenantID, userID,ProgramCode, orderID, clientAPIURL, "AWBAssigned");                      
+                        //if(responseGeneratePickup.pickupStatus.Equals(1) && responseGenerateManifest.status.Equals(1))
+                        //{
+                        //    int result = UpdateGeneratePickupManifest(orderID, tenantID, userID);
+                        //}                       
+
+                       // SmsWhatsUpDataSend(tenantID, userID,ProgramCode, orderID, clientAPIURL, "AWBAssigned");                      
 
                     }
                 }
@@ -243,6 +247,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -312,6 +320,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return ordersItemDetails;
         }
@@ -367,6 +379,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return lstReturnShipmentDetails;
@@ -503,6 +519,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return result;
         }
@@ -599,6 +619,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return pinCode;
         }
@@ -663,8 +687,52 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return returnShipmentDetails;
+        }
+
+        /// <summary>
+        /// UpdateGeneratePickupManifest
+        /// </summary>
+        /// <param name="orderID"></param>
+        ///  <param name="tenantID"></param>
+        ///  <param name="userID"></param>
+        /// <returns></returns>
+        public int UpdateGeneratePickupManifest(int orderID,int tenantID, int userID)
+        {
+            int result = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand("", conn)
+                {
+                    Connection = conn,
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@order_ID", orderID);              
+                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@user_ID", userID);        
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+      
+            }
+            return result;
         }
 
     }
