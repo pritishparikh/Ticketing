@@ -3,6 +3,7 @@ using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -417,6 +418,8 @@ namespace Easyrewardz_TicketSystem.Services
                             AWBNo = Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
                             InvoiceNo = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
                             CourierPartner = Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]),
+                            CourierPartnerOrderID = Convert.ToString(ds.Tables[0].Rows[i]["CourierPartnerOrderID"]),
+                            CourierPartnerShipmentID = Convert.ToString(ds.Tables[0].Rows[i]["CourierPartnerShipmentID"]),
                             ReferenceNo = Convert.ToString(ds.Tables[0].Rows[i]["ReferenceNo"]),
                             StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
                             StaffName = Convert.ToString(ds.Tables[0].Rows[i]["StaffName"]),
@@ -816,6 +819,106 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return UpdateCount;
+        }
+
+        public PrintManifestResponse ShipmentAssignedPrintManifest(Int64 OrderIds, string ClientAPIURL)
+        {
+
+            PrintManifestResponse printManifestResponse = new PrintManifestResponse();
+
+            
+
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            string ClientAPIResponse = string.Empty;
+            try
+            {
+
+                #region call client api for print manifest
+
+                PrintManifestRequest printManifestRequest = new PrintManifestRequest();
+                printManifestRequest.orderIds = new List<long>();
+                printManifestRequest.orderIds.Add(OrderIds);
+               
+
+                try
+                {
+                    string JsonRequest = JsonConvert.SerializeObject(printManifestRequest);
+
+                    ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ShoppingBag/PrintManifest", JsonRequest);
+
+                    if (!string.IsNullOrEmpty(ClientAPIResponse))
+                    {
+                        printManifestResponse = JsonConvert.DeserializeObject<PrintManifestResponse>(ClientAPIResponse);
+                    }
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+
+
+                #endregion
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return printManifestResponse;
+        }
+
+
+
+        public PrintLabelResponse ShipmentAssignedPrintLabel(Int64 ShipmentId, string ClientAPIURL)
+        {
+
+            PrintLabelResponse printLabelResponse = new PrintLabelResponse();
+
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            string ClientAPIResponse = string.Empty;
+            try
+            {
+
+                #region call client api for print manifest
+
+                PrintLabelRequest printLabelRequest = new PrintLabelRequest();
+                printLabelRequest.shipmentId = new List<long>();
+                printLabelRequest.shipmentId.Add(ShipmentId);
+
+
+                try
+                {
+                    string JsonRequest = JsonConvert.SerializeObject(printLabelRequest);
+
+                    ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ShoppingBag/GenerateLabel", JsonRequest);
+
+                    if (!string.IsNullOrEmpty(ClientAPIResponse))
+                    {
+                        printLabelResponse = JsonConvert.DeserializeObject<PrintLabelResponse>(ClientAPIResponse);
+                    }
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+
+
+                #endregion
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return printLabelResponse;
         }
     }
 }

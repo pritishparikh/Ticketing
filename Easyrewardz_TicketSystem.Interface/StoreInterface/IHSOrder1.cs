@@ -38,5 +38,9 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateShipmentAssignedDelivered(int orderID);
 
         int UpdateShipmentAssignedRTO(int orderID);
+
+        PrintManifestResponse ShipmentAssignedPrintManifest(Int64 OrderIds, string ClientAPIURL);
+
+        PrintLabelResponse ShipmentAssignedPrintLabel(Int64 OrderIds, string ClientAPIURL);
     }
 }

@@ -605,5 +605,75 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+
+        [HttpPost]
+        [Route("ShipmentAssignedPrintManifest")]
+        public ResponseModel ShipmentAssignedPrintManifest(Int64 OrderIds)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            PrintManifestResponse printManifest = new PrintManifestResponse();
+
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                HSOrderCaller hSOrderCaller = new HSOrderCaller();
+
+                printManifest = hSOrderCaller.ShipmentAssignedPrintManifest(new HSOrderService(_connectionString), OrderIds, _ClientAPIUrl);
+                statusCode = printManifest.manifestUrl.Length > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = printManifest;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        [HttpPost]
+        [Route("ShipmentAssignedPrintLabel")]
+        public ResponseModel ShipmentAssignedPrintLabel(Int64 ShipmentId)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            PrintLabelResponse printLabel = new PrintLabelResponse();
+
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                HSOrderCaller hSOrderCaller = new HSOrderCaller();
+
+                printLabel = hSOrderCaller.ShipmentAssignedPrintLabel(new HSOrderService(_connectionString), ShipmentId, _ClientAPIUrl);
+                statusCode = printLabel.label_url.Length > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = printLabel;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
     }
 }
