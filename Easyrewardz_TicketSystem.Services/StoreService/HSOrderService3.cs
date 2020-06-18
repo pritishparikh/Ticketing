@@ -184,23 +184,26 @@ namespace Easyrewardz_TicketSystem.Services
 
                         // need to write Code for update Status shipment pickup
 
-                        //end //Code for GeneratePickup need to move code
+                        if (!string.IsNullOrEmpty(responseGeneratePickup.response.pickupTokenNumber))
+                        {
+                            int result = UpdateGeneratePickupManifest(orderID, tenantID, userID,"Pickup");
+                        }
+                        //end //Code for GeneratePickup 
 
                         //Code for GenerateManifest need to move the code 
                         string apiReq2 = JsonConvert.SerializeObject(requestGeneratePickup);
                         apiResponse = CommonService.SendApiRequest(clientAPIURL + "api/ShoppingBag/GenerateManifest", apiReq2);
                         responseGenerateManifest = JsonConvert.DeserializeObject<ResponseGenerateManifest>(apiResponse);
 
-                        // need to write Code for update Status smanifest created
-                        //end Code for GenerateManifest need to move the code 
-                        //}
+                        // need to write Code for update Status manifest created
+                        //end Code for GenerateManifest
+                        //}                     
+                        if (!string.IsNullOrEmpty(responseGenerateManifest.manifestUrl))
+                        {
+                            int success = UpdateGeneratePickupManifest(orderID, tenantID, userID, "Manifest");
+                        }
 
-                        //if(responseGeneratePickup.pickupStatus.Equals(1) && responseGenerateManifest.status.Equals(1))
-                        //{
-                        //    int result = UpdateGeneratePickupManifest(orderID, tenantID, userID);
-                        //}                       
-
-                       // SmsWhatsUpDataSend(tenantID, userID,ProgramCode, orderID, clientAPIURL, "AWBAssigned");                      
+                        // SmsWhatsUpDataSend(tenantID, userID,ProgramCode, orderID, clientAPIURL, "AWBAssigned");                      
 
                     }
                 }
@@ -702,7 +705,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///  <param name="tenantID"></param>
         ///  <param name="userID"></param>
         /// <returns></returns>
-        public int UpdateGeneratePickupManifest(int orderID,int tenantID, int userID)
+        public int UpdateGeneratePickupManifest(int orderID,int tenantID, int userID,string status)
         {
             int result = 0;
             try
@@ -711,14 +714,16 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Open();
                 }
-                MySqlCommand cmd = new MySqlCommand("", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateflagPickupManifest", conn)
                 {
                     Connection = conn,
                     CommandType = CommandType.StoredProcedure
                 };
                 cmd.Parameters.AddWithValue("@order_ID", orderID);              
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
-                cmd.Parameters.AddWithValue("@user_ID", userID);        
+                cmd.Parameters.AddWithValue("@user_ID", userID);
+                cmd.Parameters.AddWithValue("@_status", status);
+                result = cmd.ExecuteNonQuery();
             }
             catch (Exception)
             {
@@ -729,8 +734,7 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
-                }
-      
+                }    
             }
             return result;
         }
