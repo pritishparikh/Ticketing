@@ -169,6 +169,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         obj = CreateShipment(orderID, itemIDs, tenantID, userID, responseCouriersPartnerAndAWBCode);
 
+                        SmsWhatsUpDataSend(tenantID, userID, ProgramCode, orderID, clientAPIURL, "AWBAssigned");
                         //Code for GeneratePickup 
                         // { "statusCode":"200","data":{ "awb_code":"141123201505566","order_id":"41363502","shipment_id":"41079500","courier_company_id":"51","courier_name":"Xpressbees Surface","rate":100,"is_custom_rate":"0","cod_multiplier":"0","cod_charges":"0","freight_charge":"100","rto_charges":"92","min_weight":"0.5","etd_hours":"112","etd":"Jun 19, 2020","estimated_delivery_days":"5"} }
                         RequestGeneratePickup requestGeneratePickup = new RequestGeneratePickup
@@ -201,9 +202,7 @@ namespace Easyrewardz_TicketSystem.Services
                         if (!string.IsNullOrEmpty(responseGenerateManifest.manifestUrl))
                         {
                             int success = UpdateGeneratePickupManifest(orderID, tenantID, userID, "Manifest");
-                        }
-
-                        // SmsWhatsUpDataSend(tenantID, userID,ProgramCode, orderID, clientAPIURL, "AWBAssigned");                      
+                        }                   
 
                     }
                 }
