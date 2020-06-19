@@ -162,7 +162,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 Message = dr["Message"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Message"]),
                                 StoreManagerID = dr["StoreManagerId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreManagerId"]),
                                 AgentName = dr["Agent"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Agent"]),
-                                CustomerMobile = dr["CustomerMobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(dr["AgentCustomerMobileNumber"]), 
+                                CustomerMobile = dr["CustomerMobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerMobileNumber"]), 
                                 ChatCount = dr["ChatCount"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ChatCount"]),
                                 TimeAgo = dr["TimeAgo"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TimeAgo"]),
                                 ChatStatus = dr["ChatStatus"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ChatStatus"]),
