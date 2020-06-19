@@ -264,7 +264,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@chat_id", chatID);
                 cmd.Parameters.AddWithValue("@storemanager_Id", UserID);
                 cmd.CommandType = CommandType.StoredProcedure;
-                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+                result = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception)
             {
