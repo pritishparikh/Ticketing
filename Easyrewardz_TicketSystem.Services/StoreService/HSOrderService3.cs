@@ -106,7 +106,7 @@ namespace Easyrewardz_TicketSystem.Services
                         giftwrap_charges = 0,
                         transaction_charges = 0,
                         total_discount = 0,
-                        sub_total = 20, //ds.Tables[2].Rows[0]["Amount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Amount"]),
+                        sub_total =  ds.Tables[2].Rows[0]["Amount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Amount"]),  // 10,
                         length = 10,
                         breadth = 10,
                         height = 2,
