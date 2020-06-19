@@ -56,11 +56,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name="chatid"></param>
         /// <returns></returns>
-        public int UpdateCustomerChatIdStatus(ICustomerChat customerChatStatus, int chatID, int TenantId)
+        public int UpdateCustomerChatIdStatus(ICustomerChat customerChatStatus, int chatID, int TenantId, int UserID)
         {
             _customerChat = customerChatStatus;
 
-            return _customerChat.UpdateCustomerChatIdStatus(chatID, TenantId);
+            return _customerChat.UpdateCustomerChatIdStatus(chatID, TenantId, UserID);
         }
 
         /// <summary>

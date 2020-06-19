@@ -252,7 +252,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="chatid"></param>
         /// <param name="tenantId"></param>
         /// <returns></returns>
-        public int UpdateCustomerChatIdStatus(int chatID, int tenantId)
+        public int UpdateCustomerChatIdStatus(int chatID, int tenantId, int UserID)
         {
 
             int result = 0;
@@ -262,6 +262,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateCustomerChatStatus", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@chat_id", chatID);
+                cmd.Parameters.AddWithValue("@storemanager_Id", UserID);
                 cmd.CommandType = CommandType.StoredProcedure;
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
