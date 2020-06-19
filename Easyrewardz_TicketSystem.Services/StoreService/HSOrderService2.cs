@@ -541,7 +541,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                     if (getWhatsappMessageDetailsResponse != null)
                     {
-                        if (getWhatsappMessageDetailsResponse.Remarks != null)
+                        if (getWhatsappMessageDetailsResponse.Remarks != null && getWhatsappMessageDetailsResponse.Remarks != "")
                         {
                             string ObjRemark = getWhatsappMessageDetailsResponse.Remarks.Replace("\r\n", "");
                             string[] ObjSplitComma = ObjRemark.Split(',');
