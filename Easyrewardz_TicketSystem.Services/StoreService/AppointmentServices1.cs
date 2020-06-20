@@ -226,7 +226,7 @@ namespace Easyrewardz_TicketSystem.Services
                 Result = Slot.SlotId > 0 ? Convert.ToInt32(cmd.ExecuteScalar()) :  Convert.ToInt32(cmd.ExecuteNonQuery());
                 conn.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
