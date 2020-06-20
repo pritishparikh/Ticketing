@@ -385,7 +385,8 @@ namespace Easyrewardz_TicketSystem.Services
         {
             DataSet ds = new DataSet();
             ShipmentAssignedDetails objdetails = new ShipmentAssignedDetails();
-
+            objdetails.shipmentAssigned = new List<ShipmentAssigned>();
+            objdetails.TotalCount = 0;
             List<ShipmentAssigned> shipmentAssigned = new List<ShipmentAssigned>();
             int TotalCount = 0;
             try
@@ -414,18 +415,18 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         ShipmentAssigned obj = new ShipmentAssigned
                         {
-                            OrderID = Convert.ToInt16(ds.Tables[0].Rows[i]["OrderID"]),
-                            AWBNo = Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
-                            InvoiceNo = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
-                            CourierPartner = Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]),
-                            CourierPartnerOrderID = Convert.ToString(ds.Tables[0].Rows[i]["CourierPartnerOrderID"]),
-                            CourierPartnerShipmentID = Convert.ToString(ds.Tables[0].Rows[i]["CourierPartnerShipmentID"]),
-                            ReferenceNo = Convert.ToString(ds.Tables[0].Rows[i]["ReferenceNo"]),
-                            StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
-                            StaffName = Convert.ToString(ds.Tables[0].Rows[i]["StaffName"]),
-                            MobileNumber = Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
-                            IsProceed = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsProceed"]),
-                            ShipmentAWBID = Convert.ToString(ds.Tables[0].Rows[i]["ShipmentAWBID"])
+                            OrderID = ds.Tables[0].Rows[i]["OrderID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OrderID"]),
+                            AWBNo = ds.Tables[0].Rows[i]["AWBNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
+                            InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
+                            CourierPartner = ds.Tables[0].Rows[i]["CourierPartner"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]),
+                            CourierPartnerOrderID = ds.Tables[0].Rows[i]["CourierPartnerOrderID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CourierPartnerOrderID"]),
+                            CourierPartnerShipmentID = ds.Tables[0].Rows[i]["CourierPartnerShipmentID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CourierPartnerShipmentID"]),
+                            ReferenceNo = ds.Tables[0].Rows[i]["ReferenceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReferenceNo"]),
+                            StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
+                            StaffName = ds.Tables[0].Rows[i]["StaffName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StaffName"]),
+                            MobileNumber = ds.Tables[0].Rows[i]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
+                            IsProceed = ds.Tables[0].Rows[i]["IsProceed"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsProceed"]),
+                            ShipmentAWBID = ds.Tables[0].Rows[i]["ShipmentAWBID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ShipmentAWBID"])
                         };
 
                         shipmentAssigned.Add(obj);
