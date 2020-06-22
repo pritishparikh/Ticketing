@@ -454,6 +454,7 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Parameters.AddWithValue("@_node", Xpath);
 
                         cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
+                        cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                         cmd.CommandType = CommandType.StoredProcedure;
                         MySqlDataAdapter da = new MySqlDataAdapter();
                         da.SelectCommand = cmd;
@@ -463,11 +464,11 @@ namespace Easyrewardz_TicketSystem.Services
                         {
 
                             //for success file
-                            SuccessFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            SuccessFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
                             csvLst.Add(SuccessFile);
 
                             //for error file
-                            ErrorFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            ErrorFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
                             csvLst.Add(ErrorFile);
 
 
@@ -476,6 +477,49 @@ namespace Easyrewardz_TicketSystem.Services
 
                 }
             }
+            #region old code
+            //XmlDocument xmlDoc = new XmlDocument();
+            //DataSet Bulkds = new DataSet();
+            //List<string> csvLst = new List<string>();
+            //string SuccessFile = string.Empty; string ErrorFile = string.Empty;
+            //try
+            //{
+            //    if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
+            //    {
+            //        if (DataSetCSV.Tables[0] != null && DataSetCSV.Tables[0].Rows.Count > 0)
+            //        {
+
+            //            xmlDoc.LoadXml(DataSetCSV.GetXml());
+            //            conn.Open();
+            //            MySqlCommand cmd = new MySqlCommand("SP_CategoryBulkUpload", conn);
+            //            cmd.Connection = conn;
+            //            cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
+            //            cmd.Parameters.AddWithValue("@_node", Xpath);
+
+            //            cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
+            //            cmd.CommandType = CommandType.StoredProcedure;
+            //            MySqlDataAdapter da = new MySqlDataAdapter();
+            //            da.SelectCommand = cmd;
+            //            da.Fill(Bulkds);
+
+            //            if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
+            //            {
+
+            //                //for success file
+            //                SuccessFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+            //                csvLst.Add(SuccessFile);
+
+            //                //for error file
+            //                ErrorFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+            //                csvLst.Add(ErrorFile);
+
+
+            //            }
+            //        }
+
+            //    }
+            //}
+      # endregion Old code
             catch (Exception)
             {
                 throw;
