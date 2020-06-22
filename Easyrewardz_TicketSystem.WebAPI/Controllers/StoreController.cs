@@ -504,6 +504,125 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         [Route("BulkUploadStore")]
         public ResponseModel BulkUploadStore(int StoreFor = 1)
         {
+            #region old Code
+
+            //StoreCaller newMasterStore = new StoreCaller();
+
+            //string DownloadFilePath = string.Empty;
+            //string BulkUploadFilesPath = string.Empty;
+            //bool errorfilesaved = false;
+            //bool successfilesaved = false;
+            //int count = 0;
+
+            //List<string> CSVlist = new List<string>();
+            //SettingsCaller newFile = new SettingsCaller();
+            //ResponseModel objResponseModel = new ResponseModel();
+            //int StatusCode = 0;
+            //string statusMessage = "";
+            //DataSet DataSetCSV = new DataSet();
+            //string fileName = "";
+            //string finalAttchment = "";
+            //string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
+            //string[] filesName = null;
+
+
+            //try
+            //{
+            //    var files = Request.Form.Files;
+
+            //    if (files.Count > 0)
+            //    {
+            //        for (int i = 0; i < files.Count; i++)
+            //        {
+            //            fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
+            //        }
+            //        finalAttchment = fileName.TrimEnd(',');
+            //    }
+            //    var Keys = Request.Form;
+
+            //    //var exePath = Path.GetDirectoryName(System.Reflection
+            //    //     .Assembly.GetExecutingAssembly().CodeBase);
+            //    //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+            //    //var appRoot = appPathMatcher.Match(exePath).Value;
+            //    //string Folderpath = appRoot + "\\" + _UploadedBulkFile;
+
+            //    #region FilePath
+            //    string Folderpath = Directory.GetCurrentDirectory();
+            //    filesName = finalAttchment.Split(",");
+
+
+            //    BulkUploadFilesPath = Path.Combine(Folderpath, BulkUpload, UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor));
+            //    DownloadFilePath = Path.Combine(Folderpath, BulkUpload, DownloadFile, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor)); 
+
+
+            //    if (!Directory.Exists(BulkUploadFilesPath))
+            //    {
+            //        Directory.CreateDirectory(BulkUploadFilesPath);
+            //    }
+
+
+
+            //    if (files.Count > 0)
+            //    {
+
+            //        for (int i = 0; i < files.Count; i++)
+            //        {
+            //            using (var ms = new MemoryStream())
+            //            {
+            //                files[i].CopyTo(ms);
+            //                var fileBytes = ms.ToArray();
+            //                MemoryStream msfile = new MemoryStream(fileBytes);
+            //                FileStream docFile = new FileStream(Path.Combine(BulkUploadFilesPath, filesName[i]), FileMode.Create, FileAccess.Write);
+            //                msfile.WriteTo(docFile);
+            //                docFile.Close();
+            //                ms.Close();
+            //                msfile.Close();
+            //                string s = Convert.ToBase64String(fileBytes);
+            //                byte[] a = Convert.FromBase64String(s);
+            //                // act on the Base64 data
+
+            //            }
+            //        }
+            //    }
+
+            //    #endregion
+
+
+            //    string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+            //    Authenticate authenticate = new Authenticate();
+            //    authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+
+
+            //    DataSetCSV = CommonService.csvToDataSet(Path.Combine(BulkUploadFilesPath, filesName[0]));
+            //    CSVlist = newMasterStore.StoreBulkUpload(new StoreService(_connectionString), authenticate.TenantId, authenticate.UserMasterID, DataSetCSV);
+
+            //    #region Create Error and Success files and  Insert in FileUploadLog
+
+            //    string SuccessFileName = "StoreSuccessFile_" + timeStamp + ".csv";
+            //    string ErrorFileName = "StoreErrorFile_" + timeStamp + ".csv";
+
+            //    string SuccessFileUrl = rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor) + "/Success/" + SuccessFileName;
+            //    string ErrorFileUrl = rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor) + "/Error/" + ErrorFileName;
+
+            //    if (!string.IsNullOrEmpty(CSVlist[0]))
+            //        successfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Success", SuccessFileName), CSVlist[0]);
+
+            //    if (!string.IsNullOrEmpty(CSVlist[1]))
+            //        errorfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Error", ErrorFileName), CSVlist[1]);
+
+            //    count = newFile.CreateFileUploadLog(new FileUploadService(_connectionString), authenticate.TenantId, filesName[0], errorfilesaved,
+            //                     ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store", SuccessFileUrl, ErrorFileUrl, StoreFor);
+            //    #endregion
+
+            //    StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+            //    statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+            //    objResponseModel.Status = true;
+            //    objResponseModel.StatusCode = StatusCode;
+            //    objResponseModel.Message = statusMessage;
+            //    objResponseModel.ResponseData = count;
+            #endregion Old code
             StoreCaller newMasterStore = new StoreCaller();
 
             string DownloadFilePath = string.Empty;
@@ -550,7 +669,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
                 BulkUploadFilesPath = Path.Combine(Folderpath, BulkUpload, UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor));
-                DownloadFilePath = Path.Combine(Folderpath, BulkUpload, DownloadFile, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor)); 
+                DownloadFilePath = Path.Combine(Folderpath, BulkUpload, DownloadFile, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor));
 
 
                 if (!Directory.Exists(BulkUploadFilesPath))
@@ -601,8 +720,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string SuccessFileName = "StoreSuccessFile_" + timeStamp + ".csv";
                 string ErrorFileName = "StoreErrorFile_" + timeStamp + ".csv";
 
-                string SuccessFileUrl = rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor) + "/Success/" + SuccessFileName;
-                string ErrorFileUrl = rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor) + "/Error/" + ErrorFileName;
+                string SuccessFileUrl = !string.IsNullOrEmpty(CSVlist[0]) ?
+                   rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor) + "/Success/" + SuccessFileName : string.Empty;
+                string ErrorFileUrl = !string.IsNullOrEmpty(CSVlist[1]) ?
+                    rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)StoreFor) + "/Error/" + ErrorFileName : string.Empty;
+
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
                     successfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Success", SuccessFileName), CSVlist[0]);
@@ -610,7 +732,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 if (!string.IsNullOrEmpty(CSVlist[1]))
                     errorfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Error", ErrorFileName), CSVlist[1]);
 
-                count = newFile.CreateFileUploadLog(new FileUploadService(_connectionString), authenticate.TenantId, filesName[0], errorfilesaved,
+                count = newFile.CreateFileUploadLog(new FileUploadService(_connectionString), authenticate.TenantId, filesName[0], true,
                                  ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store", SuccessFileUrl, ErrorFileUrl, StoreFor);
                 #endregion
 
@@ -620,7 +742,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = count;
-
             }
             catch (Exception )
             {
