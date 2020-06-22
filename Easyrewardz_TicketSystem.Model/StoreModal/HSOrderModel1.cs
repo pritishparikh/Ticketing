@@ -364,6 +364,8 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string ItemIDs { get; set; }
 
+        public bool IsStoreDelivery { get; set; }
+
         public bool Status { get; set; }
 
         public string StatusMessge { get; set; }

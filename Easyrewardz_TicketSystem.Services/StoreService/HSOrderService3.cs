@@ -161,7 +161,7 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             //CouriersPartner =Store
                             responseCouriersPartnerAndAWBCode.data.courier_name = "Store";
-                            obj = CreateShipment(orderID, itemIDs, tenantID, userID, responseCouriersPartnerAndAWBCode);
+                            obj = CreateShipment(orderID, itemIDs, tenantID, userID, responseCouriersPartnerAndAWBCode, true);
                         }
                         else
                         {
@@ -192,7 +192,7 @@ namespace Easyrewardz_TicketSystem.Services
                         else if (!string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.awb_code) || !string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.courier_name))
                         {
 
-                            obj = CreateShipment(orderID, itemIDs, tenantID, userID, responseCouriersPartnerAndAWBCode);
+                            obj = CreateShipment(orderID, itemIDs, tenantID, userID, responseCouriersPartnerAndAWBCode, false);
 
                             SmsWhatsUpDataSend(tenantID, userID, ProgramCode, orderID, clientAPIURL, "AWBAssigned");
                             //Code for GeneratePickup 
@@ -683,7 +683,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///  <param name="tenantID"></param>
         ///  <param name="userID"></param>
         /// <returns></returns>
-        public ReturnShipmentDetails CreateShipment(int orderID, string itemIDs, int tenantID, int userID, ResponseCouriersPartnerAndAWBCode responseCouriersPartnerAndAWBCode)
+        public ReturnShipmentDetails CreateShipment(int orderID, string itemIDs, int tenantID, int userID, ResponseCouriersPartnerAndAWBCode responseCouriersPartnerAndAWBCode, bool IsStoreDelivery)
         {
             ReturnShipmentDetails returnShipmentDetails = null;
             DataSet ds = new DataSet();
@@ -724,7 +724,8 @@ namespace Easyrewardz_TicketSystem.Services
                             AWBNumber = ds.Tables[0].Rows[i]["AWBNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
                             ItemIDs = ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),
                             Status = true,
-                            StatusMessge = "Success"
+                            StatusMessge = "Success",
+                            IsStoreDelivery = IsStoreDelivery
                         };
                     }
                 }
