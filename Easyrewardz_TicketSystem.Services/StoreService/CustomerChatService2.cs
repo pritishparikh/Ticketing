@@ -625,7 +625,7 @@ namespace Easyrewardz_TicketSystem.Services
                 throw;
             }
             
-            return resultCount;
+            return string.IsNullOrEmpty(ClientImageAPIResponse) ? 0 : 1;
         }
 
     }
