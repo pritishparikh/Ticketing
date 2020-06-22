@@ -278,6 +278,10 @@ namespace Easyrewardz_TicketSystem.Model
 
         public string CourierPartner { get; set; }
 
+        public string CourierPartnerOrderID { get; set; }
+
+        public string CourierPartnerShipmentID { get; set; }
+
         public string ReferenceNo { get; set; }
 
         public string StoreName { get; set; }
@@ -473,5 +477,27 @@ namespace Easyrewardz_TicketSystem.Model
         public string CourierPartner { get; set; }
 
         public string Date { get; set; }
+    }
+
+    public class PrintManifestRequest
+    {
+        public List<Int64> orderIds { get; set; }
+    }
+
+    public class PrintManifestResponse
+    {
+        public string manifestUrl { get; set; }
+    }
+
+    public class PrintLabelRequest
+    {
+        public List<Int64> shipmentId { get; set; }
+    }
+
+    public class PrintLabelResponse
+    {
+        public int label_created { get; set; }
+        public string label_url { get; set; }
+        public string response { get; set; }
     }
 }

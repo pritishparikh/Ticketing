@@ -13,7 +13,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int MarkAsReadOnGoingChat(int chatID); 
 
-        int UpdateCustomerChatIdStatus(int chatID, int tenantID);
+        int UpdateCustomerChatIdStatus(int chatID, int tenantID, int UserID);
 
         List<AppointmentDetails> ScheduleVisit(AppointmentMaster appointmentMaster);
 

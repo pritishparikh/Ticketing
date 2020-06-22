@@ -223,10 +223,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_UserID", Slot.UserID);
 
                 cmd.CommandType = CommandType.StoredProcedure;
-                Result = Convert.ToInt32(cmd.ExecuteNonQuery());
+                Result = Slot.SlotId > 0 ? Convert.ToInt32(cmd.ExecuteScalar()) :  Convert.ToInt32(cmd.ExecuteNonQuery());
                 conn.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

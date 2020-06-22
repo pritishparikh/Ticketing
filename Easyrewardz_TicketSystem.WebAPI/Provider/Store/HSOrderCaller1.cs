@@ -106,5 +106,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.UpdateShipmentAssignedRTO(orderID);
         }
+
+        public PrintManifestResponse ShipmentAssignedPrintManifest(IHSOrder order, Int64 OrderIds, string ClientAPIURL)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.ShipmentAssignedPrintManifest(OrderIds, ClientAPIURL);
+        }
+
+        public PrintLabelResponse ShipmentAssignedPrintLabel(IHSOrder order, Int64 ShipmentId, string ClientAPIURL)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.ShipmentAssignedPrintLabel(ShipmentId, ClientAPIURL);
+        }
     }
 }

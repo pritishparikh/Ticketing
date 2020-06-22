@@ -162,7 +162,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         [Route("InsertUpdateTimeSlotSetting")]
         public ResponseModel InsertUpdateTimeSlotSetting([FromBody]StoreTimeSlotInsertUpdate Slot)
         {
-            List<AlreadyScheduleDetail> alreadyScheduleDetails = new List<AlreadyScheduleDetail>();
+
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0; int ResultCount = 0;
             string statusMessage = "";
@@ -181,7 +181,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 ResultCount = newAppointment.InsertUpdateTimeSlotSetting(new AppointmentServices(_connectioSting), Slot);
 
-                statusCode =  ResultCount .Equals(0) ? (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
+
+                statusCode = ResultCount > 0 ? (int)EnumMaster.StatusCode.Success :
+                    ResultCount < 0 ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.InternalServerError;
+
+              //  statusCode =  ResultCount .Equals(0) ? (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
@@ -223,7 +227,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 ResultCount = newAppointment.DeleteTimeSlotMaster(new AppointmentServices(_connectioSting), SlotID,authenticate.TenantId,authenticate.ProgramCode);
 
-                statusCode = ResultCount.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode = ResultCount > 0 ? (int)EnumMaster.StatusCode.Success :
+                  ResultCount < 0 ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.InternalServerError;
+
+               // statusCode = ResultCount.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 

@@ -106,7 +106,7 @@ namespace Easyrewardz_TicketSystem.Services
                         giftwrap_charges = 0,
                         transaction_charges = 0,
                         total_discount = 0,
-                        sub_total = 20, //ds.Tables[2].Rows[0]["Amount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Amount"]),
+                        sub_total =  ds.Tables[2].Rows[0]["Amount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Amount"]),  // 10,
                         length = 10,
                         breadth = 10,
                         height = 2,
@@ -169,42 +169,64 @@ namespace Easyrewardz_TicketSystem.Services
 
                         obj = CreateShipment(orderID, itemIDs, tenantID, userID, responseCouriersPartnerAndAWBCode);
 
+                        SmsWhatsUpDataSend(tenantID, userID, ProgramCode, orderID, clientAPIURL, "AWBAssigned");
                         //Code for GeneratePickup 
                         // { "statusCode":"200","data":{ "awb_code":"141123201505566","order_id":"41363502","shipment_id":"41079500","courier_company_id":"51","courier_name":"Xpressbees Surface","rate":100,"is_custom_rate":"0","cod_multiplier":"0","cod_charges":"0","freight_charge":"100","rto_charges":"92","min_weight":"0.5","etd_hours":"112","etd":"Jun 19, 2020","estimated_delivery_days":"5"} }
-                        RequestGeneratePickup requestGeneratePickup = new RequestGeneratePickup
+
+                        if (responseCouriersPartnerAndAWBCode != null)
                         {
-                            shipmentId = new List<int>
+                            if (responseCouriersPartnerAndAWBCode.data != null)
                             {
-                            Convert.ToInt32(responseCouriersPartnerAndAWBCode.data.shipment_id)
+                                if (responseCouriersPartnerAndAWBCode.data.shipment_id != null)
+                                {
+                                    RequestGeneratePickup requestGeneratePickup = new RequestGeneratePickup
+                                    {
+                                        shipmentId = new List<int>
+                                        { 
+                                            Convert.ToInt32(responseCouriersPartnerAndAWBCode.data.shipment_id)
+                                        }
+                                    };
+
+                                    try
+                                    {
+                                        string apiReq1 = JsonConvert.SerializeObject(requestGeneratePickup);
+                                        apiResponse = CommonService.SendApiRequest(clientAPIURL + "api/ShoppingBag/GeneratePickup", apiReq1);
+                                        responseGeneratePickup = JsonConvert.DeserializeObject<ResponseGeneratePickup>(apiResponse);
+
+                                        // need to write Code for update Status shipment pickup
+
+                                        if (!string.IsNullOrEmpty(responseGeneratePickup.response.pickupTokenNumber))
+                                        {
+                                            int result = UpdateGeneratePickupManifest(orderID, tenantID, userID, "Pickup");
+                                        }
+                                        //end //Code for GeneratePickup 
+                                    }
+                                    catch (Exception ex)
+                                    {
+
+                                    }
+                                    try
+                                    {
+                                        //Code for GenerateManifest need to move the code 
+                                        string apiReq2 = JsonConvert.SerializeObject(requestGeneratePickup);
+                                        apiResponse = CommonService.SendApiRequest(clientAPIURL + "api/ShoppingBag/GenerateManifest", apiReq2);
+                                        responseGenerateManifest = JsonConvert.DeserializeObject<ResponseGenerateManifest>(apiResponse);
+
+                                        // need to write Code for update Status manifest created
+                                        //end Code for GenerateManifest
+                                        //}                     
+                                        if (!string.IsNullOrEmpty(responseGenerateManifest.manifestUrl))
+                                        {
+                                            int success = UpdateGeneratePickupManifest(orderID, tenantID, userID, "Manifest");
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+
+                                    }
+                                }
                             }
-                        };
-                        string apiReq1 = JsonConvert.SerializeObject(requestGeneratePickup);
-                        apiResponse = CommonService.SendApiRequest(clientAPIURL + "api/ShoppingBag/GeneratePickup", apiReq1);
-                        responseGeneratePickup = JsonConvert.DeserializeObject<ResponseGeneratePickup>(apiResponse);
-
-                        // need to write Code for update Status shipment pickup
-
-                        if (!string.IsNullOrEmpty(responseGeneratePickup.response.pickupTokenNumber))
-                        {
-                            int result = UpdateGeneratePickupManifest(orderID, tenantID, userID,"Pickup");
                         }
-                        //end //Code for GeneratePickup 
-
-                        //Code for GenerateManifest need to move the code 
-                        string apiReq2 = JsonConvert.SerializeObject(requestGeneratePickup);
-                        apiResponse = CommonService.SendApiRequest(clientAPIURL + "api/ShoppingBag/GenerateManifest", apiReq2);
-                        responseGenerateManifest = JsonConvert.DeserializeObject<ResponseGenerateManifest>(apiResponse);
-
-                        // need to write Code for update Status manifest created
-                        //end Code for GenerateManifest
-                        //}                     
-                        if (!string.IsNullOrEmpty(responseGenerateManifest.manifestUrl))
-                        {
-                            int success = UpdateGeneratePickupManifest(orderID, tenantID, userID, "Manifest");
-                        }
-
-                        // SmsWhatsUpDataSend(tenantID, userID,ProgramCode, orderID, clientAPIURL, "AWBAssigned");                      
-
                     }
                 }
 
