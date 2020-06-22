@@ -164,6 +164,7 @@ namespace Easyrewardz_TicketSystem.Services
                         moduleConfiguration.UnDeliverable = ds.Tables[0].Rows[0]["UnDeliverable"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["UnDeliverable"]);
                         moduleConfiguration.UnDeliverableText = ds.Tables[0].Rows[0]["UnDeliverableText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["UnDeliverableText"]);
                         moduleConfiguration.StoreDeliveryText = ds.Tables[0].Rows[0]["StoreDeliveryText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["StoreDeliveryText"]);
+                        moduleConfiguration.PaymentTenantCodeText = ds.Tables[0].Rows[0]["PaymentTenantCodeText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["PaymentTenantCodeText"]);
                     }
                 }   
             }
@@ -221,6 +222,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_UnDeliverable", Convert.ToInt16(orderConfiguration.UnDeliverable));
                 cmd.Parameters.AddWithValue("@_UnDeliverableText", orderConfiguration.UnDeliverableText);
                 cmd.Parameters.AddWithValue("@_StoreDeliveryText", orderConfiguration.StoreDeliveryText);
+                cmd.Parameters.AddWithValue("@_PaymentTenantCodeText", orderConfiguration.PaymentTenantCodeText);
                 cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
 
                 cmd.CommandType = CommandType.StoredProcedure;
