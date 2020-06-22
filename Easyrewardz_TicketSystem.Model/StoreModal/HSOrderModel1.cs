@@ -363,6 +363,10 @@ namespace Easyrewardz_TicketSystem.Model
         public string InvoiceNo { get; set; }
 
         public string ItemIDs { get; set; }
+
+        public bool Status { get; set; }
+
+        public string StatusMessge { get; set; }
     }
 
     public class OrderReturns
