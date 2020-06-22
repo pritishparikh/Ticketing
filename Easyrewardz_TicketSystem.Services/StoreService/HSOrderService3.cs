@@ -414,8 +414,13 @@ namespace Easyrewardz_TicketSystem.Services
                             InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
                             ItemIDs = ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),
                             AWBNumber = ds.Tables[0].Rows[i]["AWBNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
+                            CourierPartner = ds.Tables[0].Rows[i]["CourierPartner"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]),
                         };
 
+                        if(returnShipmentDetails.CourierPartner.Equals("Store"))
+                        {
+                            returnShipmentDetails.IsStoreDelivery = true;
+                        }
                         lstReturnShipmentDetails.Add(returnShipmentDetails);
                     }
                 }
