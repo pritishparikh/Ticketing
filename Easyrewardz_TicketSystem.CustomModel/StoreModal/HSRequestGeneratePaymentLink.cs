@@ -31,10 +31,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
         //public string ClientSecret { get; set; } = "090";
         //public string GrantType { get; set; } = "pop";
         //public string Scope { get; set; } = "lkl";
-        public string Client_Id { get; set; } = "9090";
-        public string Client_Secret { get; set; } = "090";
-        public string Grant_Type { get; set; } = "pop";
-        public string Scope { get; set; } = "lkl";
+        public string Client_Id { get; set; }
+        public string Client_Secret { get; set; }
+        public string Grant_Type { get; set; }
+        public string Scope { get; set; }
     }
 
     public class HSResponseGenerateToken
