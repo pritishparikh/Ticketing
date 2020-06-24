@@ -276,14 +276,19 @@ namespace Easyrewardz_TicketSystem.Services
 
                                     });
                                 }
-                                   
+
                                 if (ApprovedImageItemList.Count > 0)
                                 {
-                                    foreach (CustomItemSearchResponseModel carditem  in ItemList)
-                                    {
-                                            carditem.imageURL = ApprovedImageItemList.Where(x => x.uniqueItemCode.Equals(carditem.uniqueItemCode)).Select(x => x.imageURL).FirstOrDefault();
-                                    }
+                                    var ApprovedList = ApprovedImageItemList.Select(x => x.uniqueItemCode).ToList();
 
+                                    foreach (CustomItemSearchResponseModel carditem in ItemList)
+                                    {
+                                        if (ApprovedList.Contains(carditem.uniqueItemCode))
+                                        {
+                                            carditem.imageURL = ApprovedImageItemList.Where(x => x.uniqueItemCode.Equals(carditem.uniqueItemCode)).Select(x => x.imageURL).FirstOrDefault();
+                                        }
+
+                                    }
                                 }
 
                             }
