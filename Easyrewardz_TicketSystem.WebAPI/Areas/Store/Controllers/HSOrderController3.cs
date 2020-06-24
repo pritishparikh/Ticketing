@@ -170,10 +170,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 HSRequestGenerateToken hSRequestGenerateToken = new HSRequestGenerateToken()
                 {
-                    Client_Id = "",
-                    Client_Secret = "",
-                    Grant_Type = "",
-                    Scope = "",
+                    Client_Id = _Client_Id,
+                    Client_Secret = _Client_Secret,
+                    Grant_Type = _Grant_Type,
+                    Scope = _Scope,
                 };
                 
                 obj = hSOrderCaller.GeneratePaymentLink(new HSOrderService(_connectionString), objRequest, _ClientAPIUrlForGenerateToken, _ClientAPIUrlForGeneratePaymentLink, authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, _ClientAPIUrl, hSRequestGenerateToken);
