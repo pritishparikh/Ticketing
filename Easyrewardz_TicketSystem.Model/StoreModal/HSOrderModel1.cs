@@ -245,12 +245,24 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class OrderDeliveredFilterRequest
     {
+        /// <summary>
+        /// SearchText
+        /// </summary>
         public string SearchText { get; set; }
 
+        /// <summary>
+        /// PageNo
+        /// </summary>
         public int PageNo { get; set; }
 
+        /// <summary>
+        /// PageSize
+        /// </summary>
         public int PageSize { get; set; }
 
+        /// <summary>
+        /// FilterStatus
+        /// </summary>
         public string FilterStatus { get; set; }
     }
 
@@ -258,40 +270,85 @@ namespace Easyrewardz_TicketSystem.Model
     {
         public List<OrderDelivered> orderDelivereds { get; set; }
 
+        /// <summary>
+        /// TotalCount
+        /// </summary>
         public int TotalCount { get; set; }
     }
 
     public class OrderStatusFilter
     {
+        /// <summary>
+        /// StatusID
+        /// </summary>
         public int StatusID { get; set; }
 
+        /// <summary>
+        /// StatusName
+        /// </summary>
         public string StatusName { get; set; }
     }
 
     public class ShipmentAssigned
     {
+        /// <summary>
+        /// OrderID
+        /// </summary>
         public int OrderID { get; set; }
 
+        /// <summary>
+        /// AWBNo
+        /// </summary>
         public string AWBNo { get; set; }
 
+        /// <summary>
+        /// InvoiceNo
+        /// </summary>
         public string InvoiceNo { get; set; }
 
+        /// <summary>
+        /// CourierPartner
+        /// </summary>
         public string CourierPartner { get; set; }
 
+        /// <summary>
+        /// CourierPartnerOrderID
+        /// </summary>
         public string CourierPartnerOrderID { get; set; }
 
+        /// <summary>
+        /// CourierPartnerShipmentID
+        /// </summary>
         public string CourierPartnerShipmentID { get; set; }
 
+        /// <summary>
+        /// ReferenceNo
+        /// </summary>
         public string ReferenceNo { get; set; }
 
+        /// <summary>
+        /// StoreName
+        /// </summary>
         public string StoreName { get; set; }
 
+        /// <summary>
+        /// StaffName
+        /// </summary>
         public string StaffName { get; set; }
 
+        /// <summary>
+        /// MobileNumber
+        /// </summary>
         public string MobileNumber { get; set; }
 
+        /// <summary>
+        /// IsProceed
+        /// </summary>
         public bool IsProceed { get; set; }
 
+        /// <summary>
+        /// ShipmentAWBID
+        /// </summary>
         public string ShipmentAWBID { get; set; }
     }
 
@@ -299,77 +356,164 @@ namespace Easyrewardz_TicketSystem.Model
     {
         public List<ShipmentAssigned> shipmentAssigned { get; set; }
 
+        /// <summary>
+        /// TotalCount
+        /// </summary>
         public int TotalCount { get; set; }
     }
 
     public class ShipmentAssignedFilterRequest
     {
+        /// <summary>
+        /// SearchText
+        /// </summary>
         public string SearchText { get; set; }
 
+        /// <summary>
+        /// PageNo
+        /// </summary>
         public int PageNo { get; set; }
 
+        /// <summary>
+        /// PageSize
+        /// </summary>
         public int PageSize { get; set; }
 
+        /// <summary>
+        /// FilterReferenceNo
+        /// </summary>
         public string FilterReferenceNo { get; set; }
     }
 
     public class ShipmentAssignedRequest
     {
+        /// <summary>
+        /// ShipmentAWBID
+        /// </summary>
         public string ShipmentAWBID { get; set; }
 
+        /// <summary>
+        /// OrderID
+        /// </summary>
         public int OrderID { get; set; }
 
+        /// <summary>
+        /// ReferenceNo
+        /// </summary>
         public string ReferenceNo { get; set; }
 
+        /// <summary>
+        /// StoreName
+        /// </summary>
         public string StoreName { get; set; }
 
+        /// <summary>
+        /// StaffName
+        /// </summary>
         public string StaffName { get; set; }
 
+        /// <summary>
+        /// MobileNumber
+        /// </summary>
         public string MobileNumber { get; set; }
 
+        /// <summary>
+        /// IsProceed
+        /// </summary>
         public bool IsProceed { get; set; }
     }
 
     public class ConvertToOrder
     {
+        /// <summary>
+        /// ShoppingID
+        /// </summary>
         public int ShoppingID { get; set; }
 
+        /// <summary>
+        /// InvoiceNo
+        /// </summary>
         public string InvoiceNo { get; set; }
 
+        /// <summary>
+        /// Amount
+        /// </summary>
         public double Amount { get; set; }
     }
 
     public class AddressPendingRequest
     {
+        /// <summary>
+        /// OrderID
+        /// </summary>
         public int OrderID { get; set; }
 
+        /// <summary>
+        /// ShipmentAddress
+        /// </summary>
         public string ShipmentAddress { get; set; }
 
+        /// <summary>
+        /// Landmark
+        /// </summary>
         public string Landmark { get; set; }
 
+        /// <summary>
+        /// PinCode
+        /// </summary>
         public string PinCode { get; set; }
 
+        /// <summary>
+        /// City
+        /// </summary>
         public string City { get; set; }
 
+        /// <summary>
+        /// State
+        /// </summary>
         public string State { get; set; }
 
+        /// <summary>
+        /// Country
+        /// </summary>
         public string Country { get; set; }
     }
 
     public class ReturnShipmentDetails
     {
+        /// <summary>
+        /// AWBNumber
+        /// </summary>
         public string AWBNumber { get; set; }
 
+        /// <summary>
+        /// InvoiceNo
+        /// </summary>
         public string InvoiceNo { get; set; }
 
+        /// <summary>
+        /// ItemIDs
+        /// </summary>
         public string ItemIDs { get; set; }
 
+        /// <summary>
+        /// CourierPartner
+        /// </summary>
         public string CourierPartner { get; set; }
 
+        /// <summary>
+        /// IsStoreDelivery
+        /// </summary>
         public bool IsStoreDelivery { get; set; }
 
+        /// <summary>
+        /// Status
+        /// </summary>
         public bool Status { get; set; }
 
+        /// <summary>
+        /// StatusMessge
+        /// </summary>
         public string StatusMessge { get; set; }
     }
 
@@ -461,29 +605,59 @@ namespace Easyrewardz_TicketSystem.Model
     {
         public List<OrderReturns> orderReturns { get; set; }
 
+        /// <summary>
+        /// TotalCount
+        /// </summary>
         public int TotalCount { get; set; }
     }
 
     public class OrderReturnsFilterRequest
     {
+        /// <summary>
+        /// SearchText
+        /// </summary>
         public string SearchText { get; set; }
 
+        /// <summary>
+        /// PageNo
+        /// </summary>
         public int PageNo { get; set; }
 
+        /// <summary>
+        /// PageSize
+        /// </summary>
         public int PageSize { get; set; }
 
+        /// <summary>
+        /// FilterStatus
+        /// </summary>
         public string FilterStatus { get; set; }
     }
     public class AWbdetailModel
     {
+        /// <summary>
+        /// AWBNumber
+        /// </summary>
         public string AWBNumber { get; set; }
 
+        /// <summary>
+        /// InvoiceNo
+        /// </summary>
         public string InvoiceNo { get; set; }
 
+        /// <summary>
+        /// ItemIDs
+        /// </summary>
         public string ItemIDs { get; set; }
 
+        /// <summary>
+        /// CourierPartner
+        /// </summary>
         public string CourierPartner { get; set; }
 
+        /// <summary>
+        /// Date
+        /// </summary>
         public string Date { get; set; }
     }
 
@@ -494,6 +668,9 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class PrintManifestResponse
     {
+        /// <summary>
+        /// manifestUrl
+        /// </summary>
         public string manifestUrl { get; set; }
     }
 
@@ -504,8 +681,19 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class PrintLabelResponse
     {
+        /// <summary>
+        /// label_created
+        /// </summary>
         public int label_created { get; set; }
+
+        /// <summary>
+        /// label_url
+        /// </summary>
         public string label_url { get; set; }
+
+        /// <summary>
+        /// response
+        /// </summary>
         public string response { get; set; }
     }
 }

@@ -312,42 +312,46 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
 
-        [HttpPost]
-        [Route("UpdateMarkAsDelivered")]
-        public ResponseModel UpdateMarkAsDelivered(int orderID)
-        {
-            int UpdateCount = 0;
-            HSOrderCaller hSOrderCaller = new HSOrderCaller();
-            ResponseModel objResponseModel = new ResponseModel();
-            int statusCode = 0;
-            string statusMessage = "";
-            try
-            {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+        //[HttpPost]
+        //[Route("UpdateMarkAsDelivered")]
+        //public ResponseModel UpdateMarkAsDelivered(int orderID)
+        //{
+        //    int UpdateCount = 0;
+        //    HSOrderCaller hSOrderCaller = new HSOrderCaller();
+        //    ResponseModel objResponseModel = new ResponseModel();
+        //    int statusCode = 0;
+        //    string statusMessage = "";
+        //    try
+        //    {
+        //        string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+        //        Authenticate authenticate = new Authenticate();
+        //        authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                UpdateCount = hSOrderCaller.UpdateMarkAsDelivered(new HSOrderService(_connectionString),
-                    authenticate.TenantId, authenticate.UserMasterID, orderID);
-                statusCode =
-                   UpdateCount.Equals(0) ?
-                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+        //        UpdateCount = hSOrderCaller.UpdateMarkAsDelivered(new HSOrderService(_connectionString),
+        //            authenticate.TenantId, authenticate.UserMasterID, orderID);
+        //        statusCode =
+        //           UpdateCount.Equals(0) ?
+        //                   (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+        //        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                objResponseModel.Status = true;
-                objResponseModel.StatusCode = statusCode;
-                objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = UpdateCount;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return objResponseModel;
-        }
+        //        objResponseModel.Status = true;
+        //        objResponseModel.StatusCode = statusCode;
+        //        objResponseModel.Message = statusMessage;
+        //        objResponseModel.ResponseData = UpdateCount;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //    return objResponseModel;
+        //}
 
-
+        /// <summary>
+        /// Update Shipment Assigned Staff Details Of Store Delivery
+        /// </summary>
+        /// <param name="shipmentAssignedRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateShipmentAssignedData")]
         public ResponseModel UpdateShipmentAssignedData([FromBody]ShipmentAssignedRequest shipmentAssignedRequest)
@@ -382,7 +386,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Update Shopping Bag Cancel Data 
+        /// </summary>
+        /// <param name="ShoppingID"></param>
+        /// <param name="CancelComment"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateShipmentBagCancelData")]
         public ResponseModel UpdateShipmentBagCancelData(int ShoppingID, string CancelComment)
@@ -417,7 +426,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Update Shipment Pickup Pending Data
+        /// </summary>
+        /// <param name="OrderID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateShipmentPickupPendingData")]
         public ResponseModel UpdateShipmentPickupPendingData(int OrderID)
@@ -452,6 +465,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Insert Convert To Order Details
+        /// </summary>
+        /// <param name="convertToOrder"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("InsertOrderDetails")]
         public ResponseModel InsertOrderDetails([FromBody]ConvertToOrder convertToOrder)
@@ -486,7 +504,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Update Address Pending
+        /// </summary>
+        /// <param name="addressPendingRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateAddressPending")]
         public ResponseModel UpdateAddressPending([FromBody]AddressPendingRequest addressPendingRequest)
@@ -521,7 +543,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Get Order Return Details
+        /// </summary>
+        /// <param name="orderReturnsFilter"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetOrderReturnDetails")]
         public ResponseModel GetOrderReturnDetails(OrderReturnsFilterRequest orderReturnsFilter)
@@ -557,7 +583,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Update Shipment Assigned Delivered
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateShipmentAssignedDelivered")]
         public ResponseModel UpdateShipmentAssignedDelivered(int orderID)
@@ -592,7 +622,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Update Shipment Assigned RTO
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateShipmentAssignedRTO")]
         public ResponseModel UpdateShipmentAssignedRTO(int orderID)
@@ -627,7 +661,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Shipment Assigned Print Manifest
+        /// </summary>
+        /// <param name="OrderIds"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ShipmentAssignedPrintManifest")]
         public ResponseModel ShipmentAssignedPrintManifest(Int64 OrderIds)
@@ -662,7 +700,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Shipment Assigned Print Label
+        /// </summary>
+        /// <param name="ShipmentId"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ShipmentAssignedPrintLabel")]
         public ResponseModel ShipmentAssignedPrintLabel(Int64 ShipmentId)
