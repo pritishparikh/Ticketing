@@ -491,6 +491,9 @@ namespace Easyrewardz_TicketSystem.Services
                     strresponse = streamReader.ReadToEnd();
                 }
             }
+            catch (WebException e)            {                using (WebResponse response = e.Response)                {                    HttpWebResponse httpResponse = (HttpWebResponse)response;                    using (Stream data = response.GetResponseStream())                    using (var reader = new StreamReader(data))                    {                        strresponse = reader.ReadToEnd();
+
+                    }                }            }
             catch (Exception)
             {
                 throw;
@@ -507,16 +510,22 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
                 httpWebRequest.Method = "POST";
-                httpWebRequest.Accept = "text/plain";
+                //httpWebRequest.Accept = "text/plain";
 
                 httpWebRequest.ContentType = "application/x-www-form-urlencoded";
 
+   
+                ASCIIEncoding encoding = new ASCIIEncoding();
+                byte[] byte1 = encoding.GetBytes(Request);
 
-                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-                {
-                    if (!string.IsNullOrEmpty(Request))
-                        streamWriter.Write(Request);
-                }
+                //using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                //{
+                //    if (!string.IsNullOrEmpty(Request))
+                //        streamWriter.Write(Request);
+                //}
+                Stream newStream = httpWebRequest.GetRequestStream();
+
+                newStream.Write(byte1, 0, byte1.Length);
                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
 
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
@@ -525,6 +534,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
+            catch (WebException e)            {                using (WebResponse response = e.Response)                {                    HttpWebResponse httpResponse = (HttpWebResponse)response;                    using (Stream data = response.GetResponseStream())                    using (var reader = new StreamReader(data))                    {                        strresponse = reader.ReadToEnd();
+
+                    }                }            }
             catch (Exception)
             {
                 throw;
@@ -559,6 +571,9 @@ namespace Easyrewardz_TicketSystem.Services
                     strresponse = streamReader.ReadToEnd();
                 }
             }
+            catch (WebException e)            {                using (WebResponse response = e.Response)                {                    HttpWebResponse httpResponse = (HttpWebResponse)response;                    using (Stream data = response.GetResponseStream())                    using (var reader = new StreamReader(data))                    {                        strresponse = reader.ReadToEnd();
+
+                    }                }            }
             catch (Exception)
             {
                 throw;

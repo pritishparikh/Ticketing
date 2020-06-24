@@ -506,7 +506,10 @@ namespace Easyrewardz_TicketSystem.Services
                 hSRequestGeneratePaymentLink.billDateTime = newdate;
                 HSResponseGeneratePaymentLink responseGeneratePaymentLink = new HSResponseGeneratePaymentLink();
 
-                string apiReq = JsonConvert.SerializeObject(hSRequestGenerateToken);
+                // string apiReq = JsonConvert.SerializeObject(hSRequestGenerateToken);
+
+                string apiReq = "Client_Id="+ hSRequestGenerateToken.Client_Id+ "&Client_Secret=" + hSRequestGenerateToken.Client_Secret + "&Grant_Type=" + hSRequestGenerateToken.Grant_Type + "&Scope=" + hSRequestGenerateToken.Scope ;
+
                 apiResponse = CommonService.SendApiRequestToken(clientAPIUrlForGenerateToken + "connect/token", apiReq);
                 HSResponseGenerateToken hSResponseGenerateToken = new HSResponseGenerateToken();
                 hSResponseGenerateToken = JsonConvert.DeserializeObject<HSResponseGenerateToken>(apiResponse);
@@ -518,13 +521,13 @@ namespace Easyrewardz_TicketSystem.Services
                         hSRequestResendPaymentLink = new HSRequestResendPaymentLink
                         {
                             programCode = programCode,
-                            tokenId = hSResponseGenerateToken.access_token,
+                            tokenId = null, //hSResponseGenerateToken.access_token,
                             storeCode = sentPaymentLink.StoreCode,
                             billDateTime = hSRequestGeneratePaymentLink.billDateTime,
                             terminalId = hSRequestGeneratePaymentLink.terminalId,
                             merchantTxnID = hSRequestGeneratePaymentLink.merchantTxnID,
                             mobile = hSRequestGeneratePaymentLink.mobile,
-                            reason = "ABCD"
+                            reason = "RequestResendPaymentLink"
                         };
                         apiReq1 = JsonConvert.SerializeObject(hSRequestResendPaymentLink);
                         URLGeneratePaymentLink = clientAPIUrlForGeneratePaymentLink + "api/ResendPaymentLink";
@@ -539,7 +542,7 @@ namespace Easyrewardz_TicketSystem.Services
                     responseGeneratePaymentLink = JsonConvert.DeserializeObject<HSResponseGeneratePaymentLink>(apiResponse1);
                 }
 
-                if (responseGeneratePaymentLink.returnMessage == "Success")
+                if (responseGeneratePaymentLink.returnMessage.Contains("Success"))
                 {
                     if (conn != null && conn.State == ConnectionState.Closed)
                     {

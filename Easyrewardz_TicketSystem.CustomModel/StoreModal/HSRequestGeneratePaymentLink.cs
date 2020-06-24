@@ -46,6 +46,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public int expires_in { get; set; }
         public string token_type { get; set; }
         public string scope { get; set; }
+        public string error { get; set; }
     }
 
     public class SentPaymentLink
