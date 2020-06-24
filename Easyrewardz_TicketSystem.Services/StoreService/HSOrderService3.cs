@@ -453,7 +453,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="UserID"></param>
         /// <param name="programCode"></param>
         /// <returns></returns>
-        public int GenerateLink(SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode, string ClientAPIUrl)
+        public int GenerateLink(SentPaymentLink sentPaymentLink, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, int tenantID, int userID, string programCode, string ClientAPIUrl, HSRequestGenerateToken hSRequestGenerateToken)
         {
             int result = 0;
             string apiReq1 = "";
@@ -506,20 +506,19 @@ namespace Easyrewardz_TicketSystem.Services
                 hSRequestGeneratePaymentLink.billDateTime = newdate;
                 HSResponseGeneratePaymentLink responseGeneratePaymentLink = new HSResponseGeneratePaymentLink();
 
-                HSRequestGenerateToken hSRequestGenerateToken = new HSRequestGenerateToken();
                 string apiReq = JsonConvert.SerializeObject(hSRequestGenerateToken);
                 apiResponse = CommonService.SendApiRequestToken(clientAPIUrlForGenerateToken + "connect/token", apiReq);
                 HSResponseGenerateToken hSResponseGenerateToken = new HSResponseGenerateToken();
                 hSResponseGenerateToken = JsonConvert.DeserializeObject<HSResponseGenerateToken>(apiResponse);
 
-                if (!string.IsNullOrEmpty(hSResponseGenerateToken.access_Token))
+                if (!string.IsNullOrEmpty(hSResponseGenerateToken.access_token))
                 {
                     if (sentPaymentLink.SentPaymentLinkCount > 0)
                     {
                         hSRequestResendPaymentLink = new HSRequestResendPaymentLink
                         {
                             programCode = programCode,
-                            tokenId = hSResponseGenerateToken.access_Token,
+                            tokenId = hSResponseGenerateToken.access_token,
                             storeCode = sentPaymentLink.StoreCode,
                             billDateTime = hSRequestGeneratePaymentLink.billDateTime,
                             terminalId = hSRequestGeneratePaymentLink.terminalId,
@@ -535,7 +534,7 @@ namespace Easyrewardz_TicketSystem.Services
                         apiReq1 = JsonConvert.SerializeObject(hSRequestGeneratePaymentLink);
                         URLGeneratePaymentLink = clientAPIUrlForGeneratePaymentLink + "api/GeneratePaymentLink";
                     }
-                    apiResponse1 = CommonService.SendApiRequestMerchantApi(URLGeneratePaymentLink, apiReq1, hSResponseGenerateToken.access_Token);
+                    apiResponse1 = CommonService.SendApiRequestMerchantApi(URLGeneratePaymentLink, apiReq1, hSResponseGenerateToken.access_token);
 
                     responseGeneratePaymentLink = JsonConvert.DeserializeObject<HSResponseGeneratePaymentLink>(apiResponse1);
                 }
@@ -552,7 +551,7 @@ namespace Easyrewardz_TicketSystem.Services
                         CommandType = CommandType.StoredProcedure
                     };
                     cmd1.Parameters.AddWithValue("@Invoice_Number", sentPaymentLink.InvoiceNumber);
-                    cmd1.Parameters.AddWithValue("@access_Token", hSResponseGenerateToken.access_Token);
+                    cmd1.Parameters.AddWithValue("@access_Token", hSResponseGenerateToken.access_token);
                     cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
                     cmd1.Parameters.AddWithValue("@user_ID", userID);
                     cmd1.CommandType = CommandType.StoredProcedure;

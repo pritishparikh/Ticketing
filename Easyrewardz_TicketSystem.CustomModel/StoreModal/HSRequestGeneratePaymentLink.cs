@@ -27,17 +27,25 @@ namespace Easyrewardz_TicketSystem.CustomModel
     }
     public class HSRequestGenerateToken
     {
-        public string ClientID { get; set; } = "9090";
-        public string ClientSecret { get; set; } = "090";
-        public string GrantType { get; set; } = "pop";
+        //public string ClientID { get; set; } = "9090";
+        //public string ClientSecret { get; set; } = "090";
+        //public string GrantType { get; set; } = "pop";
+        //public string Scope { get; set; } = "lkl";
+        public string Client_Id { get; set; } = "9090";
+        public string Client_Secret { get; set; } = "090";
+        public string Grant_Type { get; set; } = "pop";
         public string Scope { get; set; } = "lkl";
     }
 
     public class HSResponseGenerateToken
     {
-        public string access_Token { get; set; }
-        public int expires_In { get; set; }
-        public string token_Type { get; set; }
+        //public string access_Token { get; set; }
+        //public int expires_In { get; set; }
+        //public string token_Type { get; set; }
+        public string access_token { get; set; }
+        public int expires_in { get; set; }
+        public string token_type { get; set; }
+        public string scope { get; set; }
     }
 
     public class SentPaymentLink

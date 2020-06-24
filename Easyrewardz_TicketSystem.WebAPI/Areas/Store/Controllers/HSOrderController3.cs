@@ -167,7 +167,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-                obj = hSOrderCaller.GeneratePaymentLink(new HSOrderService(_connectionString), objRequest, _ClientAPIUrlForGenerateToken, _ClientAPIUrlForGeneratePaymentLink, authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, _ClientAPIUrl);
+
+                HSRequestGenerateToken hSRequestGenerateToken = new HSRequestGenerateToken()
+                {
+                    Client_Id = "",
+                    Client_Secret = "",
+                    Grant_Type = "",
+                    Scope = "",
+                };
+                
+                obj = hSOrderCaller.GeneratePaymentLink(new HSOrderService(_connectionString), objRequest, _ClientAPIUrlForGenerateToken, _ClientAPIUrlForGeneratePaymentLink, authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, _ClientAPIUrl, hSRequestGenerateToken);
                 statusCode =
                    obj == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
