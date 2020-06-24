@@ -41,78 +41,81 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         #endregion
 
 
-        [HttpPost]
-        [Route("GetModuleConfiguration")]
-        public ResponseModel GetModuleConfiguration()
-        {
-            ModuleConfiguration moduleConfiguration = new ModuleConfiguration();
-            HSOrderCaller storecampaigncaller = new HSOrderCaller();
-            ResponseModel objResponseModel = new ResponseModel();
-            int statusCode = 0;
-            string statusMessage = "";
-            try
-            {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+        //[HttpPost]
+        //[Route("GetModuleConfiguration")]
+        //public ResponseModel GetModuleConfiguration()
+        //{
+        //    ModuleConfiguration moduleConfiguration = new ModuleConfiguration();
+        //    HSOrderCaller storecampaigncaller = new HSOrderCaller();
+        //    ResponseModel objResponseModel = new ResponseModel();
+        //    int statusCode = 0;
+        //    string statusMessage = "";
+        //    try
+        //    {
+        //        string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+        //        Authenticate authenticate = new Authenticate();
+        //        authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                moduleConfiguration = storecampaigncaller.GetModuleConfiguration(new HSOrderService(_connectionString),
-                    authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
-                statusCode =
-                   moduleConfiguration.ID.Equals(0) ?
-                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+        //        moduleConfiguration = storecampaigncaller.GetModuleConfiguration(new HSOrderService(_connectionString),
+        //            authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
+        //        statusCode =
+        //           moduleConfiguration.ID.Equals(0) ?
+        //                   (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+        //        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-                objResponseModel.Status = true;
-                objResponseModel.StatusCode = statusCode;
-                objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = moduleConfiguration;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return objResponseModel;
-        }
-
-
-        [HttpPost]
-        [Route("UpdateModuleConfiguration")]
-        public ResponseModel UpdateModuleConfiguration([FromBody]ModuleConfiguration moduleConfiguration)
-        {
-            int UpdateCount = 0;
-            HSOrderCaller hSOrderCaller = new HSOrderCaller();
-            ResponseModel objResponseModel = new ResponseModel();
-            int statusCode = 0;
-            string statusMessage = "";
-            try
-            {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
-                UpdateCount = hSOrderCaller.UpdateModuleConfiguration(new HSOrderService(_connectionString),
-                    moduleConfiguration, authenticate.UserMasterID);
-                statusCode =
-                   UpdateCount.Equals(0) ?
-                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
-
-                objResponseModel.Status = true;
-                objResponseModel.StatusCode = statusCode;
-                objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = UpdateCount;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return objResponseModel;
-        }
+        //        objResponseModel.Status = true;
+        //        objResponseModel.StatusCode = statusCode;
+        //        objResponseModel.Message = statusMessage;
+        //        objResponseModel.ResponseData = moduleConfiguration;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //    return objResponseModel;
+        //}
 
 
+        //[HttpPost]
+        //[Route("UpdateModuleConfiguration")]
+        //public ResponseModel UpdateModuleConfiguration([FromBody]ModuleConfiguration moduleConfiguration)
+        //{
+        //    int UpdateCount = 0;
+        //    HSOrderCaller hSOrderCaller = new HSOrderCaller();
+        //    ResponseModel objResponseModel = new ResponseModel();
+        //    int statusCode = 0;
+        //    string statusMessage = "";
+        //    try
+        //    {
+        //        string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+        //        Authenticate authenticate = new Authenticate();
+        //        authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+        //        UpdateCount = hSOrderCaller.UpdateModuleConfiguration(new HSOrderService(_connectionString),
+        //            moduleConfiguration, authenticate.UserMasterID);
+        //        statusCode =
+        //           UpdateCount.Equals(0) ?
+        //                   (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+        //        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+        //        objResponseModel.Status = true;
+        //        objResponseModel.StatusCode = statusCode;
+        //        objResponseModel.Message = statusMessage;
+        //        objResponseModel.ResponseData = UpdateCount;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //    return objResponseModel;
+        //}
+
+        /// <summary>
+        /// Get Order Configuration Details
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetOrderConfiguration")]
         public ResponseModel GetOrderConfiguration()
@@ -148,6 +151,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Update Order Configuration Data
+        /// </summary>
+        /// <param name="orderConfiguration"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateOrderConfiguration")]
         public ResponseModel UpdateOrderConfiguration([FromBody]OrderConfiguration orderConfiguration)
@@ -183,6 +191,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get Order Delivered Details
+        /// </summary>
+        /// <param name="orderDeliveredFilter"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetOrderDeliveredDetails")]
         public ResponseModel GetOrderDeliveredDetails(OrderDeliveredFilterRequest orderDeliveredFilter)
@@ -218,6 +231,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get Order Status Filters
+        /// </summary>
+        /// <param name="pageID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetOrderStatusFilter")]
         public ResponseModel GetOrderStatusFilter(int pageID)
@@ -253,7 +271,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Get Order Shipment Assigned Details
+        /// </summary>
+        /// <param name="shipmentAssignedFilter"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetShipmentAssignedDetails")]
         public ResponseModel GetShipmentAssignedDetails(ShipmentAssignedFilterRequest shipmentAssignedFilter)
