@@ -1,5 +1,4 @@
-﻿using Easyrewardz_TicketSystem.CustomModel;
-using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
@@ -8,15 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public partial class HSOrderService : IHSOrder
     {
         MySqlConnection conn = new MySqlConnection();
-        private IConfiguration configuration;
-        CustomResponse ApiResponse = null;
         string apiResponse = string.Empty;
         string apiResponse1 = string.Empty;
         string apisecurityToken = string.Empty;
@@ -31,91 +27,16 @@ namespace Easyrewardz_TicketSystem.Services
             //apiURLGetUserATVDetails = configuration.GetValue<string>("apiURLGetUserATVDetails");
         }
 
-        public ModuleConfiguration GetModuleConfiguration(int tenantId, int userId, string programCode)
-        {
-            DataSet ds = new DataSet();
-            ModuleConfiguration moduleConfiguration = new ModuleConfiguration();
-            try
-            {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_PHYGetModuleConfiguration", conn)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-                cmd.Parameters.AddWithValue("@_tenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_prgramCode", programCode);
 
-                MySqlDataAdapter da = new MySqlDataAdapter
-                {
-                    SelectCommand = cmd
-                };
-                da.Fill(ds);
 
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    if (ds.Tables[0].Rows.Count > 0)
-                    {
-                        moduleConfiguration.ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID"]);
-                        moduleConfiguration.ShoppingBag = ds.Tables[0].Rows[0]["ShoppingBag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ShoppingBag"]);
-                        moduleConfiguration.Payment = ds.Tables[0].Rows[0]["Payment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Payment"]);
-                        moduleConfiguration.Shipment = ds.Tables[0].Rows[0]["Shipment"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Shipment"]);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-                if (ds != null)
-                {
-                    ds.Dispose();
-                }
-            }
-            return moduleConfiguration;
-        }
-
-        public int UpdateModuleConfiguration(ModuleConfiguration moduleConfiguration, int modifiedBy)
-        {
-            int UpdateCount = 0;
-            try
-            {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateModuleConfiguration", conn)
-                {
-                    Connection = conn
-                };
-                cmd.Parameters.AddWithValue("@_ID", moduleConfiguration.ID);
-                cmd.Parameters.AddWithValue("@_ShoppingBag", Convert.ToInt16(moduleConfiguration.ShoppingBag));
-                cmd.Parameters.AddWithValue("@_Payment", Convert.ToInt16(moduleConfiguration.Payment));
-                cmd.Parameters.AddWithValue("@_Shipment", Convert.ToInt16(moduleConfiguration.Shipment));
-                cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
-
-                cmd.CommandType = CommandType.StoredProcedure;
-                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());   
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
-            return UpdateCount;
-        }
-
-        public OrderConfiguration GetOrderConfiguration(int tenantId, int userId, string programCode)
+        /// <summary>
+        /// Get Order Configuration
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
+        public OrderConfiguration GetOrderConfiguration(int TenantId, int UserId, string ProgramCode)
         {
             DataSet ds = new DataSet();
             OrderConfiguration moduleConfiguration = new OrderConfiguration();
@@ -126,8 +47,8 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                cmd.Parameters.AddWithValue("@_tenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_prgramCode", programCode);
+                cmd.Parameters.AddWithValue("@_tenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_prgramCode", ProgramCode);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -187,7 +108,13 @@ namespace Easyrewardz_TicketSystem.Services
             return moduleConfiguration;
         }
 
-        public int UpdateOrderConfiguration(OrderConfiguration orderConfiguration, int modifiedBy)
+        /// <summary>
+        /// Update Order Configuration
+        /// </summary>
+        /// <param name="orderConfiguration"></param>
+        /// <param name="ModifiedBy"></param>
+        /// <returns></returns>
+        public int UpdateOrderConfiguration(OrderConfiguration orderConfiguration, int ModifiedBy)
         {
             int UpdateCount = 0;
             try
@@ -224,7 +151,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_UnDeliverableText", orderConfiguration.UnDeliverableText);
                 cmd.Parameters.AddWithValue("@_StoreDeliveryText", orderConfiguration.StoreDeliveryText);
                 cmd.Parameters.AddWithValue("@_PaymentTenantCodeText", orderConfiguration.PaymentTenantCodeText);
-                cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
+                cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
@@ -245,7 +172,14 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
-        public OrderDeliveredDetails GetOrderDeliveredDetails(int tenantId, int userId, OrderDeliveredFilterRequest orderDeliveredFilter)
+        /// <summary>
+        /// Get Order Delivered Details
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="orderDeliveredFilter"></param>
+        /// <returns></returns>
+        public OrderDeliveredDetails GetOrderDeliveredDetails(int TenantId, int UserId, OrderDeliveredFilterRequest orderDeliveredFilter)
         {
             DataSet ds = new DataSet();
             OrderDeliveredDetails objdetails = new OrderDeliveredDetails();
@@ -259,8 +193,8 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                cmd.Parameters.AddWithValue("@_tenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_tenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_UserID", UserId);
                 cmd.Parameters.AddWithValue("@_SearchText", orderDeliveredFilter.SearchText);
                 cmd.Parameters.AddWithValue("@_pageno", orderDeliveredFilter.PageNo);
                 cmd.Parameters.AddWithValue("@_pagesize", orderDeliveredFilter.PageSize);
@@ -278,14 +212,14 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         OrderDelivered obj = new OrderDelivered
                         {
-                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
-                            InvoiceNo = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
-                            CustomerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
-                            MobileNumber = Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
-                            Date = Convert.ToString(ds.Tables[0].Rows[i]["Date"]),
-                            Time = Convert.ToString(ds.Tables[0].Rows[i]["Time"]),
-                            StatusName = Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]),
-                            ActionTypeName = Convert.ToString(ds.Tables[0].Rows[i]["ActionTypeName"]),
+                            ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNo"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
+                            CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
+                            MobileNumber = ds.Tables[0].Rows[i]["MobileNumber"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
+                            Date = ds.Tables[0].Rows[i]["Date"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["Date"]),
+                            Time = ds.Tables[0].Rows[i]["Time"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["Time"]),
+                            StatusName = ds.Tables[0].Rows[i]["StatusName"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]),
+                            ActionTypeName = ds.Tables[0].Rows[i]["ActionTypeName"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["ActionTypeName"]),
                             orderDeliveredItems = new List<OrderDeliveredItem>()
                         };
 
@@ -329,7 +263,14 @@ namespace Easyrewardz_TicketSystem.Services
             return objdetails;
         }
 
-        public List<OrderStatusFilter> GetOrderStatusFilter(int tenantId, int userId, int pageID)
+        /// <summary>
+        /// Get Order Status Filters
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="PageID"></param>
+        /// <returns></returns>
+        public List<OrderStatusFilter> GetOrderStatusFilter(int TenantId, int UserId, int PageID)
         {
             DataSet ds = new DataSet();
             List<OrderStatusFilter> orderStatusFilter = new List<OrderStatusFilter>();
@@ -340,9 +281,9 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_UserID", userId);
-                cmd.Parameters.AddWithValue("@_PageID", pageID);
+                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_UserID", UserId);
+                cmd.Parameters.AddWithValue("@_PageID", PageID);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -383,7 +324,14 @@ namespace Easyrewardz_TicketSystem.Services
             return orderStatusFilter;
         }
 
-        public ShipmentAssignedDetails GetShipmentAssignedDetails(int tenantId, int userId, ShipmentAssignedFilterRequest shipmentAssignedFilter)
+        /// <summary>
+        /// Get Order Shipment Assigned Details
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="shipmentAssignedFilter"></param>
+        /// <returns></returns>
+        public ShipmentAssignedDetails GetShipmentAssignedDetails(int TenantId, int UserId, ShipmentAssignedFilterRequest shipmentAssignedFilter)
         {
             DataSet ds = new DataSet();
             ShipmentAssignedDetails objdetails = new ShipmentAssignedDetails();
@@ -398,8 +346,8 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                cmd.Parameters.AddWithValue("@_tenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_tenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_UserID", UserId);
                 cmd.Parameters.AddWithValue("@_SearchText", shipmentAssignedFilter.SearchText);
                 cmd.Parameters.AddWithValue("@_pageno", shipmentAssignedFilter.PageNo);
                 cmd.Parameters.AddWithValue("@_pagesize", shipmentAssignedFilter.PageSize);
@@ -461,40 +409,16 @@ namespace Easyrewardz_TicketSystem.Services
             return objdetails;
         }
 
-        public int UpdateMarkAsDelivered(int tenantId, int userId, int orderID)
-        {
-            int UpdateCount = 0;
-            try
-            {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateMarkAsDelivered", conn)
-                {
-                    Connection = conn
-                };
-                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_UserID", userId);
-                cmd.Parameters.AddWithValue("@_OrderID", orderID);
-
-                cmd.CommandType = CommandType.StoredProcedure;
-                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-
-            return UpdateCount;
-        }
-
-        public int UpdateShipmentAssignedData(ShipmentAssignedRequest shipmentAssignedRequest, int tenantId, int userId, string programCode, string ClientAPIUrl)
+        /// <summary>
+        /// Update Shipment Assigned Staff Details Of Store Delivery
+        /// </summary>
+        /// <param name="shipmentAssignedRequest"></param>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="ClientAPIUrl"></param>
+        /// <returns></returns>
+        public int UpdateShipmentAssignedData(ShipmentAssignedRequest shipmentAssignedRequest, int TenantId, int UserId, string ProgramCode, string ClientAPIUrl)
         {
             int UpdateCount = 0;
             try
@@ -515,7 +439,7 @@ namespace Easyrewardz_TicketSystem.Services
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
                 if (UpdateCount > 0)
                 {
-                    SmsWhatsUpDataSend(tenantId, userId, programCode, shipmentAssignedRequest.OrderID, ClientAPIUrl, "AWBAssignedStoreDelivery");
+                    SmsWhatsUpDataSend(TenantId, UserId, ProgramCode, shipmentAssignedRequest.OrderID, ClientAPIUrl, "AWBAssignedStoreDelivery");
                 }
 
             }
@@ -534,7 +458,14 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
-        public int UpdateShipmentBagCancelData(int shoppingID, string cancelComment, int userId)
+        /// <summary>
+        /// Update Shopping Bag Cancel Data
+        /// </summary>
+        /// <param name="ShoppingID"></param>
+        /// <param name="CancelComment"></param>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public int UpdateShipmentBagCancelData(int ShoppingID, string CancelComment, int UserId)
         {
             int UpdateCount = 0;
             try
@@ -544,9 +475,9 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     Connection = conn
                 };
-                cmd.Parameters.AddWithValue("@_ShoppingID", shoppingID);
-                cmd.Parameters.AddWithValue("@_CancelComment", cancelComment);
-                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_ShoppingID", ShoppingID);
+                cmd.Parameters.AddWithValue("@_CancelComment", CancelComment);
+                cmd.Parameters.AddWithValue("@_UserID", UserId);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
@@ -567,6 +498,11 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
+        /// <summary>
+        /// Update Shipment Pickup Pending Data
+        /// </summary>
+        /// <param name="OrderID"></param>
+        /// <returns></returns>
         public int UpdateShipmentPickupPendingData(int OrderID)
         {
             int UpdateCount = 0;
@@ -598,7 +534,16 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
-        public int InsertOrderDetails(ConvertToOrder convertToOrder, int tenantId, int userId, string ProgramCode, string ClientAPIUrl)
+        /// <summary>
+        /// Insert Convert To Order Details
+        /// </summary>
+        /// <param name="convertToOrder"></param>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="ClientAPIUrl"></param>
+        /// <returns></returns>
+        public int InsertOrderDetails(ConvertToOrder convertToOrder, int TenantId, int UserId, string ProgramCode, string ClientAPIUrl)
         {
             int InsertCount = 0;
             try
@@ -611,14 +556,14 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ShoppingID", convertToOrder.ShoppingID);
                 cmd.Parameters.AddWithValue("@_InvoiceNo", convertToOrder.InvoiceNo);
                 cmd.Parameters.AddWithValue("@_Amount", convertToOrder.Amount);
-                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_UserID", UserId);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 InsertCount = Convert.ToInt32(cmd.ExecuteScalar());
                 if(InsertCount > 0)
                 {
-                    SmsWhatsUpDataSend(tenantId, userId, ProgramCode, InsertCount, ClientAPIUrl, "ShoppingBagConvertToOrder");
+                    SmsWhatsUpDataSend(TenantId, UserId, ProgramCode, InsertCount, ClientAPIUrl, "ShoppingBagConvertToOrder");
                 }
 
             }
@@ -637,8 +582,14 @@ namespace Easyrewardz_TicketSystem.Services
             return InsertCount;
         }
 
-
-        public int UpdateAddressPending(AddressPendingRequest addressPendingRequest, int tenantId, int userId)
+        /// <summary>
+        /// Update Address Pending
+        /// </summary>
+        /// <param name="addressPendingRequest"></param>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public int UpdateAddressPending(AddressPendingRequest addressPendingRequest, int TenantId, int UserId)
         {
             int UpdateCount = 0;
             try
@@ -655,8 +606,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_City", addressPendingRequest.City);
                 cmd.Parameters.AddWithValue("@_State", addressPendingRequest.State);
                 cmd.Parameters.AddWithValue("@_Country", addressPendingRequest.Country);
-                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_UserID", UserId);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
@@ -677,7 +628,14 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
-        public OrderReturnsDetails GetOrderReturnDetails(int tenantId, int userId, OrderReturnsFilterRequest orderReturnsFilter)
+        /// <summary>
+        /// Get Order Return Details
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="orderReturnsFilter"></param>
+        /// <returns></returns>
+        public OrderReturnsDetails GetOrderReturnDetails(int TenantId, int UserId, OrderReturnsFilterRequest orderReturnsFilter)
         {
             DataSet ds = new DataSet();
             OrderReturnsDetails objdetails = new OrderReturnsDetails();
@@ -691,8 +649,8 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                cmd.Parameters.AddWithValue("@_tenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_tenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_UserID", UserId);
                 cmd.Parameters.AddWithValue("@_SearchText", orderReturnsFilter.SearchText);
                 cmd.Parameters.AddWithValue("@_pageno", orderReturnsFilter.PageNo);
                 cmd.Parameters.AddWithValue("@_pagesize", orderReturnsFilter.PageSize);
@@ -710,15 +668,15 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         OrderReturns obj = new OrderReturns
                         {
-                            ReturnID = Convert.ToInt32(ds.Tables[0].Rows[i]["ReturnID"]),
-                            OrderID = Convert.ToInt32(ds.Tables[0].Rows[i]["OrderID"]),
-                            AWBNo = Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
-                            InvoiceNo = Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
-                            CustomerName = Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
-                            MobileNumber = Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
-                            Date = Convert.ToString(ds.Tables[0].Rows[i]["Date"]),
-                            Time = Convert.ToString(ds.Tables[0].Rows[i]["Time"]),
-                            StatusName = Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]),
+                            ReturnID = ds.Tables[0].Rows[i]["ReturnID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ReturnID"]),
+                            OrderID = ds.Tables[0].Rows[i]["OrderID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OrderID"]),
+                            AWBNo = ds.Tables[0].Rows[i]["AWBNo"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
+                            InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNo"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["InvoiceNo"]),
+                            CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
+                            MobileNumber = ds.Tables[0].Rows[i]["MobileNumber"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
+                            Date = ds.Tables[0].Rows[i]["Date"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["Date"]),
+                            Time = ds.Tables[0].Rows[i]["Time"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["Time"]),
+                            StatusName = ds.Tables[0].Rows[i]["StatusName"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]),
                             orderReturnsItems = new List<OrderReturnsItem>()
                         };
 
@@ -762,6 +720,11 @@ namespace Easyrewardz_TicketSystem.Services
             return objdetails;
         }
 
+        /// <summary>
+        /// Update Shipment Assigned Delivered
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <returns></returns>
         public int UpdateShipmentAssignedDelivered(int orderID)
         {
             int UpdateCount = 0;
@@ -793,6 +756,11 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
+        /// <summary>
+        /// Update Shipment Assigned RTO
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <returns></returns>
         public int UpdateShipmentAssignedRTO(int orderID)
         {
             int UpdateCount = 0;
@@ -824,6 +792,12 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
+        /// <summary>
+        /// Shipment Assigned Print Manifest
+        /// </summary>
+        /// <param name="OrderIds"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <returns></returns>
         public PrintManifestResponse ShipmentAssignedPrintManifest(Int64 OrderIds, string ClientAPIURL)
         {
 
@@ -875,7 +849,12 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-
+        /// <summary>
+        /// Shipment Assigned Print Label
+        /// </summary>
+        /// <param name="ShipmentId"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <returns></returns>
         public PrintLabelResponse ShipmentAssignedPrintLabel(Int64 ShipmentId, string ClientAPIURL)
         {
 

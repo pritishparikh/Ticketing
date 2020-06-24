@@ -9,9 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Text.RegularExpressions;
 using System.Linq;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
