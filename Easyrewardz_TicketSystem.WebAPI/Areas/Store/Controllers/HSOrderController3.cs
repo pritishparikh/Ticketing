@@ -48,7 +48,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             {
                 objResponseModel.Status = false;
                 objResponseModel.StatusCode = 503;
-                objResponseModel.Message = "Service Unavailable";
+                objResponseModel.Message = "Server Unavailable";
                 objResponseModel.ResponseData = "";
                 CustomExceptionFilter customExceptionFilter = new CustomExceptionFilter(configuration);
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);

@@ -168,7 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
                             obj = new ReturnShipmentDetails
                             {
                                 Status = false,
-                                StatusMessge = "Delivery Not Available."
+                                StatusMessge = "Service not available on entered Pincode"
                             };
                             int result = SetOrderHasBeenReturn(tenantID, userID, orderID, "Shipment");
                         }
@@ -185,7 +185,7 @@ namespace Easyrewardz_TicketSystem.Services
                             obj = new ReturnShipmentDetails
                             {
                                 Status = false,
-                                StatusMessge = "Delivery Not Available."
+                                StatusMessge = "Service not available on entered Pincode"
                             };
                             int result = SetOrderHasBeenReturn(tenantID, userID, orderID, "Shipment");
                         }

@@ -82,19 +82,19 @@ namespace Easyrewardz_TicketSystem.Services
 
                         obj.OrdersItemList = ds.Tables[1].AsEnumerable().Where(x => (x.Field<int>("OrderID")).Equals(obj.ID)).Select(x => new OrdersItem()
                         {
-                            ItemID = Convert.ToString(x.Field<string>("ItemID")),
-                            ItemName = Convert.ToString(x.Field<string>("ItemName")),
-                            ItemPrice = Convert.ToString(x.Field<string>("ItemPrice")),
-                            Quantity = x.Field<int>("Quantity")
+                            ItemID = x.Field<object>("ItemID") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemID")),
+                            ItemName = x.Field<object>("ItemName") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemName")),
+                            ItemPrice = x.Field<object>("ItemPrice") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemPrice")),
+                            Quantity = x.Field<object>("Quantity") == System.DBNull.Value ? 0 : x.Field<int>("Quantity")
 
                         }).ToList();
 
                         obj.ShoppingBagItemList = ds.Tables[2].AsEnumerable().Where(x => (x.Field<int>("ShoppingID")).Equals(obj.ShoppingID)).Select(x => new ShoppingBagItem()
                         {
-                            ItemID = Convert.ToString(x.Field<string>("ItemID")),
-                            ItemName = Convert.ToString(x.Field<string>("ItemName")),
-                            ItemPrice = Convert.ToString(x.Field<string>("ItemPrice")),
-                            Quantity = x.Field<int>("Quantity")
+                            ItemID = x.Field<object>("ItemID") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemID")),
+                            ItemName = x.Field<object>("ItemName") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemName")),
+                            ItemPrice = x.Field<object>("ItemPrice") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemPrice")),
+                            Quantity = x.Field<object>("Quantity") == System.DBNull.Value ? 0 : x.Field<int>("Quantity")
 
                         }).ToList();
 
@@ -193,10 +193,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                         obj.ShoppingBagItemList = ds.Tables[1].AsEnumerable().Where(x => (x.Field<int>("ShoppingID")).Equals(obj.ShoppingID)).Select(x => new ShoppingBagItem()
                         {
-                            ItemID = Convert.ToString(x.Field<string>("ItemID")),
-                            ItemName = Convert.ToString(x.Field<string>("ItemName")),
-                            ItemPrice = Convert.ToString(x.Field<string>("ItemPrice")),
-                            Quantity = x.Field<int>("Quantity")
+                            ItemID = x.Field<object>("ItemID") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemID")),
+                            ItemName = x.Field<object>("ItemName") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemName")),
+                            ItemPrice = x.Field<object>("ItemPrice") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemPrice")),
+                            Quantity = x.Field<object>("Quantity") == System.DBNull.Value ? 0 : x.Field<int>("Quantity")
 
                         }).ToList();
 
@@ -354,21 +354,21 @@ namespace Easyrewardz_TicketSystem.Services
 
                         obj.OrdersItemList = ds.Tables[1].AsEnumerable().Where(x => (x.Field<int>("OrderID")).Equals(obj.ID)).Select(x => new OrdersItem()
                         {
-                            ID = Convert.ToInt32(x.Field<int>("ID")),
-                            ItemID = Convert.ToString(x.Field<string>("ItemID")),
-                            ItemName = Convert.ToString(x.Field<string>("ItemName")),
-                            ItemPrice = Convert.ToString(x.Field<string>("ItemPrice")),
-                            Quantity = x.Field<int>("Quantity")
+                            ID = x.Field<object>("ID") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<int>("ID")),
+                            ItemID = x.Field<object>("ItemID") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemID")),
+                            ItemName = x.Field<object>("ItemName") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemName")),
+                            ItemPrice = x.Field<object>("ItemPrice") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemPrice")),
+                            Quantity = x.Field<object>("Quantity") == System.DBNull.Value ? 0 : x.Field<int>("Quantity")
 
                         }).ToList();
 
                         obj.ShoppingBagItemList = ds.Tables[2].AsEnumerable().Where(x => (x.Field<int>("ShoppingID")).Equals(obj.ShoppingID)).Select(x => new ShoppingBagItem()
                         {
-                            ID = Convert.ToInt32(x.Field<int>("ID")),
-                            ItemID = Convert.ToString(x.Field<string>("ItemID")),
-                            ItemName = Convert.ToString(x.Field<string>("ItemName")),
-                            ItemPrice = Convert.ToString(x.Field<string>("ItemPrice")),
-                            Quantity = x.Field<int>("Quantity")
+                            ID = x.Field<object>("ID") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<int>("ID")),
+                            ItemID = x.Field<object>("ItemID") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemID")),
+                            ItemName = x.Field<object>("ItemName") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemName")),
+                            ItemPrice = x.Field<object>("ItemPrice") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<string>("ItemPrice")),
+                            Quantity = x.Field<object>("Quantity") == System.DBNull.Value ? 0 : x.Field<int>("Quantity")
 
                         }).ToList();
 
