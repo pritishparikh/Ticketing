@@ -26,6 +26,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private readonly string _ClientAPIUrl;
         private readonly string _ClientAPIUrlForGenerateToken;
         private readonly string _ClientAPIUrlForGeneratePaymentLink;
+        private readonly string _Client_Id;
+        private readonly string _Client_Secret;
+        private readonly string _Grant_Type;
+        private readonly string _Scope;
         #endregion
 
         #region Constructor
@@ -37,6 +41,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             _ClientAPIUrl = configuration.GetValue<string>("ClientAPIURL");
             _ClientAPIUrlForGenerateToken = configuration.GetValue<string>("ClientAPIForGenerateToken");
             _ClientAPIUrlForGeneratePaymentLink = configuration.GetValue<string>("ClientAPIForGeneratePaymentLink");
+            _Client_Id = configuration.GetValue<string>("Client_Id");
+            _Client_Secret = configuration.GetValue<string>("Client_Secret");
+            _Grant_Type = configuration.GetValue<string>("Grant_Type");
+            _Scope = configuration.GetValue<string>("Scope");
         }
         #endregion
 
