@@ -17,11 +17,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        public List<CustomerChatMaster> OngoingChat(ICustomerChat customerChat,int userMasterID,int tenantID, string Search,int StoreManagerID)
+        public List<CustomerChatMaster> OngoingChat(ICustomerChat customerChat,int UserMasterID,int TenantID, string Search,int StoreManagerID)
         {
             _customerChat = customerChat;
 
-            return _customerChat.OngoingChat(userMasterID, tenantID, Search, StoreManagerID);
+            return _customerChat.OngoingChat(UserMasterID, TenantID, Search, StoreManagerID);
         }
 
         /// <summary>
@@ -29,11 +29,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        public List<CustomerChatMaster> NewChat(ICustomerChat customerChat, int userMasterID, int tenantID)
+        public List<CustomerChatMaster> NewChat(ICustomerChat customerChat, int UserMasterID, int TenantID)
         {
             _customerChat = customerChat;
 
-            return _customerChat.NewChat(userMasterID, tenantID);
+            return _customerChat.NewChat(UserMasterID, TenantID);
         }
 
         /// <summary>
@@ -41,11 +41,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        public int MarkAsReadMessage(ICustomerChat customerChat, int chatID)
+        public int MarkAsReadMessage(ICustomerChat customerChat, int ChatID)
         {
             _customerChat = customerChat;
 
-            return _customerChat.MarkAsReadOnGoingChat(chatID);
+            return _customerChat.MarkAsReadOnGoingChat(ChatID);
         }
 
         /// <summary>
@@ -53,11 +53,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name="chatid"></param>
         /// <returns></returns>
-        public int UpdateCustomerChatIdStatus(ICustomerChat customerChatStatus, int chatID, int TenantId, int UserID)
+        public int UpdateCustomerChatIdStatus(ICustomerChat customerChatStatus, int ChatID, int TenantId, int UserID)
         {
             _customerChat = customerChatStatus;
 
-            return _customerChat.UpdateCustomerChatIdStatus(chatID, TenantId, UserID);
+            return _customerChat.UpdateCustomerChatIdStatus(ChatID, TenantId, UserID);
         }
 
         /// <summary>
@@ -89,12 +89,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name=""></param>
         /// <returns></returns>
         /// 
-        public int GetChatCount(ICustomerChat customerChat,int tenantID,int UserMasterID)
+        public int GetChatCount(ICustomerChat customerChat,int TenantID,int UserMasterID)
         {
 
             _customerChat = customerChat;
 
-            return _customerChat.GetChatCount(tenantID, UserMasterID);
+            return _customerChat.GetChatCount(TenantID, UserMasterID);
         }
 
         /// <summary>
@@ -102,12 +102,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name="tenantID"></param>
         /// <returns></returns>
-        public List<DateofSchedule> GetTimeSlot(ICustomerChat customerChat, int storeID, int userMasterID, int tenantID)
+        public List<DateofSchedule> GetTimeSlot(ICustomerChat customerChat, int StoreID, int UserMasterID, int TenantID)
         {
             _customerChat = customerChat;
 
-            return _customerChat.GetTimeSlot(storeID,userMasterID, tenantID);
+            return _customerChat.GetTimeSlot(StoreID, UserMasterID, TenantID);
         }
+
+        /// <summary>
+        /// Send Message To Customer For Visit
+        /// </summary>
+        /// <param name="customerChat"></param>
+        /// <param name="appointmentMaster"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <param name="CreatedBy"></param>
+        /// <returns></returns>
         public int SendMessageToCustomerForVisit(ICustomerChat customerChat, AppointmentMaster appointmentMaster, string ClientAPIURL, int CreatedBy)
         {
             _customerChat = customerChat;
