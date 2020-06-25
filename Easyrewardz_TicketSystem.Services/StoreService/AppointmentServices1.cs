@@ -49,11 +49,11 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         AppointmentModel obj = new AppointmentModel
                         {
-                            AppointmentDate = Convert.ToString(ds.Tables[0].Rows[i]["AppointmentDate"]),
-                            SlotId = Convert.ToInt32(ds.Tables[0].Rows[i]["SlotId"]),
-                            TimeSlot = Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]),
-                            NOofPeople = Convert.ToInt32(ds.Tables[0].Rows[i]["NOofPeople"]),
-                            MaxCapacity = Convert.ToInt32(ds.Tables[0].Rows[i]["MaxCapacity"]),
+                            AppointmentDate = ds.Tables[0].Rows[i]["AppointmentDate"] == DBNull.Value ? "": Convert.ToString(ds.Tables[0].Rows[i]["AppointmentDate"]),
+                            SlotId = ds.Tables[0].Rows[i]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SlotId"]),
+                            TimeSlot = ds.Tables[0].Rows[i]["TimeSlot"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["TimeSlot"]),
+                            NOofPeople = ds.Tables[0].Rows[i]["NOofPeople"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NOofPeople"]),
+                            MaxCapacity = ds.Tables[0].Rows[i]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MaxCapacity"]),
                             AppointmentCustomerList = new List<AppointmentCustomer>()
                         };
 
@@ -137,6 +137,12 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        /// <summary>
+        /// Update Appointment Status
+        /// </summary>
+        /// <param name="appointmentCustomer"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
         public int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId)
         {
 

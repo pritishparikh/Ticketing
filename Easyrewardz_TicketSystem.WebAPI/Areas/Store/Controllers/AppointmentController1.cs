@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Model.StoreModal;
@@ -9,7 +7,6 @@ using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -35,7 +32,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
         #endregion
 
-        #region Custom Methods 
+        #region Custom Methods
+
+        /// <summary>
+        /// Get Appointment List
+        /// </summary>
+        /// <param name="AppDate"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetAppointmentList")]
         public ResponseModel GetAppointmentList(string AppDate)
@@ -75,6 +78,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get Appointment Count
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetAppointmentCount")]
         public ResponseModel GetAppointmentCount()
@@ -117,6 +124,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
         }
 
+        /// <summary>
+        /// Update Appointment Status
+        /// </summary>
+        /// <param name="appointment"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateAppointmentStatus")]
         public ResponseModel UpdateAppointmentStatus([FromBody]AppointmentCustomer appointment)
@@ -131,7 +143,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                int result = newAppointment.updateAppoinment(new AppointmentServices(_connectioSting), appointment, authenticate.TenantId);
+                int result = newAppointment.UpdateAppoinment(new AppointmentServices(_connectioSting), appointment, authenticate.TenantId);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -185,7 +197,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 statusCode = ResultCount > 0 ? (int)EnumMaster.StatusCode.Success :
                     ResultCount < 0 ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.InternalServerError;
 
-              //  statusCode =  ResultCount .Equals(0) ? (int)EnumMaster.StatusCode.InternalServerError : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
@@ -229,8 +240,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 statusCode = ResultCount > 0 ? (int)EnumMaster.StatusCode.Success :
                   ResultCount < 0 ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.InternalServerError;
-
-               // statusCode = ResultCount.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
