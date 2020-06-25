@@ -7,8 +7,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -82,11 +80,7 @@ namespace Easyrewardz_TicketSystem.Services
                             Status = Convert.ToString((StoreCampaignStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"])),
                             MaxClickAllowed = ds.Tables[0].Rows[i]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MaxClickAllowed"]),
                             StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]),
-                            CampaignCode = ds.Tables[0].Rows[i]["CampaignCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignCode"]),
-                            // SmsClickCount = ds.Tables[0].Rows[i]["SmsClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SmsClickCount"]),
-                            //  EmailClickCount = ds.Tables[0].Rows[i]["EmailClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["EmailClickCount"]),
-                            //  MessengerClickCount = ds.Tables[0].Rows[i]["MessengerClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MessengerClickCount"]),
-                            //  BotClickCount = ds.Tables[0].Rows[i]["BotClickCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BotClickCount"]),
+                            CampaignCode = ds.Tables[0].Rows[i]["CampaignCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignCode"])
                         };
                         lstCampaign.Add(storecampaign);
                     }
@@ -227,7 +221,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight
                                 {
                                     mobileNumber = "",
-                                    insightText = ""//GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID)
+                                    insightText = ""
                                 };
                                 obj.campaignkeyinsight = KeyInsight;
                             }
@@ -237,7 +231,7 @@ namespace Easyrewardz_TicketSystem.Services
                             StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight
                             {
                                 mobileNumber = "",
-                                insightText = ""//GetKeyInsightAsChatBot(mobileNumber, programCode, tenantID, userID)
+                                insightText = ""
                             };
                             obj.campaignkeyinsight = KeyInsight;
                         }
@@ -399,17 +393,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                             if (objLastTransactionDetails != null)
                             {
-                                //if (objrecommendedDetails.Count > 0)
-                                //{
-                                //    StoreCampaignLastTransactionDetails LastTransactionDetails = new StoreCampaignLastTransactionDetails();
-
-                                //    LastTransactionDetails.billNo = LastTransactionDetails.billNo;
-                                //    LastTransactionDetails.billDate = LastTransactionDetails.billDate; ;
-                                //    LastTransactionDetails.storeName = LastTransactionDetails.storeName;
-                                //    LastTransactionDetails.amount = LastTransactionDetails.amount;
-                                //    //LastTransactionDetails.itemDetails = LastTransactionDetails.itemDetails;
-                                //    obj.lasttransactiondetails = LastTransactionDetails;
-                                //}
+                                
                                 obj.lasttransactiondetails = objLastTransactionDetails;
                             }
                             else
@@ -420,7 +404,6 @@ namespace Easyrewardz_TicketSystem.Services
                                 LastTransactionDetails.billDate = "";
                                 LastTransactionDetails.storeName = "";
                                 LastTransactionDetails.amount = "";
-                                //  LastTransactionDetails.itemDetails = "";
                                 obj.lasttransactiondetails = LastTransactionDetails;
                             }
 
@@ -437,7 +420,6 @@ namespace Easyrewardz_TicketSystem.Services
                         LastTransactionDetails.billDate = "";
                         LastTransactionDetails.storeName = "";
                         LastTransactionDetails.amount = "";
-                        //  LastTransactionDetails.itemDetails = "";
                         obj.lasttransactiondetails = LastTransactionDetails;
                     }
                 }
@@ -538,7 +520,6 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
             }
-            // InsertApiResponseData(obj, userID);
             return obj;
         }
 
@@ -639,105 +620,6 @@ namespace Easyrewardz_TicketSystem.Services
             return obj;
         }
 
-        ///// <summary>
-        /////Get Customer popup Details List
-        ///// </summary>
-        ///// <param name="tenantID"></param>
-        ///// <param name="userID"></param>
-        ///// <param name="mobileNumber"></param>
-        ///// <param name="programCode"></param>
-        ///// <returns></returns>
-        //public StoresCampaignStatusResponse GetCustomerpopupDetailsList(string mobileNumber, string programCode, int tenantID, int userID)
-        //{
-        //    StoresCampaignStatusResponse obj = new StoresCampaignStatusResponse();
-        //    StoreCampaignSearchOrder objOrderSearch = new StoreCampaignSearchOrder();
-        //    List<CustomerpopupDetails> objpopupdetails = new List<CustomerpopupDetails>();
-        //    CustomerpopupDetails objOrderDetails = new CustomerpopupDetails();
-        //    List<StoreCampaignKeyInsight> objkeyinsight = new List<StoreCampaignKeyInsight>();
-        //    List<StoreCampaignKeyInsight> objkeyinsightDetails = new List<StoreCampaignKeyInsight>();
-        //    List<StoreCampaignRecommended> objrecommended = new List<StoreCampaignRecommended>();
-        //    List<StoreCampaignRecommended> objrecommendedDetails = new List<StoreCampaignRecommended>();
-        //    DataSet ds = new DataSet();
-        //    try
-        //    {
-        //        CustomerpopupDetails popupDetail = new CustomerpopupDetails();
-        //        popupDetail.name = "Dharmendra";
-        //        popupDetail.mobileNumber = "9923165567";
-        //        popupDetail.tiername = "";
-        //        popupDetail.lifeTimeValue = "4568.45";
-        //        popupDetail.visitCount = "6";
-        //        obj.useratvdetails = popupDetail;
-        //        StoreCampaignKeyInsight KeyInsight = new StoreCampaignKeyInsight();
-
-        //        KeyInsight.mobileNumber = "9923165567";
-        //        KeyInsight.insightText = "Lorem Ipsum";
-        //        obj.campaignkeyinsight = KeyInsight;
-
-        //        conn.Open();
-        //        MySqlCommand cmd = new MySqlCommand("SP_HSGetCampaignRecommendedList", conn)
-        //        {
-        //            CommandType = CommandType.StoredProcedure
-        //        };
-        //        cmd.Parameters.AddWithValue("@Tenant_ID", tenantID);
-        //        cmd.Parameters.AddWithValue("@User_ID", userID);
-        //        cmd.Parameters.AddWithValue("@mobile_Number", mobileNumber);
-        //        cmd.Parameters.AddWithValue("@program_Code", programCode);
-
-        //        MySqlDataAdapter da = new MySqlDataAdapter
-        //        {
-        //            SelectCommand = cmd
-        //        };
-        //        da.Fill(ds);
-        //        if (ds != null && ds.Tables[0] != null)
-        //        {
-        //            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-        //            {
-        //                StoreCampaignRecommended RecommendedDetail = new StoreCampaignRecommended();
-        //                RecommendedDetail.mobileNumber = ds.Tables[0].Rows[i]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]);
-        //                RecommendedDetail.itemCode = ds.Tables[0].Rows[i]["ItemCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemCode"]);
-        //                RecommendedDetail.category = ds.Tables[0].Rows[i]["Category"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Category"]);
-        //                RecommendedDetail.subCategory = ds.Tables[0].Rows[i]["SubCategory"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategory"]);
-        //                RecommendedDetail.brand = ds.Tables[0].Rows[i]["Brand"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Brand"]);
-        //                RecommendedDetail.color = ds.Tables[0].Rows[i]["Color"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Color"]);
-        //                RecommendedDetail.size = ds.Tables[0].Rows[i]["Size"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Size"]);
-        //                RecommendedDetail.price = ds.Tables[0].Rows[i]["Price"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Price"]);
-        //                RecommendedDetail.url = ds.Tables[0].Rows[i]["Url"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Url"]);
-        //                RecommendedDetail.imageURL = ds.Tables[0].Rows[i]["ImageURL"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ImageURL"]);
-        //                objrecommended.Add(RecommendedDetail);
-        //                obj.campaignrecommended = objrecommended;
-        //            }
-        //        }
-        //        //StoreCampaignRecommended RecommendedDetail = new StoreCampaignRecommended();
-
-        //        //RecommendedDetail.mobileNumber = "9923165567";
-        //        //RecommendedDetail.itemCode = "F808920000";
-        //        //RecommendedDetail.category = "Shoes";
-        //        //RecommendedDetail.subCategory = "Casual";
-        //        //RecommendedDetail.brand = "";
-        //        //RecommendedDetail.color = "Black";
-        //        //RecommendedDetail.size = "7";
-        //        //RecommendedDetail.price = "3499";
-        //        //RecommendedDetail.url = "https://www.bata.in/bataindia/e-124_c-262/blacks-and-browns/men.html";
-        //        //RecommendedDetail.imageURL = "https://img2.bata.in/0/images/product/854-6523_300x300_1.jpeg";
-        //        //objrecommended.Add(RecommendedDetail);
-        //        //obj.campaignrecommended = objrecommended;
-
-        //        StoreCampaignLastTransactionDetails LastTransactionDetails = new StoreCampaignLastTransactionDetails();
-
-        //        LastTransactionDetails.billNo = "BB332398";
-        //        LastTransactionDetails.billDate = "12 Jan 2020";
-        //        LastTransactionDetails.storeName = "Bata-Rajouri Garden";
-        //        LastTransactionDetails.amount = "1,499";
-        //        LastTransactionDetails.itemDetails = "";
-        //        obj.lasttransactiondetails = LastTransactionDetails;
-
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    return obj;
-        //}
 
         /// <summary>
         /// Get Store Task By Ticket
@@ -852,7 +734,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd2.Parameters.AddWithValue("@_storeName", obj.lasttransactiondetails.storeName);
                 cmd2.Parameters.AddWithValue("@_amount", obj.lasttransactiondetails.amount);
                 cmd2.Parameters.AddWithValue("@_UserID", userID);
-               // cmd2.ExecuteNonQuery();
+
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd2;
 
@@ -887,7 +769,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception)
             {
-                //throw;
+                throw;
             }
             finally
             {

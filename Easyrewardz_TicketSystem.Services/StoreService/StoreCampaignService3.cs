@@ -4,7 +4,6 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -39,30 +38,7 @@ namespace Easyrewardz_TicketSystem.Services
                     SelectCommand = cmd
                 };
                 da.Fill(ds);
-                //if (ds != null && ds.Tables[0] != null)
-                //{
-                    //for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    //{
-                    //    StoreCampaignSettingModel storecampaign = new StoreCampaignSettingModel()
-                    //    {
-                    //        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
-                    //        CampaignName = ds.Tables[0].Rows[i]["CampaignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignName"]),
-                    //        CampaignCode = ds.Tables[0].Rows[i]["CampaignCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignCode"]),
-                    //        Programcode = ds.Tables[0].Rows[i]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Programcode"]),
-                           
-                    //        SmsFlag = ds.Tables[0].Rows[i]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["SmsFlag"]),
-                    //        EmailFlag = ds.Tables[0].Rows[i]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["EmailFlag"]),
-                    //        MessengerFlag = ds.Tables[0].Rows[i]["MessengerFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["MessengerFlag"]),
-                    //        BotFlag = ds.Tables[0].Rows[i]["BotFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["BotFlag"]),  
-
-
-                    //    };
-                    //    lstCampaignSetting.Add(storecampaign);
-                    //}
-
                 
-                    //campaignObj.CampaignSetting = lstCampaignSetting;
-               // }
 
                 if (ds != null && ds.Tables[0] != null)
                 {

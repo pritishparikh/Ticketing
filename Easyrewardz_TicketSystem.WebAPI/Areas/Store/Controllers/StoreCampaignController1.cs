@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -35,6 +31,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
         #endregion
 
+        #region Custom Method
         /// <summary>
         /// Get Campaign Customer
         /// </summary>
@@ -220,7 +217,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 string ClientAPIURL = configuration.GetValue<string>("ClientAPIURL");
-                string SMSsenderId = "";//configuration.GetValue<string>("SMSsenderId");
+                string SMSsenderId = "";
 
                 obj = storecampaigncaller.CampaignShareSMS(new StoreCampaignService(_connectioSting), objRequest, ClientAPIURL, SMSsenderId, authenticate.TenantId, authenticate.UserMasterID);
                 statusCode =
@@ -326,5 +323,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        #endregion
     }
 }

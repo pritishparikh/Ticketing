@@ -176,7 +176,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception)
             {
-
+                throw;
             }
 
             return result;
@@ -194,7 +194,6 @@ namespace Easyrewardz_TicketSystem.Services
         {
             DataSet ds = new DataSet();
             int result = 0;
-            int resultApi = 0;
             string Message = "";
             CampaignStatusResponse obj = new CampaignStatusResponse();
             try
@@ -265,7 +264,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_strpostionNumber", strpostionNumber);
                 cmd.Parameters.AddWithValue("@_strpostionName", strpostionName);
 
-                //result = Convert.ToInt32(cmd.ExecuteNonQuery());
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
@@ -297,15 +295,6 @@ namespace Easyrewardz_TicketSystem.Services
 
                         string apiReq = JsonConvert.SerializeObject(sendFreeTextRequest);
                         apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendCampaign", apiReq);
-
-                        //ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
-
-                        //chatSendSMSResponse = JsonConvert.DeserializeObject<ChatSendSMSResponse>(apiResponse);
-
-                        //if (chatSendSMSResponse != null)
-                        //{
-                        //    resultApi = chatSendSMSResponse.Id;
-                        //}
 
                         if (apiResponse.Equals("true"))
                         {
@@ -361,7 +350,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_CampaignScriptID", objRequest.CampaignScriptID);
                 cmd.Parameters.AddWithValue("@_CreatedBy", UserID);
 
-                //result = Convert.ToInt32(cmd.ExecuteNonQuery());
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
