@@ -923,10 +923,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
 
-                string SuccessFileUrl = !string.IsNullOrEmpty(CSVlist[0]) ?
-                  rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor) + "/Success/" + SuccessFileName : string.Empty;
-                string ErrorFileUrl = !string.IsNullOrEmpty(CSVlist[1]) ?
-                    rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor) + "/Error/" + ErrorFileName : string.Empty;
+                //string SuccessFileUrl = !string.IsNullOrEmpty(CSVlist[0]) ?
+                //  rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor) + "/Success/" + SuccessFileName : string.Empty;
+                //string ErrorFileUrl = !string.IsNullOrEmpty(CSVlist[1]) ?
+                //    rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor) + "/Error/" + ErrorFileName : string.Empty;
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
                 {
@@ -943,6 +943,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     errorfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Error", ErrorFileName), CSVlist[1]);
                 }
 
+
+                string SuccessFileUrl = !string.IsNullOrEmpty(CSVlist[0]) ?
+                  rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor) + "/Success/" + SuccessFileName : string.Empty;
+                string ErrorFileUrl = !string.IsNullOrEmpty(CSVlist[1]) ?
+                    rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor) + "/Error/" + ErrorFileName : string.Empty;
 
                 count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, filesName[0], true,
                                  ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store_User", SuccessFileUrl, ErrorFileUrl, UserFor);

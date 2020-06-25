@@ -542,7 +542,7 @@ namespace Easyrewardz_TicketSystem.Services
                     responseGeneratePaymentLink = JsonConvert.DeserializeObject<HSResponseGeneratePaymentLink>(apiResponse1);
                 }
 
-                if (responseGeneratePaymentLink.returnMessage.Contains("Success"))
+                if (responseGeneratePaymentLink.tokenStatus.Contains("Initiated"))
                 {
                     if (conn != null && conn.State == ConnectionState.Closed)
                     {
@@ -554,15 +554,15 @@ namespace Easyrewardz_TicketSystem.Services
                         CommandType = CommandType.StoredProcedure
                     };
                     cmd1.Parameters.AddWithValue("@Invoice_Number", sentPaymentLink.InvoiceNumber);
-                    cmd1.Parameters.AddWithValue("@access_Token", hSResponseGenerateToken.access_token);
+                    cmd1.Parameters.AddWithValue("@access_Token", responseGeneratePaymentLink.tokenId);
                     cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
                     cmd1.Parameters.AddWithValue("@user_ID", userID);
                     cmd1.CommandType = CommandType.StoredProcedure;
                     result = Convert.ToInt32(cmd1.ExecuteNonQuery());
-                    if (result > 0)
-                    {
-                        SmsWhatsUpDataSend(tenantID, userID, programCode, hSRequestGeneratePaymentLink.OrderId, ClientAPIUrl, "ShoppingBagConvertToOrder");
-                    }
+                    //if (result > 0)
+                    //{
+                    //    SmsWhatsUpDataSend(tenantID, userID, programCode, hSRequestGeneratePaymentLink.OrderId, ClientAPIUrl, "ShoppingBagConvertToOrder");
+                    //}
                     conn.Close();
                 }
             }

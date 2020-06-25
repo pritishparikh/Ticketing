@@ -24,6 +24,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string returnMessage { get; set; }
         public string tokenId { get; set; }
         public string status { get; set; }
+        public string tokenStatus { get; set; }
     }
     public class HSRequestGenerateToken
     {
