@@ -559,10 +559,10 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd1.Parameters.AddWithValue("@user_ID", userID);
                     cmd1.CommandType = CommandType.StoredProcedure;
                     result = Convert.ToInt32(cmd1.ExecuteNonQuery());
-                    if (result > 0)
-                    {
-                        SmsWhatsUpDataSend(tenantID, userID, programCode, hSRequestGeneratePaymentLink.OrderId, ClientAPIUrl, "ShoppingBagConvertToOrder");
-                    }
+                    //if (result > 0)
+                    //{
+                    //    SmsWhatsUpDataSend(tenantID, userID, programCode, hSRequestGeneratePaymentLink.OrderId, ClientAPIUrl, "ShoppingBagConvertToOrder");
+                    //}
                     conn.Close();
                 }
             }
