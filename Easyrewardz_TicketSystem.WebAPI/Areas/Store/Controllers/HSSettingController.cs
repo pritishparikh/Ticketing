@@ -40,6 +40,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
         #region Custom Methods
         // GET: api/<controller>
+
+        /// <summary>
+        /// Get Store Agent List
+        /// </summary>
+        /// <param name="BrandID"></param>
+        /// <param name="StoreID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetStoreAgentList")]
         public ResponseModel GetStoreAgentList(int BrandID, int StoreID)
@@ -74,6 +81,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Insert And Update Agent Details
+        /// </summary>
+        /// <param name="hSSettingModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("InsertUpdateAgentDetails")]
         public ResponseModel InsertUpdateAgentDetails([FromBody]HSSettingModel hSSettingModel)
@@ -105,6 +117,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get Store Agent Details By Id
+        /// </summary>
+        /// <param name="AgentID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetStoreAgentDetailsById")]
         public ResponseModel GetStoreAgentDetailsById(int AgentID)

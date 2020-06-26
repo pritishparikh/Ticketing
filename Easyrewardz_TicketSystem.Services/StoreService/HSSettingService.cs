@@ -19,6 +19,14 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
 
         #region Custom Methods
+
+        /// <summary>
+        /// Get Store Agent List
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="BrandID"></param>
+        /// <param name="StoreID"></param>
+        /// <returns></returns>
         public List<HSSettingModel> GetStoreAgentList(int tenantID, int BrandID, int StoreID)
         {
             DataSet ds = new DataSet();
@@ -73,6 +81,12 @@ namespace Easyrewardz_TicketSystem.Services
             return listHierarchy;
         }
 
+        /// <summary>
+        /// Insert And Update Agent Details
+        /// </summary>
+        /// <param name="hSSettingModel"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
         public int InsertUpdateAgentDetails(HSSettingModel hSSettingModel, int TenantId)
         {
 
@@ -109,6 +123,12 @@ namespace Easyrewardz_TicketSystem.Services
             return i;
         }
 
+        /// <summary>
+        /// Get Store Agent Details By Id
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="AgentID"></param>
+        /// <returns></returns>
         public List<HSSettingModel> GetStoreAgentDetailsById(int tenantID, int AgentID)
         {
             DataSet ds = new DataSet();

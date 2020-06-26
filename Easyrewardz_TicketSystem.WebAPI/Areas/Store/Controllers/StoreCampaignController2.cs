@@ -4,7 +4,6 @@ using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -14,6 +13,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
     //[ApiController]
     public partial class StoreCampaignController : ControllerBase
     {
+        #region Custom Method
+
         /// <summary>
         /// GetCampaignDetails
         /// </summary>
@@ -136,5 +137,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
 
+        #endregion
     }
 }

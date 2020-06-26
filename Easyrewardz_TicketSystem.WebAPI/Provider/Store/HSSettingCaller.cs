@@ -37,6 +37,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider.Store
             return _IHSettingRepository.InsertUpdateAgentDetails(hSSettingModel, tenantID);
         }
 
+        /// <summary>
+        /// Get Store Agent Details By Id
+        /// </summary>
+        /// <param name="hSSetting"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="AgentID"></param>
+        /// <returns></returns>
         public List<HSSettingModel> GetStoreAgentDetailsById(IHSSetting hSSetting, int tenantID, int AgentID)
         {
             _IHSettingRepository = hSSetting;

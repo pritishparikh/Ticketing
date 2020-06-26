@@ -316,6 +316,14 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw;
             }
+            finally
+            {
+
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
             
             return ItemList;
         }
