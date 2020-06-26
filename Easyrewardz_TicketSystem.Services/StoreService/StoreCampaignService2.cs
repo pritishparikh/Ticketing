@@ -540,7 +540,7 @@ namespace Easyrewardz_TicketSystem.Services
                 GetWhatsappMessageDetailsResponse getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
                 string strpostionNumber = "";
                 string strpostionName = "";
-                //string additionalInfo = "";
+
                 try
                 {
                     GetWhatsappMessageDetailsModal getWhatsappMessageDetailsModal = new GetWhatsappMessageDetailsModal()

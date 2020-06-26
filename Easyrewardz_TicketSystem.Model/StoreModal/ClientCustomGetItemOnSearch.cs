@@ -7,13 +7,13 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
     public class ClientCustomGetItemOnSearch
     {
         /// <summary>
-        /// programcode
+        /// program code
         /// </summary>
         public string programcode { get; set; }
 
 
         /// <summary>
-        /// searchCriteria
+        /// search Criteria
         /// </summary>
         public string searchCriteria { get; set; }
     }

@@ -663,6 +663,9 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class PrintManifestRequest
     {
+        /// <summary>
+        /// List of order Ids
+        /// </summary>
         public List<Int64> orderIds { get; set; }
     }
 
@@ -676,6 +679,9 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class PrintLabelRequest
     {
+        /// <summary>
+        /// List of shipment Ids
+        /// </summary>
         public List<Int64> shipmentId { get; set; }
     }
 

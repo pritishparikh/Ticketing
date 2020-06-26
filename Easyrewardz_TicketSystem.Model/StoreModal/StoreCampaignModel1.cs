@@ -91,16 +91,42 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class CampaingCustomerFilterRequest
     {
+        /// <summary>
+        /// Campaign Script ID
+        /// </summary>
         public int CampaignScriptID { get; set; }
+
+        /// <summary>
+        /// Page No
+        /// </summary>
         public int PageNo { get; set; }
+
+        /// <summary>
+        /// Page Size
+        /// </summary>
         public int PageSize { get; set; }
+
+        /// <summary>
+        /// Filter Status
+        /// </summary>
         public string FilterStatus { get; set; } = "All";
+
+        /// <summary>
+        /// Mobile Number
+        /// </summary>
         public string MobileNumber { get; set; } = "";
     }
 
     public class CampaignCustomerDetails
     {
+        /// <summary>
+        /// Campaign Customer Model
+        /// </summary>
         public List<CampaignCustomerModel> CampaignCustomerModel { get; set; }
+
+        /// <summary>
+        /// Campaign Customer Count
+        /// </summary>
         public int CampaignCustomerCount { get; set; }
     }
 
@@ -279,7 +305,14 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class BroadcastDetails
     {
+        /// <summary>
+        /// List of Campaign Execution Details Response
+        /// </summary>
         public List<CampaignExecutionDetailsResponse> CampaignExecutionDetailsResponse { get; set; }
+
+        /// <summary>
+        /// Broadcast Configuration Response
+        /// </summary>
         public BroadcastConfigurationResponse BroadcastConfigurationResponse { get; set; }
     }
 

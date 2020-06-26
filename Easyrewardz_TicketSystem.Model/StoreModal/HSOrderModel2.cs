@@ -370,14 +370,49 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class OrdersSmsWhatsUpDataDetails
     {
+        /// <summary>
+        /// Order ID
+        /// </summary>
         public int OderID { get; set; }
+
+        /// <summary>
+        /// Alert Communication via Whtsup
+        /// </summary>
         public bool AlertCommunicationviaWhtsup { get; set; }
+
+        /// <summary>
+        /// Alert Communication via SMS
+        /// </summary>
         public bool AlertCommunicationviaSMS { get; set; }
+
+        /// <summary>
+        /// SMS Sender Name
+        /// </summary>
         public string SMSSenderName { get; set; }
+
+        /// <summary>
+        /// Is Send
+        /// </summary>
         public bool IsSend { get; set; }
+
+        /// <summary>
+        /// Message Text
+        /// </summary>
         public string MessageText { get; set; }
+
+        /// <summary>
+        /// Invoice No
+        /// </summary>
         public string InvoiceNo { get; set; }
+
+        /// <summary>
+        /// Additional Info
+        /// </summary>
         public string AdditionalInfo { get; set; }
+
+        /// <summary>
+        /// Mobile Number
+        /// </summary>
         public string MobileNumber { get; set; }
     }
 
