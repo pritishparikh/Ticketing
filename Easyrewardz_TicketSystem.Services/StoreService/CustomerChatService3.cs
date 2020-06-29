@@ -774,13 +774,13 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        // Update StoreManager chat status
+        ///Update StoreManager chat status
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
         ///  <param name="ChatID"></param>
         ///   <param name="ChatStatusID"></param>
         /// <returns></returns>
-        /// 
+        
         public int UpdateStoreManagerChatStatus(int TenantID, string ProgramCode, int ChatID, int ChatStatusID, int StoreManagerID)
         {
             int success = 0;
@@ -943,5 +943,50 @@ namespace Easyrewardz_TicketSystem.Services
 
             return CardApprovalist;
         }
+
+
+        /// <summary>
+        /// End Chat Form Customer
+        /// </summary>
+        /// <param name="ChatID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <returns></returns>
+
+        public int EndCustomerChat(int TenantID, string ProgramCode, int ChatID)
+        {
+            int success = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand
+                {
+                    Connection = conn,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SP_HSEndCustomerChat"
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_ChatID", ChatID);
+         
+                success = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return success;
+        }
+
     }
 }

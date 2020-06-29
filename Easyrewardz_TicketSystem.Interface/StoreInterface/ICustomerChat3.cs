@@ -39,6 +39,8 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateCardImageApproval(int TenantID, string ProgramCode, int ID, int ModifiedBy);
 
         List<CardImageApprovalModel> GetCardImageApprovalList(int TenantID, string ProgramCode);
+
+        int EndCustomerChat(int TenantID, string ProgramCode, int ChatID);
     }
 }
  

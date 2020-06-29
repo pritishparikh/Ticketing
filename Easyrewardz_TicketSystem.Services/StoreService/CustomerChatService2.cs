@@ -575,7 +575,6 @@ namespace Easyrewardz_TicketSystem.Services
         public int SendMessageToCustomer(int ChatID, string MobileNo, string ProgramCode, string Message, string WhatsAppMessage, string ImageURL, string ClientAPIURL, int CreatedBy, int InsertChat)
         {
             MySqlCommand cmd = new MySqlCommand();
-            int resultCount = 0;
             CustomerChatModel ChatMessageDetails = new CustomerChatModel();
             ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
             ClientCustomSendImageModel SendImageRequest = new ClientCustomSendImageModel();
