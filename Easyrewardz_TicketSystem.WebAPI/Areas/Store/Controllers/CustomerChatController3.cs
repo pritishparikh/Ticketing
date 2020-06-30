@@ -675,6 +675,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// End Chat Form Customer
         /// </summary>
         /// <param name="ChatID"></param>
+        /// <param name="EndChatMessage"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("EndCustomerChat")]
