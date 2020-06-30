@@ -953,7 +953,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ProgramCode"></param>
         /// <returns></returns>
 
-        public int EndCustomerChat(int TenantID, string ProgramCode, int ChatID)
+        public int EndCustomerChat(int TenantID, string ProgramCode, int ChatID, string EndChatMessage,int UserID)
         {
             int success = 0;
             try
@@ -971,7 +971,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.Parameters.AddWithValue("@_ChatID", ChatID);
-         
+                cmd.Parameters.AddWithValue("@_EndChatMessage", string.IsNullOrEmpty(EndChatMessage) ? "" : EndChatMessage);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
+
                 success = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception)

@@ -40,7 +40,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<CardImageApprovalModel> GetCardImageApprovalList(int TenantID, string ProgramCode);
 
-        int EndCustomerChat(int TenantID, string ProgramCode, int ChatID);
+        int EndCustomerChat(int TenantID, string ProgramCode, int ChatID,string EndChatMessage, int UserID);
     }
 }
  

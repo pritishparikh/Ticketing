@@ -678,7 +678,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("EndCustomerChat")]
-        public ResponseModel EndCustomerChat(int ChatID)
+        public ResponseModel EndCustomerChat(int ChatID, string EndChatMessage)
         {
 
 
@@ -695,7 +695,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                result = customerChatCaller.EndCustomerChat(new CustomerChatService(_connectionString), authenticate.TenantId, authenticate.ProgramCode,ChatID);
+                result = customerChatCaller.EndCustomerChat(new CustomerChatService(_connectionString), authenticate.TenantId,
+                    authenticate.ProgramCode,ChatID, EndChatMessage,authenticate.UserMasterID);
 
                 statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
