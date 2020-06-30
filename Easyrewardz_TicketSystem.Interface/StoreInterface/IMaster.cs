@@ -8,8 +8,20 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
 {
     public interface IMaster
     {
+        /// <summary>
+        /// GetStoreUserList
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         List<StoreUser> GetStoreUserList(int TenantId, int UserID);
 
+        /// <summary>
+        /// GetStoreFunctionList
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         List<StoreFunctionModel> GetStoreFunctionList(int TenantId, int UserID);
     }
 }

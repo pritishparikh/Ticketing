@@ -73,19 +73,59 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// </summary>
         public string FunctionName { get; set; }
 
+        /// <summary>
+        /// Created ago
+        /// </summary>
         public string Createdago { get; set; }
+
+        /// <summary>
+        /// Assigned ago
+        /// </summary>
         public string Assignedago { get; set; }
+
+        /// <summary>
+        /// Updated By
+        /// </summary>
         public string UpdatedBy { get; set; }
+
+        /// <summary>
+        /// Updated ago
+        /// </summary>
         public string Updatedago { get; set; }
 
+        /// <summary>
+        /// Task Cloure Date
+        /// </summary>
         public string TaskCloureDate { get; set; }
+
+        /// <summary>
+        /// Resolution Time Remaining
+        /// </summary>
         public string ResolutionTimeRemaining { get; set; }
+
+        /// <summary>
+        /// Resolution Over due By
+        /// </summary>
         public string ResolutionOverdueBy { get; set; }
+
+        /// <summary>
+        /// Color Name
+        /// </summary>
         public string ColorName { get; set; }
+
+        /// <summary>
+        /// Color Code
+        /// </summary>
         public string ColorCode { get; set; }
 
+        /// <summary>
+        /// Ticket ID
+        /// </summary>
         public int TicketID { get; set; }
 
+        /// <summary>
+        /// Comments list
+        /// </summary>
         public List<UserComment> Comments { get; set; }
     }
     

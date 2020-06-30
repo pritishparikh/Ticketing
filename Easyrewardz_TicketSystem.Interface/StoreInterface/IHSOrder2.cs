@@ -7,11 +7,58 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public partial interface IHSOrder
     {
+        /// <summary>
+        /// GetOrdersDetails
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="ordersDataRequest"></param>
+        /// <returns></returns>
         OrderResponseDetails GetOrdersDetails(int tenantId, int userId, OrdersDataRequest ordersDataRequest);
+
+        /// <summary>
+        /// GetShoppingBagDetails
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="ordersDataRequest"></param>
+        /// <returns></returns>
         ShoppingBagResponseDetails GetShoppingBagDetails(int tenantId, int userId, OrdersDataRequest ordersDataRequest);
+
+        /// <summary>
+        /// GetShoppingBagDeliveryType
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="pageID"></param>
+        /// <returns></returns>
         List<ShoppingBagDeliveryFilter> GetShoppingBagDeliveryType(int tenantId, int userId, int pageID);
+
+        /// <summary>
+        /// GetShipmentDetails
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="ordersDataRequest"></param>
+        /// <returns></returns>
         OrderResponseDetails GetShipmentDetails(int tenantId, int userId, OrdersDataRequest ordersDataRequest);
+
+        /// <summary>
+        /// GetOrderTabSettingDetails
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         OrderTabSetting GetOrderTabSettingDetails(int tenantId, int userId);
+
+        /// <summary>
+        /// SetOrderHasBeenReturn
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="orderID"></param>
+        /// <param name="Returnby"></param>
+        /// <returns></returns>
         int SetOrderHasBeenReturn(int tenantId, int userId, int orderID, string Returnby = "Order");
     }
 }

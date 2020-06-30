@@ -4,19 +4,74 @@ namespace Easyrewardz_TicketSystem.CustomModel
 {
     public class CustomGetChatTickets
     {
+        /// <summary>
+        /// Ticket ID
+        /// </summary>
         public int TicketID { get; set; }
+
+        /// <summary>
+        /// Ticket Status
+        /// </summary>
         public string TicketStatus { get; set; }
+
+        /// <summary>
+        /// Category
+        /// </summary>
         public string Category { get; set; }
+
+        /// <summary>
+        /// Sub Category
+        /// </summary>
         public string SubCategory { get; set; }
+
+        /// <summary>
+        /// Issue Type
+        /// </summary>
         public string IssueType { get; set; }
+
+        /// <summary>
+        /// Assign To
+        /// </summary>
         public string AssignTo { get; set; }
+
+        /// <summary>
+        /// Priority
+        /// </summary>
         public string Priority { get; set; }
+
+        /// <summary>
+        /// Created On
+        /// </summary>
         public string CreatedOn { get; set; }
+
+        /// <summary>
+        /// Ticket Title
+        /// </summary>
         public string TicketTitle { get; set; }
+
+        /// <summary>
+        /// Ticket Description
+        /// </summary>
         public string TicketDescription { get; set; }
+
+        /// <summary>
+        /// Created By
+        /// </summary>
         public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// Created Date
+        /// </summary>
         public string CreatedDate { get; set; }
+
+        /// <summary>
+        /// Updated By
+        /// </summary>
         public string UpdatedBy { get; set; }
+
+        /// <summary>
+        /// Updated Date
+        /// </summary>
         public string UpdatedDate { get; set; }
     }
 
