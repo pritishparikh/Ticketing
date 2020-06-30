@@ -111,5 +111,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
+        public int EndCustomerChat(ICustomerChat customerChat, int TenantID, string ProgramCode, int ChatID)
+        {
+            _customerChat = customerChat;
+            return _customerChat.EndCustomerChat( TenantID,  ProgramCode,  ChatID);
+
+        }
+        
+
     }
 }
