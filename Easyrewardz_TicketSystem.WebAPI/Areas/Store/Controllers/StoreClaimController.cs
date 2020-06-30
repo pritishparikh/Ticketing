@@ -73,11 +73,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             orderDetails = JsonConvert.DeserializeObject<OrderMaster>(Keys["orderDetails"]);
             OrderItemDetails = JsonConvert.DeserializeObject<List<OrderItem>>(Keys["orderItemDetails"]);
 
-            //var exePath = Path.GetDirectoryName(System.Reflection
-            //        .Assembly.GetExecutingAssembly().CodeBase);
-            //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
-            //var appRoot = appPathMatcher.Match(exePath).Value;
-            // string folderpath = rootPath + _ClaimProductImage;
             string Folderpath = Directory.GetCurrentDirectory();
             string[] filesName = finalAttchment.Split(",");
 
@@ -179,22 +174,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                                     byte[] a = Convert.FromBase64String(s);
                                     // act on the Base64 data
 
-                                }
-                                //using (var ms = new MemoryStream())
-                                //{
-                                //    files[i].CopyTo(ms);
-                                //    var fileBytes = ms.ToArray();
-                                //    MemoryStream msfile = new MemoryStream(fileBytes);
-                                //    FileStream docFile = new FileStream(folderpath + "/" + filesName[i], FileMode.Create, FileAccess.Write);
-                                //    msfile.WriteTo(docFile);
-                                //    docFile.Close();
-                                //    ms.Close();
-                                //    msfile.Close();
-                                //    string s = Convert.ToBase64String(fileBytes);
-                                //    byte[] a = Convert.FromBase64String(s);
-                                //    // act on the Base64 data
-
-                                //}
+                                }                               
                             }
                             catch (Exception)
                             {
