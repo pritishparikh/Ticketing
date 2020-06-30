@@ -107,7 +107,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// Get CategoryList
+        /// Get Chat Category
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
@@ -231,7 +231,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Chat Tickets By ID
         /// </summary>
-        /// <param name="statusID"></param>
+        /// <param name="ticketID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetChatTicketsByID")]
@@ -379,7 +379,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get tickets On View Search click
         /// </summary>
-        /// <param name="searchparams"></param>
+        /// <param name="ChatTicketSearch"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetChatTicketsOnSearch")]
@@ -457,7 +457,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Create Chat Ticket
         /// </summary>
-        /// <param name="searchparams"></param>
+        /// <param name="createChatTickets"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("CreateChatTicket")]

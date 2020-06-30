@@ -148,6 +148,8 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="ProgramCode"></param>
         /// <returns></returns>
         List<CardImageApprovalModel> GetCardImageApprovalList(int TenantID, string ProgramCode);
+
+        int EndCustomerChat(int TenantID, string ProgramCode, int ChatID,string EndChatMessage, int UserID);
     }
 }
  

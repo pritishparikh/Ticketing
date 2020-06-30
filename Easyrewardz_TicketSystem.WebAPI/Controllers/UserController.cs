@@ -866,7 +866,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     string encryptedEmailId = SecurityService.Encrypt(customChangePassword.EmailID);
 
                     string decriptedPassword = SecurityService.DecryptStringAES(customChangePassword.Password);
-                    string url = configuration.GetValue<string>("websiteURL") + "/ChangePassword";
+                    string url = configuration.GetValue<string>("websiteURL") + "ChangePassword";
                     string body = "Dear User, <br/>Please find the below details.  <br/><br/>" + "Your Email ID  : " + customChangePassword.EmailID + "<br/>" + "Your Password : " + decriptedPassword + "<br/><br/>" + "Click on Below link to change the Password <br/>" + url + "?Id:" + encryptedEmailId;
                     bool isUpdate = _securityCaller.sendMailForChangePassword(new SecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID,body,authenticate.TenantId);
                     if (isUpdate)

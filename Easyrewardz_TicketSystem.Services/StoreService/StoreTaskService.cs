@@ -1481,20 +1481,21 @@ namespace Easyrewardz_TicketSystem.Services
 
                         TaskFilterTicketByResponseModel taskTicket = new TaskFilterTicketByResponseModel
                         {
+
                             totalCount = ds.Tables[0].Rows.Count,
-                            StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
-                            TaskStatus = TaskStatusName,
-                            TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]),
-                            TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]),
-                            DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]),
-                            StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
-                            StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
-                            PriorityName = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]),
-                            CreationOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
-                            Assignto = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
-                            CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
-                            Updatedago = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]),
-                            UpdatedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"])
+                            StoreTaskID =ds.Tables[0].Rows[i]["ID"]== DBNull.Value ? 0 :Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            TaskStatus = string.IsNullOrEmpty(TaskStatusName) ? "" : TaskStatusName,
+                            TaskTitle = ds.Tables[0].Rows[i]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]),
+                            TicketID = ds.Tables[0].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]),
+                            DepartmentName = ds.Tables[0].Rows[i]["DepartmentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]),
+                            StoreName = ds.Tables[0].Rows[i]["StoreName"]== DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
+                            StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
+                            PriorityName = ds.Tables[0].Rows[i]["Priorty"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]),
+                            CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
+                            CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
+                            Updatedago = ds.Tables[0].Rows[i]["Modifiedon"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]),
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"])
                         };
                         ticketByTask.Add(taskTicket);
                     }
