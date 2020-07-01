@@ -27,7 +27,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         public List<CustomItemSearchResponseModel> ChatItemSearch(ICustomerChat customerChat, int TenantID, string Programcode, string ClientAPIURL, string SearchText)
         {
-            _customerChat = customerChat;
+            _customerChat = customerChat; 
             return _customerChat.ChatItemDetailsSearch( TenantID,  Programcode, ClientAPIURL,SearchText); 
         }
 
@@ -39,7 +39,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-        public List<CustomerChatSuggestionModel> GetChatSuggestions(ICustomerChat customerChat, string SearchText)
+        public List<object> GetChatSuggestions(ICustomerChat customerChat, string SearchText)
         {
             _customerChat = customerChat;
             return _customerChat.GetChatSuggestions(SearchText);
