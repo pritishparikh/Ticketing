@@ -16,6 +16,18 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// </summary>
         public string SuggestionText { get; set; }
 
+
+        /// <summary>
+        ///TagID
+        /// </summary>
+        public int TagID { get; set; }
+
+
+        /// <summary>
+        ///TagName
+        /// </summary>
+        public string TagName { get; set; }
+
         /// <summary>
         /// CreatedBy
         /// </summary>
@@ -35,5 +47,20 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// ModifiedDate
         /// </summary>
         public string ModifiedDate { get; set; }
+    }
+
+
+    public class ChatSuggestionTags
+    {
+        /// <summary>
+        ///TagID
+        /// </summary>
+        public int TagID { get; set; }
+
+
+        /// <summary>
+        ///TagName
+        /// </summary>
+        public string TagName { get; set; }
     }
 }

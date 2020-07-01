@@ -333,10 +333,11 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="SearchText"></param>
         /// <returns></returns>
-        public List<CustomerChatSuggestionModel> GetChatSuggestions(string SearchText)
+        public List<object> GetChatSuggestions(string SearchText)
         {
-
+            List<object> SuggestionsDetails = new List<object>();
             List<CustomerChatSuggestionModel> SuggestionList = new List<CustomerChatSuggestionModel>();
+            List<ChatSuggestionTags> ChatSuggestionTagList = new List<ChatSuggestionTags>();
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
             try
@@ -364,21 +365,46 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
-                            CustomerChatSuggestionModel obj = new CustomerChatSuggestionModel()
+                            ChatSuggestionTags Tags = new ChatSuggestionTags()
                             {
-                                SuggestionID = Convert.ToInt32(dr["SuggestionID"]),
-                                SuggestionText = dr["SuggestionText"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SuggestionText"]),
-                                //CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0: Convert.ToInt32(dr["CreatedBy"]),
-                                //CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),
-                                //ModifyBy = dr["ModifyBy"] == DBNull.Value ? 0: Convert.ToInt32(dr["ModifyBy"]),
-                                //ModifiedDate = dr["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifiedDate"]),
 
+                                TagID = dr["TagID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TagID"]),
+                                TagName = dr["TagName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TagName"]),
                             };
 
-                            SuggestionList.Add(obj);
+                            ChatSuggestionTagList.Add(Tags);
+                        }
+
+                    }
+
+
+                    if (ChatSuggestionTagList.Count > 0)
+                    {
+                        if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in ds.Tables[1].Rows)
+                            {
+                                CustomerChatSuggestionModel obj = new CustomerChatSuggestionModel()
+                                {
+                                    SuggestionID = Convert.ToInt32(dr["SuggestionID"]),
+                                    SuggestionText = dr["SuggestionText"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SuggestionText"]),
+                                    TagID = dr["TagID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TagID"]),
+                                    TagName = dr["Tags"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Tags"]),
+                                 
+
+                                };
+
+                                SuggestionList.Add(obj);
+                            }
                         }
                     }
+
+
+                   
                 }
+
+                SuggestionsDetails.Add(ChatSuggestionTagList);
+                SuggestionsDetails.Add(SuggestionList);
 
             }
             catch (Exception)
@@ -396,7 +422,7 @@ namespace Easyrewardz_TicketSystem.Services
                     ds.Dispose();
                 }
             }
-            return SuggestionList;
+            return SuggestionsDetails;
         }
 
 

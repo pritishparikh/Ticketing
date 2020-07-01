@@ -153,7 +153,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         public ResponseModel getChatSuggestions(string SearchText)
         {
             ResponseModel objResponseModel = new ResponseModel();
-            List<CustomerChatSuggestionModel> SuggestionList = new List<CustomerChatSuggestionModel>();
+            List<object> SuggestionList = new List<object>();
 
             int statusCode = 0;
             string statusMessage = "";

@@ -46,7 +46,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// </summary>
         /// <param name="SearchText"></param>
         /// <returns></returns>
-        List<CustomerChatSuggestionModel>  GetChatSuggestions(string SearchText);
+        List<object>  GetChatSuggestions(string SearchText);
 
         /// <summary>
         /// SendRecommendationsToCustomer
