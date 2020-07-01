@@ -702,4 +702,30 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string response { get; set; }
     }
+
+    public class PrintInvoiceRequest
+    {
+        /// <summary>
+        /// List of shipment Ids
+        /// </summary>
+        public List<Int64> ids { get; set; }
+    }
+
+    public class PrintInvoiceResponse
+    {
+        /// <summary>
+        /// label_created
+        /// </summary>
+        public int label_created { get; set; }
+
+        /// <summary>
+        /// label_url
+        /// </summary>
+        public string label_url { get; set; }
+
+        /// <summary>
+        /// response
+        /// </summary>
+        public string response { get; set; }
+    }
 }

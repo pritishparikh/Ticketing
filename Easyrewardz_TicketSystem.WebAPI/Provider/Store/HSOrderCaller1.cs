@@ -214,5 +214,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.ShipmentAssignedPrintLabel(ShipmentId, ClientAPIURL);
         }
+
+        /// <summary>
+        /// ShipmentAssignedPrintInvoice
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="OrderIds"></param>
+        /// <param name="ClientAPIUR"></param>
+        /// <returns></returns>
+        public PrintInvoiceResponse ShipmentAssignedPrintInvoice(IHSOrder order, Int64 OrderIds, string ClientAPIUR)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.ShipmentAssignedPrintInvoice(OrderIds, ClientAPIUR);
+        }
     }
 }

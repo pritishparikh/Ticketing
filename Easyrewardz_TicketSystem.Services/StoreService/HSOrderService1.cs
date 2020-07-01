@@ -902,5 +902,49 @@ namespace Easyrewardz_TicketSystem.Services
 
             return printLabelResponse;
         }
+
+        /// <summary>
+        /// ShipmentAssignedPrintInvoice
+        /// </summary>
+        /// <param name="OrderIds"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <returns></returns>
+        public PrintInvoiceResponse ShipmentAssignedPrintInvoice(Int64 OrderIds, string ClientAPIURL)
+        {
+            PrintInvoiceResponse printInvoiceResponse = new PrintInvoiceResponse();
+            string ClientAPIResponse = string.Empty;
+            try
+            {
+                PrintInvoiceRequest printInvoiceRequest = new PrintInvoiceRequest
+                {
+                    ids = new List<long>
+                    {
+                        OrderIds
+                    }
+                };
+                try
+                {
+                    string JsonRequest = JsonConvert.SerializeObject(printInvoiceRequest);
+
+                    ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ShoppingBag/PrintInvoice", JsonRequest);
+
+                    if (!string.IsNullOrEmpty(ClientAPIResponse))
+                    {
+                        printInvoiceResponse = JsonConvert.DeserializeObject<PrintInvoiceResponse>(ClientAPIResponse);
+                    }
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return printInvoiceResponse;
+        }
     }
 }

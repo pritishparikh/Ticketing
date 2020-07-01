@@ -135,5 +135,13 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="ClientAPIURL"></param>
         /// <returns></returns>
         PrintLabelResponse ShipmentAssignedPrintLabel(Int64 orderIds, string clientAPIURL);
+
+        /// <summary>
+        /// ShipmentAssignedPrintInvoice
+        /// </summary>
+        /// <param name="OrderIds"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <returns></returns>
+        PrintInvoiceResponse ShipmentAssignedPrintInvoice(Int64 OrderIds, string ClientAPIURL);
     }
 }
