@@ -108,53 +108,91 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class TaskFilterRaisedBymeModel
     {
+        /// <summary>
+        /// task id
+        /// </summary>
         public int? taskid { get; set; }
+
+        /// <summary>
+        /// Department
+        /// </summary>
         public int? Department { get; set; }
+
+        /// <summary>
+        /// task title
+        /// </summary>
         public string tasktitle { get; set; }
+
+        /// <summary>
+        /// task status
+        /// </summary>
         public int? taskstatus { get; set; }
+
+        /// <summary>
+        /// ticket ID
+        /// </summary>
         public int? ticketID { get; set; }
+
+        /// <summary>
+        /// function ID
+        /// </summary>
         public int? functionID { get; set; }
+
+        /// <summary>
+        /// Created On From
+        /// </summary>
         public string CreatedOnFrom { get; set; }
+
+        /// <summary>
+        /// Created On To
+        /// </summary>
         public string CreatedOnTo { get; set; }
+
+        /// <summary>
+        /// Assign to Id
+        /// </summary>
         public int? AssigntoId { get; set; }
+
+        /// <summary>
+        /// created ID
+        /// </summary>
         public int? createdID { get; set; }
+
+        /// <summary>
+        /// task with Ticket
+        /// </summary>
         public string taskwithTicket { get; set; }
+
+        /// <summary>
+        /// task with Claim
+        /// </summary>
         public string taskwithClaim { get; set; }
+
+        /// <summary>
+        /// claim ID
+        /// </summary>
         public int? claimID { get; set; }
+
+        /// <summary>
+        /// Priority
+        /// </summary>
         public int? Priority { get; set; }
+
+        /// <summary>
+        /// user id
+        /// </summary>
         public int? userid { get; set; }
     }
 
     public class TaskFilterRaisedBymeResponseModel
     {
-        //public int taskid { get; set; }
-        //public string Department { get; set; }
-        //public string storeName { get; set; }
-        //public string StoreAddress { get; set; }
-        //public string tasktitle { get; set; }
-        //public string taskstatus { get; set; }
-        //public int ticketID { get; set; }
-        //public int functionID { get; set; }
-        //public string CreatedOn { get; set; }
-        //public string AssigntoId { get; set; }
-        //public string CreatedBy { get; set; }
-        //public string taskwithTicket { get; set; }
-        //public string taskwithClaim { get; set; }
-        //public int claimID { get; set; }
-        //public string Priority { get; set; }
-        //public int totalCount { get; set; }
-        //public string modifedOn { get; set; }
-        //public string ModifiedBy { get; set; }
-
-
-
 
         /// <summary>
         /// Ticketing TaskID
         /// </summary>
         public int StoreTaskID { get; set; }
         /// <summary>
-        /// TaskStatus
+        /// Task Status
         /// </summary>
         public string TaskStatus { get; set; }
         /// <summary>
@@ -170,7 +208,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string DepartmentName { get; set; }
         /// <summary>
-        /// StoreCode
+        /// Store Code
         /// </summary>
         public int? StoreCode { get; set; }
         /// <summary>
@@ -187,7 +225,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string Assignto { get; set; }
         /// <summary>
-        ///Duedate
+        ///Due date
         /// </summary>
         public DateTime Duedate { get; set; }
         /// <summary>
@@ -195,12 +233,12 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string PriorityName { get; set; }
         /// <summary>
-        /// StoreName
+        /// Store Name
         /// </summary>
         public string StoreName { get; set; }
 
         /// <summary>
-        /// StoreAddress
+        /// Store Address
         /// </summary>
         public string StoreAddress { get; set; }
         /// <summary>
@@ -208,66 +246,147 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string CreationOn { get; set; }
         /// <summary>
-        /// FunctionName
+        /// Function Name
         /// </summary>
         public string FunctionName { get; set; }
+
+        /// <summary>
+        /// total Count
+        /// </summary>
         public int totalCount { get; set; }
+
+        /// <summary>
+        /// Created ago
+        /// </summary>
         public string Createdago { get; set; }
+
+        /// <summary>
+        /// Assigned ago
+        /// </summary>
         public string Assignedago { get; set; }
+
+        /// <summary>
+        /// Updated By
+        /// </summary>
         public string UpdatedBy { get; set; }
+
+        /// <summary>
+        /// Updated ago
+        /// </summary>
         public string Updatedago { get; set; }
 
+        /// <summary>
+        /// Task Closure Date
+        /// </summary>
         public string TaskCloureDate { get; set; }
+
+        /// <summary>
+        /// Resolution Time Remaining
+        /// </summary>
         public string ResolutionTimeRemaining { get; set; }
+
+        /// <summary>
+        /// Resolution Over due By
+        /// </summary>
         public string ResolutionOverdueBy { get; set; }
+
+        /// <summary>
+        /// Color Name
+        /// </summary>
         public string ColorName { get; set; }
+
+        /// <summary>
+        /// Color Code 
+        /// </summary>
         public string ColorCode { get; set; }
 
+        /// <summary>
+        /// Ticket ID
+        /// </summary>
         public int TicketID { get; set; }
     }
 
 
     public class TaskFilterAssignBymeModel
     {
+        /// <summary>
+        /// task id
+        /// </summary>
         public int? taskid { get; set; }
+
+        /// <summary>
+        /// Department
+        /// </summary>
         public int? Department { get; set; }
+
+        /// <summary>
+        /// task title
+        /// </summary>
         public string tasktitle { get; set; }
+
+        /// <summary>
+        /// task status
+        /// </summary>
         public int? taskstatus { get; set; }
+
+        /// <summary>
+        /// ticket ID
+        /// </summary>
         public int? ticketID { get; set; }
+
+        /// <summary>
+        /// function ID
+        /// </summary>
         public int? functionID { get; set; }
+
+        /// <summary>
+        /// Created On From
+        /// </summary>
         public string CreatedOnFrom { get; set; }
+
+        /// <summary>
+        /// Created On To
+        /// </summary>
         public string CreatedOnTo { get; set; }
+
+        /// <summary>
+        /// Assign to Id
+        /// </summary>
         public int? AssigntoId { get; set; }
+
+        /// <summary>
+        /// created ID
+        /// </summary>
         public int? createdID { get; set; }
+
+        /// <summary>
+        /// task with Ticket
+        /// </summary>
         public string taskwithTicket { get; set; }
+
+        /// <summary>
+        /// task with Claim
+        /// </summary>
         public string taskwithClaim { get; set; }
+
+        /// <summary>
+        /// claim ID
+        /// </summary>
         public int? claimID { get; set; }
+
+        /// <summary>
+        /// Priority
+        /// </summary>
         public int? Priority { get; set; }
+
+        /// <summary>
+        /// user id
+        /// </summary>
         public int? userid { get; set; }
     }
 
     public class TaskFilterAssignBymeResponseModel
     {
-        //public int taskid { get; set; }
-        //public string Department { get; set; }
-        //public string storeName { get; set; }
-        //public string StoreAddress { get; set; }
-        //public string tasktitle { get; set; }
-        //public string taskstatus { get; set; }
-        //public int ticketID { get; set; }
-        //public int functionID { get; set; }
-        //public string CreatedOn { get; set; }
-        //public string AssigntoId { get; set; }
-        //public string CreatedBy { get; set; }
-        //public string taskwithTicket { get; set; }
-        //public string taskwithClaim { get; set; }
-        //public int claimID { get; set; }
-        //public string Priority { get; set; }
-        //public int totalCount { get; set; }
-        //public string modifedOn { get; set; }
-        //public string ModifiedBy { get; set; }
-
-
 
         /// <summary>
         /// Ticketing TaskID
@@ -331,18 +450,60 @@ namespace Easyrewardz_TicketSystem.Model
         /// FunctionName
         /// </summary>
         public string FunctionName { get; set; }
+
+        /// <summary>
+        /// total Count
+        /// </summary>
         public int totalCount { get; set; }
+
+        /// <summary>
+        /// Created ago
+        /// </summary>
         public string Createdago { get; set; }
+
+        /// <summary>
+        /// Assigned ago
+        /// </summary>
         public string Assignedago { get; set; }
+
+        /// <summary>
+        /// Updated By
+        /// </summary>
         public string UpdatedBy { get; set; }
+
+        /// <summary>
+        /// Updated ago
+        /// </summary>
         public string Updatedago { get; set; }
 
+        /// <summary>
+        /// Task Closure Date
+        /// </summary>
         public string TaskCloureDate { get; set; }
+
+        /// <summary>
+        /// Resolution Time Remaining
+        /// </summary>
         public string ResolutionTimeRemaining { get; set; }
+
+        /// <summary>
+        /// Resolution Over due By
+        /// </summary>
         public string ResolutionOverdueBy { get; set; }
+
+        /// <summary>
+        /// Color Name
+        /// </summary>
         public string ColorName { get; set; }
+
+        /// <summary>
+        /// Color Code
+        /// </summary>
         public string ColorCode { get; set; }
 
+        /// <summary>
+        /// Ticket ID
+        /// </summary>
         public int TicketID { get; set; }
     }
 
@@ -353,43 +514,79 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class TaskFilterTicketByModel
     {
+        /// <summary>
+        /// task id
+        /// </summary>
         public int? taskid { get; set; }
+
+        /// <summary>
+        /// Department
+        /// </summary>
         public int? Department { get; set; }
+
+        /// <summary>
+        /// task title
+        /// </summary>
         public string tasktitle { get; set; }
+
+        /// <summary>
+        /// task status
+        /// </summary>
         public int? taskstatus { get; set; }
+
+        /// <summary>
+        /// ticket ID
+        /// </summary>
         public int? ticketID { get; set; }
+
+        /// <summary>
+        /// function ID
+        /// </summary>
         public int? functionID { get; set; }
+
+        /// <summary>
+        /// Created On From
+        /// </summary>
         public string CreatedOnFrom { get; set; }
+
+        /// <summary>
+        /// Created On To
+        /// </summary>
         public string CreatedOnTo { get; set; }
+
+        /// <summary>
+        /// Assign to Id
+        /// </summary>
         public int? AssigntoId { get; set; }
+
+        /// <summary>
+        /// created ID
+        /// </summary>
         public int? createdID { get; set; }
+
+        /// <summary>
+        /// task with Ticket
+        /// </summary>
         public string taskwithTicket { get; set; }
+
+        /// <summary>
+        /// task with Claim
+        /// </summary>
         public string taskwithClaim { get; set; }
+
+        /// <summary>
+        /// claim ID
+        /// </summary>
         public int? claimID { get; set; }
+
+        /// <summary>
+        /// Priority
+        /// </summary>
         public int? Priority { get; set; }
     }
 
     public class TaskFilterTicketByResponseModel
     {
-        //public int taskid { get; set; }
-        //public string Department { get; set; }
-        //public string storeName { get; set; }
-        //public string StoreAddress { get; set; }
-        //public string tasktitle { get; set; }
-        //public string taskstatus { get; set; }
-        //public int ticketID { get; set; }
-        //public int functionID { get; set; }
-        //public string CreatedOn { get; set; }
-        //public string AssigntoId { get; set; }
-        //public string CreatedBy { get; set; }
-        //public string taskwithTicket { get; set; }
-        //public string taskwithClaim { get; set; }
-        //public int claimID { get; set; }
-        //public string Priority { get; set; }
-        //public int totalCount { get; set; }
-        //public string modifedOn { get; set; }
-        //public string ModifiedBy { get; set; }
-
 
         /// <summary>
         /// Ticketing TaskID
@@ -429,7 +626,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string Assignto { get; set; }
         /// <summary>
-        ///Duedate
+        ///Due date
         /// </summary>
         public DateTime Duedate { get; set; }
         /// <summary>
@@ -437,122 +634,361 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string PriorityName { get; set; }
         /// <summary>
-        /// StoreName
+        /// Store Name
         /// </summary>
         public string StoreName { get; set; }
 
         /// <summary>
-        /// StoreAddress
+        /// Store Address
         /// </summary>
         public string StoreAddress { get; set; }
+
         /// <summary>
-        /// CreationOn
+        /// Creation On
         /// </summary>
         public string CreationOn { get; set; }
+
         /// <summary>
-        /// FunctionName
+        /// Function Name
         /// </summary>
         public string FunctionName { get; set; }
+
+        /// <summary>
+        /// total Count
+        /// </summary>
         public int totalCount { get; set; }
+
+        /// <summary>
+        /// Created ago
+        /// </summary>
         public string Createdago { get; set; }
+
+        /// <summary>
+        /// Assigned ago
+        /// </summary>
         public string Assignedago { get; set; }
+
+        /// <summary>
+        /// Updated By
+        /// </summary>
         public string UpdatedBy { get; set; }
+
+        /// <summary>
+        /// Updated ago
+        /// </summary>
         public string Updatedago { get; set; }
 
+        /// <summary>
+        /// Task Closure Date
+        /// </summary>
         public string TaskCloureDate { get; set; }
+
+        /// <summary>
+        /// Resolution Time Remaining
+        /// </summary>
         public string ResolutionTimeRemaining { get; set; }
+
+        /// <summary>
+        /// Resolution Over due By
+        /// </summary>
         public string ResolutionOverdueBy { get; set; }
+
+        /// <summary>
+        /// Color Name
+        /// </summary>
         public string ColorName { get; set; }
+
+        /// <summary>
+        /// Color Code
+        /// </summary>
         public string ColorCode { get; set; }
 
+        /// <summary>
+        /// Ticket ID
+        /// </summary>
         public int TicketID { get; set; }
     }
 
 
     public class StoreTaskComment
     {
+        /// <summary>
+        /// Task ID
+        /// </summary>
         public int TaskID { get; set; }
+
+        /// <summary>
+        /// Comment
+        /// </summary>
         public string Comment { get; set; }
+
+        /// <summary>
+        /// Task For
+        /// </summary>
         public int TaskFor { get; set; }
     }
 
     public class TaskCommentModel
     {
+        /// <summary>
+        /// Task Comment ID
+        /// </summary>
         public int TaskCommentID { get; set; }
+
+        /// <summary>
+        /// Task ID
+        /// </summary>
         public int TaskID { get; set; }
+
+        /// <summary>
+        /// Comment
+        /// </summary>
         public string Comment { get; set; }
+
+        /// <summary>
+        /// Comment By
+        /// </summary>
         public int CommentBy { get; set; }
+
+        /// <summary>
+        /// Commented Date
+        /// </summary>
         public string CommentedDate { get; set; }
+
+        /// <summary>
+        /// Comment By Name
+        /// </summary>
         public string CommentByName { get; set; }
+
+        /// <summary>
+        /// Commented Diff
+        /// </summary>
         public string CommentedDiff { get; set; }
+
+        /// <summary>
+        /// Is Comment On Assign
+        /// </summary>
         public int IsCommentOnAssign { get; set; }
+
+        /// <summary>
+        /// New Agent ID
+        /// </summary>
         public int NewAgentID { get; set; }
+
+        /// <summary>
+        /// New Agent Name
+        /// </summary>
         public string NewAgentName { get; set; }
+
+        /// <summary>
+        /// Old Agent ID
+        /// </summary>
         public int OldAgentID { get; set; }
+
+        /// <summary>
+        /// Old Agent Name
+        /// </summary>
         public string OldAgentName { get; set; }
     }
 
     public class CustomTaskHistory
     {
+        /// <summary>
+        /// Name
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Action
+        /// </summary>
         public string Action { get; set; }
+
+        /// <summary>
+        /// Date and Time
+        /// </summary>
         public string DateandTime { get; set; }
     }
 
     public class StoreCampaign
     {
+        /// <summary>
+        /// Campaign Type ID
+        /// </summary>
         public int CampaignTypeID { get; set; }
+
+        /// <summary>
+        /// Campaign Name
+        /// </summary>
         public string CampaignName { get; set; }
+
+        /// <summary>
+        /// Campaign Script
+        /// </summary>
         public string CampaignScript { get; set; }
+
+        /// <summary>
+        /// Campaign Script Less
+        /// </summary>
         public string CampaignScriptLess { get; set; }
+
+        /// <summary>
+        /// Contact Count
+        /// </summary>
         public int ContactCount { get; set; }
+
+        /// <summary>
+        /// Campaign End Date
+        /// </summary>
         public string CampaignEndDate { get; set; }
+
+        /// <summary>
+        /// Store Campaign Customer List
+        /// </summary>
         public List<StoreCampaignCustomer> StoreCampaignCustomerList { get; set; }
     }
 
     public class StoreCampaignCustomer
     {
+        /// <summary>
+        /// Campaign Customer ID
+        /// </summary>
         public int CampaignCustomerID { get; set; }
+
+        /// <summary>
+        /// Customer ID
+        /// </summary>
         public int CustomerID { get; set; }
+
+        /// <summary>
+        /// Campaign Type Date
+        /// </summary>
         public string CampaignTypeDate { get; set; }
+
+        /// <summary>
+        /// Campaign Type ID
+        /// </summary>
         public int CampaignTypeID { get; set; }
+
+        /// <summary>
+        /// Campaign Status
+        /// </summary>
         public int CampaignStatus { get; set; }
+
+        /// <summary>
+        /// Response
+        /// </summary>
         public int Response { get; set; }
+
+        /// <summary>
+        /// Call Re Scheduled To
+        /// </summary>
         public string CallReScheduledTo { get; set; }
+
+        /// <summary>
+        /// Customer Name
+        /// </summary>
         public string CustomerName { get; set; }
+
+        /// <summary>
+        /// Customer Phone Number
+        /// </summary>
         public string CustomerPhoneNumber { get; set; }
+
+        /// <summary>
+        /// Customer Email Id
+        /// </summary>
         public string CustomerEmailId { get; set; }
+
+        /// <summary>
+        /// Date Of Birth 
+        /// </summary>
         public string DOB { get; set; }
+
+        /// <summary>
+        /// No Of Times Not Contacted
+        /// </summary>
         public int NoOfTimesNotContacted { get; set; }
+
+        /// <summary>
+        /// Campaign Response List
+        /// </summary>
         public List<CampaignResponse> CampaignResponseList { get; set; }
     }
 
     public class CampaignStatusResponse
     {
+        /// <summary>
+        /// Campaign Status List
+        /// </summary>
         public List<CampaignStatus> CampaignStatusList { get; set; }
+
+        /// <summary>
+        /// Campaign Response List
+        /// </summary>
         public List<CampaignResponse> CampaignResponseList { get; set; }
     }
 
     public class CampaignStatus
     {
+        /// <summary>
+        /// Status ID
+        /// </summary>
         public int StatusID { get; set; }
+
+        /// <summary>
+        /// Status Name
+        /// </summary>
         public string StatusName { get; set; }
+
+        /// <summary>
+        /// Status Name ID
+        /// </summary>
         public int StatusNameID { get; set; }
     }
 
     public class CampaignResponse
     {
+        /// <summary>
+        /// Response ID
+        /// </summary>
         public int ResponseID { get; set; }
+
+        /// <summary>
+        /// Response
+        /// </summary>
         public string Response { get; set; }
+
+        /// <summary>
+        /// Status Name ID
+        /// </summary>
         public int StatusNameID { get; set; }
     }
 
     public class StoreCampaignCustomerRequest
     {
+        /// <summary>
+        /// Campaign Customer ID
+        /// </summary>
         public int CampaignCustomerID { get; set; }
+
+        /// <summary>
+        /// Status Name ID
+        /// </summary>
         public int StatusNameID { get; set; }
+
+        /// <summary>
+        /// Response ID
+        /// </summary>
         public int ResponseID { get; set; }
+
+        /// <summary>
+        /// Call ReScheduled To
+        /// </summary>
         public string CallReScheduledTo { get; set; }
+
+        /// <summary>
+        /// Call ReScheduled To Date
+        /// </summary>
         public DateTime? CallReScheduledToDate { get; set; }
     }
 
@@ -710,26 +1146,75 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class StoreTaskWithTicket
     {
+        /// <summary>
+        /// Store Task Master Details
+        /// </summary>
         public StoreTaskMaster StoreTaskMasterDetails { get; set; }
+
+        /// <summary>
+        /// Task Ticket Details
+        /// </summary>
         public TaskTicketDetails TaskTicketDetails { get; set; }
     }
 
     public class StoreTaskProcressBar
     {
+        /// <summary>
+        /// Progress
+        /// </summary>
         public int Progress { get; set; }
+
+        /// <summary>
+        /// Progress In
+        /// </summary>
         public string ProgressIn { get; set; }
+
+        /// <summary>
+        /// Remaining Time
+        /// </summary>
         public string RemainingTime { get; set; }
+
+        /// <summary>
+        /// Closure Task Date
+        /// </summary>
         public string ClosureTaskDate { get; set; }
+
+        /// <summary>
+        /// Color Name
+        /// </summary>
         public string ColorName { get; set; }
+
+        /// <summary>
+        /// Color Code
+        /// </summary>
         public string ColorCode { get; set; }
     }
 
     public class AssignTaskModel
     {
+        /// <summary>
+        /// Task ID
+        /// </summary>
         public string TaskID { get; set; }
+
+        /// <summary>
+        /// Agent ID
+        /// </summary>
         public int AgentID { get; set; }
+
+        /// <summary>
+        /// Comment On Assign
+        /// </summary>
         public string CommentOnAssign { get; set; }
+
+        /// <summary>
+        /// Is Comment On Assign
+        /// </summary>
         public int IsCommentOnAssign { get; set; }
+
+        /// <summary>
+        /// Old Agent ID
+        /// </summary>
         public int OldAgentID { get; set; }
     }
 

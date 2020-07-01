@@ -99,71 +99,211 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class StoreCampaignSearchOrder
     {
+        /// <summary>
+        /// program Code
+        /// </summary>
         public string programCode { get; set; }
+
+        /// <summary>
+        /// mobile Number
+        /// </summary>
         public string mobileNumber { get; set; }
+
+        /// <summary>
+        /// security Token
+        /// </summary>
         public string securityToken { get; set; }
     }
 
     public class StoresCampaignStatusResponse
     {
+        /// <summary>
+        /// user atv details
+        /// </summary>
         public CustomerpopupDetails useratvdetails { get; set; }
+
+        /// <summary>
+        /// campaign key insight
+        /// </summary>
         public StoreCampaignKeyInsight campaignkeyinsight { get; set; }
+
+        /// <summary>
+        /// campaign recommended
+        /// </summary>
         public List<StoreCampaignRecommended> campaignrecommended { get; set; }
+
+        /// <summary>
+        /// last transaction details
+        /// </summary>
         public StoreCampaignLastTransactionDetails lasttransactiondetails { get; set; }
+
+        /// <summary>
+        /// Share Campaign Via Setting Modal
+        /// </summary>
         public ShareCampaignViaSettingModal ShareCampaignViaSettingModal { get; set; }
 
     }
 
     public class CustomerpopupDetails
     {
+        /// <summary>
+        /// name
+        /// </summary>
         public string name { get; set; }
+
+        /// <summary>
+        /// mobile Number
+        /// </summary>
         public string mobileNumber { get; set; }
+
+        /// <summary>
+        /// tier name
+        /// </summary>
         public string tiername { get; set; }
+
+        /// <summary>
+        /// life Time Value
+        /// </summary>
         public string lifeTimeValue { get; set; }
+
+        /// <summary>
+        /// visit Count
+        /// </summary>
         public string visitCount { get; set; }
 
     }
 
     public class StoreCampaignLogo
     {
+        /// <summary>
+        /// Id
+        /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// name
+        /// </summary>
         public string name { get; set; }
     }
 
     public class StoreCampaignKeyInsight
     {
+        /// <summary>
+        /// mobile Number
+        /// </summary>
         public string mobileNumber { get; set; }
+
+        /// <summary>
+        /// insight Text
+        /// </summary>
         public string insightText { get; set; }
+
+        /// <summary>
+        /// Show Key Insights
+        /// </summary>
         public bool ShowKeyInsights { get; set; } = true;
     }
 
     public class StoreCampaignRecommended
     {
+        /// <summary>
+        /// mobile Number
+        /// </summary>
         public string mobileNumber { get; set; }
+
+        /// <summary>
+        /// item Code
+        /// </summary>
         public string itemCode { get; set; }
+
+        /// <summary>
+        /// category
+        /// </summary>
         public string category { get; set; }
+
+        /// <summary>
+        /// sub Category
+        /// </summary>
         public string subCategory { get; set; }
+
+        /// <summary>
+        /// brand
+        /// </summary>
         public string brand { get; set; }
+
+        /// <summary>
+        /// color
+        /// </summary>
         public string color { get; set; }
+
+        /// <summary>
+        /// size
+        /// </summary>
         public string size { get; set; }
+
+        /// <summary>
+        /// price
+        /// </summary>
         public string price { get; set; }
+
+        /// <summary>
+        /// url
+        /// </summary>
         public string url { get; set; }
+
+        /// <summary>
+        /// imageURL
+        /// </summary>
         public string imageURL { get; set; }
     }
     public class StoreCampaignLastTransactionDetails
     {
+        /// <summary>
+        /// bill No
+        /// </summary>
         public string billNo { get; set; }
+
+        /// <summary>
+        /// bill Date
+        /// </summary>
         public string billDate { get; set; }
+
+        /// <summary>
+        /// store Name
+        /// </summary>
         public string storeName { get; set; }
+
+        /// <summary>
+        /// amount
+        /// </summary>
         public string amount { get; set; }
+
+        /// <summary>
+        /// item Details
+        /// </summary>
         public List<StoreCampaignLastTransactionitemDetailsDetails> itemDetails { get; set; }
     }
 
     public class StoreCampaignLastTransactionitemDetailsDetails
     {
+        /// <summary>
+        /// mobile No
+        /// </summary>
         public string mobileNo { get; set; }
+
+        /// <summary>
+        /// article
+        /// </summary>
         public string article { get; set; }
+
+        /// <summary>
+        /// quantity
+        /// </summary>
         public string quantity { get; set; }
+
+        /// <summary>
+        /// amount
+        /// </summary>
         public string amount { get; set; }
 
     }

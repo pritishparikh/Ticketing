@@ -7,40 +7,83 @@ namespace Easyrewardz_TicketSystem.Model
     public class StoreCampaignModel3
     {
         //public List<StoreCampaignSettingModel> CampaignSetting { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public  StoreCampaignSettingTimer CampaignSettingTimer { get; set; }
     } 
 
 
     public class StoreCampaignSettingModel
     {
+        /// <summary>
+        /// ID
+        /// </summary>
         public int ID { get; set; }
 
+        /// <summary>
+        /// Campaign Name
+        /// </summary>
         public string CampaignName { get; set; }
 
+        /// <summary>
+        /// Campaign Code
+        /// </summary>
         public string CampaignCode { get; set; }
 
+        /// <summary>
+        /// Program code
+        /// </summary>
         public string Programcode { get; set; }
 
-
+        /// <summary>
+        /// Sms Flag
+        /// </summary>
         public bool SmsFlag { get; set; }
 
+        /// <summary>
+        /// Email Flag
+        /// </summary>
         public bool EmailFlag { get; set; }
 
+        /// <summary>
+        /// Messenger Flag
+        /// </summary>
         public bool MessengerFlag { get; set; }
 
+        /// <summary>
+        /// Bot Flag
+        /// </summary>
         public bool BotFlag { get; set; }
 
-
+        /// <summary>
+        /// Created By
+        /// </summary>
         public int CreatedBy { get; set; }
 
-         public string CreatedOnName { get; set; }
+        /// <summary>
+        /// Created On Name
+        /// </summary>
+        public string CreatedOnName { get; set; }
 
+        /// <summary>
+        /// Created On
+        /// </summary>
         public string CreatedOn { get; set; }
 
-
+        /// <summary>
+        /// Modified By
+        /// </summary>
         public int ModifiedBy { get; set; }
 
+        /// <summary>
+        /// Modified By Name
+        /// </summary>
         public string ModifiedByName { get; set; }
+
+        /// <summary>
+        /// Modified On
+        /// </summary>
         public string ModifiedOn { get; set; }
 
     }

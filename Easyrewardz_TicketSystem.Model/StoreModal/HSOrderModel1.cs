@@ -207,6 +207,9 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string ActionTypeName { get; set; }
 
+        /// <summary>
+        /// Order Delivered Items
+        /// </summary>
         public List<OrderDeliveredItem> orderDeliveredItems { get; set; }
     }
 
@@ -268,6 +271,9 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class OrderDeliveredDetails
     {
+        /// <summary>
+        /// OrderDelivereds
+        /// </summary>
         public List<OrderDelivered> orderDelivereds { get; set; }
 
         /// <summary>
@@ -354,6 +360,9 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class ShipmentAssignedDetails
     {
+        /// <summary>
+        /// Shipment Assigned
+        /// </summary>
         public List<ShipmentAssigned> shipmentAssigned { get; set; }
 
         /// <summary>
@@ -564,6 +573,9 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string StatusName { get; set; }
 
+        /// <summary>
+        /// OrderReturnsItems
+        /// </summary>
         public List<OrderReturnsItem> orderReturnsItems { get; set; }
     }
 
@@ -603,6 +615,9 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class OrderReturnsDetails
     {
+        /// <summary>
+        /// orderReturns
+        /// </summary>
         public List<OrderReturns> orderReturns { get; set; }
 
         /// <summary>
