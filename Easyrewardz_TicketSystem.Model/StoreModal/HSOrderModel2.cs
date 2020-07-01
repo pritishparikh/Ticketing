@@ -418,14 +418,33 @@ namespace Easyrewardz_TicketSystem.Model
 
     public enum SMSWhtappTemplate
     {
+        /// <summary>
+        /// Shopping Bag Convert To Order
+        /// </summary>
         [Description("ShoppingBagConvertToOrder")]
         ShoppingBagConvertToOrder,
+
+        /// <summary>
+        /// AWB Assigned
+        /// </summary>
         [Description("AWBAssigned")]
         AWBAssigned,
+
+        /// <summary>
+        /// Pick up Scheduled
+        /// </summary>
         [Description("PickupScheduled")]
         PickupScheduled,
+
+        /// <summary>
+        /// Shipped
+        /// </summary>
         [Description("Shipped")]
         Shipped,
+
+        /// <summary>
+        /// Delivered
+        /// </summary>
         [Description("Delivered")]
         Delivered
     }

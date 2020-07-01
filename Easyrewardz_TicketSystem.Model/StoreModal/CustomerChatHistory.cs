@@ -29,12 +29,24 @@ namespace Easyrewardz_TicketSystem.Model
     }
     public class GetChatHistoryModel
     {
+        /// <summary>
+        /// max Page Size
+        /// </summary>
         const int maxPageSize = 20;
 
+        /// <summary>
+        /// Chat Id
+        /// </summary>
         public int ChatId { get; set; }
 
+        /// <summary>
+        /// page Number
+        /// </summary>
         public int pageNumber { get; set; } = 1;
 
+        /// <summary>
+        /// page Size
+        /// </summary>
         public int _pageSize { get; set; } = 10;
 
         public int pageSize
