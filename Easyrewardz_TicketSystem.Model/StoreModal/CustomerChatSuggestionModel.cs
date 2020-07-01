@@ -61,6 +61,6 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// <summary>
         ///TagName
         /// </summary>
-        public string TagName { get; set; }
+        public string TagName { get; set; } 
     }
 }
