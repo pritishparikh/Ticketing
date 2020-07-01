@@ -167,7 +167,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// Get Store Aler tList
+        /// Get Store Alert List
         /// </summary>
         /// <param name="alertId"></param>
         /// <returns></returns>

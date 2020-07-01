@@ -62,6 +62,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// get customer chat session
         /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="ProgramCode"></param>
         /// <returns></returns>
         public ChatSessionModel GetChatSession(int TenantId, string ProgramCode)
         {
@@ -125,7 +127,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// get recent chat history of agents
         /// </summary>
-        /// 
+        /// <param name="TenantId"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="CustomerID"></param>
+        /// <returns></returns>
         public List<AgentRecentChatHistory> GetAgentRecentChat(int TenantId,string ProgramCode, int CustomerID)
         {
             MySqlCommand cmd = new MySqlCommand();
@@ -197,11 +202,11 @@ namespace Easyrewardz_TicketSystem.Services
 
         /// <summary>
         /// Get Agent Chat History
+        /// </summary>
         /// <param name="TenantId"></param>
         /// <param name="StoreManagerID"></param>
         /// <param name="ProgramCode"></param>
-        /// </summary>
-        /// 
+        /// <returns></returns>        
         public List<AgentCustomerChatHistory> GetAgentChatHistory(int TenantId, int StoreManagerID, string ProgramCode)
         {
             MySqlCommand cmd = new MySqlCommand();
@@ -276,7 +281,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Agent List For Ongoin Chat
         /// </summary>
-        /// 
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         public List<AgentRecentChatHistory> GetAgentList(int TenantID)
         {
             MySqlCommand cmd = new MySqlCommand();
@@ -344,11 +350,12 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
-        ///  <param name="ItemID"></param>
-        ///   <param name="ImageUrl"></param>
-        ///    <param name="CreatedBy"></param>
+        /// <param name="ClientAPIUrl"></param>
+        /// <param name="SearchText"></param>
+        /// <param name="ItemID"></param>
+        /// <param name="ImageUrl"></param>
+        /// <param name="CreatedBy"></param>
         /// <returns></returns>
-        /// 
         public int InsertCardImageUpload(int TenantID, string ProgramCode,string ClientAPIUrl, string SearchText, string ItemID, string ImageUrl, int CreatedBy)
         {
             int success = 0;
@@ -465,11 +472,12 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Approve Reject Card Image
         /// </summary>
+        /// <param name="ID"></param>
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
-        ///  <param name="ItemID"></param>
-        ///   <param name="AddToLibrary"></param>
-        ///   <param name="ModifiedBy"></param>
+        /// <param name="ItemID"></param>
+        /// <param name="AddToLibrary"></param>
+        /// <param name="ModifiedBy"></param>
         /// <returns></returns>
         public int ApproveRejectCardImage(int ID,int TenantID, string ProgramCode, string ItemID, bool AddToLibrary, int ModifiedBy)
         {
@@ -511,9 +519,10 @@ namespace Easyrewardz_TicketSystem.Services
 
         /// <summary>
         /// Get Card Image Upload log
+        /// </summary>
+        /// <param name="ListingFor"></param>
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
-        /// </summary>
         /// <returns></returns>
         public List<ChatCardImageUploadModel> GetCardImageUploadlog(int ListingFor, int TenantID, string ProgramCode)
         {
@@ -598,15 +607,14 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        ///Insert New CardItem Configuration
+        /// Insert New CardItem Configuration
         /// </summary>
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
-        ///  <param name="CardItem"></param>
-        ///   <param name="IsEnabled"></param>
-        ///    <param name="CreatedBy"></param>
+        /// <param name="CardItem"></param>
+        /// <param name="IsEnabled"></param>
+        /// <param name="CreatedBy"></param>
         /// <returns></returns>
-        /// 
         public int InsertNewCardItemConfiguration(int TenantID, string ProgramCode, string CardItem, bool IsEnabled, int CreatedBy)
         {
             int success = 0;
@@ -646,15 +654,14 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        ///Update Card Item Configuration
+        /// Update Card Item Configuration
         /// </summary>
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
-        ///  <param name="EnabledCardItems"></param>
-        ///   <param name="DisabledCardItems"></param>
-        ///    <param name="ModifiedBy"></param>
+        /// <param name="EnabledCardItems"></param>
+        /// <param name="DisabledCardItems"></param>
+        /// <param name="ModifiedBy"></param>
         /// <returns></returns>
-        /// 
         public int UpdateCardItemConfiguration(int TenantID, string ProgramCode, string EnabledCardItems, string DisabledCardItems, int ModifiedBy)
         {
             int success = 0;
@@ -693,10 +700,10 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        ///Get Card Configuration List
+        /// Get Card Configuration List
+        /// </summary>
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
-        /// </summary>
         /// <returns></returns>
         public List<ChatCardConfigurationModel> GetCardConfiguration(int TenantID, string ProgramCode)
         {
@@ -774,13 +781,14 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        ///Update StoreManager chat status
+        /// Update StoreManager chat status
+        /// </summary>
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
-        ///  <param name="ChatID"></param>
-        ///   <param name="ChatStatusID"></param>
+        /// <param name="ChatID"></param>
+        /// <param name="ChatStatusID"></param>
+        /// <param name="StoreManagerID"></param>
         /// <returns></returns>
-        
         public int UpdateStoreManagerChatStatus(int TenantID, string ProgramCode, int ChatID, int ChatStatusID, int StoreManagerID)
         {
             int success = 0;
@@ -820,14 +828,13 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        ///Update Card Image Approval
+        /// Update Card Image Approval
         /// </summary>
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
-        ///  <param name="ID"></param>
-        ///    <param name="ModifiedBy"></param>
+        /// <param name="ID"></param>
+        /// <param name="ModifiedBy"></param>
         /// <returns></returns>
-        /// 
         public int UpdateCardImageApproval(int TenantID, string ProgramCode, int ID, int ModifiedBy)
         {
             int success = 0;
@@ -865,10 +872,10 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        ///Get Card Image Approval List
+        /// Get Card Image Approval List
+        /// </summary>
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
-        /// </summary>
         /// <returns></returns>
         public List<CardImageApprovalModel> GetCardImageApprovalList(int TenantID, string ProgramCode)
         {
@@ -948,11 +955,12 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// End Chat Form Customer
         /// </summary>
-        /// <param name="ChatID"></param>
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
+        /// <param name="ChatID"></param>
+        /// <param name="EndChatMessage"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
-
         public int EndCustomerChat(int TenantID, string ProgramCode, int ChatID, string EndChatMessage,int UserID)
         {
             int success = 0;

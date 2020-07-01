@@ -13,10 +13,12 @@ namespace Easyrewardz_TicketSystem.Services
     {
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public HSChatTicketingService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
         /// <summary>
         /// Add Chat Ticket Notes
@@ -62,9 +64,9 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Create Chat Ticket
+        ///  Create Chat Ticket
         /// </summary>
-        /// <param name="searchparams"></param>
+        /// <param name="createChatTickets"></param>
         /// <returns></returns>
         public int CreateChatTicket(CreateChatTickets createChatTickets)
         {
@@ -501,7 +503,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get tickets On View Search click
         /// </summary>
-        /// <param name="searchparams"></param>
+        /// <param name="searchModel"></param>
         /// <returns></returns>
         public List<CustomGetChatTickets> GetTicketsOnSearch(ChatTicketSearch searchModel)
         {

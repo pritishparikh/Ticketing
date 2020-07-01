@@ -215,7 +215,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// Delete HSTimeSlotMaster
+        /// Delete Time Slot Master
         /// </summary>
         /// <param name="SlotID"></param>
         /// <returns></returns>
@@ -260,6 +260,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get HSTimeSlotMaster List
         /// </summary>
+        /// <param name="SlotID"></param>
+        /// <param name="StoreID"></param>
         /// <returns></returns>
 
         [HttpPost]

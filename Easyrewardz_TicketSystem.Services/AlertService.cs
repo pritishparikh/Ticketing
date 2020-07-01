@@ -16,10 +16,12 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public AlertService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
         /// <summary>
         /// Create Alert 

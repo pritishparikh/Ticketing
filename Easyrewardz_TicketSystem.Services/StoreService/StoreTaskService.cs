@@ -377,10 +377,11 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Update Task Status
+        /// Submit Task
         /// </summary>
         /// <param name="taskMaster"></param>
-        /// <param name="taskMaster"></param>
+        /// <param name="UserID"></param>
+        /// <param name="TenantId"></param>
         /// <returns></returns>
         public int SubmitTask(StoreTaskMaster taskMaster, int UserID, int TenantId)
         {
@@ -418,10 +419,11 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// GetUserList
+        ///  Get User List
         /// </summary>
         /// <param name="TenantID"></param>
         /// <param name="TaskID"></param>
+        /// <param name="TaskFor"></param>
         /// <returns></returns>
         public List<CustomStoreUserList> GetUserList(int TenantID, int TaskID, int TaskFor)
         {
@@ -475,12 +477,11 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// AssignTask
+        /// Assign Task
         /// </summary>
-        /// <param name="TaskID"></param>
+        /// <param name="assignTaskModel"></param>
         /// <param name="TenantID"></param>
         /// <param name="UserID"></param>
-        /// <param name="AgentID"></param>
         /// <returns></returns>
         public int AssignTask(AssignTaskModel assignTaskModel, int TenantID, int UserID)
         {
@@ -596,7 +597,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Get Store Ticketing TaskByTaskID
+        /// Get Store Ticketing Task By Task ID
         /// </summary>
         /// <param name="TaskID"></param>
         /// <param name="TenantID"></param>
@@ -1437,9 +1438,9 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        /// Get task Data for task for ticket data
+        /// Get Task Ticket Data
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
 
         public List<TaskFilterTicketByResponseModel> GetTaskTicketData(TaskFilterTicketByModel model)
@@ -1517,6 +1518,13 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        /// <summary>
+        /// Get Store Campaign Customer By Status
+        /// </summary>
+        /// <param name="statusID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public List<StoreCampaign> GetStoreCampaignCustomerByStatus(string statusID, int TenantID, int UserID)
         {
 

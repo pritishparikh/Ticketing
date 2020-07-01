@@ -13,6 +13,9 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Campaign Setting List
         /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="ProgramCode"></param>
         /// <returns></returns>
         public StoreCampaignModel3 GetStoreCampignSetting(int TenantId, int UserId, string ProgramCode)
         {
@@ -122,9 +125,10 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        /// Update Campaign Setting
+        ///  Update Campaign Max Click Timer
         /// </summary>
-        /// <param name="CampaignModel"></param>
+        /// <param name="storeCampaignSettingTimer"></param>
+        /// <param name="ModifiedBy"></param>
         /// <returns></returns>
         public int UpdateCampaignMaxClickTimer(StoreCampaignSettingTimer storeCampaignSettingTimer, int ModifiedBy)
         {
@@ -227,7 +231,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// GetAppointmentConfiguration
+        /// Get Appointment Configuration
         /// </summary>
         /// <param name="TenantId"></param>
         /// <param name="UserId"></param>
@@ -373,7 +377,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// GetLanguageDetails
+        /// Get Language Details
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>
@@ -437,7 +441,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// InsertLanguageDetails
+        /// Insert Language Details
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>
@@ -479,7 +483,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// GetSelectedLanguageDetails
+        /// Get Selected Language Details
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>
@@ -546,7 +550,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// DeleteSelectedLanguage
+        /// Delete Selected Language
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>

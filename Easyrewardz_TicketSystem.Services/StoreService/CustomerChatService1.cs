@@ -385,7 +385,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// GetTimeSlot
+        /// Get Time Slot
         /// </summary>
         /// <param name="userMasterID"></param>
         /// <param name="tenantID"></param>
@@ -471,6 +471,13 @@ namespace Easyrewardz_TicketSystem.Services
             return lstdateofSchedule;
         }
 
+        /// <summary>
+        /// Send Message To Customer For Visit
+        /// </summary>
+        /// <param name="appointmentMaster"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <param name="CreatedBy"></param>
+        /// <returns></returns>
         public int SendMessageToCustomerForVisit(AppointmentMaster appointmentMaster, string ClientAPIURL, int CreatedBy)
         {
             MySqlCommand cmd = new MySqlCommand();

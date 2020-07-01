@@ -17,10 +17,12 @@ namespace Easyrewardz_TicketSystem.Services
 
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public ModulesSettingService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
         #region Claim Attachment Setting
 

@@ -16,6 +16,7 @@ namespace Easyrewardz_TicketSystem.Services
         MySqlConnection conn = new MySqlConnection();
         private readonly string rootPath;
 
+        #region Constructor
         public StoreFileUploadService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
@@ -25,6 +26,22 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
             rootPath = RootPath;
         }
+        #endregion
+
+        /// <summary>
+        /// Create File Upload Log
+        /// </summary>
+        /// <param name="tenantid"></param>
+        /// <param name="filename"></param>
+        /// <param name="isuploaded"></param>
+        /// <param name="errorlogfilename"></param>
+        /// <param name="successlogfilename"></param>
+        /// <param name="createdby"></param>
+        /// <param name="filetype"></param>
+        /// <param name="succesFilepath"></param>
+        /// <param name="errorFilepath"></param>
+        /// <param name="fileuploadFor"></param>
+        /// <returns></returns>
         public int CreateFileUploadLog(int tenantid, string filename, bool isuploaded, string errorlogfilename, string successlogfilename, int createdby, string filetype, string succesFilepath, string errorFilepath, int fileuploadFor)
         {
             int count = 0;
@@ -69,6 +86,12 @@ namespace Easyrewardz_TicketSystem.Services
             return count;
         }
 
+        /// <summary>
+        /// Get File Upload Logs
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="fileuploadFor"></param>
+        /// <returns></returns>
         public List<FileUploadLogs> GetFileUploadLogs(int tenantId, int fileuploadFor)
         {
             List<FileUploadLogs> objFileUploadLogLst = new List<FileUploadLogs>();

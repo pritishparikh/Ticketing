@@ -27,7 +27,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Search the Report
         /// </summary>
-        /// <param name="StoreReportModel"></param>
+        /// <param name="searchModel"></param>
+        /// <param name="StoreUserList"></param>
         /// <returns></returns>
         public int GetStoreReportSearch(StoreReportModel searchModel, List<StoreUserListing> StoreUserList)
         {
@@ -162,9 +163,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Download the Report
         /// </summary>
-        /// <param name="ScdeduleID"></param>
-        ///  <param name="UserId"></param>
-        ///   <param name="TenantId"></param>
+        /// <param name="ReportID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="StoreUserList"></param>
         /// <returns></returns>
         public string DownloadStoreReportSearch(int ReportID, int UserID, int TenantID, List<StoreUserListing> StoreUserList)
         {
@@ -235,11 +237,11 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-
         /// <summary>
         /// Get List of reports for Download
         /// </summary>
-        /// <param name="StoreReportModel"></param>
+        /// <param name="searchModel"></param>
+        /// <param name="StoreUserList"></param>
         /// <returns></returns>
         public SearchStoreResponseReport GetStoreReportSearchList(StoreReportModel searchModel, List<StoreUserListing> StoreUserList)
         {
@@ -502,6 +504,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="ReportID"></param>
         /// <param name="ReportName"></param>
+        /// <param name="TenantID"></param>
         /// <returns></returns>
         public bool CheckIfReportNameExists(int ReportID, string ReportName, int TenantID)
         {
@@ -537,7 +540,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Schedule
+        /// Schedule Report
         /// </summary>
         /// <param name="ScheduleMaster"></param>
         /// <param name="TenantID"></param>
@@ -603,6 +606,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Store Report List
         /// </summary>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
         public List<ReportModel> StoreReportList(int tenantID)
         {
             List<ReportModel> objReportLst = new List<ReportModel>();
@@ -731,8 +736,11 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Delete StoreReport
+        /// Delete Store Report
         /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="ReportID"></param>
+        /// <returns></returns>
         public int DeleteStoreReport(int tenantID, int ReportID)
         {
             int deleteCount = 0;
@@ -765,9 +773,9 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        /// Save/Update  Store Re[ort
+        /// Save/Update  Store Reeort
         /// </summary>
-        /// <param name="StoreReportRequest"></param>
+        /// <param name="ReportMaster"></param>
         /// <returns></returns>
         public int SaveStoreReport(StoreReportRequest ReportMaster)
         {
@@ -811,7 +819,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get Campaign Names
         /// </summary>
         /// <returns></returns>
-       public  List<CampaignScriptName> GetCampaignNames()
+        public List<CampaignScriptName> GetCampaignNames()
         {
             List<CampaignScriptName> objCampaignList = new List<CampaignScriptName>();
             DataSet ds = new DataSet();

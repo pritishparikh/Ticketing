@@ -16,14 +16,16 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public StoreSLAService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
 
         /// <summary>
-        /// Bind issuetype 
+        /// Bind Function List 
         /// <param name="tenantID"></param>
         /// <param name="SearchText"></param>
         /// </summary>
@@ -181,7 +183,7 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        /// Create SLA 
+        /// Update SLA 
         /// <param name="SLAModel"></param>
         /// </summary>
         public int UpdateStoreSLA(StoreSLAModel SLA)
@@ -286,7 +288,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// GET SLA
         /// <param name="tenantID"></param>
-        /// <param name="SLAFor"></param>
         /// </summary>
         public List<StoreSLAResponseModel> StoreSLAList(int tenantID)
         {

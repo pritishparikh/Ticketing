@@ -23,8 +23,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// GetFeaturePlanList
         /// </summary>
+        /// <param name="TenantID"></param>
         /// <returns></returns>
-
         public FeaturePlanModel GetFeaturePlanList(int TenantID)
         {
             DataSet ds = new DataSet();

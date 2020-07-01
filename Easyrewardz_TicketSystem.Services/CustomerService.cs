@@ -101,6 +101,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="searchText"></param>
         /// <param name="TenantId"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
         public List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText, int TenantId, int UserID)
         {
@@ -290,6 +291,13 @@ namespace Easyrewardz_TicketSystem.Services
             return message;
         }
 
+        /// <summary>
+        /// Get Customer By API
+        /// </summary>
+        /// <param name="searchText"></param>
+        /// <param name="TenantId"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public List<CustomerMaster> GetCustomerByAPI(string searchText, int TenantId,int UserID)
         {
             List<CustomerMaster> customerMasters = new List<CustomerMaster>();

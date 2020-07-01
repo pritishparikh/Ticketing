@@ -84,6 +84,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Department By Search
         /// </summary>
+        /// <param name="tenantID"></param>
         /// <param name="departmentName"></param>
         /// <returns></returns>
         public List<StoreDepartmentModel> GetStoreDepartmentBySearch(int tenantID, string departmentName)
@@ -138,7 +139,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Function By DepartmentID
         /// </summary>
-        /// <param name="DepartmentID"></param>
+        /// <param name="departmentID"></param>
+        /// <param name="tenantID"></param>
         /// <returns></returns>
         public List<StoreFunctionModel> GetStoreFunctionByDepartment(int departmentID, int tenantID)
         {
@@ -189,11 +191,11 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-
         /// <summary>
         /// Get Function By multiple DepartmentIDs
         /// </summary>
-        /// <param name="DepartmentID"></param>
+        /// <param name="DepartmentIds"></param>
+        /// <param name="TenantID"></param>
         /// <returns></returns>
         public List<StoreFunctionModel> GetStoreFunctionbyMultiDepartment(string DepartmentIds, int TenantID)
         {
@@ -240,13 +242,12 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-
         /// <summary>
-        /// Search function by department ID and Namne
+        /// Search function by department ID and Name
         /// </summary>
-        /// <param name="DepartmentID"></param>
+        /// <param name="departmentID"></param>
         /// <param name="SearchText"></param>
-        /// <param name="TenantID"></param>
+        /// <param name="tenantID"></param>
         /// <returns></returns>
         public List<StoreFunctionModel> SearchStoreFunctionByDepartment(int departmentID, string SearchText,int tenantID)
         {
@@ -301,10 +302,12 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-
         /// <summary>
         /// Add Department
         /// </summary>
+        /// <param name="departmentName"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="createdBy"></param>
         /// <returns></returns>
         public int AddStoreDepartment(string departmentName, int tenantID, int createdBy)
         {
@@ -337,8 +340,12 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        ///Add function
+        /// Add function
         /// </summary>
+        /// <param name="departmentID"></param>
+        /// <param name="functionName"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="createdBy"></param>
         /// <returns></returns>
         public int AddStorefunction(int departmentID, string functionName, int tenantID, int createdBy)
         {
@@ -372,9 +379,9 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Delete department Brand Mapping 
+        /// Delete department Brand Mapping
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name="tenantID"></param>
         /// <param name="DepartmentBrandMappingID"></param>
         /// <returns></returns>
         public int DeleteDepartmentMapping(int tenantID, int DepartmentBrandMappingID)
@@ -410,6 +417,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Update Department Mapping
         /// </summary>
+        /// <param name="updateDepartmentModel"></param>
         /// <returns></returns>
         public int UpdateDepartmentMapping(CreateStoreDepartmentModel updateDepartmentModel)
         {
@@ -452,7 +460,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get list of Stores bY brandIDs
         /// </summary>
-        /// <param name="TicketId">Id of the Ticket</param>
+        /// <param name="BrandIDs"></param>
+        /// <param name="tenantID"></param>
         /// <returns></returns>
         public List<StoreCodeModel> getStoreByBrandID(string BrandIDs, int tenantID)
         {
@@ -509,6 +518,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Create Department
         /// </summary>
+        /// <param name="createDepartmentModel"></param>
         /// <returns></returns>
         public int CreateDepartment(CreateStoreDepartmentModel createDepartmentModel)
         {
@@ -547,7 +557,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Get DepartmentMapping Listing
+        /// Get Department Mapping Listing
         /// <param name="TenantID"></param>
         /// </summary>
         /// <returns></returns>

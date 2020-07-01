@@ -24,11 +24,20 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public StoreDashboardService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
+        /// <summary>
+        /// Get Loggin Account Info
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="UserId"></param>
+        /// <param name="ProfilePicPath"></param>
+        /// <returns></returns>
         public LoggedInAgentModel GetLogginAccountInfo(int tenantID, int UserId, string ProfilePicPath)
         {
             DataSet ds = new DataSet();

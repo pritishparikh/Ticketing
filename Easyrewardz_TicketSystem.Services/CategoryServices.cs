@@ -24,10 +24,12 @@ namespace Easyrewardz_TicketSystem.Services
 
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public CategoryServices(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
         /// <summary>
         /// Get Category List
@@ -82,11 +84,12 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// AddCategory
+        /// Add Category
         /// </summary>
         /// <param name="categoryName"></param>
         /// <param name="TenantID"></param>
         /// <param name="UserID"></param>
+        /// <param name="BrandID"></param>
         /// <returns></returns>
         public int AddCategory(string categoryName, int TenantID, int UserID, int BrandID)
         {

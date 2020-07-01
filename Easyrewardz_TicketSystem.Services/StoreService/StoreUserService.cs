@@ -68,47 +68,6 @@ namespace Easyrewardz_TicketSystem.Services
             return UserID;
         }
 
-        ///// <summary>
-        ///// AddStoreUserProfiledetail
-        ///// </summary>
-        ///// <param name="customStoreUserModel"></param>
-        //public int AddStoreUserProfiledetail(CustomStoreUserModel customStoreUserModel)
-        //{
-
-        //    int Success = 0;
-        //    try
-        //    {
-        //        conn.Open();
-        //        MySqlCommand cmd = new MySqlCommand("SP_InsertStoreUserProfileDetails", conn);
-        //        cmd.Connection = conn;
-        //        cmd.Parameters.AddWithValue("@Department_Id", customStoreUserModel.DepartmentId);
-        //        cmd.Parameters.AddWithValue("@Function_ID", customStoreUserModel.FunctionID);
-        //        cmd.Parameters.AddWithValue("@Designation_ID", customStoreUserModel.DesignationID);
-        //        cmd.Parameters.AddWithValue("@Reportee_ID", customStoreUserModel.ReporteeID);
-        //        cmd.Parameters.AddWithValue("@Created_By", customStoreUserModel.CreatedBy);
-        //        cmd.Parameters.AddWithValue("@Is_StoreUser", customStoreUserModel.IsStoreUser);
-        //        cmd.Parameters.AddWithValue("@Tenant_ID", customStoreUserModel.TenantID);
-        //        cmd.Parameters.AddWithValue("@User_ID", customStoreUserModel.UserID);
-        //        cmd.CommandType = CommandType.StoredProcedure;
-        //        Success = Convert.ToInt32(cmd.ExecuteNonQuery());
-
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    finally
-        //    {
-        //        if (conn != null)
-        //        {
-        //            conn.Close();
-        //        }
-        //    }
-
-        //    return Success;
-        //}
-
-
 
         /// <summary>
         /// Insert User Profile Details
@@ -257,9 +216,11 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Delete User
         /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="Modifyby"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="UserId"></param>
         /// <param name="IsStoreUser"></param>
+        /// <param name="ModifiedBy"></param>
+        /// <returns></returns>
         public int DeleteStoreUser(int tenantID, int UserId, bool IsStoreUser, int ModifiedBy)
         {
             int success = 0;
@@ -295,7 +256,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Update Store User
         /// </summary>
-        /// <param name="StoreUserListing"></param>
+        /// <param name="customStoreUserEdit"></param>
+        /// <returns></returns>
         public int UpdateStoreUser(StoreUserDetailsModel customStoreUserEdit)
         {
             int success = 0;
@@ -551,6 +513,14 @@ namespace Easyrewardz_TicketSystem.Services
             return Usermaster;
         }
 
+        /// <summary>
+        /// Add Brand Store
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="brandID"></param>
+        /// <param name="storeID"></param>
+        /// <param name="UserMasterID"></param>
+        /// <returns></returns>
         public int AddBrandStore(int tenantID, int brandID, int storeID, int UserMasterID)
         {
             int UserID = 0;
@@ -581,6 +551,15 @@ namespace Easyrewardz_TicketSystem.Services
             return UserID;
         }
 
+        /// <summary>
+        /// Update Brand Store
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="brandID"></param>
+        /// <param name="storeID"></param>
+        /// <param name="userMasterID"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public int UpdateBrandStore(int tenantID, int brandID, int storeID, int userMasterID, int userID)
         {
             int UserID = 0;
@@ -675,7 +654,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get Reportee Designation
         /// </summary>
         /// <param name="DesignationID"></param>
-        /// <param name="HierarchyFor"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
         public List<DesignationMaster> BindStoreReporteeDesignation(int DesignationID, int TenantID)
@@ -848,10 +826,10 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        /// Get Claim sub Category List by muliptle CategoryID
+        ///  Get Claim sub Category List by muliptle CategoryID
         /// </summary>
         /// <param name="TenantID"></param>
-        /// <param name="BrandID"></param>
+        /// <param name="CategoryIDs"></param>
         /// <returns></returns>
         public List<StoreClaimSubCategoryModel> GetClaimSubCategoryByCategoryID(int TenantID, string CategoryIDs)
         {
@@ -970,6 +948,12 @@ namespace Easyrewardz_TicketSystem.Services
             return issueTypeList;
         }
 
+        /// <summary>
+        /// Get User Profile Details
+        /// </summary>
+        /// <param name="UserMasterID"></param>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public List<UpdateUserProfiledetailsModel> GetUserProfileDetails(int UserMasterID, string url)
         {
             DataSet ds = new DataSet();
@@ -1017,6 +1001,11 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateUserProfiledetailsModel;
         }
 
+        /// <summary>
+        /// Update User Profile Detail
+        /// </summary>
+        /// <param name="UpdateUserProfiledetailsModel"></param>
+        /// <returns></returns>
         public int UpdateUserProfileDetail(UpdateUserProfiledetailsModel UpdateUserProfiledetailsModel)
         {
             int UserID = 0;
@@ -1054,7 +1043,13 @@ namespace Easyrewardz_TicketSystem.Services
 
         #endregion
 
-
+        /// <summary>
+        /// Get Store User Credentails
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="IsStoreUser"></param>
+        /// <returns></returns>
         public CustomChangePassword GetStoreUserCredentails(int userID, int TenantID, int IsStoreUser)
         {
             DataSet ds = new DataSet();
@@ -1102,10 +1097,11 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return customChangePassword;
         }
+
         /// <summary>
         /// Delete Profile Picture
         /// <param name="tenantID"></param>
-        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
         /// </summary>
         public int DeleteProfilePicture(int tenantID, int userID)
         {

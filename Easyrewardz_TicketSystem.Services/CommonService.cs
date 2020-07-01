@@ -13,8 +13,10 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public class CommonService
     {
+        #region Variable Declaration
         public static string sLogFormat;
         public static string sErrorTime;
+        #endregion
 
         /// <summary>
         /// Send Email
@@ -23,6 +25,9 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="emailToAddress"></param>
         /// <param name="subject"></param>
         /// <param name="body"></param>
+        /// <param name="cc"></param>
+        /// <param name="bcc"></param>
+        /// <param name="tenantId"></param>
         /// <returns></returns>
         public bool SendEmail(SMTPDetails smtpDetails,string emailToAddress, string subject, string body, string[] cc = null, string[] bcc = null, int tenantId= 0)
         {
@@ -85,7 +90,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Encrypt
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="Planetext"></param>
         /// <returns></returns>
         public string Encrypt(string Planetext)
         {
@@ -113,7 +118,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Decrypt
         /// </summary>
-        /// <param name="EncptToken"></param>
+        /// <param name="cipherText"></param>
         /// <returns></returns>
         public string Decrypt(string cipherText)
         {
@@ -242,7 +247,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Convert CSV to datatable
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="FilePath"></param>
+        /// <returns></returns>
         public static DataSet csvToDataSet(string FilePath)
         {
             DataTable dtCsv = new DataTable();
@@ -429,9 +435,11 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        ///SEND api request
+        /// SEND api request
         /// </summary>
-        /// 
+        /// <param name="url"></param>
+        /// <param name="Request"></param>
+        /// <returns></returns>
         public static string SendApiRequest(string url, string Request)
         {
             string strresponse = "";
@@ -506,6 +514,13 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        /// <summary>
+        /// Send Api Request Token
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="Request"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public static string SendApiRequestToken(string url, string Request, string token = "")
         {
             string strresponse = "";
@@ -549,6 +564,13 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        /// <summary>
+        /// Send Api Request Merchant Api
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="Request"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public static string SendApiRequestMerchantApi(string url, string Request, string token = "")
         {
             string strresponse = "";

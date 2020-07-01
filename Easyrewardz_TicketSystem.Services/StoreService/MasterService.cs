@@ -20,6 +20,12 @@ namespace Easyrewardz_TicketSystem.Services.StoreServices
 
         #endregion
 
+        /// <summary>
+        /// Get Store User List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public List<StoreUser> GetStoreUserList(int TenantID, int UserID)
         {
             DataSet ds = new DataSet();
@@ -68,6 +74,12 @@ namespace Easyrewardz_TicketSystem.Services.StoreServices
             return users;
         }
 
+        /// <summary>
+        /// Get Store Function List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public List<StoreFunctionModel> GetStoreFunctionList(int TenantID, int UserID)
         {
             DataSet ds = new DataSet();

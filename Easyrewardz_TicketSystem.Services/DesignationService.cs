@@ -11,10 +11,13 @@ namespace Easyrewardz_TicketSystem.Services
     public class DesignationService:IDesignation
     {
         MySqlConnection conn = new MySqlConnection();
+
+        #region Constructor
         public DesignationService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
         /// <summary>
         /// Get Designations

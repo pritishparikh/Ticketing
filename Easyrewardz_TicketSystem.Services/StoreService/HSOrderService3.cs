@@ -585,7 +585,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// CheckPinCodeForCourierAvailibilty
+        /// Check PinCode For Courier Availibilty
         /// </summary>
         /// <param name="orderID"></param>
         ///  <param name="tenantID"></param>
@@ -685,7 +685,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Get Store PinCode By UserID
+        /// Create Shipment
         /// </summary>
         ///  <param name="tenantID"></param>
         ///  <param name="userID"></param>
@@ -756,7 +756,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// UpdateGeneratePickupManifest
+        /// Update Generate Pickup Manifest
         /// </summary>
         /// <param name="orderID"></param>
         ///  <param name="tenantID"></param>
@@ -797,7 +797,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// CheckClientPinCodeForCourierAvailibilty
+        /// Check Client PinCode For Courier Availibilty
         /// </summary>
         /// <param name="hSChkCourierAvailibilty"></param>
         /// <param name="tenantID"></param>

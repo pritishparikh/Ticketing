@@ -271,6 +271,12 @@ namespace Easyrewardz_TicketSystem.Services
             return isUpdate;
         }
 
+        /// <summary>
+        /// Validate Priority
+        /// </summary>
+        /// <param name="priorityName"></param>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
         public string ValidatePriority(string priorityName, int tenantID)
         {
             string Message = "";

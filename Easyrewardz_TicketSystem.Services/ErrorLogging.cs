@@ -11,10 +11,19 @@ namespace Easyrewardz_TicketSystem.Services
    public class ErrorLogging : IErrorLogging
     {
         MySqlConnection conn = new MySqlConnection();
+
+        #region Constructor
         public ErrorLogging(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
+
+        /// <summary>
+        /// Insert Error Log
+        /// </summary>
+        /// <param name="errorLog"></param>
+        /// <returns></returns>
         public int InsertErrorLog(ErrorLog errorLog)
         {
             int Success = 0;

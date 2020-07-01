@@ -384,7 +384,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// GetClaimCommentForApprovel
+        /// Get Claim Comment For Approvel
         /// </summary>
         /// <param name="claimID">Id of the Claim</param>
         /// <returns></returns>

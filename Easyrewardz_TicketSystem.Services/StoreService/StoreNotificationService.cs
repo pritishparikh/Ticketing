@@ -16,7 +16,14 @@ namespace Easyrewardz_TicketSystem.Services
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
+        /// <summary>
+        /// Get Notification
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public ListStoreNotificationModels GetNotification(int tenantID, int userID)
         {
            List<StoreNotificationModel> ListstoreNotificationModel = new List<StoreNotificationModel>();
@@ -83,6 +90,14 @@ namespace Easyrewardz_TicketSystem.Services
             return storeNotificationModels;
         }
 
+        /// <summary>
+        /// Read Notification
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <param name="NotificatonTypeID"></param>
+        /// <param name="NotificatonType"></param>
+        /// <returns></returns>
         public int ReadNotification(int tenantID, int userID, int NotificatonTypeID, int NotificatonType)
         {
             int updateCount = 0;
@@ -106,7 +121,6 @@ namespace Easyrewardz_TicketSystem.Services
 
             return updateCount;
         }
-        #endregion
 
     }
 }

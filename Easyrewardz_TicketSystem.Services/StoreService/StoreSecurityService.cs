@@ -624,7 +624,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// 
+        /// validate User Email Id
         /// </summary>
         /// <param name="EmailId"></param>
         public Authenticate validateUserEmailId(string EmailId)
@@ -783,12 +783,13 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Change Passsword
+        /// Get Forget Passowrd Mail Content
         /// </summary>
         /// <param name="TenantId"></param>
         /// <param name="url"></param>
         /// <param name="emailid"></param>
         /// <param name="content"></param>
+        /// <param name="subject"></param>
         public void GetForgetPassowrdMailContent(int TenantId, string url, string emailid, out string content, out string subject)
         {
             DataSet ds = new DataSet();

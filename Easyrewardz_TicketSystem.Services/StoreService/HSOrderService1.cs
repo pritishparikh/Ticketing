@@ -12,13 +12,16 @@ namespace Easyrewardz_TicketSystem.Services
 {
     public partial class HSOrderService : IHSOrder
     {
+        #region Variable Declaration
         MySqlConnection conn = new MySqlConnection();
         string apiResponse = string.Empty;
         string apiResponse1 = string.Empty;
         string apisecurityToken = string.Empty;
         string apiURL = string.Empty;
         string apiURLGetUserATVDetails = string.Empty;
+        #endregion
 
+        #region Constructor
         public HSOrderService(string _connectionString)
         {
 
@@ -26,7 +29,7 @@ namespace Easyrewardz_TicketSystem.Services
             apisecurityToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9ncmFtQ29kZSI6IkJhdGEiLCJVc2VySUQiOiIzIiwiQXBwSUQiOiI3IiwiRGF5IjoiMjgiLCJNb250aCI6IjMiLCJZZWFyIjoiMjAyMSIsIlJvbGUiOiJBZG1pbiIsImlzcyI6IkF1dGhTZWN1cml0eUlzc3VlciIsImF1ZCI6IkF1dGhTZWN1cml0eUF1ZGllbmNlIn0.0XeF7V5LWfQn0NlSlG7Rb-Qq1hUCtUYRDg6dMGIMvg0";
             //apiURLGetUserATVDetails = configuration.GetValue<string>("apiURLGetUserATVDetails");
         }
-
+        #endregion
 
 
         /// <summary>

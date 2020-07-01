@@ -11,10 +11,12 @@ namespace Easyrewardz_TicketSystem.Services
     {
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public BrandServices(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
         /// <summary>
         /// Get Brand List
