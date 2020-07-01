@@ -81,7 +81,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                     CommonService commonService = new CommonService();
                     string encryptedEmailId = commonService.Encrypt(EmailId);
-                    string url = X_Authorized_Domainname.TrimEnd('/') + "/storeUserforgotPassword?Id:" + encryptedEmailId;
+                    string url = X_Authorized_Domainname.TrimEnd('/') + "/userforgotPassword?Id:" + encryptedEmailId;
                     // string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url;
 
                     string content = "";
