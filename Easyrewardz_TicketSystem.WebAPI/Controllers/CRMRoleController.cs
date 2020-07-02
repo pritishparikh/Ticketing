@@ -50,6 +50,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Create /Update CRMRole
         /// </summary>
+        /// <param name="CRMRoleID"></param>
+        /// <param name="RoleName"></param>
+        /// <param name="RoleisActive"></param>
+        /// <param name="ModulesEnabled"></param>
+        /// <param name="ModulesDisabled"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("CreateUpdateCRMRole")]
@@ -95,8 +100,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Delete CRMROLE
+        /// Delete CRM ROLE
         /// </summary>
+        /// <param name="CRMRoleID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("DeleteCRMRole")]
@@ -137,7 +143,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         /// <summary>
-        /// View  CRMROLE
+        /// View  CRM ROLE
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -179,7 +185,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         /// <summary>
-        /// View  CRMROLE
+        /// View  CRM ROLE
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -220,7 +226,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// GetCRMRoleDropdown
+        /// Get CRM Role Dropdown
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -262,120 +268,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         /// <summary>
-        /// Bullk Upload  SLA
+        /// Bullk Upload  CRM Role
         /// </summary>
+        /// <param name="RoleFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadCRMRole")]
         public ResponseModel BulkUploadCRMRole(int RoleFor=1)
         {
-            //#region old Code 
-            //string DownloadFilePath = string.Empty;
-            //string BulkUploadFilesPath = string.Empty;
-            //bool errorfilesaved = false;
-            //bool successfilesaved = false;
-            //int count = 0;
-            //List<string> CSVlist = new List<string>();
-            //SettingsCaller newCRM = new SettingsCaller();
-            //ResponseModel objResponseModel = new ResponseModel();
-            //int statusCode = 0;
-            //string statusMessage = "";
-            //DataSet dataSetCSV = new DataSet();
-            //string fileName = "";
-            //string finalAttchment = "";
-            //string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
-            //string[] filesName = null;
-
-            //try
-            //{
-
-            //    string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-            //    Authenticate authenticate = new Authenticate();
-            //    authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
-            //    var files = Request.Form.Files;
-
-            //    if (files.Count > 0)
-            //    {
-            //        for (int i = 0; i < files.Count; i++)
-            //        {
-            //            fileName += files[i].FileName.Replace(".", timeStamp + ".") + ",";
-            //        }
-            //        finalAttchment = fileName.TrimEnd(',');
-            //    }
-            //    var Keys = Request.Form;
-
-            //    #region FilePath
-            //    string Folderpath = Directory.GetCurrentDirectory();
-            //     filesName = finalAttchment.Split(",");
-
-
-            //    BulkUploadFilesPath = Path.Combine(Folderpath, BulkUpload, UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor));
-            //    DownloadFilePath = Path.Combine(Folderpath, BulkUpload, DownloadFile, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor)); 
-
-
-            //    if (!Directory.Exists(BulkUploadFilesPath))
-            //    {
-            //        Directory.CreateDirectory(BulkUploadFilesPath);
-            //    }
-
-
-
-            //    if (files.Count > 0)
-            //    {
-
-            //        for (int i = 0; i < files.Count; i++)
-            //        {
-            //            using (var ms = new MemoryStream())
-            //            {
-            //                files[i].CopyTo(ms);
-            //                var fileBytes = ms.ToArray();
-            //                MemoryStream msfile = new MemoryStream(fileBytes);
-            //                FileStream docFile = new FileStream(Path.Combine(BulkUploadFilesPath, filesName[i]), FileMode.Create, FileAccess.Write);
-            //                msfile.WriteTo(docFile);
-            //                docFile.Close();
-            //                ms.Close();
-            //                msfile.Close();
-            //                string s = Convert.ToBase64String(fileBytes);
-            //                byte[] a = Convert.FromBase64String(s);
-            //                // act on the Base64 data
-
-            //            }
-            //        }
-            //    }
-
-            //    #endregion
-
-
-
-            //    dataSetCSV = CommonService.csvToDataSet(Path.Combine(BulkUploadFilesPath, filesName[0]));
-            //    CSVlist = newCRM.CRMRoleBulkUpload(new CRMRoleService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, RoleFor, dataSetCSV);
-
-            //    #region Create Error and Success files and  Insert in FileUploadLog
-
-            //    string SuccessFileName = "CRMRoleSuccessFile_" + timeStamp + ".csv";
-            //    string ErrorFileName = "CRMRoleErrorFile_" + timeStamp + ".csv";
-
-            //    string SuccessFileUrl = rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor) + "/Success/" + SuccessFileName;
-            //    string ErrorFileUrl = rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)RoleFor) + "/Error/" + ErrorFileName;
-
-            //    if (!string.IsNullOrEmpty(CSVlist[0]))
-            //        successfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Success", SuccessFileName), CSVlist[0]);
-
-            //    if (!string.IsNullOrEmpty(CSVlist[1]))
-            //        errorfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Error", ErrorFileName), CSVlist[1]);
-
-            //    count = newCRM.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, filesName[0], errorfilesaved,
-            //                     ErrorFileName, SuccessFileName, authenticate.UserMasterID, "CRMRole", SuccessFileUrl, ErrorFileUrl, RoleFor);
-            //    #endregion
-
-            //    statusCode = count >0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.WehadanerrorSorryaboutthat;
-            //    statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
-            //    objResponseModel.Status = true;
-            //    objResponseModel.StatusCode = statusCode;
-            //    objResponseModel.Message = statusMessage;
-            //    objResponseModel.ResponseData = CSVlist.Count;
-            //    #endregion old Code 
             string DownloadFilePath = string.Empty;
             string BulkUploadFilesPath = string.Empty;
             bool errorfilesaved = false;

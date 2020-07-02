@@ -51,9 +51,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Search Store details
         /// </summary>
-        /// <param name="Storename"></param>
-        /// <param name="Storecode"></param>
-        /// <param name="Pincode"></param>
+        /// <param name="SearchText"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("SearchStoreDetail")]
@@ -326,47 +324,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
-
-        #region attach store old approach 
-        /// <summary>
-        /// attach store
-        /// </summary>
-        /// <param name="StoreId"></param>
-        /// <param name="TicketId"></param>
-        /// <returns></returns>
-        //[HttpPost]
-        //[Route("attachstore")]
-        //public ResponseModel Attachstore(string StoreId, int TicketId)
-        //{
-        //    StoreCaller newStore = new StoreCaller();
-        //    ResponseModel objResponseModel = new ResponseModel();
-        //    int StatusCode = 0;
-        //    string statusMessage = "";
-        //    try
-        //    {
-        //        string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-        //        Authenticate authenticate = new Authenticate();
-        //        authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
-        //        int result = newStore.AttachStore(new StoreService(_connectionString), StoreId, TicketId, authenticate.UserMasterID);
-        //        StatusCode =
-        //        result == 0 ?
-        //               (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-        //        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-        //        objResponseModel.Status = true;
-        //        objResponseModel.StatusCode = StatusCode;
-        //        objResponseModel.Message = statusMessage;
-        //        objResponseModel.ResponseData = result;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    return objResponseModel;
-        //}
-
-        #endregion
-
         /// <summary>
         /// attach store
         /// </summary>
@@ -497,7 +454,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Bulk Upload Store
         /// </summary>
-        /// <param name="File"></param>
         /// <param name="StoreFor"></param>
         /// <returns></returns>
         [HttpPost]

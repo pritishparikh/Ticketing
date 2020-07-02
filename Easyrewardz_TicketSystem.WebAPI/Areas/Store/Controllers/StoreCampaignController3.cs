@@ -412,9 +412,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// DeleteSelectedLanguage
+        /// Delete Selected Language
         /// </summary>
         /// <param name="selectedLanguageID"></param>
+        /// <param name="isActive"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("DeleteSelectedLanguage")]

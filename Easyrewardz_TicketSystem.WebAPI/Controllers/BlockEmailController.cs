@@ -38,8 +38,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Custom Methods
 
         /// <summary>
-        /// Add EmailBlock
+        /// Add Email Block
         /// </summary>
+        /// <param name="blockEmailMaster"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("AddEmailBlock")]
@@ -78,8 +79,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Update EmailBlock
+        /// Update Email Block
         /// </summary>
+        /// <param name="blockEmailMaster"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateEmailBlock")]
@@ -118,8 +120,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Delete EmailBlock
+        /// Delete Email Block
         /// </summary>
+        /// <param name="blockEmailID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("DeleteEmailBlock")]

@@ -267,8 +267,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Insert Card Image Upload
         /// </summary>
-        /// <param name="ItemID"></param>
-        /// <param name="ImageUrl"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("InsertCardImageUpload")]
@@ -366,8 +364,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Approve Reject Card Image
         /// </summary>
+        /// <param name="ID"></param>
         /// <param name="ItemID"></param>
-        /// <param name="ImageUrl"></param>
+        /// <param name="AddToLibrary"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("ApproveRejectCardImage")]
@@ -408,7 +407,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// Insert New CardItem Configuration
+        /// Insert New Card Item Configuration
         /// </summary>
         /// <param name="CardItem"></param>
         /// <param name="IsEnabled"></param>

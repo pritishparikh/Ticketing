@@ -94,7 +94,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Delete department Brand Mapping 
         /// </summary>
-        /// <param name="TenantID"></param>
         /// <param name="DepartmentBrandMappingID"></param>
         /// <returns></returns>
         [HttpPost]
@@ -268,7 +267,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Department List 
         /// </summary>
-        /// <param name="TenantID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("getDepartmentList")]
@@ -465,7 +463,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Create Department
+        /// </summary>
+        /// <param name="createDepartmentModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("CreateDepartment")]
         public ResponseModel CreateDepartment([FromBody] CreateStoreDepartmentModel createDepartmentModel)
@@ -509,7 +511,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get DeparmentBrandMapping List 
         /// </summary>
-        /// <param name="TenantID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetDeparmentBrandMappingList")]
@@ -547,6 +548,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Bulk Upload Department
+        /// </summary>
+        /// <param name="DeptFor"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadDepartment")]
         public ResponseModel BulkUploadDepartment(int DeptFor = 3)

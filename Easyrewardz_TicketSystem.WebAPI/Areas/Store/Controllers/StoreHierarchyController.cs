@@ -80,7 +80,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// UpdateStoreHierarchy
+        /// Update Store Hierarchy
         /// </summary>
         /// <param name="CustomHierarchymodel"></param>
         /// <returns></returns>
@@ -118,7 +118,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// DeleteStoreHierarchy
+        /// Delete Store Hierarchy
         /// </summary>
         /// <param name="designationID"></param>
         /// <returns></returns>
@@ -192,8 +192,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// Bulk Upload StoreHierarchy
+        /// Bulk Upload Store Hierarchy
         /// </summary>
+        /// <param name="HierarchyFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadStoreHierarchy")]

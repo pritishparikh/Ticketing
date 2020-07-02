@@ -114,7 +114,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// DeleteCategory
+        /// Delete Category
         /// </summary>
         /// <param name="CategoryID"></param>
         /// <returns></returns>
@@ -152,7 +152,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// UpdateCategory
+        /// Update Category
         /// </summary>
         /// <param name="Category"></param>
         /// <returns></returns>
@@ -194,7 +194,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// CategoryList
+        /// Category List
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
@@ -223,7 +223,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Create Categorybrand mapping
+        /// Create Category brand mapping
         /// </summary>
         /// <param name="CustomCreateCategory"></param>
         /// <returns></returns>
@@ -278,7 +278,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// ListCategorybrandmapping
+        /// List Category brand mapping
         /// </summary>
         /// <param name="CustomCreateCategory"></param>
         /// <returns></returns>
@@ -315,7 +315,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// GetCategoryListByMultiBrandID
+        /// Get Category List By Multi Brand ID
         /// </summary>
         /// <param name="BrandIDs"></param>
         /// <returns></returns>
@@ -353,7 +353,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        ///BulkUploadCategory
+        ///Bulk Upload Category
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -640,7 +640,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get CategoryList with search test
+        /// Get Category List with search test
         /// </summary>
         /// <param name="BrandID"></param>
         /// <returns></returns>

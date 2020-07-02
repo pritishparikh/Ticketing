@@ -143,7 +143,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// Get SubCategoryBy CategoryID
+        /// Get SubCategory By CategoryID
         /// </summary>
         /// <param name="categoryID"></param>
         /// <returns></returns>

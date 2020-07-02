@@ -38,6 +38,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Create Alert
         /// </summary>
+        /// <param name="alertModel"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("CreateAlert")]
@@ -79,8 +80,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// UpdateAlert
+        /// Update Alert
         /// </summary>
+        /// <param name="alertModel"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("ModifyAlert")]
@@ -124,6 +126,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Delete Alert
         /// </summary>
+        /// <param name="AlertID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("DeleteAlert")]
@@ -166,8 +169,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         /// <summary>
-        /// Get Alert List 
+        /// Get Alert List
         /// </summary>
+        /// <param name="alertId"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetAlertList")]
@@ -338,8 +342,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// ValidateAlertNameExist
+        /// Validate Alert Name Exist
         /// </summary>
+        /// <param name="alertTypeId"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("ValidateAlertNameExist")]

@@ -73,6 +73,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return objResponseModel;
         }
+
         /// <summary>
         /// Add Order Details
         /// </summary>
@@ -114,9 +115,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         /// <summary>
-        /// Add Order Details
+        /// Insert Order Items
         /// </summary>
-        /// <param name="OrderItem"></param>
+        /// <param name="itemMaster"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("InsertOrderItems")]
@@ -152,10 +153,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         /// <summary>
-        /// Get Orderdetail list 
+        /// Get Order List With Item Details
         /// </summary>
         /// <param name="OrderNumber"></param>
-        /// <param name="TenantID"></param>
+        /// <param name="CustomerID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("getOrderListWithItemDetails")]
@@ -241,7 +242,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         /// <summary>
-        /// Get Orderdetail list with item
+        /// Get Order Details By Customer id
         /// </summary>
         /// <param name="CustomerID"></param>
         /// <returns></returns>
@@ -364,50 +365,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
-
-        #region attach order OLD APPROACH
-        /// <summary>
-        /// attach order
-        /// </summary>
-        /// <param name="OrderitemID"></param>
-        /// <param name="TicketId"></param>
-        /// <returns></returns>
-        //[HttpPost]
-        //[Route("attachorder")]
-        //public ResponseModel AttachOrder(string OrderID, int TicketId)
-        //{
-        //    OrderCaller ordercaller = new OrderCaller();
-        //    ResponseModel objResponseModel = new ResponseModel();
-        //    int StatusCode = 0;
-        //    string statusMessage = "";
-        //    try
-        //    {
-        //        string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-        //        Authenticate authenticate = new Authenticate();
-        //        authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
-
-
-
-        //        int result = ordercaller.AttachOrder(new OrderService(connectioSting), OrderID, TicketId, authenticate.UserMasterID);
-        //        StatusCode =
-        //        result == 0 ?
-        //               (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
-        //        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
-        //        objResponseModel.Status = true;
-        //        objResponseModel.StatusCode = StatusCode;
-        //        objResponseModel.Message = statusMessage;
-        //        objResponseModel.ResponseData = result;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    return objResponseModel;
-        //}
-
-
-        #endregion
 
         /// <summary>
         /// attach order

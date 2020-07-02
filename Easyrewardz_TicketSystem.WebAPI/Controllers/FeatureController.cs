@@ -35,7 +35,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         #region GetFeatureList
         /// <summary>
-        ///GetFeatureList
+        ///Get Feature List
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
@@ -72,9 +72,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         /// <summary>
-        ///AddFeature
+        /// Add Feature
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="objFeatures"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("AddFeature")]

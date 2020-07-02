@@ -244,9 +244,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         /// <summary>
-        /// AddBrandStore
+        /// Add Brand Store
         /// </summary>
-        /// <param name="storeUser"></param>
+        /// <param name="brandID"></param>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddUserBrandStore")]
         public ResponseModel AddUserBrandStore(int brandID, int storeID)
@@ -280,10 +282,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+
         /// <summary>
-        /// Update User BrandStore
+        /// Update User Brand Store
         /// </summary>
-        /// <param name="storeUser"></param>
+        /// <param name="UserID"></param>
+        /// <param name="brandID"></param>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateUserBrandStore")]
         public ResponseModel UpdateUserBrandStore(int UserID, int brandID, int storeID)
@@ -368,8 +374,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get  Store User List
         /// </summary>
-        /// <param name="tenantID"></param>
-
         /// <returns></returns>
         [HttpPost]
         [Route("GetStoreUsers")]
@@ -413,8 +417,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get  Store User List on USerID
         /// </summary>
-        /// <param name="tenantID"></param>
-
+        /// <param name="UserID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetStoreUserDetailsByUserID")]
@@ -504,7 +507,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// Get  reportee designation on designation id
         /// </summary>
         /// <param name="DesignationID"></param>
-        /// <param name="storeID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BindStoreReporteeDesignation")]
@@ -544,12 +546,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
-        // <summary>
+        /// <summary>
         /// Get Store Report To User
         /// </summary>
         /// <param name="DesignationID"></param>
         /// <param name="IsStoreUser"></param>
-        /// <param name="TenantID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BindStoreReportToUser")]
@@ -594,10 +595,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Bind Claim 
 
         /// <summary>
-        /// Get Claim Category List by muliptle brandID
+        /// Bind Store Claim Category
         /// </summary>
-        /// <param name="TenantID"></param>
-        /// <param name="BrandID"></param>
+        /// <param name="BrandIds"></param>
         /// <returns></returns>
         /// 
         [HttpPost]
@@ -642,8 +642,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get Claim sub Category List by muliptle CategoryID
         /// </summary>
-        /// <param name="TenantID"></param>
-        /// <param name="BrandID"></param>
+        /// <param name="CategoryIDs"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BindStoreClaimSubCategory")]
@@ -687,7 +686,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get Claim Issue Type List by multiple subcat Id
         /// </summary>
-        /// <param name="TenantID">Tenant Id</param>
         /// <param name="SubCategoryID">SubCategory ID</param>
         /// <returns></returns>
         [HttpPost]

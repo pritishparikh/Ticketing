@@ -85,7 +85,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// Search the Report
+        /// Download Store Report Search
         /// </summary>
         /// <param name="searchparams"></param>
         /// <returns></returns>
@@ -353,7 +353,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// Get CampaignNames
+        /// Get Campaign Names
         /// </summary>
         /// <returns></returns>
         [HttpPost]

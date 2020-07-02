@@ -50,6 +50,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Create /Update CRMRole
         /// </summary>
+        /// <param name="CRMRoleID"></param>
+        /// <param name="RoleName"></param>
+        /// <param name="RoleisActive"></param>
+        /// <param name="ModulesEnabled"></param>
+        /// <param name="ModulesDisabled"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("CreateUpdateStoreCRMRole")]
@@ -95,8 +100,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// Delete CRMROLE
+        /// Delete CRM ROLE
         /// </summary>
+        /// <param name="CRMRoleID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("DeleteStoreCRMRole")]
@@ -179,7 +185,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// View  CRMROLE
+        /// Get Store Roles By User ID
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -264,6 +270,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Bullk Upload  CRMRole
         /// </summary>
+        /// <param name="RoleFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadStoreCRMRole")]

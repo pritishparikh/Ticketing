@@ -364,9 +364,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region City List 
 
         /// <summary>
-        /// get state list 
+        /// get state list
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="StateId"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("getcitylist")]
@@ -579,12 +579,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
         #endregion
-      
+
         #region Get  Country State City List
+
         /// <summary>
-        ///Get Country State City List
+        /// Get Country State City List
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="Pincode"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetCountryStateCityList")]
@@ -626,6 +627,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region Create Department
+
         /// <summary>
         ///CreateDepartment
         /// </summary>
@@ -674,6 +676,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region Get LogedInEmail
+
         /// <summary>
         ///Get Logged in Email
         /// </summary>

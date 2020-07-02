@@ -33,7 +33,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         #region Custom Methods
         /// <summary>
-        /// Get PriorityList
+        /// Get Priority List
         /// </summary>
         /// <param name="PriorityFor"></param>
         /// <returns></returns>
@@ -282,8 +282,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// ValidatePriorityNameExist
+        /// Validate Priority Name Exist
         /// </summary>
+        /// <param name="PriorityName"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("ValidatePriorityNameExist")]

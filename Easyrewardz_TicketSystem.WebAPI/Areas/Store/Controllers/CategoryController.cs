@@ -273,6 +273,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get Claim SubCategory By Category On Search
+        /// </summary>
+        /// <param name="CategoryID"></param>
+        /// <param name="searchText"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetClaimSubCategoryByCategoryOnSearch")]
         public ResponseModel GetClaimSubCategoryByCategoryOnSearch(int CategoryID, string searchText)
@@ -355,7 +361,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Claim IssueType List
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name="SubCategoryID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetClaimIssueTypeList")]
@@ -397,7 +403,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// GetClaimIssueTypeOnSearch
+        /// Get Claim Issue Type On Search
         /// </summary>
         /// <param name="SubCategoryID"></param>
         /// <param name="searchText"></param>
@@ -483,7 +489,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// Create Categorybrand mapping
+        /// Create Category brand mapping
         /// </summary>
         /// <param name="CustomCreateCategory"></param>
         /// <returns></returns>
@@ -538,7 +544,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// DeleteCategory
+        /// Delete Category
         /// </summary>
         /// <param name="CategoryID"></param>
         /// <returns></returns>
@@ -576,8 +582,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        ///Bulk Upload Claim Category
+        /// Bulk Upload Claim Category
         /// </summary>
+        /// <param name="CategoryFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadClaimCategory")]

@@ -45,7 +45,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Stroe Dashboard Data
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="dasbhboardmodel"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetstoreDashboardList")]
@@ -90,7 +90,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Stroe Dashboard Data
         /// </summary>
-        /// <param name=StoreDashboardClaimModel></param>
+        /// <param name="ClaimSearchModel"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("getstoreDashboardListClaim")]

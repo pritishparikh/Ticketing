@@ -46,8 +46,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        ///Bulk Upload Item
+        /// Bulk Upload Item
         /// </summary>
+        /// <param name="ItemFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadItem")]

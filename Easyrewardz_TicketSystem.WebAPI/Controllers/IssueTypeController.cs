@@ -33,9 +33,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         #region Custom Methods
         /// <summary>
-        /// Get IssueTypeList
+        /// Get Issue Type List
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name="SubCategoryID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetIssueTypeList")]
@@ -75,6 +75,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+
         /// <summary>
         /// Add Issue Type
         /// </summary>
@@ -116,7 +117,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// GetIssueTypeListByMultiSubCategoryID
+        /// Get Issue Type List By Multi SubCategory ID
         /// </summary>
         /// <param name="SubCategoryIDs"></param>
         /// <returns></returns>
@@ -162,7 +163,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get IssueType On Seach
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name="SubCategoryID"></param>
+        /// <param name="searchText"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetIssueTypeOnSeach")]

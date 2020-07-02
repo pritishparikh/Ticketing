@@ -78,7 +78,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Update Junk Words
+        /// Update Email Block
         /// <param name="JunkWordsMaster"></param>
         /// </summary>
         /// <returns></returns>

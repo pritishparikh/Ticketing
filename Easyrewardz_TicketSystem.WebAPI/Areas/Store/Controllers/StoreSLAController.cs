@@ -236,7 +236,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get SLA
         /// </summary>
-        /// <param name="SLAFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetStoreSLA")]
@@ -313,6 +312,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Bullk Upload Store SLA
         /// </summary>
+        /// <param name="SLAFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadStoreSLA")]

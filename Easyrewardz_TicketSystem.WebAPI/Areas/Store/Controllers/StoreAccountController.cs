@@ -90,9 +90,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                     CommonService commonService = new CommonService();
                     string encryptedEmailId = commonService.Encrypt(jsonData);
-                    // string url = configuration.GetValue<string>("websiteURL") + "/storeUserforgotPassword?Id:" + encryptedEmailId;
                     string url = X_Authorized_Domainname.TrimEnd('/') + "/storeUserforgotPassword?Id:" + encryptedEmailId;
-                    // string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url;
 
                     string content = "";
                     string subject = "";
@@ -346,6 +344,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return resp;
         }
 
+        /// <summary>
+        /// Create File
+        /// </summary>
+        /// <param name="contenttoprint"></param>
         public void CreateFile(string contenttoprint)
         {
             string FilesPath = string.Empty;
