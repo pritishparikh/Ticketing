@@ -337,6 +337,31 @@ namespace Easyrewardz_TicketSystem.WebAPI
             });
 
             /*-----------------------------*/
+
+            /*chatbot card image upload */
+
+
+            string ChatBotSoundUploadPath = "Uploadfiles/Chat/ChatBotSoundFiles";
+            string ChatBotSoundUploadPathURL = Path.Combine(CurrentDirectory, ChatBotSoundUploadPath);
+            if (!Directory.Exists(ChatBotSoundUploadPathURL))
+            {
+                Directory.CreateDirectory(ChatBotSoundUploadPathURL);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(ChatBotSoundUploadPathURL),
+                RequestPath = "/" + ChatBotSoundUploadPath
+            });
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(ChatBotSoundUploadPathURL),
+                RequestPath = "/" + ChatBotSoundUploadPath
+            });
+
+            /*-----------------------------*/
+
+
             app.UseMvc();
         }
 

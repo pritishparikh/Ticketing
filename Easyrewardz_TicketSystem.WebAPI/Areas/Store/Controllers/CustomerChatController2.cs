@@ -307,6 +307,161 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+
+
+        #region Chat Sound Notification Setting
+
+        /// <summary>
+        /// Get Chat Sound List
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetChatSoundList")]
+        public ResponseModel GetChatSoundList()
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<ChatSoundModel> SoundList = new List<ChatSoundModel>();
+
+            int statusCode = 0;
+            string statusMessage = "";
+            string SoundPhysicalFilePath = string.Empty;
+            string SoundFilePath = string.Empty;
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                SoundPhysicalFilePath = Path.Combine(Directory.GetCurrentDirectory(), UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)4), "ChatBotSoundFiles");
+
+                if (!Directory.Exists(SoundPhysicalFilePath))
+                {
+                    Directory.CreateDirectory(SoundPhysicalFilePath);
+                }
+
+                SoundFilePath = rootPath + UploadFiles + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)4) + "/ChatBotSoundFiles/";
+
+                SoundList = customerChatCaller.GetChatSoundList(new CustomerChatService(_connectionString), authenticate.TenantId,authenticate.ProgramCode, SoundFilePath);
+                statusCode = SoundList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = SoundList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+
+        /// <summary>
+        /// Get Chat Sound Notification Setting
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetChatSoundNotiSetting")]
+        public ResponseModel GetChatSoundNotiSetting()
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            ChatSoundNotificationModel SoundSetting = new ChatSoundNotificationModel();
+
+            int statusCode = 0;
+            string statusMessage = "";
+            string SoundPhysicalFilePath = string.Empty;
+            string SoundFilePath = string.Empty;
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                SoundPhysicalFilePath = Path.Combine(Directory.GetCurrentDirectory(), UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)4), "ChatBotSoundFiles");
+
+                if (!Directory.Exists(SoundPhysicalFilePath))
+                {
+                    Directory.CreateDirectory(SoundPhysicalFilePath);
+                }
+
+                SoundFilePath = rootPath + UploadFiles + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)4) + "/ChatBotSoundFiles/";
+
+                SoundSetting = customerChatCaller.GetChatSoundNotificationSetting(new CustomerChatService(_connectionString), authenticate.TenantId, authenticate.ProgramCode, SoundFilePath);
+                statusCode = SoundSetting.ID > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = SoundSetting;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Update Chat Sound Notification Setting
+        /// </summary>
+        /// <param name="ChatSoundNotificationModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateChatSoundNotiSetting")]
+        public ResponseModel UpdateChatSoundNotiSetting([FromBody]  ChatSoundNotificationModel Setting)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int result = 0;
+            int statusCode = 0;
+            string statusMessage = "";
+          
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                Setting.TenantID = authenticate.TenantId;
+                Setting.ProgramCode = authenticate.ProgramCode;
+                Setting.ModifyBy = authenticate.UserMasterID;
+
+               
+
+
+                result = customerChatCaller.UpdateChatSoundNotificationSetting(new CustomerChatService(_connectionString), Setting);
+
+                statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        #endregion
+
         #endregion
     }
 }

@@ -61,6 +61,28 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
 
+        #region Chat Sound Notification Setting
+
+        public ChatSoundNotificationModel GetChatSoundNotificationSetting(ICustomerChat customerChat, int TenantID, string Programcode,string SoundFilePath)
+        {
+            _customerChat = customerChat;
+            return _customerChat.GetChatSoundNotificationSetting( TenantID,  Programcode, SoundFilePath);
+        }
+
+        public List<ChatSoundModel> GetChatSoundList(ICustomerChat customerChat, int TenantID, string Programcode, string SoundFilePath)
+        {
+            _customerChat = customerChat;
+            return _customerChat.GetChatSoundList( TenantID,  Programcode, SoundFilePath);
+        }
+
+
+        public int UpdateChatSoundNotificationSetting(ICustomerChat customerChat, ChatSoundNotificationModel Setting)
+        {
+            _customerChat = customerChat;
+            return _customerChat.UpdateChatSoundNotificationSetting( Setting);
+        }
+
+        #endregion
 
 
         #endregion

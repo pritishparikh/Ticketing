@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ChatID"></param>
         /// <returns></returns>
         /// 
-        public List<CustomerChatMessages> GetChatMessageDetails(int tenantId, int ChatID ,int ForRecentChat)
+        public List<CustomerChatMessages> GetChatMessageDetails(int tenantId, int ChatID, int ForRecentChat)
         {
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
@@ -125,7 +125,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ChatID", ChatMessageDetails.ChatID);
                 cmd.Parameters.AddWithValue("@_Message", string.IsNullOrEmpty(ChatMessageDetails.Message) ? "" : ChatMessageDetails.Message);
                 cmd.Parameters.AddWithValue("@_ByCustomer", ChatMessageDetails.ByCustomer ? 1 : 2);
-                cmd.Parameters.AddWithValue("@_Status",!ChatMessageDetails.ByCustomer ? 0 : 1);
+                cmd.Parameters.AddWithValue("@_Status", !ChatMessageDetails.ByCustomer ? 0 : 1);
                 cmd.Parameters.AddWithValue("@_StoreManagerId", ChatMessageDetails.StoreManagerId);
                 cmd.Parameters.AddWithValue("@_CreatedBy", ChatMessageDetails.CreatedBy);
 
@@ -173,7 +173,7 @@ namespace Easyrewardz_TicketSystem.Services
                 #region call client api for getting item list
 
                 SearchItemRequest.programcode = Programcode;
-               SearchItemRequest.searchCriteria = SearchText;
+                SearchItemRequest.searchCriteria = SearchText;
 
                 try
                 {
@@ -213,14 +213,14 @@ namespace Easyrewardz_TicketSystem.Services
 
                             if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                             {
-                                CardItemsIds= ds.Tables[0].Rows[0]["CardItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CardItemID"]);
+                                CardItemsIds = ds.Tables[0].Rows[0]["CardItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CardItemID"]);
 
-                                if(!string.IsNullOrEmpty(CardItemsIds))
+                                if (!string.IsNullOrEmpty(CardItemsIds))
                                 {
                                     string[] CardItemsIDArr = CardItemsIds.Split(new char[] { ',' });
 
-                                    if(CardItemsIDArr.Contains("1"))
-                                    ItemList = ItemList.Select(x => { x.uniqueItemCode = ""; return x; }).ToList();
+                                    if (CardItemsIDArr.Contains("1"))
+                                        ItemList = ItemList.Select(x => { x.uniqueItemCode = ""; return x; }).ToList();
 
                                     if (CardItemsIDArr.Contains("2"))
                                         ItemList = ItemList.Select(x => { x.categoryName = ""; return x; }).ToList();
@@ -302,11 +302,11 @@ namespace Easyrewardz_TicketSystem.Services
                     }
 
                 }
-                catch(Exception )
+                catch (Exception)
                 {
                     throw;
                 }
-                
+
 
 
                 #endregion
@@ -324,7 +324,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-            
+
             return ItemList;
         }
 
@@ -343,7 +343,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
 
-                if (conn != null && conn.State == ConnectionState.Closed) 
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
                     conn.Open();
                 }
@@ -390,7 +390,7 @@ namespace Easyrewardz_TicketSystem.Services
                                     SuggestionText = dr["SuggestionText"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SuggestionText"]),
                                     TagID = dr["TagID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TagID"]),
                                     TagName = dr["Tags"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Tags"]),
-                                 
+
 
                                 };
 
@@ -400,7 +400,7 @@ namespace Easyrewardz_TicketSystem.Services
                     }
 
 
-                   
+
                 }
 
                 SuggestionsDetails.Add(ChatSuggestionTagList);
@@ -414,7 +414,7 @@ namespace Easyrewardz_TicketSystem.Services
             finally
             {
                 if (conn != null)
-                { 
+                {
                     conn.Close();
                 }
                 if (ds != null)
@@ -451,7 +451,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ProgramCode", ChatReply.ProgramCode);
                 cmd.Parameters.AddWithValue("@_StoreCode", ChatReply.StoreCode);
                 cmd.Parameters.AddWithValue("@_Mobile", ChatReply.Mobile);
-                cmd.Parameters.AddWithValue("@_Message",string.IsNullOrEmpty(ChatReply.Message) ? "" :  ChatReply.Message);
+                cmd.Parameters.AddWithValue("@_Message", string.IsNullOrEmpty(ChatReply.Message) ? "" : ChatReply.Message);
                 cmd.Parameters.AddWithValue("@_ChatID", ChatReply.ChatID);
                 cmd.Parameters.AddWithValue("@_DateTime", Now);
 
@@ -499,7 +499,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_prgCode", Programcode);
                 cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", MobileNo);
-           
+
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -525,7 +525,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 Url = dr["Url"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Url"]),
                                 ImageURL = dr["ImageURL"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ImageURL"]),
 
-                           };
+                            };
 
                             RecommendationsList.Add(obj);
                         }
@@ -533,12 +533,12 @@ namespace Easyrewardz_TicketSystem.Services
 
                     if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
                     {
-                        Chat_ID= ds.Tables[1].Rows[0]["Chat_ID"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["Chat_ID"]);
+                        Chat_ID = ds.Tables[1].Rows[0]["Chat_ID"] == System.DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["Chat_ID"]);
                         ProgramCode = ds.Tables[1].Rows[0]["prgCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["prgCode"]);
                     }
                 }
 
-                if(RecommendationsList.Count > 0 && Chat_ID > 0 && !string.IsNullOrEmpty(ProgramCode))
+                if (RecommendationsList.Count > 0 && Chat_ID > 0 && !string.IsNullOrEmpty(ProgramCode))
                 {
 
                     #region call client send text api for sending message to customer
@@ -547,7 +547,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         string whatsAppContent = "Brand: " + RecObj.Brand + ", Category: " + RecObj.Category + ", Sub Category: " + RecObj.SubCategory + ", Color: " + RecObj.Color + ", Size: " +
                                                  RecObj.Size + ", Item Code: " + RecObj.ItemCode + ", Price: " + RecObj.Price + "  " + RecObj.Url;
-                        resultCount = resultCount + SendMessageToCustomer(Chat_ID, MobileNo.Length>10?MobileNo:"91"+MobileNo, ProgramCode, RecObj.Url, whatsAppContent, RecObj.ImageURL, ClientAPIURL, CreatedBy,0);
+                        resultCount = resultCount + SendMessageToCustomer(Chat_ID, MobileNo.Length > 10 ? MobileNo : "91" + MobileNo, ProgramCode, RecObj.Url, whatsAppContent, RecObj.ImageURL, ClientAPIURL, CreatedBy, 0);
                     }
 
                     #endregion
@@ -563,20 +563,20 @@ namespace Easyrewardz_TicketSystem.Services
                         CustomerChatModel ChatMessageDetails = new CustomerChatModel();
                         ChatMessageDetails.ChatID = Chat_ID;
                         ChatMessageDetails.Message = messagecontent;
-                        ChatMessageDetails.ByCustomer =false;
+                        ChatMessageDetails.ByCustomer = false;
                         ChatMessageDetails.ChatStatus = 0;
                         ChatMessageDetails.StoreManagerId = CreatedBy;
                         ChatMessageDetails.CreatedBy = CreatedBy;
 
-                        resultCount  = resultCount + SaveChatMessages(ChatMessageDetails);
+                        resultCount = resultCount + SaveChatMessages(ChatMessageDetails);
 
                     }
 
-                     
+
                 }
 
             }
-            catch (Exception )
+            catch (Exception)
             {
                 throw;
             }
@@ -655,17 +655,236 @@ namespace Easyrewardz_TicketSystem.Services
 
                 #endregion
 
-                
+
 
             }
-            catch (Exception )
+            catch (Exception)
             {
                 throw;
             }
-            
+
             return string.IsNullOrEmpty(ClientImageAPIResponse) ? 0 : 1;
         }
 
-    }
 
+
+        #region Chat Sound Notification Setting
+
+        /// <summary>
+        ///  Get Chat Sound List
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <returns></returns>
+        /// 
+        public List<ChatSoundModel> GetChatSoundList(int TenantID, string Programcode, string SoundFilePath)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            List<ChatSoundModel> SoundList = new List<ChatSoundModel>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSGetChatSoundList", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantId", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", Programcode);
+
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            ChatSoundModel obj = new ChatSoundModel()
+                            {
+                                SoundID = Convert.ToInt32(dr["SoundID"]),
+                                TenantID = dr["TenantID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TenantID"]),
+                                ProgramCode = dr["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ProgramCode"]),
+                                SoundFileName = dr["SoundFileName"] == DBNull.Value ? string.Empty :  Convert.ToString(dr["SoundFileName"]),
+                                SoundFileUrl = dr["SoundFileName"] == DBNull.Value ? string.Empty :  SoundFilePath + Convert.ToString(dr["SoundFileName"]),
+                                CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CreatedBy"]),
+                                CreatedByName = dr["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedByName"]),
+                                CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),
+                                ModifyBy = dr["ModifiedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ModifiedBy"]),
+                                ModifyByName = dr["ModifyByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyByName"]),
+                                ModifyDate = dr["ModifyDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyDate"]),
+
+                            };
+
+                            SoundList.Add(obj);
+                        }
+                    }
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return SoundList;
+        }
+
+
+        /// <summary>
+        /// Get Chat Sound Notification Setting
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <returns></returns>
+        /// 
+        public ChatSoundNotificationModel GetChatSoundNotificationSetting(int TenantID, string Programcode, string SoundFilePath)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            ChatSoundNotificationModel SoundSetting = new ChatSoundNotificationModel();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSGetChatSoundNotificationSetting", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantId", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", Programcode);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+
+                        SoundSetting.ID = ds.Tables[0].Rows[0]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["ID"]);
+                        SoundSetting.TenantID = ds.Tables[0].Rows[0]["TenantID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["TenantID"]);
+                        SoundSetting.ProgramCode = ds.Tables[0].Rows[0]["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ProgramCode"]);
+                        SoundSetting.NewChatSoundID = ds.Tables[0].Rows[0]["NewChatSoundID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["NewChatSoundID"]);
+                        SoundSetting.NewChatSoundFile = ds.Tables[0].Rows[0]["NewChatSoundFile"] == DBNull.Value ? string.Empty :  SoundFilePath + Convert.ToString(ds.Tables[0].Rows[0]["NewChatSoundFile"]);
+                        SoundSetting.NewChatSoundVolume = ds.Tables[0].Rows[0]["NewChatVolume"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["NewChatVolume"]);
+                        SoundSetting.NewMessageSoundID = ds.Tables[0].Rows[0]["NewMessageSoundID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["NewMessageSoundID"]);
+                        SoundSetting.NewMessageSoundFile = ds.Tables[0].Rows[0]["NewMessageSoundFile"] == DBNull.Value ? string.Empty : SoundFilePath + Convert.ToString(ds.Tables[0].Rows[0]["NewMessageSoundFile"]);
+                        SoundSetting.NewMessageSoundVolume = ds.Tables[0].Rows[0]["NewMessageVolume"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["NewMessageVolume"]);
+                        SoundSetting.IsNotiNewChat = ds.Tables[0].Rows[0]["IsNotiNewChat"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["IsNotiNewChat"]);
+                        SoundSetting.IsNotiNewMessage = ds.Tables[0].Rows[0]["IsNotiNewMessage"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["IsNotiNewMessage"]);
+                        SoundSetting.IsDefault = ds.Tables[0].Rows[0]["IsDefault"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["IsDefault"]);
+                        SoundSetting.CreatedBy = ds.Tables[0].Rows[0]["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["CreatedBy"]);
+                        SoundSetting.CreatedByName = ds.Tables[0].Rows[0]["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CreatedByName"]);
+                        SoundSetting.CreatedDate = ds.Tables[0].Rows[0]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CreatedDate"]);
+                        SoundSetting.ModifyBy = ds.Tables[0].Rows[0]["ModifiedBy"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["ModifiedBy"]);
+                        SoundSetting.ModifyByName = ds.Tables[0].Rows[0]["ModifyByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ModifyByName"]);
+                        SoundSetting.ModifyDate = ds.Tables[0].Rows[0]["ModifyDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ModifyDate"]);
+
+                    }
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return SoundSetting;
+
+
+            
+        }
+
+
+        /// <summary>
+        /// Update Chat Sound Notification Setting
+        /// </summary>
+        /// <param name="ChatSoundNotificationModel"></param>
+        /// <returns></returns>
+        ///
+        public int UpdateChatSoundNotificationSetting(ChatSoundNotificationModel Setting)
+        {
+            int success = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand
+                {
+                    Connection = conn,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "SP_HSUpdateChatSoundNotificationSetting"
+                };
+
+
+                cmd.Parameters.AddWithValue("@_ID", Setting.ID);
+                cmd.Parameters.AddWithValue("@_TenantID", Setting.TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", Setting.ProgramCode);
+                cmd.Parameters.AddWithValue("@_NewChatSoundID", Setting.NewChatSoundID);
+                cmd.Parameters.AddWithValue("@_NewChatVolume", Setting.NewChatSoundVolume);
+                cmd.Parameters.AddWithValue("@_NewMessageSoundID", Setting.NewMessageSoundID);
+                cmd.Parameters.AddWithValue("@_NewMessageVolume", Setting.NewMessageSoundVolume);
+                cmd.Parameters.AddWithValue("@_IsNotiNewChat",Convert.ToInt16(Setting.IsNotiNewChat));
+                cmd.Parameters.AddWithValue("@_IsNotiNewMessage", Convert.ToInt16(Setting.IsNotiNewMessage));
+                cmd.Parameters.AddWithValue("@_IsDefault", Convert.ToInt16(Setting.IsDefault));
+                cmd.Parameters.AddWithValue("@_ModifiedBy", Setting.ModifyBy);
+
+                success = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return success;
+        }
+
+        #endregion
+    }
 }

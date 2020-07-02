@@ -76,5 +76,37 @@ namespace Easyrewardz_TicketSystem.Interface
         int SendMessageToCustomer(int ChatID, string MobileNo,string ProgramCode,string Message, string WhatsAppMessage, string ImageURL, string ClientAPIURL,int CreatedBy, int InsertChat);
 
 
+        #region Chat Sound Notification Setting
+
+
+        /// <summary>
+        /// Get Chat Sound Notification Setting
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <returns></returns>
+        ///
+        ChatSoundNotificationModel GetChatSoundNotificationSetting(int TenantID, string Programcode, string SoundFilePath);
+
+        /// <summary>
+        ///  Get Chat Sound List
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <returns></returns>
+        /// 
+        List<ChatSoundModel> GetChatSoundList(int TenantID, string Programcode, string SoundFilePath);
+
+        /// <summary>
+        /// Update Chat Sound Notification Setting
+        /// </summary>
+        /// <param name="ChatSoundNotificationModel"></param>
+        /// <returns></returns>
+        ///
+        int UpdateChatSoundNotificationSetting(ChatSoundNotificationModel Setting);
+
+        #endregion
+
+
     }
 }
