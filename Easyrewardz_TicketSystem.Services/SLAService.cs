@@ -421,7 +421,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// 
         public List<string> BulkUploadSLA(int TenantID, int CreatedBy, int SLAFor, DataSet DataSetCSV)
         {
-            
+
             XmlDocument xmlDoc = new XmlDocument();
             DataSet Bulkds = new DataSet();
             List<string> csvLst = new List<string>();
@@ -462,7 +462,7 @@ namespace Easyrewardz_TicketSystem.Services
                             csvLst.Add(ErroFile);
 
 
-                            
+
 
                         }
                     }
@@ -755,19 +755,32 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="issueTypeID"></param>
         /// <param name="tenantID"></param>
         /// </summary>
-        public int ValidateSLAByIssueTypeID(int issueTypeID, int tenantID)
+        public ValidateSLA ValidateSLAByIssueTypeID(int issueTypeID, int tenantID)
         {
-            int isExist;
+            ValidateSLA objValidateSLA = new ValidateSLA();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
             try
             {
                 conn.Open();
+                cmd.Connection = conn;
+
                 MySqlCommand cmd1 = new MySqlCommand("SP_ValidateSLAByIssueType", conn);
-                cmd1.Connection = conn;              
-                cmd1.Parameters.AddWithValue("@issueType_ID", issueTypeID);
-                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                isExist = Convert.ToInt32(cmd1.ExecuteScalar());
-                conn.Close();
+                cmd1.Parameters.AddWithValue("@issueTypeID", issueTypeID);
+                cmd1.Parameters.AddWithValue("@tenantID", tenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objValidateSLA.PriorityID = Convert.ToInt32(ds.Tables[0].Rows[0]["SlaID"]);
+                        objValidateSLA.PriortyName = Convert.ToString(ds.Tables[0].Rows[0]["BrandName"]);
+                    }
+                }
             }
             catch (Exception)
             {
@@ -779,9 +792,13 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
-            return isExist;
+            return objValidateSLA;
         }
     }
 }
