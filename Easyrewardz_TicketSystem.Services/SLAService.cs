@@ -755,7 +755,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="issueTypeID"></param>
         /// <param name="tenantID"></param>
         /// </summary>
-        public List<ValidateSLA> ValidateSLAByIssueTypeID(int issueTypeID, int tenantID)
+        public List<ValidateSLA> ValidateSLAByIssueTypeID(int issueTypeID, int tenantID,int ticketID)
         {
             List<ValidateSLA> lstValidateSLA = new List<ValidateSLA>();
             DataSet ds = new DataSet();
@@ -769,20 +769,25 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@issueTypeID", issueTypeID);
                 cmd1.Parameters.AddWithValue("@tenantID", tenantID);
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
-                da.Fill(ds);
-
-                if (ds != null && ds.Tables != null)
+                cmd1.Parameters.AddWithValue("@ticketID", ticketID);
+                MySqlDataAdapter da = new MySqlDataAdapter
                 {
-                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    SelectCommand = cmd1
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        ValidateSLA objValidateSLA = new ValidateSLA();
-                        objValidateSLA.PriorityID = Convert.ToInt32(ds.Tables[0].Rows[0]["PriorityID"]);
-                        objValidateSLA.PriortyName = Convert.ToString(ds.Tables[0].Rows[0]["PriortyName"]);
+                        ValidateSLA objValidateSLA = new ValidateSLA
+                        {
+                            PriorityID = ds.Tables[0].Rows[i]["PriorityID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["PriorityID"]),
+                            PriortyName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"])
+                        };
                         lstValidateSLA.Add(objValidateSLA);
                     }
                 }
+
             }
             catch (Exception)
             {

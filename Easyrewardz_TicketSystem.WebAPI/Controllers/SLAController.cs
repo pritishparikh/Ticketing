@@ -692,7 +692,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="issueTypeID"></param>
         [HttpPost]
         [Route("ValidateSLAByIssueTypeID")]
-        public ResponseModel ValidateSLAByIssueTypeID(int issueTypeID)
+        public ResponseModel ValidateSLAByIssueTypeID(int issueTypeID,int ticketID)
         {
             SLACaller _newSLA = new SLACaller();
             List<ValidateSLA> validateSLA = new List<ValidateSLA>();
@@ -706,7 +706,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                validateSLA = _newSLA.ValidateSLAByIssueTypeID(new SLAServices(_connectioSting), issueTypeID, authenticate.TenantId);
+                validateSLA = _newSLA.ValidateSLAByIssueTypeID(new SLAServices(_connectioSting), issueTypeID, authenticate.TenantId, ticketID);
                 statusCode = validateSLA.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
