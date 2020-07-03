@@ -32,5 +32,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         bool UpdateSLADetails(SLADetail sLADetail, int TenantID, int UserID);
 
+        int ValidateSLAByIssueTypeID(int issueTypeID, int tenantID);
+
     }
 }

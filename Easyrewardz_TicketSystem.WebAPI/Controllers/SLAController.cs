@@ -686,6 +686,43 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
 
+        /// <summary>
+        /// ValidateSLAByIssueTypeID
+        /// </summary>
+        /// <param name="issueTypeID"></param>
+        [HttpPost]
+        [Route("ValidateSLAByIssueTypeID")]
+        public ResponseModel ValidateSLAByIssueTypeID(int issueTypeID)
+        {
+            SLACaller _newSLA = new SLACaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                int result = _newSLA.ValidateSLAByIssueTypeID(new SLAServices(_connectioSting), issueTypeID, authenticate.TenantId);
+                statusCode = result < 0 ?
+                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
 
         #endregion
     }

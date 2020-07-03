@@ -749,5 +749,39 @@ namespace Easyrewardz_TicketSystem.Services
 
             return isUpdateDone;
         }
+
+        /// <summary>
+        ///ValidateSLAByIssueTypeID
+        /// <param name="issueTypeID"></param>
+        /// <param name="tenantID"></param>
+        /// </summary>
+        public int ValidateSLAByIssueTypeID(int issueTypeID, int tenantID)
+        {
+            int isExist;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd1 = new MySqlCommand("SP_ValidateSLAByIssueType", conn);
+                cmd1.Connection = conn;              
+                cmd1.Parameters.AddWithValue("@issueType_ID", issueTypeID);
+                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                isExist = Convert.ToInt32(cmd1.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return isExist;
+        }
     }
 }
