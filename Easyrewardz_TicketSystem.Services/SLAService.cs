@@ -755,9 +755,9 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="issueTypeID"></param>
         /// <param name="tenantID"></param>
         /// </summary>
-        public ValidateSLA ValidateSLAByIssueTypeID(int issueTypeID, int tenantID)
+        public List<ValidateSLA> ValidateSLAByIssueTypeID(int issueTypeID, int tenantID)
         {
-            ValidateSLA objValidateSLA = new ValidateSLA();
+            List<ValidateSLA> lstValidateSLA = new List<ValidateSLA>();
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             try
@@ -777,8 +777,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        objValidateSLA.PriorityID = Convert.ToInt32(ds.Tables[0].Rows[0]["SlaID"]);
-                        objValidateSLA.PriortyName = Convert.ToString(ds.Tables[0].Rows[0]["BrandName"]);
+                        ValidateSLA objValidateSLA = new ValidateSLA();
+                        objValidateSLA.PriorityID = Convert.ToInt32(ds.Tables[0].Rows[0]["PriorityID"]);
+                        objValidateSLA.PriortyName = Convert.ToString(ds.Tables[0].Rows[0]["PriortyName"]);
+                        lstValidateSLA.Add(objValidateSLA);
                     }
                 }
             }
@@ -798,7 +800,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return objValidateSLA;
+            return lstValidateSLA;
         }
     }
 }

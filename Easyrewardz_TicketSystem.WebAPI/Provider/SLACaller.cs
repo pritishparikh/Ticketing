@@ -42,7 +42,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _SLARepository = SLA;
             return _SLARepository.UpdateSLADetails(sLADetail, TenantID, UserID);
         }
-        public ValidateSLA ValidateSLAByIssueTypeID (ISLA SLA, int issueTypeID, int tenantID)
+        public List<ValidateSLA> ValidateSLAByIssueTypeID (ISLA SLA, int issueTypeID, int tenantID)
         {
             _SLARepository = SLA;
             return _SLARepository.ValidateSLAByIssueTypeID(issueTypeID, tenantID);
