@@ -844,10 +844,10 @@ namespace Easyrewardz_TicketSystem.Services
             string spantext = "{0}D {1}H {2}M Ago";
             try
             {
-                //if (string.IsNullOrEmpty(time))
-                //{
-                //    return "";
-                //}
+                if (string.IsNullOrEmpty(time))
+                {
+                    return "";
+                }
                 //if (time.Split(new char[] { '|' }).Length < 2)
                 //{
                 //    return "";
