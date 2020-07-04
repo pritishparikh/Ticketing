@@ -591,18 +591,18 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     return "";
                 }
-                if (time.Split(new char[] { '|' }).Length < 2)
-                {
-                    return "";
-                }
-                if (time.Split(new char[] { '|' })[0].Trim().Length < 1)
-                {
-                    return "";
-                }
-                if (time.Split(new char[] { '|' })[1].Trim().Length < 1)
-                {
-                    return "";
-                }
+                //if (time.Split(new char[] { '|' }).Length < 2)
+                //{
+                //    return "";
+                //}
+                //if (time.Split(new char[] { '|' })[0].Trim().Length < 1)
+                //{
+                //    return "";
+                //}
+                //if (time.Split(new char[] { '|' })[1].Trim().Length < 1)
+                //{
+                //    return "";
+                //}
 
                 if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
                 {
