@@ -587,22 +587,22 @@ namespace Easyrewardz_TicketSystem.Services
             string spantext = "{0}D {1}H {2}M Ago";
             try
             {
-                if (string.IsNullOrEmpty(time))
-                {
-                    return "";
-                }
-                if (time.Split(new char[] { '|' }).Length < 2)
-                {
-                    return "";
-                }
-                if (time.Split(new char[] { '|' })[0].Trim().Length < 1)
-                {
-                    return "";
-                }
-                if (time.Split(new char[] { '|' })[1].Trim().Length < 1)
-                {
-                    return "";
-                }
+                //if (string.IsNullOrEmpty(time))
+                //{
+                //    return "";
+                //}
+                //if (time.Split(new char[] { '|' }).Length < 2)
+                //{
+                //    return "";
+                //}
+                //if (time.Split(new char[] { '|' })[0].Trim().Length < 1)
+                //{
+                //    return "";
+                //}
+                //if (time.Split(new char[] { '|' })[1].Trim().Length < 1)
+                //{
+                //    return "";
+                //}
 
                 if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
                 {
