@@ -749,5 +749,64 @@ namespace Easyrewardz_TicketSystem.Services
 
             return isUpdateDone;
         }
+
+        /// <summary>
+        ///ValidateSLAByIssueTypeID
+        /// <param name="issueTypeID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="ticketID"></param>
+        /// </summary>
+        public List<ValidateSLA> ValidateSLAByIssueTypeID(int issueTypeID, int tenantID, int ticketID)
+        {
+            List<ValidateSLA> lstValidateSLA = new List<ValidateSLA>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("SP_ValidateSLAByIssueType", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@issueTypeID", issueTypeID);
+                cmd1.Parameters.AddWithValue("@tenantID", tenantID);
+                cmd1.Parameters.AddWithValue("@ticketID", ticketID);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        ValidateSLA objValidateSLA = new ValidateSLA
+                        {
+                            PriorityID = ds.Tables[0].Rows[i]["PriorityID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["PriorityID"]),
+                            PriortyName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"])
+                        };
+                        lstValidateSLA.Add(objValidateSLA);
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return lstValidateSLA;
+        }
     }
 }

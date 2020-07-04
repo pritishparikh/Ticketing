@@ -97,5 +97,15 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <returns></returns>
         bool UpdateSLADetails(SLADetail sLADetail, int TenantID, int UserID);
 
+
+        /// <summary>
+        /// Validate SLA By IssueTypeID
+        /// </summary>
+        /// <param name="issueTypeID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="ticketID"></param>
+        /// <returns></returns>
+        List<ValidateSLA> ValidateSLAByIssueTypeID(int issueTypeID, int tenantID, int ticketID);
+
     }
 }
