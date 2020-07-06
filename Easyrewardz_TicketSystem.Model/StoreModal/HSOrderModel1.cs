@@ -736,11 +736,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// label_url
         /// </summary>
-        public string label_url { get; set; }
+        public string label_url { get; set; } = "";
 
         /// <summary>
         /// response
         /// </summary>
-        public string response { get; set; }
+        public string response { get; set; } = "";
     }
 }
