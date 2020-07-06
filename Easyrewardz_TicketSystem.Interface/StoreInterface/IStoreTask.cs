@@ -202,5 +202,16 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="UserID"></param>
         /// <returns></returns>
         List<StoreCampaign> GetStoreCampaignCustomerByStatus(string statusID ,int TenantID, int UserID);
+
+        /// <summary>
+        /// Get Store Customer Popup Details List
+        /// </summary>
+        /// <param name="mobileNumber"></param>
+        /// <param name="programCode"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <returns></returns>
+        StoresCampaignDetailResponse GetStoreCustomerpopupDetailsList(string mobileNumber, string programCode, int TenantID, int UserID, string ClientAPIURL);
     }
 }

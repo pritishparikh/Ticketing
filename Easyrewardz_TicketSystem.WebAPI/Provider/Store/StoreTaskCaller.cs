@@ -139,5 +139,22 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _TaskRepository = task;
             return _TaskRepository.GetTaskTicketData(taskMaster);
         }
+        /// <summary>
+        /// Get Customer Popup Details List
+        /// </summary>
+        /// <param name="Campaign"></param>
+        /// <param name="mobileNumber"></param>
+        /// <param name="programCode"></param>
+        /// <param name="campaignID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <returns></returns>
+        public StoresCampaignDetailResponse GetStoreCustomerpopupDetailsList(IStoreTask Campaign, string mobileNumber, string programCode, int TenantID, int UserID, string ClientAPIURL)
+        {
+            _TaskRepository = Campaign;
+            return _TaskRepository.GetStoreCustomerpopupDetailsList(mobileNumber, programCode, TenantID, UserID, ClientAPIURL);
+
+        }
     }
 }
