@@ -372,5 +372,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public bool BotClickable { get; set; }
     }
+    public class StoresCampaignDetailResponse
+    {
+        public CustomerpopupDetails useratvdetails { get; set; }
+        public StoreCampaignLastTransactionDetails lasttransactiondetails { get; set; }
+    }
 }
 

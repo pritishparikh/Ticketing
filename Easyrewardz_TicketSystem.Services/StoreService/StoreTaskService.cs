@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,9 +14,16 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
+        CustomResponse ApiResponse = null;
+        string apiResponse = string.Empty;
+        string apiResponse1 = string.Empty;
+        string apisecurityToken = string.Empty;
+        string apiURL = string.Empty;
+        string apiURLGetUserATVDetails = string.Empty;
         public StoreTaskService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
+            apisecurityToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9ncmFtQ29kZSI6IkJhdGEiLCJVc2VySUQiOiIzIiwiQXBwSUQiOiI3IiwiRGF5IjoiMjgiLCJNb250aCI6IjMiLCJZZWFyIjoiMjAyMSIsIlJvbGUiOiJBZG1pbiIsImlzcyI6IkF1dGhTZWN1cml0eUlzc3VlciIsImF1ZCI6IkF1dGhTZWN1cml0eUF1ZGllbmNlIn0.0XeF7V5LWfQn0NlSlG7Rb-Qq1hUCtUYRDg6dMGIMvg0";
         }
         #endregion
         /// <summary>
@@ -1612,6 +1620,133 @@ namespace Easyrewardz_TicketSystem.Services
             return objList;
         }
 
+        /// <summary>
+        ///Get Customer popup Details List
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <param name="mobileNumber"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
+        public StoresCampaignDetailResponse GetStoreCustomerpopupDetailsList(string mobileNumber, string programCode, int tenantID, int userID, string ClientAPIURL)
+        {
+            StoresCampaignDetailResponse obj = new StoresCampaignDetailResponse();
+            StoreCampaignSearchOrder objOrderSearch = new StoreCampaignSearchOrder();
+            CustomerpopupDetails objpopupDetails = new CustomerpopupDetails();
+            StoreCampaignLastTransactionDetails objLastTransactionDetails = new StoreCampaignLastTransactionDetails();
+            string apiReq = string.Empty;
+            DataSet ds = new DataSet();
+            try
+            {
+                objOrderSearch.mobileNumber = mobileNumber;
+                objOrderSearch.programCode = programCode;
+                objOrderSearch.securityToken = apisecurityToken;
+                try
+                {
+                    apiReq = JsonConvert.SerializeObject(objOrderSearch);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetUserATVDetails", apiReq);
+
+                    if (!string.IsNullOrEmpty(apiResponse))
+                    {
+                        ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+
+                        if (apiResponse != null)
+                        {
+                            objpopupDetails = JsonConvert.DeserializeObject<CustomerpopupDetails>(((apiResponse)));
+
+                            if (objpopupDetails != null)
+                            {
+                                CustomerpopupDetails popupDetail = new CustomerpopupDetails
+                                {
+                                    name = objpopupDetails.name,
+                                    mobileNumber = objpopupDetails.mobileNumber,
+                                    tiername = objpopupDetails.tiername,
+                                    lifeTimeValue = objpopupDetails.lifeTimeValue,
+                                    visitCount = objpopupDetails.visitCount
+                                };
+                                obj.useratvdetails = popupDetail;
+                            }
+                            else
+                            {
+                                CustomerpopupDetails popupDetail = new CustomerpopupDetails
+                                {
+                                    name = "",
+                                    mobileNumber = "",
+                                    tiername = "",
+                                    lifeTimeValue = "",
+                                    visitCount = ""
+                                };
+                                obj.useratvdetails = popupDetail;
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    if (obj.useratvdetails == null)
+                    {
+                        CustomerpopupDetails popupDetail = new CustomerpopupDetails
+                        {
+                            name = "",
+                            mobileNumber = "",
+                            tiername = "",
+                            lifeTimeValue = "",
+                            visitCount = ""
+                        };
+                        obj.useratvdetails = popupDetail;
+                    }
+                }
+                try
+                {
+                    apiResponse = string.Empty;
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetLastTransactionDetails", apiReq);
+
+                    if (!string.IsNullOrEmpty(apiResponse))
+                    {
+
+                        if (apiResponse != null)
+                        {
+                            objLastTransactionDetails = JsonConvert.DeserializeObject<StoreCampaignLastTransactionDetails>(((apiResponse)));
+
+                            if (objLastTransactionDetails != null)
+                            {
+
+                                obj.lasttransactiondetails = objLastTransactionDetails;
+                            }
+                            else
+                            {
+                                StoreCampaignLastTransactionDetails LastTransactionDetails = new StoreCampaignLastTransactionDetails();
+
+                                LastTransactionDetails.billNo = "";
+                                LastTransactionDetails.billDate = "";
+                                LastTransactionDetails.storeName = "";
+                                LastTransactionDetails.amount = "";
+                                obj.lasttransactiondetails = LastTransactionDetails;
+                            }
+
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    if (obj.lasttransactiondetails == null)
+                    {
+                        StoreCampaignLastTransactionDetails LastTransactionDetails = new StoreCampaignLastTransactionDetails();
+
+                        LastTransactionDetails.billNo = "";
+                        LastTransactionDetails.billDate = "";
+                        LastTransactionDetails.storeName = "";
+                        LastTransactionDetails.amount = "";
+                        obj.lasttransactiondetails = LastTransactionDetails;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return obj;
+        }
 
         #endregion
 
