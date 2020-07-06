@@ -69,5 +69,22 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="shippingTemplateRequest"></param>
         /// <returns></returns>
         ShippingTemplateDetails GetOrderShippingTemplate(int tenantId, int userId, ShippingTemplateRequest shippingTemplateRequest);
+
+        /// <summary>
+        /// InsertOrderShippingTemplate
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <param name="addEditShippingTemplate"></param>
+        /// <returns></returns>
+        int InsertUpdateOrderShippingTemplate(int tenantID, int userID, AddEditShippingTemplate addEditShippingTemplate);
+
+        /// <summary>
+        /// GetOrderShippingTemplateName
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        ShippingTemplateDetails GetOrderShippingTemplateName(int tenantId, int userId);
     }
 }

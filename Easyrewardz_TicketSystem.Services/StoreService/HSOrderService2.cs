@@ -785,5 +785,122 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objdetails;
         }
+
+        /// <summary>
+        /// InsertOrderShippingTemplate
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <param name="addEditShippingTemplate"></param>
+        /// <returns></returns>
+        public int InsertUpdateOrderShippingTemplate(int tenantID, int userID, AddEditShippingTemplate addEditShippingTemplate)
+        {
+            int result = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand("SP_PHYInsertOrderShippingTemplate", conn)
+                {
+                    Connection = conn,
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantID);
+                cmd.Parameters.AddWithValue("@_UserID", userID);
+                cmd.Parameters.AddWithValue("@_ID", addEditShippingTemplate.ID);
+                cmd.Parameters.AddWithValue("@_TemplateName", addEditShippingTemplate.TemplateName);
+                cmd.Parameters.AddWithValue("@_Height", addEditShippingTemplate.Height);
+                cmd.Parameters.AddWithValue("@_Height_Unit", addEditShippingTemplate.Height_Unit);
+                cmd.Parameters.AddWithValue("@_Length", addEditShippingTemplate.Length);
+                cmd.Parameters.AddWithValue("@_Length_Unit", addEditShippingTemplate.Length_Unit);
+                cmd.Parameters.AddWithValue("@_Breath", addEditShippingTemplate.Breath);
+                cmd.Parameters.AddWithValue("@_Breath_Unit", addEditShippingTemplate.Breath_Unit);
+                cmd.Parameters.AddWithValue("@_Weight", addEditShippingTemplate.Weight);
+                cmd.Parameters.AddWithValue("@_Weight_Unit", addEditShippingTemplate.Weight_Unit);
+                result = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// GetOrderShippingTemplateName
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public ShippingTemplateDetails GetOrderShippingTemplateName(int tenantId, int userId)
+        {
+            DataSet ds = new DataSet();
+            ShippingTemplateDetails objdetails = new ShippingTemplateDetails();
+
+            List<ShippingTemplate> orderlist = new List<ShippingTemplate>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrderShippingTemplateName", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        ShippingTemplate obj = new ShippingTemplate
+                        {
+                            ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            TemplateName = ds.Tables[0].Rows[i]["TemplateName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TemplateName"]),
+                            Height = ds.Tables[0].Rows[i]["Height"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Height"]),
+                            Height_Unit = ds.Tables[0].Rows[i]["Height_Unit"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Height_Unit"]),
+                            Length = ds.Tables[0].Rows[i]["Length"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Length"]),
+                            Length_Unit = ds.Tables[0].Rows[i]["Length_Unit"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Length_Unit"]),
+                            Breath = ds.Tables[0].Rows[i]["Breath"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Breath"]),
+                            Breath_Unit = ds.Tables[0].Rows[i]["Breath_Unit"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Breath_Unit"]),
+                            Weight = ds.Tables[0].Rows[i]["Weight"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Weight"]),
+                            Weight_Unit = ds.Tables[0].Rows[i]["Weight_Unit"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Weight_Unit"]),
+                        };
+                        orderlist.Add(obj);
+                    }
+                }
+                objdetails.ShippingTemplateList = orderlist;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objdetails;
+        }
     }
 }

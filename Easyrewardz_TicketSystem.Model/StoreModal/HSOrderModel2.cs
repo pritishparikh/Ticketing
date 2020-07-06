@@ -468,7 +468,7 @@ namespace Easyrewardz_TicketSystem.Model
     public class ShippingTemplateDetails
     {
         /// <summary>
-        /// OrdersList
+        /// ShippingTemplateList
         /// </summary>
         public List<ShippingTemplate> ShippingTemplateList { get; set; }
         /// <summary>
@@ -540,5 +540,51 @@ namespace Easyrewardz_TicketSystem.Model
         /// Modifiedby
         /// </summary>
         public string Modifiedby { get; set; }
+    }
+
+
+    public class AddEditShippingTemplate
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; } = 0;
+        /// <summary>
+        /// TemplateName
+        /// </summary>
+        public string TemplateName { get; set; }
+        /// <summary>
+        /// Height
+        /// </summary>
+        public decimal Height { get; set; }
+        /// <summary>
+        /// Height_Unit
+        /// </summary>
+        public string Height_Unit { get; set; }
+        /// <summary>
+        /// Length
+        /// </summary>
+        public decimal Length { get; set; }
+        /// <summary>
+        /// Length_Unit
+        /// </summary>
+        public string Length_Unit { get; set; }
+        /// <summary>
+        /// Breath
+        /// </summary>
+        public decimal Breath { get; set; }
+        /// <summary>
+        /// Breath_Unit
+        /// </summary>
+        public string Breath_Unit { get; set; }
+        /// <summary>
+        /// Weight
+        /// </summary>
+        public decimal Weight { get; set; }
+        /// <summary>
+        /// Weight_Unit
+        /// </summary>
+        public string Weight_Unit { get; set; }
+        
     }
 }
