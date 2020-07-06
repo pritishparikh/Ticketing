@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public partial interface ICustomerChat
     {
-        ChatCustomerProfileModel GetChatCustomerProfileDetails(int TenantId, string ProgramCode, int CustomerID);
+        ChatCustomerProfileModel GetChatCustomerProfileDetails(int TenantId, string ProgramCode, int CustomerID, int UserID, string ClientAPIURL);
 
 
     }

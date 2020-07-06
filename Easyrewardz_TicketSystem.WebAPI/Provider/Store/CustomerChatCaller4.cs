@@ -11,10 +11,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
     {
         #region Methods 
 
-        public ChatCustomerProfileModel GetChatCustomerProfileDetails(ICustomerChat customerChat, int TenantID, string Programcode, int CustomerID)
+        public ChatCustomerProfileModel GetChatCustomerProfileDetails(ICustomerChat customerChat, int TenantID, string Programcode, int CustomerID, int UserID, string ClientAPIURL)
         {
             _customerChat = customerChat;
-            return _customerChat.GetChatCustomerProfileDetails(TenantID, Programcode, CustomerID);
+            return _customerChat.GetChatCustomerProfileDetails(TenantID, Programcode, CustomerID,  UserID,  ClientAPIURL);
         }
 
         #endregion

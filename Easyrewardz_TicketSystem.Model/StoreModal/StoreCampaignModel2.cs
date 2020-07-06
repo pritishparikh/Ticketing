@@ -146,6 +146,7 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class CustomerpopupDetails
     {
+
         /// <summary>
         /// name
         /// </summary>
@@ -170,6 +171,18 @@ namespace Easyrewardz_TicketSystem.Model
         /// visit Count
         /// </summary>
         public string visitCount { get; set; }
+
+        /// <summary>
+        /// email
+        /// </summary>
+        public string email { get; set; }
+
+
+
+        /// <summary>
+        /// available Points
+        /// </summary>
+        public string availablePoints { get; set; }
 
     }
 
