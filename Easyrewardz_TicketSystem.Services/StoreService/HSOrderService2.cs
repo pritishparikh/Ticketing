@@ -701,5 +701,89 @@ namespace Easyrewardz_TicketSystem.Services
 
             return result;
         }
+
+        /// <summary>
+        /// GetOrderShippingTemplate
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="shippingTemplateRequest"></param>
+        /// <returns></returns>
+        public ShippingTemplateDetails GetOrderShippingTemplate(int tenantId, int userId, ShippingTemplateRequest shippingTemplateRequest)
+        {
+            DataSet ds = new DataSet();
+            ShippingTemplateDetails objdetails = new ShippingTemplateDetails();
+
+            List<ShippingTemplate> orderlist = new List<ShippingTemplate>();
+            int TotalCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetOrderShippingTemplate", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_pageno", shippingTemplateRequest.PageNo);
+                cmd.Parameters.AddWithValue("@_pagesize", shippingTemplateRequest.PageSize);
+                cmd.Parameters.AddWithValue("@_FilterStatus", shippingTemplateRequest.FilterStatus);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        ShippingTemplate obj = new ShippingTemplate
+                        {
+                            ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            TemplateName = ds.Tables[0].Rows[i]["TemplateName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TemplateName"]),
+                            Height = ds.Tables[0].Rows[i]["Height"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Height"]),
+                            Height_Unit = ds.Tables[0].Rows[i]["Height_Unit"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Height_Unit"]),
+                            Length = ds.Tables[0].Rows[i]["Length"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Length"]),
+                            Length_Unit = ds.Tables[0].Rows[i]["Length_Unit"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Length_Unit"]),
+                            Breath = ds.Tables[0].Rows[i]["Breath"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Breath"]),
+                            Breath_Unit = ds.Tables[0].Rows[i]["Breath_Unit"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Breath_Unit"]),
+                            Weight = ds.Tables[0].Rows[i]["Weight"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Weight"]),
+                            Weight_Unit = ds.Tables[0].Rows[i]["Weight_Unit"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Weight_Unit"]),
+                            CreatedOn = ds.Tables[0].Rows[i]["CreatedOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedOn"]),
+                            ModifiedOn = ds.Tables[0].Rows[i]["ModifiedOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedOn"]),
+                            Createdby = ds.Tables[0].Rows[i]["Createdby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]),
+                            Modifiedby = ds.Tables[0].Rows[i]["Modifiedby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Modifiedby"])
+                        };
+                        orderlist.Add(obj);
+                    }
+                }
+
+                if (ds != null && ds.Tables[1] != null)
+                {
+                    TotalCount = ds.Tables[1].Rows[0]["TotalCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["TotalCount"]);
+                }
+
+                objdetails.ShippingTemplateList = orderlist;
+                objdetails.TotalCount = TotalCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objdetails;
+        }
     }
 }

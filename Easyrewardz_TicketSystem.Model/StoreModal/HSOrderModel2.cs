@@ -448,4 +448,97 @@ namespace Easyrewardz_TicketSystem.Model
         [Description("Delivered")]
         Delivered
     }
+
+    public class ShippingTemplateRequest
+    {
+        /// <summary>
+        /// PageNo
+        /// </summary>
+        public int PageNo { get; set; }
+        /// <summary>
+        /// PageSize
+        /// </summary>
+        public int PageSize { get; set; }
+        /// <summary>
+        /// FilterStatus
+        /// </summary>
+        public string FilterStatus { get; set; }
+    }
+
+    public class ShippingTemplateDetails
+    {
+        /// <summary>
+        /// OrdersList
+        /// </summary>
+        public List<ShippingTemplate> ShippingTemplateList { get; set; }
+        /// <summary>
+        /// TotalCount
+        /// </summary>
+        public int TotalCount { get; set; }
+    }
+
+
+    public class ShippingTemplate
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
+        /// TemplateName
+        /// </summary>
+        public string TemplateName { get; set; }
+        /// <summary>
+        /// Height
+        /// </summary>
+        public decimal Height { get; set; }
+        /// <summary>
+        /// Height_Unit
+        /// </summary>
+        public string Height_Unit { get; set; }
+        /// <summary>
+        /// Length
+        /// </summary>
+        public decimal Length { get; set; }
+        /// <summary>
+        /// Length_Unit
+        /// </summary>
+        public string Length_Unit { get; set; }
+        /// <summary>
+        /// Breath
+        /// </summary>
+        public decimal Breath { get; set; }
+        /// <summary>
+        /// Breath_Unit
+        /// </summary>
+        public string Breath_Unit { get; set; }
+        /// <summary>
+        /// Weight
+        /// </summary>
+        public decimal Weight { get; set; }
+        /// <summary>
+        /// Weight_Unit
+        /// </summary>
+        public string Weight_Unit { get; set; }
+        /// <summary>
+        /// IsActive
+        /// </summary>
+        public bool IsActive { get; set; }
+        /// <summary>
+        /// CreatedOn
+        /// </summary>
+        public string CreatedOn { get; set; }
+        /// <summary>
+        /// ModifiedOn
+        /// </summary>
+        public string ModifiedOn { get; set; }
+        /// <summary>
+        /// Createdby
+        /// </summary>
+        public string Createdby { get; set; }
+        /// <summary>
+        /// Modifiedby
+        /// </summary>
+        public string Modifiedby { get; set; }
+    }
 }

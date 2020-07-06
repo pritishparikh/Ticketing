@@ -60,5 +60,14 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="Returnby"></param>
         /// <returns></returns>
         int SetOrderHasBeenReturn(int tenantId, int userId, int orderID, string Returnby = "Order");
+
+        /// <summary>
+        /// GetOrderShippingTemplate
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="shippingTemplateRequest"></param>
+        /// <returns></returns>
+        ShippingTemplateDetails GetOrderShippingTemplate(int tenantId, int userId, ShippingTemplateRequest shippingTemplateRequest);
     }
 }
