@@ -108,10 +108,10 @@ namespace Easyrewardz_TicketSystem.Services
                         transaction_charges = 0,
                         total_discount = 0,
                         sub_total =  ds.Tables[2].Rows[0]["Amount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Amount"]),  // 10,
-                        length = 10,
-                        breadth = 10,
-                        height = 2,
-                        weight = 1.4,
+                        length = ds.Tables[2].Rows[0]["Length"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Length"]),
+                        breadth = ds.Tables[2].Rows[0]["Breath"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Breath"]),
+                        height = ds.Tables[2].Rows[0]["Height"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Height"]),
+                        weight = ds.Tables[2].Rows[0]["Weight"] == DBNull.Value ? 0 : Convert.ToDouble(ds.Tables[2].Rows[0]["Weight"]),
                         //orderitems = new List<Orderitems>(),
                     };
                 }

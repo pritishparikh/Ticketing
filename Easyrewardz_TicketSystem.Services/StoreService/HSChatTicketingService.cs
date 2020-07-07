@@ -308,6 +308,11 @@ namespace Easyrewardz_TicketSystem.Services
                         customGetChatTickets.CustomerMobileNumber = ds.Tables[0].Rows[i]["CustomerMobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerMobileNumber"]);
                         customGetChatTickets.Brand = ds.Tables[0].Rows[i]["Brand"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Brand"]);
                         customGetChatTickets.CreatedDate = ds.Tables[0].Rows[i]["CreatedAgo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedAgo"]);
+                        customGetChatTickets.ChatID = ds.Tables[0].Rows[i]["ChatID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ChatID"]);
+                        customGetChatTickets.ChatEndDateTime = ds.Tables[0].Rows[i]["ChatEndDateTime"] == DBNull.Value ? string.Empty : Convert.ToDateTime(ds.Tables[0].Rows[i]["ChatEndDateTime"]).ToString("yyyy-MM-dd HH:mm tt");
+                        customGetChatTickets.IsIconDisplay = ds.Tables[0].Rows[i]["IsIconDisplay"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsIconDisplay"]);
+                        customGetChatTickets.IsChatAllreadyActive = ds.Tables[0].Rows[i]["IsChatAllreadyActive"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsChatAllreadyActive"]);
+
                         customGetChatTickets.ChatTicketNote = ds.Tables[1].AsEnumerable().Select(x => new ChatTicketNotes()
                         {
                             Name = x.Field<object>("Name") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("Name")),
