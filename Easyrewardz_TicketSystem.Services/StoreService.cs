@@ -483,8 +483,10 @@ namespace Easyrewardz_TicketSystem.Services
                         store.CityID = ds.Tables[0].Rows[i]["CityID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CityID"]);
                         store.StateID = ds.Tables[0].Rows[i]["StateID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StateID"]);
                         store.RegionID = ds.Tables[0].Rows[i]["RegionID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["RegionID"]);
+                        store.RegionName = ds.Tables[0].Rows[i]["RegionName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RegionName"]);
                         store.ZoneID = ds.Tables[0].Rows[i]["ZoneID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ZoneID"]);
                         store.StoreTypeID = ds.Tables[0].Rows[i]["StoreTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreTypeID"]);
+                        store.StoreTypeName = ds.Tables[0].Rows[i]["StoreTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreTypeName"]);
                         store.StatusID = Convert.ToBoolean(ds.Tables[0].Rows[i]["StatusID"]);
                         store.BrandIDs = ds.Tables[0].Rows[i]["BrandIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandIDs"]);
                         store.BrandNames = ds.Tables[0].Rows[i]["BrandNames"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandNames"]);
