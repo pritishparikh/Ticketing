@@ -22,7 +22,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///  <param name="tenantID"></param>
         ///  <param name="userID"></param>
         /// <returns></returns>
-        public ReturnShipmentDetails CreateShipmentAWB(int orderID, string itemIDs, int tenantID, int userID, string clientAPIURL, string ProgramCode)
+        public ReturnShipmentDetails CreateShipmentAWB(int orderID, string itemIDs, int tenantID, int userID, string clientAPIURL, string ProgramCode, int templateID)
         {
 
             bool isAWBGenerated = false;
@@ -50,6 +50,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_TenantID", tenantID);
                 cmd.Parameters.AddWithValue("@_UserID", userID);
                 cmd.Parameters.AddWithValue("@_OrderID", orderID);
+                cmd.Parameters.AddWithValue("@_TemplateID", templateID);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {

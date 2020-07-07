@@ -19,7 +19,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CreateShipmentAWB")]
-        public ResponseModel CreateShipmentAWB(int orderID, string itemIDs)
+        public ResponseModel CreateShipmentAWB(int orderID, string itemIDs, int templateID)
         {
             HSOrderCaller hSOrderCaller = new HSOrderCaller();
             ResponseModel objResponseModel = new ResponseModel();
@@ -32,7 +32,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                returnShipmentDetails = hSOrderCaller.InsertShipmentAWB(new HSOrderService(_connectionString), orderID, itemIDs, authenticate.TenantId, authenticate.UserMasterID,_ClientAPIUrl,authenticate.ProgramCode);
+                returnShipmentDetails = hSOrderCaller.InsertShipmentAWB(new HSOrderService(_connectionString), orderID, itemIDs, authenticate.TenantId, authenticate.UserMasterID,_ClientAPIUrl,authenticate.ProgramCode, templateID);
                 statusCode =
                   string.IsNullOrEmpty (returnShipmentDetails.ItemIDs) ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

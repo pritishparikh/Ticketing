@@ -18,10 +18,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         ///  <param name="tenantID"></param>
         ///  <param name="userID"></param>
         /// <returns></returns>
-        public ReturnShipmentDetails InsertShipmentAWB(IHSOrder order, int orderID, string itemIDs,int tenantID,int userID,string clientAPIURL,string ProgramCode)
+        public ReturnShipmentDetails InsertShipmentAWB(IHSOrder order, int orderID, string itemIDs,int tenantID,int userID,string clientAPIURL,string ProgramCode, int templateID)
         {
             _OrderRepository = order;
-            return _OrderRepository.CreateShipmentAWB(orderID, itemIDs, tenantID, userID, clientAPIURL, ProgramCode);
+            return _OrderRepository.CreateShipmentAWB(orderID, itemIDs, tenantID, userID, clientAPIURL, ProgramCode, templateID);
         }
 
         /// <summary>

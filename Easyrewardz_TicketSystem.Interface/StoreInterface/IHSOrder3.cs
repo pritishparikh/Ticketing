@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.Interface
         ///  <param name="tenantID"></param>
         ///  <param name="userID"></param>
         /// <returns></returns>
-        ReturnShipmentDetails CreateShipmentAWB(int orderID, string itemIDs, int tenantID, int userID,string clientAPIURL, string ProgramCode);
+        ReturnShipmentDetails CreateShipmentAWB(int orderID, string itemIDs, int tenantID, int userID,string clientAPIURL, string ProgramCode, int templateID);
 
         /// <summary>
         /// GetItemDetailByOrderID
