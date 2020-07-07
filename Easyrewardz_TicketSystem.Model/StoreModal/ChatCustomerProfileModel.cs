@@ -77,6 +77,44 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// <summary>
         ///List of Insights of Customer
         /// </summary>
-        public List<string> Insights { get; set; }
+        public List<InsightsModel> Insights { get; set; }
+
+
+        /// <summary>
+        ///Order Delivered Count
+        /// </summary>
+        public int OrderDelivered { get; set; }
+
+        /// <summary>
+        /// Order Shopping Bag Count
+        /// </summary>
+        public int OrderShoppingBag { get; set; }
+
+        /// <summary>
+        /// Order Ready To Ship Count
+        /// </summary>
+        public int OrderReadyToShip { get; set; }
+
+        /// <summary>
+        /// Order Returns Count
+        /// </summary>
+        public int OrderReturns { get; set; }
+
+
+    }
+
+    public class InsightsModel
+    {
+        /// <summary>
+        ///insight ID
+        /// </summary>
+        public int insightID { get; set; }
+
+
+        /// <summary>
+        ///insight Message
+        /// </summary>
+        public string insightMessage { get; set; }
+
     }
 }
