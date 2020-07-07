@@ -500,10 +500,11 @@ namespace Easyrewardz_TicketSystem.Services
                 hSRequestGeneratePaymentLink.programCode = programCode;
                 hSRequestGeneratePaymentLink.storeCode = sentPaymentLink.StoreCode;
                 DateTime dateTime_billdatetime = Convert.ToDateTime(hSRequestGeneratePaymentLink.billDateTime).ToUniversalTime();
-                var settings = new JsonSerializerSettings { DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ" };
-                var json = JsonConvert.SerializeObject(dateTime_billdatetime, settings);
-                var newdate = JsonConvert.DeserializeObject<string>(json);
-                hSRequestGeneratePaymentLink.billDateTime = newdate;
+                //var settings = new JsonSerializerSettings { DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ" };
+                //var json = JsonConvert.SerializeObject(dateTime_billdatetime, settings);
+                // var newdate = JsonConvert.DeserializeObject<string>(json);
+                //hSRequestGeneratePaymentLink.billDateTime = newdate;
+                hSRequestGeneratePaymentLink.billDateTime = dateTime_billdatetime.ToString("dd-MMM-yyyy hh:mm:ss");
                 HSResponseGeneratePaymentLink responseGeneratePaymentLink = new HSResponseGeneratePaymentLink();
 
                 // string apiReq = JsonConvert.SerializeObject(hSRequestGenerateToken);
@@ -542,7 +543,7 @@ namespace Easyrewardz_TicketSystem.Services
                     responseGeneratePaymentLink = JsonConvert.DeserializeObject<HSResponseGeneratePaymentLink>(apiResponse1);
                 }
 
-                if (responseGeneratePaymentLink.returnCode.Equals("0"))
+                if (responseGeneratePaymentLink.returnCode.Equals("0") && responseGeneratePaymentLink.tokenStatus.Contains("Initiated"))
                 {
                     if (conn != null && conn.State == ConnectionState.Closed)
                     {
