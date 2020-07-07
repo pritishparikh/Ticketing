@@ -865,5 +865,68 @@ namespace Easyrewardz_TicketSystem.Services
 
             return objCampaignList;
         }
+
+        /// <summary>
+        /// User Login Report
+        /// </summary>
+        /// <returns></returns>
+        public List<LoginReportResponse> UserLoginReport(LoginReportRequest loginReportRequest)
+        {
+            List<LoginReportResponse> lstLoginReportResponse = new List<LoginReportResponse>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("SP_StoreLoginUserReport", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@User_ID", string.IsNullOrEmpty(loginReportRequest.UserID) ? "" : loginReportRequest.UserID.TrimEnd(','));
+                cmd1.Parameters.AddWithValue("@Start_date", loginReportRequest.Startdate);
+                cmd1.Parameters.AddWithValue("@End_date", loginReportRequest.Enddate);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", loginReportRequest.TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            LoginReportResponse LoginReport = new LoginReportResponse
+                            {
+                                UserID = ds.Tables[0].Rows[i]["UserID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]),
+                                UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]),
+                                StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]),
+                                RegionName = ds.Tables[0].Rows[i]["RegionName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RegionName"]),
+                                Zone = ds.Tables[0].Rows[i]["ZoneID"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.Zones)Convert.ToInt32(ds.Tables[0].Rows[i]["ZoneID"])),
+                                LoginDate = ds.Tables[0].Rows[i]["LoginDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["LoginDate"]),
+                                LoginTime = ds.Tables[0].Rows[i]["LoginTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["LoginTime"]),
+                                LogoutTime = ds.Tables[0].Rows[i]["LogoutTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["LogoutTime"]),
+                                TotalWorking = ds.Tables[0].Rows[i]["TotalWorking"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TotalWorking"]),
+                            };
+                            lstLoginReportResponse.Add(LoginReport);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (ds != null)
+                    ds.Dispose();
+                conn.Close();
+            }
+
+
+            return lstLoginReportResponse;
+        }
     }
 }

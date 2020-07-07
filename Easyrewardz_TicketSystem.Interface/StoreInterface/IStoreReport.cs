@@ -71,5 +71,10 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         /// <returns></returns>
         List<CampaignScriptName> GetCampaignNames();
 
+        /// <summary>
+        /// User Login Report
+        /// </summary>
+        /// <returns></returns>
+        List<LoginReportResponse> UserLoginReport(LoginReportRequest loginReportRequest);
     }
 }

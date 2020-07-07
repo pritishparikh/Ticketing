@@ -69,6 +69,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _Reports = Report;
             return _Reports.GetCampaignNames();
         }
-
+        public List<LoginReportResponse> UserLoginReport(IStoreReport Report, LoginReportRequest loginReportRequest)
+        {
+            _Reports = Report;
+            return _Reports.UserLoginReport(loginReportRequest);
+        }
     }
 }
