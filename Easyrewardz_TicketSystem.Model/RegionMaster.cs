@@ -10,4 +10,12 @@ namespace Easyrewardz_TicketSystem.Model
         public int PinCodeID { get; set; }
         public string RegionName { get; set; }
     }
+
+    public class RegionZoneMaster
+    {
+        public int RegionID { get; set; }
+        public string RegionName { get; set; }
+        public int ZoneID { get; set; }
+        public string ZoneName { get; set; }
+    }
 }

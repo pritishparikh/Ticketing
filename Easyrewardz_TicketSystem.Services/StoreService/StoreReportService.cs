@@ -30,13 +30,14 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="searchModel"></param>
         /// <param name="StoreUserList"></param>
         /// <returns></returns>
-        public int GetStoreReportSearch(StoreReportModel searchModel, List<StoreUserListing> StoreUserList)
+        public int GetStoreReportSearch(StoreReportModel searchModel, List<StoreUserListing> StoreUserList, List<StoreUserListing> StoreReportUserList)
         {
 
             MySqlCommand cmd = new MySqlCommand();
             int resultCount = 0;
 
             string UserList = "";
+            string CampaignAssignToList = "";
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -49,6 +50,11 @@ namespace Easyrewardz_TicketSystem.Services
                 if (StoreUserList.Count > 0)
                 {
                     UserList = string.Join(',', StoreUserList.AsEnumerable().Select(x => x.UserID).ToList());
+                }
+
+                if (StoreReportUserList.Count > 0)
+                {
+                    CampaignAssignToList = string.Join(',', StoreReportUserList.AsEnumerable().Select(x => x.UserID).ToList());
                 }
 
                 if (searchModel.ActiveTabId.Equals(1))
@@ -78,11 +84,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-                else
+                else if (searchModel.ActiveTabId.Equals(3))
                 {
                     if (searchModel.CampaignAssignedIds.Equals("0"))
                     {
-                        searchModel.CampaignAssignedIds = UserList;
+                        searchModel.CampaignAssignedIds = CampaignAssignToList;
+                    }
+                }
+
+                else
+                {
+                    if (searchModel.LoginUsersIds.Equals("0"))
+                    {
+                        searchModel.LoginUsersIds = UserList;
                     }
                 }
 
@@ -139,7 +153,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_CampaignStatusids", string.IsNullOrEmpty(searchModel.CampaignStatusids) ? "" : searchModel.CampaignStatusids);
 
                 /*------------------ ENDS HERE-------------------------------*/
-
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
@@ -506,7 +519,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ReportName"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public bool CheckIfReportNameExists(int ReportID, string ReportName, int TenantID)
+        public bool CheckIfReportNameExists(int ReportID, string ReportName, int ScheuleID, int TenantID)
         {
 
 
@@ -519,6 +532,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@Report_ID", ReportID);
                 cmd.Parameters.AddWithValue("@Report_Name", string.IsNullOrEmpty(ReportName) ? "" : ReportName.ToLower());
+                cmd.Parameters.AddWithValue("@Schedule_ID", ScheuleID);
 
 
                 cmd.CommandType = CommandType.StoredProcedure;

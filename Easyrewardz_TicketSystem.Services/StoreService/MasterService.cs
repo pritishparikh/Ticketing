@@ -125,5 +125,53 @@ namespace Easyrewardz_TicketSystem.Services.StoreServices
 
             return users;
         }
+
+        /// <summary>
+        /// Get Region List
+        /// </summary>
+        /// <returns></returns>
+        public List<RegionZoneMaster> GetRegionlist(int UserID)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<RegionZoneMaster> regionMaster = new List<RegionZoneMaster>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetRegionZoneByUserID", conn);
+                cmd1.Parameters.AddWithValue("@_UserID", UserID);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        RegionZoneMaster region = new RegionZoneMaster();
+                        region.RegionID = Convert.ToInt32(ds.Tables[0].Rows[i]["RegionID"]);
+                        region.RegionName = Convert.ToString(ds.Tables[0].Rows[i]["RegionName"]);
+                        region.ZoneID = Convert.ToInt32(ds.Tables[0].Rows[i]["ZoneID"]);
+                        regionMaster.Add(region);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return regionMaster;
+        }
     }
 }

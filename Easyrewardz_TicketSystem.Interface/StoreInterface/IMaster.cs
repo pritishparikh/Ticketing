@@ -23,5 +23,11 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         /// <param name="UserID"></param>
         /// <returns></returns>
         List<StoreFunctionModel> GetStoreFunctionList(int TenantId, int UserID);
+
+        /// <summary>
+        /// GetRegionZoneList
+        /// </summary>
+        /// <returns></returns>
+        List<RegionZoneMaster> GetRegionlist(int UserID);
     }
 }

@@ -55,6 +55,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             int resultCount = 0;
             StoreReportCaller dbsearchMaster = new StoreReportCaller();
             List<StoreUserListing> StoreUserList = new List<StoreUserListing>();
+            List<StoreUserListing> StoreReportUserList = new List<StoreUserListing>();
             try
             {
 
@@ -67,7 +68,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
 
-                resultCount = dbsearchMaster.StoreReportSearch(new StoreReportService(_connectioSting), SearchParams, StoreUserList);
+                StoreReportUserList = new StoreUserService(_connectioSting).GetStoreReportUserList(authenticate.TenantId, SearchParams.CampaignRegion, SearchParams.CampaignZone);
+
+                resultCount = dbsearchMaster.StoreReportSearch(new StoreReportService(_connectioSting), SearchParams, StoreUserList, StoreReportUserList);
 
                 StatusCode = resultCount > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -154,7 +157,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CheckIfReportNameExists")]
-        public ResponseModel CheckIfReportNameExists(int ReportID, string ReportName)
+        public ResponseModel CheckIfReportNameExists(int ReportID, string ReportName, int ScheuleID)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -170,7 +173,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
-                IsExists = dbsearchMaster.CheckIfReportNameExists(new StoreReportService(_connectioSting), ReportID, ReportName, authenticate.TenantId);
+                IsExists = dbsearchMaster.CheckIfReportNameExists(new StoreReportService(_connectioSting), ReportID, ReportName, ScheuleID, authenticate.TenantId);
 
                 StatusCode = IsExists ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);

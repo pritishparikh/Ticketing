@@ -1134,5 +1134,112 @@ namespace Easyrewardz_TicketSystem.Services
 
             return success;
         }
+
+
+        /// <summary>
+        /// Get Store Report User
+        /// </summary>
+        /// <param name="tenantID"></param>
+        public List<StoreUserListing> GetStoreReportUserList(int tenantID, int RegionID, int ZoneID)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<StoreUserListing> UsermasterList = new List<StoreUserListing>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreReportUserList", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
+                cmd1.Parameters.AddWithValue("@_RegionID", RegionID);
+                cmd1.Parameters.AddWithValue("@_ZoneID", ZoneID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreUserListing Usermaster = new StoreUserListing();
+                        Usermaster.UserID = Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]);
+
+                        Usermaster.BrandID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
+                        Usermaster.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                        Usermaster.StoreID = ds.Tables[0].Rows[i]["StoreID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
+                        Usermaster.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                        Usermaster.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+
+                        Usermaster.UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]);
+                        Usermaster.FirstName = ds.Tables[0].Rows[i]["FirstName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
+                        Usermaster.LastName = ds.Tables[0].Rows[i]["LastName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["LastName"]);
+                        Usermaster.MobileNo = ds.Tables[0].Rows[i]["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                        Usermaster.EmailID = ds.Tables[0].Rows[i]["EmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                        Usermaster.RoleID = ds.Tables[0].Rows[i]["RoleID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["RoleID"]);
+                        Usermaster.RoleName = ds.Tables[0].Rows[i]["RoleName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RoleName"]);
+
+                        Usermaster.BrandIDs = ds.Tables[0].Rows[i]["BrandIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandIDs"]);
+                        Usermaster.MappedBrand = ds.Tables[0].Rows[i]["MappedBrand"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MappedBrand"]);
+
+                        Usermaster.CategoryCount = ds.Tables[0].Rows[i]["CategoryCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryCount"]);
+                        Usermaster.CategoryIDs = ds.Tables[0].Rows[i]["CategoryIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryIDs"]);
+                        Usermaster.MappedCategory = ds.Tables[0].Rows[i]["MappedCategory"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MappedCategory"]);
+
+                        Usermaster.SubCategoryCount = ds.Tables[0].Rows[i]["SubCategoryCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryCount"]);
+                        Usermaster.SubCategoryIDs = ds.Tables[0].Rows[i]["SubCategoryIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryIDs"]);
+                        Usermaster.MappedSubCategory = ds.Tables[0].Rows[i]["MappedSubCategory"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MappedSubCategory"]);
+
+                        Usermaster.IssueTypeCount = ds.Tables[0].Rows[i]["IssueTypeCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeCount"]);
+                        Usermaster.IssueTypeIDs = ds.Tables[0].Rows[i]["IssueTypeIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeIDs"]);
+                        Usermaster.MappedIssuetype = ds.Tables[0].Rows[i]["MappedIssuetype"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MappedIssuetype"]);
+
+                        Usermaster.DesignationID = ds.Tables[0].Rows[i]["DesignationID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
+                        Usermaster.DesignationName = ds.Tables[0].Rows[i]["DesignationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
+
+                        Usermaster.ReporteeID = ds.Tables[0].Rows[i]["ReporteeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ReporteeID"]);
+                        Usermaster.ReporteeName = ds.Tables[0].Rows[i]["ReporteeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReporteeName"]);
+                        Usermaster.ReporteeDesignationID = ds.Tables[0].Rows[i]["ReporteeDesignationID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ReporteeDesignationID"]);
+                        Usermaster.ReporteeDesignation = ds.Tables[0].Rows[i]["ReporteeDesignation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReporteeDesignation"]);
+                        Usermaster.DepartmentID = ds.Tables[0].Rows[i]["DepartmentID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["DepartmentID"]);
+                        Usermaster.DepartmentName = ds.Tables[0].Rows[i]["DepartmentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
+
+                        Usermaster.FunctionIDs = ds.Tables[0].Rows[i]["FunctionIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FunctionIDs"]);
+                        Usermaster.MappedFunctions = ds.Tables[0].Rows[i]["MappedFunction"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MappedFunction"]);
+
+                        Usermaster.isActive = ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsActive"]);
+                        Usermaster.isClaimApprover = ds.Tables[0].Rows[i]["IsClaimApprover"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsClaimApprover"]);
+                        Usermaster.CreatedBy = ds.Tables[0].Rows[i]["CreatedName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedName"]);
+                        Usermaster.UpdatedBy = ds.Tables[0].Rows[i]["ModifyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifyName"]);
+                        Usermaster.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
+                        Usermaster.UpdatedDate = ds.Tables[0].Rows[i]["UpdatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedDate"]);
+
+                        UsermasterList.Add(Usermaster);
+                    }
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+
+                if (ds != null)
+                    ds.Dispose();
+            }
+
+            return UsermasterList;
+        }
     }
 }

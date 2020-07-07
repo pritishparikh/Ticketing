@@ -154,6 +154,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _StoreUserRepository.GetStoreUserCredentails(userID, TenantID, IsStoreUser);
         }
 
+        /// <summary>
+        /// GetStoreReportUser
+        /// </summary>
+        /// <param name="Users"></param>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
+        public List<StoreUserListing> GetStoreReportUser(IStoreUser Users, int tenantID, int RegionID, int ZoneID)
+        {
+            _StoreUserRepository = Users;
+            return _StoreUserRepository.GetStoreReportUserList(tenantID, RegionID, ZoneID);
+        }
         #endregion
     }
 }
