@@ -94,9 +94,9 @@ namespace Easyrewardz_TicketSystem.Services
 
                 else
                 {
-                    if (searchModel.LoginUsersIds.Equals("0"))
+                    if (searchModel.UserIDs.Equals("0"))
                     {
-                        searchModel.LoginUsersIds = UserList;
+                        searchModel.UserIDs = UserList;
                     }
                 }
 
@@ -154,6 +154,12 @@ namespace Easyrewardz_TicketSystem.Services
 
                 /*------------------ ENDS HERE-------------------------------*/
 
+                /*------------------ Login Report  PARAMETERS------------------------------*/
+                cmd.Parameters.AddWithValue("@User_ID", string.IsNullOrEmpty(searchModel.UserIDs) ? "" : searchModel.UserIDs.TrimEnd(','));
+                cmd.Parameters.AddWithValue("@Start_date", string.IsNullOrEmpty(searchModel.Startdate) ? "" : searchModel.Startdate);
+                cmd.Parameters.AddWithValue("@End_date", string.IsNullOrEmpty(searchModel.Enddate) ? "" : searchModel.Enddate);
+
+                /*------------------ ENDS HERE-------------------------------*/
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 resultCount = Convert.ToInt32(cmd.ExecuteScalar());

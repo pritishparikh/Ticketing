@@ -61,12 +61,11 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public int CampaignZone { get; set; }
         //ends here
 
-        // login user search params
-        public string LoginUsersIds { get; set; }
-        //public int? CampaignAssignedIds { get; set; }
-        public string LoginStartDate { get; set; }
-        public string LoginEndDate { get; set; }
-        //ends here
+        // Login Report parameter
+        public string UserIDs { get; set; }
+        public string Startdate { get; set; }
+        public string Enddate { get; set; }
+        //// End Login Report parameter
 
     }
 
