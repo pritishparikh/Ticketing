@@ -65,10 +65,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         [HttpPost]
         [Route("GetUserList")]
-        public ResponseModel GetUserList( )
+        public ResponseModel GetUserList()
         {
             List<User> objUserList = new List<User>();
-           
+
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -81,7 +81,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 MasterCaller newMasterBrand = new MasterCaller();
 
-                objUserList = newMasterBrand.GetUserList(new UserServices(_connectioSting), authenticate.TenantId,authenticate.UserMasterID);
+                objUserList = newMasterBrand.GetUserList(new UserServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =
                 objUserList.Count == 0 ?
@@ -110,8 +110,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="UserModel"></param>
         [HttpPost]
         [Route("AddUserPersonalDetail")]
-        public ResponseModel AddUserPersonalDetail([FromBody] UserModel userModel )
-        {         
+        public ResponseModel AddUserPersonalDetail([FromBody] UserModel userModel)
+        {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -124,7 +124,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 UserCaller userCaller = new UserCaller();
                 userModel.CreatedBy = authenticate.UserMasterID;
                 userModel.TenantID = authenticate.TenantId;
-                 int Result = userCaller.AddUserPersonaldetail(new UserServices(_connectioSting), userModel);
+                int Result = userCaller.AddUserPersonaldetail(new UserServices(_connectioSting), userModel);
 
                 StatusCode =
                Result == 0 ?
@@ -155,7 +155,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="IsStoreUser"></param>
         [HttpPost]
         [Route("AddUserProfileDetail")]
-        public ResponseModel AddUserProfileDetail(int DesignationID, int ReportTo, int UserID,int IsStoreUser=1)
+        public ResponseModel AddUserProfileDetail(int DesignationID, int ReportTo, int UserID, int IsStoreUser = 1)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -280,7 +280,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="IsStoreUser"></param>
         [HttpPost]
         [Route("DeleteUser")]
-        public ResponseModel DeleteUser(int userID,int IsStoreUser=1)
+        public ResponseModel DeleteUser(int userID, int IsStoreUser = 1)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -293,7 +293,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 UserCaller userCaller = new UserCaller();
 
-                int Result = userCaller.DeleteUser(new UserServices(_connectioSting), userID,authenticate.TenantId, authenticate.UserMasterID, IsStoreUser);
+                int Result = userCaller.DeleteUser(new UserServices(_connectioSting), userID, authenticate.TenantId, authenticate.UserMasterID, IsStoreUser);
 
                 StatusCode =
                Result == 0 ?
@@ -321,7 +321,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="IsStoreUser"></param>
         [HttpGet]
         [Route("GetUserListData")]
-        public ResponseModel GetUserListData(int IsStoreUser=1)
+        public ResponseModel GetUserListData(int IsStoreUser = 1)
         {
             List<CustomUserList> objUserList = new List<CustomUserList>();
 
@@ -367,9 +367,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="IsStoreUser"></param>
         [HttpPost]
         [Route("GetUserDetailsById")]
-        public ResponseModel GetUserDetailsById(int UserID,int IsStoreUser=1)
+        public ResponseModel GetUserDetailsById(int UserID, int IsStoreUser = 1)
         {
-            CustomUserList objUser  = new CustomUserList();
+            CustomUserList objUser = new CustomUserList();
 
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -383,10 +383,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 UserCaller userCaller = new UserCaller();
 
-                objUser = userCaller.GetuserDetailsById(new UserServices(_connectioSting), UserID,authenticate.TenantId, IsStoreUser);
+                objUser = userCaller.GetuserDetailsById(new UserServices(_connectioSting), UserID, authenticate.TenantId, IsStoreUser);
 
                 StatusCode =
-                objUser == null ? 
+                objUser == null ?
                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
@@ -412,7 +412,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadUser")]
-        public ResponseModel BulkUploadUser(int UserFor=1)
+        public ResponseModel BulkUploadUser(int UserFor = 1)
         {
             #region Old Code
             //string DownloadFilePath = string.Empty; 
@@ -534,7 +534,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             //    objResponseModel.StatusCode = StatusCode;
             //    objResponseModel.Message = statusMessage;
             //    objResponseModel.ResponseData = count;
-                #endregion Old Code
+            #endregion Old Code
             string DownloadFilePath = string.Empty;
             string BulkUploadFilesPath = string.Empty;
             bool errorfilesaved = false; bool successfilesaved = false;
@@ -721,9 +721,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 UserCaller userCaller = new UserCaller();
                 int Result = userCaller.UpdateUserProfileDetail(new UserServices(_connectioSting), UpdateUserProfiledetailsModel);
-                
+
                 profileDetailsmodel.Result = Result;
-             
+
                 StatusCode =
                Result == 0 ?
                       (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -761,7 +761,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                string url = configuration.GetValue<string>("APIURL") + ProfileImg_Resources+"/" +ProfileImg_Image;
+                string url = configuration.GetValue<string>("APIURL") + ProfileImg_Resources + "/" + ProfileImg_Image;
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 UserCaller userCaller = new UserCaller();
                 objUserList = userCaller.GetUserProfileDetails(new UserServices(_connectioSting), authenticate.UserMasterID, url);
@@ -832,7 +832,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="IsStoreUser"></param>
         [HttpPost]
         [Route("SendMailforchangepassword")]
-        public ResponseModel SendMailforchangepassword (int userID, int IsStoreUser = 1)
+        public ResponseModel SendMailforchangepassword(int userID, int IsStoreUser = 1)
         {
             CustomChangePassword customChangePassword = new CustomChangePassword();
             ResponseModel objResponseModel = new ResponseModel();
@@ -857,18 +857,26 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 UserCaller userCaller = new UserCaller();
 
                 customChangePassword = userCaller.SendMailforchangepassword(new UserServices(_data), userID, authenticate.TenantId, IsStoreUser);
-                if(customChangePassword.UserID >0 && customChangePassword.Password!=null && customChangePassword.EmailID !=null)
+                if (customChangePassword.UserID > 0 && customChangePassword.Password != null && customChangePassword.EmailID != null)
                 {
                     MasterCaller masterCaller = new MasterCaller();
                     SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_data), authenticate.TenantId);
                     securityCaller _securityCaller = new securityCaller();
                     CommonService commonService = new CommonService();
-                    string encryptedEmailId = SecurityService.Encrypt(customChangePassword.EmailID);
+
+                    //string encryptedEmailId = SecurityService.Encrypt(customChangePassword.EmailID);
+
+                    EmailProgramCode emailProgramCode = new EmailProgramCode();
+                    emailProgramCode.EmailID = customChangePassword.EmailID;
+                    emailProgramCode.ProgramCode = ProgramCode;
+                    string jsonData = JsonConvert.SerializeObject(emailProgramCode);
+
+                    string encryptedEmailId = commonService.Encrypt(jsonData);
 
                     string decriptedPassword = SecurityService.DecryptStringAES(customChangePassword.Password);
-                    string url = configuration.GetValue<string>("websiteURL") + "ChangePassword";
+                    string url = X_Authorized_Domainname.TrimEnd('/') + "ChangePassword";
                     string body = "Dear User, <br/>Please find the below details.  <br/><br/>" + "Your Email ID  : " + customChangePassword.EmailID + "<br/>" + "Your Password : " + decriptedPassword + "<br/><br/>" + "Click on Below link to change the Password <br/>" + url + "?Id:" + encryptedEmailId;
-                    bool isUpdate = _securityCaller.sendMailForChangePassword(new SecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID,body,authenticate.TenantId);
+                    bool isUpdate = _securityCaller.sendMailForChangePassword(new SecurityService(_connectioSting), sMTPDetails, customChangePassword.EmailID, body, authenticate.TenantId);
                     if (isUpdate)
                     {
                         objResponseModel.Status = true;
@@ -908,7 +916,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <param name="IsStoreUser"></param>
         [HttpPost]
         [Route("ChangePassword")]
-        public ResponseModel ChangePassword([FromBody] CustomChangePassword customChangePassword, int IsStoreUser=1)
+        [AllowAnonymous]
+        public ResponseModel ChangePassword([FromBody] CustomChangePassword customChangePassword, int IsStoreUser = 1)
         {
 
             string _data = "";
@@ -920,7 +929,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 if (!string.IsNullOrEmpty(token))
                 {
                     _data = _connectioSting;
@@ -957,8 +966,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     }
                 }
                 customChangePassword.Password = SecurityService.Encrypt(customChangePassword.Password);
-               
-                
+
+
                 bool Result = _securityCaller.ChangePassword(new SecurityService(_data), customChangePassword, authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =
@@ -998,10 +1007,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                
+
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-                
-                string result = userCaller.validateUserExist(new UserServices(_connectioSting), UserEmailID, UserMobile,authenticate.TenantId);
+
+                string result = userCaller.validateUserExist(new UserServices(_connectioSting), UserEmailID, UserMobile, authenticate.TenantId);
                 StatusCode =
                string.IsNullOrEmpty(result) ?
                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
