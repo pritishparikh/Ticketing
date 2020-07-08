@@ -32,6 +32,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd = new MySqlCommand("SP_HSInsertReInitiateChat", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                //cmd.Parameters.AddWithValue("@_ChatID", customerChatMaster.ChatID);
                 cmd.Parameters.AddWithValue("@_StoreID", string.IsNullOrEmpty(customerChatMaster.StoreID) ? "" : customerChatMaster.StoreID);
                 cmd.Parameters.AddWithValue("@_ProgramCode", string.IsNullOrEmpty(customerChatMaster.ProgramCode) ? "" : customerChatMaster.ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerID", string.IsNullOrEmpty(customerChatMaster.CustomerID) ? "" : customerChatMaster.CustomerID);
@@ -39,7 +40,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_LastName", string.IsNullOrEmpty(customerChatMaster.LastName) ? "" : customerChatMaster.LastName);
                 cmd.Parameters.AddWithValue("@_CustomerMobileNumber", string.IsNullOrEmpty(customerChatMaster.MobileNo) ? "" : customerChatMaster.MobileNo);
                 cmd.Parameters.AddWithValue("@_StoreManagerId", customerChatMaster.CreatedBy);
-                cmd.Parameters.AddWithValue("@_ChatTicketID", customerChatMaster.ChatTicketID);
+                
                 
                 cmd.CommandType = CommandType.StoredProcedure;
                 resultCount = Convert.ToInt32(cmd.ExecuteScalar());
