@@ -524,6 +524,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// StatusMessge
         /// </summary>
         public string StatusMessge { get; set; }
+
+        /// <summary>
+        /// ShipmentCharges
+        /// </summary>
+        public string ShipmentCharges { get; set; }
     }
 
     public class OrderReturns
@@ -674,6 +679,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// Date
         /// </summary>
         public string Date { get; set; }
+
+        /// <summary>
+        /// ShipmentCharges
+        /// </summary>
+        public string ShipmentCharges { get; set; }
     }
 
     public class PrintManifestRequest

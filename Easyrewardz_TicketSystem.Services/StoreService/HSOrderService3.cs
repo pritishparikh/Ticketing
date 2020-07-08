@@ -142,6 +142,7 @@ namespace Easyrewardz_TicketSystem.Services
                         ItemIDs = ds.Tables[5].Rows[0]["OrderItemIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[5].Rows[0]["OrderItemIDs"]),
                         Date = ds.Tables[5].Rows[0]["Date"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[5].Rows[0]["Date"]),
                         CourierPartner = ds.Tables[5].Rows[0]["CourierPartner"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[5].Rows[0]["CourierPartner"]),
+                        ShipmentCharges = ds.Tables[5].Rows[0]["ShippingCharges"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[5].Rows[0]["ShippingCharges"]),
                     };
                 }
 
@@ -276,6 +277,7 @@ namespace Easyrewardz_TicketSystem.Services
                             AWBNumber = awbdetailModel.AWBNumber,
                             InvoiceNo = awbdetailModel.InvoiceNo,
                             ItemIDs = awbdetailModel.ItemIDs,
+                            ShipmentCharges = awbdetailModel.ShipmentCharges,
                         };
                     }
 
@@ -500,11 +502,12 @@ namespace Easyrewardz_TicketSystem.Services
                 }
                 hSRequestGeneratePaymentLink.programCode = programCode;
                 hSRequestGeneratePaymentLink.storeCode = sentPaymentLink.StoreCode;
-                DateTime dateTime_billdatetime = Convert.ToDateTime(hSRequestGeneratePaymentLink.billDateTime).ToUniversalTime();
-                var settings = new JsonSerializerSettings { DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ" };
-                var json = JsonConvert.SerializeObject(dateTime_billdatetime, settings);
-                var newdate = JsonConvert.DeserializeObject<string>(json);
-                hSRequestGeneratePaymentLink.billDateTime = newdate;
+                DateTime dateTime_billdatetime = Convert.ToDateTime(hSRequestGeneratePaymentLink.billDateTime);
+                //var settings = new JsonSerializerSettings { DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ" };
+                //var settings = new JsonSerializerSettings { DateFormatString = "dd-MMM-yyyy hh:mm:ss" };
+                //var json = JsonConvert.SerializeObject(dateTime_billdatetime, settings);
+                //var newdate = JsonConvert.DeserializeObject<string>(json);
+                hSRequestGeneratePaymentLink.billDateTime = dateTime_billdatetime.ToString("dd-MMM-yyyy hh:mm:ss");
                 HSResponseGeneratePaymentLink responseGeneratePaymentLink = new HSResponseGeneratePaymentLink();
 
                 // string apiReq = JsonConvert.SerializeObject(hSRequestGenerateToken);
@@ -543,7 +546,7 @@ namespace Easyrewardz_TicketSystem.Services
                     responseGeneratePaymentLink = JsonConvert.DeserializeObject<HSResponseGeneratePaymentLink>(apiResponse1);
                 }
 
-                if (responseGeneratePaymentLink.returnCode.Equals("0"))
+                if (responseGeneratePaymentLink.returnCode.Equals("0") && responseGeneratePaymentLink.tokenStatus.Contains("Initiated"))
                 {
                     if (conn != null && conn.State == ConnectionState.Closed)
                     {
@@ -713,6 +716,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_CourierPartnerID", string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.courier_company_id) ? "" : responseCouriersPartnerAndAWBCode.data.courier_company_id);
                 cmd.Parameters.AddWithValue("@_CourierPartnerOrderID", string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.order_id) ? "" : responseCouriersPartnerAndAWBCode.data.order_id);
                 cmd.Parameters.AddWithValue("@_CourierPartnerShipmentID", string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.shipment_id) ? "" : responseCouriersPartnerAndAWBCode.data.shipment_id);
+                cmd.Parameters.AddWithValue("@_ShipmentCharges", string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.rate) ? "0" : responseCouriersPartnerAndAWBCode.data.rate);
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@user_ID", userID);
 
@@ -733,7 +737,8 @@ namespace Easyrewardz_TicketSystem.Services
                             ItemIDs = ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),
                             Status = true,
                             StatusMessge = "Success",
-                            IsStoreDelivery = IsStoreDelivery
+                            IsStoreDelivery = IsStoreDelivery,
+                            ShipmentCharges = ds.Tables[0].Rows[i]["ShipmentCharges"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ShipmentCharges"])
                         };
                     }
                 }
