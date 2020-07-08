@@ -23,7 +23,7 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         /// <param name="TenantID"></param>
         /// <param name="StoreUserList"></param>
         /// <returns></returns>
-        string DownloadStoreReportSearch(int ReportID, int UserID, int TenantID, List<StoreUserListing> StoreUserList);
+        string DownloadStoreReportSearch(int ReportID, int UserID, int TenantID, List<StoreUserListing> StoreUserList, List<StoreUserListing> StoreReportUserList);
 
         /// <summary>
         /// Check If Report Name Exists

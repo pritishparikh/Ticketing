@@ -187,7 +187,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TenantID"></param>
         /// <param name="StoreUserList"></param>
         /// <returns></returns>
-        public string DownloadStoreReportSearch(int ReportID, int UserID, int TenantID, List<StoreUserListing> StoreUserList)
+        public string DownloadStoreReportSearch(int ReportID, int UserID, int TenantID, List<StoreUserListing> StoreUserList, List<StoreUserListing> StoreReportUserList)
         {
             MySqlCommand cmd = new MySqlCommand();
             string SearchInputParams = string.Empty;
@@ -220,7 +220,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     SearchModel = JsonConvert.DeserializeObject<StoreReportModel>(SearchInputParams);
                     SearchModel.TenantID = TenantID;
-                    ReportDownloadList = GetStoreReportSearchList(SearchModel, StoreUserList);
+                    ReportDownloadList = GetStoreReportSearchList(SearchModel, StoreUserList, StoreReportUserList);
 
                     if (ReportDownloadList != null)
                     {
@@ -268,7 +268,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="searchModel"></param>
         /// <param name="StoreUserList"></param>
         /// <returns></returns>
-        public SearchStoreResponseReport GetStoreReportSearchList(StoreReportModel searchModel, List<StoreUserListing> StoreUserList)
+        public SearchStoreResponseReport GetStoreReportSearchList(StoreReportModel searchModel, List<StoreUserListing> StoreUserList, List<StoreUserListing> StoreReportUserList)
         {
             List<string> ReportDownloadList = new List<string>();
             MySqlCommand cmd = new MySqlCommand();
@@ -281,6 +281,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<LoginReportResponse> lstLoginReportResponse = new List<LoginReportResponse>();
 
             string UserList = "";
+            string CampaignAssignToList = "";
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -295,6 +296,11 @@ namespace Easyrewardz_TicketSystem.Services
                 if (StoreUserList.Count > 0)
                 {
                     UserList = string.Join(',', StoreUserList.AsEnumerable().Select(x => x.UserID).ToList());
+                }
+
+                if (StoreReportUserList.Count > 0)
+                {
+                    CampaignAssignToList = string.Join(',', StoreReportUserList.AsEnumerable().Select(x => x.UserID).ToList());
                 }
 
                 if (searchModel.ActiveTabId.Equals(1))
@@ -328,7 +334,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (searchModel.CampaignAssignedIds.Equals("0"))
                     {
-                        searchModel.CampaignAssignedIds = UserList;
+                        searchModel.CampaignAssignedIds = CampaignAssignToList;
                     }
                 }
                 else 

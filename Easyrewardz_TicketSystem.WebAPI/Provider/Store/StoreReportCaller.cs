@@ -23,10 +23,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Reports.GetStoreReportSearch(searchModel, StoreUserList, StoreReportUserList);
         }
 
-        public string DownloadStoreReportSearch(IStoreReport Report, int ReportID, int UserID, int TenantID, List<StoreUserListing> StoreUserList)
+        public string DownloadStoreReportSearch(IStoreReport Report, int ReportID, int UserID, int TenantID, List<StoreUserListing> StoreUserList, List<StoreUserListing> StoreReportUserList)
         {
             _Reports = Report;
-            return _Reports.DownloadStoreReportSearch(ReportID, UserID, TenantID, StoreUserList);
+            return _Reports.DownloadStoreReportSearch(ReportID, UserID, TenantID, StoreUserList, StoreReportUserList);
         }
 
 
