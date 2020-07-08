@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="CustomerChatMaster"></param>
         /// <returns></returns>
-        public int SaveReInitiateChatMessages(CustomerChatMaster customerChatMaster,int TenantId)
+        public int SaveReInitiateChatMessages(CustomerChatMaster customerChatMaster,int TenantId,string ProgramCode)
         {
 
             MySqlCommand cmd = new MySqlCommand();
@@ -34,7 +34,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_TenantID", TenantId);
                 //cmd.Parameters.AddWithValue("@_ChatID", customerChatMaster.ChatID);
                 cmd.Parameters.AddWithValue("@_StoreID", string.IsNullOrEmpty(customerChatMaster.StoreID) ? "" : customerChatMaster.StoreID);
-                cmd.Parameters.AddWithValue("@_ProgramCode", string.IsNullOrEmpty(customerChatMaster.ProgramCode) ? "" : customerChatMaster.ProgramCode);
+                cmd.Parameters.AddWithValue("@_ProgramCode", string.IsNullOrEmpty(ProgramCode) ? "" : ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerID", string.IsNullOrEmpty(customerChatMaster.CustomerID) ? "" : customerChatMaster.CustomerID);
                 cmd.Parameters.AddWithValue("@_FirstName", string.IsNullOrEmpty(customerChatMaster.FirstName) ? "" : customerChatMaster.FirstName);
                 cmd.Parameters.AddWithValue("@_LastName", string.IsNullOrEmpty(customerChatMaster.LastName) ? "" : customerChatMaster.LastName);
