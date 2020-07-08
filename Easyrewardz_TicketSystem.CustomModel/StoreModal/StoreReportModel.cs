@@ -59,6 +59,12 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public string CampaignAssignedIds { get; set; }
         //ends here
 
+        // Login Report parameter
+        public string UserIDs { get; set; }
+        public string Startdate { get; set; }
+        public string Enddate { get; set; }
+        //// End Login Report parameter
+
     }
 
     public class StoreReportRequest
@@ -84,6 +90,7 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public List<SearchStoreTaskReportResponse> TaskReport { get; set; }
         public List<SearchStoreClaimReportResponse> ClaimReport { get; set; }
         public List<SearchStoreCampaignReportResponse> CampaignReport { get; set; }
+        public List<LoginReportResponse> LoginReportResponse { get; set; }
     }
 
 
