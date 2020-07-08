@@ -30,13 +30,14 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="searchModel"></param>
         /// <param name="StoreUserList"></param>
         /// <returns></returns>
-        public int GetStoreReportSearch(StoreReportModel searchModel, List<StoreUserListing> StoreUserList)
+        public int GetStoreReportSearch(StoreReportModel searchModel, List<StoreUserListing> StoreUserList, List<StoreUserListing> StoreReportUserList)
         {
 
             MySqlCommand cmd = new MySqlCommand();
             int resultCount = 0;
 
             string UserList = "";
+            string CampaignAssignToList = "";
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -49,6 +50,11 @@ namespace Easyrewardz_TicketSystem.Services
                 if (StoreUserList.Count > 0)
                 {
                     UserList = string.Join(',', StoreUserList.AsEnumerable().Select(x => x.UserID).ToList());
+                }
+
+                if (StoreReportUserList.Count > 0)
+                {
+                    CampaignAssignToList = string.Join(',', StoreReportUserList.AsEnumerable().Select(x => x.UserID).ToList());
                 }
 
                 if (searchModel.ActiveTabId.Equals(1))
@@ -78,11 +84,19 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-                else
+                else if (searchModel.ActiveTabId.Equals(3))
                 {
                     if (searchModel.CampaignAssignedIds.Equals("0"))
                     {
-                        searchModel.CampaignAssignedIds = UserList;
+                        searchModel.CampaignAssignedIds = CampaignAssignToList;
+                    }
+                }
+
+                else
+                {
+                    if (searchModel.UserIDs.Equals("0"))
+                    {
+                        searchModel.UserIDs = UserList;
                     }
                 }
 
@@ -140,7 +154,12 @@ namespace Easyrewardz_TicketSystem.Services
 
                 /*------------------ ENDS HERE-------------------------------*/
 
+                /*------------------ Login Report  PARAMETERS------------------------------*/
+                cmd.Parameters.AddWithValue("@User_ID", string.IsNullOrEmpty(searchModel.UserIDs) ? "" : searchModel.UserIDs.TrimEnd(','));
+                cmd.Parameters.AddWithValue("@Start_date", string.IsNullOrEmpty(searchModel.Startdate) ? "" : searchModel.Startdate);
+                cmd.Parameters.AddWithValue("@End_date", string.IsNullOrEmpty(searchModel.Enddate) ? "" : searchModel.Enddate);
 
+                /*------------------ ENDS HERE-------------------------------*/
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 resultCount = Convert.ToInt32(cmd.ExecuteScalar());
@@ -178,6 +197,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<SearchStoreTaskReportResponse> TaskReport = new List<SearchStoreTaskReportResponse>();
             List<SearchStoreClaimReportResponse> ClaimReport = new List<SearchStoreClaimReportResponse>();
             List<SearchStoreCampaignReportResponse> CampaignReport = new List<SearchStoreCampaignReportResponse>();
+            List<LoginReportResponse> lstLoginReportResponse = new List<LoginReportResponse>();
 
             string CSVReport = string.Empty;
             try
@@ -214,10 +234,15 @@ namespace Easyrewardz_TicketSystem.Services
                             ClaimReport = ReportDownloadList.ClaimReport;
                             CSVReport = ClaimReport != null && ClaimReport.Count > 0 ? CommonService.ListToCSV(ClaimReport) : string.Empty;
                         }
-                        else
+                        else if (SearchModel.ActiveTabId.Equals(3))
                         {
                             CampaignReport = ReportDownloadList.CampaignReport;
                             CSVReport = CampaignReport != null && CampaignReport.Count > 0 ? CommonService.ListToCSV(CampaignReport) : string.Empty;
+                        }
+                        else 
+                        {
+                            lstLoginReportResponse = ReportDownloadList.LoginReportResponse;
+                            CSVReport = lstLoginReportResponse != null && lstLoginReportResponse.Count > 0 ? CommonService.ListToCSV(lstLoginReportResponse) : string.Empty;
                         }
                     }
 
@@ -253,6 +278,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<SearchStoreTaskReportResponse> TaskReport = new List<SearchStoreTaskReportResponse>();
             List<SearchStoreClaimReportResponse> ClaimReport = new List<SearchStoreClaimReportResponse>();
             List<SearchStoreCampaignReportResponse> CampaignReport = new List<SearchStoreCampaignReportResponse>();
+            List<LoginReportResponse> lstLoginReportResponse = new List<LoginReportResponse>();
 
             string UserList = "";
             try
@@ -298,11 +324,18 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-                else
+                else if (searchModel.ActiveTabId.Equals(3))
                 {
                     if (searchModel.CampaignAssignedIds.Equals("0"))
                     {
                         searchModel.CampaignAssignedIds = UserList;
+                    }
+                }
+                else 
+                {
+                    if (searchModel.UserIDs.Equals("0"))
+                    {
+                        searchModel.UserIDs = UserList;
                     }
                 }
 
@@ -359,6 +392,12 @@ namespace Easyrewardz_TicketSystem.Services
 
                 /*------------------ ENDS HERE-------------------------------*/
 
+                /*------------------ Login Report  PARAMETERS------------------------------*/
+                cmd.Parameters.AddWithValue("@User_ID", string.IsNullOrEmpty(searchModel.UserIDs) ? "" : searchModel.UserIDs.TrimEnd(','));
+                cmd.Parameters.AddWithValue("@Start_date", string.IsNullOrEmpty(searchModel.Startdate) ? "" : searchModel.Startdate);
+                cmd.Parameters.AddWithValue("@End_date", string.IsNullOrEmpty(searchModel.Enddate) ? "" : searchModel.Enddate);
+
+                /*------------------ ENDS HERE-------------------------------*/
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
@@ -455,7 +494,7 @@ namespace Easyrewardz_TicketSystem.Services
                             }
                             objSearchResult.ClaimReport = ClaimReport;
                         }
-                        else// campaign mapping
+                        else if (searchModel.ActiveTabId.Equals(3))// campaign mapping
                         {
                             foreach (DataRow dr in ds.Tables[0].Rows)
                             {
@@ -484,6 +523,29 @@ namespace Easyrewardz_TicketSystem.Services
 
                             objSearchResult.CampaignReport = CampaignReport;
                         }
+
+                        else // login Report
+                        {
+                            foreach (DataRow dr in ds.Tables[0].Rows)
+                            {
+                               
+                                LoginReportResponse LoginReport = new LoginReportResponse
+                                {
+                                    UserID = dr["UserID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["UserID"]),
+                                    UserName = dr["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["UserName"]),
+                                    StoreCode = dr["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreCode"]),
+                                    RegionName = dr["RegionName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["RegionName"]),
+                                    Zone = dr["ZoneID"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.Zones)Convert.ToInt32(dr["ZoneID"])),
+                                    LoginDate = dr["LoginDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["LoginDate"]),
+                                    LoginTime = dr["LoginTime"] == DBNull.Value ? string.Empty : Convert.ToString(dr["LoginTime"]),
+                                    LogoutTime = dr["LogoutTime"] == DBNull.Value ? string.Empty : Convert.ToString(dr["LogoutTime"]),
+                                    TotalWorking = dr["TotalWorking"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TotalWorking"]),
+                                };
+                                lstLoginReportResponse.Add(LoginReport);
+                            }
+
+                            objSearchResult.LoginReportResponse = lstLoginReportResponse;
+                        }
                     }
                 }
             }
@@ -506,7 +568,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ReportName"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public bool CheckIfReportNameExists(int ReportID, string ReportName, int TenantID)
+        public bool CheckIfReportNameExists(int ReportID, string ReportName, int ScheuleID, int TenantID)
         {
 
 
@@ -519,6 +581,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
                 cmd.Parameters.AddWithValue("@Report_ID", ReportID);
                 cmd.Parameters.AddWithValue("@Report_Name", string.IsNullOrEmpty(ReportName) ? "" : ReportName.ToLower());
+                cmd.Parameters.AddWithValue("@Schedule_ID", ScheuleID);
 
 
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -864,6 +927,69 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return objCampaignList;
+        }
+
+        /// <summary>
+        /// User Login Report
+        /// </summary>
+        /// <returns></returns>
+        public List<LoginReportResponse> UserLoginReport(LoginReportRequest loginReportRequest)
+        {
+            List<LoginReportResponse> lstLoginReportResponse = new List<LoginReportResponse>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("SP_StoreLoginUserReport", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@User_ID", string.IsNullOrEmpty(loginReportRequest.UserID) ? "" : loginReportRequest.UserID.TrimEnd(','));
+                cmd1.Parameters.AddWithValue("@Start_date", loginReportRequest.Startdate);
+                cmd1.Parameters.AddWithValue("@End_date", loginReportRequest.Enddate);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", loginReportRequest.TenantID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            LoginReportResponse LoginReport = new LoginReportResponse
+                            {
+                                UserID = ds.Tables[0].Rows[i]["UserID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["UserID"]),
+                                UserName = ds.Tables[0].Rows[i]["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserName"]),
+                                StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]),
+                                RegionName = ds.Tables[0].Rows[i]["RegionName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RegionName"]),
+                                Zone = ds.Tables[0].Rows[i]["ZoneID"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.Zones)Convert.ToInt32(ds.Tables[0].Rows[i]["ZoneID"])),
+                                LoginDate = ds.Tables[0].Rows[i]["LoginDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["LoginDate"]),
+                                LoginTime = ds.Tables[0].Rows[i]["LoginTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["LoginTime"]),
+                                LogoutTime = ds.Tables[0].Rows[i]["LogoutTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["LogoutTime"]),
+                                TotalWorking = ds.Tables[0].Rows[i]["TotalWorking"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TotalWorking"]),
+                            };
+                            lstLoginReportResponse.Add(LoginReport);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (ds != null)
+                    ds.Dispose();
+                conn.Close();
+            }
+
+
+            return lstLoginReportResponse;
         }
     }
 }

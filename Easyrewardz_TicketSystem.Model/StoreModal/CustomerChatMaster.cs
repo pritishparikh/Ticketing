@@ -100,6 +100,12 @@ namespace Easyrewardz_TicketSystem.Model
         /// IS Chat Ended from Customer
         /// </summary>
         public bool IsCustEndChat { get; set; }
+
+
+        /// <summary>
+        /// ChatTicketID
+        /// </summary>
+        public int ChatTicketID { get; set; }
     }
 
     public class CustomerChatMessages

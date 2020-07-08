@@ -13,7 +13,7 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         /// <param name="searchModel"></param>
         /// <param name="StoreUserList"></param>
         /// <returns></returns>
-        int GetStoreReportSearch(StoreReportModel searchModel, List<StoreUserListing> StoreUserList);
+        int GetStoreReportSearch(StoreReportModel searchModel, List<StoreUserListing> StoreUserList, List<StoreUserListing> StoreReportUserList);
 
         /// <summary>
         /// Download Store Report Search
@@ -32,7 +32,7 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         /// <param name="ReportName"></param>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        bool CheckIfReportNameExists(int ReportID, string ReportName, int TenantID);
+        bool CheckIfReportNameExists(int ReportID, string ReportName, int ScheuleID, int TenantID);
 
         /// <summary>
         /// Schedule Store Report
@@ -71,5 +71,10 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         /// <returns></returns>
         List<CampaignScriptName> GetCampaignNames();
 
+        /// <summary>
+        /// User Login Report
+        /// </summary>
+        /// <returns></returns>
+        List<LoginReportResponse> UserLoginReport(LoginReportRequest loginReportRequest);
     }
 }

@@ -1288,6 +1288,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+
+
+        /// <summary>
+        /// GetStoreReportUserList
+        /// </summary>
+        /// <param name="RegionID"></param>
+        /// <param name="ZoneID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreReportUser")]
+        public ResponseModel GetStoreReportUser(int RegionID, int ZoneID)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<StoreUserListing> objUser = new List<StoreUserListing>();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                objUser = userCaller.GetStoreReportUser(new StoreUserService(_connectioSting), authenticate.TenantId, RegionID, ZoneID, authenticate.UserMasterID);
+
+                StatusCode =
+               objUser.Count == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objUser;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
         #endregion
     }
 }

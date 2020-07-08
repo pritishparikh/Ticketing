@@ -182,6 +182,29 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// </summary>
         public string UpdatedDate { get; set; }
 
+
+        /// <summary>
+        /// ChatID
+        /// </summary>
+        public int  ChatID { get; set; }
+
+
+        /// <summary>
+        /// ChatEndDateTime
+        /// </summary>
+        public string ChatEndDateTime { get; set; }
+       
+        /// <summary>
+        /// IsIconDisplay
+        /// </summary>
+        public bool IsIconDisplay { get; set; }
+
+        /// <summary>
+        /// IsChatAllreadyActive
+        /// </summary>
+        public bool IsChatAllreadyActive { get; set; }
+
+
         /// <summary>
         ///List of Chat Ticket Note
         /// </summary>

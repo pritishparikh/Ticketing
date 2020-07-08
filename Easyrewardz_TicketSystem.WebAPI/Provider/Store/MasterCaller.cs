@@ -136,5 +136,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
         #endregion
 
+        public List<RegionZoneMaster> GetRegionlist(IMaster _ImasterInterface, int UserID)
+        {
+            _IMaster = _ImasterInterface;
+            return _IMaster.GetRegionlist(UserID);
+        }
+
     }
 }

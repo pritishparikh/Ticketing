@@ -187,6 +187,6 @@ namespace Easyrewardz_TicketSystem.Interface
         #endregion
 
 
-
+        List<StoreUserListing> GetStoreReportUserList(int tenantID, int RegionID, int ZoneID, int UserID);
     }
 }
