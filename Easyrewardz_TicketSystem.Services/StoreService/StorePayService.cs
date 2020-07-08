@@ -86,7 +86,8 @@ namespace Easyrewardz_TicketSystem.Services
                                 if(HASHResponse.Count > 0)
                                 {
                                     string HashRequest = HASHResponse["hashedPassword"];
-                                    var RequestEncrypt = new { text = "token=" + HashRequest + "&programCode" + ProgramCode + "&userCode=" + UserID };
+                                    string EpochTime = Convert.ToString(CommonService.ConvertToUnixTimestamp(DateTime.Now));
+                                    var RequestEncrypt = new { text = "token=" + HashRequest + "&programCode=" + ProgramCode + "&userCode=" + UserID + "&epochTime=" + EpochTime };
                                     ClientAPIResponse = CommonService.SendApiRequestMerchantApi(clientAPIUrlForGeneratePaymentLink + "api/AESEncrypt",
                                                         JsonConvert.SerializeObject(RequestEncrypt), hSResponseGenerateToken.access_token);
 
