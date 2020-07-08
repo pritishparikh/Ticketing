@@ -1312,7 +1312,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
-                objUser = userCaller.GetStoreReportUser(new StoreUserService(_connectioSting), authenticate.TenantId, RegionID, ZoneID);
+                objUser = userCaller.GetStoreReportUser(new StoreUserService(_connectioSting), authenticate.TenantId, RegionID, ZoneID, authenticate.UserMasterID);
 
                 StatusCode =
                objUser.Count == 0 ?

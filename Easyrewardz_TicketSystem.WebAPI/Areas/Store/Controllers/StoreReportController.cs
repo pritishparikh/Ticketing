@@ -68,7 +68,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
 
-                StoreReportUserList = new StoreUserService(_connectioSting).GetStoreReportUserList(authenticate.TenantId, SearchParams.CampaignRegion, SearchParams.CampaignZone);
+                StoreReportUserList = new StoreUserService(_connectioSting).GetStoreReportUserList(authenticate.TenantId, SearchParams.CampaignRegion, SearchParams.CampaignZone, authenticate.UserMasterID);
 
                 resultCount = dbsearchMaster.StoreReportSearch(new StoreReportService(_connectioSting), SearchParams, StoreUserList, StoreReportUserList);
 

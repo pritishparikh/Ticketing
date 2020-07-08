@@ -1140,7 +1140,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get Store Report User
         /// </summary>
         /// <param name="tenantID"></param>
-        public List<StoreUserListing> GetStoreReportUserList(int tenantID, int RegionID, int ZoneID)
+        public List<StoreUserListing> GetStoreReportUserList(int tenantID, int RegionID, int ZoneID, int UserID)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -1157,6 +1157,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 cmd1.Parameters.AddWithValue("@_RegionID", RegionID);
                 cmd1.Parameters.AddWithValue("@_ZoneID", ZoneID);
+                cmd1.Parameters.AddWithValue("@_UserID", UserID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
