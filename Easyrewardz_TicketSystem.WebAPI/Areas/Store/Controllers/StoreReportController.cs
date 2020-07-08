@@ -66,7 +66,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 SearchParams.TenantID = authenticate.TenantId; // add tenantID to request
                                                                // searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
 
-                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
+                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId, authenticate.UserMasterID);
 
                 StoreReportUserList = new StoreUserService(_connectioSting).GetStoreReportUserList(authenticate.TenantId, SearchParams.CampaignRegion, SearchParams.CampaignZone, authenticate.UserMasterID);
 
@@ -94,7 +94,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("DownloadStoreReport")]
-        public ResponseModel DownloadStoreReportSearch(int ReportID)
+        public ResponseModel DownloadStoreReportSearch(int ReportID, int RegionID, int ZoneID)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
@@ -105,6 +105,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string URLPath = string.Empty;
             StoreReportCaller dbsearchMaster = new StoreReportCaller();
             List<StoreUserListing> StoreUserList = new List<StoreUserListing>();
+            List<StoreUserListing> StoreReportUserList = new List<StoreUserListing>();
             try
             {
 
@@ -112,8 +113,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
-                CSVReport = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), ReportID, authenticate.UserMasterID, authenticate.TenantId, StoreUserList);
+                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId, authenticate.UserMasterID);
+
+                StoreReportUserList = new StoreUserService(_connectioSting).GetStoreReportUserList(authenticate.TenantId, RegionID, ZoneID, authenticate.UserMasterID);
+
+                CSVReport = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), ReportID, authenticate.UserMasterID, authenticate.TenantId, StoreUserList, StoreReportUserList);
 
                 appRoot = Directory.GetCurrentDirectory();
 
@@ -172,7 +176,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
+                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId, authenticate.UserMasterID);
                 IsExists = dbsearchMaster.CheckIfReportNameExists(new StoreReportService(_connectioSting), ReportID, ReportName, ScheuleID, authenticate.TenantId);
 
                 StatusCode = IsExists ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.RecordNotFound;

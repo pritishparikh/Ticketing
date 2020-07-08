@@ -79,7 +79,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// </summary>
         /// <param name="tenantID"></param>
         /// <returns></returns>
-        List<StoreUserListing> GetStoreUserList(int tenantID);
+        List<StoreUserListing> GetStoreUserList(int tenantID, int UserID);
 
         /// <summary>
         /// Get Store User On User ID

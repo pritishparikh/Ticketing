@@ -71,10 +71,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _StoreUserRepository.UpdateStoreUser(userdetails);
         }
 
-        public List<StoreUserListing> GetStoreUserList(IStoreUser Users, int tenantID)
+        public List<StoreUserListing> GetStoreUserList(IStoreUser Users, int tenantID, int UserID)
         {
             _StoreUserRepository = Users;
-            return _StoreUserRepository.GetStoreUserList(tenantID);
+            return _StoreUserRepository.GetStoreUserList(tenantID, UserID);
         }
 
 

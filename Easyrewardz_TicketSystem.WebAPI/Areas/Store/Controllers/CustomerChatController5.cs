@@ -33,7 +33,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
                 customerChatMaster.CreatedBy = authenticate.UserMasterID;
-                result = customerChatCaller.SaveReInitiateChat(new CustomerChatService(_connectionString),authenticate.TenantId, customerChatMaster);
+                result = customerChatCaller.SaveReInitiateChat(new CustomerChatService(_connectionString),authenticate.TenantId,authenticate.ProgramCode, customerChatMaster);
 
                 statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

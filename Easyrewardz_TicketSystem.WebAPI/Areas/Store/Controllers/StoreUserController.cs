@@ -391,7 +391,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
-                objUser = userCaller.GetStoreUserList(new StoreUserService(_connectioSting), authenticate.TenantId);
+                objUser = userCaller.GetStoreUserList(new StoreUserService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =
                objUser.Count == 0 ?
