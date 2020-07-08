@@ -197,6 +197,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<SearchStoreTaskReportResponse> TaskReport = new List<SearchStoreTaskReportResponse>();
             List<SearchStoreClaimReportResponse> ClaimReport = new List<SearchStoreClaimReportResponse>();
             List<SearchStoreCampaignReportResponse> CampaignReport = new List<SearchStoreCampaignReportResponse>();
+            List<LoginReportResponse> lstLoginReportResponse = new List<LoginReportResponse>();
 
             string CSVReport = string.Empty;
             try
@@ -233,10 +234,15 @@ namespace Easyrewardz_TicketSystem.Services
                             ClaimReport = ReportDownloadList.ClaimReport;
                             CSVReport = ClaimReport != null && ClaimReport.Count > 0 ? CommonService.ListToCSV(ClaimReport) : string.Empty;
                         }
-                        else
+                        else if (SearchModel.ActiveTabId.Equals(3))
                         {
                             CampaignReport = ReportDownloadList.CampaignReport;
                             CSVReport = CampaignReport != null && CampaignReport.Count > 0 ? CommonService.ListToCSV(CampaignReport) : string.Empty;
+                        }
+                        else 
+                        {
+                            lstLoginReportResponse = ReportDownloadList.LoginReportResponse;
+                            CSVReport = lstLoginReportResponse != null && lstLoginReportResponse.Count > 0 ? CommonService.ListToCSV(lstLoginReportResponse) : string.Empty;
                         }
                     }
 
@@ -272,6 +278,7 @@ namespace Easyrewardz_TicketSystem.Services
             List<SearchStoreTaskReportResponse> TaskReport = new List<SearchStoreTaskReportResponse>();
             List<SearchStoreClaimReportResponse> ClaimReport = new List<SearchStoreClaimReportResponse>();
             List<SearchStoreCampaignReportResponse> CampaignReport = new List<SearchStoreCampaignReportResponse>();
+            List<LoginReportResponse> lstLoginReportResponse = new List<LoginReportResponse>();
 
             string UserList = "";
             try
@@ -317,11 +324,18 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-                else
+                else if (searchModel.ActiveTabId.Equals(3))
                 {
                     if (searchModel.CampaignAssignedIds.Equals("0"))
                     {
                         searchModel.CampaignAssignedIds = UserList;
+                    }
+                }
+                else 
+                {
+                    if (searchModel.UserIDs.Equals("0"))
+                    {
+                        searchModel.UserIDs = UserList;
                     }
                 }
 
@@ -378,6 +392,12 @@ namespace Easyrewardz_TicketSystem.Services
 
                 /*------------------ ENDS HERE-------------------------------*/
 
+                /*------------------ Login Report  PARAMETERS------------------------------*/
+                cmd.Parameters.AddWithValue("@User_ID", string.IsNullOrEmpty(searchModel.UserIDs) ? "" : searchModel.UserIDs.TrimEnd(','));
+                cmd.Parameters.AddWithValue("@Start_date", string.IsNullOrEmpty(searchModel.Startdate) ? "" : searchModel.Startdate);
+                cmd.Parameters.AddWithValue("@End_date", string.IsNullOrEmpty(searchModel.Enddate) ? "" : searchModel.Enddate);
+
+                /*------------------ ENDS HERE-------------------------------*/
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
@@ -474,7 +494,7 @@ namespace Easyrewardz_TicketSystem.Services
                             }
                             objSearchResult.ClaimReport = ClaimReport;
                         }
-                        else// campaign mapping
+                        else if (searchModel.ActiveTabId.Equals(3))// campaign mapping
                         {
                             foreach (DataRow dr in ds.Tables[0].Rows)
                             {
@@ -502,6 +522,29 @@ namespace Easyrewardz_TicketSystem.Services
                             }
 
                             objSearchResult.CampaignReport = CampaignReport;
+                        }
+
+                        else // login Report
+                        {
+                            foreach (DataRow dr in ds.Tables[0].Rows)
+                            {
+                               
+                                LoginReportResponse LoginReport = new LoginReportResponse
+                                {
+                                    UserID = dr["UserID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["UserID"]),
+                                    UserName = dr["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["UserName"]),
+                                    StoreCode = dr["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreCode"]),
+                                    RegionName = dr["RegionName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["RegionName"]),
+                                    Zone = dr["ZoneID"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.Zones)Convert.ToInt32(dr["ZoneID"])),
+                                    LoginDate = dr["LoginDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["LoginDate"]),
+                                    LoginTime = dr["LoginTime"] == DBNull.Value ? string.Empty : Convert.ToString(dr["LoginTime"]),
+                                    LogoutTime = dr["LogoutTime"] == DBNull.Value ? string.Empty : Convert.ToString(dr["LogoutTime"]),
+                                    TotalWorking = dr["TotalWorking"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TotalWorking"]),
+                                };
+                                lstLoginReportResponse.Add(LoginReport);
+                            }
+
+                            objSearchResult.LoginReportResponse = lstLoginReportResponse;
                         }
                     }
                 }

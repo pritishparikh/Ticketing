@@ -86,12 +86,12 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
     #region Store report Model
 
 
-
     public class SearchStoreResponseReport
     {
         public List<SearchStoreTaskReportResponse> TaskReport { get; set; }
         public List<SearchStoreClaimReportResponse> ClaimReport { get; set; }
         public List<SearchStoreCampaignReportResponse> CampaignReport { get; set; }
+        public List<LoginReportResponse> LoginReportResponse { get; set; }
     }
 
 
