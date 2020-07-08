@@ -1,5 +1,7 @@
-﻿using Easyrewardz_TicketSystem.Interface.StoreInterface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface.StoreInterface;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -23,14 +25,17 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
         /// <param name="UserID"></param>
+        ///  <param name="clientAPIUrlForGenerateToken"></param>
+        ///   <param name="clientAPIUrlForGeneratePaymentLink"></param>
+        ///    <param name="hSRequestGenerateToken"></param>
         /// <returns></returns>
-        /// 
-        public string GenerateStorePayLink(int TenantID, string ProgramCode, int UserID)
+        public string GenerateStorePayLink(int TenantID, string ProgramCode, int UserID, string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, HSRequestGenerateToken hSRequestGenerateToken)
         {
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
             string PaymentLink = string.Empty;
-
+            string ClientAPIResponse = string.Empty;
+            HSResponseGenerateToken hSResponseGenerateToken = new HSResponseGenerateToken();
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -59,7 +64,57 @@ namespace Easyrewardz_TicketSystem.Services
 
                 if (!string.IsNullOrEmpty(PaymentLink))
                 {
-                    // add storepaylogic here
+                    // generate token 
+                    string apiReq = "Client_Id=" + hSRequestGenerateToken.Client_Id + "&Client_Secret=" + hSRequestGenerateToken.Client_Secret +
+                        "&Grant_Type=" + hSRequestGenerateToken.Grant_Type + "&Scope=" + hSRequestGenerateToken.Scope;
+                    ClientAPIResponse = CommonService.SendApiRequestToken(clientAPIUrlForGenerateToken + "connect/token", apiReq);
+
+                    if(!string.IsNullOrEmpty(ClientAPIResponse))
+                    {
+                        hSResponseGenerateToken = JsonConvert.DeserializeObject<HSResponseGenerateToken>(ClientAPIResponse);
+
+                        if (!string.IsNullOrEmpty(hSResponseGenerateToken.access_token))
+                        {
+                            //generate HASH 
+                            var RequestHASH = new { password = "programCode=" + ProgramCode + "&userCode=" + UserID };
+                            ClientAPIResponse = CommonService.SendApiRequestMerchantApi(clientAPIUrlForGeneratePaymentLink + "api/SHAHash", 
+                                                 JsonConvert.SerializeObject(RequestHASH), hSResponseGenerateToken.access_token);
+
+                            if (!string.IsNullOrEmpty(ClientAPIResponse))
+                            {
+                                var HASHResponse= JsonConvert.DeserializeObject<Dictionary<string,string>>(ClientAPIResponse);
+                                if(HASHResponse.Count > 0)
+                                {
+                                    string HashRequest = HASHResponse["hashedPassword"];
+                                    var RequestEncrypt = new { text = "token=" + HashRequest + "&programCode" + ProgramCode + "&userCode=" + UserID };
+                                    ClientAPIResponse = CommonService.SendApiRequestMerchantApi(clientAPIUrlForGeneratePaymentLink + "api/AESEncrypt",
+                                                        JsonConvert.SerializeObject(RequestEncrypt), hSResponseGenerateToken.access_token);
+
+                                    if (!string.IsNullOrEmpty(ClientAPIResponse))
+                                    {
+                                        var EncryptedResponse= JsonConvert.DeserializeObject<Dictionary<string, string>>(ClientAPIResponse);
+
+                                        if (EncryptedResponse.Count > 0)
+                                        {
+                                            string EncryptedText = EncryptedResponse["encryptedText"];
+                                            PaymentLink = !string.IsNullOrEmpty(EncryptedText) ? PaymentLink + "?" + EncryptedText : string.Empty;
+
+                                        }
+
+                                           
+
+                                    }
+
+                                }
+                            }
+
+                        }
+                    }
+                    
+
+
+
+
 
                 }
 

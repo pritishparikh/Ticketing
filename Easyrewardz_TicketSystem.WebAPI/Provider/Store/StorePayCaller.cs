@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface.StoreInterface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface.StoreInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +19,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider.Store
         #region Methods 
 
         /// <summary>
-        /// Generate StorePay Link
+        /// Generate Store Pay Link
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="UserID"></param>
+        ///  <param name="clientAPIUrlForGenerateToken"></param>
+        ///   <param name="clientAPIUrlForGeneratePaymentLink"></param>
+        ///    <param name="hSRequestGenerateToken"></param>
         /// <returns></returns>
-        public string GenerateStorePayLink(IStorePay storePay, int TenantID, string ProgramCode,  int UserID)
+        public string GenerateStorePayLink(IStorePay storePay, int TenantID, string ProgramCode,  int UserID,
+            string clientAPIUrlForGenerateToken, string clientAPIUrlForGeneratePaymentLink, HSRequestGenerateToken hSRequestGenerateToken)
         {
             _storePay = storePay;
-            return _storePay.GenerateStorePayLink(TenantID, ProgramCode, UserID);
+            return _storePay.GenerateStorePayLink(TenantID, ProgramCode, UserID,  clientAPIUrlForGenerateToken,  clientAPIUrlForGeneratePaymentLink,  hSRequestGenerateToken);
         }
 
         #endregion

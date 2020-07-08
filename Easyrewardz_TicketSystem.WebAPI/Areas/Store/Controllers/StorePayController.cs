@@ -20,6 +20,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private IConfiguration configuration;
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
+        private readonly string _ClientAPIUrlForGenerateToken;
+        private readonly string _ClientAPIUrlForGeneratePaymentLink;
+        private readonly string _Client_Id;
+        private readonly string _Client_Secret;
+        private readonly string _Grant_Type;
+        private readonly string _Scope;
         #endregion
 
         #region Cunstructor
@@ -28,19 +34,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+            _ClientAPIUrlForGenerateToken = configuration.GetValue<string>("ClientAPIForGenerateToken");
+            _ClientAPIUrlForGeneratePaymentLink = configuration.GetValue<string>("ClientAPIForGeneratePaymentLink");
+            _Client_Id = configuration.GetValue<string>("Client_Id");
+            _Client_Secret = configuration.GetValue<string>("Client_Secret");
+            _Grant_Type = configuration.GetValue<string>("Grant_Type");
+            _Scope = configuration.GetValue<string>("Scope");
+
         }
         #endregion
 
         #region Custom Methods
 
         /// <summary>
-        /// Get Appointment List
+        /// Generate Store Pay Link
         /// </summary>
-        /// <param name="AppDate"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GenerateStorePayLink")]
-        public ResponseModel GenerateStorePayLink(string AppDate)
+        public ResponseModel GenerateStorePayLink()
         {
             string StorePayLink = string.Empty;
             ResponseModel objResponseModel = new ResponseModel();
@@ -55,7 +67,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 StorePayCaller newStorePay = new StorePayCaller();
 
-                StorePayLink = newStorePay.GenerateStorePayLink(new StorePayService(_connectioSting), authenticate.TenantId, authenticate.ProgramCode,authenticate.UserMasterID);
+                HSRequestGenerateToken hSRequestGenerateToken = new HSRequestGenerateToken()
+                {
+                    Client_Id = _Client_Id,
+                    Client_Secret = _Client_Secret,
+                    Grant_Type = _Grant_Type,
+                    Scope = _Scope,
+                };
+
+                StorePayLink = newStorePay.GenerateStorePayLink(new StorePayService(_connectioSting), authenticate.TenantId, authenticate.ProgramCode,authenticate.UserMasterID,
+                    _ClientAPIUrlForGenerateToken, _ClientAPIUrlForGeneratePaymentLink, hSRequestGenerateToken);
 
                 statusCode =
                 string.IsNullOrEmpty(StorePayLink) ?
