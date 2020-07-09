@@ -913,10 +913,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="userID"></param>
         /// <param name="Delivery_postcode"></param>
         /// <returns></returns>
-        public bool CheckPincodeExists(int tenantID, int userID, string Delivery_postcode)
+        public PincodeCheck CheckPincodeExists(int tenantID, int userID, string Delivery_postcode)
         {
-            bool result = false;
-
+            PincodeCheck pincodeCheck = new PincodeCheck();
+            DataSet ds = new DataSet();
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -932,7 +932,20 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_UserID", userID);
                 cmd.Parameters.AddWithValue("@_Pincode", Delivery_postcode);
 
-                result = Convert.ToBoolean(cmd.ExecuteScalar());
+                //result = Convert.ToBoolean(cmd.ExecuteScalar());
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    pincodeCheck = new PincodeCheck()
+                    {
+                        PincodeAvailable = ds.Tables[0].Rows[0]["IsPincodeValid"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["IsPincodeValid"]),
+                        PincodeState = ds.Tables[0].Rows[0]["statename"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["statename"])
+                    };
+                }
             }
             catch (Exception)
             {
@@ -946,7 +959,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return result;
+            return pincodeCheck;
         }
     }
 }

@@ -600,4 +600,16 @@ namespace Easyrewardz_TicketSystem.Model
         public string Weight_Unit { get; set; }
         
     }
+
+    public class PincodeCheck
+    {
+        /// <summary>
+        /// PincodeAvailable
+        /// </summary>
+        public bool PincodeAvailable { get; set; }
+        /// <summary>
+        /// PincodeSatate
+        /// </summary>
+        public string PincodeState { get; set; }
+    }
 }
