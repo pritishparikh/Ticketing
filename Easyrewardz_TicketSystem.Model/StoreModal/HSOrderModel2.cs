@@ -612,4 +612,20 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string PincodeState { get; set; }
     }
+
+    public class OrderSelfPickUp
+    {
+        /// <summary>
+        /// OrderID
+        /// </summary>
+        public int OrderID { get; set; }
+        /// <summary>
+        /// PickupDate
+        /// </summary>
+        public string PickupDate { get; set; }
+        /// <summary>
+        /// PickupTime
+        /// </summary>
+        public string PickupTime { get; set; }
+    }
 }

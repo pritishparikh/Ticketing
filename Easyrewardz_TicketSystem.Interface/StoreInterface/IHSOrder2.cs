@@ -86,5 +86,16 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="userId"></param>
         /// <returns></returns>
         ShippingTemplateDetails GetOrderShippingTemplateName(int tenantId, int userId);
+
+        /// <summary>
+        /// SetOrderHasBeenSelfPickUp
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="orderID"></param>
+        /// <param name="PickupDate"></param>
+        /// <param name="PickupTime"></param>
+        /// <returns></returns>
+        int SetOrderHasBeenSelfPickUp(int tenantId, int userId, OrderSelfPickUp orderSelfPickUp);
     }
 }

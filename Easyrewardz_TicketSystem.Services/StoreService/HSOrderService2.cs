@@ -961,5 +961,49 @@ namespace Easyrewardz_TicketSystem.Services
 
             return pincodeCheck;
         }
+
+        /// <summary>
+        /// SetOrderHasBeenSelfPickUp
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="orderID"></param>
+        /// <param name="PickupDate"></param>
+        /// <param name="PickupTime"></param>
+        /// <returns></returns>
+        public int SetOrderHasBeenSelfPickUp(int tenantId, int userId, OrderSelfPickUp orderSelfPickUp)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYSetOrderHasBeenReturn", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_OrderID", orderSelfPickUp.OrderID);
+                cmd.Parameters.AddWithValue("@_PickupDate", orderSelfPickUp.PickupDate);
+                cmd.Parameters.AddWithValue("@_PickupTime", orderSelfPickUp.PickupTime);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
     }
 }
