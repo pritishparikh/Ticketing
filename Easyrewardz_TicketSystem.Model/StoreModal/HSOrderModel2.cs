@@ -136,6 +136,19 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public List<OrdersItem> OrdersItemList { get; set; }
         /// <summary>
+        /// ShippingCharges
+        /// </summary>
+        public string ShippingCharges { get; set; }
+        /// <summary>
+        /// EstimatedDeliveryDate
+        /// </summary>
+        public string EstimatedDeliveryDate { get; set; }
+        /// <summary>
+        /// PickupScheduledDate
+        /// </summary>
+        public string PickupScheduledDate { get; set; }
+
+        /// <summary>
         /// ShoppingBagItemList
         /// </summary>
         public List<ShoppingBagItem> ShoppingBagItemList { get; set; }

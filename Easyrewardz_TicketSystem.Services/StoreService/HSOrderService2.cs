@@ -347,6 +347,9 @@ namespace Easyrewardz_TicketSystem.Services
                             PickupDate = ds.Tables[0].Rows[i]["PickupDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PickupDate"]),
                             PickupTime = ds.Tables[0].Rows[i]["PickupTime"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PickupTime"]),
                             CourierPartner = ds.Tables[0].Rows[i]["CourierPartner"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]),
+                            ShippingCharges = ds.Tables[0].Rows[i]["ShippingCharges"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ShippingCharges"]),
+                            EstimatedDeliveryDate = ds.Tables[0].Rows[i]["EstimatedDeliveryDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["EstimatedDeliveryDate"]),
+                            PickupScheduledDate = ds.Tables[0].Rows[i]["PickupScheduledDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PickupScheduledDate"]),
                             OrdersItemList = new List<OrdersItem>(),
                             ShoppingBagItemList = new List<ShoppingBagItem>()
                         };
