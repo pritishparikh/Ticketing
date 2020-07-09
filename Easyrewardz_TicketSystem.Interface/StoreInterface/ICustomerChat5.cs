@@ -12,6 +12,6 @@ namespace Easyrewardz_TicketSystem.Interface
         /// </summary>
         /// <param name="customerChatMaster"></param>
         /// <returns></returns>
-        int SaveReInitiateChatMessages(CustomerChatMaster customerChatMaster, int TenantId,string ProgramCode);
+        int SaveReInitiateChatMessages(CustomerChatMaster customerChatMaster, int TenantId, string ProgramCode, string _ClientAPIUrl);
     }
 }

@@ -479,7 +479,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="AddToLibrary"></param>
         /// <param name="ModifiedBy"></param>
         /// <returns></returns>
-        public int ApproveRejectCardImage(int ID,int TenantID, string ProgramCode, string ItemID, bool AddToLibrary, int ModifiedBy)
+        public int ApproveRejectCardImage(int ID,int TenantID, string ProgramCode, string ItemID, bool AddToLibrary,string RejectionReason, int ModifiedBy)
         {
             int success = 0;
             try
@@ -499,6 +499,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.Parameters.AddWithValue("@_ItemID", ItemID);
                 cmd.Parameters.AddWithValue("@_IsAddToLibrary", Convert.ToInt16(AddToLibrary));
+                cmd.Parameters.AddWithValue("@_RejectionReason", RejectionReason);
                 cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
 
                 success = Convert.ToInt32(cmd.ExecuteScalar());

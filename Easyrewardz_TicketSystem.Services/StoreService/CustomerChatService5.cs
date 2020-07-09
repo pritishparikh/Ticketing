@@ -2,9 +2,9 @@
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
-using System.Text;
+using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="CustomerChatMaster"></param>
         /// <returns></returns>
-        public int SaveReInitiateChatMessages(CustomerChatMaster customerChatMaster,int TenantId,string ProgramCode)
+        public int SaveReInitiateChatMessages(CustomerChatMaster customerChatMaster,int TenantId,string ProgramCode,string _ClientAPIUrl)
         {
 
             MySqlCommand cmd = new MySqlCommand();
@@ -45,6 +45,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 resultCount = Convert.ToInt32(cmd.ExecuteScalar());
 
+                //NameValueCollection Params = new NameValueCollection();
+                //Params.Add("Mobilenumber", customerChatMaster.MobileNo);
+                //Params.Add("ProgramCode", ProgramCode);
+                //string ClosedChatStr = CommonService.SendParamsApiRequest(_ClientAPIUrl + "/api/ChatbotBell/", Params);
             }
             catch (Exception)
             {

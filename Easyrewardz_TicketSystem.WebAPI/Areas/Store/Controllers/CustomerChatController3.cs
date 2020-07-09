@@ -370,7 +370,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("ApproveRejectCardImage")]
-        public ResponseModel ApproveRejectCardImage(int ID,string ItemID, bool AddToLibrary)
+        public ResponseModel ApproveRejectCardImage(int ID,string ItemID, bool AddToLibrary,string RejectionReason)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int result = 0;
@@ -386,7 +386,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
                 result = customerChatCaller.ApproveRejectCardImage
-                    (new CustomerChatService(_connectionString), ID, authenticate.TenantId, authenticate.ProgramCode, ItemID, AddToLibrary, authenticate.UserMasterID);
+                    (new CustomerChatService(_connectionString), ID, authenticate.TenantId, authenticate.ProgramCode, ItemID, AddToLibrary, RejectionReason, authenticate.UserMasterID);
 
                 statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

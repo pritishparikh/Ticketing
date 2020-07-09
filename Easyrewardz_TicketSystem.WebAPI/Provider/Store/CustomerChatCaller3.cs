@@ -60,10 +60,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
-        public int ApproveRejectCardImage(ICustomerChat customerChat, int ID, int TenantID, string ProgramCode, string ItemID, bool AddToLibrary, int ModifiedBy)
+        public int ApproveRejectCardImage(ICustomerChat customerChat, int ID, int TenantID, string ProgramCode, string ItemID, bool AddToLibrary,string RejectionReason, int ModifiedBy)
         {
             _customerChat = customerChat;
-            return _customerChat.ApproveRejectCardImage(ID, TenantID,  ProgramCode,  ItemID,  AddToLibrary,  ModifiedBy);
+            return _customerChat.ApproveRejectCardImage(ID, TenantID,  ProgramCode,  ItemID,  AddToLibrary, RejectionReason,  ModifiedBy);
 
         }
 

@@ -88,7 +88,8 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="AddToLibrary"></param>
         /// <param name="ModifiedBy"></param>
         /// <returns></returns>
-        int ApproveRejectCardImage(int ID,int TenantID, string ProgramCode, string ItemID, bool AddToLibrary, int ModifiedBy);
+        //int ApproveRejectCardImage(int ID,int TenantID, string ProgramCode, string ItemID, bool AddToLibrary, int ModifiedBy);
+        int ApproveRejectCardImage(int ID, int TenantID, string ProgramCode, string ItemID, bool AddToLibrary, string RejectionReason, int ModifiedBy);
 
         /// <summary>
         /// InsertNewCardItemConfiguration

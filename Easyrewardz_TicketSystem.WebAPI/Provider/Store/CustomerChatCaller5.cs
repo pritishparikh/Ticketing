@@ -17,10 +17,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="customerChat"></param>
         /// <param name="customerChatMaster"></param>
         /// <returns></returns>
-        public int SaveReInitiateChat(ICustomerChat customerChat,int TenantId,string ProgramCode,CustomerChatMaster customerChatMaster)
+        public int SaveReInitiateChat(ICustomerChat customerChat,int TenantId,string ProgramCode,string _ClientAPIUrl, CustomerChatMaster customerChatMaster)
         {
             _customerChat = customerChat;
-            return _customerChat.SaveReInitiateChatMessages(customerChatMaster, TenantId, ProgramCode);
+            return _customerChat.SaveReInitiateChatMessages(customerChatMaster, TenantId, ProgramCode, _ClientAPIUrl);
 
         }
         #endregion
