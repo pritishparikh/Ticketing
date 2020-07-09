@@ -224,7 +224,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                                             if (!string.IsNullOrEmpty(responseGeneratePickup.response.pickupTokenNumber))
                                             {
-                                                int result = UpdateGeneratePickupManifest(orderID, tenantID, userID, "Pickup");
+                                                int result = UpdateGeneratePickupManifest(orderID, tenantID, userID, "Pickup", responseGeneratePickup);
                                             }
                                             //end //Code for GeneratePickup 
                                         }
@@ -244,7 +244,7 @@ namespace Easyrewardz_TicketSystem.Services
                                             //}                     
                                             if (!string.IsNullOrEmpty(responseGenerateManifest.manifestUrl))
                                             {
-                                                int success = UpdateGeneratePickupManifest(orderID, tenantID, userID, "Manifest");
+                                                int success = UpdateGeneratePickupManifest(orderID, tenantID, userID, "Manifest", responseGeneratePickup);
                                             }
                                         }
                                         catch (Exception ex)
@@ -418,7 +418,7 @@ namespace Easyrewardz_TicketSystem.Services
                             ItemIDs = ds.Tables[0].Rows[i]["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ItemID"]),
                             AWBNumber = ds.Tables[0].Rows[i]["AWBNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AWBNo"]),
                             CourierPartner = ds.Tables[0].Rows[i]["CourierPartner"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]),
-                            ShipmentCharges = ds.Tables[0].Rows[i]["CourierPartner"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]),
+                            ShipmentCharges = ds.Tables[0].Rows[i]["ShippingCharges"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ShippingCharges"]),
                         };
 
                         if(returnShipmentDetails.CourierPartner.Equals("Store"))
@@ -601,32 +601,45 @@ namespace Easyrewardz_TicketSystem.Services
             ResponseCourierAvailibilty responseCourierAvailibilty = new ResponseCourierAvailibilty();
             try
             {
-                hSChkCourierAvailibilty.Cod = 0;
-                hSChkCourierAvailibilty.Weight = 1;
-                string apiReq = JsonConvert.SerializeObject(hSChkCourierAvailibilty);
-                apiResponse = CommonService.SendApiRequest(clientAPIUrl + "api/ShoppingBag/ChkCourierAvailibilty", apiReq);
-                responseCourierAvailibilty = JsonConvert.DeserializeObject<ResponseCourierAvailibilty>(apiResponse);
-
-                if (responseCourierAvailibilty != null)
+                bool pinCodeResult = CheckPincodeExists(tenantID, userID, Convert.ToString(hSChkCourierAvailibilty.Delivery_postcode));
+                if(pinCodeResult)
                 {
-                    if (responseCourierAvailibilty.Available.ToLower() == "false")
+                    hSChkCourierAvailibilty.Cod = 0;
+                    hSChkCourierAvailibilty.Weight = 1;
+                    string apiReq = JsonConvert.SerializeObject(hSChkCourierAvailibilty);
+                    apiResponse = CommonService.SendApiRequest(clientAPIUrl + "api/ShoppingBag/ChkCourierAvailibilty", apiReq);
+                    responseCourierAvailibilty = JsonConvert.DeserializeObject<ResponseCourierAvailibilty>(apiResponse);
+
+                    if (responseCourierAvailibilty != null)
                     {
-                        OrderTabSetting orderTabSetting = new OrderTabSetting();
-                        orderTabSetting = GetOrderTabSettingDetails(tenantID, userID);
-                        if (orderTabSetting.StoreDelivery)
+                        if (responseCourierAvailibilty.Available.ToLower() == "false")
                         {
-                            responseCourierAvailibilty.Available = "true";
+                            OrderTabSetting orderTabSetting = new OrderTabSetting();
+                            orderTabSetting = GetOrderTabSettingDetails(tenantID, userID);
+                            if (orderTabSetting.StoreDelivery)
+                            {
+                                responseCourierAvailibilty.Available = "true";
+                            }
                         }
+                    }
+                    else
+                    {
+                        responseCourierAvailibilty = new ResponseCourierAvailibilty
+                        {
+                            StatusCode = "201",
+                            Available = "false"
+                        };
                     }
                 }
                 else
                 {
                     responseCourierAvailibilty = new ResponseCourierAvailibilty
                     {
-                        StatusCode = "201",
+                        StatusCode = "301",
                         Available = "false"
                     };
                 }
+                
             }
             catch (Exception)
             {
@@ -718,6 +731,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_CourierPartnerOrderID", string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.order_id) ? "" : responseCouriersPartnerAndAWBCode.data.order_id);
                 cmd.Parameters.AddWithValue("@_CourierPartnerShipmentID", string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.shipment_id) ? "" : responseCouriersPartnerAndAWBCode.data.shipment_id);
                 cmd.Parameters.AddWithValue("@_ShipmentCharges", string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.rate) ? "0" : responseCouriersPartnerAndAWBCode.data.rate);
+                cmd.Parameters.AddWithValue("@_EstimatedDeliveryDate", string.IsNullOrEmpty(responseCouriersPartnerAndAWBCode.data.etd) ? "" : responseCouriersPartnerAndAWBCode.data.etd);
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@user_ID", userID);
 
@@ -769,7 +783,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///  <param name="tenantID"></param>
         ///  <param name="userID"></param>
         /// <returns></returns>
-        public int UpdateGeneratePickupManifest(int orderID,int tenantID, int userID,string status)
+        public int UpdateGeneratePickupManifest(int orderID,int tenantID, int userID,string status, ResponseGeneratePickup responseGeneratePickup)
         {
             int result = 0;
             try
@@ -787,6 +801,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@user_ID", userID);
                 cmd.Parameters.AddWithValue("@_status", status);
+                cmd.Parameters.AddWithValue("@_pickupScheduledDate", string.IsNullOrEmpty(responseGeneratePickup.response.pickupScheduledDate) ? "": responseGeneratePickup.response.pickupScheduledDate);
                 result = cmd.ExecuteNonQuery();
             }
             catch (Exception)
