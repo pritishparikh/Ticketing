@@ -902,5 +902,48 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objdetails;
         }
+
+        /// <summary>
+        /// CheckPincodeExists
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <param name="Delivery_postcode"></param>
+        /// <returns></returns>
+        public bool CheckPincodeExists(int tenantID, int userID, string Delivery_postcode)
+        {
+            bool result = false;
+
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                MySqlCommand cmd = new MySqlCommand("SP_PHYCheckPincodeExists", conn)
+                {
+                    Connection = conn,
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantID);
+                cmd.Parameters.AddWithValue("@_UserID", userID);
+                cmd.Parameters.AddWithValue("@_Pincode", Delivery_postcode);
+
+                result = Convert.ToBoolean(cmd.ExecuteScalar());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return result;
+        }
     }
 }
