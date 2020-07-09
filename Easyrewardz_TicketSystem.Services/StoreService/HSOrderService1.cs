@@ -90,6 +90,8 @@ namespace Easyrewardz_TicketSystem.Services
                         moduleConfiguration.UnDeliverableText = ds.Tables[0].Rows[0]["UnDeliverableText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["UnDeliverableText"]);
                         moduleConfiguration.StoreDeliveryText = ds.Tables[0].Rows[0]["StoreDeliveryText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["StoreDeliveryText"]);
                         moduleConfiguration.PaymentTenantCodeText = ds.Tables[0].Rows[0]["TenderPayRemainingText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["TenderPayRemainingText"]);
+                        moduleConfiguration.RetryCount = ds.Tables[0].Rows[0]["RetryCount"] == DBNull.Value ? 0 : Convert.ToInt16(ds.Tables[0].Rows[0]["RetryCount"]);
+                        moduleConfiguration.StateFlag = ds.Tables[0].Rows[0]["StateFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["StateFlag"]);
                     }
                 }   
             }
@@ -154,6 +156,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_UnDeliverableText", orderConfiguration.UnDeliverableText);
                 cmd.Parameters.AddWithValue("@_StoreDeliveryText", orderConfiguration.StoreDeliveryText);
                 cmd.Parameters.AddWithValue("@_PaymentTenantCodeText", orderConfiguration.PaymentTenantCodeText);
+                cmd.Parameters.AddWithValue("@_RetryCount", orderConfiguration.RetryCount);
+                cmd.Parameters.AddWithValue("@_StateFlag", orderConfiguration.StateFlag);
                 cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
 
                 cmd.CommandType = CommandType.StoredProcedure;

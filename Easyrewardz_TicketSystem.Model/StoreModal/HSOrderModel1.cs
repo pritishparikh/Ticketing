@@ -163,6 +163,18 @@ namespace Easyrewardz_TicketSystem.Model
         /// PaymentTenantCodeText
         /// </summary>
         public string PaymentTenantCodeText { get; set; }
+
+        /// <summary>
+        /// Retry
+        /// </summary>
+        public int RetryCount { get; set; }
+
+        /// <summary>
+        /// State
+        /// </summary>
+        public bool StateFlag { get; set; }
+
+
     }
 
     public class OrderDelivered
