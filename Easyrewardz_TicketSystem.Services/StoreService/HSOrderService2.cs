@@ -1005,5 +1005,61 @@ namespace Easyrewardz_TicketSystem.Services
 
             return UpdateCount;
         }
+
+        /// <summary>
+        /// GetCourierPartnerFilter
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="pageID"></param>
+        /// <returns></returns>
+        public List<string> GetCourierPartnerFilter(int tenantId, int userId, int pageID)
+        {
+            DataSet ds = new DataSet();
+            List<string> CourierPartnerFilter = new List<string>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetCourierPartnerFilter", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_PageID", pageID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        string obj = Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]);
+
+                        CourierPartnerFilter.Add(obj);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return CourierPartnerFilter;
+        }
     }
 }
