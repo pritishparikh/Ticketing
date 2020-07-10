@@ -316,6 +316,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_pageno", ordersDataRequest.PageNo);
                 cmd.Parameters.AddWithValue("@_pagesize", ordersDataRequest.PageSize);
                 cmd.Parameters.AddWithValue("@_FilterStatus", ordersDataRequest.FilterStatus);
+                cmd.Parameters.AddWithValue("@_FilterDelivery", ordersDataRequest.FilterDelivery);
+                cmd.Parameters.AddWithValue("@_CourierPartner", ordersDataRequest.CourierPartner);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {

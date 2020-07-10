@@ -238,6 +238,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// FilterStatus
         /// </summary>
         public string FilterDelivery { get; set; }
+        /// <summary>
+        /// CourierPartner
+        /// </summary>
+        public string CourierPartner { get; set; }
     }
 
 
