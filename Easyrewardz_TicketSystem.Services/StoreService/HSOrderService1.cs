@@ -359,6 +359,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_pageno", shipmentAssignedFilter.PageNo);
                 cmd.Parameters.AddWithValue("@_pagesize", shipmentAssignedFilter.PageSize);
                 cmd.Parameters.AddWithValue("@_FilterReferenceNo", shipmentAssignedFilter.FilterReferenceNo);
+                cmd.Parameters.AddWithValue("@_CourierPartner", shipmentAssignedFilter.CourierPartner);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {

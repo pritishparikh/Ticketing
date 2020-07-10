@@ -404,6 +404,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// FilterReferenceNo
         /// </summary>
         public string FilterReferenceNo { get; set; }
+        /// <summary>
+        /// CourierPartner
+        /// </summary>
+        public string CourierPartner { get; set; }
     }
 
     public class ShipmentAssignedRequest
