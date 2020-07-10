@@ -977,7 +977,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_PHYSetOrderHasBeenReturn", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_PHYSetOrderHasBeenSelfPickUp", conn)
                 {
                     Connection = conn
                 };
