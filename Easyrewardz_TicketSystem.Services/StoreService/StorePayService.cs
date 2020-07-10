@@ -86,25 +86,45 @@ namespace Easyrewardz_TicketSystem.Services
                                 if (HASHResponse.Count > 0)
                                 {
                                     string HashRequest = HASHResponse["hashedPassword"];
-                                    string EpochTime = Convert.ToString(CommonService.ConvertToUnixTimestamp(DateTime.Now));
-                                    var RequestEncrypt = new { text = "token=" + HashRequest + "&programCode=" + ProgramCode + "&userCode=" + UserID + "&epochTime=" + EpochTime };
-                                    ClientAPIResponse = CommonService.SendApiRequestMerchantApi(clientAPIUrlForGeneratePaymentLink + "api/AESEncrypt",
-                                                        JsonConvert.SerializeObject(RequestEncrypt), hSResponseGenerateToken.access_token);
 
+                                    var RequestEpoch = new { currentDateTime = DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss") };
+
+                                    ClientAPIResponse = CommonService.SendApiRequestMerchantApi(clientAPIUrlForGeneratePaymentLink + "api/EpochTime",
+                                                        JsonConvert.SerializeObject(RequestEpoch), hSResponseGenerateToken.access_token);
                                     if (!string.IsNullOrEmpty(ClientAPIResponse))
                                     {
-                                        var EncryptedResponse = JsonConvert.DeserializeObject<Dictionary<string, string>>(ClientAPIResponse);
-
-                                        if (EncryptedResponse.Count > 0)
+                                        var EpochTimeResponse = JsonConvert.DeserializeObject<Dictionary<string, string>>(ClientAPIResponse);
+                                        if (EpochTimeResponse.Count > 0)
                                         {
-                                            string EncryptedText = EncryptedResponse["encryptedText"];
-                                            PaymentLink = !string.IsNullOrEmpty(EncryptedText) ? PaymentLink + "?" + EncryptedText : string.Empty;
+                                            string EpochTime = EpochTimeResponse["epochTime"];
+
+                                            if (!string.IsNullOrEmpty(EpochTime))
+                                            {
+                                                var RequestEncrypt = new { text = "token=" + HashRequest + "&programCode=" + ProgramCode + "&userCode=" + UserID + "&epochTime=" + EpochTime };
+                                                ClientAPIResponse = CommonService.SendApiRequestMerchantApi(clientAPIUrlForGeneratePaymentLink + "api/AESEncrypt",
+                                                                    JsonConvert.SerializeObject(RequestEncrypt), hSResponseGenerateToken.access_token);
+                                                if (!string.IsNullOrEmpty(ClientAPIResponse))
+                                                {
+                                                    if (!string.IsNullOrEmpty(ClientAPIResponse))
+                                                    {
+                                                        var EncryptedResponse = JsonConvert.DeserializeObject<Dictionary<string, string>>(ClientAPIResponse);
+
+                                                        if (EncryptedResponse.Count > 0)
+                                                        {
+                                                            string EncryptedText = EncryptedResponse["encryptedText"];
+                                                            PaymentLink = !string.IsNullOrEmpty(EncryptedText) ? PaymentLink + "?" + EncryptedText : string.Empty;
+
+                                                        }
+
+                                                    }
+                                                }
+                                            }
 
                                         }
-
-
-
                                     }
+
+
+
 
                                 }
                             }
