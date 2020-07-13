@@ -227,5 +227,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.ShipmentAssignedPrintInvoice(OrderIds, ClientAPIUR);
         }
+
+        /// <summary>
+        /// ShipmentAssignedPrintInvoice
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="OrderIds"></param>
+        /// <param name="ClientAPIUR"></param>
+        /// <returns></returns>
+        public int SendSMSWhatsupOnReturnCancel(IHSOrder order, int TenantId, int UserId, string ProgramCode, int OrderId, string ClientAPIURL)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.SendSMSWhatsupOnReturnCancel(TenantId, UserId, ProgramCode, OrderId, ClientAPIURL);
+        }
     }
 }

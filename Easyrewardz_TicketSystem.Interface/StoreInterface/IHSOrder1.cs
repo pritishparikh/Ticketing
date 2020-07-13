@@ -143,5 +143,13 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="ClientAPIURL"></param>
         /// <returns></returns>
         PrintInvoiceResponse ShipmentAssignedPrintInvoice(Int64 OrderIds, string ClientAPIURL);
+
+        /// <summary>
+        /// ShipmentAssignedPrintInvoice
+        /// </summary>
+        /// <param name="OrderIds"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <returns></returns>
+        int SendSMSWhatsupOnReturnCancel(int TenantId, int UserId, string ProgramCode, int OrderId, string ClientAPIURL);
     }
 }

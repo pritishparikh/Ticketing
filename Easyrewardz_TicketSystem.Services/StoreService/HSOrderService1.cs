@@ -953,5 +953,54 @@ namespace Easyrewardz_TicketSystem.Services
 
             return printInvoiceResponse;
         }
+
+        /// <summary>
+        /// ShipmentAssignedPrintInvoice
+        /// </summary>
+        /// <param name="OrderIds"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <returns></returns>
+        public int SendSMSWhatsupOnReturnCancel(int TenantId, int UserId, string ProgramCode, int OrderId, string ClientAPIURL)
+        {
+            DataSet ds = new DataSet();
+            bool cancel = false;
+            int result = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetCancelSMSWhatupText", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        cancel = ds.Tables[0].Rows[0]["Cancel"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Cancel"]);
+                    }
+                }
+
+                if(cancel == true)
+                {
+                    result = SmsWhatsUpDataSend(TenantId, UserId, ProgramCode, OrderId, ClientAPIURL, "Cancelled");
+                }
+               
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return result;
+        }
     }
 }

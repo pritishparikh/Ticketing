@@ -516,6 +516,7 @@ namespace Easyrewardz_TicketSystem.Services
         public int SmsWhatsUpDataSend(int tenantId, int userId, string ProgramCode, int orderId, string ClientAPIURL, string sMSWhtappTemplate)
         {
             int result = 0;
+            string Message = "";
             DataSet ds = new DataSet();
             OrdersSmsWhatsUpDataDetails ordersSmsWhatsUpDataDetails = new OrdersSmsWhatsUpDataDetails();
             //try
