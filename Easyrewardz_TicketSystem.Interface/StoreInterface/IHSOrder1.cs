@@ -151,5 +151,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="ClientAPIURL"></param>
         /// <returns></returns>
         int SendSMSWhatsupOnReturnCancel(int TenantId, int UserId, string ProgramCode, int OrderId, string ClientAPIURL);
+
+        int UpdateOnReturnRetry(int OrderId, int StatusId, string AWBNo, int ReturnId);
     }
 }

@@ -240,5 +240,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.SendSMSWhatsupOnReturnCancel(TenantId, UserId, ProgramCode, OrderId, ClientAPIURL);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="OrderId"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <returns></returns>
+        public int UpdateOnReturnRetry(IHSOrder order, int OrderId, int StatusId, string AWBNo, int ReturnId)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.UpdateOnReturnRetry(OrderId, StatusId, AWBNo, ReturnId);
+        }
     }
 }

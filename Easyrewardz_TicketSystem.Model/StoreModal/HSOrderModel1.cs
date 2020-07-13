@@ -590,9 +590,24 @@ namespace Easyrewardz_TicketSystem.Model
         public string Time { get; set; }
 
         /// <summary>
+        /// StatusId
+        /// </summary>
+        public int StatusId { get; set; }
+
+        /// <summary>
         /// StatusName
         /// </summary>
         public string StatusName { get; set; }
+
+        /// <summary>
+        /// RetryCount
+        /// </summary>
+        public int RetryCount { get; set; }
+
+        /// <summary>
+        /// IsRetry
+        /// </summary>
+        public bool IsRetry { get; set; }
 
         /// <summary>
         /// OrderReturnsItems

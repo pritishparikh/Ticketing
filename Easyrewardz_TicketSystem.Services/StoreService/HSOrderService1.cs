@@ -684,10 +684,23 @@ namespace Easyrewardz_TicketSystem.Services
                             MobileNumber = ds.Tables[0].Rows[i]["MobileNumber"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["MobileNumber"]),
                             Date = ds.Tables[0].Rows[i]["Date"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["Date"]),
                             Time = ds.Tables[0].Rows[i]["Time"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["Time"]),
+                            StatusId = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]),
                             StatusName = ds.Tables[0].Rows[i]["StatusName"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]),
+                            RetryCount = ds.Tables[0].Rows[i]["RetryCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["RetryCount"]),
                             orderReturnsItems = new List<OrderReturnsItem>()
                         };
 
+                        if((ds.Tables[3].Rows[0]["RetryCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[3].Rows[0]["RetryCount"])) > 0)
+                        {
+                            if (obj.RetryCount == (ds.Tables[3].Rows[0]["RetryCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[3].Rows[0]["RetryCount"])))
+                            {
+                                obj.IsRetry = false;
+                            }
+                            else
+                            {
+                                obj.IsRetry = true;
+                            }
+                        }
 
                         obj.orderReturnsItems = ds.Tables[1].AsEnumerable().Where(x => (x.Field<int>("OrderID")).Equals(obj.OrderID)).Select(x => new OrderReturnsItem()
                         {
@@ -956,9 +969,12 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// ShipmentAssignedPrintInvoice
+        /// Send SMS and Whatsup On Return Cancel
         /// </summary>
-        /// <param name="OrderIds"></param>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="OrderId"></param>
         /// <param name="ClientAPIURL"></param>
         /// <returns></returns>
         public int SendSMSWhatsupOnReturnCancel(int TenantId, int UserId, string ProgramCode, int OrderId, string ClientAPIURL)
@@ -1002,6 +1018,40 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Update On Return Retry
+        /// </summary>
+        /// <param name="OrderId"></param>
+        /// <param name="StatusId"></param>
+        /// <param name="AWBNo"></param>
+        /// <returns></returns>
+        public int UpdateOnReturnRetry(int OrderId, int StatusId, string AWBNo, int ReturnId)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_UpdateOnReturnTabRetry", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_OrderID", OrderId);
+                cmd.Parameters.AddWithValue("@_StatusID", StatusId);
+                cmd.Parameters.AddWithValue("@_AWBNo", AWBNo);
+                cmd.Parameters.AddWithValue("@_ReturnID", ReturnId);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return UpdateCount;
         }
     }
 }

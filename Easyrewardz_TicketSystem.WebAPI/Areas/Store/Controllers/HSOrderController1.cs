@@ -690,6 +690,46 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             int statusCode = 0;
             string statusMessage = "";
+            int UpdateCount = 0;
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                HSOrderCaller hSOrderCaller = new HSOrderCaller();
+
+                UpdateCount = hSOrderCaller.SendSMSWhatsupOnReturnCancel(new HSOrderService(_connectionString), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, OrderId, _ClientAPIUrl);
+                statusCode = UpdateCount.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = UpdateCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="OrderId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateOnReturnRetry")]
+        public ResponseModel UpdateOnReturnRetry(int OrderId, int StatusId, string AWBNo, int ReturnId)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+
+            int statusCode = 0;
+            string statusMessage = "";
             int result = 0;
             try
             {
@@ -700,7 +740,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 HSOrderCaller hSOrderCaller = new HSOrderCaller();
 
-                result = hSOrderCaller.SendSMSWhatsupOnReturnCancel(new HSOrderService(_connectionString), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, OrderId, _ClientAPIUrl);
+                result = hSOrderCaller.UpdateOnReturnRetry(new HSOrderService(_connectionString), OrderId, StatusId, AWBNo, ReturnId);
                 statusCode = result.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
@@ -715,6 +755,5 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
-
     }
 }
