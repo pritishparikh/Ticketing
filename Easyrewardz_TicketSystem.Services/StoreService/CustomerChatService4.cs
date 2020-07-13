@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
+using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -171,6 +171,138 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return CustomerProfile;
+        }
+
+
+        public List<CustomerChatProductModel> GetChatCustomerProducts(int TenantId, string ProgramCode, int CustomerID, string MobileNo)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            List<CustomerChatProductModel> CustomerProducts = new List<CustomerChatProductModel>();
+            string CardItemsIds = string.Empty;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("HSChatCustomerProductsList", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
+                cmd.Parameters.AddWithValue("@_MobileNo", MobileNo);
+
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            CustomerChatProductModel Obj = new CustomerChatProductModel()
+                            {
+                                ProductID = dr["ProductID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ProductID"]),
+                                uniqueItemCode = dr["ItemCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ItemCode"]),
+                                productName = dr["ItemName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ItemName"]),
+                                categoryName = dr["Category"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Category"]),
+                                subCategoryName = dr["SubCategory"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SubCategory"]),
+                                color = dr["Color"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Color"]),
+                                colorCode = dr["ColorCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ColorCode"]),
+                                brandName = dr["Brand"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Brand"]),
+                                price = dr["Price"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Price"]),
+                                discount = dr["Discount"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Discount"]),
+                                url = dr["Url"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Url"]),
+                                imageURL = dr["ImageURL"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ImageURL"]),
+                                size = dr["Size"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Size"]),
+
+                                StoreID = dr["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreId"]),
+                                StoreCode = dr["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreCode"]),
+                                IsShoppingBag = dr["IsShoppingBag"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsShoppingBag"]),
+                                IsWishList = dr["IsWishList"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsWishList"]),
+                                IsRecommended = dr["IsRecommended"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsRecommended"]),
+                               
+                            };
+
+
+                            CustomerProducts.Add(Obj);
+                        }
+
+                        if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                        {
+                            CardItemsIds = ds.Tables[1].Rows[0]["CardItemID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["CardItemID"]);
+                        }
+
+                        if (!string.IsNullOrEmpty(CardItemsIds))
+                        {
+                            string[] CardItemsIDArr = CardItemsIds.Split(new char[] { ',' });
+
+                            if (CardItemsIDArr.Contains("1"))
+                                CustomerProducts = CustomerProducts.Select(x => { x.uniqueItemCode = ""; return x; }).ToList();
+
+                            if (CardItemsIDArr.Contains("2"))
+                                CustomerProducts = CustomerProducts.Select(x => { x.categoryName = ""; return x; }).ToList();
+
+                            if (CardItemsIDArr.Contains("3"))
+                                CustomerProducts = CustomerProducts.Select(x => { x.subCategoryName = ""; return x; }).ToList();
+
+                            if (CardItemsIDArr.Contains("4"))
+                                CustomerProducts = CustomerProducts.Select(x => { x.brandName = ""; return x; }).ToList();
+
+                            if (CardItemsIDArr.Contains("5"))
+                                CustomerProducts = CustomerProducts.Select(x => { x.color = ""; return x; }).ToList();
+
+                            if (CardItemsIDArr.Contains("6"))
+                                CustomerProducts = CustomerProducts.Select(x => { x.size = ""; return x; }).ToList();
+
+                            if (CardItemsIDArr.Contains("7"))
+                                CustomerProducts = CustomerProducts.Select(x => { x.price = ""; return x; }).ToList();
+
+                            if (CardItemsIDArr.Contains("8"))
+                                CustomerProducts = CustomerProducts.Select(x => { x.url = ""; return x; }).ToList();
+
+                            if (CardItemsIDArr.Contains("9"))
+                                CustomerProducts = CustomerProducts.Select(x => { x.imageURL = ""; return x; }).ToList();
+
+                            if (CardItemsIDArr.Contains("10"))
+                                CustomerProducts = CustomerProducts.Select(x => { x.productName = ""; return x; }).ToList();
+
+                            if (CardItemsIDArr.Contains("11"))
+                                CustomerProducts = CustomerProducts.Select(x => { x.discount = ""; return x; }).ToList();
+
+                            if (CardItemsIDArr.Contains("12"))
+                                CustomerProducts = CustomerProducts.Select(x => { x.colorCode = ""; return x; }).ToList();
+
+
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return CustomerProducts;
         }
     }
 }
