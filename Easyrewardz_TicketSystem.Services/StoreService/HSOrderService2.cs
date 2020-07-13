@@ -316,6 +316,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_pageno", ordersDataRequest.PageNo);
                 cmd.Parameters.AddWithValue("@_pagesize", ordersDataRequest.PageSize);
                 cmd.Parameters.AddWithValue("@_FilterStatus", ordersDataRequest.FilterStatus);
+                cmd.Parameters.AddWithValue("@_FilterDelivery", ordersDataRequest.FilterDelivery);
+                cmd.Parameters.AddWithValue("@_CourierPartner", ordersDataRequest.CourierPartner);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -914,10 +916,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="userID"></param>
         /// <param name="Delivery_postcode"></param>
         /// <returns></returns>
-        public bool CheckPincodeExists(int tenantID, int userID, string Delivery_postcode)
+        public PincodeCheck CheckPincodeExists(int tenantID, int userID, string Delivery_postcode)
         {
-            bool result = false;
-
+            PincodeCheck pincodeCheck = new PincodeCheck();
+            DataSet ds = new DataSet();
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -933,7 +935,20 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_UserID", userID);
                 cmd.Parameters.AddWithValue("@_Pincode", Delivery_postcode);
 
-                result = Convert.ToBoolean(cmd.ExecuteScalar());
+                //result = Convert.ToBoolean(cmd.ExecuteScalar());
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    pincodeCheck = new PincodeCheck()
+                    {
+                        PincodeAvailable = ds.Tables[0].Rows[0]["IsPincodeValid"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["IsPincodeValid"]),
+                        PincodeState = ds.Tables[0].Rows[0]["statename"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["statename"])
+                    };
+                }
             }
             catch (Exception)
             {
@@ -947,7 +962,107 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return result;
+            return pincodeCheck;
+        }
+
+        /// <summary>
+        /// SetOrderHasBeenSelfPickUp
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="orderID"></param>
+        /// <param name="PickupDate"></param>
+        /// <param name="PickupTime"></param>
+        /// <returns></returns>
+        public int SetOrderHasBeenSelfPickUp(int tenantId, int userId, OrderSelfPickUp orderSelfPickUp)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYSetOrderHasBeenSelfPickUp", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_OrderID", orderSelfPickUp.OrderID);
+                cmd.Parameters.AddWithValue("@_PickupDate", orderSelfPickUp.PickupDate);
+                cmd.Parameters.AddWithValue("@_PickupTime", orderSelfPickUp.PickupTime);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
+
+        /// <summary>
+        /// GetCourierPartnerFilter
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="pageID"></param>
+        /// <returns></returns>
+        public List<string> GetCourierPartnerFilter(int tenantId, int userId, int pageID)
+        {
+            DataSet ds = new DataSet();
+            List<string> CourierPartnerFilter = new List<string>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetCourierPartnerFilter", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                cmd.Parameters.AddWithValue("@_UserID", userId);
+                cmd.Parameters.AddWithValue("@_PageID", pageID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        string obj = Convert.ToString(ds.Tables[0].Rows[i]["CourierPartner"]);
+
+                        CourierPartnerFilter.Add(obj);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return CourierPartnerFilter;
         }
     }
 }

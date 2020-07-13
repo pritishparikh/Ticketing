@@ -562,7 +562,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 ProgramCode = dr["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ProgramCode"]),
                                 ItemID = dr["ItemID"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ItemID"]),
                                 ImageURL = dr["ImageURL"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ImageURL"]),
-
+                                RejectionReason = dr["RejectionReason"] == DBNull.Value ? string.Empty : Convert.ToString(dr["RejectionReason"]),
                                 StoreID = dr["StoreID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreID"]),
                                 StoreCode = dr["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreCode"]),
                                 StoreName = dr["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreName"]),

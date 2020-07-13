@@ -132,5 +132,36 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _OrderRepository = order;
             return _OrderRepository.GetOrderShippingTemplateName(tenantId, userId);
         }
+
+        /// <summary>
+        /// SetOrderHasBeenSelfPickUp
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="orderID"></param>
+        /// <param name="PickupDate"></param>
+        /// <param name="PickupTime"></param>
+        /// <returns></returns>
+        public int SetOrderHasBeenSelfPickUp(IHSOrder order, int tenantId, int userId, OrderSelfPickUp orderSelfPickUp)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.SetOrderHasBeenSelfPickUp(tenantId, userId, orderSelfPickUp);
+        }
+
+        /// <summary>
+        /// GetCourierPartnerFilter
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="pageID"></param>
+        /// <returns></returns>
+        public List<string> GetCourierPartnerFilter(IHSOrder order, int tenantId, int userId, int pageID)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.GetCourierPartnerFilter(tenantId, userId, pageID);
+        }
+
     }
 }

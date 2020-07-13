@@ -601,32 +601,44 @@ namespace Easyrewardz_TicketSystem.Services
             ResponseCourierAvailibilty responseCourierAvailibilty = new ResponseCourierAvailibilty();
             try
             {
-                bool pinCodeResult = CheckPincodeExists(tenantID, userID, Convert.ToString(hSChkCourierAvailibilty.Delivery_postcode));
-                if(pinCodeResult)
+                PincodeCheck pincodeCheck = CheckPincodeExists(tenantID, userID, Convert.ToString(hSChkCourierAvailibilty.Delivery_postcode));
+                if(pincodeCheck != null)
                 {
-                    hSChkCourierAvailibilty.Cod = 0;
-                    hSChkCourierAvailibilty.Weight = 1;
-                    string apiReq = JsonConvert.SerializeObject(hSChkCourierAvailibilty);
-                    apiResponse = CommonService.SendApiRequest(clientAPIUrl + "api/ShoppingBag/ChkCourierAvailibilty", apiReq);
-                    responseCourierAvailibilty = JsonConvert.DeserializeObject<ResponseCourierAvailibilty>(apiResponse);
-
-                    if (responseCourierAvailibilty != null)
+                    if (pincodeCheck.PincodeAvailable)
                     {
-                        if (responseCourierAvailibilty.Available.ToLower() == "false")
+                        hSChkCourierAvailibilty.Cod = 0;
+                        hSChkCourierAvailibilty.Weight = 1;
+                        string apiReq = JsonConvert.SerializeObject(hSChkCourierAvailibilty);
+                        apiResponse = CommonService.SendApiRequest(clientAPIUrl + "api/ShoppingBag/ChkCourierAvailibilty", apiReq);
+                        responseCourierAvailibilty = JsonConvert.DeserializeObject<ResponseCourierAvailibilty>(apiResponse);
+
+                        if (responseCourierAvailibilty != null)
                         {
-                            OrderTabSetting orderTabSetting = new OrderTabSetting();
-                            orderTabSetting = GetOrderTabSettingDetails(tenantID, userID);
-                            if (orderTabSetting.StoreDelivery)
+                            if (responseCourierAvailibilty.Available.ToLower() == "false")
                             {
-                                responseCourierAvailibilty.Available = "true";
+                                OrderTabSetting orderTabSetting = new OrderTabSetting();
+                                orderTabSetting = GetOrderTabSettingDetails(tenantID, userID);
+                                if (orderTabSetting.StoreDelivery)
+                                {
+                                    responseCourierAvailibilty.Available = "true";
+                                    responseCourierAvailibilty.State = pincodeCheck.PincodeState;
+                                }
                             }
+                        }
+                        else
+                        {
+                            responseCourierAvailibilty = new ResponseCourierAvailibilty
+                            {
+                                StatusCode = "201",
+                                Available = "false"
+                            };
                         }
                     }
                     else
                     {
                         responseCourierAvailibilty = new ResponseCourierAvailibilty
                         {
-                            StatusCode = "201",
+                            StatusCode = "301",
                             Available = "false"
                         };
                     }

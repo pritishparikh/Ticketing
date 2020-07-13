@@ -55,7 +55,11 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// IsAddedToLibrary
         /// </summary>
         public bool IsAddedToLibrary { get; set; }
-
+       
+        /// <summary>
+        /// RejectionReason
+        /// </summary>
+        public string RejectionReason { get; set; }
         /// <summary>
         /// Created By
         /// </summary>

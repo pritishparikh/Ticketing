@@ -39,6 +39,11 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string Available  { get; set; }
 
         /// <summary>
+        /// State
+        /// </summary>
+        public string State { get; set; }
+
+        /// <summary>
         /// Message
         /// </summary>
         public string Message { get; set; }
