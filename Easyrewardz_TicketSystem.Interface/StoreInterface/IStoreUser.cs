@@ -186,7 +186,21 @@ namespace Easyrewardz_TicketSystem.Interface
         List<StoreClaimIssueTypeModel> GetClaimIssueTypeListBySubCategoryID(int TenantID, string SubCategoryIDs);
         #endregion
 
-
+        /// <summary>
+        /// GetStoreReportUserList
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="RegionID"></param>
+        /// <param name="ZoneID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         List<StoreUserListing> GetStoreReportUserList(int tenantID, int RegionID, int ZoneID, int UserID);
+
+        /// <summary>
+        /// GetStoreReportUsersList
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
+        List<StoreUserListing> GetStoreReportUsersList(int tenantID);
     }
 }
