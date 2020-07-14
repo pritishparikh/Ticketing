@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -630,6 +631,29 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        public static string SendParamsApiRequest(string url, NameValueCollection Request)
+        {
+            string strresponse = string.Empty;
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.QueryString = Request;
+
+                var data = wc.UploadValues(url, "POST", wc.QueryString);
+
+                // data here is optional, in case we recieve any string data back from the POST request.
+                strresponse = UnicodeEncoding.UTF8.GetString(data);
+            }
+            catch (Exception)
+            {
+
+                //throw ex;
+            }
+
+            return strresponse;
+
+
+        }
 
         public static double ConvertToUnixTimestamp(DateTime date)
         {

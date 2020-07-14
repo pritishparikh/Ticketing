@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
 
@@ -700,13 +701,12 @@ namespace Easyrewardz_TicketSystem.Services
         {
             try
             {
-                ChatbotBellMakeBellActive chatbotBellMakeBellActive = new ChatbotBellMakeBellActive
+                NameValueCollection Params = new NameValueCollection
                 {
-                    Mobilenumber = Mobilenumber,
-                    ProgramCode = ProgramCode
+                    { "Mobilenumber", Mobilenumber },
+                    { "ProgramCode", ProgramCode }
                 };
-                string apiReq = JsonConvert.SerializeObject(chatbotBellMakeBellActive);
-                string apiResponsechatbotBellMakeBellActive = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/MakeBellActive", apiReq);
+                string apiResponsechatbotBellMakeBellActive = CommonService.SendParamsApiRequest(ClientAPIURL + "api/ChatbotBell/MakeBellActive", Params);
             }
             catch(Exception ex)
             {
