@@ -1167,6 +1167,7 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@_CampaignTypeID", CampaignTypeID);
                 cmd.Parameters.AddWithValue("@_IsClosed", IsClosed);
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
 
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
