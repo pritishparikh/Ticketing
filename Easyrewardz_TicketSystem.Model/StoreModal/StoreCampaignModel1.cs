@@ -391,4 +391,17 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public bool DisableWhatsapp { get; set; }
     }
+
+    public class ChatbotBellMakeBellActive
+    {
+        /// <summary>
+        /// Mobilenumber
+        /// </summary>
+        public string Mobilenumber { get; set; }
+        /// <summary>
+        /// ProgramCode
+        /// </summary>
+        public string ProgramCode { get; set; }
+    }
+
 }

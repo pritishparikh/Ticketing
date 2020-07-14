@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
@@ -299,6 +300,7 @@ namespace Easyrewardz_TicketSystem.Services
                         if (apiResponse.Equals("true"))
                         {
                             UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");
+                            MakeBellActive(objRequest.CustomerMobileNumber, objRequest.ProgramCode, ClientAPIURL, TenantID, UserID);
                         }
                     }
                     catch (Exception)
@@ -441,6 +443,7 @@ namespace Easyrewardz_TicketSystem.Services
                     if(result > 0)
                     {
                         UpdateResponseShare(objRequest.CustomerID, "Contacted Via SMS");
+                        MakeBellActive(objRequest.CustomerMobileNumber, objRequest.ProgramCode, ClientAPIURL, TenantID, UserID);
                     }
                 }
 
@@ -683,6 +686,32 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// MakeBellActive
+        /// </summary>
+        /// <param name="Mobilenumber"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        public void MakeBellActive(string Mobilenumber, string ProgramCode, string ClientAPIURL, int TenantID, int UserID)
+        {
+            try
+            {
+                ChatbotBellMakeBellActive chatbotBellMakeBellActive = new ChatbotBellMakeBellActive
+                {
+                    Mobilenumber = Mobilenumber,
+                    ProgramCode = ProgramCode
+                };
+                string apiReq = JsonConvert.SerializeObject(chatbotBellMakeBellActive);
+                string apiResponsechatbotBellMakeBellActive = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/MakeBellActive", apiReq);
+            }
+            catch(Exception ex)
+            {
+                
+            }
         }
     }
 }
