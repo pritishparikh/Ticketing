@@ -187,7 +187,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Open();
                 }
 
-                cmd = new MySqlCommand("HSChatCustomerProductsList", conn);
+                cmd = new MySqlCommand("SP_HSChatCustomerProductsList", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_TenantID", TenantId);
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
