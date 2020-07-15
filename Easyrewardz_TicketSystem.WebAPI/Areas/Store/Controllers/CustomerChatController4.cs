@@ -144,6 +144,92 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Add Item to Shopping Bag
+        /// <param name="CustomerID"></param>
+        /// <param name="MobileNo"></param>
+        /// <param name="ItemCode"></param>
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddProductsToShoppingBag")]
+        public ResponseModel AddProductsToShoppingBag(int CustomerID, string MobileNo, string ItemCodes)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int Result = 0;
+
+            int statusCode = 0;
+            string statusMessage = "";
+            string SoundPhysicalFilePath = string.Empty;
+            string SoundFilePath = string.Empty;
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                Result = customerChatCaller.AddProductsToShoppingBag(new CustomerChatService(_connectionString), authenticate.TenantId,
+                    authenticate.ProgramCode, CustomerID, MobileNo, ItemCodes);
+                statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Add Products To Wishlist
+        /// <param name="CustomerID"></param>
+        /// <param name="MobileNo"></param>
+        /// <param name="ItemCode"></param>
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddProductsToWishlist")]
+        public ResponseModel AddProductsToWishlist(int CustomerID, string MobileNo, string ItemCodes)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int Result = 0;
+
+            int statusCode = 0;
+            string statusMessage = "";
+            string SoundPhysicalFilePath = string.Empty;
+            string SoundFilePath = string.Empty;
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                Result = customerChatCaller.AddProductsToWishlist(new CustomerChatService(_connectionString), authenticate.TenantId,
+                    authenticate.ProgramCode, CustomerID, MobileNo, ItemCodes);
+                statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
         #endregion
     }
 }
