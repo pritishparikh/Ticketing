@@ -173,7 +173,14 @@ namespace Easyrewardz_TicketSystem.Services
             return CustomerProfile;
         }
 
-
+        /// <summary>
+        ///   Get Chat Customer Products Details
+        /// <param name="tenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <param name="CustomerID"></param>
+        /// <param name="MobileNo"></param>
+        /// </summary>
+        /// <returns></returns>
         public List<CustomerChatProductModel> GetChatCustomerProducts(int TenantId, string ProgramCode, int CustomerID, string MobileNo)
         {
             MySqlCommand cmd = new MySqlCommand();
@@ -306,6 +313,15 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
+        /// <summary>
+        ///  Remove Item from Wishlist /Shopping Bag
+        /// <param name="tenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <param name="CustomerID"></param>
+        /// <param name="MobileNo"></param>
+        /// <param name="ItemCode"></param>
+        /// </summary>
+        /// <returns></returns>
         public int RemoveProduct(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCode)
         {
             MySqlCommand cmd = new MySqlCommand();
@@ -349,6 +365,15 @@ namespace Easyrewardz_TicketSystem.Services
             return Result;
         }
 
+        /// <summary>
+        /// Add Products To ShoppingBag
+        /// <param name="tenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <param name="CustomerID"></param>
+        /// <param name="MobileNo"></param>
+        /// <param name="ItemCodes"></param>
+        /// </summary>
+        /// <returns></returns>
         public int AddProductsToShoppingBag(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes)
         {
             MySqlCommand cmd = new MySqlCommand();
@@ -393,6 +418,15 @@ namespace Easyrewardz_TicketSystem.Services
             return Result;
         }
 
+        /// <summary>
+        /// Add Products To Wishlist
+        /// <param name="tenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <param name="CustomerID"></param>
+        /// <param name="MobileNo"></param>
+        /// <param name="ItemCodes"></param>
+        /// </summary>
+        /// <returns></returns>
         public int AddProductsToWishlist(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes)
         {
             MySqlCommand cmd = new MySqlCommand();
