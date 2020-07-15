@@ -304,5 +304,51 @@ namespace Easyrewardz_TicketSystem.Services
 
             return CustomerProducts;
         }
+
+
+        public int RemoveProduct(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCode)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int Result = 0;
+
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSRemoveProduct", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
+                cmd.Parameters.AddWithValue("@_MobileNo", CustomerMobile);
+                cmd.Parameters.AddWithValue("@_ItemCode", ItemCode);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                Result = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                
+            }
+
+            return Result;
+        }
+
+
     }
 }

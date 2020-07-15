@@ -23,6 +23,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _customerChat.GetChatCustomerProducts(TenantID, Programcode, CustomerID, MobileNo);
         }
 
+        public int RemoveProduct(ICustomerChat customerChat, int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCode)
+        {
+            _customerChat = customerChat;
+            return _customerChat.RemoveProduct( TenantId,  ProgramCode,  CustomerID,  CustomerMobile, ItemCode);
+        }
 
         #endregion
     }

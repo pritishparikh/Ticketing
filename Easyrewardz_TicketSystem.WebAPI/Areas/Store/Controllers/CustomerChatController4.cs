@@ -99,6 +99,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+
+
+        /// <summary>
+        /// Remove Item from Wishlist /Shopping Bag
+        /// <param name="CustomerID"></param>
+        /// <param name="MobileNo"></param>
+        /// <param name="ItemCode"></param>
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("RemoveProduct")]
+        public ResponseModel RemoveProduct(int CustomerID, string MobileNo, string ItemCode)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int Result = 0;
+
+            int statusCode = 0;
+            string statusMessage = "";
+            string SoundPhysicalFilePath = string.Empty;
+            string SoundFilePath = string.Empty;
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                Result = customerChatCaller.RemoveProduct(new CustomerChatService(_connectionString), authenticate.TenantId,
+                    authenticate.ProgramCode, CustomerID, MobileNo, ItemCode);
+                statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
         #endregion
     }
 }
