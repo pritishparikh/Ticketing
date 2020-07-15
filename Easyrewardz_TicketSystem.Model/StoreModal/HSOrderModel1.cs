@@ -170,10 +170,14 @@ namespace Easyrewardz_TicketSystem.Model
         public int RetryCount { get; set; }
 
         /// <summary>
-        /// State
+        /// StateFlag
         /// </summary>
         public bool StateFlag { get; set; }
 
+        /// <summary>
+        /// CurrencyText
+        /// </summary>
+        public string CurrencyText { get; set; }
 
     }
 

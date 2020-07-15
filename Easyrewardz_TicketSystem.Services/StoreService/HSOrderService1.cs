@@ -92,6 +92,7 @@ namespace Easyrewardz_TicketSystem.Services
                         moduleConfiguration.PaymentTenantCodeText = ds.Tables[0].Rows[0]["TenderPayRemainingText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["TenderPayRemainingText"]);
                         moduleConfiguration.RetryCount = ds.Tables[0].Rows[0]["RetryCount"] == DBNull.Value ? 0 : Convert.ToInt16(ds.Tables[0].Rows[0]["RetryCount"]);
                         moduleConfiguration.StateFlag = ds.Tables[0].Rows[0]["StateFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["StateFlag"]);
+                        moduleConfiguration.CurrencyText = ds.Tables[0].Rows[0]["Currency"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["Currency"]);
                     }
                 }   
             }
@@ -158,6 +159,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_PaymentTenantCodeText", orderConfiguration.PaymentTenantCodeText);
                 cmd.Parameters.AddWithValue("@_RetryCount", orderConfiguration.RetryCount);
                 cmd.Parameters.AddWithValue("@_StateFlag", orderConfiguration.StateFlag);
+                cmd.Parameters.AddWithValue("@_CurrencyText", orderConfiguration.CurrencyText);
                 cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
 
                 cmd.CommandType = CommandType.StoredProcedure;
