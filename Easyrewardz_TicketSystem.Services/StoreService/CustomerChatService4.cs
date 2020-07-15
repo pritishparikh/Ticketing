@@ -173,7 +173,14 @@ namespace Easyrewardz_TicketSystem.Services
             return CustomerProfile;
         }
 
-
+        /// <summary>
+        ///   Get Chat Customer Products Details
+        /// <param name="tenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <param name="CustomerID"></param>
+        /// <param name="MobileNo"></param>
+        /// </summary>
+        /// <returns></returns>
         public List<CustomerChatProductModel> GetChatCustomerProducts(int TenantId, string ProgramCode, int CustomerID, string MobileNo)
         {
             MySqlCommand cmd = new MySqlCommand();
@@ -187,7 +194,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Open();
                 }
 
-                cmd = new MySqlCommand("HSChatCustomerProductsList", conn);
+                cmd = new MySqlCommand("SP_HSChatCustomerProductsList", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_TenantID", TenantId);
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
@@ -303,6 +310,165 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return CustomerProducts;
+        }
+
+
+        /// <summary>
+        ///  Remove Item from Wishlist /Shopping Bag
+        /// <param name="tenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <param name="CustomerID"></param>
+        /// <param name="MobileNo"></param>
+        /// <param name="ItemCode"></param>
+        /// </summary>
+        /// <returns></returns>
+        public int RemoveProduct(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCode)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int Result = 0;
+
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSRemoveProduct", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
+                cmd.Parameters.AddWithValue("@_MobileNo", CustomerMobile);
+                cmd.Parameters.AddWithValue("@_ItemCode", ItemCode);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                Result = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Add Products To ShoppingBag
+        /// <param name="tenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <param name="CustomerID"></param>
+        /// <param name="MobileNo"></param>
+        /// <param name="ItemCodes"></param>
+        /// </summary>
+        /// <returns></returns>
+        public int AddProductsToShoppingBag(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int Result = 0;
+
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_AddProductsToBagOrWishList", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
+                cmd.Parameters.AddWithValue("@_MobileNo", CustomerMobile);
+                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(ItemCodes) ? "" : ItemCodes);
+                cmd.Parameters.AddWithValue("@_Action","shoppingbag");
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                Result = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Add Products To Wishlist
+        /// <param name="tenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <param name="CustomerID"></param>
+        /// <param name="MobileNo"></param>
+        /// <param name="ItemCodes"></param>
+        /// </summary>
+        /// <returns></returns>
+        public int AddProductsToWishlist(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int Result = 0;
+
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_AddProductsToBagOrWishList", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
+                cmd.Parameters.AddWithValue("@_MobileNo", CustomerMobile);
+                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(ItemCodes) ? "" : ItemCodes);
+                cmd.Parameters.AddWithValue("@_Action", "wishlist");
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                Result = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+
+            }
+
+            return Result;
         }
     }
 }

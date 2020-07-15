@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
 
@@ -299,6 +300,7 @@ namespace Easyrewardz_TicketSystem.Services
                         if (apiResponse.Equals("true"))
                         {
                             UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");
+                            MakeBellActive(objRequest.CustomerMobileNumber, objRequest.ProgramCode, ClientAPIURL, TenantID, UserID);
                         }
                     }
                     catch (Exception)
@@ -441,6 +443,7 @@ namespace Easyrewardz_TicketSystem.Services
                     if(result > 0)
                     {
                         UpdateResponseShare(objRequest.CustomerID, "Contacted Via SMS");
+                        MakeBellActive(objRequest.CustomerMobileNumber, objRequest.ProgramCode, ClientAPIURL, TenantID, UserID);
                     }
                 }
 
@@ -683,6 +686,31 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// MakeBellActive
+        /// </summary>
+        /// <param name="Mobilenumber"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        public void MakeBellActive(string Mobilenumber, string ProgramCode, string ClientAPIURL, int TenantID, int UserID)
+        {
+            try
+            {
+                NameValueCollection Params = new NameValueCollection
+                {
+                    { "Mobilenumber", Mobilenumber },
+                    { "ProgramCode", ProgramCode }
+                };
+                string apiResponsechatbotBellMakeBellActive = CommonService.SendParamsApiRequest(ClientAPIURL + "api/ChatbotBell/MakeBellActive", Params);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }

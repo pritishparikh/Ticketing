@@ -7,11 +7,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
 {
     public partial class HSOrderService : IHSOrder
     {
+        public static string Xpath = "//NewDataSet//Table1";
+
         /// <summary>
         /// GetOrdersDetails
         /// </summary>
@@ -1063,6 +1066,82 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return CourierPartnerFilter;
+        }
+
+        /// <summary>
+        /// BulkUploadOrderTemplate 
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="UserFor"></param>
+        /// <param name="DataSetCSV"></param>
+        public List<string> BulkUploadOrderTemplate(int TenantID, int CreatedBy, int UserFor, DataSet DataSetCSV)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            DataSet Bulkds = new DataSet();
+            List<string> csvLst = new List<string>();
+            MySqlCommand cmd = null;
+            string SuccesFile = string.Empty; string ErroFile = string.Empty;
+            try
+            {
+                if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
+                {
+                    if (DataSetCSV.Tables[0] != null && DataSetCSV.Tables[0].Rows.Count > 0)
+                    {
+
+                        //check if user ulpoad or brandcategory mapping
+                        xmlDoc.LoadXml(DataSetCSV.GetXml());
+                        conn.Open();
+
+                        cmd = new MySqlCommand("SP_BulkUploadOrderTemplate", conn);
+                        cmd.Parameters.AddWithValue("@_tenantID", TenantID);
+                        cmd.Parameters.AddWithValue("@_UserFor", UserFor);
+                        cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
+                        cmd.Parameters.AddWithValue("@_node", Xpath);
+                        cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Connection = conn;
+                        MySqlDataAdapter da = new MySqlDataAdapter
+                        {
+                            SelectCommand = cmd
+                        };
+                        
+                        da.Fill(Bulkds);
+
+                        if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
+                        {
+
+                            //for success file
+                            SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(SuccesFile);
+
+                            //for error file
+                            ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            csvLst.Add(ErroFile);
+
+                        }
+                    }
+
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            finally
+            {
+                if (DataSetCSV != null)
+                {
+                    DataSetCSV.Dispose();
+                }
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return csvLst;
         }
     }
 }

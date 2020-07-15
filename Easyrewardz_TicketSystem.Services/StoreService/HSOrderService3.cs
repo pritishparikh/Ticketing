@@ -107,7 +107,7 @@ namespace Easyrewardz_TicketSystem.Services
                         giftwrap_charges = 0,
                         transaction_charges = 0,
                         total_discount = 0,
-                        sub_total =  ds.Tables[2].Rows[0]["Amount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Amount"]),  // 10,
+                        sub_total = ds.Tables[2].Rows[0]["Amount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Amount"]),  // 10,
                         length = ds.Tables[2].Rows[0]["Length"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Length"]),
                         breadth = ds.Tables[2].Rows[0]["Breath"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Breath"]),
                         height = ds.Tables[2].Rows[0]["Height"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["Height"]),
@@ -155,9 +155,9 @@ namespace Easyrewardz_TicketSystem.Services
                     };
 
                     ResponseCourierAvailibilty responseCourierAvailibilty = new ResponseCourierAvailibilty();
-                    responseCourierAvailibilty = CheckClientPinCodeForCourierAvailibilty(hSChkCourierAvailibilty, tenantID,userID, clientAPIURL);
+                    responseCourierAvailibilty = CheckClientPinCodeForCourierAvailibilty(hSChkCourierAvailibilty, tenantID, userID, clientAPIURL);
 
-                    if(responseCourierAvailibilty.Available == "false")
+                    if (responseCourierAvailibilty.Available == "false")
                     {
                         if (iSStoreDelivery == true)
                         {
@@ -421,7 +421,7 @@ namespace Easyrewardz_TicketSystem.Services
                             ShipmentCharges = ds.Tables[0].Rows[i]["ShippingCharges"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ShippingCharges"]),
                         };
 
-                        if(returnShipmentDetails.CourierPartner.Equals("Store"))
+                        if (returnShipmentDetails.CourierPartner.Equals("Store"))
                         {
                             returnShipmentDetails.IsStoreDelivery = true;
                         }
@@ -513,7 +513,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 // string apiReq = JsonConvert.SerializeObject(hSRequestGenerateToken);
 
-                string apiReq = "Client_Id="+ hSRequestGenerateToken.Client_Id+ "&Client_Secret=" + hSRequestGenerateToken.Client_Secret + "&Grant_Type=" + hSRequestGenerateToken.Grant_Type + "&Scope=" + hSRequestGenerateToken.Scope ;
+                string apiReq = "Client_Id=" + hSRequestGenerateToken.Client_Id + "&Client_Secret=" + hSRequestGenerateToken.Client_Secret + "&Grant_Type=" + hSRequestGenerateToken.Grant_Type + "&Scope=" + hSRequestGenerateToken.Scope;
 
                 apiResponse = CommonService.SendApiRequestToken(clientAPIUrlForGenerateToken + "connect/token", apiReq);
                 HSResponseGenerateToken hSResponseGenerateToken = new HSResponseGenerateToken();
@@ -602,7 +602,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 PincodeCheck pincodeCheck = CheckPincodeExists(tenantID, userID, Convert.ToString(hSChkCourierAvailibilty.Delivery_postcode));
-                if(pincodeCheck != null)
+                if (pincodeCheck != null)
                 {
                     if (pincodeCheck.PincodeAvailable)
                     {
@@ -623,6 +623,18 @@ namespace Easyrewardz_TicketSystem.Services
                                     responseCourierAvailibilty.Available = "true";
                                     responseCourierAvailibilty.State = pincodeCheck.PincodeState;
                                 }
+                                else
+                                {
+                                    responseCourierAvailibilty = new ResponseCourierAvailibilty
+                                    {
+                                        StatusCode = "201",
+                                        Available = "false"
+                                    };
+                                }
+                            }
+                            else
+                            {
+                                responseCourierAvailibilty.State = pincodeCheck.PincodeState;
                             }
                         }
                         else
@@ -651,7 +663,7 @@ namespace Easyrewardz_TicketSystem.Services
                         Available = "false"
                     };
                 }
-                
+
             }
             catch (Exception)
             {
@@ -795,7 +807,7 @@ namespace Easyrewardz_TicketSystem.Services
         ///  <param name="tenantID"></param>
         ///  <param name="userID"></param>
         /// <returns></returns>
-        public int UpdateGeneratePickupManifest(int orderID,int tenantID, int userID,string status, ResponseGeneratePickup responseGeneratePickup)
+        public int UpdateGeneratePickupManifest(int orderID, int tenantID, int userID, string status, ResponseGeneratePickup responseGeneratePickup)
         {
             int result = 0;
             try
@@ -809,11 +821,11 @@ namespace Easyrewardz_TicketSystem.Services
                     Connection = conn,
                     CommandType = CommandType.StoredProcedure
                 };
-                cmd.Parameters.AddWithValue("@order_ID", orderID);              
+                cmd.Parameters.AddWithValue("@order_ID", orderID);
                 cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 cmd.Parameters.AddWithValue("@user_ID", userID);
                 cmd.Parameters.AddWithValue("@_status", status);
-                cmd.Parameters.AddWithValue("@_pickupScheduledDate", string.IsNullOrEmpty(responseGeneratePickup.response.pickupScheduledDate) ? "": responseGeneratePickup.response.pickupScheduledDate);
+                cmd.Parameters.AddWithValue("@_pickupScheduledDate", string.IsNullOrEmpty(responseGeneratePickup.response.pickupScheduledDate) ? "" : responseGeneratePickup.response.pickupScheduledDate);
                 result = cmd.ExecuteNonQuery();
             }
             catch (Exception)
@@ -825,7 +837,7 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
-                }    
+                }
             }
             return result;
         }
