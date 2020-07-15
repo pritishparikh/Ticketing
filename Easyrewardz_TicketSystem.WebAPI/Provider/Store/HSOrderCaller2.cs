@@ -2,6 +2,7 @@
 using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -161,6 +162,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _OrderRepository = order;
             return _OrderRepository.GetCourierPartnerFilter(tenantId, userId, pageID);
+        }
+
+        /// <summary>
+        /// BulkUploadOrderTemplate
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="UserFor"></param>
+        /// <param name="DataSetCSV"></param>
+        /// <returns></returns>
+        public List<string> BulkUploadOrderTemplate(IHSOrder order, int TenantID, int CreatedBy, int UserFor, DataSet DataSetCSV)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.BulkUploadOrderTemplate(TenantID, CreatedBy, UserFor, DataSetCSV);
         }
 
     }

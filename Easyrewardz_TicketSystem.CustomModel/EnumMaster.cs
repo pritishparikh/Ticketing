@@ -372,7 +372,13 @@ namespace Easyrewardz_TicketSystem.CustomModel
             ///Chat 
             /// </summary>
             [Description("Chat")]
-            Chat = 4
+            Chat = 4,
+
+            /// <summary>
+            ///OrderTemplate 
+            /// </summary>
+            [Description("OrderTemplate")]
+            OrderTemplate = 5
         }
 
         public enum SavedSearch

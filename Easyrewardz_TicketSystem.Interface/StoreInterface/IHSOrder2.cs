@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace Easyrewardz_TicketSystem.Interface
@@ -106,5 +107,15 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="pageID"></param>
         /// <returns></returns>
         List<string> GetCourierPartnerFilter(int tenantId, int userId, int pageID);
+
+        /// <summary>
+        /// BulkUploadOrderTemplate
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="UserFor"></param>
+        /// <param name="DataSetCSV"></param>
+        /// <returns></returns>
+        List<string> BulkUploadOrderTemplate(int TenantID, int CreatedBy, int UserFor, DataSet DataSetCSV);
     }
 }

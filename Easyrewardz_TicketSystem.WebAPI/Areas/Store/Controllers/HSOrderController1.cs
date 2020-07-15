@@ -27,6 +27,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private readonly string _Client_Secret;
         private readonly string _Grant_Type;
         private readonly string _Scope;
+        private readonly string BulkUpload;
+        private readonly string UploadFiles;
+        private readonly string DownloadFile;
+        private readonly string rootPath;
         #endregion
 
         #region Constructor
@@ -42,6 +46,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             _Client_Secret = configuration.GetValue<string>("Client_Secret");
             _Grant_Type = configuration.GetValue<string>("Grant_Type");
             _Scope = configuration.GetValue<string>("Scope");
+            BulkUpload = configuration.GetValue<string>("BulkUpload");
+            UploadFiles = configuration.GetValue<string>("Uploadfiles");
+            DownloadFile = configuration.GetValue<string>("Downloadfile");
+            rootPath = configuration.GetValue<string>("APIURL");
         }
         #endregion
 
