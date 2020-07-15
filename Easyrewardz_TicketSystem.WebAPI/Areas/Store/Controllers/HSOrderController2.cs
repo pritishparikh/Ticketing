@@ -495,6 +495,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                     objResponseModel.StatusCode = StatusCode;
                     objResponseModel.Message = "Please upload File";
                     objResponseModel.ResponseData = 0;
+
+                    return objResponseModel;
                 }
                 var Keys = Request.Form;
 
