@@ -386,7 +386,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Open();
                 }
 
-                cmd = new MySqlCommand("SP_AddProductsToBagOrWishList", conn);
+                cmd = new MySqlCommand("SP_HSAddProductsToBagOrWishList", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_TenantID", TenantId);
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
@@ -441,7 +441,7 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Open();
                 }
 
-                cmd = new MySqlCommand("SP_AddProductsToBagOrWishList", conn);
+                cmd = new MySqlCommand("SP_HSAddProductsToBagOrWishList", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_TenantID", TenantId);
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
