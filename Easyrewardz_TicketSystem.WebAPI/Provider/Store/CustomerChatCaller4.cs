@@ -30,17 +30,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
 
-        public int AddProductsToShoppingBag(ICustomerChat customerChat, int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes)
+        public int AddProductsToShoppingBag(ICustomerChat customerChat, int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes, bool IsFromRecommendation)
         {
             _customerChat = customerChat;
-            return _customerChat.AddProductsToShoppingBag(TenantId, ProgramCode, CustomerID, CustomerMobile, ItemCodes);
+            return _customerChat.AddProductsToShoppingBag(TenantId, ProgramCode, CustomerID, CustomerMobile, ItemCodes,  IsFromRecommendation);
         }
 
 
-        public int AddProductsToWishlist(ICustomerChat customerChat, int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes)
+        public int AddProductsToWishlist(ICustomerChat customerChat, int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes, bool IsFromRecommendation)
         {
             _customerChat = customerChat;
-            return _customerChat.AddProductsToWishlist(TenantId, ProgramCode, CustomerID, CustomerMobile, ItemCodes);
+            return _customerChat.AddProductsToWishlist(TenantId, ProgramCode, CustomerID, CustomerMobile, ItemCodes,  IsFromRecommendation);
         }
         #endregion
     }

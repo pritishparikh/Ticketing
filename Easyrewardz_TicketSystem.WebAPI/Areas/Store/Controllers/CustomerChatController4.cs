@@ -153,7 +153,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("AddProductsToShoppingBag")]
-        public ResponseModel AddProductsToShoppingBag(int CustomerID, string MobileNo, string ItemCodes)
+        public ResponseModel AddProductsToShoppingBag(int CustomerID, string MobileNo, string ItemCodes, bool IsFromRecommendation=false)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int Result = 0;
@@ -171,7 +171,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
                 Result = customerChatCaller.AddProductsToShoppingBag(new CustomerChatService(_connectionString), authenticate.TenantId,
-                    authenticate.ProgramCode, CustomerID, MobileNo, ItemCodes);
+                    authenticate.ProgramCode, CustomerID, MobileNo, ItemCodes, IsFromRecommendation);
                 statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
@@ -196,7 +196,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("AddProductsToWishlist")]
-        public ResponseModel AddProductsToWishlist(int CustomerID, string MobileNo, string ItemCodes)
+        public ResponseModel AddProductsToWishlist(int CustomerID, string MobileNo, string ItemCodes, bool IsFromRecommendation = false)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int Result = 0;
@@ -214,7 +214,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
                 Result = customerChatCaller.AddProductsToWishlist(new CustomerChatService(_connectionString), authenticate.TenantId,
-                    authenticate.ProgramCode, CustomerID, MobileNo, ItemCodes);
+                    authenticate.ProgramCode, CustomerID, MobileNo, ItemCodes, IsFromRecommendation);
                 statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
