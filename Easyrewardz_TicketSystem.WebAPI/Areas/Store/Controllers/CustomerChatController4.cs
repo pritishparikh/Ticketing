@@ -171,7 +171,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
                 Result = customerChatCaller.AddProductsToShoppingBag(new CustomerChatService(_connectionString), authenticate.TenantId,
-                    authenticate.ProgramCode, CustomerID, MobileNo, ItemCodes, IsFromRecommendation);
+                    authenticate.ProgramCode, CustomerID, MobileNo, ItemCodes, IsFromRecommendation, authenticate.UserMasterID);
                 statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
@@ -210,11 +210,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
+                 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
                 Result = customerChatCaller.AddProductsToWishlist(new CustomerChatService(_connectionString), authenticate.TenantId,
-                    authenticate.ProgramCode, CustomerID, MobileNo, ItemCodes, IsFromRecommendation);
+                    authenticate.ProgramCode, CustomerID, MobileNo, ItemCodes, IsFromRecommendation, authenticate.UserMasterID);
                 statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 

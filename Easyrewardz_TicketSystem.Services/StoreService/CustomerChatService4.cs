@@ -374,7 +374,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ItemCodes"></param>
         /// </summary>
         /// <returns></returns>
-        public int AddProductsToShoppingBag(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes, bool IsFromRecommendation)
+        public int AddProductsToShoppingBag(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes, bool IsFromRecommendation,int UserID)
         {
             MySqlCommand cmd = new MySqlCommand();
             int Result = 0;
@@ -395,13 +395,14 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(ItemCodes) ? "" : ItemCodes);
                 cmd.Parameters.AddWithValue("@_Action","shoppingbag");
                 cmd.Parameters.AddWithValue("@_IsFromRecommendation", Convert.ToInt16(IsFromRecommendation));
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 Result = Convert.ToInt32(cmd.ExecuteScalar());
 
 
-            }
+            } 
             catch (Exception)
             {
 
@@ -428,7 +429,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ItemCodes"></param>
         /// </summary>
         /// <returns></returns>
-        public int AddProductsToWishlist(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes, bool IsFromRecommendation)
+        public int AddProductsToWishlist(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes, bool IsFromRecommendation, int UserID)
         {
             MySqlCommand cmd = new MySqlCommand();
             int Result = 0;
@@ -449,7 +450,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(ItemCodes) ? "" : ItemCodes);
                 cmd.Parameters.AddWithValue("@_Action", "wishlist");
                 cmd.Parameters.AddWithValue("@_IsFromRecommendation", Convert.ToInt16(IsFromRecommendation));
-
+                cmd.Parameters.AddWithValue("@User_ID", UserID);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 Result = Convert.ToInt32(cmd.ExecuteScalar());
