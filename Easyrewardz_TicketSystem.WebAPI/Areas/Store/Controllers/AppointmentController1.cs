@@ -99,7 +99,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 AppointmentCaller newAppointment = new AppointmentCaller();
 
-                objAppointmentCount = newAppointment.GetAppointmentCountList(new AppointmentServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
+                objAppointmentCount = newAppointment.GetAppointmentCountList(new AppointmentServices(_connectioSting), authenticate.TenantId, authenticate.ProgramCode, authenticate.UserMasterID);
 
                 statusCode =
                 objAppointmentCount.Count == 0 ?

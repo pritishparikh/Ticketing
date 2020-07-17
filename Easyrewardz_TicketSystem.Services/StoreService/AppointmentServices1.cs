@@ -95,7 +95,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<AppointmentCount> GetAppointmentCount(int TenantID, int UserId)
+        public List<AppointmentCount> GetAppointmentCount(int TenantID, string ProgramCode,int UserId)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -107,19 +107,32 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_HSGetAppointmentCount", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.Parameters.AddWithValue("@Program_Code", ProgramCode);
                 cmd1.Parameters.AddWithValue("@User_Id", UserId);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
 
-                AppointmentCount obj = new AppointmentCount
+                if (ds != null && ds.Tables != null)
                 {
-                    Today = ds.Tables[0].Rows.Count == 0 ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["Today"]),
-                    Tomorrow = ds.Tables[1].Rows.Count == 0 ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["Tomorrow"]),
-                    DayAfterTomorrow = ds.Tables[2].Rows.Count == 0 ? 0 : Convert.ToInt32(ds.Tables[2].Rows[0]["DayAfterTomorrow"]) 
-                };
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            AppointmentCount Apt = new AppointmentCount()
+                            {
 
-                appointmentsCount.Add(obj);
+                                AppointmentDate = dr["AppointmentDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["AppointmentDate"]),
+                                DayName = dr["DayName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["DayName"]),
+                                AptCount = dr["AptCount"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AptCount"])
+
+                            };
+
+                            appointmentsCount.Add(Apt);
+                        }
+                    }
+                }
+
             }
             catch (Exception )
             {
