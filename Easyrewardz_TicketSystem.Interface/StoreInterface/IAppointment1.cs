@@ -24,7 +24,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="TenantID"></param>
         /// <param name="UserId"></param>
         /// <returns></returns>
-        List<AppointmentCount> GetAppointmentCount(int TenantID, int UserId);
+        List<AppointmentCount> GetAppointmentCount(int TenantID, string ProgramCode,int UserId);
 
         /// <summary>
         /// Update Appointment Status
