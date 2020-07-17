@@ -610,87 +610,87 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
 
-
-                if (ordersSmsWhatsUpDataDetails.AlertCommunicationviaWhtsup)
+                if (ordersSmsWhatsUpDataDetails.IsSend)
                 {
-                    try
+                    if (ordersSmsWhatsUpDataDetails.AlertCommunicationviaWhtsup)
                     {
-                        List<string> additionalList = new List<string>();
-                        if (additionalInfo != null)
+                        try
                         {
-                            additionalList = ordersSmsWhatsUpDataDetails.AdditionalInfo.Split(",").ToList();
+                            List<string> additionalList = new List<string>();
+                            if (additionalInfo != null)
+                            {
+                                additionalList = ordersSmsWhatsUpDataDetails.AdditionalInfo.Split(",").ToList();
+                            }
+                            SendFreeTextRequest sendFreeTextRequest = new SendFreeTextRequest
+                            {
+                                To = ordersSmsWhatsUpDataDetails.MobileNumber.TrimStart('0').Length > 10 ? ordersSmsWhatsUpDataDetails.MobileNumber : "91" + ordersSmsWhatsUpDataDetails.MobileNumber.TrimStart('0'),
+                                ProgramCode = ProgramCode,
+                                TemplateName = getWhatsappMessageDetailsResponse.TemplateName,
+                                AdditionalInfo = additionalList
+                            };
+
+                            string apiReq = JsonConvert.SerializeObject(sendFreeTextRequest);
+                            apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendCampaign", apiReq);
+
+
+                            //if (apiResponse.Equals("true"))
+                            //{
+                            //    UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");
+                            //}
                         }
-                        SendFreeTextRequest sendFreeTextRequest = new SendFreeTextRequest
+                        catch (Exception)
                         {
-                            To = ordersSmsWhatsUpDataDetails.MobileNumber.TrimStart('0').Length > 10 ? ordersSmsWhatsUpDataDetails.MobileNumber : "91" + ordersSmsWhatsUpDataDetails.MobileNumber.TrimStart('0'),
-                            ProgramCode = ProgramCode,
-                            TemplateName = getWhatsappMessageDetailsResponse.TemplateName,
-                            AdditionalInfo = additionalList
+                            throw;
+                        }
+                    }
+                    else if (ordersSmsWhatsUpDataDetails.AlertCommunicationviaSMS)
+                    {
+
+                        Message = ordersSmsWhatsUpDataDetails.MessageText;
+
+                        //else if (sMSWhtappTemplate == "AWBAssigned" & ordersSmsWhatsUpDataDetails.AWBAssigned)
+                        //{
+                        //    Message = ordersSmsWhatsUpDataDetails.AWBAssignedText;
+                        //}
+                        //else if (sMSWhtappTemplate == "PickupScheduled" & ordersSmsWhatsUpDataDetails.PickupScheduled)
+                        //{
+                        //    Message = ordersSmsWhatsUpDataDetails.PickupScheduledText;
+                        //}
+                        //else if (sMSWhtappTemplate == "Shipped" & ordersSmsWhatsUpDataDetails.Shipped)
+                        //{
+                        //    Message = ordersSmsWhatsUpDataDetails.ShippedText;
+                        //}
+                        //else if (sMSWhtappTemplate == "Delivered" & ordersSmsWhatsUpDataDetails.Delivered)
+                        //{
+                        //    Message = ordersSmsWhatsUpDataDetails.DeliveredText;
+                        //}
+
+
+                        ChatSendSMS chatSendSMS = new ChatSendSMS
+                        {
+                            MobileNumber = ordersSmsWhatsUpDataDetails.MobileNumber.TrimStart('0').Length > 10 ? ordersSmsWhatsUpDataDetails.MobileNumber : "91" + ordersSmsWhatsUpDataDetails.MobileNumber.TrimStart('0'),
+                            SenderId = ordersSmsWhatsUpDataDetails.SMSSenderName,
+                            SmsText = Message
                         };
 
-                        string apiReq = JsonConvert.SerializeObject(sendFreeTextRequest);
-                        apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendCampaign", apiReq);
+                        string apiReq = JsonConvert.SerializeObject(chatSendSMS);
+                        apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendSMS", apiReq);
 
+                        ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
 
-                        //if (apiResponse.Equals("true"))
+                        chatSendSMSResponse = JsonConvert.DeserializeObject<ChatSendSMSResponse>(apiResponse);
+
+                        if (chatSendSMSResponse != null)
+                        {
+                            result = chatSendSMSResponse.Id;
+                        }
+
+                        //if (result > 0)
                         //{
-                        //    UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");
+                        //    UpdateResponseShare(objRequest.CustomerID, "Contacted Via SMS");
                         //}
                     }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
                 }
-                else if (ordersSmsWhatsUpDataDetails.AlertCommunicationviaSMS)
-                {
-                    if (ordersSmsWhatsUpDataDetails.IsSend)
-                    {
-                        Message = ordersSmsWhatsUpDataDetails.MessageText;
-                    }
-                    //else if (sMSWhtappTemplate == "AWBAssigned" & ordersSmsWhatsUpDataDetails.AWBAssigned)
-                    //{
-                    //    Message = ordersSmsWhatsUpDataDetails.AWBAssignedText;
-                    //}
-                    //else if (sMSWhtappTemplate == "PickupScheduled" & ordersSmsWhatsUpDataDetails.PickupScheduled)
-                    //{
-                    //    Message = ordersSmsWhatsUpDataDetails.PickupScheduledText;
-                    //}
-                    //else if (sMSWhtappTemplate == "Shipped" & ordersSmsWhatsUpDataDetails.Shipped)
-                    //{
-                    //    Message = ordersSmsWhatsUpDataDetails.ShippedText;
-                    //}
-                    //else if (sMSWhtappTemplate == "Delivered" & ordersSmsWhatsUpDataDetails.Delivered)
-                    //{
-                    //    Message = ordersSmsWhatsUpDataDetails.DeliveredText;
-                    //}
-
-
-                    ChatSendSMS chatSendSMS = new ChatSendSMS
-                    {
-                        MobileNumber = ordersSmsWhatsUpDataDetails.MobileNumber.TrimStart('0').Length > 10 ? ordersSmsWhatsUpDataDetails.MobileNumber : "91" + ordersSmsWhatsUpDataDetails.MobileNumber.TrimStart('0'),
-                        SenderId = ordersSmsWhatsUpDataDetails.SMSSenderName,
-                        SmsText = Message
-                    };
-
-                    string apiReq = JsonConvert.SerializeObject(chatSendSMS);
-                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendSMS", apiReq);
-
-                    ChatSendSMSResponse chatSendSMSResponse = new ChatSendSMSResponse();
-
-                    chatSendSMSResponse = JsonConvert.DeserializeObject<ChatSendSMSResponse>(apiResponse);
-
-                    if (chatSendSMSResponse != null)
-                    {
-                        result = chatSendSMSResponse.Id;
-                    }
-
-                    //if (result > 0)
-                    //{
-                    //    UpdateResponseShare(objRequest.CustomerID, "Contacted Via SMS");
-                    //}
-                }
-
             }
             catch (Exception)
             {

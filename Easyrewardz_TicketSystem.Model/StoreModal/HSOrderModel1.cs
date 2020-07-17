@@ -179,6 +179,44 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string CurrencyText { get; set; }
 
+        /// <summary>
+        /// List Of PHYOrderMessageTemplate
+        /// </summary>
+        public List<PHYOrderMessageTemplate> pHYOrderMessageTemplates { get; set; }
+
+    }
+
+    public class PHYOrderMessageTemplate
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+
+        /// <summary>
+        /// MessageName
+        /// </summary>
+        public string MessageName { get; set; }
+
+        /// <summary>
+        /// IsActive
+        /// </summary>
+        public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Description
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// StoreDeliveryIsActive
+        /// </summary>
+        public bool StoreDeliveryIsActive { get; set; }
+
+        /// <summary>
+        /// StoreDeliveryDescription
+        /// </summary>
+        public string StoreDeliveryDescription { get; set; }
     }
 
     public class OrderDelivered

@@ -24,6 +24,14 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateOrderConfiguration(OrderConfiguration orderConfiguration, int modifiedBy);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orderConfiguration"></param>
+        /// <param name="modifiedBy"></param>
+        /// <returns></returns>
+        int UpdateOrderConfigurationMessageTemplate(List<PHYOrderMessageTemplate> pHYOrderMessageTemplates, int TenantId);
+
+        /// <summary>
         /// Get Order Delivered Details
         /// </summary>
         /// <param name="tenantId"></param>

@@ -37,6 +37,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _OrderRepository.UpdateOrderConfiguration(orderConfiguration, ModifiedBy);
         }
 
+
+        /// <summary>
+        /// Update Order Configuration Message Template
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="orderConfiguration"></param>
+        /// <param name="ModifiedBy"></param>
+        /// <returns></returns>
+        public int UpdateOrderConfigurationMessageTemplate(IHSOrder order, List<PHYOrderMessageTemplate> pHYOrderMessageTemplates, int TenantId)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.UpdateOrderConfigurationMessageTemplate(pHYOrderMessageTemplates, TenantId);
+        }
+
         /// <summary>
         /// Get Order Delivered Details
         /// </summary>

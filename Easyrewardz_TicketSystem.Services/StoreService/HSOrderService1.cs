@@ -43,6 +43,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
             DataSet ds = new DataSet();
             OrderConfiguration moduleConfiguration = new OrderConfiguration();
+            List<PHYOrderMessageTemplate> pHYOrderMessages = new List<PHYOrderMessageTemplate>();
             try
             {
                 conn.Open();
@@ -74,27 +75,47 @@ namespace Easyrewardz_TicketSystem.Services
                         moduleConfiguration.AlertCommunicationviaWhtsup= ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"]);
                         moduleConfiguration.AlertCommunicationviaSMS= ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"]);
                         moduleConfiguration.AlertCommunicationSMSText = ds.Tables[0].Rows[0]["AlertCommunicationSMSText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["AlertCommunicationSMSText"]);
-                        moduleConfiguration.ShoppingBagConvertToOrder = ds.Tables[0].Rows[0]["ShoppingBagConvertToOrder"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ShoppingBagConvertToOrder"]);
-                        moduleConfiguration.ShoppingBagConvertToOrderText = ds.Tables[0].Rows[0]["ShoppingBagConvertToOrderText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["ShoppingBagConvertToOrderText"]);
-                        moduleConfiguration.AWBAssigned = ds.Tables[0].Rows[0]["AWBAssigned"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AWBAssigned"]);
-                        moduleConfiguration.AWBAssignedText = ds.Tables[0].Rows[0]["AWBAssignedText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["AWBAssignedText"]);
-                        moduleConfiguration.PickupScheduled = ds.Tables[0].Rows[0]["PickupScheduled"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["PickupScheduled"]);
-                        moduleConfiguration.PickupScheduledText = ds.Tables[0].Rows[0]["PickupScheduledText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["PickupScheduledText"]);
-                        moduleConfiguration.Shipped = ds.Tables[0].Rows[0]["Shipped"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Shipped"]);
-                        moduleConfiguration.ShippedText = ds.Tables[0].Rows[0]["ShippedText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["ShippedText"]);
-                        moduleConfiguration.Delivered = ds.Tables[0].Rows[0]["Delivered"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Delivered"]);
-                        moduleConfiguration.DeliveredText = ds.Tables[0].Rows[0]["DeliveredText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["DeliveredText"]);
-                        moduleConfiguration.Cancel = ds.Tables[0].Rows[0]["Cancel"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Cancel"]);
-                        moduleConfiguration.CancelText = ds.Tables[0].Rows[0]["CancelText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["CancelText"]);
-                        moduleConfiguration.UnDeliverable = ds.Tables[0].Rows[0]["UnDeliverable"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["UnDeliverable"]);
-                        moduleConfiguration.UnDeliverableText = ds.Tables[0].Rows[0]["UnDeliverableText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["UnDeliverableText"]);
-                        moduleConfiguration.StoreDeliveryText = ds.Tables[0].Rows[0]["StoreDeliveryText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["StoreDeliveryText"]);
+                        //moduleConfiguration.ShoppingBagConvertToOrder = ds.Tables[0].Rows[0]["ShoppingBagConvertToOrder"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ShoppingBagConvertToOrder"]);
+                        //moduleConfiguration.ShoppingBagConvertToOrderText = ds.Tables[0].Rows[0]["ShoppingBagConvertToOrderText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["ShoppingBagConvertToOrderText"]);
+                        //moduleConfiguration.AWBAssigned = ds.Tables[0].Rows[0]["AWBAssigned"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AWBAssigned"]);
+                        //moduleConfiguration.AWBAssignedText = ds.Tables[0].Rows[0]["AWBAssignedText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["AWBAssignedText"]);
+                        //moduleConfiguration.PickupScheduled = ds.Tables[0].Rows[0]["PickupScheduled"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["PickupScheduled"]);
+                        //moduleConfiguration.PickupScheduledText = ds.Tables[0].Rows[0]["PickupScheduledText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["PickupScheduledText"]);
+                        //moduleConfiguration.Shipped = ds.Tables[0].Rows[0]["Shipped"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Shipped"]);
+                        //moduleConfiguration.ShippedText = ds.Tables[0].Rows[0]["ShippedText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["ShippedText"]);
+                        //moduleConfiguration.Delivered = ds.Tables[0].Rows[0]["Delivered"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Delivered"]);
+                        //moduleConfiguration.DeliveredText = ds.Tables[0].Rows[0]["DeliveredText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["DeliveredText"]);
+                        //moduleConfiguration.Cancel = ds.Tables[0].Rows[0]["Cancel"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Cancel"]);
+                        //moduleConfiguration.CancelText = ds.Tables[0].Rows[0]["CancelText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["CancelText"]);
+                        //moduleConfiguration.UnDeliverable = ds.Tables[0].Rows[0]["UnDeliverable"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["UnDeliverable"]);
+                        //moduleConfiguration.UnDeliverableText = ds.Tables[0].Rows[0]["UnDeliverableText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["UnDeliverableText"]);
+                        //moduleConfiguration.StoreDeliveryText = ds.Tables[0].Rows[0]["StoreDeliveryText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["StoreDeliveryText"]);
                         moduleConfiguration.PaymentTenantCodeText = ds.Tables[0].Rows[0]["TenderPayRemainingText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["TenderPayRemainingText"]);
                         moduleConfiguration.RetryCount = ds.Tables[0].Rows[0]["RetryCount"] == DBNull.Value ? 0 : Convert.ToInt16(ds.Tables[0].Rows[0]["RetryCount"]);
                         moduleConfiguration.StateFlag = ds.Tables[0].Rows[0]["StateFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["StateFlag"]);
                         moduleConfiguration.CurrencyText = ds.Tables[0].Rows[0]["Currency"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["Currency"]);
                     }
-                }   
+                }
+
+                if (ds != null && ds.Tables[1] != null)
+                {
+                    for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                    {
+                        PHYOrderMessageTemplate obj = new PHYOrderMessageTemplate
+                        {
+                            ID = ds.Tables[1].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[i]["ID"]),
+                            MessageName = ds.Tables[1].Rows[i]["MessageName"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[1].Rows[i]["MessageName"]),
+                            IsActive = ds.Tables[1].Rows[i]["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[1].Rows[i]["IsActive"]),
+                            Description = ds.Tables[1].Rows[i]["Description"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[1].Rows[i]["Description"]),
+                            StoreDeliveryIsActive = ds.Tables[1].Rows[i]["StoreDeliveryIsActive"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[1].Rows[i]["StoreDeliveryIsActive"]),
+                            StoreDeliveryDescription = ds.Tables[1].Rows[i]["StoreDeliveryDescription"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[1].Rows[i]["StoreDeliveryDescription"])
+                        };
+
+                        pHYOrderMessages.Add(obj);
+                    }
+                }
+
+                moduleConfiguration.pHYOrderMessageTemplates = pHYOrderMessages;
             }
             catch (Exception)
             {
@@ -164,6 +185,48 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
+
+
+        public int UpdateOrderConfigurationMessageTemplate(List<PHYOrderMessageTemplate> pHYOrderMessageTemplates, int TenantId)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                
+                for (int i = 0; i < pHYOrderMessageTemplates.Count; i++)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateOrderMessageTemplate", conn)
+                    {
+                        Connection = conn
+                    };
+
+                    cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                    cmd.Parameters.AddWithValue("@_TemplateId", pHYOrderMessageTemplates[i].ID);
+                    cmd.Parameters.AddWithValue("@_IsActive", pHYOrderMessageTemplates[i].IsActive);
+                    cmd.Parameters.AddWithValue("@_Description", pHYOrderMessageTemplates[i].Description);
+                    cmd.Parameters.AddWithValue("@_StoreDeliveryIsActive", pHYOrderMessageTemplates[i].StoreDeliveryIsActive);
+                    cmd.Parameters.AddWithValue("@_StoreDeliveryDescription", pHYOrderMessageTemplates[i].StoreDeliveryDescription);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+                }
 
             }
             catch (Exception)
