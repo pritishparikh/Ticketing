@@ -301,7 +301,7 @@ namespace Easyrewardz_TicketSystem.Services
                         if (apiResponse.Equals("true"))
                         {
                             UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");
-                            MakeBellActive(objRequest.CustomerMobileNumber, objRequest.ProgramCode, ClientAPIURL, TenantID, UserID);
+                           // MakeBellActive(objRequest.CustomerMobileNumber, objRequest.ProgramCode, ClientAPIURL, TenantID, UserID);
                         }
                     }
                     catch (Exception)
@@ -444,7 +444,7 @@ namespace Easyrewardz_TicketSystem.Services
                     if(result > 0)
                     {
                         UpdateResponseShare(objRequest.CustomerID, "Contacted Via SMS");
-                        MakeBellActive(objRequest.CustomerMobileNumber, objRequest.ProgramCode, ClientAPIURL, TenantID, UserID);
+                       // MakeBellActive(objRequest.CustomerMobileNumber, objRequest.ProgramCode, ClientAPIURL, TenantID, UserID);
                     }
                 }
 
