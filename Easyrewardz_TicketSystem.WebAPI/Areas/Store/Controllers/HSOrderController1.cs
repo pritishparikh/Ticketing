@@ -706,7 +706,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 HSOrderCaller hSOrderCaller = new HSOrderCaller();
 
                 printInvoice = hSOrderCaller.ShipmentAssignedPrintInvoice(new HSOrderService(_connectionString), OrderIds, _ClientAPIUrl);
-                statusCode = printInvoice.label_url.Length > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusCode = printInvoice.invoice_url.Length > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
                 objResponseModel.Status = true;

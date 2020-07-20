@@ -199,7 +199,10 @@ namespace Easyrewardz_TicketSystem.Services
             CampaignStatusResponse obj = new CampaignStatusResponse();
             try
             {
+                List<GetWhatsappMessageDetailsResponse> getWhatsappMessageDetailsResponseList = new List<GetWhatsappMessageDetailsResponse>();
                 GetWhatsappMessageDetailsResponse getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
+
+                string whatsapptemplate = GetWhatsupTemplateName(TenantID, UserID, "Campaign");
 
                 string strpostionNumber = "";
                 string strpostionName = "";
@@ -214,13 +217,24 @@ namespace Easyrewardz_TicketSystem.Services
                     string apiBotReq = JsonConvert.SerializeObject(getWhatsappMessageDetailsModal);
                     string apiBotResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetWhatsappMessageDetails", apiBotReq);
 
+                    //if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
+                    //{
+                    //    getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
+                    //}
+
                     if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
                     {
-                        getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
+                        getWhatsappMessageDetailsResponseList = JsonConvert.DeserializeObject<List<GetWhatsappMessageDetailsResponse>>(apiBotResponse);
                     }
 
 
-
+                    if(getWhatsappMessageDetailsResponseList != null)
+                    {
+                        if(getWhatsappMessageDetailsResponseList.Count > 0)
+                        {
+                            getWhatsappMessageDetailsResponse = getWhatsappMessageDetailsResponseList.Where(x => x.TemplateName == whatsapptemplate).First();
+                        }
+                    }
 
                     if (getWhatsappMessageDetailsResponse != null)
                     {
@@ -321,6 +335,59 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// GetWhatsupTemplateName
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="MessageName"></param>
+        /// <returns></returns>
+        public string GetWhatsupTemplateName(int TenantID, int UserID, string MessageName)
+        {
+            string WhatsupTemplateName = "";
+            DataSet ds = new DataSet();
+            try
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetWhatsupTemplate", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantId", TenantID);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
+                cmd.Parameters.AddWithValue("@_MessageName", MessageName);
+
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    WhatsupTemplateName = ds.Tables[0].Rows[0]["TemplateName"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["TemplateName"]);
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return WhatsupTemplateName;
         }
 
         /// <summary>
@@ -612,10 +679,14 @@ namespace Easyrewardz_TicketSystem.Services
                 string strpostionNumber = "";
                 string strpostionName = "";
                 GetWhatsappMessageDetailsResponse getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
+                List<GetWhatsappMessageDetailsResponse> getWhatsappMessageDetailsResponseList = new List<GetWhatsappMessageDetailsResponse>();
+
                 try
                 {
                     if (channelType.Equals("Whatsapp"))
                     {
+                        string whatsapptemplate = GetWhatsupTemplateName(tenantID, userID, "Campaign");
+
                         GetWhatsappMessageDetailsModal getWhatsappMessageDetailsModal = new GetWhatsappMessageDetailsModal()
                         {
                             ProgramCode = programcode
@@ -624,9 +695,23 @@ namespace Easyrewardz_TicketSystem.Services
                         string apiBotReq = JsonConvert.SerializeObject(getWhatsappMessageDetailsModal);
                         string apiBotResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetWhatsappMessageDetails", apiBotReq);
 
+                        //if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
+                        //{
+                        //    getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
+                        //}
+
                         if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
                         {
-                            getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
+                            getWhatsappMessageDetailsResponseList = JsonConvert.DeserializeObject<List<GetWhatsappMessageDetailsResponse>>(apiBotResponse);
+                        }
+
+
+                        if (getWhatsappMessageDetailsResponseList != null)
+                        {
+                            if (getWhatsappMessageDetailsResponseList.Count > 0)
+                            {
+                                getWhatsappMessageDetailsResponse = getWhatsappMessageDetailsResponseList.Where(x => x.TemplateName == whatsapptemplate).First();
+                            }
                         }
 
                         if (getWhatsappMessageDetailsResponse != null)

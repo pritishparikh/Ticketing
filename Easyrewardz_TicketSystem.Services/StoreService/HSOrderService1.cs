@@ -19,6 +19,7 @@ namespace Easyrewardz_TicketSystem.Services
         string apisecurityToken = string.Empty;
         string apiURL = string.Empty;
         string apiURLGetUserATVDetails = string.Empty;
+        string _connectionStringClass = "";
         #endregion
 
         #region Constructor
@@ -26,6 +27,7 @@ namespace Easyrewardz_TicketSystem.Services
         {
 
             conn.ConnectionString = _connectionString;
+            _connectionStringClass = _connectionString;
             apisecurityToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9ncmFtQ29kZSI6IkJhdGEiLCJVc2VySUQiOiIzIiwiQXBwSUQiOiI3IiwiRGF5IjoiMjgiLCJNb250aCI6IjMiLCJZZWFyIjoiMjAyMSIsIlJvbGUiOiJBZG1pbiIsImlzcyI6IkF1dGhTZWN1cml0eUlzc3VlciIsImF1ZCI6IkF1dGhTZWN1cml0eUF1ZGllbmNlIn0.0XeF7V5LWfQn0NlSlG7Rb-Qq1hUCtUYRDg6dMGIMvg0";
             //apiURLGetUserATVDetails = configuration.GetValue<string>("apiURLGetUserATVDetails");
         }
