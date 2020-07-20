@@ -72,19 +72,19 @@ namespace Easyrewardz_TicketSystem.Model
     public class AppointmentCount
     {
         /// <summary>
-        /// 
+        /// AppointmentDate
         /// </summary>
-        public int Today { get; set; }
+        public string AppointmentDate { get; set; }
 
         /// <summary>
-        /// 
+        /// DayName
         /// </summary>
-        public int Tomorrow { get; set; }
+        public string DayName { get; set; }
 
         /// <summary>
-        /// 
+        /// Appointment Count
         /// </summary>
-        public int DayAfterTomorrow { get; set; }
+        public int AptCount { get; set; }
     }
 
     public class AppointmentDetails

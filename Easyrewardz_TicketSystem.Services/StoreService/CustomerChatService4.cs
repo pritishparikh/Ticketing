@@ -473,5 +473,178 @@ namespace Easyrewardz_TicketSystem.Services
 
             return Result;
         }
+
+
+        #region Client Exposed API
+
+        /// <summary>
+        /// Add Products To ShoppingBag by Customer
+        /// <param name="CustomerAddToShoppingBag"></param>
+        /// </summary>
+        /// <returns></returns>
+        public int CustomerAddToShoppingBag(ClientChatAddProduct Item)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int Result = 0;
+
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSCustomerAddToBagOrWishList", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_ProgramCode", Item.ProgramCode);
+                cmd.Parameters.AddWithValue("@_CustomerMobile", Item.CustomerMobile);
+                cmd.Parameters.AddWithValue("@_StoreCode", Item.StoreCode);
+                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(Item.ProductDetails.uniqueItemCode) ? "" : Item.ProductDetails.uniqueItemCode);
+                cmd.Parameters.AddWithValue("@_ItemName", string.IsNullOrEmpty(Item.ProductDetails.productName) ? "" : Item.ProductDetails.productName);
+                cmd.Parameters.AddWithValue("@_Category", string.IsNullOrEmpty(Item.ProductDetails.categoryName) ? "" : Item.ProductDetails.categoryName);
+                cmd.Parameters.AddWithValue("@_SubCategory", string.IsNullOrEmpty(Item.ProductDetails.subCategoryName) ? "" : Item.ProductDetails.subCategoryName);
+                cmd.Parameters.AddWithValue("@_Brand", string.IsNullOrEmpty(Item.ProductDetails.brandName) ? "" : Item.ProductDetails.brandName);
+                cmd.Parameters.AddWithValue("@_Color", string.IsNullOrEmpty(Item.ProductDetails.color) ? "" : Item.ProductDetails.color);
+                cmd.Parameters.AddWithValue("@_ColorCode", string.IsNullOrEmpty(Item.ProductDetails.colorCode) ? "" : Item.ProductDetails.colorCode);
+                cmd.Parameters.AddWithValue("@_Size", string.IsNullOrEmpty(Item.ProductDetails.size) ? "" : Item.ProductDetails.size);
+                cmd.Parameters.AddWithValue("@_Price", string.IsNullOrEmpty(Item.ProductDetails.price) ? "" : Item.ProductDetails.price);
+                cmd.Parameters.AddWithValue("@_Discount", string.IsNullOrEmpty(Item.ProductDetails.discount) ? "" : Item.ProductDetails.discount);
+                cmd.Parameters.AddWithValue("@_Url", string.IsNullOrEmpty(Item.ProductDetails.url) ? "" : Item.ProductDetails.url);
+                cmd.Parameters.AddWithValue("@_ImageURL", string.IsNullOrEmpty(Item.ProductDetails.imageURL) ? "" : Item.ProductDetails.imageURL);
+                cmd.Parameters.AddWithValue("@_Action", "shoppingbag");
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                Result = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Add Products To ShoppingBag by Customer
+        /// <param name="CustomerAddToShoppingBag"></param>
+        /// </summary>
+        /// <returns></returns>
+        public int CustomerAddToWishlist(ClientChatAddProduct Item)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int Result = 0;
+
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSCustomerAddToBagOrWishList", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_ProgramCode", Item.ProgramCode);
+                cmd.Parameters.AddWithValue("@_CustomerMobile",  Item.CustomerMobile);
+                cmd.Parameters.AddWithValue("@_StoreCode", Item.StoreCode);
+                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(Item.ProductDetails.uniqueItemCode) ? "" : Item.ProductDetails.uniqueItemCode);
+                cmd.Parameters.AddWithValue("@_ItemName", string.IsNullOrEmpty(Item.ProductDetails.productName) ? "" : Item.ProductDetails.productName);
+                cmd.Parameters.AddWithValue("@_Category", string.IsNullOrEmpty(Item.ProductDetails.categoryName) ? "" : Item.ProductDetails.categoryName);
+                cmd.Parameters.AddWithValue("@_SubCategory", string.IsNullOrEmpty(Item.ProductDetails.subCategoryName) ? "" : Item.ProductDetails.subCategoryName);
+                cmd.Parameters.AddWithValue("@_Brand", string.IsNullOrEmpty(Item.ProductDetails.brandName) ? "" : Item.ProductDetails.brandName);
+                cmd.Parameters.AddWithValue("@_Color", string.IsNullOrEmpty(Item.ProductDetails.color) ? "" : Item.ProductDetails.color);
+                cmd.Parameters.AddWithValue("@_ColorCode", string.IsNullOrEmpty(Item.ProductDetails.colorCode) ? "" : Item.ProductDetails.colorCode);
+                cmd.Parameters.AddWithValue("@_Size", string.IsNullOrEmpty(Item.ProductDetails.size) ? "" : Item.ProductDetails.size);
+                cmd.Parameters.AddWithValue("@_Price", string.IsNullOrEmpty(Item.ProductDetails.price) ? "" : Item.ProductDetails.price);
+                cmd.Parameters.AddWithValue("@_Discount", string.IsNullOrEmpty(Item.ProductDetails.discount) ? "" : Item.ProductDetails.discount);
+                cmd.Parameters.AddWithValue("@_Url", string.IsNullOrEmpty(Item.ProductDetails.url) ? "" : Item.ProductDetails.url);
+                cmd.Parameters.AddWithValue("@_ImageURL", string.IsNullOrEmpty(Item.ProductDetails.imageURL) ? "" : Item.ProductDetails.imageURL);
+                cmd.Parameters.AddWithValue("@_Action", "wishlist");
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                Result = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Remove Products To Wishlist/ShoppingBag by Customer
+        /// <param name="ProgramCode"></param>
+        /// <param name="CustomerMobile"></param>
+        /// <param name="StoreCode"></param>
+        /// <param name="ItemCode"></param>
+        /// </summary>
+        /// <returns></returns>
+        public int CustomerRemoveProduct(string ProgramCode, string CustomerMobile, string StoreCode, string ItemCode)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            int Result = 0;
+
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSRemoveProductByCustomer", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_CustomerMobile", CustomerMobile);
+                cmd.Parameters.AddWithValue("@_StoreCode", StoreCode);
+                cmd.Parameters.AddWithValue("@_ItemCode", ItemCode);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                Result = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+
+            }
+
+            return Result;
+        }
+
+        #endregion
     }
 }

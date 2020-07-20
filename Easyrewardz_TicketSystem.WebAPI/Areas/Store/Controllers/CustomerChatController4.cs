@@ -29,8 +29,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             int statusCode = 0;
             string statusMessage = "";
-            string SoundPhysicalFilePath = string.Empty;
-            string SoundFilePath = string.Empty;
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
@@ -72,8 +70,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             int statusCode = 0;
             string statusMessage = "";
-            string SoundPhysicalFilePath = string.Empty;
-            string SoundFilePath = string.Empty;
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
@@ -117,8 +113,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             int statusCode = 0;
             string statusMessage = "";
-            string SoundPhysicalFilePath = string.Empty;
-            string SoundFilePath = string.Empty;
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
@@ -229,6 +223,130 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+
+
+        #region Client Exposed API
+
+        /// <summary>
+        /// Add Products To ShoppingBag by Customer
+        /// <param name="ClientChatAddProduct"></param>
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CustomerAddToShoppingBag")]
+        public ResponseModel CustomerAddToShoppingBag([FromBody] ClientChatAddProduct Item)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int Result = 0;
+
+            int statusCode = 0;
+            string statusMessage = "";
+            string SoundPhysicalFilePath = string.Empty;
+            string SoundFilePath = string.Empty;
+            try
+            {
+                
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                Result = customerChatCaller.CustomerAddToShoppingBag(new CustomerChatService(_connectionString), Item);
+                statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Add Products To Wishlist by Customer
+        /// <param name="ClientChatAddProduct"></param>
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CustomerAddToWishlist")]
+        public ResponseModel CustomerAddToWishlist([FromBody] ClientChatAddProduct Item)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int Result = 0;
+
+            int statusCode = 0;
+            string statusMessage = "";
+            string SoundPhysicalFilePath = string.Empty;
+            string SoundFilePath = string.Empty;
+            try
+            {
+                
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                Result = customerChatCaller.CustomerAddToWishlist(new CustomerChatService(_connectionString), Item);
+                statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Remove Products To Wishlist/ShoppingBag by Customer
+        /// <param name="ProgramCode"></param>
+        /// <param name="CustomerMobile"></param>
+        /// <param name="StoreCode"></param>
+        /// <param name="ItemCode"></param>
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CustomerRemoveProduct")]
+        public ResponseModel CustomerRemoveProduct(string ProgramCode, string CustomerMobile, string StoreCode, string ItemCode)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int Result = 0;
+
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                Result = customerChatCaller.CustomerRemoveProduct(new CustomerChatService(_connectionString), ProgramCode,  CustomerMobile,  StoreCode,  ItemCode);
+                statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;   
+                objResponseModel.ResponseData = Result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        #endregion
+
 
         #endregion
     }

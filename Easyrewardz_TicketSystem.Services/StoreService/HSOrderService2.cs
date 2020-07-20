@@ -526,8 +526,11 @@ namespace Easyrewardz_TicketSystem.Services
             OrdersSmsWhatsUpDataDetails ordersSmsWhatsUpDataDetails = new OrdersSmsWhatsUpDataDetails();
             try
             {
-
+                StoreCampaignService storeCampaign = new StoreCampaignService(_connectionStringClass);
                 GetWhatsappMessageDetailsResponse getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
+                List<GetWhatsappMessageDetailsResponse> getWhatsappMessageDetailsResponseList = new List<GetWhatsappMessageDetailsResponse>();
+
+                string whatsapptemplate = storeCampaign.GetWhatsupTemplateName(tenantId, userId, sMSWhtappTemplate);
 
                 string strpostionNumber = "";
                 string strpostionName = "";
@@ -542,9 +545,23 @@ namespace Easyrewardz_TicketSystem.Services
                     string apiBotReq = JsonConvert.SerializeObject(getWhatsappMessageDetailsModal);
                     string apiBotResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetWhatsappMessageDetails", apiBotReq);
 
+                    //if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
+                    //{
+                    //    getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
+                    //}
+
                     if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
                     {
-                        getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
+                        getWhatsappMessageDetailsResponseList = JsonConvert.DeserializeObject<List<GetWhatsappMessageDetailsResponse>>(apiBotResponse);
+                    }
+
+
+                    if (getWhatsappMessageDetailsResponseList != null)
+                    {
+                        if (getWhatsappMessageDetailsResponseList.Count > 0)
+                        {
+                            getWhatsappMessageDetailsResponse = getWhatsappMessageDetailsResponseList.Where(x => x.TemplateName == whatsapptemplate).First();
+                        }
                     }
 
                     if (getWhatsappMessageDetailsResponse != null)

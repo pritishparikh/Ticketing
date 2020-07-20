@@ -37,11 +37,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name="appointment"></param>
         /// <param name="tenantID"></param>
+        /// <param name="ProgramCode"></param>
         /// <returns></returns>
-        public List<AppointmentCount> GetAppointmentCountList(IAppointment appointment, int tenantID, int UserId)
+        public List<AppointmentCount> GetAppointmentCountList(IAppointment appointment, int tenantID,string ProgramCode, int UserId)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.GetAppointmentCount(tenantID, UserId);
+            return _AppointmentRepository.GetAppointmentCount(tenantID, ProgramCode,UserId);
         }
 
         /// <summary>

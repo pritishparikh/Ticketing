@@ -814,17 +814,17 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// label_created
         /// </summary>
-        public int label_created { get; set; }
+        public bool is_invoice_created { get; set; }
 
         /// <summary>
         /// label_url
         /// </summary>
-        public string label_url { get; set; } = "";
+        public string invoice_url { get; set; } = "";
 
         /// <summary>
         /// response
         /// </summary>
-        public string response { get; set; } = "";
+        public List<object> not_created { get; set; } = null;
     }
 
     public class PHYWhatsAppTemplate

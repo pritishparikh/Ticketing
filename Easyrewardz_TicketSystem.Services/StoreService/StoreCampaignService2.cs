@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -538,9 +539,10 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 GetWhatsappMessageDetailsResponse getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
+                List<GetWhatsappMessageDetailsResponse> getWhatsappMessageDetailsResponseList = new List<GetWhatsappMessageDetailsResponse>();
                 string strpostionNumber = "";
                 string strpostionName = "";
-
+                string whatsapptemplate = GetWhatsupTemplateName(tenantID, userID, "Campaign");
                 try
                 {
                     GetWhatsappMessageDetailsModal getWhatsappMessageDetailsModal = new GetWhatsappMessageDetailsModal()
@@ -551,11 +553,24 @@ namespace Easyrewardz_TicketSystem.Services
                     string apiBotReq = JsonConvert.SerializeObject(getWhatsappMessageDetailsModal);
                     string apiBotResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetWhatsappMessageDetails", apiBotReq);
 
+                    //if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
+                    //{
+                    //    getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
+                    //}
+
                     if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
                     {
-                        getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
+                        getWhatsappMessageDetailsResponseList = JsonConvert.DeserializeObject<List<GetWhatsappMessageDetailsResponse>>(apiBotResponse);
                     }
 
+
+                    if (getWhatsappMessageDetailsResponseList != null)
+                    {
+                        if (getWhatsappMessageDetailsResponseList.Count > 0)
+                        {
+                            getWhatsappMessageDetailsResponse = getWhatsappMessageDetailsResponseList.Where(x => x.TemplateName == whatsapptemplate).First();
+                        }
+                    }
 
 
 

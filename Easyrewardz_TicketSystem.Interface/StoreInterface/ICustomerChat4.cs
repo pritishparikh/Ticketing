@@ -16,6 +16,17 @@ namespace Easyrewardz_TicketSystem.Interface
         int AddProductsToShoppingBag(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes, bool IsFromRecommendation,int UserID);
 
         int AddProductsToWishlist(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes, bool IsFromRecommendation, int UserID);
-         
+
+
+
+        #region Client Exposed API
+
+        int CustomerAddToShoppingBag(ClientChatAddProduct Item);
+
+        int CustomerAddToWishlist(ClientChatAddProduct Item);
+
+        int CustomerRemoveProduct(string ProgramCode, string CustomerMobile, string StoreCode, string ItemCode);
+
+        #endregion
     }
 }
