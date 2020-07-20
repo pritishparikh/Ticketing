@@ -142,7 +142,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Category_ID", CategoryID);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                k = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                k = Convert.ToInt32(cmd1.ExecuteScalar());
             }
             catch (Exception)
             {
