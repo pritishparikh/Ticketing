@@ -826,4 +826,32 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string response { get; set; } = "";
     }
+
+    public class PHYWhatsAppTemplate
+    {
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+
+        /// <summary>
+        /// MessageName
+        /// </summary>
+        public string MessageName { get; set; }
+
+        /// <summary>
+        /// TemplateName
+        /// </summary>
+        public string TemplateName { get; set; }
+
+        /// <summary>
+        /// Status
+        /// </summary>
+        public bool Status { get; set; }
+    }
+
+    public class PHYWhatsAppTemplateDetails
+    {
+        public List<PHYWhatsAppTemplate> pHYWhatsAppTemplates { get; set; }
+    }
 }

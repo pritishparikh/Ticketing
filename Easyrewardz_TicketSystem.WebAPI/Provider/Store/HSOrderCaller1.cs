@@ -52,6 +52,30 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
         /// <summary>
+        /// Get Whatsapp Template
+        /// </summary>
+        /// <param name="Order"></param>
+        /// <returns></returns>
+        public List<PHYWhatsAppTemplate> GetWhatsappTemplate(IHSOrder Order, int TenantId, int UserId, string MessageName)
+        {
+            _OrderRepository = Order;
+            return _OrderRepository.GetWhatsappTemplate(TenantId, UserId, MessageName);
+        }
+
+        /// <summary>
+        /// Update Whatsapp Template
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="pHYOrderMessageTemplates"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
+        public int UpdateWhatsappTemplate(IHSOrder order, List<PHYWhatsAppTemplate> pHYWhatsAppTemplates, int TenantId)
+        {
+            _OrderRepository = order;
+            return _OrderRepository.UpdateWhatsappTemplate(pHYWhatsAppTemplates, TenantId);
+        }
+
+        /// <summary>
         /// Get Order Delivered Details
         /// </summary>
         /// <param name="order"></param>

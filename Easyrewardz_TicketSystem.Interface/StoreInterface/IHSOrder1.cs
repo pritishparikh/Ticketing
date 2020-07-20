@@ -24,12 +24,26 @@ namespace Easyrewardz_TicketSystem.Interface
         int UpdateOrderConfiguration(OrderConfiguration orderConfiguration, int modifiedBy);
 
         /// <summary>
-        /// 
+        /// Update Order Configuration Message Template
         /// </summary>
         /// <param name="orderConfiguration"></param>
         /// <param name="modifiedBy"></param>
         /// <returns></returns>
         int UpdateOrderConfigurationMessageTemplate(List<PHYOrderMessageTemplate> pHYOrderMessageTemplates, int TenantId);
+
+        /// <summary>
+        /// Get Whatsapp Template
+        /// </summary>
+        /// <returns></returns>
+        List<PHYWhatsAppTemplate> GetWhatsappTemplate(int TenantId, int UserId, string MessageName);
+
+        /// <summary>
+        /// Update Whatsapp Template
+        /// </summary>
+        /// <param name="pHYWhatsAppTemplates"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
+        int UpdateWhatsappTemplate(List<PHYWhatsAppTemplate> pHYWhatsAppTemplates, int TenantId);
 
         /// <summary>
         /// Get Order Delivered Details

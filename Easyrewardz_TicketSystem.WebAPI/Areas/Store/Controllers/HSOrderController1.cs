@@ -133,7 +133,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Update Order Configuration Message Template
+        /// </summary>
+        /// <param name="orderConfiguration"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateOrderConfigurationMessageTemplate")]
         public ResponseModel UpdateOrderConfigurationMessageTemplate([FromBody]OrderConfiguration orderConfiguration)
@@ -151,6 +155,84 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 UpdateCount = hSOrderCaller.UpdateOrderConfigurationMessageTemplate(new HSOrderService(_connectionString),
                     orderConfiguration.pHYOrderMessageTemplates, authenticate.TenantId);
+                statusCode =
+                   UpdateCount.Equals(0) ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = UpdateCount;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Whatsapp Template
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetWhatsappTemplate")]
+        public ResponseModel GetWhatsappTemplate(string MessageName)
+        {
+            List<PHYWhatsAppTemplate> pHYWhatsAppTemplates = new List<PHYWhatsAppTemplate>();
+            HSOrderCaller hSOrderCaller = new HSOrderCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                pHYWhatsAppTemplates = hSOrderCaller.GetWhatsappTemplate(new HSOrderService(_connectionString), authenticate.TenantId, authenticate.UserMasterID, MessageName);
+                statusCode =
+                   pHYWhatsAppTemplates.Count == 0 ?
+                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = pHYWhatsAppTemplates;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Update Whatsapp Template
+        /// </summary>
+        /// <param name="templateDetails"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateWhatsappTemplate")]
+        public ResponseModel UpdateWhatsappTemplate([FromBody]PHYWhatsAppTemplateDetails templateDetails)
+        {
+            int UpdateCount = 0;
+            HSOrderCaller hSOrderCaller = new HSOrderCaller();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                UpdateCount = hSOrderCaller.UpdateWhatsappTemplate(new HSOrderService(_connectionString),
+                    templateDetails.pHYWhatsAppTemplates, authenticate.TenantId);
                 statusCode =
                    UpdateCount.Equals(0) ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

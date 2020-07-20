@@ -75,21 +75,6 @@ namespace Easyrewardz_TicketSystem.Services
                         moduleConfiguration.AlertCommunicationviaWhtsup= ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"]);
                         moduleConfiguration.AlertCommunicationviaSMS= ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"]);
                         moduleConfiguration.AlertCommunicationSMSText = ds.Tables[0].Rows[0]["AlertCommunicationSMSText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["AlertCommunicationSMSText"]);
-                        //moduleConfiguration.ShoppingBagConvertToOrder = ds.Tables[0].Rows[0]["ShoppingBagConvertToOrder"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ShoppingBagConvertToOrder"]);
-                        //moduleConfiguration.ShoppingBagConvertToOrderText = ds.Tables[0].Rows[0]["ShoppingBagConvertToOrderText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["ShoppingBagConvertToOrderText"]);
-                        //moduleConfiguration.AWBAssigned = ds.Tables[0].Rows[0]["AWBAssigned"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AWBAssigned"]);
-                        //moduleConfiguration.AWBAssignedText = ds.Tables[0].Rows[0]["AWBAssignedText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["AWBAssignedText"]);
-                        //moduleConfiguration.PickupScheduled = ds.Tables[0].Rows[0]["PickupScheduled"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["PickupScheduled"]);
-                        //moduleConfiguration.PickupScheduledText = ds.Tables[0].Rows[0]["PickupScheduledText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["PickupScheduledText"]);
-                        //moduleConfiguration.Shipped = ds.Tables[0].Rows[0]["Shipped"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Shipped"]);
-                        //moduleConfiguration.ShippedText = ds.Tables[0].Rows[0]["ShippedText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["ShippedText"]);
-                        //moduleConfiguration.Delivered = ds.Tables[0].Rows[0]["Delivered"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Delivered"]);
-                        //moduleConfiguration.DeliveredText = ds.Tables[0].Rows[0]["DeliveredText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["DeliveredText"]);
-                        //moduleConfiguration.Cancel = ds.Tables[0].Rows[0]["Cancel"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Cancel"]);
-                        //moduleConfiguration.CancelText = ds.Tables[0].Rows[0]["CancelText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["CancelText"]);
-                        //moduleConfiguration.UnDeliverable = ds.Tables[0].Rows[0]["UnDeliverable"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["UnDeliverable"]);
-                        //moduleConfiguration.UnDeliverableText = ds.Tables[0].Rows[0]["UnDeliverableText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["UnDeliverableText"]);
-                        //moduleConfiguration.StoreDeliveryText = ds.Tables[0].Rows[0]["StoreDeliveryText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["StoreDeliveryText"]);
                         moduleConfiguration.PaymentTenantCodeText = ds.Tables[0].Rows[0]["TenderPayRemainingText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["TenderPayRemainingText"]);
                         moduleConfiguration.RetryCount = ds.Tables[0].Rows[0]["RetryCount"] == DBNull.Value ? 0 : Convert.ToInt16(ds.Tables[0].Rows[0]["RetryCount"]);
                         moduleConfiguration.StateFlag = ds.Tables[0].Rows[0]["StateFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["StateFlag"]);
@@ -162,20 +147,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_AlertCommunicationviaSMSText", orderConfiguration.AlertCommunicationSMSText);
                 cmd.Parameters.AddWithValue("@_EnableClickAfterValue", Convert.ToInt16(orderConfiguration.EnableClickAfterValue));
                 cmd.Parameters.AddWithValue("@_EnableClickAfterDuration", orderConfiguration.EnableClickAfterDuration);
-                cmd.Parameters.AddWithValue("@_ShoppingBagConvertToOrder", Convert.ToInt16(orderConfiguration.ShoppingBagConvertToOrder));
-                cmd.Parameters.AddWithValue("@_ShoppingBagConvertToOrderText", orderConfiguration.ShoppingBagConvertToOrderText);
-                cmd.Parameters.AddWithValue("@_AWBAssigned", Convert.ToInt16(orderConfiguration.AWBAssigned));
-                cmd.Parameters.AddWithValue("@_AWBAssignedText", orderConfiguration.AWBAssignedText);
-                cmd.Parameters.AddWithValue("@_PickupScheduled", Convert.ToInt16(orderConfiguration.PickupScheduled));
-                cmd.Parameters.AddWithValue("@_PickupScheduledText", orderConfiguration.PickupScheduledText);
-                cmd.Parameters.AddWithValue("@_Shipped", Convert.ToInt16(orderConfiguration.Shipped));
-                cmd.Parameters.AddWithValue("@_ShippedText", orderConfiguration.ShippedText);
-                cmd.Parameters.AddWithValue("@_Delivered", Convert.ToInt16(orderConfiguration.Delivered));
-                cmd.Parameters.AddWithValue("@_DeliveredText", orderConfiguration.DeliveredText);
-                cmd.Parameters.AddWithValue("@_Cancel", Convert.ToInt16(orderConfiguration.Cancel));
-                cmd.Parameters.AddWithValue("@_CancelText", orderConfiguration.CancelText);
-                cmd.Parameters.AddWithValue("@_UnDeliverable", Convert.ToInt16(orderConfiguration.UnDeliverable));
-                cmd.Parameters.AddWithValue("@_UnDeliverableText", orderConfiguration.UnDeliverableText);
                 cmd.Parameters.AddWithValue("@_StoreDeliveryText", orderConfiguration.StoreDeliveryText);
                 cmd.Parameters.AddWithValue("@_PaymentTenantCodeText", orderConfiguration.PaymentTenantCodeText);
                 cmd.Parameters.AddWithValue("@_RetryCount", orderConfiguration.RetryCount);
@@ -202,7 +173,12 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
-
+        /// <summary>
+        /// Update Order Configuration Message Template
+        /// </summary>
+        /// <param name="pHYOrderMessageTemplates"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
         public int UpdateOrderConfigurationMessageTemplate(List<PHYOrderMessageTemplate> pHYOrderMessageTemplates, int TenantId)
         {
             int UpdateCount = 0;
@@ -225,7 +201,7 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd.Parameters.AddWithValue("@_StoreDeliveryDescription", pHYOrderMessageTemplates[i].StoreDeliveryDescription);
 
                     cmd.CommandType = CommandType.StoredProcedure;
-                    UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+                    UpdateCount += Convert.ToInt32(cmd.ExecuteNonQuery());
                 }
 
             }
@@ -244,6 +220,113 @@ namespace Easyrewardz_TicketSystem.Services
             return UpdateCount;
         }
 
+        /// <summary>
+        /// Get Whatsapp Template
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="MessageName"></param>
+        /// <returns></returns>
+        public List<PHYWhatsAppTemplate> GetWhatsappTemplate(int TenantId, int UserId, string MessageName)
+        {
+            DataSet ds = new DataSet();
+            List<PHYWhatsAppTemplate> pHYWhatsAppTemplates = new List<PHYWhatsAppTemplate>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYGetWhatsupTemplate", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                cmd.Parameters.AddWithValue("@_TenantId", TenantId);
+                cmd.Parameters.AddWithValue("@_UserID", UserId);
+                cmd.Parameters.AddWithValue("@_MessageName", MessageName);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        PHYWhatsAppTemplate obj = new PHYWhatsAppTemplate
+                        {
+                            ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            MessageName = ds.Tables[0].Rows[i]["MessageName"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["MessageName"]),
+                            TemplateName = ds.Tables[0].Rows[i]["TemplateName"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["TemplateName"]),
+                            Status = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["Status"])
+                        };
+
+                        pHYWhatsAppTemplates.Add(obj);
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return pHYWhatsAppTemplates;
+        }
+
+        /// <summary>
+        /// Update Whatsapp Template
+        /// </summary>
+        /// <param name="pHYWhatsAppTemplates"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
+        public int UpdateWhatsappTemplate(List<PHYWhatsAppTemplate> pHYWhatsAppTemplates, int TenantId)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+
+                for (int i = 0; i < pHYWhatsAppTemplates.Count; i++)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateWhatsupTemplate", conn)
+                    {
+                        Connection = conn
+                    };
+
+                    cmd.Parameters.AddWithValue("@_TenantID", TenantId);
+                    cmd.Parameters.AddWithValue("@_TemplateId", pHYWhatsAppTemplates[i].ID);
+                    cmd.Parameters.AddWithValue("@_TemplateName", pHYWhatsAppTemplates[i].TemplateName);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    UpdateCount += Convert.ToInt32(cmd.ExecuteNonQuery());
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return UpdateCount;
+        }
         /// <summary>
         /// Get Order Delivered Details
         /// </summary>
