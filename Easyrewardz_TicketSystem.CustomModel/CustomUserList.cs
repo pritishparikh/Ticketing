@@ -43,6 +43,6 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public int AssignID { get; set; }
         public int ReporteeDesignationID { get; set; }
 
-
+        public string ReporteeDesignation { get; set; }
     }
 }
