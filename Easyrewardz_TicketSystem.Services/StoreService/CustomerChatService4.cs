@@ -556,7 +556,7 @@ namespace Easyrewardz_TicketSystem.Services
                         PhyOrder.address = Buy.CustomerAddress;
 
                         string Json = JsonConvert.SerializeObject(PhyOrder);
-                        ClientAPIresponse = CommonService.SendApiRequestToken(ClientAPIURL+ "api​/ShoppingBag​/AddOrderinPhygital", Json);
+                        ClientAPIresponse = CommonService.SendApiRequestToken(ClientAPIURL+ "api/ShoppingBag/AddOrderinPhygital", Json);
 
                         if(!string.IsNullOrEmpty(ClientAPIresponse))
                         {
