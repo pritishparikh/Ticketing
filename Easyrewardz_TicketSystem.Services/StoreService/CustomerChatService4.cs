@@ -547,22 +547,32 @@ namespace Easyrewardz_TicketSystem.Services
                         PhyOrder.storeCode = Store_Code;
                         PhyOrder.billNo = "";
                         PhyOrder.date = DateTime.Now.ToString();
-                        PhyOrder.customerName    = "";
+                        PhyOrder.customerName  = "";
                         PhyOrder.customerMobile = Buy.CustomerMobile;
                         PhyOrder.amount = TotalAmount;
                         PhyOrder.paymentCollected = "No";
-                        PhyOrder.deleveryType = " ER Phygital";
+                        PhyOrder.tender = "ER Phygital";
+                        PhyOrder.deleveryType = "Store Delivery";
                         PhyOrder.address = Buy.CustomerAddress;
 
                         string Json = JsonConvert.SerializeObject(PhyOrder);
                         ClientAPIresponse = CommonService.SendApiRequestToken(ClientAPIURL+ "api​/ShoppingBag​/AddOrderinPhygital", Json);
 
-                        Result = 1; // remove after  api issues solved
                         if(!string.IsNullOrEmpty(ClientAPIresponse))
                         {
+                            var Response = JsonConvert.DeserializeObject<Dictionary<string, string>>(ClientAPIresponse);
+
+                            if (Response["statusCode"].Equals("200"))
+                            {
+                                Result = 1;
+                            }
 
                         }
                     }
+                }
+                else
+                {
+                    Result = 1;
                 }
             }
             catch (Exception)
