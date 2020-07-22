@@ -65,7 +65,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 SearchParams.TenantID = authenticate.TenantId; // add tenantID to request
                                                                // searchparams.curentUserId = authenticate.UserMasterID; // add currentUserID to request
 
-                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
+                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId, authenticate.UserMasterID);
 
                 resultCount = dbsearchMaster.StoreReportSearch(new StoreReportService(_connectioSting), SearchParams, StoreUserList);
 
@@ -109,7 +109,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
+                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId,authenticate.UserMasterID);
                 CSVReport = dbsearchMaster.DownloadStoreReportSearch(new StoreReportService(_connectioSting), ReportID, authenticate.UserMasterID, authenticate.TenantId, StoreUserList);
 
                 appRoot = Directory.GetCurrentDirectory();
@@ -169,7 +169,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
 
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId);
+                StoreUserList = new StoreUserService(_connectioSting).GetStoreUserList(authenticate.TenantId, authenticate.UserMasterID);
                 IsExists = dbsearchMaster.CheckIfReportNameExists(new StoreReportService(_connectioSting), ReportID, ReportName, authenticate.TenantId);
 
                 StatusCode = IsExists ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.RecordNotFound;
