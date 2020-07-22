@@ -283,7 +283,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        public List<AgentRecentChatHistory> GetAgentList(int TenantID)
+        public List<AgentRecentChatHistory> GetAgentList(int TenantID, int UserID)
         {
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
@@ -297,6 +297,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd = new MySqlCommand("SP_HSGetStoreManagerList", conn);
                 cmd.Parameters.AddWithValue("@_tenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
                 cmd.Connection = conn;
 
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -315,7 +316,7 @@ namespace Easyrewardz_TicketSystem.Services
                             {
                               
                                 StoreManagerID = dr["StoreManagerId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreManagerId"]),
-                                AgentName = dr["StoreManagerName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreManagerName"]),
+                                AgentName = dr["StoreManagerName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreManagerName"]).Trim(),
                                
 
                             };

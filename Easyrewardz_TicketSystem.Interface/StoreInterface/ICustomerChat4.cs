@@ -18,6 +18,8 @@ namespace Easyrewardz_TicketSystem.Interface
         int AddProductsToWishlist(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes, bool IsFromRecommendation, int UserID);
 
 
+        int BuyProductsOnChat(ChatCustomerBuyModel Buy, string ClientAPIURL);
+
 
         #region Client Exposed API
 

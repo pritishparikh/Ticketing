@@ -43,6 +43,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _customerChat.AddProductsToWishlist(TenantId, ProgramCode, CustomerID, CustomerMobile, ItemCodes, IsFromRecommendation , UserID);
         }
 
+        public int BuyProductsOnChat(ICustomerChat customerChat, ChatCustomerBuyModel Buy, string ClientAPIURL)
+        {
+            _customerChat = customerChat;
+            return _customerChat.BuyProductsOnChat(Buy, ClientAPIURL);
+        }
+
+
         #region Client Exposed API
 
         public int CustomerAddToShoppingBag(ICustomerChat customerChat, ClientChatAddProduct Item)
