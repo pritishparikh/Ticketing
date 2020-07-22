@@ -350,7 +350,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get  Store User List
         /// </summary>
         /// <param name="tenantID"></param>
-        public List<StoreUserListing> GetStoreUserList(int tenantID)
+        public List<StoreUserListing> GetStoreUserList(int tenantID, int UserID)
         {
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
@@ -365,6 +365,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetStoreUserList", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
+                cmd1.Parameters.AddWithValue("@_userID", UserID);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
