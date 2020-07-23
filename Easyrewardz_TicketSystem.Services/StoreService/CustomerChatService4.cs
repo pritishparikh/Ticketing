@@ -483,7 +483,7 @@ namespace Easyrewardz_TicketSystem.Services
             string ClientAPIresponse = string.Empty;
             PhyAddOrderModel PhyOrder = new PhyAddOrderModel();
             List<ItemDetail> ItemDetails = new List<ItemDetail>();
-            string Store_Code = string.Empty;
+            string Store_Code = string.Empty; string CustomerName = string.Empty;
             double TotalAmount = 0;
             try
             {
@@ -535,6 +535,7 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             TotalAmount=ds.Tables[1].Rows[0]["TotalAmount"] == DBNull.Value ? 0 : Convert.ToDouble(ds.Tables[1].Rows[0]["TotalAmount"]);
                             Store_Code = ds.Tables[1].Rows[0]["Store_Code"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["Store_Code"]);
+                            CustomerName = ds.Tables[1].Rows[0]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["CustomerName"]);
                         }
                        
                     }
@@ -547,7 +548,7 @@ namespace Easyrewardz_TicketSystem.Services
                         PhyOrder.storeCode = Store_Code;
                         PhyOrder.billNo = "";
                         PhyOrder.date = DateTime.Now.ToString();
-                        PhyOrder.customerName  = "";
+                        PhyOrder.customerName  = CustomerName;
                         PhyOrder.customerMobile = Buy.CustomerMobile;
                         PhyOrder.amount = TotalAmount;
                         PhyOrder.paymentCollected = "No";
