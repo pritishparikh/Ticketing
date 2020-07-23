@@ -799,7 +799,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetForgetPassowrdMailContent", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_StoreGetForgetPassowrdMailContent", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_TenantId", TenantId);
                 cmd1.Parameters.AddWithValue("@_url", url);
