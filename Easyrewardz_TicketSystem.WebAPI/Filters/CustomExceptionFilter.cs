@@ -52,7 +52,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
             var exceptionType = context.Exception.GetType();
             context.ExceptionHandled = true;
 
-            /*
+
             ErrorLogCaller errorLogCaller = new ErrorLogCaller();
             ErrorLog errorLogs = new ErrorLog
             {
@@ -66,7 +66,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
             };
             int result = errorLogCaller.AddErrorLog(new ErrorLogging(_ErconnectioSting), errorLogs);
 
-            */
+
             try
             {
                 ElasticErrorLogModel Elastic = new ElasticErrorLogModel
@@ -98,8 +98,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
         }
         public void OnExceptioninanyclass(ErrorLog errorLog )
         {
-            // ErrorLogCaller errorLogCaller = new ErrorLogCaller();
-            // int result = errorLogCaller.AddErrorLog(new ErrorLogging(_ErconnectioSting), errorLog);
+            ErrorLogCaller errorLogCaller = new ErrorLogCaller();
+            int result = errorLogCaller.AddErrorLog(new ErrorLogging(_ErconnectioSting), errorLog);
             try
             {
                 string ClientAPIResponse = string.Empty;
