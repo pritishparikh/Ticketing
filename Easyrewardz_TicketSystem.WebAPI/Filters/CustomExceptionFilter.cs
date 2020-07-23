@@ -20,7 +20,7 @@ using Newtonsoft.Json;
 namespace Easyrewardz_TicketSystem.WebAPI.Filters
 {
     //[Route("api/[controller]")]
-   // [ApiController]
+    // [ApiController]
     //[Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class CustomExceptionFilter : IExceptionFilter
     {
@@ -30,6 +30,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
         private readonly string _ErconnectioSting;
         private readonly string _radisCacheServerAddress;
         private readonly string _ClientAPIUrl;
+        private readonly bool _SeeErrorLog;
         #endregion
         public CustomExceptionFilter(IConfiguration _iConfig)
         {
@@ -38,6 +39,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
             _ErconnectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessErMasterMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
             _ClientAPIUrl = configuration.GetValue<string>("ClientAPIURL");
+            _SeeErrorLog = configuration.GetValue<bool>("ErrorLog");
         }
         public void OnException(ExceptionContext context)
         {
@@ -52,23 +54,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
             var exceptionType = context.Exception.GetType();
             context.ExceptionHandled = true;
 
-            /*
-            ErrorLogCaller errorLogCaller = new ErrorLogCaller();
-            ErrorLog errorLogs = new ErrorLog
-            {
-                ActionName = actionName,
-                ControllerName = controllerName,
-                TenantID = authenticate.TenantId,
-                UserID = authenticate.UserMasterID,
-                Exceptions = context.Exception.StackTrace,
-                MessageException = context.Exception.Message,
-                IPAddress = Convert.ToString(context.HttpContext.Connection.RemoteIpAddress)
-            };
-            int result = errorLogCaller.AddErrorLog(new ErrorLogging(_ErconnectioSting), errorLogs);
-
-            */
             try
             {
+
+                if (_SeeErrorLog)
+                {
+                    ErrorLogCaller errorLogCaller = new ErrorLogCaller();
+                    ErrorLog errorLogs = new ErrorLog
+                    {
+                        ActionName = actionName,
+                        ControllerName = controllerName,
+                        TenantID = authenticate.TenantId,
+                        UserID = authenticate.UserMasterID,
+                        Exceptions = context.Exception.StackTrace,
+                        MessageException = context.Exception.Message,
+                        IPAddress = Convert.ToString(context.HttpContext.Connection.RemoteIpAddress)
+                    };
+                    int result = errorLogCaller.AddErrorLog(new ErrorLogging(_ErconnectioSting), errorLogs);
+                }
+
                 ElasticErrorLogModel Elastic = new ElasticErrorLogModel
                 {
                     applicationId = "2",
@@ -84,11 +88,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                 ClientAPIResponse = CommonService.SendApiRequest(_ClientAPIUrl + "api/InsertApplicationLog", JsonConvert.SerializeObject(Elastic));
 
             }
-            catch(Exception)
+            catch (Exception)
             {
 
             }
-          
+
             context.Result = new RedirectToRouteResult(
              new RouteValueDictionary
              {
@@ -96,12 +100,17 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                     { "action", "ReturnException" }
              });
         }
-        public void OnExceptioninanyclass(ErrorLog errorLog )
+        public void OnExceptioninanyclass(ErrorLog errorLog)
         {
-            // ErrorLogCaller errorLogCaller = new ErrorLogCaller();
-            // int result = errorLogCaller.AddErrorLog(new ErrorLogging(_ErconnectioSting), errorLog);
+           
             try
             {
+                if (_SeeErrorLog)
+                {
+                    ErrorLogCaller errorLogCaller = new ErrorLogCaller();
+                    int result = errorLogCaller.AddErrorLog(new ErrorLogging(_ErconnectioSting), errorLog);
+                }
+
                 string ClientAPIResponse = string.Empty;
                 ElasticErrorLogModel Elastic = new ElasticErrorLogModel
                 {
