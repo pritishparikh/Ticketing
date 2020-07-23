@@ -837,6 +837,7 @@ namespace Easyrewardz_TicketSystem.Services
                             StatusId = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]),
                             StatusName = ds.Tables[0].Rows[i]["StatusName"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[i]["StatusName"]),
                             RetryCount = ds.Tables[0].Rows[i]["RetryCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["RetryCount"]),
+                            IsCancelled = ds.Tables[0].Rows[i]["IsCancelled"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsCancelled"]),
                             orderReturnsItems = new List<OrderReturnsItem>()
                         };
 
@@ -1156,9 +1157,14 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-                if(cancel == true)
+                if(cancel)
                 {
                     result = SmsWhatsUpDataSend(TenantId, UserId, ProgramCode, OrderId, ClientAPIURL, "Cancelled");
+
+                    if (result > 0)
+                    {
+                        UpdateCancelSMSWhatsAppSend(OrderId);
+                    }
                 }
                
             }
@@ -1169,6 +1175,31 @@ namespace Easyrewardz_TicketSystem.Services
 
             return result;
         }
+
+
+        public int UpdateCancelSMSWhatsAppSend(int OrderId)
+        {
+            int UpdateCount = 0;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateCancelSMSWhatsAppSendFlag", conn)
+                {
+                    Connection = conn
+                };
+                cmd.Parameters.AddWithValue("@_OrderId", OrderId);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return UpdateCount;
+        }
+
 
         /// <summary>
         /// Update On Return Retry
