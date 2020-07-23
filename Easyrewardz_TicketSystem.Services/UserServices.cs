@@ -423,6 +423,7 @@ namespace Easyrewardz_TicketSystem.Services
                         user.IssueType_Name = ds.Tables[0].Rows[i]["IssueType_Name"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueType_Name"]);
                         user.CrmRoleName= ds.Tables[0].Rows[i]["RoleName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RoleName"]);
                         user.ReportTo= ds.Tables[0].Rows[i]["ReportTo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReportTo"]);
+                        user.ReporteeDesignation = ds.Tables[0].Rows[i]["ReporteeDesignation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReporteeDesignation"]);
                         user.AssignEscalation= ds.Tables[0].Rows[i]["AssignEscalation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignEscalation"]);
                         user.AssignName = ds.Tables[0].Rows[i]["AssignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);
                         users.Add(user);

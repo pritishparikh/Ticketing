@@ -475,6 +475,126 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
+        public int BuyProductsOnChat(ChatCustomerBuyModel Buy,string ClientAPIURL)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            int Result = 0;
+            string ClientAPIresponse = string.Empty;
+            PhyAddOrderModel PhyOrder = new PhyAddOrderModel();
+            List<ItemDetail> ItemDetails = new List<ItemDetail>();
+            string Store_Code = string.Empty; string CustomerName = string.Empty;
+            double TotalAmount = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+
+                cmd = new MySqlCommand("SP_HSBuyProductsOnChat", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", Buy.TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", Buy.ProgramCode);
+                cmd.Parameters.AddWithValue("@_CustomerID", Buy.CustomerID);
+                cmd.Parameters.AddWithValue("@_MobileNo", Buy.CustomerMobile);
+                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(Buy.ItemCodes) ? "" : Buy.ItemCodes);
+                cmd.Parameters.AddWithValue("@_IsDirectBuy",   Convert.ToInt16(Buy.IsDirectBuy) );
+                cmd.Parameters.AddWithValue("@_IsFromRecommendation", Convert.ToInt16(Buy.IsFromRecommendation));
+                cmd.Parameters.AddWithValue("@User_ID", Buy.UserID);
+                
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (!Buy.IsDirectBuy)
+                {
+                    if (ds != null && ds.Tables != null)
+                    {
+                        if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in ds.Tables[0].Rows)
+                            {
+                                ItemDetail obj = new ItemDetail()
+                                {
+                                    itemID = dr["ItemCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ItemCode"]),
+                                    itemName = dr["ItemName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ItemName"]),
+                                    itemPrice = dr["Price"] == DBNull.Value ? "0" : Convert.ToString(dr["Price"]),
+                                    quantity = "1",
+                                    category = dr["Category"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Category"]),
+                                };
+
+                                ItemDetails.Add(obj);
+                            }
+                        }
+
+                        if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                        {
+                            TotalAmount=ds.Tables[1].Rows[0]["TotalAmount"] == DBNull.Value ? 0 : Convert.ToDouble(ds.Tables[1].Rows[0]["TotalAmount"]);
+                            Store_Code = ds.Tables[1].Rows[0]["Store_Code"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["Store_Code"]);
+                            CustomerName = ds.Tables[1].Rows[0]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["CustomerName"]);
+                        }
+                       
+                    }
+
+                    if(ItemDetails.Count > 0)
+                    {
+                        PhyOrder.itemDetails = ItemDetails;
+                        PhyOrder.source = "BELL";
+                        PhyOrder.progCode = Buy.ProgramCode;
+                        PhyOrder.storeCode = Store_Code;
+                        PhyOrder.billNo = "";
+                        PhyOrder.date = DateTime.Now.ToString();
+                        PhyOrder.customerName  = CustomerName;
+                        PhyOrder.customerMobile = Buy.CustomerMobile;
+                        PhyOrder.amount = TotalAmount;
+                        PhyOrder.paymentCollected = "No";
+                        PhyOrder.tender = "ER Phygital";
+                        PhyOrder.deleveryType = "Store Delivery";
+                        PhyOrder.address = Buy.CustomerAddress;
+
+                        string Json = JsonConvert.SerializeObject(PhyOrder);
+                        ClientAPIresponse = CommonService.SendApiRequestToken(ClientAPIURL+ "api/ShoppingBag/AddOrderinPhygital", Json);
+
+                        if(!string.IsNullOrEmpty(ClientAPIresponse))
+                        {
+                            var Response = JsonConvert.DeserializeObject<Dictionary<string, string>>(ClientAPIresponse);
+
+                            if (Response["statusCode"].Equals("200"))
+                            {
+                                Result = 1;
+                            }
+
+                        }
+                    }
+                }
+                else
+                {
+                    Result = 1;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return Result;
+        }
+
         #region Client Exposed API
 
         /// <summary>

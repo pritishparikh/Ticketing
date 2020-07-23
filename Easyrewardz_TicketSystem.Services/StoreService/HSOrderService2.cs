@@ -560,7 +560,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         if (getWhatsappMessageDetailsResponseList.Count > 0)
                         {
-                            getWhatsappMessageDetailsResponse = getWhatsappMessageDetailsResponseList.Where(x => x.TemplateName == whatsapptemplate).First();
+                            getWhatsappMessageDetailsResponse = getWhatsappMessageDetailsResponseList.Where(x => x.TemplateName == whatsapptemplate).FirstOrDefault();
                         }
                     }
 
@@ -583,6 +583,10 @@ namespace Easyrewardz_TicketSystem.Services
                             strpostionNumber = strpostionNumber.TrimEnd(',');
                             strpostionName = strpostionName.TrimEnd(',');
                         }
+                    }
+                    else
+                    {
+                        getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
                     }
                 }
                 catch (Exception)

@@ -53,8 +53,9 @@ namespace Easyrewardz_TicketSystem.Interface
         /// GetAgentList
         /// </summary>
         /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
-        List<AgentRecentChatHistory> GetAgentList(int TenantID);
+        List<AgentRecentChatHistory> GetAgentList(int TenantID, int UserID);
 
         /// <summary>
         /// GetCardImageUploadlog
