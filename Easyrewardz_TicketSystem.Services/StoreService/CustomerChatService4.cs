@@ -392,7 +392,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", CustomerMobile);
-                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(ItemCodes) ? "" : ItemCodes);
+                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(ItemCodes) ? "" : ItemCodes.TrimEnd(','));
                 cmd.Parameters.AddWithValue("@_Action","shoppingbag");
                 cmd.Parameters.AddWithValue("@_IsFromRecommendation", Convert.ToInt16(IsFromRecommendation));
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
@@ -447,7 +447,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", CustomerMobile);
-                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(ItemCodes) ? "" : ItemCodes);
+                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(ItemCodes) ? "" : ItemCodes.TrimEnd(','));
                 cmd.Parameters.AddWithValue("@_Action", "wishlist");
                 cmd.Parameters.AddWithValue("@_IsFromRecommendation", Convert.ToInt16(IsFromRecommendation));
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
@@ -499,7 +499,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ProgramCode", Buy.ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerID", Buy.CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", Buy.CustomerMobile);
-                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(Buy.ItemCodes) ? "" : Buy.ItemCodes);
+                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(Buy.ItemCodes) ? "" : Buy.ItemCodes.TrimEnd(','));
                 cmd.Parameters.AddWithValue("@_IsDirectBuy",   Convert.ToInt16(Buy.IsDirectBuy) );
                 cmd.Parameters.AddWithValue("@_IsFromRecommendation", Convert.ToInt16(Buy.IsFromRecommendation));
                 cmd.Parameters.AddWithValue("@User_ID", Buy.UserID);
