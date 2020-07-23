@@ -30,7 +30,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateChatSession")]
-        public ResponseModel UpdateChatSession(int ChatSessionValue, string ChatSessionDuration, int ChatDisplayValue, string ChatDisplayDuration,int ChatCharLimit)
+        public ResponseModel UpdateChatSession([FromBody] ChatSessionModel Chat)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int result = 0;
@@ -42,11 +42,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
+                Chat.TenantID = authenticate.TenantId;
+                Chat.ProgramCode = authenticate.ProgramCode;
+                Chat.ModifiedBy = authenticate.UserMasterID;
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                result = customerChatCaller.UpdateChatSession(new CustomerChatService(_connectionString),authenticate.TenantId,authenticate.ProgramCode,
-                    ChatSessionValue,  ChatSessionDuration,  ChatDisplayValue, ChatDisplayDuration, ChatCharLimit, authenticate.UserMasterID);
+                result = customerChatCaller.UpdateChatSession(new CustomerChatService(_connectionString), Chat);
 
                 statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);

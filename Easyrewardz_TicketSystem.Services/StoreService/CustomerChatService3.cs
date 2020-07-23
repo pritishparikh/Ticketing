@@ -20,7 +20,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ChatDisplayValue"></param>
         /// <param name="ChatDisplayDuration"></param>
         /// <returns></returns>
-        public int UpdateChatSession(int TenantId, string ProgramCode, int ChatSessionValue, string ChatSessionDuration, int ChatDisplayValue, string ChatDisplayDuration, int ChatCharLimit, int ModifiedBy)
+        public int UpdateChatSession(ChatSessionModel Chat)
         {
             int success = 0;
             try
@@ -33,14 +33,23 @@ namespace Easyrewardz_TicketSystem.Services
                     CommandText = "SP_UpdateChatSessionMaster"
                 };
 
-                cmd.Parameters.AddWithValue("@_TenantID", TenantId);
-                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
-                cmd.Parameters.AddWithValue("@_ChatSessionValue", ChatSessionValue);
-                cmd.Parameters.AddWithValue("@_ChatSessionDuration", ChatSessionDuration);
-                cmd.Parameters.AddWithValue("@_ChatDisplayValue", ChatDisplayValue);
-                cmd.Parameters.AddWithValue("@_ChatDisplayDuration", ChatDisplayDuration); 
-                cmd.Parameters.AddWithValue("@_ChatCharLimit", ChatCharLimit);
-                cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
+                cmd.Parameters.AddWithValue("@_TenantID", Chat.TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", Chat.ProgramCode);
+                cmd.Parameters.AddWithValue("@_ChatSessionValue", Chat.ChatSessionValue);
+                cmd.Parameters.AddWithValue("@_ChatSessionDuration", Chat.ChatSessionDuration);
+                cmd.Parameters.AddWithValue("@_ChatDisplayValue", Chat.ChatDisplayValue);
+                cmd.Parameters.AddWithValue("@_ChatDisplayDuration", Chat.ChatDisplayDuration); 
+                cmd.Parameters.AddWithValue("@_ChatCharLimit", Chat.ChatCharLimit);
+
+                cmd.Parameters.AddWithValue("@_Message",Convert.ToInt16(Chat.Message));
+                cmd.Parameters.AddWithValue("@_Card", Convert.ToInt16(Chat.Card));
+                cmd.Parameters.AddWithValue("@_RecommendedList", Convert.ToInt16(Chat.RecommendedList));
+                cmd.Parameters.AddWithValue("@_ScheduleVisit", Convert.ToInt16(Chat.ScheduleVisit));
+                cmd.Parameters.AddWithValue("@_PaymentLink", Convert.ToInt16(Chat.PaymentLink));
+                cmd.Parameters.AddWithValue("@_CustomerProfile", Convert.ToInt16(Chat.CustomerProfile));
+                cmd.Parameters.AddWithValue("@_CustomerProduct", Convert.ToInt16(Chat.CustomerProduct));
+
+                cmd.Parameters.AddWithValue("@_ModifiedBy", Chat.ModifiedBy);
 
                 success = Convert.ToInt32(cmd.ExecuteScalar());
             }
@@ -100,6 +109,14 @@ namespace Easyrewardz_TicketSystem.Services
                         ChatSession.ChatDisplayValue = ds.Tables[0].Rows[0]["ChatDisplayValue"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["ChatDisplayValue"]);
                         ChatSession.ChatDisplayDuration = ds.Tables[0].Rows[0]["ChatDisplayDuration"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ChatDisplayDuration"]);
                         ChatSession.ChatCharLimit= ds.Tables[0].Rows[0]["ChatTextLimit"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["ChatTextLimit"]);
+
+                        ChatSession.Message = ds.Tables[0].Rows[0]["Message"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Message"]);
+                        ChatSession.Card = ds.Tables[0].Rows[0]["Card"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["Card"]);
+                        ChatSession.RecommendedList = ds.Tables[0].Rows[0]["RecommendedList"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["RecommendedList"]);
+                        ChatSession.ScheduleVisit = ds.Tables[0].Rows[0]["ScheduleVisit"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ScheduleVisit"]);
+                        ChatSession.PaymentLink = ds.Tables[0].Rows[0]["PaymentLink"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["PaymentLink"]);
+                        ChatSession.CustomerProfile = ds.Tables[0].Rows[0]["CustomerProfile"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CustomerProfile"]);
+                        ChatSession.CustomerProfile = ds.Tables[0].Rows[0]["CustomerProfile"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CustomerProfile"]);
                     }
                 }
             }            

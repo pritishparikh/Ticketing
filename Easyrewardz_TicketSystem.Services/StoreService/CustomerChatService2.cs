@@ -797,6 +797,7 @@ namespace Easyrewardz_TicketSystem.Services
                         SoundSetting.NewMessageSoundVolume = ds.Tables[0].Rows[0]["NewMessageVolume"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["NewMessageVolume"]);
                         SoundSetting.IsNotiNewChat = ds.Tables[0].Rows[0]["IsNotiNewChat"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["IsNotiNewChat"]);
                         SoundSetting.IsNotiNewMessage = ds.Tables[0].Rows[0]["IsNotiNewMessage"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["IsNotiNewMessage"]);
+                        SoundSetting.NotificationTime = ds.Tables[0].Rows[0]["NotificationTime"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["NotificationTime"]);
                         SoundSetting.IsDefault = ds.Tables[0].Rows[0]["IsDefault"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["IsDefault"]);
                         SoundSetting.CreatedBy = ds.Tables[0].Rows[0]["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["CreatedBy"]);
                         SoundSetting.CreatedByName = ds.Tables[0].Rows[0]["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["CreatedByName"]);
@@ -866,6 +867,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_NewMessageVolume", Setting.NewMessageSoundVolume);
                 cmd.Parameters.AddWithValue("@_IsNotiNewChat",Convert.ToInt16(Setting.IsNotiNewChat));
                 cmd.Parameters.AddWithValue("@_IsNotiNewMessage", Convert.ToInt16(Setting.IsNotiNewMessage));
+                cmd.Parameters.AddWithValue("@_NotificationTime", Convert.ToInt16(Setting.NotificationTime));
                 cmd.Parameters.AddWithValue("@_IsDefault", Convert.ToInt16(Setting.IsDefault));
                 cmd.Parameters.AddWithValue("@_ModifiedBy", Setting.ModifyBy);
 
