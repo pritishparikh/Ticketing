@@ -126,15 +126,10 @@ namespace Easyrewardz_TicketSystem.Model
         public bool PaymentLink { get; set; }
 
         /// <summary>
-        ///Is CustomerProfile Enabled
+        ///Is CustomerProfile and CustomerProduct Enabled
         /// </summary>
-        public bool CustomerProfile { get; set; }
+        public bool ChatProfileProduct { get; set; }
 
-
-        /// <summary>
-        ///Is CustomerProduct Enabled
-        /// </summary>
-        public bool CustomerProduct { get; set; }
 
 
 
