@@ -74,6 +74,7 @@ namespace Easyrewardz_TicketSystem.Services
                             EmailFlag = ds.Tables[0].Rows[i]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["EmailFlag"]),
                             MessengerFlag = ds.Tables[0].Rows[i]["MessengerFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["MessengerFlag"]),
                             BotFlag = ds.Tables[0].Rows[i]["BotFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["BotFlag"]),
+                            IsCustomerChating = ds.Tables[0].Rows[i]["IsCustomerChating"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsCustomerChating"]),
                             HSCampaignResponseList = ds.Tables[1].AsEnumerable().Select(r => new HSCampaignResponse()
                             {
                                 ResponseID = r.Field<object>("ResponseID") == DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("ResponseID")),

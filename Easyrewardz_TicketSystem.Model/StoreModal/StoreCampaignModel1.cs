@@ -82,7 +82,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// BotFlag
         /// </summary>
         public bool BotFlag { get; set; }
-
+        /// <summary>
+        /// BotFlag
+        /// </summary>
+        public bool IsCustomerChating { get; set; }
         /// <summary>
         /// HSCampaignResponseList
         /// </summary>
