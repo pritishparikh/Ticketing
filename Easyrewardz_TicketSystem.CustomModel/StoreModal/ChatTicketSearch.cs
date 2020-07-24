@@ -35,5 +35,15 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// User ID
         /// </summary>
         public int UserID { get; set; }
+
+        /// <summary>
+        /// MobileNumber
+        /// </summary>
+        public string MobileNumber { get; set; }
+
+        /// <summary>
+        /// ChatDate
+        /// </summary>
+        public string ChatLastDate { get; set; }
     }
 }

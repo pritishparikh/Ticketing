@@ -72,9 +72,24 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string CreationOn { get; set; }
 
         /// <summary>
+        /// Creation Ago
+        /// </summary>
+        public string CreationAgo { get; set; }
+
+        /// <summary>
         /// Assign To
         /// </summary>
         public string AssignTo { get; set; }
+
+        /// <summary>
+        /// Assign On
+        /// </summary>
+        public string AssignOn { get; set; }
+
+        /// <summary>
+        /// Modify On
+        /// </summary>
+        public string ModifyOn { get; set; }
 
         /// <summary>
         /// Status

@@ -105,5 +105,17 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="searchparams"></param>
         /// <returns></returns>
         int CreateChatTicket(CreateChatTickets createChatTickets);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="statusID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="userMasterID"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
+        List<CustomGetChatTickets> GetTicketsByCustomerOnLoad(int statusID, int tenantID, int userMasterID, string programCode);
+
+        List<CustomGetChatTickets> GetTicketsByCustomerOnSearch(ChatTicketSearch searchModel);
     }
 }

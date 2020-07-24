@@ -665,5 +665,132 @@ namespace Easyrewardz_TicketSystem.Services
 
             return ticketCount;
         }
+
+
+        public List<CustomGetChatTickets> GetTicketsByCustomerOnLoad(int statusID, int tenantID, int userMasterID, string programCode)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<CustomGetChatTickets> lstGetChatTickets = new List<CustomGetChatTickets>();
+            List<string> countList = new List<string>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand sqlcmd = new MySqlCommand("SP_HSGetChatTicketsByCustomer", conn);
+                sqlcmd.CommandType = CommandType.StoredProcedure;
+
+                sqlcmd.Parameters.AddWithValue("Status_ID", statusID);
+                sqlcmd.Parameters.AddWithValue("Tenant_ID", tenantID);
+                sqlcmd.Parameters.AddWithValue("UserMaster_ID", userMasterID);
+                sqlcmd.Parameters.AddWithValue("program_Code", programCode);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = sqlcmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomGetChatTickets customGetChatTickets = new CustomGetChatTickets
+                        {
+                            TicketID = ds.Tables[0].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]),
+                            TicketStatus = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TicketStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"])),
+                            TicketTitle = ds.Tables[0].Rows[i]["TicketTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"]),
+                            Category = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]),
+                            SubCategory = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]),
+                            IssueType = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]),
+                            AssignTo = ds.Tables[0].Rows[i]["Assignee"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignee"]),
+                            Priority = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]),
+                            CreatedOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
+                            CreatedDate = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifyBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifyBy"]),
+                            UpdatedDate = ds.Tables[0].Rows[i]["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]),
+                        };
+
+                        lstGetChatTickets.Add(customGetChatTickets);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return lstGetChatTickets;
+        }
+
+
+        public List<CustomGetChatTickets> GetTicketsByCustomerOnSearch(ChatTicketSearch searchModel)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<CustomGetChatTickets> lstGetChatTickets = new List<CustomGetChatTickets>();
+            List<string> countList = new List<string>();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand sqlcmd = new MySqlCommand("SP_HSSearchChatTicketByCustomer", conn);
+                sqlcmd.CommandType = CommandType.StoredProcedure;
+
+                sqlcmd.Parameters.AddWithValue("Category_Id", searchModel.CategoryId);
+                sqlcmd.Parameters.AddWithValue("SubCategory_Id", searchModel.SubCategoryId);
+                sqlcmd.Parameters.AddWithValue("IssueType_Id", searchModel.IssueTypeId);
+                sqlcmd.Parameters.AddWithValue("TicketStatus_ID", searchModel.TicketStatusID);
+                sqlcmd.Parameters.AddWithValue("Mobile_No", searchModel.MobileNumber);
+                sqlcmd.Parameters.AddWithValue("Chat_Last_Date", searchModel.ChatLastDate);
+                sqlcmd.Parameters.AddWithValue("Tenant_ID", searchModel.TenantID);
+                sqlcmd.Parameters.AddWithValue("User_ID", searchModel.UserID);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = sqlcmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomGetChatTickets customGetChatTickets = new CustomGetChatTickets
+                        {
+                            TicketID = ds.Tables[0].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]),
+                            TicketStatus = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TicketStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"])),
+                            TicketTitle = ds.Tables[0].Rows[i]["TicketTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketTitle"]),
+                            TicketDescription = ds.Tables[0].Rows[i]["TicketDescription"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketDescription"]),
+                            Category = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]),
+                            SubCategory = ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]),
+                            IssueType = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]),
+                            AssignTo = ds.Tables[0].Rows[i]["Assignee"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignee"]),
+                            Priority = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]),
+                            CreatedOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
+                            CreatedDate = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifyBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifyBy"]),
+                            UpdatedDate = ds.Tables[0].Rows[i]["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]),
+                        };
+
+                        lstGetChatTickets.Add(customGetChatTickets);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return lstGetChatTickets;
+        }
     }
 }

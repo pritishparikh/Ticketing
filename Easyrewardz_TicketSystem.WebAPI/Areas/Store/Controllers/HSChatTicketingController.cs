@@ -491,6 +491,74 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+
+        [HttpPost]
+        [Route("GetChatTicketsByCustomer")]
+        public ResponseModel GetTicketsByCustomerOnPageLoad(int statusID)
+        {
+            List<CustomGetChatTickets> customGetChatTickets = null;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
+            try
+            {
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                customGetChatTickets = chatTicketingCaller.GetTicketsByCustomerOnLoad(new HSChatTicketingService(_connectioSting), statusID, authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
+
+                statusCode = customGetChatTickets.Count.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = customGetChatTickets.Count > 0 ? customGetChatTickets : null;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        [HttpPost]
+        [Route("GetChatTicketsByCustomerOnSearch")]
+        public ResponseModel GetChatTicketsByCustomerOnSearch([FromBody]ChatTicketSearch searchModel)
+        {
+            List<CustomGetChatTickets> searchResultList = null;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            HSChatTicketingCaller chatTicketingCaller = new HSChatTicketingCaller();
+            try
+            {
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                searchModel.UserID = authenticate.UserMasterID;
+                searchModel.TenantID = authenticate.TenantId;
+                searchResultList = chatTicketingCaller.GetChatTicketsByCustomerOnSearch(new HSChatTicketingService(_connectioSting), searchModel);
+
+                statusCode = searchResultList.Count.Equals(0) ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = searchResultList.Count > 0 ? searchResultList : null;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
         #endregion
     }
 }
