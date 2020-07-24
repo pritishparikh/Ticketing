@@ -70,6 +70,11 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
 
 
         /// <summary>
+        ///Notification Display time in Seconds
+        /// </summary>
+        public int NotificationTime { get; set; }
+
+        /// <summary>
         ///Is Set to Default Sound Setting
         /// </summary>
         public bool IsDefault { get; set; }

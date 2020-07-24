@@ -20,8 +20,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="ChatCharLimit"></param>
         /// <param name="ModifiedBy"></param>
         /// <returns></returns>
-        int UpdateChatSession(int TenantId, string ProgramCode, int ChatSessionValue, string ChatSessionDuration, int ChatDisplayValue,
-                            string ChatDisplayDuration,int ChatCharLimit, int ModifiedBy);
+        int UpdateChatSession(ChatSessionModel Chat);
 
         /// <summary>
         /// GetChatSession

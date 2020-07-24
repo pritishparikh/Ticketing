@@ -712,7 +712,8 @@ namespace Easyrewardz_TicketSystem.Services
                         if (status)
                         {
                             string ConnectionString = ds.Tables[0].Rows[0]["ConnectionString"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ConnectionString"]);
-                            string ProgramCodeString = ds.Tables[0].Rows[0]["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ProgramCode"]);
+                            //string ProgramCodeString = ds.Tables[0].Rows[0]["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ProgramCode"]);
+                            string ProgramCodeString = Programcode;
 
 
                             string jsonString = JsonConvert.SerializeObject(ConnectionString);

@@ -98,6 +98,44 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public int ChatCharLimit { get; set; }
 
+      
+
+        /// <summary>
+        ///Is Message Enabled
+        /// </summary>
+        public bool Message { get; set; }
+
+        /// <summary>
+        ///Is Card Enabled
+        /// </summary>
+        public bool Card { get; set; }
+
+        /// <summary>
+        ///Is RecommendedList Enabled
+        /// </summary>
+        public bool RecommendedList { get; set; }
+
+        /// <summary>
+        ///Is ScheduleVisit Enabled
+        /// </summary>
+        public bool ScheduleVisit { get; set; }
+
+        /// <summary>
+        ///Is PaymentLink Enabled
+        /// </summary>
+        public bool PaymentLink { get; set; }
+
+        /// <summary>
+        ///Is CustomerProfile  Enabled
+        /// </summary>
+        public bool CustomerProfile { get; set; }
+
+        /// <summary>
+        ///Is CustomerProduct Enabled
+        /// </summary>
+        public bool CustomerProduct { get; set; }
+
+
         /// <summary>
         /// Created By
         /// </summary>

@@ -652,6 +652,11 @@ namespace Easyrewardz_TicketSystem.Model
         public bool IsRetry { get; set; }
 
         /// <summary>
+        /// IsCancelled
+        /// </summary>
+        public bool IsCancelled { get; set; }
+
+        /// <summary>
         /// OrderReturnsItems
         /// </summary>
         public List<OrderReturnsItem> orderReturnsItems { get; set; }

@@ -392,7 +392,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", CustomerMobile);
-                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(ItemCodes) ? "" : ItemCodes);
+                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(ItemCodes) ? "" : ItemCodes.TrimEnd(','));
                 cmd.Parameters.AddWithValue("@_Action","shoppingbag");
                 cmd.Parameters.AddWithValue("@_IsFromRecommendation", Convert.ToInt16(IsFromRecommendation));
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
@@ -447,7 +447,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", CustomerMobile);
-                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(ItemCodes) ? "" : ItemCodes);
+                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(ItemCodes) ? "" : ItemCodes.TrimEnd(','));
                 cmd.Parameters.AddWithValue("@_Action", "wishlist");
                 cmd.Parameters.AddWithValue("@_IsFromRecommendation", Convert.ToInt16(IsFromRecommendation));
                 cmd.Parameters.AddWithValue("@User_ID", UserID);
@@ -483,7 +483,7 @@ namespace Easyrewardz_TicketSystem.Services
             string ClientAPIresponse = string.Empty;
             PhyAddOrderModel PhyOrder = new PhyAddOrderModel();
             List<ItemDetail> ItemDetails = new List<ItemDetail>();
-            string Store_Code = string.Empty;
+            string Store_Code = string.Empty; string CustomerName = string.Empty;
             double TotalAmount = 0;
             try
             {
@@ -499,7 +499,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ProgramCode", Buy.ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerID", Buy.CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", Buy.CustomerMobile);
-                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(Buy.ItemCodes) ? "" : Buy.ItemCodes);
+                cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(Buy.ItemCodes) ? "" : Buy.ItemCodes.TrimEnd(','));
                 cmd.Parameters.AddWithValue("@_IsDirectBuy",   Convert.ToInt16(Buy.IsDirectBuy) );
                 cmd.Parameters.AddWithValue("@_IsFromRecommendation", Convert.ToInt16(Buy.IsFromRecommendation));
                 cmd.Parameters.AddWithValue("@User_ID", Buy.UserID);
@@ -535,6 +535,7 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             TotalAmount=ds.Tables[1].Rows[0]["TotalAmount"] == DBNull.Value ? 0 : Convert.ToDouble(ds.Tables[1].Rows[0]["TotalAmount"]);
                             Store_Code = ds.Tables[1].Rows[0]["Store_Code"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["Store_Code"]);
+                            CustomerName = ds.Tables[1].Rows[0]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["CustomerName"]);
                         }
                        
                     }
@@ -546,8 +547,8 @@ namespace Easyrewardz_TicketSystem.Services
                         PhyOrder.progCode = Buy.ProgramCode;
                         PhyOrder.storeCode = Store_Code;
                         PhyOrder.billNo = "";
-                        PhyOrder.date = DateTime.Now.ToString();
-                        PhyOrder.customerName  = "";
+                        PhyOrder.date = DateTime.Now.ToString("dd MMM yyyy hh:mm:ss");
+                        PhyOrder.customerName  = CustomerName;
                         PhyOrder.customerMobile = Buy.CustomerMobile;
                         PhyOrder.amount = TotalAmount;
                         PhyOrder.paymentCollected = "No";
@@ -556,7 +557,7 @@ namespace Easyrewardz_TicketSystem.Services
                         PhyOrder.address = Buy.CustomerAddress;
 
                         string Json = JsonConvert.SerializeObject(PhyOrder);
-                        ClientAPIresponse = CommonService.SendApiRequestToken(ClientAPIURL+ "api/ShoppingBag/AddOrderinPhygital", Json);
+                        ClientAPIresponse = CommonService.SendApiRequest(ClientAPIURL+ "api/ShoppingBag/AddOrderinPhygital", Json);
 
                         if(!string.IsNullOrEmpty(ClientAPIresponse))
                         {
