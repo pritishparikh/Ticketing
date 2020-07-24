@@ -1,4 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.Model.StoreModal;
+using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
@@ -13,5 +15,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="storeCode"></param>
         /// <returns></returns>
         StoreDetails GetStoreDetailsByStoreCode(int tenantID, int userID, string programcode, string storeCode);
+
+        List<SlotTemplateModel> GetSlotTemplates(int TenantID, string ProgramCode);
     }
 }

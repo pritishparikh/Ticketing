@@ -1,5 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.Model.StoreModal;
+using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -9,6 +11,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _AppointmentRepository = appointment;
             return _AppointmentRepository.GetStoreDetailsByStoreCode(tenantID, userID, programcode, storeCode);
+        }
+
+        public List<SlotTemplateModel> GetSlotTemplates(IAppointment appointment, int TenantID, string ProgramCode)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.GetSlotTemplates( TenantID,  ProgramCode);
         }
     }
 }
