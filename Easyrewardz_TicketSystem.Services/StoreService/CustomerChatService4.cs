@@ -547,7 +547,7 @@ namespace Easyrewardz_TicketSystem.Services
                         PhyOrder.progCode = Buy.ProgramCode;
                         PhyOrder.storeCode = Store_Code;
                         PhyOrder.billNo = "";
-                        PhyOrder.date = DateTime.Now.ToString();
+                        PhyOrder.date = DateTime.Now.ToString("dd MMM yyyy hh:mm:ss");
                         PhyOrder.customerName  = CustomerName;
                         PhyOrder.customerMobile = Buy.CustomerMobile;
                         PhyOrder.amount = TotalAmount;

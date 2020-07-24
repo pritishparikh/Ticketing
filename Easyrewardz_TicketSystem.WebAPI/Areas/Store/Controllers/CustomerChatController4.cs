@@ -154,8 +154,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             int statusCode = 0;
             string statusMessage = "";
-            string SoundPhysicalFilePath = string.Empty;
-            string SoundFilePath = string.Empty;
+
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
@@ -197,8 +196,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             int statusCode = 0;
             string statusMessage = "";
-            string SoundPhysicalFilePath = string.Empty;
-            string SoundFilePath = string.Empty;
+
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
@@ -239,8 +237,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             int statusCode = 0;
             string statusMessage = "";
-            string SoundPhysicalFilePath = string.Empty;
-            string SoundFilePath = string.Empty;
+
             try
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
