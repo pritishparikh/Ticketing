@@ -46,9 +46,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_RecommendedList", Convert.ToInt16(Chat.RecommendedList));
                 cmd.Parameters.AddWithValue("@_ScheduleVisit", Convert.ToInt16(Chat.ScheduleVisit));
                 cmd.Parameters.AddWithValue("@_PaymentLink", Convert.ToInt16(Chat.PaymentLink));
-                cmd.Parameters.AddWithValue("@_ChatProfileProduct", Convert.ToInt16(Chat.ChatProfileProduct));
-
-
+                cmd.Parameters.AddWithValue("@_CustomerProfile", Convert.ToInt16(Chat.CustomerProfile));
+                cmd.Parameters.AddWithValue("@_CustomerProduct", Convert.ToInt16(Chat.CustomerProduct));
                 cmd.Parameters.AddWithValue("@_ModifiedBy", Chat.ModifiedBy);
 
                 success = Convert.ToInt32(cmd.ExecuteScalar());
@@ -115,8 +114,9 @@ namespace Easyrewardz_TicketSystem.Services
                         ChatSession.RecommendedList = ds.Tables[0].Rows[0]["RecommendedList"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["RecommendedList"]);
                         ChatSession.ScheduleVisit = ds.Tables[0].Rows[0]["ScheduleVisit"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ScheduleVisit"]);
                         ChatSession.PaymentLink = ds.Tables[0].Rows[0]["PaymentLink"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["PaymentLink"]);
-                        ChatSession.ChatProfileProduct = ds.Tables[0].Rows[0]["ChatProfileProduct"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ChatProfileProduct"]);
-                       
+                        ChatSession.CustomerProfile = ds.Tables[0].Rows[0]["CustomerProfile"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CustomerProfile"]);
+                        ChatSession.CustomerProduct = ds.Tables[0].Rows[0]["CustomerProduct"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CustomerProduct"]);
+
                     }
                 }
             }            
