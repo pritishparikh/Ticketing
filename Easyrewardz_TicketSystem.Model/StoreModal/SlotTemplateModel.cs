@@ -50,11 +50,6 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// </summary>
         public string ProgramCode { get; set; }
 
-        /// <summary>
-        /// _SlotTemplateID
-        /// </summary>
-        public int SlotTemplateID { get; set; }
-
 
         /// <summary>
         /// Slot Template Name
@@ -111,14 +106,16 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string StoreNonOpFromAt { get; set; }
 
         /// <summary>
-        /// Store NonOp From At
+        /// Store NonOperational From At
         /// </summary>
         public int StoreNonOpToValue { get; set; }
 
         /// <summary>
-        /// Store NonOp To At
+        /// Store NonOperational To At
         /// </summary>
         public string StoreNonOpToAt { get; set; }
+
+        public List<TemplateBasedSlots> TemplateSlots { get; set; }
 
 
         /// <summary>

@@ -5,6 +5,8 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -282,6 +284,75 @@ namespace Easyrewardz_TicketSystem.Services
             }
 
             return SlotsList;
+        }
+
+        /// <summary>
+        ///Create Slot Template
+        /// </summary>
+        /// <param name="CreateStoreSlotTemplate"></param>
+        /// <returns></returns>
+        public int CreateSlotTemplate(CreateStoreSlotTemplate Template)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            string XmlText = string.Empty;
+            int Result = 0;
+            XDocument SlotDetails = null;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                if(Template.SlotTemplateType.Equals("M") && Template.TemplateSlots.Count > 0)
+                {
+                    SlotDetails= new XDocument(new XDeclaration("1.0", "UTF - 8", "yes"),
+                    new XElement("ManualSlots",
+                    from Slots in Template.TemplateSlots
+                    select new XElement("SlotDetails",
+                    new XElement("SlotStartTime", Slots.SlotStartTime),
+                    new XElement("SlotEndTime", Slots.SlotEndTime))));
+
+                    XmlText = SlotDetails.ToString();
+                }
+
+                cmd = new MySqlCommand("SP_HSCreateSlotTemplates", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantId", Template.TenantId);
+                cmd.Parameters.AddWithValue("@_ProgramCode", Template.ProgramCode);
+                cmd.Parameters.AddWithValue("@_SlotTemplateName", Template.SlotTemplateName);
+                cmd.Parameters.AddWithValue("@_SlotTemplateType", Template.SlotTemplateType);
+                cmd.Parameters.AddWithValue("@_StoreOpenValue", Template.StoreOpenValue);
+                cmd.Parameters.AddWithValue("@_StoreOpenAt", Template.StoreOpenAt);
+                cmd.Parameters.AddWithValue("@_StoreCloseValue", Template.StoreCloseValue);
+                cmd.Parameters.AddWithValue("@_StoreCloseAt", Template.StoreCloseAt);
+                cmd.Parameters.AddWithValue("@_Slotduration", Template.Slotduration);
+                cmd.Parameters.AddWithValue("@_SlotGaps", Template.SlotGaps);
+                cmd.Parameters.AddWithValue("@_StoreNonOpFromValue", Template.StoreNonOpFromValue);
+                cmd.Parameters.AddWithValue("@_StoreNonOpFromAt", Template.StoreNonOpFromAt);
+                cmd.Parameters.AddWithValue("@_StoreNonOpToValue", Template.StoreNonOpToValue);
+                cmd.Parameters.AddWithValue("@_StoreNonOpToAt", Template.StoreNonOpToAt);
+                cmd.Parameters.AddWithValue("@_XmlManualSlots",string.IsNullOrEmpty(XmlText) ? "" : XmlText);
+                cmd.Parameters.AddWithValue("@_UserID", Template.UserID);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                Result = Convert.ToInt32(cmd.ExecuteScalar());
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return Result;
         }
     }
 }
