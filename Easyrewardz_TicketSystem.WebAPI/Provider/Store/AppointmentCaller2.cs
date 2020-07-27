@@ -23,5 +23,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _AppointmentRepository = appointment;
             return _AppointmentRepository.GetSlotTemplates( TenantID,  ProgramCode);
         }
+
+        public List<TemplateBasedSlots> GetGeneratedSlots(IAppointment appointment, CreateStoreSlotTemplate Template)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.GetGeneratedSlots(Template);
+        }
     }
 }

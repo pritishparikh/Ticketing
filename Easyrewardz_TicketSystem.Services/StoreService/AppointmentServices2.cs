@@ -203,5 +203,85 @@ namespace Easyrewardz_TicketSystem.Services
 
             return TemplateList;
         }
+
+        /// <summary>
+        ///Get Generated Slots
+        /// </summary>
+        /// <param name="CreateStoreSlotTemplate"></param>
+        /// <returns></returns>
+        public List<TemplateBasedSlots> GetGeneratedSlots(CreateStoreSlotTemplate Template)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            List<TemplateBasedSlots> SlotsList = new List<TemplateBasedSlots>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSGenerateTemplateSlots", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantId", Template.TenantId);
+                cmd.Parameters.AddWithValue("@_ProgramCode", Template.ProgramCode);
+                cmd.Parameters.AddWithValue("@_SlotTemplateID", 0);
+                cmd.Parameters.AddWithValue("@_StoreOpenValue", Template.StoreOpenValue);
+                cmd.Parameters.AddWithValue("@_StoreOpenAt", Template.StoreOpenAt);
+                cmd.Parameters.AddWithValue("@_StoreCloseValue", Template.StoreCloseValue);
+                cmd.Parameters.AddWithValue("@_StoreCloseAt", Template.StoreCloseAt);
+                cmd.Parameters.AddWithValue("@_Slotduration", Template.Slotduration);
+                cmd.Parameters.AddWithValue("@_SlotGaps", Template.SlotGaps);
+                cmd.Parameters.AddWithValue("@_StoreNonOpFromValue", Template.StoreNonOpFromValue);
+                cmd.Parameters.AddWithValue("@_StoreNonOpFromAt", Template.StoreNonOpFromAt);
+                cmd.Parameters.AddWithValue("@_StoreNonOpToValue", Template.StoreNonOpToValue);
+                cmd.Parameters.AddWithValue("@_StoreNonOpToAt", Template.StoreNonOpToAt);
+                cmd.Parameters.AddWithValue("@_UserID", Template.UserID);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            TemplateBasedSlots Obj = new TemplateBasedSlots()
+                            {
+                                SlotID = dr["SlotID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotID"]),
+                                SlotTemplateID = dr["SlotTemplateID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotTemplateID"]),
+                                SlotStartTime = dr["SlotStartTime"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SlotStartTime"]),
+                                SlotEndTime = dr["SlotEndTime"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SlotEndTime"]),
+                                SlotOccupancy = dr["SlotOccupancy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotOccupancy"]),
+                                IsSlotEnabled = dr["SlotStatus"] == DBNull.Value ? false : Convert.ToBoolean(dr["SlotStatus"]),
+
+                            };
+                            SlotsList.Add(Obj);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return SlotsList;
+        }
     }
 }

@@ -20,5 +20,7 @@ namespace Easyrewardz_TicketSystem.Interface
         List<StoreOperationalDays> GetStoreOperationalDays(int TenantID, string ProgramCode, int UserID);
 
         List<SlotTemplateModel> GetSlotTemplates(int TenantID, string ProgramCode);
+
+        List<TemplateBasedSlots> GetGeneratedSlots(CreateStoreSlotTemplate Template);
     }
 }
