@@ -302,7 +302,7 @@ namespace Easyrewardz_TicketSystem.Services
                     try
                     {
                         List<string> additionalList = new List<string>();
-                        if (additionalInfo != null)
+                        if (!string.IsNullOrEmpty(additionalInfo))
                         {
                             additionalList = additionalInfo.Split(",").ToList();
                         }
