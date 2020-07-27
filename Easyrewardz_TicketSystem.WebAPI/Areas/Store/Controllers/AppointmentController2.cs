@@ -58,12 +58,58 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// Get Slot Templates
+        /// Get Store Operational Days
         /// </summary>
         /// <param name="TenantID"></param>
         /// <param name="ProgramCode"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
         [HttpPost]
+        [Route("GetStoreOperationalDays")]
+        public ResponseModel GetStoreOperationalDays()
+        {
+            List<StoreOperationalDays> Operationaldays = new List<StoreOperationalDays>();
+           ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                AppointmentCaller newAppointment = new AppointmentCaller();
+
+                Operationaldays = newAppointment.GetStoreOperationalDays(new AppointmentServices(_connectioSting),
+                    authenticate.TenantId, authenticate.ProgramCode,authenticate.UserMasterID);
+
+                statusCode = Operationaldays.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Operationaldays;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+    }
+
+    /// <summary>
+    /// Get Slot Templates
+    /// </summary>
+    /// <param name="TenantID"></param>
+    /// <param name="ProgramCode"></param>
+    /// <returns></returns>
+    [HttpPost]
         [Route("GetSlotTemplates")]
         public ResponseModel GetSlotTemplates()
         {

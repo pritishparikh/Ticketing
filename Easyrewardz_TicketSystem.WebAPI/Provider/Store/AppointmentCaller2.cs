@@ -12,6 +12,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _AppointmentRepository = appointment;
             return _AppointmentRepository.GetStoreDetailsByStoreCode(tenantID, userID, programcode, storeCode);
         }
+        public List<StoreOperationalDays> GetStoreOperationalDays(IAppointment appointment, int TenantID, string ProgramCode, int UserID)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.GetStoreOperationalDays(TenantID, ProgramCode,  UserID);
+        }
 
         public List<SlotTemplateModel> GetSlotTemplates(IAppointment appointment, int TenantID, string ProgramCode)
         {

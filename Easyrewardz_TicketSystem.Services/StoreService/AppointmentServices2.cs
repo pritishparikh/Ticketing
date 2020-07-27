@@ -75,6 +75,72 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
+        /// Get Store Operational Days
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public List<StoreOperationalDays> GetStoreOperationalDays(int TenantID, string ProgramCode, int UserID)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            List<StoreOperationalDays> Operationaldays = new List<StoreOperationalDays>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSGetStoreOperationalDays", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantId", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            StoreOperationalDays Obj = new StoreOperationalDays()
+                            {
+                                DayID = dr["DayID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DayID"]),
+                                DayName = dr["DayName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["DayName"])
+                            };
+                            Operationaldays.Add(Obj);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return Operationaldays;
+        }
+
+        /// <summary>
         /// Get Slot Templates
         /// </summary>
         /// <param name="TenantID"></param>

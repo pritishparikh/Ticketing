@@ -11,4 +11,13 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
 
         public string SlotTemplateName { get; set; }
     }
+
+    public class StoreOperationalDays
+    {
+
+        public int DayID { get; set; }
+
+        public string DayName { get; set; }
+    }
+
 }

@@ -16,6 +16,9 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <returns></returns>
         StoreDetails GetStoreDetailsByStoreCode(int tenantID, int userID, string programcode, string storeCode);
 
+
+        List<StoreOperationalDays> GetStoreOperationalDays(int TenantID, string ProgramCode, int UserID);
+
         List<SlotTemplateModel> GetSlotTemplates(int TenantID, string ProgramCode);
     }
 }
