@@ -474,7 +474,12 @@ namespace Easyrewardz_TicketSystem.Services
             return Result;
         }
 
-
+        /// <summary>
+        /// Buy Products On Chat from shopping Bag/WishList
+        /// <param name="ChatCustomerBuyModel"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// </summary>
+        /// <returns></returns>
         public int BuyProductsOnChat(ChatCustomerBuyModel Buy,string ClientAPIURL)
         {
             MySqlCommand cmd = new MySqlCommand();
@@ -590,6 +595,79 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     ds.Dispose();
                 }
+            }
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Buy Products On Chat from shopping Bag/WishList
+        /// <param name="ChatCustomerBuyModel"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// </summary>
+        /// <returns></returns>
+        public int SendProductsOnChat(SendProductsToCustomer ProductDetails, string ClientAPIURL)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            int Result = 0;
+
+            //string HtmlMessageContent = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\">" +
+            //    "<img class=\"chat-product-img\" src=\"{0}\" alt=\"Product Image\" ></div>" +
+            //    "<div class=\"col-md-10 bkcprdt\"><div><label class=\"chat-product-name\">Brand :{1}</label></div>" +
+            //    "<div><label class=\"chat-product-code\">Category: {2}</label></div><div><label class=\"chat-product-code\">SubCategory: {3}</label></div>" +
+            //    "<div><label class=\"chat-product-code\">Color: {4}</label></div><div><label class=\"chat-product-code\">Size: {5}</label></div>" +
+            //    "<div><label class=\"chat-product-code\">Item Code: {6}</label></div><div><label class=\"chat-product-prize\"> Price : {7}</label></div>" +
+            //    "<div><a href=\"{8}\" target=\"_blank\" class=\"chat-product-url\">{9}</a></div></div></div></div>";
+
+            try
+            {
+               
+
+                if(ProductDetails.Products.Count > 0)
+                {
+                    foreach(CustomerChatProductModel obj in ProductDetails.Products)
+                    {
+                        string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\">";
+                        string Midhtml = "<div class=\"col-md-10 bkcprdt\">";
+                        var Endhtml = "</div></div></div>";
+
+                        Starthtml  += !string.IsNullOrEmpty(obj.imageURL) ? "<img class=\"chat-product-img\" src=\""+ obj.imageURL + "\" alt=\"Product Image\" ></div>" : "</div>";
+                        Starthtml += Midhtml;
+
+                        Starthtml += !string.IsNullOrEmpty(obj.brandName) ? "<div><label class=\"chat-product-name\">Brand : " + obj.brandName + "</label></div>" : "";
+                        Starthtml += !string.IsNullOrEmpty(obj.categoryName) ? "<div><label class=\"chat-product-code\">Category: " + obj.categoryName + "</label></div>" : "";
+                        Starthtml += !string.IsNullOrEmpty(obj.subCategoryName) ? "<div><label class=\"chat-product-code\">SubCategory: " + obj.subCategoryName + "</label></div>" : "";
+                        Starthtml += !string.IsNullOrEmpty(obj.color) ? "<div><label class=\"chat-product-code\">Color: " + obj.color + "</label></div>" : "";
+                        Starthtml += !string.IsNullOrEmpty(obj.size) ? "<div><label class=\"chat-product-code\">Size: " + obj.size + "</label></div>" : "";
+                        Starthtml += !string.IsNullOrEmpty(obj.uniqueItemCode) ? "<div><label class=\"chat-product-code\">Item Code: " + obj.uniqueItemCode + "</label></div>" : "";
+                        Starthtml += !string.IsNullOrEmpty(obj.price) ? "<div><label class=\"chat-product-prize\"> Price : " + obj.price + "</label></div>" : "";
+                        Starthtml += !string.IsNullOrEmpty(obj.url) ? "<div><a href=\"{8}\" target=\"_blank\" class=\"chat-product-url\">" + obj.url + "</a></div>" : "";
+                        Starthtml += Endhtml;
+
+
+                        CustomerChatModel ChatMessageDetails = new CustomerChatModel();
+                        ChatMessageDetails.ChatID = ProductDetails.ChatID;
+                        ChatMessageDetails.Message = Starthtml;
+                        ChatMessageDetails.ByCustomer = false;
+                        ChatMessageDetails.ChatStatus = 0;
+                        ChatMessageDetails.StoreManagerId = ProductDetails.UserID;
+                        ChatMessageDetails.CreatedBy = ProductDetails.UserID;
+
+                        Result = Result + SaveChatMessages(ChatMessageDetails);
+
+                    }
+                }
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                
             }
 
             return Result;

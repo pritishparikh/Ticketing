@@ -49,6 +49,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _customerChat.BuyProductsOnChat(Buy, ClientAPIURL);
         }
 
+        public int SendProductsOnChat(ICustomerChat customerChat, SendProductsToCustomer ProductDetails, string ClientAPIURL)
+        {
+            _customerChat = customerChat;
+            return _customerChat.SendProductsOnChat(ProductDetails, ClientAPIURL);
+        }
+
 
         #region Client Exposed API
 

@@ -20,6 +20,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int BuyProductsOnChat(ChatCustomerBuyModel Buy, string ClientAPIURL);
 
+        int SendProductsOnChat(SendProductsToCustomer ProductDetails, string ClientAPIURL);
 
         #region Client Exposed API
 

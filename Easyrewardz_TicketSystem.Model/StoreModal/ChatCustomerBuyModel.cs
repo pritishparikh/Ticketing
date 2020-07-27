@@ -17,4 +17,13 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public Address CustomerAddress { get; set; }
   
     }
+
+    public class SendProductsToCustomer
+    {
+        public int TenantID { get; set; }
+        public string ProgramCode { get; set; }
+        public int ChatID { get; set; }
+        public int UserID { get; set; }
+        public List<CustomerChatProductModel> Products { get; set; }
+    }
 }

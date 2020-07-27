@@ -266,6 +266,48 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Bu yProducts On Chat from shopping Bag/WishList
+        /// <param name="ChatCustomerBuyModel"></param>
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("SendProductsOnChat")]
+        public ResponseModel SendProductsOnChat([FromBody]SendProductsToCustomer ProductDetails)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int Result = 0;
+
+            int statusCode = 0;
+            string statusMessage = "";
+
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                ProductDetails.TenantID = authenticate.TenantId;
+                ProductDetails.ProgramCode = authenticate.ProgramCode;
+                ProductDetails.UserID = authenticate.UserMasterID;
+
+                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+
+                Result = customerChatCaller.SendProductsOnChat(new CustomerChatService(_connectionString), ProductDetails, _ClientAPIUrl);
+                statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
 
 
         #region Client Exposed API
