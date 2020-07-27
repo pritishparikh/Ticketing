@@ -204,6 +204,11 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// </summary>
         public bool IsChatAllreadyActive { get; set; }
 
+        /// <summary>
+        /// ReInitiateChatDateTime
+        /// </summary>
+        public string ReInitiateChatDateTime { get; set; }
+
 
         /// <summary>
         ///List of Chat Ticket Note

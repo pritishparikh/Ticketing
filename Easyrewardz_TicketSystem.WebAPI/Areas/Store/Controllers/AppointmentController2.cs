@@ -101,15 +101,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             return objResponseModel;
         }
-    }
 
-    /// <summary>
-    /// Get Slot Templates
-    /// </summary>
-    /// <param name="TenantID"></param>
-    /// <param name="ProgramCode"></param>
-    /// <returns></returns>
-    [HttpPost]
+
+        /// <summary>
+        /// Get Slot Templates
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <returns></returns>
+        [HttpPost]
         [Route("GetSlotTemplates")]
         public ResponseModel GetSlotTemplates()
         {

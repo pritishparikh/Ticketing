@@ -312,6 +312,7 @@ namespace Easyrewardz_TicketSystem.Services
                         customGetChatTickets.ChatEndDateTime = ds.Tables[0].Rows[i]["ChatEndDateTime"] == DBNull.Value ? string.Empty : Convert.ToDateTime(ds.Tables[0].Rows[i]["ChatEndDateTime"]).ToString("yyyy-MM-dd HH:mm tt");
                         customGetChatTickets.IsIconDisplay = ds.Tables[0].Rows[i]["IsIconDisplay"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsIconDisplay"]);
                         customGetChatTickets.IsChatAllreadyActive = ds.Tables[0].Rows[i]["IsChatAllreadyActive"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsChatAllreadyActive"]);
+                        customGetChatTickets.ReInitiateChatDateTime = ds.Tables[0].Rows[i]["ReInitiateChatDateTime"] == DBNull.Value ? string.Empty : Convert.ToDateTime(ds.Tables[0].Rows[i]["ReInitiateChatDateTime"]).ToString("yyyy-MM-dd HH:mm tt");
 
                         customGetChatTickets.ChatTicketNote = ds.Tables[1].AsEnumerable().Select(x => new ChatTicketNotes()
                         {
