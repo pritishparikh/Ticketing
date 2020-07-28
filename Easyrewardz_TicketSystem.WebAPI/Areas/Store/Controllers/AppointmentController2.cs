@@ -242,5 +242,52 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             return objResponseModel;
         }
+
+        /// <summary>
+        ///GetS lots By TemplateID
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="UserID"></param>
+        /// <param name="SlotTemplateID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetSlotsByTemplateID")]
+        public ResponseModel GetSlotsByTemplateID(int SlotTemplateID)
+        {
+            List<TemplateBasedSlots> SlotsList = new List<TemplateBasedSlots>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                AppointmentCaller newAppointment = new AppointmentCaller();
+
+                SlotsList = newAppointment.GetSlotsByTemplateID(new AppointmentServices(_connectioSting), authenticate.TenantId,authenticate.ProgramCode
+                    ,authenticate.UserMasterID,SlotTemplateID);
+
+                statusCode = SlotsList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = SlotsList;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
     }
 }

@@ -346,5 +346,78 @@ namespace Easyrewardz_TicketSystem.Services
 
             return Result;
         }
+
+        /// <summary>
+        ///GetS lots By TemplateID
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="UserID"></param>
+        /// <param name="SlotTemplateID"></param>
+        /// <returns></returns>
+        public List<TemplateBasedSlots> GetSlotsByTemplateID(int TenantID, string ProgramCode, int UserID, int SlotTemplateID)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            List<TemplateBasedSlots> SlotsList = new List<TemplateBasedSlots>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSGetSlotsByTemplateID", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
+                cmd.Parameters.AddWithValue("@_SlotTemplateID", SlotTemplateID);
+
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            TemplateBasedSlots Obj = new TemplateBasedSlots()
+                            {
+                                SlotID = dr["SlotID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotID"]),
+                                SlotTemplateID = dr["SlotTemplateID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotTemplateID"]),
+                                SlotStartTime = dr["SlotStartTime"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SlotStartTime"]),
+                                SlotEndTime = dr["SlotEndTime"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SlotEndTime"]),
+                                SlotOccupancy = dr["SlotOccupancy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotOccupancy"]),
+                                IsSlotEnabled = dr["SlotStatus"] == DBNull.Value ? false : Convert.ToBoolean(dr["SlotStatus"]),
+
+                            };
+                            SlotsList.Add(Obj);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return SlotsList;
+        }
     }
 }

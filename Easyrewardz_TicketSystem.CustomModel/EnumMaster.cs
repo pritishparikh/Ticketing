@@ -420,5 +420,29 @@ namespace Easyrewardz_TicketSystem.CustomModel
         }
 
 
+        public enum DisplaySlotsFrom
+        {
+            /// <summary>
+            /// Current Slot
+            /// </summary>
+            [Description("Current Slot")]
+            New = 301,
+
+            /// <summary>
+            /// Skip Current Slot & Show Next Slot
+            /// </summary>
+            [Description("Skip Current Slot & Show Next Slot")]
+            InProgress = 302,
+
+            /// <summary>
+            /// Close
+            /// </summary>
+            [Description("Skip Current & Next Slot")]
+            Close = 303
+        }
+    }
+
+
+
         }
 }
