@@ -642,7 +642,7 @@ namespace Easyrewardz_TicketSystem.Services
                         Starthtml += !string.IsNullOrEmpty(obj.size) ? "<div><label class=\"chat-product-code\">Size: " + obj.size + "</label></div>" : "";
                         Starthtml += !string.IsNullOrEmpty(obj.uniqueItemCode) ? "<div><label class=\"chat-product-code\">Item Code: " + obj.uniqueItemCode + "</label></div>" : "";
                         Starthtml += !string.IsNullOrEmpty(obj.price) ? "<div><label class=\"chat-product-prize\"> Price : " + obj.price + "</label></div>" : "";
-                        Starthtml += !string.IsNullOrEmpty(obj.url) ? "<div><a href=\"{8}\" target=\"_blank\" class=\"chat-product-url\">" + obj.url + "</a></div>" : "";
+                        Starthtml += !string.IsNullOrEmpty(obj.url) ? "<div><a href=\"" + obj.url + "\" target=\"_blank\" class=\"chat-product-url\">" + obj.url + "</a></div>" : "";
                         Starthtml += Endhtml;
 
 
