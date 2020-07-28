@@ -26,5 +26,7 @@ namespace Easyrewardz_TicketSystem.Interface
         int CreateSlotTemplate(CreateStoreSlotTemplate Template);
 
         List<TemplateBasedSlots> GetSlotsByTemplateID(int TenantID, string ProgramCode, int UserID, int SlotTemplateID);
+
+
     }
 }

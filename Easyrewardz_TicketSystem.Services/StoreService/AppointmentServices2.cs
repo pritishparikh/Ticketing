@@ -373,7 +373,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.Parameters.AddWithValue("@_UserID", UserID);
                 cmd.Parameters.AddWithValue("@_SlotTemplateID", SlotTemplateID);
-
+                cmd.CommandType = CommandType.StoredProcedure;
 
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -399,6 +399,8 @@ namespace Easyrewardz_TicketSystem.Services
                         }
                     }
                 }
+
+
             }
             catch (Exception)
             {

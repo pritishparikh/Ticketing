@@ -98,6 +98,9 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// </summary>
         public string StoreNonOpToAt { get; set; }
 
+        /// <summary>
+        ///Template Slots List
+        /// </summary>
         public List<TemplateBasedSlots> TemplateSlots { get; set; }
 
 

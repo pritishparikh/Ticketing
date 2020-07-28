@@ -444,5 +444,5 @@ namespace Easyrewardz_TicketSystem.CustomModel
 
 
 
-        }
+        
 }

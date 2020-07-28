@@ -8,6 +8,7 @@ using System.Text;
 using System.Linq;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model.StoreModal;
+using System.Xml.Linq;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -202,6 +203,8 @@ namespace Easyrewardz_TicketSystem.Services
         {
 
             int Result = 0;
+            string XmlSlots = string.Empty;
+            XDocument SlotDetails = null;
             try
             {
                 if (conn != null && conn.State == ConnectionState.Closed)
@@ -210,13 +213,27 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
 
+                if(Slot.TemplateSlots.Count > 0)
+                {
+                    SlotDetails = new XDocument(new XDeclaration("1.0", "UTF - 8", "yes"),
+                  new XElement("Slots",
+                  from Slots in Slot.TemplateSlots
+                  select new XElement("SlotDetails",
+                  new XElement("SlotStartTime", Slots.SlotStartTime),
+                  new XElement("SlotEndTime", Slots.SlotEndTime),
+                  new XElement("SlotOccupancy", Slots.SlotOccupancy),
+                  new XElement("SlotStatus", Convert.ToInt16(Slots.IsSlotEnabled))
+                  )));
+
+                    XmlSlots = SlotDetails.ToString();
+                }
+
                 MySqlCommand cmd = new MySqlCommand(Slot.SlotId > 0 ? "SP_HSUpdateStoreTimeSlotSetting" : "SP_HSInsertStoreTimeSlotSetting", conn);
                 cmd.Connection = conn;
 
                 if(Slot.SlotId > 0)
                 {
                     cmd.Parameters.AddWithValue("@_SlotSettingID", Slot.SlotId);
-                    cmd.Parameters.AddWithValue("@_StoreId", string.IsNullOrEmpty(Slot.StoreIds) ? 0 : Convert.ToInt32(Slot.StoreIds.TrimEnd(',')));
                 }
                 else
                 {
@@ -226,23 +243,19 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_TenantId", Slot.TenantId);
                 cmd.Parameters.AddWithValue("@_ProgramCode", Slot.ProgramCode);
                 
-                cmd.Parameters.AddWithValue("@_StoreOpenValue", Slot.StoreOpenValue); 
-                cmd.Parameters.AddWithValue("@_StoreOpenAt", Slot.StoreOpenAt);
-                cmd.Parameters.AddWithValue("@_StoreCloseValue", Slot.StoreCloseValue);
-                cmd.Parameters.AddWithValue("@_StoreCloseAt", Slot.StoreCloseAt); 
-                cmd.Parameters.AddWithValue("@_Slotduration", Slot.Slotduration); 
+                cmd.Parameters.AddWithValue("@_OpDays", string.IsNullOrEmpty(Slot.StoreOpdays) ? "" : Slot.StoreOpdays.TrimEnd(',')); 
+                cmd.Parameters.AddWithValue("@_SlotTemplateID", Slot.SlotTemplateID);
                 cmd.Parameters.AddWithValue("@_SlotMaxCapacity", Slot.SlotMaxCapacity);
-
-                cmd.Parameters.AddWithValue("@_StoreNonOpFromValue", Slot.StoreNonOpFromValue);
-                cmd.Parameters.AddWithValue("@_StoreNonOpFromAt", Slot.StoreNonOpFromAt);
-                cmd.Parameters.AddWithValue("@_StoreNonOpToValue", Slot.StoreNonOpToValue);
-                cmd.Parameters.AddWithValue("@_StoreNonOpToAt", Slot.StoreNonOpToAt);
-                cmd.Parameters.AddWithValue("@_StoreTotalSlot", Slot.StoreTotalSlot);
-                cmd.Parameters.AddWithValue("@_AppointmentDays", Slot.AppointmentDays);
+                cmd.Parameters.AddWithValue("@_AppointmentDays", Slot.AppointmentDays); 
+                cmd.Parameters.AddWithValue("@_ApplicableFromDate", Slot.ApplicableFromDate); 
+                cmd.Parameters.AddWithValue("@_IsActive",Convert.ToInt16(Slot.IsActive));
+                cmd.Parameters.AddWithValue("@_SlotDisplayCode", Slot.SlotDisplayCode);
+                cmd.Parameters.AddWithValue("@_XmlSlots", string.IsNullOrEmpty(XmlSlots) ? "" : XmlSlots);
                 cmd.Parameters.AddWithValue("@_UserID", Slot.UserID);
+                
 
                 cmd.CommandType = CommandType.StoredProcedure;
-                Result = Slot.SlotId > 0 ? Convert.ToInt32(cmd.ExecuteScalar()) :  Convert.ToInt32(cmd.ExecuteNonQuery());
+                Result = Convert.ToInt32(cmd.ExecuteScalar()) ;
                 conn.Close();
             }
             catch (Exception)

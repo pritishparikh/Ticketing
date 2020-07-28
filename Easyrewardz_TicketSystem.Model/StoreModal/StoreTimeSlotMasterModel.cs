@@ -118,64 +118,48 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string StoreIds { get; set; }
 
         /// <summary>
-        /// Store Open Value
+        /// Store Operational Days
         /// </summary>
-        public int StoreOpenValue { get; set; }
+        public string StoreOpdays{ get; set; }
 
         /// <summary>
-        /// Store Open At
+        /// Slot Template ID
         /// </summary>
-        public string StoreOpenAt { get; set; }
+        public int SlotTemplateID { get; set; }
 
-        /// <summary>
-        /// Store Close Value
-        /// </summary>
-        public int StoreCloseValue { get; set; }
-
-        /// <summary>
-        /// Store Close At
-        /// </summary>
-        public string StoreCloseAt { get; set; }
-
-        /// <summary>
-        /// Slot duration
-        /// </summary>
-        public float Slotduration { get; set; }
 
         /// <summary>
         /// Slot Max Capacity
         /// </summary>
         public int SlotMaxCapacity { get; set; }
 
-        /// <summary>
-        /// Store NonOp From Value
-        /// </summary>
-        public int StoreNonOpFromValue { get; set; }
-
-        /// <summary>
-        /// Store NonOp From At
-        /// </summary>
-        public string StoreNonOpFromAt { get; set; }
-
-        /// <summary>
-        /// Store NonOp From At
-        /// </summary>
-        public int StoreNonOpToValue { get; set; }
-
-        /// <summary>
-        /// Store NonOp To At
-        /// </summary>
-        public string StoreNonOpToAt { get; set; }
-
-        /// <summary>
-        /// Store Total Slot
-        /// </summary>
-        public int StoreTotalSlot { get; set; }
 
         /// <summary>
         /// Appointment Days
         /// </summary>
         public int AppointmentDays { get; set; }
+
+
+        /// <summary>
+        /// Applicable From Date
+        /// </summary>
+        public string ApplicableFromDate { get; set; }
+
+        /// <summary>
+        /// Is Active
+        /// </summary>
+        public bool IsActive { get; set; }
+
+
+        /// <summary>
+        /// User ID
+        /// </summary>
+        public int SlotDisplayCode { get; set; } // refer enum DisplaySlotsFrom : 301-Current Slot , 302-Skip Current Slot & Show Next Slot, 303-Skip Current & Next Slot
+
+        /// <summary>
+        ///Template Slots List
+        /// </summary>
+        public List<TemplateBasedSlots> TemplateSlots { get; set; }
 
         /// <summary>
         /// User ID
