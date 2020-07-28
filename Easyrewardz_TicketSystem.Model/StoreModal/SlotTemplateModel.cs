@@ -62,20 +62,11 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// </summary>
         public string SlotTemplateType { get; set; }
 
-        /// <summary>
-        /// Store Open Value
-        /// </summary>
-        public int StoreOpenValue { get; set; }
 
         /// <summary>
         /// Store Open At
         /// </summary>
         public string StoreOpenAt { get; set; }
-
-        /// <summary>
-        /// Store Close Value
-        /// </summary>
-        public int StoreCloseValue { get; set; }
 
         /// <summary>
         /// Store Close At
@@ -96,19 +87,11 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
 
 
         /// <summary>
-        /// Store NonOp From Value
-        /// </summary>
-        public int StoreNonOpFromValue { get; set; }
-
-        /// <summary>
         /// Store NonOp From At
         /// </summary>
         public string StoreNonOpFromAt { get; set; }
 
-        /// <summary>
-        /// Store NonOperational From At
-        /// </summary>
-        public int StoreNonOpToValue { get; set; }
+
 
         /// <summary>
         /// Store NonOperational To At
