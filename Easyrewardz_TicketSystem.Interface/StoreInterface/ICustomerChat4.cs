@@ -24,7 +24,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         #region Client Exposed API
 
-        int CustomerAddToShoppingBag(ClientChatAddProduct Item);
+        int CustomerAddToShoppingBag(ClientChatAddProduct Item); 
 
         int CustomerAddToWishlist(ClientChatAddProduct Item);
 

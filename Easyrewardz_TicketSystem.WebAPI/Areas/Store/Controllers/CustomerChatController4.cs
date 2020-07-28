@@ -406,7 +406,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             int Result = 0;
 
             int statusCode = 0;
-            string statusMessage = "";
+            string statusMessage = ""; 
             try
             {
 

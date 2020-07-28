@@ -687,7 +687,7 @@ namespace Easyrewardz_TicketSystem.Services
 
             try
             {
-                if (conn != null && conn.State == ConnectionState.Closed)
+                if (conn != null && conn.State == ConnectionState.Closed) 
                 {
                     conn.Open();
                 }
