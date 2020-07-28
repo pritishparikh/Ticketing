@@ -400,7 +400,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CustomerRemoveProduct")]
-        public ResponseModel CustomerRemoveProduct(string ProgramCode, string CustomerMobile, string StoreCode, string ItemCode)
+        public ResponseModel CustomerRemoveProduct(string ProgramCode, string CustomerMobile, string RemoveFrom, string ItemCode)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int Result = 0;
@@ -413,7 +413,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                Result = customerChatCaller.CustomerRemoveProduct(new CustomerChatService(_connectionString), ProgramCode,  CustomerMobile,  StoreCode,  ItemCode);
+                Result = customerChatCaller.CustomerRemoveProduct(new CustomerChatService(_connectionString), ProgramCode,  CustomerMobile, RemoveFrom,  ItemCode);
                 statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 

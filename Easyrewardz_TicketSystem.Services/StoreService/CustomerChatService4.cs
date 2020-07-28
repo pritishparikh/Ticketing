@@ -696,7 +696,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_ProgramCode", Item.ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerMobile", Item.CustomerMobile);
-                cmd.Parameters.AddWithValue("@_StoreCode", Item.StoreCode);
                 cmd.Parameters.AddWithValue("@_ItemCode", string.IsNullOrEmpty(Item.ProductDetails.uniqueItemCode) ? "" : Item.ProductDetails.uniqueItemCode);
                 cmd.Parameters.AddWithValue("@_ItemName", string.IsNullOrEmpty(Item.ProductDetails.productName) ? "" : Item.ProductDetails.productName);
                 cmd.Parameters.AddWithValue("@_Category", string.IsNullOrEmpty(Item.ProductDetails.categoryName) ? "" : Item.ProductDetails.categoryName);
@@ -801,7 +800,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ItemCode"></param>
         /// </summary>
         /// <returns></returns>
-        public int CustomerRemoveProduct(string ProgramCode, string CustomerMobile, string StoreCode, string ItemCode)
+        public int CustomerRemoveProduct(string ProgramCode, string CustomerMobile, string RemoveFrom, string ItemCode)
         {
             MySqlCommand cmd = new MySqlCommand();
             int Result = 0;
@@ -817,7 +816,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerMobile", CustomerMobile);
-                cmd.Parameters.AddWithValue("@_StoreCode", StoreCode);
+                cmd.Parameters.AddWithValue("@_RemoveFrom", RemoveFrom.ToLower());
                 cmd.Parameters.AddWithValue("@_ItemCode", ItemCode);
 
                 cmd.CommandType = CommandType.StoredProcedure;

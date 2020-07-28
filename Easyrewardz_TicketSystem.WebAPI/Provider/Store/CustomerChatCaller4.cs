@@ -72,10 +72,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
 
-        public int CustomerRemoveProduct(ICustomerChat customerChat, string ProgramCode, string CustomerMobile, string StoreCode, string ItemCode)
+        public int CustomerRemoveProduct(ICustomerChat customerChat, string ProgramCode, string CustomerMobile, string RemoveFrom, string ItemCode)
         {
             _customerChat = customerChat;
-            return _customerChat.CustomerRemoveProduct( ProgramCode,  CustomerMobile,  StoreCode,  ItemCode);
+            return _customerChat.CustomerRemoveProduct( ProgramCode,  CustomerMobile, RemoveFrom,  ItemCode);
         }
 
         #endregion

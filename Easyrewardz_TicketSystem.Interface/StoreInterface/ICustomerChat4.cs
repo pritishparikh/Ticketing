@@ -28,7 +28,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         int CustomerAddToWishlist(ClientChatAddProduct Item);
 
-        int CustomerRemoveProduct(string ProgramCode, string CustomerMobile, string StoreCode, string ItemCode);
+        int CustomerRemoveProduct(string ProgramCode, string CustomerMobile, string RemoveFrom, string ItemCode);
 
         #endregion
     }

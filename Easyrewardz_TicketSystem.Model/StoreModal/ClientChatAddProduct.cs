@@ -17,11 +17,6 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
 
 
         /// <summary>
-        ///Store Code
-        /// </summary>
-        public string StoreCode { get; set; }
-
-        /// <summary>
         /// Product Details
         /// </summary>
         public CustomItemSearchResponseModel ProductDetails { get; set; }
