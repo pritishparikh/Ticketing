@@ -324,6 +324,7 @@ namespace Easyrewardz_TicketSystem.Services
             DataSet ds = new DataSet();
             MySqlCommand cmd = new MySqlCommand();
             List<StoreTimeSlotSettingModel> TimeSlotList = new List<StoreTimeSlotSettingModel>();
+            List<TemplateBasedSlots> TemplateSlotsList = new List<TemplateBasedSlots>();
             try
             {
 
@@ -348,7 +349,7 @@ namespace Easyrewardz_TicketSystem.Services
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
                         foreach (DataRow dr in ds.Tables[0].Rows)
-                        {
+                        {                        
                             TimeSlotList.Add(new StoreTimeSlotSettingModel()
                             {
 
@@ -358,9 +359,8 @@ namespace Easyrewardz_TicketSystem.Services
                                 StoreId = dr["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreId"]),
                                 StoreCode = dr["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreCode"]),
                                 StoreTimimg = dr["StoreTimimg"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreTimimg"]),
-                                NonOperationalTimimg = dr["NonOperationalTimimg"] == DBNull.Value ? string.Empty : Convert.ToString(dr["NonOperationalTimimg"]),
+                                OperationalDays = dr["OperationalDays"] == DBNull.Value ? string.Empty : Convert.ToString(dr["OperationalDays"]),
                                 StoreSlotDuration = dr["StoreSlotDuration"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreSlotDuration"]),
-                                MaxCapacity = dr["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(dr["MaxCapacity"]),
                                 TotalSlot = dr["TotalSlot"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TotalSlot"]),
                                 AppointmentDays = dr["AppointmentDays"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AppointmentDays"]),
                                 CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CreatedBy"]),
@@ -369,14 +369,23 @@ namespace Easyrewardz_TicketSystem.Services
                                 ModifyBy = dr["ModifyBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ModifyBy"]),
                                 ModifyByName = dr["ModifyByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyByName"]),
                                 ModifyDate = dr["ModifyDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyDate"]),
-
-
-
+                                Status = dr["Status"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Status"]),
+                                TemplateSlots = new List<TemplateBasedSlots>()
                             });
 
-                              
+                            if (ds.Tables.Count > 1)
+                            {
+                                TimeSlotList[0].TemplateSlots = ds.Tables[1].AsEnumerable().Select(r => new TemplateBasedSlots()
+                                {
+                                    SlotID = r.Field<object>("SlotID") == DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("SlotID")),
+                                    SlotStartTime = r.Field<object>("SlotStartTime") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SlotStartTime")),
+                                    SlotEndTime = r.Field<object>("SlotEndTime") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SlotEndTime")),
+                                    IsSlotEnabled = r.Field<object>("SlotStatus") == DBNull.Value ? false : Convert.ToBoolean(r.Field<object>("SlotStatus"))
+                                }).ToList();
+                            }
                         }
                     }
+                    
                 }
 
                 

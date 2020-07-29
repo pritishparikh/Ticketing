@@ -37,9 +37,14 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string StoreTimimg { get; set; }
 
         /// <summary>
-        /// Non Operational Timimg
+        /// Operational Days
         /// </summary>
-        public string NonOperationalTimimg { get; set; }
+        public string OperationalDays { get; set; }
+
+        /// <summary>
+        /// Slot Template Name
+        /// </summary>
+        public string SlotTemplateName { get; set; }
 
         /// <summary>
         /// Store Slot Duration
@@ -89,9 +94,17 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// <summary>
         /// Modify Date
         /// </summary>
-        public string ModifyDate { get; set; } 
-       
-        
+        public string ModifyDate { get; set; }
+
+        /// <summary>
+        /// Status
+        /// </summary>
+        public string Status { get; set; }
+
+        /// <summary>
+        /// Template Slots
+        /// </summary>
+        public List<TemplateBasedSlots> TemplateSlots { get; set; }
     }
 
 
@@ -168,4 +181,5 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
 
 
     }
+
 }
