@@ -622,7 +622,8 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     foreach(CustomerChatProductModel obj in ProductDetails.Products)
                     {
-                        string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\">";
+                        //string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\">";
+                        string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px;\"><div class=\"col-md-2\">";
                         string Midhtml = "<div class=\"col-md-10 bkcprdt\">";
                         var Endhtml = "</div></div></div>";
 
