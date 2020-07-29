@@ -16,7 +16,6 @@ namespace Easyrewardz_TicketSystem.Services
         MySqlConnection conn = new MySqlConnection();
         string apiResponse = string.Empty;
         string apiResponse1 = string.Empty;
-        //string apisecurityToken = string.Empty;
         string apiURL = string.Empty;
         string apiURLGetUserATVDetails = string.Empty;
         string _connectionStringClass = "";
@@ -25,11 +24,8 @@ namespace Easyrewardz_TicketSystem.Services
         #region Constructor
         public HSOrderService(string _connectionString)
         {
-
             conn.ConnectionString = _connectionString;
             _connectionStringClass = _connectionString;
-            //apisecurityToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9ncmFtQ29kZSI6IkJhdGEiLCJVc2VySUQiOiIzIiwiQXBwSUQiOiI3IiwiRGF5IjoiMjgiLCJNb250aCI6IjMiLCJZZWFyIjoiMjAyMSIsIlJvbGUiOiJBZG1pbiIsImlzcyI6IkF1dGhTZWN1cml0eUlzc3VlciIsImF1ZCI6IkF1dGhTZWN1cml0eUF1ZGllbmNlIn0.0XeF7V5LWfQn0NlSlG7Rb-Qq1hUCtUYRDg6dMGIMvg0";
-            ////apiURLGetUserATVDetails = configuration.GetValue<string>("apiURLGetUserATVDetails");
         }
         #endregion
 
@@ -54,8 +50,6 @@ namespace Easyrewardz_TicketSystem.Services
                     CommandType = CommandType.StoredProcedure
                 };
                 cmd.Parameters.AddWithValue("@_tenantID", TenantId);
-               // cmd.Parameters.AddWithValue("@_prgramCode", ProgramCode);
-
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
@@ -73,9 +67,9 @@ namespace Easyrewardz_TicketSystem.Services
                         moduleConfiguration.ShoppingBag = ds.Tables[0].Rows[0]["ShoppingBag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["ShoppingBag"]);
                         moduleConfiguration.EnableClickAfterValue = ds.Tables[0].Rows[0]["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt16(ds.Tables[0].Rows[0]["EnableClickAfterValue"]);
                         moduleConfiguration.EnableClickAfterDuration = ds.Tables[0].Rows[0]["EnableClickAfterDuration"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["EnableClickAfterDuration"]);
-                        moduleConfiguration.StoreDelivery= ds.Tables[0].Rows[0]["StoreDelivery"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["StoreDelivery"]);
-                        moduleConfiguration.AlertCommunicationviaWhtsup= ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"]);
-                        moduleConfiguration.AlertCommunicationviaSMS= ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"]);
+                        moduleConfiguration.StoreDelivery = ds.Tables[0].Rows[0]["StoreDelivery"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["StoreDelivery"]);
+                        moduleConfiguration.AlertCommunicationviaWhtsup = ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaWhtsup"]);
+                        moduleConfiguration.AlertCommunicationviaSMS = ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["AlertCommunicationviaSMS"]);
                         moduleConfiguration.AlertCommunicationSMSText = ds.Tables[0].Rows[0]["AlertCommunicationSMSText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["AlertCommunicationSMSText"]);
                         moduleConfiguration.PaymentTenantCodeText = ds.Tables[0].Rows[0]["TenderPayRemainingText"] == DBNull.Value ? "" : Convert.ToString(ds.Tables[0].Rows[0]["TenderPayRemainingText"]);
                         moduleConfiguration.RetryCount = ds.Tables[0].Rows[0]["RetryCount"] == DBNull.Value ? 0 : Convert.ToInt16(ds.Tables[0].Rows[0]["RetryCount"]);
@@ -187,7 +181,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-                
+
                 for (int i = 0; i < pHYOrderMessageTemplates.Count; i++)
                 {
                     MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateOrderMessageTemplate", conn)
@@ -240,11 +234,9 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-
                 cmd.Parameters.AddWithValue("@_TenantId", TenantId);
                 cmd.Parameters.AddWithValue("@_UserID", UserId);
                 cmd.Parameters.AddWithValue("@_MessageName", MessageName);
-
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
@@ -298,7 +290,6 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 conn.Open();
-
                 for (int i = 0; i < pHYWhatsAppTemplates.Count; i++)
                 {
                     MySqlCommand cmd = new MySqlCommand("SP_PHYUpdateWhatsupTemplate", conn)
@@ -313,7 +304,6 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd.CommandType = CommandType.StoredProcedure;
                     UpdateCount += Convert.ToInt32(cmd.ExecuteNonQuery());
                 }
-
             }
             catch (Exception)
             {
@@ -340,7 +330,6 @@ namespace Easyrewardz_TicketSystem.Services
         {
             DataSet ds = new DataSet();
             OrderDeliveredDetails objdetails = new OrderDeliveredDetails();
-
             List<OrderDelivered> orderDelivered = new List<OrderDelivered>();
             int TotalCount = 0;
             try
@@ -592,7 +581,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_StaffName", shipmentAssignedRequest.StaffName);
                 cmd.Parameters.AddWithValue("@_MobileNumber", shipmentAssignedRequest.MobileNumber);
                 cmd.Parameters.AddWithValue("@_IsProceed", shipmentAssignedRequest.IsProceed);
-
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
                 if (UpdateCount > 0)
@@ -636,7 +624,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ShoppingID", ShoppingID);
                 cmd.Parameters.AddWithValue("@_CancelComment", CancelComment);
                 cmd.Parameters.AddWithValue("@_UserID", UserId);
-
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -672,7 +659,6 @@ namespace Easyrewardz_TicketSystem.Services
                     Connection = conn
                 };
                 cmd.Parameters.AddWithValue("@_OrderID", OrderID);
-
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -716,10 +702,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_Amount", convertToOrder.Amount);
                 cmd.Parameters.AddWithValue("@_TenantID", TenantId);
                 cmd.Parameters.AddWithValue("@_UserID", UserId);
-
                 cmd.CommandType = CommandType.StoredProcedure;
                 InsertCount = Convert.ToInt32(cmd.ExecuteScalar());
-                if(InsertCount > 0)
+                if (InsertCount > 0)
                 {
                     SmsWhatsUpDataSend(TenantId, UserId, ProgramCode, InsertCount, ClientAPIUrl, "ShoppingBagConvertToOrder");
                 }
@@ -797,7 +782,6 @@ namespace Easyrewardz_TicketSystem.Services
         {
             DataSet ds = new DataSet();
             OrderReturnsDetails objdetails = new OrderReturnsDetails();
-
             List<OrderReturns> orderReturns = new List<OrderReturns>();
             int TotalCount = 0;
             try
@@ -841,7 +825,7 @@ namespace Easyrewardz_TicketSystem.Services
                             orderReturnsItems = new List<OrderReturnsItem>()
                         };
 
-                        if((ds.Tables[3].Rows[0]["RetryCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[3].Rows[0]["RetryCount"])) > 0)
+                        if ((ds.Tables[3].Rows[0]["RetryCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[3].Rows[0]["RetryCount"])) > 0)
                         {
                             if (obj.RetryCount == (ds.Tables[3].Rows[0]["RetryCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[3].Rows[0]["RetryCount"])))
                             {
@@ -972,26 +956,15 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public PrintManifestResponse ShipmentAssignedPrintManifest(Int64 OrderIds, string ClientAPIURL)
         {
-
             PrintManifestResponse printManifestResponse = new PrintManifestResponse();
-
-            
-
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
             string ClientAPIResponse = string.Empty;
             try
             {
-
-                #region call client api for print manifest
-
                 PrintManifestRequest printManifestRequest = new PrintManifestRequest();
                 printManifestRequest.orderIds = new List<long>();
                 printManifestRequest.orderIds.Add(OrderIds);
-               
-
-                try
-                {
                     string JsonRequest = JsonConvert.SerializeObject(printManifestRequest);
 
                     ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ShoppingBag/PrintManifest", JsonRequest);
@@ -1000,26 +973,24 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         printManifestResponse = JsonConvert.DeserializeObject<PrintManifestResponse>(ClientAPIResponse);
                     }
-
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-
-
-
-                #endregion
-
             }
             catch (Exception)
             {
                 throw;
             }
-
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
             return printManifestResponse;
         }
-
 
         /// <summary>
         /// Shipment Assigned Print Label
@@ -1029,49 +1000,37 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public PrintLabelResponse ShipmentAssignedPrintLabel(Int64 ShipmentId, string ClientAPIURL)
         {
-
             PrintLabelResponse printLabelResponse = new PrintLabelResponse();
-
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
             string ClientAPIResponse = string.Empty;
             try
             {
-
-                #region call client api for print manifest
-
                 PrintLabelRequest printLabelRequest = new PrintLabelRequest();
                 printLabelRequest.shipmentId = new List<long>();
-                printLabelRequest.shipmentId.Add(ShipmentId);
-
-
-                try
+                printLabelRequest.shipmentId.Add(ShipmentId);            
+                string JsonRequest = JsonConvert.SerializeObject(printLabelRequest);
+                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ShoppingBag/GenerateLabel", JsonRequest);
+                if (!string.IsNullOrEmpty(ClientAPIResponse))
                 {
-                    string JsonRequest = JsonConvert.SerializeObject(printLabelRequest);
-
-                    ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ShoppingBag/GenerateLabel", JsonRequest);
-
-                    if (!string.IsNullOrEmpty(ClientAPIResponse))
-                    {
-                        printLabelResponse = JsonConvert.DeserializeObject<PrintLabelResponse>(ClientAPIResponse);
-                    }
-
+                    printLabelResponse = JsonConvert.DeserializeObject<PrintLabelResponse>(ClientAPIResponse);
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
-
-
-
-                #endregion
-
             }
             catch (Exception)
             {
                 throw;
             }
-
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
             return printLabelResponse;
         }
 
@@ -1094,26 +1053,25 @@ namespace Easyrewardz_TicketSystem.Services
                         OrderIds
                     }
                 };
-                try
+                string JsonRequest = JsonConvert.SerializeObject(printInvoiceRequest);
+
+                ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ShoppingBag/PrintInvoice", JsonRequest);
+
+                if (!string.IsNullOrEmpty(ClientAPIResponse))
                 {
-                    string JsonRequest = JsonConvert.SerializeObject(printInvoiceRequest);
-
-                    ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ShoppingBag/PrintInvoice", JsonRequest);
-
-                    if (!string.IsNullOrEmpty(ClientAPIResponse))
-                    {
-                        printInvoiceResponse = JsonConvert.DeserializeObject<PrintInvoiceResponse>(ClientAPIResponse);
-                    }
-
-                }
-                catch (Exception)
-                {
-                    throw;
+                    printInvoiceResponse = JsonConvert.DeserializeObject<PrintInvoiceResponse>(ClientAPIResponse);
                 }
             }
             catch (Exception)
             {
                 throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
             }
 
             return printInvoiceResponse;
@@ -1157,7 +1115,7 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-                if(cancel)
+                if (cancel)
                 {
                     result = SmsWhatsUpDataSend(TenantId, UserId, ProgramCode, OrderId, ClientAPIURL, "Cancelled");
 
@@ -1166,13 +1124,23 @@ namespace Easyrewardz_TicketSystem.Services
                         UpdateCancelSMSWhatsAppSend(OrderId);
                     }
                 }
-               
+
             }
             catch (Exception)
             {
                 throw;
             }
-
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
             return result;
         }
 
@@ -1195,6 +1163,13 @@ namespace Easyrewardz_TicketSystem.Services
             catch (Exception)
             {
                 throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
             }
 
             return UpdateCount;
@@ -1222,7 +1197,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_StatusID", StatusId);
                 cmd.Parameters.AddWithValue("@_AWBNo", AWBNo);
                 cmd.Parameters.AddWithValue("@_ReturnID", ReturnId);
-
                 cmd.CommandType = CommandType.StoredProcedure;
                 UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
 
@@ -1231,7 +1205,13 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 throw;
             }
-
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
             return UpdateCount;
         }
     }
