@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.Services
         MySqlConnection conn = new MySqlConnection();
         string apiResponse = string.Empty;
         string apiResponse1 = string.Empty;
-        string apisecurityToken = string.Empty;
+        //string apisecurityToken = string.Empty;
         string apiURL = string.Empty;
         string apiURLGetUserATVDetails = string.Empty;
         string _connectionStringClass = "";
@@ -28,8 +28,8 @@ namespace Easyrewardz_TicketSystem.Services
 
             conn.ConnectionString = _connectionString;
             _connectionStringClass = _connectionString;
-            apisecurityToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9ncmFtQ29kZSI6IkJhdGEiLCJVc2VySUQiOiIzIiwiQXBwSUQiOiI3IiwiRGF5IjoiMjgiLCJNb250aCI6IjMiLCJZZWFyIjoiMjAyMSIsIlJvbGUiOiJBZG1pbiIsImlzcyI6IkF1dGhTZWN1cml0eUlzc3VlciIsImF1ZCI6IkF1dGhTZWN1cml0eUF1ZGllbmNlIn0.0XeF7V5LWfQn0NlSlG7Rb-Qq1hUCtUYRDg6dMGIMvg0";
-            //apiURLGetUserATVDetails = configuration.GetValue<string>("apiURLGetUserATVDetails");
+            //apisecurityToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9ncmFtQ29kZSI6IkJhdGEiLCJVc2VySUQiOiIzIiwiQXBwSUQiOiI3IiwiRGF5IjoiMjgiLCJNb250aCI6IjMiLCJZZWFyIjoiMjAyMSIsIlJvbGUiOiJBZG1pbiIsImlzcyI6IkF1dGhTZWN1cml0eUlzc3VlciIsImF1ZCI6IkF1dGhTZWN1cml0eUF1ZGllbmNlIn0.0XeF7V5LWfQn0NlSlG7Rb-Qq1hUCtUYRDg6dMGIMvg0";
+            ////apiURLGetUserATVDetails = configuration.GetValue<string>("apiURLGetUserATVDetails");
         }
         #endregion
 
@@ -41,7 +41,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="userId"></param>
         /// <param name="programCode"></param>
         /// <returns></returns>
-        public OrderConfiguration GetOrderConfiguration(int TenantId, int UserId, string ProgramCode)
+        public OrderConfiguration GetOrderConfiguration(int TenantId)
         {
             DataSet ds = new DataSet();
             OrderConfiguration moduleConfiguration = new OrderConfiguration();
@@ -54,7 +54,7 @@ namespace Easyrewardz_TicketSystem.Services
                     CommandType = CommandType.StoredProcedure
                 };
                 cmd.Parameters.AddWithValue("@_tenantID", TenantId);
-                cmd.Parameters.AddWithValue("@_prgramCode", ProgramCode);
+               // cmd.Parameters.AddWithValue("@_prgramCode", ProgramCode);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {

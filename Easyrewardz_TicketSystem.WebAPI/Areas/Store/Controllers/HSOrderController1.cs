@@ -74,7 +74,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 orderConfiguration = hSOrderCaller.GetOrderConfiguration(new HSOrderService(_connectionString),
-                    authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
+                    authenticate.TenantId);
                 statusCode =
                    orderConfiguration.ID.Equals(0) ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

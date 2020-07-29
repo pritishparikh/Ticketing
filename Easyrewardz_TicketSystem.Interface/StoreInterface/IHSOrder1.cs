@@ -13,7 +13,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="userId"></param>
         /// <param name="programCode"></param>
         /// <returns></returns>
-        OrderConfiguration GetOrderConfiguration(int tenantId, int userId, string programCode);
+        OrderConfiguration GetOrderConfiguration(int tenantId);
 
         /// <summary>
         /// Update Order Configuration

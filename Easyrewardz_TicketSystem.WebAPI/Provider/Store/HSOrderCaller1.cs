@@ -18,10 +18,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="userId"></param>
         /// <param name="programCode"></param>
         /// <returns></returns>
-        public OrderConfiguration GetOrderConfiguration(IHSOrder Order, int TenantId, int UserId, string ProgramCode)
+        public OrderConfiguration GetOrderConfiguration(IHSOrder Order, int TenantId)
         {
             _OrderRepository = Order;
-            return _OrderRepository.GetOrderConfiguration(TenantId, UserId, ProgramCode);
+            return _OrderRepository.GetOrderConfiguration(TenantId);
         }
 
         /// <summary>
