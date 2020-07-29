@@ -291,7 +291,6 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Open();
                 }
 
-
                 MySqlCommand cmd = new MySqlCommand("SP_DeleteStoreTimeSlotMaster", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_SlotSettingID", SlotID);
@@ -300,7 +299,6 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 Result = Convert.ToInt32(cmd.ExecuteScalar());
-                conn.Close();
             }
             catch (Exception)
             {
