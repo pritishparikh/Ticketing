@@ -617,6 +617,8 @@ namespace Easyrewardz_TicketSystem.Services
                     SendTextRequest.To = MobileNo;
                     SendTextRequest.textToReply = Message;
                     SendTextRequest.programCode = ProgramCode;
+                    SendTextRequest.ShoppingBag = "1";
+                    SendTextRequest.Like = "1";
 
                     string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
 

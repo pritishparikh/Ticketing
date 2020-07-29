@@ -622,6 +622,21 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     foreach(CustomerChatProductModel obj in ProductDetails.Products)
                     {
+
+                        #region call client api for sending message to customer
+
+                        SendTextRequest.To = ProductDetails.CustomerMobile;
+                        SendTextRequest.textToReply = Message;
+                        SendTextRequest.programCode = ProductDetails.ProgramCode;
+                        SendTextRequest.ShoppingBag = obj.IsShoppingBag ? "1" : "0";
+                        SendTextRequest.Like = obj.IsWishList ? "1" : "0";
+
+                        string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
+
+                        ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendText", JsonRequest);
+
+                        #endregion
+
                         //string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\">";
                         string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px;\"><div class=\"col-md-2\">";
                         string Midhtml = "<div class=\"col-md-10 bkcprdt\">";
@@ -653,17 +668,7 @@ namespace Easyrewardz_TicketSystem.Services
 
 
 
-                        #region call client api for sending message to customer
-                        
-                            //SendTextRequest.To = ProductDetails.CustomerMobile;
-                            //SendTextRequest.textToReply = Message;
-                            //SendTextRequest.programCode = ProductDetails.ProgramCode;
-
-                            //string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
-
-                            //ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendText", JsonRequest);
-
-                        #endregion
+                       
 
                     }
                 }
