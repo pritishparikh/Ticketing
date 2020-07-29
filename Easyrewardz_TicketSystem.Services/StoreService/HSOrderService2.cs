@@ -1109,8 +1109,6 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (DataSetCSV.Tables[0] != null && DataSetCSV.Tables[0].Rows.Count > 0)
                     {
-
-                        //check if user ulpoad or brandcategory mapping
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
                         conn.Open();
 

@@ -66,22 +66,19 @@ namespace Easyrewardz_TicketSystem.Services
         public List<CustomerChatMaster> NewChat(int userMasterID, int tenantID)
         {
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
             List<CustomerChatMaster> lstCustomerChatMaster = new List<CustomerChatMaster>(); 
-
             try
             {
                 conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSNewChat", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_HSNewChat", conn)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
-                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@userMaster_ID", userMasterID);
+                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
-                    SelectCommand = cmd1
+                    SelectCommand = cmd
                 };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
@@ -105,7 +102,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -127,24 +123,21 @@ namespace Easyrewardz_TicketSystem.Services
         public List<CustomerChatMaster> OngoingChat(int userMasterID, int tenantID, string Search, int StoreManagerID)
         {
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
             List<CustomerChatMaster> lstCustomerChatMaster = new List<CustomerChatMaster>();
             try
             {
                 conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSOngoingChat", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_HSOngoingChat", conn)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
-                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
-                cmd1.Parameters.AddWithValue("@search", string.IsNullOrEmpty(Search)? "": Search);
-                cmd1.Parameters.AddWithValue("@StoreMgr_ID", StoreManagerID);
-                
+                cmd.Parameters.AddWithValue("@userMaster_ID", userMasterID);
+                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@search", string.IsNullOrEmpty(Search)? "": Search);
+                cmd.Parameters.AddWithValue("@StoreMgr_ID", StoreManagerID);
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
-                    SelectCommand = cmd1
+                    SelectCommand = cmd
                 };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
@@ -169,7 +162,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -189,7 +181,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public List<AppointmentDetails> ScheduleVisit(AppointmentMaster appointmentMaster)
         {
-
             DataSet ds = new DataSet();
             List<AppointmentDetails> lstAppointmentDetails = new List<AppointmentDetails>();
             try 
@@ -254,7 +245,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int UpdateCustomerChatIdStatus(int chatID, int tenantId, int UserID)
         {
-
             int result = 0;
             try
             {
@@ -268,7 +258,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -278,7 +267,6 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-
             return result;
         }
 
@@ -290,27 +278,31 @@ namespace Easyrewardz_TicketSystem.Services
         public List<CustomerChatHistory> CustomerChatHistory(int chatID)
         {
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
             List<CustomerChatHistory> customerChatHistory = new List<CustomerChatHistory>();
             try
             {
                 conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSCustomerChatHistory", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@chat_id", chatID);
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                MySqlCommand cmd = new MySqlCommand("SP_HSCustomerChatHistory", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@chat_id", chatID);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        CustomerChatHistory chatHistory = new CustomerChatHistory();
-                        chatHistory.ChatID = Convert.ToInt32(ds.Tables[0].Rows[i]["ChatID"]);
-                        chatHistory.CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
-                        chatHistory.Time = ds.Tables[0].Rows[i]["Time"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Time"]);
-                        chatHistory.Message = ds.Tables[0].Rows[i]["Message"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
+                        CustomerChatHistory chatHistory = new CustomerChatHistory
+                        {
+                            ChatID = Convert.ToInt32(ds.Tables[0].Rows[i]["ChatID"]),
+                            CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]),
+                            Time = ds.Tables[0].Rows[i]["Time"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Time"]),
+                            Message = ds.Tables[0].Rows[i]["Message"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Message"])
+                        };
                         customerChatHistory.Add(chatHistory);
                     }
                 }
@@ -343,22 +335,19 @@ namespace Easyrewardz_TicketSystem.Services
         public int GetChatCount(int tenantID,int UserMasterID)
         {
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
             int counts = 0;
             try
             {
-
                 conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSCountTotalUnreadChat", conn)
+                MySqlCommand cmd = new MySqlCommand("SP_HSCountTotalUnreadChat", conn)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
-                cmd1.Parameters.AddWithValue("@UserMaster_ID", UserMasterID);
+                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@UserMaster_ID", UserMasterID);
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
-                    SelectCommand = cmd1
+                    SelectCommand = cmd
                 };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
@@ -371,7 +360,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -393,29 +381,26 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public List<DateofSchedule> GetTimeSlot(int storeID,int userMasterID, int tenantID)
         {
-            DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();        
+            DataSet ds = new DataSet();     
             List<DateofSchedule> lstdateofSchedule = new List<DateofSchedule>();
-
             try
             {
-               
-
                 if (conn != null && conn.State == ConnectionState.Closed)
                 {
                     conn.Open();
                 }
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetTimeSlot", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
-                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
-        
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                MySqlCommand cmd = new MySqlCommand("SP_HSGetTimeSlot", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@userMaster_ID", userMasterID);
+                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
                 da.Fill(ds);
-
-
                 if (ds != null && ds.Tables[0] != null)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -424,14 +409,11 @@ namespace Easyrewardz_TicketSystem.Services
                         dateofSchedule.ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
                         dateofSchedule.Day = ds.Tables[0].Rows[i]["DayName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayName"]);
                         dateofSchedule.Dates = ds.Tables[0].Rows[i]["DateFormat"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DateFormat"]);
-
-
                         if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
                         {
                             dateofSchedule.AlreadyScheduleDetails = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<object>("AID")).Equals(dateofSchedule.ID))
                                 .Select(x => new AlreadyScheduleDetail()
                                 {
-
                                     TimeSlotId = x.Field<object>("SlotId") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("SlotId")),
                                     AppointmentDate = x.Field<object>("AppointmentDate") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("AppointmentDate")),
                                     VisitedCount = x.Field<object>("VisitedCount") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("VisitedCount")),
@@ -443,16 +425,12 @@ namespace Easyrewardz_TicketSystem.Services
 
                                 }).ToList();
                         }
-
                         lstdateofSchedule.Add(dateofSchedule);
-
                     }
-
                 }  
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -461,7 +439,6 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
-
                 if (ds != null)
                 {
                     ds.Dispose();
@@ -482,13 +459,10 @@ namespace Easyrewardz_TicketSystem.Services
         {
             MySqlCommand cmd = new MySqlCommand();
             int resultCount = 0;
-            //CustomerChatModel ChatMessageDetails = new CustomerChatModel();
             ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
             string ClientAPIResponse = string.Empty;
-
             try
             {
-
                 string textToReply = "Dear" + appointmentMaster.CustomerName + ",Your Visit for Our Store is schedule On" + appointmentMaster.AppointmentDate +
                     "On Time Between"+ appointmentMaster.TimeSlot;
 
@@ -502,32 +476,13 @@ namespace Easyrewardz_TicketSystem.Services
 
                 ClientAPIResponse = CommonService.SendApiRequest(ClientAPIResponse + "api/ChatbotBell/SendText", JsonRequest);
 
-
-                // response binding pending as no response structure is provided yet from client------
-
-                //--------
-
                 #endregion
-
-                //if (ChatID > 0)
-                //{
-                //    ChatMessageDetails.ChatID = ChatID;
-                //    ChatMessageDetails.Message = Message;
-                //    ChatMessageDetails.ByCustomer = false;
-                //    ChatMessageDetails.ChatStatus = 1;
-                //    ChatMessageDetails.StoreManagerId = CreatedBy;
-                //    ChatMessageDetails.CreatedBy = CreatedBy;
-
-                //    resultCount = SaveChatMessages(ChatMessageDetails);
-
-                //}
-
+               
             }
             catch (Exception)
             {
                 throw;
             }
-
             return resultCount;
         }
     }
