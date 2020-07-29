@@ -611,15 +611,9 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
             int Result = 0;
-
-            //string HtmlMessageContent = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\">" +
-            //    "<img class=\"chat-product-img\" src=\"{0}\" alt=\"Product Image\" ></div>" +
-            //    "<div class=\"col-md-10 bkcprdt\"><div><label class=\"chat-product-name\">Brand :{1}</label></div>" +
-            //    "<div><label class=\"chat-product-code\">Category: {2}</label></div><div><label class=\"chat-product-code\">SubCategory: {3}</label></div>" +
-            //    "<div><label class=\"chat-product-code\">Color: {4}</label></div><div><label class=\"chat-product-code\">Size: {5}</label></div>" +
-            //    "<div><label class=\"chat-product-code\">Item Code: {6}</label></div><div><label class=\"chat-product-prize\"> Price : {7}</label></div>" +
-            //    "<div><a href=\"{8}\" target=\"_blank\" class=\"chat-product-url\">{9}</a></div></div></div></div>";
-
+            ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
+            string ClientAPIResponse = string.Empty;
+            string Message = string.Empty;
             try
             {
                
@@ -655,6 +649,20 @@ namespace Easyrewardz_TicketSystem.Services
                         ChatMessageDetails.CreatedBy = ProductDetails.UserID;
 
                         Result = Result + SaveChatMessages(ChatMessageDetails);
+
+
+
+                        #region call client api for sending message to customer
+                        
+                            //SendTextRequest.To = ProductDetails.CustomerMobile;
+                            //SendTextRequest.textToReply = Message;
+                            //SendTextRequest.programCode = ProductDetails.ProgramCode;
+
+                            //string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
+
+                            //ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendText", JsonRequest);
+
+                        #endregion
 
                     }
                 }

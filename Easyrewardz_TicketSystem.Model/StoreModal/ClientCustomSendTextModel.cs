@@ -21,6 +21,15 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// </summary>
         public string programCode { get; set; }
 
-       
+        /// <summary>
+        /// ShoppingBag flag
+        /// </summary>
+        public string ShoppingBag { get; set; }
+
+        /// <summary>
+        /// Like flag 
+        /// </summary>
+        public string Like { get; set; }
+
     }
 }

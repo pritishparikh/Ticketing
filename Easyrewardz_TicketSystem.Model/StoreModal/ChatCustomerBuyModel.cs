@@ -23,6 +23,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public int TenantID { get; set; }
         public string ProgramCode { get; set; }
         public int ChatID { get; set; }
+        public string CustomerMobile { get; set; }
         public int UserID { get; set; }
         public List<CustomerChatProductModel> Products { get; set; }
     }
