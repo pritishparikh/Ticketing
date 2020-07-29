@@ -693,7 +693,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("ShipmentAssignedPrintManifest")]
-        public ResponseModel ShipmentAssignedPrintManifest(Int64 OrderIds)
+        public ResponseModel ShipmentAssignedPrintManifest(int OrderIds)
         {
             ResponseModel objResponseModel = new ResponseModel();
             PrintManifestResponse printManifest = new PrintManifestResponse();
@@ -732,7 +732,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("ShipmentAssignedPrintLabel")]
-        public ResponseModel ShipmentAssignedPrintLabel(Int64 ShipmentId)
+        public ResponseModel ShipmentAssignedPrintLabel(int ShipmentId)
         {
             ResponseModel objResponseModel = new ResponseModel();
             PrintLabelResponse printLabel = new PrintLabelResponse();
@@ -771,7 +771,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("ShipmentAssignedPrintInvoice")]
-        public ResponseModel ShipmentAssignedPrintInvoice(Int64 OrderIds)
+        public ResponseModel ShipmentAssignedPrintInvoice(int OrderIds)
         {
             ResponseModel objResponseModel = new ResponseModel();
             PrintInvoiceResponse printInvoice = new PrintInvoiceResponse();

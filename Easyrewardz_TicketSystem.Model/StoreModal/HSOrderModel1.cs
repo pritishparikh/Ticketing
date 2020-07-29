@@ -769,7 +769,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// List of order Ids
         /// </summary>
-        public List<Int64> orderIds { get; set; }
+        public List<int> orderIds { get; set; }
     }
 
     public class PrintManifestResponse
@@ -785,7 +785,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// List of shipment Ids
         /// </summary>
-        public List<Int64> shipmentId { get; set; }
+        public List<int> shipmentId { get; set; }
     }
 
     public class PrintLabelResponse
@@ -811,7 +811,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// List of shipment Ids
         /// </summary>
-        public List<Int64> ids { get; set; }
+        public List<int> ids { get; set; }
     }
 
     public class PrintInvoiceResponse

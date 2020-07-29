@@ -954,7 +954,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="OrderIds"></param>
         /// <param name="ClientAPIURL"></param>
         /// <returns></returns>
-        public PrintManifestResponse ShipmentAssignedPrintManifest(Int64 OrderIds, string ClientAPIURL)
+        public PrintManifestResponse ShipmentAssignedPrintManifest(int OrderIds, string ClientAPIURL)
         {
             PrintManifestResponse printManifestResponse = new PrintManifestResponse();
             MySqlCommand cmd = new MySqlCommand();
@@ -963,7 +963,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 PrintManifestRequest printManifestRequest = new PrintManifestRequest();
-                printManifestRequest.orderIds = new List<long>();
+                printManifestRequest.orderIds = new List<int>();
                 printManifestRequest.orderIds.Add(OrderIds);
                     string JsonRequest = JsonConvert.SerializeObject(printManifestRequest);
 
@@ -998,7 +998,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ShipmentId"></param>
         /// <param name="ClientAPIURL"></param>
         /// <returns></returns>
-        public PrintLabelResponse ShipmentAssignedPrintLabel(Int64 ShipmentId, string ClientAPIURL)
+        public PrintLabelResponse ShipmentAssignedPrintLabel(int ShipmentId, string ClientAPIURL)
         {
             PrintLabelResponse printLabelResponse = new PrintLabelResponse();
             MySqlCommand cmd = new MySqlCommand();
@@ -1007,7 +1007,7 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 PrintLabelRequest printLabelRequest = new PrintLabelRequest();
-                printLabelRequest.shipmentId = new List<long>();
+                printLabelRequest.shipmentId = new List<int>();
                 printLabelRequest.shipmentId.Add(ShipmentId);            
                 string JsonRequest = JsonConvert.SerializeObject(printLabelRequest);
                 ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ShoppingBag/GenerateLabel", JsonRequest);
@@ -1040,7 +1040,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="OrderIds"></param>
         /// <param name="ClientAPIURL"></param>
         /// <returns></returns>
-        public PrintInvoiceResponse ShipmentAssignedPrintInvoice(Int64 OrderIds, string ClientAPIURL)
+        public PrintInvoiceResponse ShipmentAssignedPrintInvoice(int OrderIds, string ClientAPIURL)
         {
             PrintInvoiceResponse printInvoiceResponse = new PrintInvoiceResponse();
             string ClientAPIResponse = string.Empty;
@@ -1048,7 +1048,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 PrintInvoiceRequest printInvoiceRequest = new PrintInvoiceRequest
                 {
-                    ids = new List<long>
+                    ids = new List<int>
                     {
                         OrderIds
                     }
@@ -1099,8 +1099,7 @@ namespace Easyrewardz_TicketSystem.Services
                     CommandType = CommandType.StoredProcedure
                 };
                 cmd.Parameters.AddWithValue("@_TenantID", TenantId);
-                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
-
+                
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
