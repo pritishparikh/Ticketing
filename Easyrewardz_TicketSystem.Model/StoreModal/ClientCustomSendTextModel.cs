@@ -21,6 +21,32 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// </summary>
         public string programCode { get; set; }
 
+      
+
+    }
+
+    public class ClientCustomSendProductModel
+    {
+        /// <summary>
+        /// Customer Mobile Number
+        /// </summary>
+        public string To { get; set; }
+
+        /// <summary>
+        /// textToReply
+        /// </summary>
+        public string textToReply { get; set; }
+
+        /// <summary>
+        /// programCode
+        /// </summary>
+        public string programCode { get; set; }
+
+        /// <summary>
+        /// programCode
+        /// </summary>
+        public string ImageUrl { get; set; }
+
         /// <summary>
         /// ShoppingBag flag
         /// </summary>
