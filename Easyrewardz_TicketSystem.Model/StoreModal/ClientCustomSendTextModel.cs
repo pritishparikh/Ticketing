@@ -30,7 +30,7 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// <summary>
         /// Customer Mobile Number
         /// </summary>
-        public string To { get; set; }
+        public string to { get; set; }
 
         /// <summary>
         /// textToReply
@@ -45,17 +45,17 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         /// <summary>
         /// programCode
         /// </summary>
-        public string ImageUrl { get; set; }
+        public string imageUrl { get; set; }
 
         /// <summary>
         /// ShoppingBag flag
         /// </summary>
-        public string ShoppingBag { get; set; }
+        public string shoppingBag { get; set; }
 
         /// <summary>
         /// Like flag 
         /// </summary>
-        public string Like { get; set; }
+        public string like { get; set; }
 
     }
 }
