@@ -3,7 +3,9 @@ using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Model.StoreModal;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -310,6 +312,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
 
+
         #region Client Exposed API
 
         /// <summary>
@@ -317,6 +320,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name="ClientChatAddProduct"></param>
         /// </summary>
         /// <returns></returns>
+
+        [AllowAnonymous]
         [HttpPost]
         [Route("CustomerAddToShoppingBag")]
         public ResponseModel CustomerAddToShoppingBag([FromBody] ClientChatAddProduct Item)
@@ -325,21 +330,50 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             int Result = 0;
 
             int statusCode = 0;
+            string connString = string.Empty;
             string statusMessage = "";
             try
             {
-                
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                Result = customerChatCaller.CustomerAddToShoppingBag(new CustomerChatService(_connectionString), Item);
-                statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                if (string.IsNullOrEmpty(Item.ProgramCode))
+                {
 
-                objResponseModel.Status = true;
-                objResponseModel.StatusCode = statusCode;
-                objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = Result;
+                    RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                    if (cacheService.Exists("Con" + Item.ProgramCode))
+                    {
+                        connString = cacheService.Get("Con" + Item.ProgramCode);
+                        connString = JsonConvert.DeserializeObject<string>(connString);
+
+                        Result = customerChatCaller.CustomerAddToShoppingBag(new CustomerChatService(connString), Item);
+                        statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                        objResponseModel.Status = true;
+                        objResponseModel.StatusCode = statusCode;
+                        objResponseModel.Message = statusMessage;
+                        objResponseModel.ResponseData = Result;
+                    }
+                    else
+                    {
+                        objResponseModel.Status = false;
+                        objResponseModel.StatusCode = statusCode;
+                        objResponseModel.Message = "Invalid ProgramCode";
+                        objResponseModel.ResponseData = Result;
+
+                    }
+                }
+                else
+                {
+                    objResponseModel.Status = false;
+                    objResponseModel.StatusCode = statusCode;
+                    objResponseModel.Message = "Please Provide ProgramCode";
+                    objResponseModel.ResponseData = Result;
+
+                }
+
+
             }
             catch (Exception)
             {
@@ -354,6 +388,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name="ClientChatAddProduct"></param>
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpPost]
         [Route("CustomerAddToWishlist")]
         public ResponseModel CustomerAddToWishlist([FromBody] ClientChatAddProduct Item)
@@ -363,20 +398,48 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             int statusCode = 0;
             string statusMessage = "";
+            string connString = string.Empty;
             try
             {
-                
+
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                Result = customerChatCaller.CustomerAddToWishlist(new CustomerChatService(_connectionString), Item);
-                statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                if (string.IsNullOrEmpty(Item.ProgramCode))
+                {
 
-                objResponseModel.Status = true;
-                objResponseModel.StatusCode = statusCode;
-                objResponseModel.Message = statusMessage;
-                objResponseModel.ResponseData = Result;
+                    RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                    if (cacheService.Exists("Con" + Item.ProgramCode))
+                    {
+                        connString = cacheService.Get("Con" + Item.ProgramCode);
+                        connString = JsonConvert.DeserializeObject<string>(connString);
+
+                        Result = customerChatCaller.CustomerAddToWishlist(new CustomerChatService(connString), Item);
+                        statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                        objResponseModel.Status = true;
+                        objResponseModel.StatusCode = statusCode;
+                        objResponseModel.Message = statusMessage;
+                        objResponseModel.ResponseData = Result;
+                    }
+                    else
+                    {
+                        objResponseModel.Status = false;
+                        objResponseModel.StatusCode = statusCode;
+                        objResponseModel.Message = "Invalid ProgramCode";
+                        objResponseModel.ResponseData = Result;
+
+                    }
+                }
+                else
+                {
+                    objResponseModel.Status = false;
+                    objResponseModel.StatusCode = statusCode;
+                    objResponseModel.Message = "Please Provide ProgramCode";
+                    objResponseModel.ResponseData = Result;
+
+                }
             }
             catch (Exception)
             {
@@ -394,6 +457,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <param name="ItemCode"></param>
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpPost]
         [Route("CustomerRemoveProduct")]
         public ResponseModel CustomerRemoveProduct(string ProgramCode, string CustomerMobile, string RemoveFrom, string ItemCode)
@@ -402,21 +466,50 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             int Result = 0;
 
             int statusCode = 0;
-            string statusMessage = ""; 
+            string statusMessage = "";
+            string connString = string.Empty;
             try
             {
 
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                Result = customerChatCaller.CustomerRemoveProduct(new CustomerChatService(_connectionString), ProgramCode,  CustomerMobile, RemoveFrom,  ItemCode);
-                statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
-                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+                if (string.IsNullOrEmpty(ProgramCode))
+                {
 
-                objResponseModel.Status = true;
-                objResponseModel.StatusCode = statusCode;
-                objResponseModel.Message = statusMessage;   
-                objResponseModel.ResponseData = Result;
+                    RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                    if (cacheService.Exists("Con" + ProgramCode))
+                    {
+                        connString = cacheService.Get("Con" + ProgramCode);
+                        connString = JsonConvert.DeserializeObject<string>(connString);
+
+                        Result = customerChatCaller.CustomerRemoveProduct(new CustomerChatService(connString), ProgramCode, CustomerMobile, RemoveFrom, ItemCode);
+                        statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                        objResponseModel.Status = true;
+                        objResponseModel.StatusCode = statusCode;
+                        objResponseModel.Message = statusMessage;
+                        objResponseModel.ResponseData = Result;
+                    }
+                    else
+                    {
+                        objResponseModel.Status = false;
+                        objResponseModel.StatusCode = statusCode;
+                        objResponseModel.Message = "Invalid ProgramCode";
+                        objResponseModel.ResponseData = Result;
+
+                    }
+                }
+                else
+                {
+                    objResponseModel.Status = false;
+                    objResponseModel.StatusCode = statusCode;
+                    objResponseModel.Message = "Please Provide ProgramCode";
+                    objResponseModel.ResponseData = Result;
+
+                }
+
             }
             catch (Exception)
             {
