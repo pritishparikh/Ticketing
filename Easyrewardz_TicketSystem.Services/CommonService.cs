@@ -81,7 +81,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 isMailSent = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw ;
             }
@@ -613,8 +613,7 @@ namespace Easyrewardz_TicketSystem.Services
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
                 httpWebRequest.Method = "POST";
                 httpWebRequest.Accept = "text/plain";
-
-                //httpWebRequest.PreAuthenticate = true;
+                
                 httpWebRequest.ContentType = "application/json ";
                 httpWebRequest.Headers.Add("Authorization", "Bearer " + token);
 
@@ -670,7 +669,7 @@ namespace Easyrewardz_TicketSystem.Services
             catch (Exception)
             {
 
-                //throw ex;
+                throw;
             }
 
             return strresponse;

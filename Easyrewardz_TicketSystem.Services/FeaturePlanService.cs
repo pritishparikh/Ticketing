@@ -84,9 +84,16 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            finally
             {
-                throw ex;
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return featurePlanModel;
         }
@@ -118,10 +125,10 @@ namespace Easyrewardz_TicketSystem.Services
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
                 message = Convert.ToString(cmd.Parameters["@Message"].Value);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -129,6 +136,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+               
             }
 
             return message;
@@ -152,17 +160,17 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
-                }
+                }              
             }
 
             return result;
@@ -178,8 +186,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_AddPlan", conn);
                 cmd.Connection = conn;
-                cmd.CommandType = CommandType.StoredProcedure;
-                //cmd.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd.CommandType = CommandType.StoredProcedure;               
                 cmd.Parameters.AddWithValue("@UserID", plan.CreatedBy);
                 cmd.Parameters.AddWithValue("@Planname", plan.PlanName);
                 cmd.Parameters.AddWithValue("@MonthlyPlanPrice", plan.MonthlyAmount);
@@ -203,7 +210,7 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
-                }
+                }               
             }
             return result;
         }
@@ -220,8 +227,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetPlanOnEdit", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                //cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.CommandType = CommandType.StoredProcedure;                
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -250,6 +256,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return planModels;

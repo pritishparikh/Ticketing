@@ -381,7 +381,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetRegisteredTenant", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                //cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+               
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -391,9 +391,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         CompanyModel companyModel = new CompanyModel();
                         companyModel.TenantID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
-                        companyModel.CompanyName = Convert.ToString(ds.Tables[0].Rows[i]["CompanayName"]);
-                        //languageModel.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
+                        companyModel.CompanyName = Convert.ToString(ds.Tables[0].Rows[i]["CompanayName"]);                      
 
                         GetRegisteredTenant.Add(companyModel);
                     }
@@ -408,6 +406,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 

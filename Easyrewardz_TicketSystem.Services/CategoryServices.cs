@@ -62,9 +62,7 @@ namespace Easyrewardz_TicketSystem.Services
                         Category category = new Category();
                         category.CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
                         category.CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
-                        category.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
-
+                        category.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);                       
                         categoryList.Add(category);
                     }
                 }
@@ -78,6 +76,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return categoryList;
@@ -479,50 +481,7 @@ namespace Easyrewardz_TicketSystem.Services
                     }
 
                 }
-            }
-            #region old code
-            //XmlDocument xmlDoc = new XmlDocument();
-            //DataSet Bulkds = new DataSet();
-            //List<string> csvLst = new List<string>();
-            //string SuccessFile = string.Empty; string ErrorFile = string.Empty;
-            //try
-            //{
-            //    if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
-            //    {
-            //        if (DataSetCSV.Tables[0] != null && DataSetCSV.Tables[0].Rows.Count > 0)
-            //        {
-
-            //            xmlDoc.LoadXml(DataSetCSV.GetXml());
-            //            conn.Open();
-            //            MySqlCommand cmd = new MySqlCommand("SP_CategoryBulkUpload", conn);
-            //            cmd.Connection = conn;
-            //            cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
-            //            cmd.Parameters.AddWithValue("@_node", Xpath);
-
-            //            cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
-            //            cmd.CommandType = CommandType.StoredProcedure;
-            //            MySqlDataAdapter da = new MySqlDataAdapter();
-            //            da.SelectCommand = cmd;
-            //            da.Fill(Bulkds);
-
-            //            if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
-            //            {
-
-            //                //for success file
-            //                SuccessFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
-            //                csvLst.Add(SuccessFile);
-
-            //                //for error file
-            //                ErrorFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
-            //                csvLst.Add(ErrorFile);
-
-
-            //            }
-            //        }
-
-            //    }
-            //}
-      # endregion Old code
+            }          
             catch (Exception)
             {
                 throw;
@@ -612,8 +571,7 @@ namespace Easyrewardz_TicketSystem.Services
                         Category category = new Category();
                         category.CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
                         category.CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
-                        category.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
+                        category.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);                     
 
                         categoryList.Add(category);
                     }

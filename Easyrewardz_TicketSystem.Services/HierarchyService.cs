@@ -42,16 +42,16 @@ namespace Easyrewardz_TicketSystem.Services
                     Success = Convert.ToInt32(cmd.ExecuteScalar());
 
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
+                    throw;
                 }
                 finally
                 {
                     if (conn != null)
                     {
                         conn.Close();
-                    }
+                    }                    
                 }
 
             }
@@ -86,9 +86,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                     Success = Convert.ToInt32(cmd.ExecuteNonQuery());
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
+                    throw;
                 }
                 finally
                 {
@@ -126,25 +126,27 @@ namespace Easyrewardz_TicketSystem.Services
                         hierarchymodel.ReportTo= ds.Tables[0].Rows[i]["ReportTo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReportTo"]);
                         hierarchymodel.Createdbyperson= ds.Tables[0].Rows[i]["Createdby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]);
                         hierarchymodel.Updatedbyperson = ds.Tables[0].Rows[i]["UpdatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedBy"]);
-                        hierarchymodel.Status= ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsActive"]);
-                       // hierarchymodel.Createddate= Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
-                        hierarchymodel.Createdateformat= ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
-                        //hierarchymodel.Updateddate= Convert.ToDateTime(ds.Tables[0].Rows[i]["ModifiedDate"]);
+                        hierarchymodel.Status= ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsActive"]);                      
+                        hierarchymodel.Createdateformat= ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);                
                         hierarchymodel.Updateddateformat = ds.Tables[0].Rows[i]["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]);
                         hierarchymodel.ReportToDesignation = ds.Tables[0].Rows[i]["ReportToDesignation"] == DBNull.Value ? 0 : Convert.ToInt16(ds.Tables[0].Rows[i]["ReportToDesignation"]); 
                         listHierarchy.Add(hierarchymodel);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return listHierarchy;

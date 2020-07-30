@@ -483,8 +483,10 @@ namespace Easyrewardz_TicketSystem.Services
             string ProgramCode = string.Empty;
             List<CustomerRecommendatonModel> RecommendationsList = new List<CustomerRecommendatonModel>();
             DataSet ds = new DataSet();
+            ClientCustomSendProductModel Details = new ClientCustomSendProductModel();
             string HtmlMessageContent = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\"><img class=\"chat-product-img\" src=\"{0}\" alt=\"Product Image\" ></div><div class=\"col-md-10 bkcprdt\"><div><label class=\"chat-product-name\">Brand :{1}</label></div><div><label class=\"chat-product-code\">Category: {2}</label></div><div><label class=\"chat-product-code\">SubCategory: {3}</label></div><div><label class=\"chat-product-code\">Color: {4}</label></div><div><label class=\"chat-product-code\">Size: {5}</label></div><div><label class=\"chat-product-code\">Item Code: {6}</label></div><div><label class=\"chat-product-prize\"> Price : {7}</label></div><div><a href=\"{8}\" target=\"_blank\" class=\"chat-product-url\">{9}</a></div></div></div></div>";
-
+            string ClientAPIResponse = string.Empty;
+            string whatsAppContent = string.Empty;
             try
             {
 
@@ -524,7 +526,10 @@ namespace Easyrewardz_TicketSystem.Services
                                 Price = dr["Price"] == DBNull.Value ? "0" : Convert.ToString(dr["Price"]),
                                 Url = dr["Url"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Url"]),
                                 ImageURL = dr["ImageURL"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ImageURL"]),
-
+                                ItemName = dr["ItemName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ItemName"]),
+                                IsShoppingBag = dr["IsShoppingBag"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsShoppingBag"]),
+                                IsWishList = dr["IsWishList"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsWishList"]),
+                                IsRecommended = dr["IsRecommended"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsRecommended"]),
                             };
 
                             RecommendationsList.Add(obj);
@@ -545,9 +550,37 @@ namespace Easyrewardz_TicketSystem.Services
 
                     foreach (CustomerRecommendatonModel RecObj in RecommendationsList)
                     {
+                        /*
                         string whatsAppContent = "Brand: " + RecObj.Brand + ", Category: " + RecObj.Category + ", Sub Category: " + RecObj.SubCategory + ", Color: " + RecObj.Color + ", Size: " +
                                                  RecObj.Size + ", Item Code: " + RecObj.ItemCode + ", Price: " + RecObj.Price + "  " + RecObj.Url;
                         resultCount = resultCount + SendMessageToCustomer(Chat_ID, MobileNo.Length > 10 ? MobileNo : "91" + MobileNo, ProgramCode, RecObj.Url, whatsAppContent, RecObj.ImageURL, ClientAPIURL, CreatedBy, 0);
+                        */
+
+                        #region call client api for sending message to customer
+
+                        whatsAppContent += !string.IsNullOrEmpty(RecObj.ItemCode) ? RecObj.ItemCode : " " + ",";
+                        whatsAppContent += !string.IsNullOrEmpty(RecObj.ItemName) ? RecObj.ItemName : " " + ",";
+                        whatsAppContent += !string.IsNullOrEmpty(RecObj.Category) ? RecObj.Category : " " + ",";
+                        whatsAppContent += !string.IsNullOrEmpty(RecObj.SubCategory) ? RecObj.SubCategory : " " + ",";
+                        whatsAppContent += !string.IsNullOrEmpty(RecObj.Brand) ? RecObj.Brand : " " + ",";
+                        whatsAppContent += !string.IsNullOrEmpty(RecObj.Price) ? RecObj.Price : " " + ",";
+                        whatsAppContent += !string.IsNullOrEmpty(RecObj.Color) ? RecObj.Color : " " + ",";
+                        whatsAppContent += !string.IsNullOrEmpty(RecObj.Size) ? RecObj.Size : " " + ",";
+                        whatsAppContent += !string.IsNullOrEmpty(RecObj.ImageURL) ? RecObj.ImageURL : " " + ",";
+
+
+                        Details.to = MobileNo.Length > 10 ? MobileNo : "91" + MobileNo;
+                        Details.textToReply = whatsAppContent;
+                        Details.programCode = Programcode;
+                        Details.imageUrl = RecObj.ImageURL;
+                        Details.shoppingBag = RecObj.IsShoppingBag ? "1" : "0";
+                        Details.like = RecObj.IsWishList ? "1" : "0";
+
+                        string JsonRequest = JsonConvert.SerializeObject(Details);
+
+                        ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendCtaImage", JsonRequest);
+
+                        #endregion
                     }
 
                     #endregion
@@ -617,6 +650,7 @@ namespace Easyrewardz_TicketSystem.Services
                     SendTextRequest.To = MobileNo;
                     SendTextRequest.textToReply = Message;
                     SendTextRequest.programCode = ProgramCode;
+
 
                     string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
 

@@ -219,6 +219,7 @@ namespace Easyrewardz_TicketSystem.Services
                   new XElement("Slots",
                   from Slots in Slot.TemplateSlots
                   select new XElement("SlotDetails",
+                  new XElement("SlotID", Slots.SlotID),
                   new XElement("SlotStartTime", Slots.SlotStartTime),
                   new XElement("SlotEndTime", Slots.SlotEndTime),
                   new XElement("SlotOccupancy", Slots.SlotOccupancy),
@@ -249,7 +250,6 @@ namespace Easyrewardz_TicketSystem.Services
 
               
                 cmd.Parameters.AddWithValue("@_AppointmentDays", Slot.AppointmentDays); 
-                cmd.Parameters.AddWithValue("@_ApplicableFromDate", Slot.ApplicableFromDate); 
                 cmd.Parameters.AddWithValue("@_IsActive",Convert.ToInt16(Slot.IsActive));
                 cmd.Parameters.AddWithValue("@_SlotDisplayCode", Slot.SlotDisplayCode);
                 cmd.Parameters.AddWithValue("@_XmlSlots", string.IsNullOrEmpty(XmlSlots) ? "" : XmlSlots);

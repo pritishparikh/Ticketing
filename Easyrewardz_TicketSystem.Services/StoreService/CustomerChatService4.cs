@@ -611,9 +611,10 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             DataSet ds = new DataSet();
             int Result = 0;
-            ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
+            ClientCustomSendProductModel Details = new ClientCustomSendProductModel();
             string ClientAPIResponse = string.Empty;
             string Message = string.Empty;
+            string CTAMessage = string.Empty;
             try
             {
                
@@ -622,6 +623,33 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     foreach(CustomerChatProductModel obj in ProductDetails.Products)
                     {
+
+                        #region call client api for sending message to customer
+
+                        CTAMessage += !string.IsNullOrEmpty(obj.uniqueItemCode) ? obj.uniqueItemCode : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.productName) ? obj.productName : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.categoryName) ? obj.categoryName : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.subCategoryName) ? obj.subCategoryName : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.brandName) ? obj.brandName : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.price) ? obj.price : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.color) ? obj.color : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.size) ? obj.size : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.imageURL) ? obj.imageURL : " " + ",";
+
+
+                        Details.to = ProductDetails.CustomerMobile.Length > 10 ? ProductDetails.CustomerMobile : "91" + ProductDetails.CustomerMobile;
+                        Details.textToReply = Message;
+                        Details.programCode = ProductDetails.ProgramCode;
+                        Details.imageUrl = obj.imageURL;
+                        Details.shoppingBag = obj.IsShoppingBag ? "1" : "0";
+                        Details.like = obj.IsWishList ? "1" : "0";
+
+                        string JsonRequest = JsonConvert.SerializeObject(Details);
+
+                        ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendCtaImage", JsonRequest);
+
+                        #endregion
+
                         //string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\">";
                         string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px;\"><div class=\"col-md-2\">";
                         string Midhtml = "<div class=\"col-md-10 bkcprdt\">";
@@ -653,17 +681,7 @@ namespace Easyrewardz_TicketSystem.Services
 
 
 
-                        #region call client api for sending message to customer
-                        
-                            //SendTextRequest.To = ProductDetails.CustomerMobile;
-                            //SendTextRequest.textToReply = Message;
-                            //SendTextRequest.programCode = ProductDetails.ProgramCode;
-
-                            //string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
-
-                            //ClientAPIResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendText", JsonRequest);
-
-                        #endregion
+                       
 
                     }
                 }
