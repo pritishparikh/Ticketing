@@ -326,8 +326,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             int statusCode = 0;
             string statusMessage = "";
-            string SoundPhysicalFilePath = string.Empty;
-            string SoundFilePath = string.Empty;
             try
             {
                 
@@ -365,8 +363,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             int statusCode = 0;
             string statusMessage = "";
-            string SoundPhysicalFilePath = string.Empty;
-            string SoundFilePath = string.Empty;
             try
             {
                 

@@ -107,9 +107,9 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_HSGetAppointmentCount", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
-                cmd1.Parameters.AddWithValue("@Program_Code", ProgramCode);
-                cmd1.Parameters.AddWithValue("@User_Id", UserId);
+                cmd1.Parameters.AddWithValue("@_TenantId", TenantID);
+                cmd1.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd1.Parameters.AddWithValue("@_UserID", UserId);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
