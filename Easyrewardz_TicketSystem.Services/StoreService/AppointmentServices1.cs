@@ -359,7 +359,10 @@ namespace Easyrewardz_TicketSystem.Services
                                 StoreId = dr["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreId"]),
                                 StoreCode = dr["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreCode"]),
                                 StoreTimimg = dr["StoreTimimg"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreTimimg"]),
+                                OperationalDaysCount = dr["OperationalDays"] == DBNull.Value ? 0 : Convert.ToString(dr["OperationalDays"]).Split(',').Length,
                                 OperationalDays = dr["OperationalDays"] == DBNull.Value ? string.Empty : Convert.ToString(dr["OperationalDays"]),
+                                SlotTemplateID = dr["SlotTemplateID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotTemplateID"]),
+                                SlotTemplateName = dr["SlotTemplateName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SlotTemplateName"]),
                                 StoreSlotDuration = dr["StoreSlotDuration"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreSlotDuration"]),
                                 TotalSlot = dr["TotalSlot"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TotalSlot"]),
                                 AppointmentDays = dr["AppointmentDays"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AppointmentDays"]),
@@ -370,19 +373,26 @@ namespace Easyrewardz_TicketSystem.Services
                                 ModifyByName = dr["ModifyByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyByName"]),
                                 ModifyDate = dr["ModifyDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyDate"]),
                                 Status = dr["Status"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Status"]),
-                                TemplateSlots = new List<TemplateBasedSlots>()
-                            });
-
-                            if (ds.Tables.Count > 1)
-                            {
-                                TimeSlotList[0].TemplateSlots = ds.Tables[1].AsEnumerable().Select(r => new TemplateBasedSlots()
+                                TemplateSlots = ds.Tables[1].AsEnumerable().Where(x => (x.Field<int>("SlotSettingID")).Equals(dr["SlotSettingID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotSettingID"]))).Select(r => new TemplateBasedSlots()
                                 {
                                     SlotID = r.Field<object>("SlotID") == DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("SlotID")),
-                                    SlotStartTime = r.Field<object>("SlotStartTime") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SlotStartTime")),
-                                    SlotEndTime = r.Field<object>("SlotEndTime") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SlotEndTime")),
+                                    SlotStartTime = r.Field<object>("TimeSlot") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TimeSlot")).Split('-')[0],
+                                    SlotEndTime = r.Field<object>("TimeSlot") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("TimeSlot")).Split('-')[1],
+                                    SlotOccupancy = r.Field<object>("MaxCapacity") == DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("MaxCapacity")),
                                     IsSlotEnabled = r.Field<object>("SlotStatus") == DBNull.Value ? false : Convert.ToBoolean(r.Field<object>("SlotStatus"))
-                                }).ToList();
-                            }
+                                }).ToList()
+                        });
+
+                            //if (ds.Tables.Count > 1)
+                            //{
+                            //    TimeSlotList[0].TemplateSlots = ds.Tables[1].AsEnumerable().Where(x => (x.Field<int>("OrderID")).Equals(obj.ID)).Select(r => new TemplateBasedSlots()
+                            //    {
+                            //        SlotID = r.Field<object>("SlotID") == DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("SlotID")),
+                            //        SlotStartTime = r.Field<object>("SlotStartTime") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SlotStartTime")),
+                            //        SlotEndTime = r.Field<object>("SlotEndTime") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SlotEndTime")),
+                            //        IsSlotEnabled = r.Field<object>("SlotStatus") == DBNull.Value ? false : Convert.ToBoolean(r.Field<object>("SlotStatus"))
+                            //    }).ToList();
+                            //}
                         }
                     }
                     
