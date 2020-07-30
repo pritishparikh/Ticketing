@@ -37,9 +37,19 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string StoreTimimg { get; set; }
 
         /// <summary>
+        /// Operational Days Count
+        /// </summary>
+        public int OperationalDaysCount { get; set; }
+
+        /// <summary>
         /// Operational Days
         /// </summary>
         public string OperationalDays { get; set; }
+
+        /// <summary>
+        /// Slot Template ID
+        /// </summary>
+        public int SlotTemplateID { get; set; }
 
         /// <summary>
         /// Slot Template Name
