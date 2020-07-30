@@ -373,6 +373,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 ModifyByName = dr["ModifyByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyByName"]),
                                 ModifyDate = dr["ModifyDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyDate"]),
                                 Status = dr["Status"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Status"]),
+                                SlotDisplayCode = dr["SlotDisplayCode"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotDisplayCode"]),
                                 TemplateSlots = ds.Tables[1].AsEnumerable().Where(x => (x.Field<int>("SlotSettingID")).Equals(dr["SlotSettingID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SlotSettingID"]))).Select(r => new TemplateBasedSlots()
                                 {
                                     SlotID = r.Field<object>("SlotID") == DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("SlotID")),

@@ -188,3 +188,17 @@ D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV1\Ticketing\Easy
 D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV1\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.csproj.CopyComplete
 D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV1\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
 D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV1\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.deps.json
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.csprojAssemblyReference.cache
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.csproj.CoreCompileInputs.cache
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.AssemblyInfoInputs.cache
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.AssemblyInfo.cs
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.csproj.CopyComplete
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
+D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Interface\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb

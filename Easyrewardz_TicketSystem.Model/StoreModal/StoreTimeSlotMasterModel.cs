@@ -112,6 +112,11 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public string Status { get; set; }
 
         /// <summary>
+        /// Slot Display Code
+        /// </summary>
+        public int SlotDisplayCode { get; set; }
+
+        /// <summary>
         /// Template Slots
         /// </summary>
         public List<TemplateBasedSlots> TemplateSlots { get; set; }

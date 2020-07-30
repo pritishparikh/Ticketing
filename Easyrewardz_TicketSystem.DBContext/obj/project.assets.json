@@ -5476,11 +5476,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenantV1\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj",
+      "projectUniqueName": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenantV2\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj",
       "projectName": "Easyrewardz_TicketSystem.DBContext",
-      "projectPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenantV1\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj",
+      "projectPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenantV2\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\Easyrewardz_TicketSystem.DBContext.csproj",
       "packagesPath": "C:\\Users\\rashmi.salaria\\.nuget\\packages\\",
-      "outputPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenantV1\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\obj\\",
+      "outputPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenantV2\\Ticketing\\Easyrewardz_TicketSystem.DBContext\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -5499,8 +5499,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenantV1\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
-              "projectPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenantV1\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
+            "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenantV2\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
+              "projectPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenantV2\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
             }
           }
         }
