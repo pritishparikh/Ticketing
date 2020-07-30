@@ -102,11 +102,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name="tenantID"></param>
         /// <returns></returns>
-        public List<DateofSchedule> GetTimeSlot(ICustomerChat customerChat, int StoreID, int UserMasterID, int TenantID)
+        public List<DateofSchedule> GetTimeSlot(ICustomerChat customerChat, int TenantID, string Programcode, int UserID)
         {
             _customerChat = customerChat;
 
-            return _customerChat.GetTimeSlot(StoreID, UserMasterID, TenantID);
+            return _customerChat.GetTimeSlot( TenantID,  Programcode, UserID);
         }
 
         /// <summary>

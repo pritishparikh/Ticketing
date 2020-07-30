@@ -379,7 +379,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="tenantID"></param>
         /// <param name="storeID"></param>
         /// <returns></returns>
-        public List<DateofSchedule> GetTimeSlot(int storeID,int userMasterID, int tenantID)
+        public List<DateofSchedule> GetTimeSlot(int TenantID, string Programcode, int UserID)
         {
             DataSet ds = new DataSet();     
             List<DateofSchedule> lstdateofSchedule = new List<DateofSchedule>();
@@ -393,8 +393,9 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                cmd.Parameters.AddWithValue("@userMaster_ID", userMasterID);
-                cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd.Parameters.AddWithValue("@_TenantId", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", Programcode);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
 
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
@@ -403,30 +404,35 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        DateofSchedule dateofSchedule = new DateofSchedule();
-                        dateofSchedule.ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        dateofSchedule.Day = ds.Tables[0].Rows[i]["DayName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayName"]);
-                        dateofSchedule.Dates = ds.Tables[0].Rows[i]["DateFormat"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DateFormat"]);
-                        if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            dateofSchedule.AlreadyScheduleDetails = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<object>("AID")).Equals(dateofSchedule.ID))
-                                .Select(x => new AlreadyScheduleDetail()
-                                {
-                                    TimeSlotId = x.Field<object>("SlotId") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("SlotId")),
-                                    AppointmentDate = x.Field<object>("AppointmentDate") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("AppointmentDate")),
-                                    VisitedCount = x.Field<object>("VisitedCount") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("VisitedCount")),
-                                    MaxCapacity = x.Field<object>("MaxCapacity") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("MaxCapacity")),
-                                    Remaining = x.Field<object>("Remaining") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Remaining")),
-                                    TimeSlot = x.Field<object>("TimeSlot") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("TimeSlot")),
-                                    StoreId = x.Field<object>("StoreId") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("StoreId")),
-                                    IsDisabled = x.Field<object>("IsDisabled") == System.DBNull.Value ? false : Convert.ToBoolean(x.Field<object>("IsDisabled")),
+                            DateofSchedule dateofSchedule = new DateofSchedule();
+                            dateofSchedule.ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                            dateofSchedule.Day = ds.Tables[0].Rows[i]["DayName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayName"]);
+                            dateofSchedule.Dates = ds.Tables[0].Rows[i]["DateFormat"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DateFormat"]);
+                            if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                            {
+                                dateofSchedule.AlreadyScheduleDetails = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<object>("AID")).Equals(dateofSchedule.ID))
+                                    .Select(x => new AlreadyScheduleDetail()
+                                    {
+                                        TimeSlotId = x.Field<object>("SlotId") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("SlotId")),
+                                        AppointmentDate = x.Field<object>("AppointmentDate") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("AppointmentDate")),
+                                        VisitedCount = x.Field<object>("VisitedCount") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("VisitedCount")),
+                                        MaxCapacity = x.Field<object>("MaxCapacity") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("MaxCapacity")),
+                                        Remaining = x.Field<object>("Remaining") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Remaining")),
+                                        TimeSlot = x.Field<object>("TimeSlot") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("TimeSlot")),
+                                        StoreId = x.Field<object>("StoreId") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("StoreId")),
+                                        IsDisabled = x.Field<object>("IsDisabled") == System.DBNull.Value ? false : Convert.ToBoolean(x.Field<object>("IsDisabled")),
 
-                                }).ToList();
+                                    }).ToList();
+                            }
+                            lstdateofSchedule.Add(dateofSchedule);
                         }
-                        lstdateofSchedule.Add(dateofSchedule);
                     }
+
+                    
                 }  
             }
             catch (Exception)

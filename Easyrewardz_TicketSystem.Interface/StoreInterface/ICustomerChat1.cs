@@ -66,11 +66,11 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <summary>
         /// Get Time Slot
         /// </summary>
-        /// <param name="storeID"></param>
-        /// <param name="userMasterID"></param>
-        /// <param name="tenantID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="Programcode"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
-        List<DateofSchedule> GetTimeSlot(int storeID,int userMasterID, int tenantID);
+        List<DateofSchedule> GetTimeSlot(int TenantID, string Programcode, int UserID);
 
         /// <summary>
         /// Send Message To Customer For Visit

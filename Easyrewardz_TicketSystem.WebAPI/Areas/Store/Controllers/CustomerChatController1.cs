@@ -383,7 +383,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetTimeSlot")]
-        public ResponseModel GetTimeSlot(int storeID)
+        public ResponseModel GetTimeSlot()
         {
             List<DateofSchedule> dateOfSchedule = new List<DateofSchedule>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -397,15 +397,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                dateOfSchedule = customerChatCaller.GetTimeSlot(new CustomerChatService(_connectionString), storeID, authenticate.UserMasterID, authenticate.TenantId);
+                dateOfSchedule = customerChatCaller.GetTimeSlot(new CustomerChatService(_connectionString), 
+                    authenticate.TenantId, authenticate.ProgramCode,authenticate.UserMasterID);
 
-                statusCode =
-               dateOfSchedule.Count == 0 ?
-                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode = dateOfSchedule.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-
+               
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
