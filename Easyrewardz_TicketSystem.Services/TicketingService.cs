@@ -110,7 +110,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@_OrderMasterID", ticketingDetails.OrderMasterID);
                 cmd1.Parameters.AddWithValue("@_IssueTypeID", ticketingDetails.IssueTypeID);
                 cmd1.Parameters.AddWithValue("@_ChannelOfPurchaseID", ticketingDetails.ChannelOfPurchaseID);
-                //need to change as per TicketActionType ID[QB / ETA]
+               
                 cmd1.Parameters.AddWithValue("@_AssignedID", ticketingDetails.AssignedID);
                 cmd1.Parameters.AddWithValue("@_TicketActionID", ticketingDetails.TicketActionID);
 
@@ -130,11 +130,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd1.Parameters.AddWithValue("@_TikcketTitle", string.IsNullOrEmpty(ticketingDetails.TicketTitle) ? "" : ticketingDetails.TicketTitle);
                 cmd1.Parameters.AddWithValue("@_StoreID", string.IsNullOrEmpty(ticketingDetails.StoreID) ? "" : ticketingDetails.StoreID);
-                // added for mailer check 
-                //cmd1.Parameters.AddWithValue("@_Is_Sent", Convert.ToInt16(!string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody)));
-
-        
-               // issentflag = ticketingDetails.ticketingMailerQues != null && !string.IsNullOrEmpty(ticketingDetails.ticketingMailerQues[0].TicketMailBody);
+               
 
                 if(ticketingDetails.ticketingMailerQues != null && ticketingDetails.ticketingMailerQues.Count > 0 )
                 {
@@ -158,8 +154,7 @@ namespace Easyrewardz_TicketSystem.Services
                         try
                         {
 
-                            //conn.Open();
-                            //cmd.Connection = conn;
+                           
                             MySqlCommand cmdtask = new MySqlCommand("SP_createTask", conn);
                             cmdtask.Connection = conn;
                             cmdtask.Parameters.AddWithValue("@Ticket_ID", ticketID);
@@ -173,11 +168,11 @@ namespace Easyrewardz_TicketSystem.Services
                             cmdtask.Parameters.AddWithValue("@Created_By", ticketingDetails.CreatedBy);
                             cmdtask.CommandType = CommandType.StoredProcedure;
                             taskId = Convert.ToInt32(cmdtask.ExecuteScalar());
-                            //conn.Close();
+                           
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
-                            throw ex;
+                            throw;
                         }
 
                     }
@@ -187,11 +182,7 @@ namespace Easyrewardz_TicketSystem.Services
                 try
                 {
                     int i = 0;
-                    //if (!Directory.Exists(FolderPath))
-                    //{
-                    //    // Try to create the directory.
-                    //    DirectoryInfo di = Directory.CreateDirectory(FolderPath);
-                    //}
+                  
 
                     if(!string.IsNullOrEmpty(finalAttchment))
                     {
@@ -205,13 +196,12 @@ namespace Easyrewardz_TicketSystem.Services
 
 
                 }
-                catch (IOException ioex)
+                catch (Exception)
                 {
-                    Console.WriteLine(ioex.Message);
+                    throw;
                 }
                 int a = 0;
-                //conn.Open();
-                //cmd.Connection = conn;
+              
 
                 #region Fetch email based on storeID
 
@@ -294,6 +284,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+              
             }
 
             return ticketID;
@@ -453,6 +444,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return listSavedSearch;
         }
@@ -495,6 +490,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return Savedsearch;
@@ -819,12 +818,11 @@ namespace Easyrewardz_TicketSystem.Services
                         ticketDetails.Username = ds.Tables[0].Rows[i]["Username"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Username"]);
                         ticketDetails.UpdateDate = ds.Tables[0].Rows[i]["UpdatedAt"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedAt"]);
                         ticketDetails.Status = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]);
-                        // ticketDetails.TargetClouredate = ds.Tables[0].Rows[i]["TargetClouredate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetClouredate"]);
+                       
                         ticketDetails.AssignedID= ds.Tables[0].Rows[i]["AssignedID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["AssignedID"]);
                         ticketDetails.UserEmailID = ds.Tables[0].Rows[i]["UserEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UserEmailID"]);
                         ticketDetails.TicketAssignDate = ds.Tables[0].Rows[i]["TicketAssignDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketAssignDate"]);
-                        // ticketDetails.TargetResponseDate = ds.Tables[0].Rows[i]["TargetResponseDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetResponseDate"]);
-                        //ticketDetails.TargetResolutionDate = ds.Tables[0].Rows[i]["TargetResolutionDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetResolutionDate"]);
+                       
 
                         ticketDetails.OpenTicket = ds.Tables[0].Rows[i]["OpenTickets"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["OpenTickets"]);
                         ticketDetails.Totalticket = ds.Tables[0].Rows[i]["Totaltickets"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Totaltickets"]);
@@ -871,8 +869,7 @@ namespace Easyrewardz_TicketSystem.Services
                         {
                             ticketDetails.TargetClosuredate = ds.Tables[5].Rows[0]["TargetClosuredate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[5].Rows[0]["TargetClosuredate"]);
                             ticketDetails.DurationRemaining = ds.Tables[5].Rows[0]["DaysRemaining"] == DBNull.Value ? "0 Day 0 Hour" : Convert.ToString(ds.Tables[5].Rows[0]["DaysRemaining"]);
-                            // ticketDetails.TargetResponseDate = ds.Tables[5].Rows[i]["TargetResponseDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TargetResponseDate"]);
-                            //ticketDetails.TargetResolutionDate = ds.Tables[5].Rows[i]["ResolutionDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ResolutionDate"]);
+                            
                         }
                     }
                 }
@@ -1068,78 +1065,13 @@ namespace Easyrewardz_TicketSystem.Services
             MySqlCommand cmd = new MySqlCommand();
             List<TicketMessage> ticketMessages = new List<TicketMessage>();
             List<CustomTicketMessage> TrailTicketMessagelist = new List<CustomTicketMessage>();
-            List<MessageDetails> LatestTicketMessagelist = new List<MessageDetails>();
-
-            #region old approach
-
-            //try
-            //{
-            //    conn.Open();
-            //    cmd.Connection = conn;
-            //    MySqlCommand cmd1 = new MySqlCommand("SP_GetTicketMessage", conn);
-            //    //MySqlCommand cmd1 = new MySqlCommand("Test_GetTicketMessage", conn);
-            //    cmd1.CommandType = CommandType.StoredProcedure;
-            //    cmd1.Parameters.AddWithValue("@Ticket_Id", ticketID);
-            //    cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
-            //    MySqlDataAdapter da = new MySqlDataAdapter();
-            //    da.SelectCommand = cmd1;
-            //    da.Fill(ds);
-
-            //    if (ds != null && ds.Tables.Count > 0)
-            //    {
-
-            //        if (ds.Tables[0] != null && ds.Tables[0] != null)
-            //        {
-            //            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-            //            {
-            //                CustomTicketMessage TicketMessageDetails = new CustomTicketMessage();
-            //                TicketMessageDetails.MailID = Convert.ToInt32(ds.Tables[0].Rows[i]["MailID"]);
-            //                TicketMessageDetails.TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]);
-            //                TicketMessageDetails.TicketMailSubject = ds.Tables[0].Rows[i]["TikcketMailSubject"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TikcketMailSubject"]);
-            //                TicketMessageDetails.TicketMailBody = ds.Tables[0].Rows[i]["TicketMailBody"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TicketMailBody"]);
-            //                TicketMessageDetails.IsCustomerComment = Convert.ToInt32(ds.Tables[0].Rows[i]["IsCustomerComment"]);
-            //                TicketMessageDetails.HasAttachment = Convert.ToInt32(ds.Tables[0].Rows[i]["HasAttachment"]);
-            //                TicketMessageDetails.TicketSource = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketSource"]);
-            //                TicketMessageDetails.CommentBy = ds.Tables[0].Rows[i]["CommentBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CommentBy"]);
-            //                TicketMessageDetails.DayOfCreation = ds.Tables[0].Rows[i]["DayOfCreation"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayOfCreation"]);
-            //                TicketMessageDetails.CreatedDate = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
-            //                CustumTicketMessagelist.Add(TicketMessageDetails);
-            //            }
-            //        }
-
-
-            //        if (ds.Tables[1] != null && ds.Tables[1] != null)
-            //        {
-            //            for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
-            //            {
-
-            //                TicketMessage ticketMessage = new TicketMessage();
-            //                ticketMessage.MessageCount = Convert.ToInt32(ds.Tables[1].Rows[i]["MessageCount"]);
-            //                ticketMessage.MessageDate = ds.Tables[1].Rows[i]["MessageDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[i]["MessageDate"]);
-
-            //                ticketMessage.CustomTicketMessages = CustumTicketMessagelist.Where(x => !string.IsNullOrEmpty(x.CreatedDate) && x.CreatedDate == ticketMessage.MessageDate).ToList();
-            //                ticketMessage.UpdatedDate = CustumTicketMessagelist.Where(x => !string.IsNullOrEmpty(x.CreatedDate) && x.CreatedDate == ticketMessage.MessageDate).Select(x => x.UpdatedAt).ToList().FirstOrDefault();
-
-            //                ticketMessages.Add(ticketMessage);
-            //            }
-
-            //        }
-            //    }
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-
-            #endregion
+            List<MessageDetails> LatestTicketMessagelist = new List<MessageDetails>();      
 
             try
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetTicketMessage", conn);
-                //MySqlCommand cmd1 = new MySqlCommand("Test_GetTicketMessage", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetTicketMessage", conn);               
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@Ticket_Id", ticketID);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantID);
@@ -1568,7 +1500,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@_OrderMasterID", ticketingDetails.OrderMasterID);
                 cmd1.Parameters.AddWithValue("@_IssueTypeID", ticketingDetails.IssueTypeID);
                 cmd1.Parameters.AddWithValue("@_ChannelOfPurchaseID", ticketingDetails.ChannelOfPurchaseID);
-                //need to change as per TicketActionType ID[QB / ETA]
+               
                 cmd1.Parameters.AddWithValue("@_AssignedID", ticketingDetails.AssignedID);
                 cmd1.Parameters.AddWithValue("@_TicketActionID", ticketingDetails.TicketActionID);
 
@@ -1604,8 +1536,7 @@ namespace Easyrewardz_TicketSystem.Services
                         try
                         {
 
-                            //conn.Open();
-                            //cmd.Connection = conn;
+                          
                             MySqlCommand cmdtask = new MySqlCommand("SP_UpdateDraftTask", conn);
                             cmdtask.Connection = conn;
                             cmdtask.Parameters.AddWithValue("@Ticket_ID", ticketingDetails.TicketID);
@@ -1621,7 +1552,7 @@ namespace Easyrewardz_TicketSystem.Services
                             cmdtask.Parameters.AddWithValue("@_StatusID", ticketingDetails.StatusID);
                             cmdtask.CommandType = CommandType.StoredProcedure;
                             taskId = Convert.ToInt32(cmdtask.ExecuteScalar());
-                            //conn.Close();
+                           
                         }
                         catch (Exception ex)
                         {

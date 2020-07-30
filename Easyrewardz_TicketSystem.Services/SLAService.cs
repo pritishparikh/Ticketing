@@ -313,13 +313,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         }
                     }
-                }
-
-                //paging here
-                //if (PageSize > 0 && objSLALst.Count > 0)
-                //    objSLALst[0].totalpages = objSLALst.Count > PageSize ? Math.Round(Convert.ToDouble(objSLALst.Count / PageSize)) : 1;
-
-                //objSLALst = objSLALst.Skip(rowStart).Take(PageSize).ToList();
+                }              
 
 
             }
@@ -362,8 +356,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetIssueTypeForSLACreation", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                //cmd1.Parameters.AddWithValue("@_tenantID", 1);
+                cmd1.CommandType = CommandType.StoredProcedure;             
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 cmd1.Parameters.AddWithValue("@Search_Text", string.IsNullOrEmpty(SearchText) ? "" : SearchText);
                 MySqlDataAdapter da = new MySqlDataAdapter();

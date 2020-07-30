@@ -48,8 +48,7 @@ namespace Easyrewardz_TicketSystem.Services
                         brand.BrandID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
                         brand.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
                         brand.BrandCode = ds.Tables[0].Rows[i]["BrandCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandCode"]);
-                        brand.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
+                        brand.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);                   
 
                         brands.Add(brand);
                     }
@@ -64,6 +63,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -179,11 +182,9 @@ namespace Easyrewardz_TicketSystem.Services
                         brand.TenantID = ds.Tables[0].Rows[i]["TenantID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
                         brand.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
                         brand.BrandCode = ds.Tables[0].Rows[i]["BrandCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandCode"]);
-                        brand.Created_By = ds.Tables[0].Rows[i]["Created_By"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Created_By"]);
-                       // brand.CreatedDate = Convert.ToDateTime(dt.Rows[i]["CreatedDate"]);
+                        brand.Created_By = ds.Tables[0].Rows[i]["Created_By"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Created_By"]);                    
                         brand.CreatedDateFormat = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
-                        brand.Modify_By = ds.Tables[0].Rows[i]["Modified_By"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Modified_By"]);
-                       // brand.ModifyDate = Convert.ToDateTime(dt.Rows[i]["ModifiedDate"]);
+                        brand.Modify_By = ds.Tables[0].Rows[i]["Modified_By"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Modified_By"]);                      
                         brand.ModifyDateFormat = ds.Tables[0].Rows[i]["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]);
                         brand.Status = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
                         brands.Add(brand);
@@ -199,6 +200,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 

@@ -494,6 +494,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if(ds!=null)
+                {
+                    ds.Dispose();
+                }
             }
             return storeTypeMaster;
         }
@@ -606,6 +610,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return storeMaster;
         }
@@ -626,8 +634,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetLanguageList", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                //cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.CommandType = CommandType.StoredProcedure;               
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -638,23 +645,24 @@ namespace Easyrewardz_TicketSystem.Services
                         LanguageModel languageModel = new LanguageModel();
                         languageModel.LanguageID = Convert.ToInt32(ds.Tables[0].Rows[i]["LanguageID"]);
                         languageModel.LanguageName = Convert.ToString(ds.Tables[0].Rows[i]["LanguageName"]);  
-                        //languageModel.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
-
                         languageModels.Add(languageModel);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -710,6 +718,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -793,6 +805,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return customGetEmailID;
