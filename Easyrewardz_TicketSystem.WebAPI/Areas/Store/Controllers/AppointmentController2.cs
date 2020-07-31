@@ -292,6 +292,51 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
+        ///Get Appointment Count On SlotID
+        /// </summary>
+        /// <param name="SlotSettingID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetAppointmentCountOnSlotID")]
+        public ResponseModel GetAppointmentCountOnSlotID(int SlotSettingID)
+        {
+            int AppointmentCount = 0;
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                ////Get token (Double encrypted) and get the tenant id 
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                AppointmentCaller newAppointment = new AppointmentCaller();
+
+                AppointmentCount = newAppointment.GetAppointmentCountOnSlotID(new AppointmentServices(_connectioSting), authenticate.TenantId, authenticate.ProgramCode, SlotSettingID);
+                  
+
+                statusCode = AppointmentCount > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = AppointmentCount;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+
+        /// <summary>
         ///BulkUpload Slot
         /// </summary>
         /// <returns></returns>
@@ -347,5 +392,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             return objResponseModel;
         }
+
+
     }
 }

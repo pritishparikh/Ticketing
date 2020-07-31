@@ -421,5 +421,64 @@ namespace Easyrewardz_TicketSystem.Services
 
             return SlotsList;
         }
+
+
+        /// <summary>
+        ///Get Appointment Count On SlotID
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="SlotSettingID"></param>
+        /// <returns></returns>
+        public int GetAppointmentCountOnSlotID(int TenantID, string ProgramCode, int SlotSettingID)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            int AppointmentCount = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                cmd = new MySqlCommand("SP_HSGetAppointmentCountOnSlotID", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@_SlotSettingID", SlotSettingID);
+                cmd.Parameters.AddWithValue("@_TenantId", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        AppointmentCount = ds.Tables[0].Rows[0]["AppointmentCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["AppointmentCount"]);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return AppointmentCount;
+        }
     }
 }
