@@ -264,7 +264,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     getWhatsappMessageDetailsResponse = new GetWhatsappMessageDetailsResponse();
                 }
-
+                if(conn != null)
+                {
+                    conn.Close();
+                }
                 conn.Open();
 
                 MySqlCommand cmd = new MySqlCommand("SP_HSCampaignShareChatbot", conn)
