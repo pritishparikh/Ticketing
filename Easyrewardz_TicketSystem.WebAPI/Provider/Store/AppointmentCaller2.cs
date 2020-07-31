@@ -41,6 +41,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _AppointmentRepository = appointment;
             return _AppointmentRepository.GetSlotsByTemplateID( TenantID,  ProgramCode,  UserID,  SlotTemplateID);
         }
-  
+
+        public int GetAppointmentCountOnSlotID(IAppointment appointment, int TenantID, string ProgramCode, int SlotSettingID)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.GetAppointmentCountOnSlotID( TenantID,  ProgramCode,  SlotSettingID);
+        }
+
     }
 }

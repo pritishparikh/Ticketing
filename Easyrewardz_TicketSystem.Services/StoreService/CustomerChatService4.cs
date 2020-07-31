@@ -641,8 +641,8 @@ namespace Easyrewardz_TicketSystem.Services
                         Details.textToReply = Message;
                         Details.programCode = ProductDetails.ProgramCode;
                         Details.imageUrl = obj.imageURL;
-                        Details.shoppingBag = obj.IsShoppingBag ? "1" : "0";
-                        Details.like = obj.IsWishList ? "1" : "0";
+                        Details.shoppingBag = obj.IsCard ? "0" : obj.IsShoppingBag ? "1" : "0";
+                        Details.like = obj.IsCard ? "0" : obj.IsWishList ? "1" : "0";
 
                         string JsonRequest = JsonConvert.SerializeObject(Details);
 
@@ -650,38 +650,39 @@ namespace Easyrewardz_TicketSystem.Services
 
                         #endregion
 
-                        //string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\">";
-                        string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px;\"><div class=\"col-md-2\">";
-                        string Midhtml = "<div class=\"col-md-10 bkcprdt\">";
-                        var Endhtml = "</div></div></div>";
+                        if(!obj.IsCard)
+                        {
+                            //string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\">";
+                            string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px;\"><div class=\"col-md-2\">";
+                            string Midhtml = "<div class=\"col-md-10 bkcprdt\">";
+                            var Endhtml = "</div></div></div>";
 
-                        Starthtml  += !string.IsNullOrEmpty(obj.imageURL) ? "<img class=\"chat-product-img\" src=\""+ obj.imageURL + "\" alt=\"Product Image\" ></div>" : "</div>";
-                        Starthtml += Midhtml;
+                            Starthtml += !string.IsNullOrEmpty(obj.imageURL) ? "<img class=\"chat-product-img\" src=\"" + obj.imageURL + "\" alt=\"Product Image\" ></div>" : "</div>";
+                            Starthtml += Midhtml;
 
-                        Starthtml += !string.IsNullOrEmpty(obj.brandName) ? "<div><label class=\"chat-product-name\">Brand : " + obj.brandName + "</label></div>" : "";
-                        Starthtml += !string.IsNullOrEmpty(obj.categoryName) ? "<div><label class=\"chat-product-code\">Category: " + obj.categoryName + "</label></div>" : "";
-                        Starthtml += !string.IsNullOrEmpty(obj.subCategoryName) ? "<div><label class=\"chat-product-code\">SubCategory: " + obj.subCategoryName + "</label></div>" : "";
-                        Starthtml += !string.IsNullOrEmpty(obj.color) ? "<div><label class=\"chat-product-code\">Color: " + obj.color + "</label></div>" : "";
-                        Starthtml += !string.IsNullOrEmpty(obj.size) ? "<div><label class=\"chat-product-code\">Size: " + obj.size + "</label></div>" : "";
-                        Starthtml += !string.IsNullOrEmpty(obj.uniqueItemCode) ? "<div><label class=\"chat-product-code\">Item Code: " + obj.uniqueItemCode + "</label></div>" : "";
-                        Starthtml += !string.IsNullOrEmpty(obj.price) ? "<div><label class=\"chat-product-prize\"> Price : " + obj.price + "</label></div>" : "";
-                        Starthtml += !string.IsNullOrEmpty(obj.url) ? "<div><a href=\"" + obj.url + "\" target=\"_blank\" class=\"chat-product-url\">" + obj.url + "</a></div>" : "";
-                        Starthtml += Endhtml;
-
-
-                        CustomerChatModel ChatMessageDetails = new CustomerChatModel();
-                        ChatMessageDetails.ChatID = ProductDetails.ChatID;
-                        ChatMessageDetails.Message = Starthtml;
-                        ChatMessageDetails.ByCustomer = false;
-                        ChatMessageDetails.ChatStatus = 0;
-                        ChatMessageDetails.StoreManagerId = ProductDetails.UserID;
-                        ChatMessageDetails.CreatedBy = ProductDetails.UserID;
-
-                        Result = Result + SaveChatMessages(ChatMessageDetails);
+                            Starthtml += !string.IsNullOrEmpty(obj.brandName) ? "<div><label class=\"chat-product-name\">Brand : " + obj.brandName + "</label></div>" : "";
+                            Starthtml += !string.IsNullOrEmpty(obj.categoryName) ? "<div><label class=\"chat-product-code\">Category: " + obj.categoryName + "</label></div>" : "";
+                            Starthtml += !string.IsNullOrEmpty(obj.subCategoryName) ? "<div><label class=\"chat-product-code\">SubCategory: " + obj.subCategoryName + "</label></div>" : "";
+                            Starthtml += !string.IsNullOrEmpty(obj.color) ? "<div><label class=\"chat-product-code\">Color: " + obj.color + "</label></div>" : "";
+                            Starthtml += !string.IsNullOrEmpty(obj.size) ? "<div><label class=\"chat-product-code\">Size: " + obj.size + "</label></div>" : "";
+                            Starthtml += !string.IsNullOrEmpty(obj.uniqueItemCode) ? "<div><label class=\"chat-product-code\">Item Code: " + obj.uniqueItemCode + "</label></div>" : "";
+                            Starthtml += !string.IsNullOrEmpty(obj.price) ? "<div><label class=\"chat-product-prize\"> Price : " + obj.price + "</label></div>" : "";
+                            Starthtml += !string.IsNullOrEmpty(obj.url) ? "<div><a href=\"" + obj.url + "\" target=\"_blank\" class=\"chat-product-url\">" + obj.url + "</a></div>" : "";
+                            Starthtml += Endhtml;
 
 
+                            CustomerChatModel ChatMessageDetails = new CustomerChatModel();
+                            ChatMessageDetails.ChatID = ProductDetails.ChatID;
+                            ChatMessageDetails.Message = Starthtml;
+                            ChatMessageDetails.ByCustomer = false;
+                            ChatMessageDetails.ChatStatus = 0;
+                            ChatMessageDetails.StoreManagerId = ProductDetails.UserID;
+                            ChatMessageDetails.CreatedBy = ProductDetails.UserID;
 
-                       
+                            Result = Result + SaveChatMessages(ChatMessageDetails);
+
+                        }
+
 
                     }
                 }

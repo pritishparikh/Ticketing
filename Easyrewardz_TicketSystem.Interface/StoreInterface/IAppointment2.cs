@@ -27,6 +27,6 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<TemplateBasedSlots> GetSlotsByTemplateID(int TenantID, string ProgramCode, int UserID, int SlotTemplateID);
 
-
+        int GetAppointmentCountOnSlotID(int TenantID, string ProgramCode, int SlotSettingID);
     }
 }
