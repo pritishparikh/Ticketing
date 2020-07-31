@@ -267,6 +267,8 @@ namespace Easyrewardz_TicketSystem.Services
                         storeAppointmentConfiguration.CardQRcode = ds.Tables[0].Rows[0]["CardQRcode"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CardQRcode"]);
                         storeAppointmentConfiguration.CardBarcode = ds.Tables[0].Rows[0]["CardBarcode"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CardBarcode"]);
                         storeAppointmentConfiguration.OnlyCard = ds.Tables[0].Rows[0]["OnlyCard"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["OnlyCard"]);
+                        storeAppointmentConfiguration.ViaWhatsApp = ds.Tables[0].Rows[0]["CommViaWhatsApp"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CommViaWhatsApp"]);
+                        storeAppointmentConfiguration.OnlyCard = ds.Tables[0].Rows[0]["CommViaSMS"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CommViaSMS"]);
                         storeAppointmentConfiguration.Programcode = ds.Tables[0].Rows[0]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Programcode"]);
                     }
                 }
@@ -355,10 +357,12 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_CardQRcode", Convert.ToInt16(storeAppointmentConfiguration.CardQRcode));
                 cmd.Parameters.AddWithValue("@_CardBarcode", Convert.ToInt16(storeAppointmentConfiguration.CardBarcode));
                 cmd.Parameters.AddWithValue("@_OnlyCard", Convert.ToInt16(storeAppointmentConfiguration.OnlyCard));
+                cmd.Parameters.AddWithValue("@_ViaWhatsApp", Convert.ToInt16(storeAppointmentConfiguration.ViaWhatsApp));
+                cmd.Parameters.AddWithValue("@_ViaSMS", Convert.ToInt16(storeAppointmentConfiguration.ViaSMS));
                 cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
               
                 cmd.CommandType = CommandType.StoredProcedure;
-                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+                UpdateCount = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
             catch (Exception)

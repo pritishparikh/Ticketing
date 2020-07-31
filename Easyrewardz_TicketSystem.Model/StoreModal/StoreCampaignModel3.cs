@@ -199,6 +199,15 @@ namespace Easyrewardz_TicketSystem.Model
         /// OnlyCard
         /// </summary>
         public bool OnlyCard { get; set; }
+
+        /// <summary>
+        /// Send Message to Customer Via WhatsApp Incase od Cancellation
+        /// </summary>
+        public bool ViaWhatsApp { get; set; }
+        /// <summary>
+        ///         /// Send Message to Customer Via WhatsApp Incase od Cancellation
+        /// </summary>
+        public bool ViaSMS { get; set; }
     }
 
     public class Languages
