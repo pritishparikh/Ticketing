@@ -196,9 +196,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                             obj = CreateShipment(orderID, itemIDs, tenantID, userID, responseCouriersPartnerAndAWBCode, false);
 
-                            SmsWhatsUpDataSend(tenantID, userID, ProgramCode, orderID, clientAPIURL, "AWBAssigned");
-                            //Code for GeneratePickup 
-                            // { "statusCode":"200","data":{ "awb_code":"141123201505566","order_id":"41363502","shipment_id":"41079500","courier_company_id":"51","courier_name":"Xpressbees Surface","rate":100,"is_custom_rate":"0","cod_multiplier":"0","cod_charges":"0","freight_charge":"100","rto_charges":"92","min_weight":"0.5","etd_hours":"112","etd":"Jun 19, 2020","estimated_delivery_days":"5"} }
+                            SmsWhatsUpDataSend(tenantID, userID, ProgramCode, orderID, clientAPIURL, "AWBAssigned");                          
 
                             if (responseCouriersPartnerAndAWBCode != null)
                             {
@@ -503,15 +501,11 @@ namespace Easyrewardz_TicketSystem.Services
                 }
                 hSRequestGeneratePaymentLink.programCode = programCode;
                 hSRequestGeneratePaymentLink.storeCode = sentPaymentLink.StoreCode;
-                DateTime dateTime_billdatetime = Convert.ToDateTime(hSRequestGeneratePaymentLink.billDateTime);
-                //var settings = new JsonSerializerSettings { DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ" };
-                //var settings = new JsonSerializerSettings { DateFormatString = "dd-MMM-yyyy hh:mm:ss" };
-                //var json = JsonConvert.SerializeObject(dateTime_billdatetime, settings);
-                //var newdate = JsonConvert.DeserializeObject<string>(json);
+                DateTime dateTime_billdatetime = Convert.ToDateTime(hSRequestGeneratePaymentLink.billDateTime);               
                 hSRequestGeneratePaymentLink.billDateTime = dateTime_billdatetime.ToString("dd-MMM-yyyy hh:mm:ss");
                 HSResponseGeneratePaymentLink responseGeneratePaymentLink = new HSResponseGeneratePaymentLink();
 
-                // string apiReq = JsonConvert.SerializeObject(hSRequestGenerateToken);
+              
 
                 string apiReq = "Client_Id=" + hSRequestGenerateToken.Client_Id + "&Client_Secret=" + hSRequestGenerateToken.Client_Secret + "&Grant_Type=" + hSRequestGenerateToken.Grant_Type + "&Scope=" + hSRequestGenerateToken.Scope;
 
@@ -563,11 +557,7 @@ namespace Easyrewardz_TicketSystem.Services
                     cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
                     cmd1.Parameters.AddWithValue("@user_ID", userID);
                     cmd1.CommandType = CommandType.StoredProcedure;
-                    result = Convert.ToInt32(cmd1.ExecuteNonQuery());
-                    //if (result > 0)
-                    //{
-                    //    SmsWhatsUpDataSend(tenantID, userID, programCode, hSRequestGeneratePaymentLink.OrderId, ClientAPIUrl, "ShoppingBagConvertToOrder");
-                    //}
+                    result = Convert.ToInt32(cmd1.ExecuteNonQuery());                  
                     conn.Close();
                 }
             }

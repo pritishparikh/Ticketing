@@ -66,9 +66,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 ModifyBy = dr["ModifyBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ModifyBy"]),
                                 ModifyByName = dr["ModifyByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifyByName"]),
                                 ChatDate = dr["ChatDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ChatDate"]),
-                                ChatTime = dr["ChatTime"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ChatTime"]),
-                                //AgentProfilePic = dr["AgentProfilePic"] == DBNull.Value ? string.Empty : Convert.ToString(dr["AgentProfilePic"]),
-                                //CustomerProfilePic = dr["CustomerProfilePic"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerProfilePic"]),
+                                ChatTime = dr["ChatTime"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ChatTime"]),                               
                                 IsBotReply = dr["IsBotReply"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsBotReply"])
 
 

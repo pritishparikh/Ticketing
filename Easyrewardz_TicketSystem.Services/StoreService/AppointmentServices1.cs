@@ -392,16 +392,7 @@ namespace Easyrewardz_TicketSystem.Services
                                 }).ToList()
                         });
 
-                            //if (ds.Tables.Count > 1)
-                            //{
-                            //    TimeSlotList[0].TemplateSlots = ds.Tables[1].AsEnumerable().Where(x => (x.Field<int>("OrderID")).Equals(obj.ID)).Select(r => new TemplateBasedSlots()
-                            //    {
-                            //        SlotID = r.Field<object>("SlotID") == DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("SlotID")),
-                            //        SlotStartTime = r.Field<object>("SlotStartTime") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SlotStartTime")),
-                            //        SlotEndTime = r.Field<object>("SlotEndTime") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SlotEndTime")),
-                            //        IsSlotEnabled = r.Field<object>("SlotStatus") == DBNull.Value ? false : Convert.ToBoolean(r.Field<object>("SlotStatus"))
-                            //    }).ToList();
-                            //}
+                            
                         }
                     }
                     

@@ -110,6 +110,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return lstCustomerChatMaster;
         }
@@ -170,6 +174,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return lstCustomerChatMaster;
         }
@@ -197,8 +205,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
                 cmd.Parameters.AddWithValue("@NOof_People", appointmentMaster.NOofPeople);
                 cmd.Parameters.AddWithValue("@Mobile_No", appointmentMaster.MobileNo);
-                cmd.CommandType = CommandType.StoredProcedure;
-                //message = Convert.ToInt32(cmd.ExecuteScalar());
+                cmd.CommandType = CommandType.StoredProcedure;               
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
@@ -220,8 +227,7 @@ namespace Easyrewardz_TicketSystem.Services
                         lstAppointmentDetails.Add(appointmentDetails);
                     }
                 }
-
-                // int response = SendMessageToCustomer( /*ChatID*/0, appointmentMaster.MobileNo, appointmentMaster.ProgramCode, appointmentMaster.MessageToReply,/*ClientAPIURL*/"",appointmentMaster.CreatedBy);
+               
             }
             catch (Exception)
             {
@@ -232,6 +238,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return lstAppointmentDetails;
@@ -367,6 +377,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return counts;

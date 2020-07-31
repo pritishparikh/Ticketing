@@ -755,8 +755,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_StoreUserChangePassword", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_Password", customChangePassword.Password);
-                cmd.Parameters.AddWithValue("@_NewPassword", customChangePassword.NewPassword);
-                //cmd.Parameters.AddWithValue("@_UserID", customChangePassword.UserID);
+                cmd.Parameters.AddWithValue("@_NewPassword", customChangePassword.NewPassword);               
                 cmd.Parameters.AddWithValue("@Email_ID", customChangePassword.EmailID);
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 cmd.Parameters.AddWithValue("@User_ID", User_ID);
@@ -828,6 +827,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
         }

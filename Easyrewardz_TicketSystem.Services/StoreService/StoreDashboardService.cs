@@ -109,12 +109,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         loggedInAcc.Chatstatus = chatstat;
                     }
-                    //if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
-                    //{
-                    //    loggedInAcc.SLAScore = ds.Tables[1].Rows[0]["SLAScore"] != System.DBNull.Value ? Convert.ToString(ds.Tables[1].Rows[0]["SLAScore"]) : string.Empty;
-                    //    loggedInAcc.AvgResponseTime = ds.Tables[1].Rows[0]["AverageResponseTime"] != System.DBNull.Value ? Convert.ToString(ds.Tables[1].Rows[0]["AverageResponseTime"]) : string.Empty;
-                    //    loggedInAcc.CSATScore = ds.Tables[1].Rows[0]["CSATScore"] != System.DBNull.Value ? Convert.ToString(ds.Tables[1].Rows[0]["CSATScore"]) : string.Empty;
-                    //}
+                 
 
                     if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
                     {
@@ -232,6 +227,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return departmentMasters;
 
@@ -323,6 +322,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return ClaimSearchResponse;

@@ -219,10 +219,7 @@ namespace Easyrewardz_TicketSystem.Services
                     string apiBotReq = JsonConvert.SerializeObject(getWhatsappMessageDetailsModal);
                     string apiBotResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetWhatsappMessageDetails", apiBotReq);
 
-                    //if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
-                    //{
-                    //    getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
-                    //}
+                  
 
                     if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
                     {
@@ -319,8 +316,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         if (apiResponse.Equals("true"))
                         {
-                            UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");
-                            //MakeBellActive(objRequest.CustomerMobileNumber, objRequest.ProgramCode, ClientAPIURL, TenantID, UserID);
+                            UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");                           
                         }
                     }
                     catch (Exception)
@@ -338,6 +334,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return result;
@@ -381,15 +381,19 @@ namespace Easyrewardz_TicketSystem.Services
                     WhatsupTemplateName = ds.Tables[0].Rows[0]["TemplateName"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["TemplateName"]);
                 }
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -530,6 +534,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return result;
@@ -701,10 +709,7 @@ namespace Easyrewardz_TicketSystem.Services
                         string apiBotReq = JsonConvert.SerializeObject(getWhatsappMessageDetailsModal);
                         string apiBotResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetWhatsappMessageDetails", apiBotReq);
 
-                        //if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
-                        //{
-                        //    getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
-                        //}
+                      
 
                         if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
                         {
@@ -802,9 +807,9 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 string apiResponsechatbotBellMakeBellActive = CommonService.SendParamsApiRequest(ClientAPIURL + "api/ChatbotBell/MakeBellActive", Params);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
+                throw;
             }
         }
     }

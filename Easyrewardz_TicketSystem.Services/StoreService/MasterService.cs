@@ -69,6 +69,10 @@ namespace Easyrewardz_TicketSystem.Services.StoreServices
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return users;
@@ -121,6 +125,10 @@ namespace Easyrewardz_TicketSystem.Services.StoreServices
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return users;
@@ -169,6 +177,10 @@ namespace Easyrewardz_TicketSystem.Services.StoreServices
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return regionMaster;

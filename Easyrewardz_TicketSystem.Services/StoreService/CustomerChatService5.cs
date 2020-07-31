@@ -45,10 +45,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 resultCount = Convert.ToInt32(cmd.ExecuteScalar());
 
-                //NameValueCollection Params = new NameValueCollection();
-                //Params.Add("Mobilenumber", customerChatMaster.MobileNo);
-                //Params.Add("ProgramCode", ProgramCode);
-                //string ClosedChatStr = CommonService.SendParamsApiRequest(_ClientAPIUrl + "/api/ChatbotBell/", Params);
+               
             }
             catch (Exception)
             {

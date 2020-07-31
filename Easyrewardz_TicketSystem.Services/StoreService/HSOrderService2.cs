@@ -545,10 +545,7 @@ namespace Easyrewardz_TicketSystem.Services
                     string apiBotReq = JsonConvert.SerializeObject(getWhatsappMessageDetailsModal);
                     string apiBotResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetWhatsappMessageDetails", apiBotReq);
 
-                    //if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
-                    //{
-                    //    getWhatsappMessageDetailsResponse = JsonConvert.DeserializeObject<GetWhatsappMessageDetailsResponse>(apiBotResponse.Replace("[", "").Replace("]", ""));
-                    //}
+                    
 
                     if (!string.IsNullOrEmpty(apiBotResponse.Replace("[]", "").Replace("[", "").Replace("]", "")))
                     {
@@ -625,9 +622,7 @@ namespace Easyrewardz_TicketSystem.Services
                         MobileNumber = ds.Tables[0].Rows[0]["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["MobileNumber"]),
                         AdditionalInfo = ds.Tables[1].Rows[0]["additionalInfo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[1].Rows[0]["additionalInfo"]),
                     };
-                    // result = ds.Tables[0].Rows[0]["ChatID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["ChatID"]);
-                    // Message = ds.Tables[0].Rows[0]["Message"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Message"]);
-                    // additionalInfo = ds.Tables[0].Rows[0]["additionalInfo"] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[0]["additionalInfo"]);
+                   
                 }
 
 
@@ -652,12 +647,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                             string apiReq = JsonConvert.SerializeObject(sendFreeTextRequest);
                             apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/SendCampaign", apiReq);
-
-
-                            //if (apiResponse.Equals("true"))
-                            //{
-                            //    UpdateResponseShare(objRequest.CustomerID, "Contacted Via Chatbot");
-                            //}
+                           
                         }
                         catch (Exception)
                         {
@@ -667,24 +657,7 @@ namespace Easyrewardz_TicketSystem.Services
                     else if (ordersSmsWhatsUpDataDetails.AlertCommunicationviaSMS)
                     {
 
-                        Message = ordersSmsWhatsUpDataDetails.MessageText;
-
-                        //else if (sMSWhtappTemplate == "AWBAssigned" & ordersSmsWhatsUpDataDetails.AWBAssigned)
-                        //{
-                        //    Message = ordersSmsWhatsUpDataDetails.AWBAssignedText;
-                        //}
-                        //else if (sMSWhtappTemplate == "PickupScheduled" & ordersSmsWhatsUpDataDetails.PickupScheduled)
-                        //{
-                        //    Message = ordersSmsWhatsUpDataDetails.PickupScheduledText;
-                        //}
-                        //else if (sMSWhtappTemplate == "Shipped" & ordersSmsWhatsUpDataDetails.Shipped)
-                        //{
-                        //    Message = ordersSmsWhatsUpDataDetails.ShippedText;
-                        //}
-                        //else if (sMSWhtappTemplate == "Delivered" & ordersSmsWhatsUpDataDetails.Delivered)
-                        //{
-                        //    Message = ordersSmsWhatsUpDataDetails.DeliveredText;
-                        //}
+                        Message = ordersSmsWhatsUpDataDetails.MessageText;                     
 
 
                         ChatSendSMS chatSendSMS = new ChatSendSMS
@@ -706,10 +679,7 @@ namespace Easyrewardz_TicketSystem.Services
                             result = chatSendSMSResponse.Id;
                         }
 
-                        //if (result > 0)
-                        //{
-                        //    UpdateResponseShare(objRequest.CustomerID, "Contacted Via SMS");
-                        //}
+                        
                     }
                 }
             }
@@ -983,6 +953,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
