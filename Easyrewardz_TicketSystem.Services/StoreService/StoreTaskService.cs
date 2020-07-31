@@ -1328,8 +1328,6 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-
-
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
@@ -1358,14 +1356,12 @@ namespace Easyrewardz_TicketSystem.Services
                             ColorName = ds.Tables[0].Rows[i]["ColorName"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorName"]),
                             ColorCode = ds.Tables[0].Rows[i]["ColorCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorCode"])
                         };
-
                         raisedByfilter.Add(storeRaisedby);
                     }
                 }
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
@@ -1380,7 +1376,6 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return raisedByfilter;
-
         }
 
 
@@ -1512,29 +1507,34 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-
-
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
 
                         TaskFilterTicketByResponseModel taskTicket = new TaskFilterTicketByResponseModel
                         {
-
                             totalCount = ds.Tables[0].Rows.Count,
-                            StoreTaskID =ds.Tables[0].Rows[i]["ID"]== DBNull.Value ? 0 :Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            StoreTaskID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
                             TaskStatus = string.IsNullOrEmpty(TaskStatusName) ? "" : TaskStatusName,
                             TaskTitle = ds.Tables[0].Rows[i]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]),
                             TicketID = ds.Tables[0].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]),
                             DepartmentName = ds.Tables[0].Rows[i]["DepartmentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]),
-                            StoreName = ds.Tables[0].Rows[i]["StoreName"]== DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
+                            StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
                             StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
                             PriorityName = ds.Tables[0].Rows[i]["Priorty"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]),
                             CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
                             Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
                             CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
-                            Updatedago = ds.Tables[0].Rows[i]["Modifiedon"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]),
-                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"])
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
+                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]),
+                            Createdago = ds.Tables[0].Rows[i]["Createdago"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdago"]),
+                            Assignedago = ds.Tables[0].Rows[i]["Assignedago"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignedago"]),
+                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]),
+                            TaskCloureDate = ds.Tables[0].Rows[i]["ClosureTaskDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureTaskDate"]),
+                            ResolutionTimeRemaining = ds.Tables[0].Rows[i]["RemainingTime"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RemainingTime"]),
+                            ResolutionOverdueBy = ds.Tables[0].Rows[i]["taskoverDue"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["taskoverDue"]),
+                            ColorName = ds.Tables[0].Rows[i]["ColorName"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorName"]),
+                            ColorCode = ds.Tables[0].Rows[i]["ColorCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorCode"])
                         };
                         ticketByTask.Add(taskTicket);
                     }
@@ -1542,7 +1542,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
@@ -1551,9 +1550,12 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return ticketByTask;
-
         }
 
         public List<StoreCampaign> GetStoreCampaignCustomerByStatus(string statusID, int TenantID, int UserID)
