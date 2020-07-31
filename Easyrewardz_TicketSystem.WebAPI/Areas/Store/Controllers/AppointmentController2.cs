@@ -289,5 +289,48 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             return objResponseModel;
         }
+
+
+        /// <summary>
+        ///BulkUpload Slot
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("BulkUploadSlot")]
+        public ResponseModel BulkUploadSlot(int RoleFor = 3)
+        {
+            List<TemplateBasedSlots> SlotsList = new List<TemplateBasedSlots>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+
+                AppointmentCaller newAppointment = new AppointmentCaller();
+
+               
+
+                statusCode = (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = 1;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
     }
 }
