@@ -641,7 +641,7 @@ namespace Easyrewardz_TicketSystem.Services
 
 
                         Details.to = ProductDetails.CustomerMobile.Length > 10 ? ProductDetails.CustomerMobile : "91" + ProductDetails.CustomerMobile;
-                        Details.textToReply = Message;
+                        Details.textToReply = CTAMessage;
                         Details.programCode = ProductDetails.ProgramCode;
                         Details.imageUrl = obj.imageURL;
                         Details.shoppingBag = obj.IsCard ? "0" : obj.IsShoppingBag ? "1" : "0";
@@ -653,7 +653,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         #endregion
 
-                        if(!obj.IsCard)
+                        if(!obj.IsCard && ClientAPIResponse.Equals("true"))
                         {
                             //string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\">";
                             string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px;\"><div class=\"col-md-2\">";
