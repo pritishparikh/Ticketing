@@ -303,6 +303,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
             string statusMessage = "";
+            string fileName = "";
+            string finalAttchment = "";
+
             try
             {
 
@@ -310,6 +313,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
+
+                var files = Request.Form.Files;
+
+                if (files.Count > 0)
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        fileName += files[i].FileName.Replace(".", DateTime.Now.ToString("ddmmyyyyhhssfff") + ".") + ",";
+                    }
+                    finalAttchment = fileName.TrimEnd(',');
+                }
+                var Keys = Request.Form;
 
                 AppointmentCaller newAppointment = new AppointmentCaller();
 
