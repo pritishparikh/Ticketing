@@ -322,7 +322,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ItemCode"></param>
         /// </summary>
         /// <returns></returns>
-        public int RemoveProduct(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCode)
+        public int RemoveProduct(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCode, string RemoveFrom, int UserID)
         {
             MySqlCommand cmd = new MySqlCommand();
             int Result = 0;
@@ -340,7 +340,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", CustomerMobile);
+                cmd.Parameters.AddWithValue("@_RemoveFrom", RemoveFrom);
+                
                 cmd.Parameters.AddWithValue("@_ItemCode", ItemCode);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
