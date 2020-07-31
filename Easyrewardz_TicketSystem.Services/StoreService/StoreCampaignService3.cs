@@ -268,7 +268,7 @@ namespace Easyrewardz_TicketSystem.Services
                         storeAppointmentConfiguration.CardBarcode = ds.Tables[0].Rows[0]["CardBarcode"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CardBarcode"]);
                         storeAppointmentConfiguration.OnlyCard = ds.Tables[0].Rows[0]["OnlyCard"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["OnlyCard"]);
                         storeAppointmentConfiguration.ViaWhatsApp = ds.Tables[0].Rows[0]["CommViaWhatsApp"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CommViaWhatsApp"]);
-                        storeAppointmentConfiguration.OnlyCard = ds.Tables[0].Rows[0]["CommViaSMS"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CommViaSMS"]);
+                        storeAppointmentConfiguration.ViaSMS = ds.Tables[0].Rows[0]["CommViaSMS"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CommViaSMS"]);
                         storeAppointmentConfiguration.Programcode = ds.Tables[0].Rows[0]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Programcode"]);
                     }
                 }
