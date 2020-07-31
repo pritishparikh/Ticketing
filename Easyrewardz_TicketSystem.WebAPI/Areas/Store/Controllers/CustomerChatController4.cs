@@ -337,7 +337,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                if (string.IsNullOrEmpty(Item.ProgramCode))
+                if (!string.IsNullOrEmpty(Item.ProgramCode))
                 {
 
                     RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
@@ -405,7 +405,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                if (string.IsNullOrEmpty(Item.ProgramCode))
+                if (!string.IsNullOrEmpty(Item.ProgramCode))
                 {
 
                     RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
@@ -474,7 +474,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                if (string.IsNullOrEmpty(ProgramCode))
+                if (!string.IsNullOrEmpty(ProgramCode))
                 {
 
                     RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
