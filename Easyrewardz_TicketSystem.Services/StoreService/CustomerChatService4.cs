@@ -340,7 +340,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", CustomerMobile);
-                cmd.Parameters.AddWithValue("@_RemoveFrom", RemoveFrom);
+                cmd.Parameters.AddWithValue("@_RemoveFrom", RemoveFrom.ToLower());
                 
                 cmd.Parameters.AddWithValue("@_ItemCode", ItemCode);
                 cmd.Parameters.AddWithValue("@_UserID", UserID);
