@@ -1,4 +1,5 @@
 ﻿using Easyrewardz_TicketSystem.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -494,43 +495,37 @@ namespace Easyrewardz_TicketSystem.Services
             {
 
                 var client = new HttpClient();
-                WebRequest tRequest;
-                var uri = url;
-                tRequest = WebRequest.Create(uri);
-                tRequest.Method = "post";
-                tRequest.ContentType = "text/json";               
-                using (var streamWriter = new StreamWriter(tRequest.GetRequestStream()))
+                string inputJson = JsonConvert.SerializeObject(Request);
+                HttpContent inputContent = new StringContent(inputJson, Encoding.UTF8, "text/json");
+                HttpResponseMessage response = client.PostAsync(url, inputContent).Result;
+                if (response.IsSuccessStatusCode)
                 {
-                    if (!string.IsNullOrEmpty(Request))
-                        streamWriter.Write(Request);
+                    strresponse = response.Content.ReadAsStringAsync().Result;
                 }
-                WebResponse tResponse = tRequest.GetResponse();                
-                HttpWebResponse httpResponse = (HttpWebResponse)tResponse;
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    strresponse = streamReader.ReadToEnd();
-                }                        
-                tResponse.Close();
-                
+                //    WebRequest tRequest;
+                //var uri = url;
+                //tRequest = WebRequest.Create(uri);
+                //tRequest.Method = "post";
+                //tRequest.ContentType = "text/json";               
+                //using (var streamWriter = new StreamWriter(tRequest.GetRequestStream()))
+                //{
+                //    if (!string.IsNullOrEmpty(Request))
+                //        streamWriter.Write(Request);
+                //}
+                //WebResponse tResponse = tRequest.GetResponse();                
+                //HttpWebResponse httpResponse = (HttpWebResponse)tResponse;
+                //using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                //{
+                //    strresponse = streamReader.ReadToEnd();
+                //}                        
+                //tResponse.Close();
+
             }           
-            catch (WebException e)
-            {
-                using (WebResponse response = e.Response)
-                {
-                    HttpWebResponse httpResponse = (HttpWebResponse)response;
-
-                    using (Stream data = response.GetResponseStream())
-                    using (var reader = new StreamReader(data))
-                    {
-                        strresponse = reader.ReadToEnd();
-
-                    }
-                }
-            }
-            catch (Exception)
+            catch (WebException)
             {
                 throw;
             }
+
             return strresponse;
 
         }
