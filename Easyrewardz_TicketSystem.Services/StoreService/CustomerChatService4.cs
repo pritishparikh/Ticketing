@@ -611,8 +611,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int SendProductsOnChat(SendProductsToCustomer ProductDetails, string ClientAPIURL)
         {
-            MySqlCommand cmd = new MySqlCommand();
-            DataSet ds = new DataSet();
             int Result = 0;
             ClientCustomSendProductModel Details = new ClientCustomSendProductModel();
             string ClientAPIResponse = string.Empty;
@@ -637,7 +635,7 @@ namespace Easyrewardz_TicketSystem.Services
                         CTAMessage += !string.IsNullOrEmpty(obj.price) ? obj.price + "," : " " + ",";
                         CTAMessage += !string.IsNullOrEmpty(obj.color) ? obj.color + "," : " " + ",";
                         CTAMessage += !string.IsNullOrEmpty(obj.size) ? obj.size + "," : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.imageURL) ? obj.imageURL + "," : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.imageURL) ? obj.imageURL + "," : "";
 
 
                         Details.to = ProductDetails.CustomerMobile.Length > 10 ? ProductDetails.CustomerMobile : "91" + ProductDetails.CustomerMobile;
