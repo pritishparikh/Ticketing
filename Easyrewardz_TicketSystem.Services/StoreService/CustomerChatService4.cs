@@ -644,8 +644,8 @@ namespace Easyrewardz_TicketSystem.Services
                         Details.textToReply = CTAMessage;
                         Details.programCode = ProductDetails.ProgramCode;
                         Details.imageUrl = obj.imageURL;
-                        Details.shoppingBag = obj.IsCard ? "0" : obj.IsShoppingBag ? "1" : "0";
-                        Details.like = obj.IsCard ? "0" : obj.IsWishList ? "1" : "0";
+                        Details.shoppingBag = obj.IsCard ? "0" : obj.IsShoppingBag ? "0" : "1";
+                        Details.like = obj.IsCard ? "0" : obj.IsWishList ? "0" : "1";
 
                         string JsonRequest = JsonConvert.SerializeObject(Details);
 
