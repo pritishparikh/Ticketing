@@ -496,9 +496,8 @@ namespace Easyrewardz_TicketSystem.Services
             try
             {
                 using (HttpClient client = new HttpClient())
-                {
-                    string inputJson = JsonConvert.SerializeObject(Request);
-                    HttpContent inputContent = new StringContent(inputJson, Encoding.UTF8, "text/json");
+                {                   
+                    HttpContent inputContent = new StringContent(Request, Encoding.UTF8, "text/json");
                     MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("text/json");
                     client.DefaultRequestHeaders.Accept.Add(contentType);
                     HttpResponseMessage responseMessage = client.PostAsync(url, inputContent).Result;
