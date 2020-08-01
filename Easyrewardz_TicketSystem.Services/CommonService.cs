@@ -517,11 +517,7 @@ namespace Easyrewardz_TicketSystem.Services
                 tResponse.Close();
 
                 
-            }
-            catch ()
-            {
-               
-            }
+            }           
             catch (Exception)
             {
                 throw;
