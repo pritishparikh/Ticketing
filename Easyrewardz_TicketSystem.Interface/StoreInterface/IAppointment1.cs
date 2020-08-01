@@ -31,8 +31,10 @@ namespace Easyrewardz_TicketSystem.Interface
         /// </summary>
         /// <param name="appointmentCustomer"></param>
         /// <param name="TenantId"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
-        int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId);
+        int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantID, string ProgramCode, int UserID);
 
 
         #region TimeSlotMaster CRUD

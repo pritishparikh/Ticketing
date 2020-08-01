@@ -165,22 +165,28 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="appointmentCustomer"></param>
         /// <param name="TenantId"></param>
         /// <returns></returns>
-        public int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId)
+        public int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantID, string ProgramCode, int UserID)
         {
 
             MySqlCommand cmd = new MySqlCommand();
-            int i = 0;
+            int Result = 0;
             try
             {
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSUpdateAppoinmentStatus", conn);
-                cmd1.Parameters.AddWithValue("@Appointment_ID", appointmentCustomer.AppointmentID);
-                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
-                cmd1.Parameters.AddWithValue("@_Status", appointmentCustomer.Status);
+                cmd = new MySqlCommand("SP_HSUpdateAppoinmentStatus", conn);
 
-                cmd1.CommandType = CommandType.StoredProcedure;
-                i = cmd1.ExecuteNonQuery();
+                cmd.Parameters.AddWithValue("@_TenantId", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_AptID", appointmentCustomer.AppointmentID);
+                cmd.Parameters.AddWithValue("@_AptStatus", appointmentCustomer.AppointmentID);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                Result = Convert.ToInt32(cmd.ExecuteNonQuery());
                 conn.Close();
             }
             catch (Exception)
@@ -195,7 +201,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return i;
+            return Result;
         }
 
 

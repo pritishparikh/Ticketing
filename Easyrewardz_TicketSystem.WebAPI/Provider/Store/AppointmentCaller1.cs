@@ -52,10 +52,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name="appointmentCustomer"></param>
         /// <param name="TenantId"></param>
         /// <returns></returns>
-        public int UpdateAppoinment(IAppointment appointment, AppointmentCustomer appointmentCustomer, int TenantId)
+        public int UpdateAppointmentStatus(IAppointment appointment, AppointmentCustomer appointmentCustomer, int TenantID, string ProgramCode, int UserID)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.UpdateAppointmentStatus(appointmentCustomer, TenantId);
+            return _AppointmentRepository.UpdateAppointmentStatus(appointmentCustomer, TenantID, ProgramCode, UserID);
         }
 
 
