@@ -385,7 +385,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Claim Raised By
         /// </summary>
-        public string ClaimRaisedBy { get; set; }
+        public string RaiseBy { get; set; }
 
         /// <summary>
         /// Creation On

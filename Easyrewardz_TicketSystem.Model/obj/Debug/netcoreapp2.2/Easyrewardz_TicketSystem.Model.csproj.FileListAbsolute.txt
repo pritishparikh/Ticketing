@@ -128,3 +128,12 @@ D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easy
 D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
 D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
 D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenantV2\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.csprojAssemblyReference.cache
+D:\Devesh\Devesh\Ticketing\Ticketings\MultiTenantHomeShopAPIv2.0\Ticketing\Easyrewardz_TicketSystem.Model\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.deps.json
+D:\Devesh\Devesh\Ticketing\Ticketings\MultiTenantHomeShopAPIv2.0\Ticketing\Easyrewardz_TicketSystem.Model\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Devesh\Devesh\Ticketing\Ticketings\MultiTenantHomeShopAPIv2.0\Ticketing\Easyrewardz_TicketSystem.Model\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Devesh\Devesh\Ticketing\Ticketings\MultiTenantHomeShopAPIv2.0\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.csprojAssemblyReference.cache
+D:\Devesh\Devesh\Ticketing\Ticketings\MultiTenantHomeShopAPIv2.0\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.csproj.CoreCompileInputs.cache
+D:\Devesh\Devesh\Ticketing\Ticketings\MultiTenantHomeShopAPIv2.0\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.AssemblyInfoInputs.cache
+D:\Devesh\Devesh\Ticketing\Ticketings\MultiTenantHomeShopAPIv2.0\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.AssemblyInfo.cs
+D:\Devesh\Devesh\Ticketing\Ticketings\MultiTenantHomeShopAPIv2.0\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Devesh\Devesh\Ticketing\Ticketings\MultiTenantHomeShopAPIv2.0\Ticketing\Easyrewardz_TicketSystem.Model\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb

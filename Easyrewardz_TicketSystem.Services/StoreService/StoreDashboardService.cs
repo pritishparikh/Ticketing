@@ -371,7 +371,7 @@ namespace Easyrewardz_TicketSystem.Services
                         StoreDashboard.AssignedId = ds.Tables[0].Rows[i]["AssignedID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["AssignedID"]);
                         StoreDashboard.AssignTo = ds.Tables[0].Rows[i]["AssignedToName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignedToName"]);
                         StoreDashboard.ClaimRaisedByID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
-                        StoreDashboard.ClaimRaisedBy = ds.Tables[0].Rows[i]["Raisedby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Raisedby"]);
+                        StoreDashboard.RaiseBy = ds.Tables[0].Rows[i]["Raisedby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Raisedby"]);
                         StoreDashboard.CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
 
                         ClaimSearchResponse.Add(StoreDashboard);
