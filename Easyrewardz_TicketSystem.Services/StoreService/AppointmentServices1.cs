@@ -34,15 +34,18 @@ namespace Easyrewardz_TicketSystem.Services
             List<AppointmentModel> appointments = new List<AppointmentModel>();
             try
             {
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSAppointmentDeatils", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
-                cmd1.Parameters.AddWithValue("@User_Id", UserId);
-                cmd1.Parameters.AddWithValue("@Apt_Date", AppDate);
+                cmd = new MySqlCommand("SP_HSAppointmentDeatils", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd.Parameters.AddWithValue("@User_Id", UserId);
+                cmd.Parameters.AddWithValue("@Apt_Date", AppDate);
                 MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                da.SelectCommand = cmd;
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
@@ -107,15 +110,18 @@ namespace Easyrewardz_TicketSystem.Services
             List<AppointmentCount> appointmentsCount = new List<AppointmentCount>();
             try
             {
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetAppointmentCount", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@_TenantId", TenantID);
-                cmd1.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
-                cmd1.Parameters.AddWithValue("@_UserID", UserId);
+                cmd = new MySqlCommand("SP_HSGetAppointmentCount", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@_TenantId", TenantID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd.Parameters.AddWithValue("@_UserID", UserId);
                 MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                da.SelectCommand = cmd;
                 da.Fill(ds);
 
                 if (ds != null && ds.Tables != null)
