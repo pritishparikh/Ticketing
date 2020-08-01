@@ -583,6 +583,43 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
+        public static string SendImageApiRequest1(string url, string Request)
+        {
+            string strresponse = "";
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpContent inputContent = new StringContent(Request, Encoding.UTF8, "text/json");
+                    MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("text/json");
+                    client.DefaultRequestHeaders.Accept.Add(contentType);
+                    HttpResponseMessage responseMessage = client.PostAsync(url, inputContent).Result;
+                    strresponse = responseMessage.Content.ReadAsStringAsync().Result;
+                }
+            }
+            catch (WebException e)
+            {
+                using (WebResponse response = e.Response)
+                {
+                    HttpWebResponse httpResponse = (HttpWebResponse)response;
+
+                    using (Stream data = response.GetResponseStream())
+                    using (var reader = new StreamReader(data))
+                    {
+                        strresponse = reader.ReadToEnd();
+
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return strresponse;
+
+        }
+
         /// <summary>
         /// Send Api Request Token
         /// </summary>
