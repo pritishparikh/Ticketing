@@ -498,31 +498,39 @@ namespace Easyrewardz_TicketSystem.Services
                 var uri = url;
                 tRequest = WebRequest.Create(uri);
                 tRequest.Method = "post";
-                tRequest.ContentType = "text/json";
-                //HttpResponseMessage response;
-                //Stream dataStream = tRequest.GetRequestStream();
+                tRequest.ContentType = "text/json";               
                 using (var streamWriter = new StreamWriter(tRequest.GetRequestStream()))
                 {
                     if (!string.IsNullOrEmpty(Request))
                         streamWriter.Write(Request);
                 }
-                WebResponse tResponse = tRequest.GetResponse();
-                //dataStream = tResponse.GetResponseStream();
-                //StreamReader tReader = new StreamReader(dataStream);
-                //String sResponseFromServer = tReader.ReadToEnd();
+                WebResponse tResponse = tRequest.GetResponse();                
                 HttpWebResponse httpResponse = (HttpWebResponse)tResponse;
-                string statusCode = httpResponse.StatusCode.ToString();
-                //tReader.Close();
-                //dataStream.Close();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    strresponse = streamReader.ReadToEnd();
+                }                        
                 tResponse.Close();
-
                 
             }           
+            catch (WebException e)
+            {
+                using (WebResponse response = e.Response)
+                {
+                    HttpWebResponse httpResponse = (HttpWebResponse)response;
+
+                    using (Stream data = response.GetResponseStream())
+                    using (var reader = new StreamReader(data))
+                    {
+                        strresponse = reader.ReadToEnd();
+
+                    }
+                }
+            }
             catch (Exception)
             {
                 throw;
             }
-
             return strresponse;
 
         }
