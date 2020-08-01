@@ -94,6 +94,12 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string Dates { get; set; }
 
+
+        /// <summary>
+        /// Max People Allowed in One Appointment
+        /// </summary>
+        public int  MaxPeopleAllowed { get; set; }
+
         /// <summary>
         /// Already Schedule Details List
         /// </summary>

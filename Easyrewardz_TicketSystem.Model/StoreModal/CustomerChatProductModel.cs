@@ -106,5 +106,11 @@ namespace Easyrewardz_TicketSystem.Model.StoreModal
         public bool IsRecommended { get; set; }
 
 
+        /// <summary>
+        /// ISFromCard
+        /// </summary>
+        public bool IsCard { get; set; }
+
+
     }
 }

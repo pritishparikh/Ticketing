@@ -479,8 +479,8 @@ namespace Easyrewardz_TicketSystem.Services
                         customClaimList.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
                         customClaimList.RaiseBy = ds.Tables[0].Rows[i]["RaiseBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RaiseBy"]);
                         customClaimList.CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
-                        customClaimList.CreationAgo = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]), "CreatedSpan");
-                        customClaimList.AssignOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]), "AssignedSpan");
+                        customClaimList.CreationAgo = ds.Tables[0].Rows[i]["CreationAgo"] == DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["CreationAgo"]), "CreatedSpan");
+                        customClaimList.AssignOn = ds.Tables[0].Rows[i]["AssignedOn"] == DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["AssignedOn"]), "AssignedSpan");
                         customClaimList.ModifyOn = ds.Tables[0].Rows[i]["ModifyOn"] == DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["ModifyOn"]), "ModifiedSpan");
                         lstCustomClaim.Add(customClaimList);
                     }

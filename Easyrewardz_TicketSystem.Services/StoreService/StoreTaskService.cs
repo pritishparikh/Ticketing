@@ -1304,26 +1304,28 @@ namespace Easyrewardz_TicketSystem.Services
         public List<TaskFilterRaisedBymeResponseModel> GetRaisedbyfiterData(TaskFilterRaisedBymeModel model)
         {
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
             List<TaskFilterRaisedBymeResponseModel> raisedByfilter = new List<TaskFilterRaisedBymeResponseModel>();
             try
             {
                 conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("sp_getStoreRaisebyData", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@objtaskID", model.taskid);
-                cmd1.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
-                cmd1.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
-                cmd1.Parameters.AddWithValue("@objDepartment", model.Department);
-                cmd1.Parameters.AddWithValue("@objfuncation", model.functionID);
-                cmd1.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
-                cmd1.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
-                cmd1.Parameters.AddWithValue("@objassignTo", model.AssigntoId);
-                cmd1.Parameters.AddWithValue("@objtaskPriority", model.Priority);
-                cmd1.Parameters.AddWithValue("@objuserid", model.userid);
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                MySqlCommand cmd = new MySqlCommand("sp_getStoreRaisebyData", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@objtaskID", model.taskid);
+                cmd.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
+                cmd.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
+                cmd.Parameters.AddWithValue("@objDepartment", model.Department);
+                cmd.Parameters.AddWithValue("@objfuncation", model.functionID);
+                cmd.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
+                cmd.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
+                cmd.Parameters.AddWithValue("@objassignTo", model.AssigntoId);
+                cmd.Parameters.AddWithValue("@objtaskPriority", model.Priority);
+                cmd.Parameters.AddWithValue("@objuserid", model.userid);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
@@ -1333,20 +1335,31 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
 
-                        TaskFilterRaisedBymeResponseModel storeRaisedby = new TaskFilterRaisedBymeResponseModel();
-                        storeRaisedby.totalCount = ds.Tables[0].Rows.Count;
-                        storeRaisedby.StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        storeRaisedby.TaskStatus = TaskStatusName;
-                        storeRaisedby.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        storeRaisedby.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
-                        storeRaisedby.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        storeRaisedby.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
-                        storeRaisedby.PriorityName = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
-                        storeRaisedby.CreationOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
-                        storeRaisedby.Assignto = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
-                        storeRaisedby.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        storeRaisedby.Updatedago = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
-                        storeRaisedby.UpdatedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        TaskFilterRaisedBymeResponseModel storeRaisedby = new TaskFilterRaisedBymeResponseModel
+                        {
+                            totalCount = ds.Tables[0].Rows.Count,
+                            StoreTaskID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            TaskStatus = TaskStatusName,
+                            TaskTitle = ds.Tables[0].Rows[i]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]),
+                            DepartmentName = ds.Tables[0].Rows[i]["DepartmentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]),
+                            StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
+                            StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
+                            PriorityName = ds.Tables[0].Rows[i]["Priorty"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]),
+                            CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
+                            CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
+                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]),
+                            Createdago = ds.Tables[0].Rows[i]["CreatedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]), "CreatedSpan"),
+                            Assignedago = ds.Tables[0].Rows[i]["AssignedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["AssignedDate"]), "AssignedSpan"),
+                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]), "ModifiedSpan"),
+                            TaskCloureDate = ds.Tables[0].Rows[i]["ClosureTaskDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureTaskDate"]),
+                            ResolutionTimeRemaining = ds.Tables[0].Rows[i]["RemainingTime"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RemainingTime"]),
+                            ResolutionOverdueBy = ds.Tables[0].Rows[i]["taskoverDue"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["taskoverDue"]),
+                            ColorName = ds.Tables[0].Rows[i]["ColorName"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorName"]),
+                            ColorCode = ds.Tables[0].Rows[i]["ColorCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorCode"])
+                        };
+                        
                         raisedByfilter.Add(storeRaisedby);
                     }
                 }
@@ -1371,9 +1384,6 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
-
-
-
         /// <summary>
         /// Get task Data for raised by me filter---
         /// </summary>
@@ -1383,56 +1393,65 @@ namespace Easyrewardz_TicketSystem.Services
         public List<TaskFilterAssignBymeResponseModel> GetAssignBYfiterData(TaskFilterAssignBymeModel model)
         {
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
             List<TaskFilterAssignBymeResponseModel> assignByfilter = new List<TaskFilterAssignBymeResponseModel>();
             try
             {
                 conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("sp_getStoreAssigbBYdatafilter", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@objtaskID", model.taskid);
-                cmd1.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
-                cmd1.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
-                cmd1.Parameters.AddWithValue("@objDepartment", model.Department);
-                cmd1.Parameters.AddWithValue("@objfuncation", model.functionID);
-                cmd1.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
-                cmd1.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
-                cmd1.Parameters.AddWithValue("@objcreatedby", model.createdID);
-                cmd1.Parameters.AddWithValue("@objtaskPriority", model.Priority);
-                cmd1.Parameters.AddWithValue("@objuserid", model.userid);
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                MySqlCommand cmd = new MySqlCommand("sp_getStoreAssigbBYdatafilter", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@objtaskID", model.taskid);
+                cmd.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
+                cmd.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
+                cmd.Parameters.AddWithValue("@objDepartment", model.Department);
+                cmd.Parameters.AddWithValue("@objfuncation", model.functionID);
+                cmd.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
+                cmd.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
+                cmd.Parameters.AddWithValue("@objcreatedby", model.createdID);
+                cmd.Parameters.AddWithValue("@objtaskPriority", model.Priority);
+                cmd.Parameters.AddWithValue("@objuserid", model.userid);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-
-
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
 
-                        TaskFilterAssignBymeResponseModel storeAssignBY = new TaskFilterAssignBymeResponseModel();
-                        storeAssignBY.totalCount = ds.Tables[0].Rows.Count;
-                        storeAssignBY.StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        storeAssignBY.TaskStatus = TaskStatusName;
-                        storeAssignBY.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        storeAssignBY.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
-                        storeAssignBY.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        storeAssignBY.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
-                        storeAssignBY.PriorityName = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
-                        storeAssignBY.CreationOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
-                        storeAssignBY.Assignto = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
-                        storeAssignBY.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        storeAssignBY.Updatedago = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
-                        storeAssignBY.UpdatedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        TaskFilterAssignBymeResponseModel storeAssignBY = new TaskFilterAssignBymeResponseModel
+                        {
+                            totalCount = ds.Tables[0].Rows.Count,
+                            StoreTaskID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            TaskStatus = TaskStatusName,
+                            TaskTitle = ds.Tables[0].Rows[i]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]),
+                            DepartmentName = ds.Tables[0].Rows[i]["DepartmentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]),
+                            StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
+                            StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
+                            PriorityName = ds.Tables[0].Rows[i]["Priorty"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]),
+                            CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
+                            CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
+                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]),
+                            Createdago = ds.Tables[0].Rows[i]["CreatedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]), "CreatedSpan"),
+                            Assignedago = ds.Tables[0].Rows[i]["AssignedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["AssignedDate"]), "AssignedSpan"),
+                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]), "ModifiedSpan"),
+                            TaskCloureDate = ds.Tables[0].Rows[i]["ClosureTaskDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureTaskDate"]),
+                            ResolutionTimeRemaining = ds.Tables[0].Rows[i]["RemainingTime"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RemainingTime"]),
+                            ResolutionOverdueBy = ds.Tables[0].Rows[i]["taskoverDue"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["taskoverDue"]),
+                            ColorName = ds.Tables[0].Rows[i]["ColorName"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorName"]),
+                            ColorCode = ds.Tables[0].Rows[i]["ColorCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorCode"])
+                        };
                         assignByfilter.Add(storeAssignBY);
                     }
                 }
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
@@ -1441,14 +1460,13 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return assignByfilter;
-
         }
-
-
-
-
 
         /// <summary>
         /// Get Task Ticket Data
@@ -1487,15 +1505,12 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-
-
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
 
                         TaskFilterTicketByResponseModel taskTicket = new TaskFilterTicketByResponseModel
                         {
-
                             totalCount = ds.Tables[0].Rows.Count,
                             StoreTaskID =ds.Tables[0].Rows[i]["ID"]== DBNull.Value ? 0 :Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
                             TaskStatus = string.IsNullOrEmpty(TaskStatusName) ? "" : TaskStatusName,
@@ -1508,8 +1523,16 @@ namespace Easyrewardz_TicketSystem.Services
                             CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
                             Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
                             CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
-                            Updatedago = ds.Tables[0].Rows[i]["Modifiedon"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]),
-                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"])
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
+                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]),
+                            Createdago = ds.Tables[0].Rows[i]["Createdago"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdago"]),
+                            Assignedago = ds.Tables[0].Rows[i]["Assignedago"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignedago"]),
+                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]),
+                            TaskCloureDate = ds.Tables[0].Rows[i]["ClosureTaskDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureTaskDate"]),
+                            ResolutionTimeRemaining = ds.Tables[0].Rows[i]["RemainingTime"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RemainingTime"]),
+                            ResolutionOverdueBy = ds.Tables[0].Rows[i]["taskoverDue"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["taskoverDue"]),
+                            ColorName = ds.Tables[0].Rows[i]["ColorName"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorName"]),
+                            ColorCode = ds.Tables[0].Rows[i]["ColorCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorCode"])
                         };
                         ticketByTask.Add(taskTicket);
                     }
@@ -1517,7 +1540,6 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
@@ -1526,9 +1548,12 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return ticketByTask;
-
         }
 
         /// <summary>

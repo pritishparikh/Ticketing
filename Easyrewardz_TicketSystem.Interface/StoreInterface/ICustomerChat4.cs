@@ -11,7 +11,7 @@ namespace Easyrewardz_TicketSystem.Interface
 
         List<CustomerChatProductModel> GetChatCustomerProducts(int TenantId, string ProgramCode, int CustomerID, string MobileNo);
 
-        int RemoveProduct(int TenantId, string ProgramCode, int CustomerID,string CustomerMobile, string ItemCode);
+        int RemoveProduct(int TenantId, string ProgramCode, int CustomerID,string CustomerMobile, string ItemCode,string RemoveFrom, int UserID);
 
         int AddProductsToShoppingBag(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCodes, bool IsFromRecommendation,int UserID);
 
