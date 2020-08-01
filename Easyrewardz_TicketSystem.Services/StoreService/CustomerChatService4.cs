@@ -629,15 +629,15 @@ namespace Easyrewardz_TicketSystem.Services
 
                         #region call client api for sending message to customer
 
-                        CTAMessage += !string.IsNullOrEmpty(obj.uniqueItemCode) ? obj.uniqueItemCode : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.productName) ? obj.productName : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.categoryName) ? obj.categoryName : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.subCategoryName) ? obj.subCategoryName : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.brandName) ? obj.brandName : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.price) ? obj.price : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.color) ? obj.color : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.size) ? obj.size : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.imageURL) ? obj.imageURL : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.uniqueItemCode) ? obj.uniqueItemCode + "," : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.productName) ? obj.productName + "," : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.categoryName) ? obj.categoryName + "," : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.subCategoryName) ? obj.subCategoryName + "," : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.brandName) ? obj.brandName + "," : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.price) ? obj.price + "," : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.color) ? obj.color + "," : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.size) ? obj.size + "," : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.imageURL) ? obj.imageURL + "," : " " + ",";
 
 
                         Details.to = ProductDetails.CustomerMobile.Length > 10 ? ProductDetails.CustomerMobile : "91" + ProductDetails.CustomerMobile;
