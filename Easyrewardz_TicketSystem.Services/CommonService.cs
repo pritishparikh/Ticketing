@@ -6,6 +6,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
@@ -476,6 +477,50 @@ namespace Easyrewardz_TicketSystem.Services
 
                     }
                 }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return strresponse;
+
+        }
+
+        public static string SendApiRequest1(string url, string Request)
+        {
+            string strresponse = "";
+            try
+            {
+
+                var client = new HttpClient();
+                WebRequest tRequest;
+                var uri = url;
+                tRequest = WebRequest.Create(uri);
+                tRequest.Method = "post";
+                tRequest.ContentType = "text/json";
+                //HttpResponseMessage response;
+                //Stream dataStream = tRequest.GetRequestStream();
+                using (var streamWriter = new StreamWriter(tRequest.GetRequestStream()))
+                {
+                    if (!string.IsNullOrEmpty(Request))
+                        streamWriter.Write(Request);
+                }
+                WebResponse tResponse = tRequest.GetResponse();
+                //dataStream = tResponse.GetResponseStream();
+                //StreamReader tReader = new StreamReader(dataStream);
+                //String sResponseFromServer = tReader.ReadToEnd();
+                HttpWebResponse httpResponse = (HttpWebResponse)tResponse;
+                string statusCode = httpResponse.StatusCode.ToString();
+                //tReader.Close();
+                //dataStream.Close();
+                tResponse.Close();
+
+                
+            }
+            catch ()
+            {
+               
             }
             catch (Exception)
             {
