@@ -932,7 +932,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception)
             {
-                throw;
+                //throw; Please dont uncomment
             }
             finally
             {
