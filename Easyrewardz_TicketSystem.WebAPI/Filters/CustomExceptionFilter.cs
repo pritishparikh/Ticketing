@@ -67,7 +67,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                         TenantID = authenticate.TenantId,
                         UserID = authenticate.UserMasterID,
                         Exceptions = context.Exception.StackTrace,
-                        MessageException = context.Exception.Message,
+                        MessageException = context.Exception.Message + " | " + context.Exception.InnerException,
                         IPAddress = Convert.ToString(context.HttpContext.Connection.RemoteIpAddress)
                     };
                     int result = errorLogCaller.AddErrorLog(new ErrorLogging(_ErconnectioSting), errorLogs);

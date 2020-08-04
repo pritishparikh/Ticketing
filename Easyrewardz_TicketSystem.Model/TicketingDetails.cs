@@ -185,6 +185,11 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public bool IsInforToStore { get; set; }
 
+
+        /// <summary>
+        /// IsInforToStore
+        /// </summary>
+        public bool IsGenFromStoreCamPaign { get; set; } = false;
     }
 
     public class TicketTitleDetails

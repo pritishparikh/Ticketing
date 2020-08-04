@@ -118,7 +118,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 cmd1.Parameters.AddWithValue("@_TicketTemplateID", ticketingDetails.TicketTemplateID);
 
-                cmd1.Parameters.AddWithValue("@_CreatedBy", ticketingDetails.CreatedBy);
+                cmd1.Parameters.AddWithValue("@_CreatedBy", ticketingDetails.IsGenFromStoreCamPaign ? -2 : ticketingDetails.CreatedBy);
                 cmd1.Parameters.AddWithValue("@_Notes", ticketingDetails.Ticketnotes);
 
                 cmd1.Parameters.AddWithValue("@_IsInstantEscalateToHighLevel", Convert.ToInt16(ticketingDetails.IsInstantEscalateToHighLevel));
