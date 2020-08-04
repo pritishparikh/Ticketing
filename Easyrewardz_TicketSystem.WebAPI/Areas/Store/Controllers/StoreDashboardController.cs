@@ -97,7 +97,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         public ResponseModel getstoreDashboardListClaim([FromBody] StoreDashboardClaimModel ClaimSearchModel)
         {
 
-            List<StoreDashboardClaimResponseModel> ClaimSearchResponse = new List<StoreDashboardClaimResponseModel>();
+            List<CustomClaimList> ClaimSearchResponse = new List<CustomClaimList>();
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";

@@ -315,10 +315,10 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="TenantID"></param>
         /// <returns></returns>
 
-        public List<StoreDashboardClaimResponseModel> GetClaimDataForStoreDashboard(StoreDashboardClaimModel model)
+        public List<CustomClaimList> GetClaimDataForStoreDashboard(StoreDashboardClaimModel model)
         {
             DataSet ds = new DataSet();
-            List<StoreDashboardClaimResponseModel> ClaimSearchResponse = new List<StoreDashboardClaimResponseModel>();
+            List<CustomClaimList> ClaimSearchResponse = new List<CustomClaimList>();
 
             try
             {
@@ -354,10 +354,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        StoreDashboardClaimResponseModel StoreDashboard = new StoreDashboardClaimResponseModel();
+                        CustomClaimList StoreDashboard = new CustomClaimList();
                         StoreDashboard.ClaimID = ds.Tables[0].Rows[i]["ClaimID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ClaimID"]);
-                        StoreDashboard.ClaimStatusId = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]);
-                        StoreDashboard.ClaimStatus = StoreDashboard.ClaimStatusId.Equals(0) ? string.Empty : Convert.ToString((EnumMaster.ClaimStatus)StoreDashboard.ClaimStatusId);
+                        //StoreDashboard.ClaimStatusId = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]);
+                        StoreDashboard.Status = ds.Tables[0].Rows[i]["StatusID"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.ClaimStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["StatusID"]));
                         StoreDashboard.BrandID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
                         StoreDashboard.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
                         StoreDashboard.CategoryID = ds.Tables[0].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
@@ -367,11 +367,11 @@ namespace Easyrewardz_TicketSystem.Services
                         StoreDashboard.IssueTypeID = ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
                         StoreDashboard.IssueTypeName = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
                         StoreDashboard.CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        StoreDashboard.CreatedByName = ds.Tables[0].Rows[i]["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedByName"]);
-                        StoreDashboard.AssignedId = ds.Tables[0].Rows[i]["AssignedID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["AssignedID"]);
+                        //StoreDashboard.CreatedByName = ds.Tables[0].Rows[i]["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedByName"]);
+                        //StoreDashboard.AssignedId = ds.Tables[0].Rows[i]["AssignedID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["AssignedID"]);
                         StoreDashboard.AssignTo = ds.Tables[0].Rows[i]["AssignedToName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignedToName"]);
-                        StoreDashboard.ClaimRaisedByID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
-                        StoreDashboard.RaiseBy = ds.Tables[0].Rows[i]["Raisedby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Raisedby"]);
+                        //StoreDashboard.ClaimRaisedByID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerID"]);
+                        StoreDashboard.RaiseBy = ds.Tables[0].Rows[i]["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedByName"]);
                         StoreDashboard.CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
 
                         ClaimSearchResponse.Add(StoreDashboard);

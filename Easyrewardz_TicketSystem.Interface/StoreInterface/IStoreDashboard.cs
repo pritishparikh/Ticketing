@@ -1,4 +1,5 @@
-﻿using Easyrewardz_TicketSystem.Model;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Model;
 using System.Collections.Generic;
 
 namespace Easyrewardz_TicketSystem.Interface
@@ -17,7 +18,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        List<StoreDashboardClaimResponseModel> GetClaimDataForStoreDashboard(StoreDashboardClaimModel model);
+        List<CustomClaimList> GetClaimDataForStoreDashboard(StoreDashboardClaimModel model);
 
         /// <summary>
         /// Get Loggin Account Info
