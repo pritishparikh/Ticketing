@@ -164,7 +164,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 }
 
 
-                bool isUpdate = newSecurityCaller.UpdatePassword(new SecurityService(_data), encryptedEmailId, Password);
+                bool isUpdate = newSecurityCaller.UpdatePassword(new SecurityService(_data), bsObj.EmailID, Password);
 
                 if (isUpdate)
                 {
