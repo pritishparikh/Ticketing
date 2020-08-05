@@ -82,6 +82,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _Alerts.ValidateStoreAlert(AlertID, tenantID);
 
         }
+
+        /// <summary>
+        /// GetMailParameter
+        /// </summary>
+        /// <param name="Alert"></param>
+        /// <param name="tenantId"></param>
+        /// <param name="alertID"></param>
+        /// <returns></returns>
+        public List<MailParameterModel> GetMailParameter(IStoreAlerts Alert, int tenantId, int alertID)
+        {
+            _Alerts = Alert;
+            return _Alerts.GetMailParameter(tenantId, alertID);
+
+        }
         #endregion
     }
 }

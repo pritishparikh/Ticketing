@@ -63,5 +63,13 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="TenantID"></param>
         /// <returns></returns>
         string ValidateStoreAlert(int AlertID, int TenantID);
+
+        /// <summary>
+        /// GetMailParameter
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="alertID"></param>
+        /// <returns></returns>
+        List<MailParameterModel> GetMailParameter(int tenantId, int alertID);
     }
 }

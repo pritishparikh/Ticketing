@@ -382,6 +382,47 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
             return objResponseModel;
         }
+
+        /// <summary>
+        /// GetMailParameter
+        /// </summary>
+        /// <param name="alertID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetMailParameter")]
+        public ResponseModel GetMailParameter(int alertID)
+        {
+            List<MailParameterModel> mailParameterModel = new List<MailParameterModel>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                AlertCaller newAlert = new AlertCaller();
+
+                mailParameterModel = newAlert.GetMailParameter(new StoreAlertService(_connectioSting), authenticate.TenantId, alertID);
+
+                statusCode = mailParameterModel.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound; ;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = mailParameterModel;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
         #endregion
 
     }
