@@ -79,8 +79,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     MasterCaller masterCaller = new MasterCaller();
                     SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_data), authenticate.TenantId);
 
+                    EmailProgramCode emailProgramCode = new EmailProgramCode();
+                    emailProgramCode.EmailID = EmailId;
+                    emailProgramCode.ProgramCode = X_Authorized_Programcode;
+                    string jsonData = JsonConvert.SerializeObject(emailProgramCode);
+
                     CommonService commonService = new CommonService();
-                    string encryptedEmailId = commonService.Encrypt(EmailId);
+                    string encryptedEmailId = commonService.Encrypt(jsonData);
                     string url = X_Authorized_Domainname.TrimEnd('/') + "/userforgotPassword?Id:" + encryptedEmailId;
                     // string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url;
 
