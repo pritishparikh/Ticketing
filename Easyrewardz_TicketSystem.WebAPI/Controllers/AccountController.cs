@@ -92,9 +92,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     string content = "";
                     string subject = "";
 
-                    securityCaller.GetForgetPassowrdMailContent(new SecurityService(_connectioSting), authenticate.TenantId, url, EmailId, out content, out subject);
+                    securityCaller.GetForgetPassowrdMailContent(new SecurityService(_data), authenticate.TenantId, url, EmailId, out content, out subject);
 
-                    bool isUpdate = securityCaller.sendMail(new SecurityService(_connectioSting), sMTPDetails, EmailId, subject, content, authenticate.TenantId);
+                    bool isUpdate = securityCaller.sendMail(new SecurityService(_data), sMTPDetails, EmailId, subject, content, authenticate.TenantId);
 
                     if (isUpdate)
                     {
