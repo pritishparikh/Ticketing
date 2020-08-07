@@ -841,7 +841,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         ticketDetails.products = ds.Tables[2].AsEnumerable().Select(x => new Product()
                         {
-                            ItemID = Convert.ToInt32(x.Field<int>("OrderItemID")),
+                            ItemID = x.Field<object>("OrderItemID") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("OrderItemID")),
                             InvoiceNumber = x.Field<object>("InvoiceNo") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("InvoiceNo"))
 
                         }).ToList();
