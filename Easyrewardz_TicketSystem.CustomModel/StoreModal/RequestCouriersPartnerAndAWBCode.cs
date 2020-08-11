@@ -8,7 +8,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
     {
         public int pickup_postcode { get; set; }
         public int delivery_postcode { get; set; }
-        public int weight { get; set; }
+        public double weight { get; set; }
         public OrderDetails orderDetails { get; set; }
     }
     public class OrderDetails

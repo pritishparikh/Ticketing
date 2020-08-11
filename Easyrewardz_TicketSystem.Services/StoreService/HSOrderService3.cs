@@ -68,7 +68,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         pickup_postcode = ds.Tables[1].Rows[0]["pickup_postcode"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["pickup_postcode"]),
                         delivery_postcode = ds.Tables[1].Rows[0]["delivery_postcode"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["delivery_postcode"]),
-                        weight = ds.Tables[1].Rows[0]["weight"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[1].Rows[0]["weight"])
+                        weight = ds.Tables[1].Rows[0]["weight"] == DBNull.Value ? 0 : Convert.ToDouble(ds.Tables[1].Rows[0]["weight"])
                     };
                 }
 

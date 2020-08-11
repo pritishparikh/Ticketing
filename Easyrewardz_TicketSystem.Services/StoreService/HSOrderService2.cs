@@ -1086,7 +1086,7 @@ namespace Easyrewardz_TicketSystem.Services
                         xmlDoc.LoadXml(DataSetCSV.GetXml());
                         conn.Open();
 
-                        cmd = new MySqlCommand("SP_BulkUploadOrderTemplate", conn);
+                        cmd = new MySqlCommand("SP_PHYBulkUploadOrderTemplate", conn);
                         cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                         cmd.Parameters.AddWithValue("@_UserFor", UserFor);
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
