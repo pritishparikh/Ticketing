@@ -325,43 +325,45 @@ namespace Easyrewardz_TicketSystem.Services
 
                     if (ApiResponse != null)
                     {
-                        customCustomerDetails = JsonConvert.DeserializeObject<List<CustomCustomerDetails>>(Convert.ToString((ApiResponse.Responce)));
-                        if (customCustomerDetails != null )
+                        if (ApiResponse?.Responce != null)
                         {
-                            if(customCustomerDetails.Count > 0)
+                            customCustomerDetails = JsonConvert.DeserializeObject<List<CustomCustomerDetails>>(Convert.ToString((ApiResponse.Responce)));
+                            if (customCustomerDetails != null)
                             {
-
-                                for(int k =0; k< customCustomerDetails.Count; k++ )
+                                if (customCustomerDetails.Count > 0)
                                 {
-                                    CustomerMaster customerDetails = new CustomerMaster();
-                                    customerDetails.TenantID = TenantId;
-                                    customerDetails.CustomerName = customCustomerDetails[k].CustomerName;
-                                    customerDetails.CreatedBy = UserID;
-                                    customerDetails.CustomerPhoneNumber = customCustomerDetails[k].MobileNumber;
-                                    customerDetails.CustomerEmailId = customCustomerDetails[k].Email;
-                                    customerDetails.GenderID = customCustomerDetails[k].Gender.ToLower().Equals("male") ? 1 : 2;
-                                    customerDetails.AltEmailID = customCustomerDetails[k].Email;
-                                    customerDetails.AltNumber = customCustomerDetails[k].MobileNumber;
-                                    customerDetails.IsActive = Convert.ToInt16(true);
-                                    
-                                   
-                                    
 
-                                    //call add customer
-                                    InsertedCustID = addCustomerDetails(customerDetails, TenantId);
-                                    if (InsertedCustID > 0)
+                                    for (int k = 0; k < customCustomerDetails.Count; k++)
                                     {
-                                        customerDetails.CustomerID = InsertedCustID;
+                                        CustomerMaster customerDetails = new CustomerMaster();
+                                        customerDetails.TenantID = TenantId;
+                                        customerDetails.CustomerName = customCustomerDetails[k].CustomerName;
+                                        customerDetails.CreatedBy = UserID;
+                                        customerDetails.CustomerPhoneNumber = customCustomerDetails[k].MobileNumber;
+                                        customerDetails.CustomerEmailId = customCustomerDetails[k].Email;
+                                        customerDetails.GenderID = customCustomerDetails[k].Gender.ToLower().Equals("male") ? 1 : 2;
+                                        customerDetails.AltEmailID = customCustomerDetails[k].Email;
+                                        customerDetails.AltNumber = customCustomerDetails[k].MobileNumber;
+                                        customerDetails.IsActive = Convert.ToInt16(true);
+
+
+
+
+                                        //call add customer
+                                        InsertedCustID = addCustomerDetails(customerDetails, TenantId);
+                                        if (InsertedCustID > 0)
+                                        {
+                                            customerDetails.CustomerID = InsertedCustID;
+                                        }
+
+                                        customerMasters.Add(customerDetails);
                                     }
-
-                                    customerMasters.Add(customerDetails);
                                 }
-                            }
-                            
 
-                            
+
+
+                            }
                         }
-                        
                     }
 
                 }
