@@ -1,5 +1,4 @@
 ﻿using Easyrewardz_TicketSystem.Model;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -7,8 +6,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
@@ -33,12 +30,12 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="bcc"></param>
         /// <param name="tenantId"></param>
         /// <returns></returns>
-        public bool SendEmail(SMTPDetails smtpDetails, string emailToAddress, string subject, string body, string[] cc = null, string[] bcc = null, int tenantId = 0)
+        public bool SendEmail(SMTPDetails smtpDetails,string emailToAddress, string subject, string body, string[] cc = null, string[] bcc = null, int tenantId= 0)
         {
             bool isMailSent = false;
             try
             {
-
+                
 
                 SmtpClient smtpClient = new SmtpClient(smtpDetails.SMTPServer, Convert.ToInt32(smtpDetails.SMTPPort));
                 smtpClient.EnableSsl = smtpDetails.EnableSsl;
@@ -50,15 +47,15 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         message.From = new MailAddress(smtpDetails.FromEmailId, "EasyRewardz");
 
-                        if (cc != null)
+                        if(cc!=null)
                         {
-                            if (cc.Length > 0)
+                            if(cc.Length >0)
                             {
-                                for (int i = 0; i < cc.Length; i++)
+                                for(int i=0; i< cc.Length;i++)
                                 {
                                     message.CC.Add(cc[i]);
                                 }
-
+                            
                             }
                         }
 
@@ -86,7 +83,7 @@ namespace Easyrewardz_TicketSystem.Services
             }
             catch (Exception)
             {
-                throw;
+                throw ;
             }
             return isMailSent;
         }
@@ -188,7 +185,7 @@ namespace Easyrewardz_TicketSystem.Services
             var props = type.GetProperties();
 
             // This is testing 
-            if (string.IsNullOrEmpty(ExcludeColumns))
+            if (string.IsNullOrEmpty(ExcludeColumns))  
             {
                 sList.Append(string.Join(",", props.Select(p => p.Name)));
             }
@@ -258,8 +255,8 @@ namespace Easyrewardz_TicketSystem.Services
             DataTable dtCsv = new DataTable();
             string FileContent = string.Empty;
             DataSet dsCsv = new DataSet();
-
-
+       
+     
             try
             {
                 if (!string.IsNullOrEmpty(FilePath))
@@ -278,9 +275,9 @@ namespace Easyrewardz_TicketSystem.Services
                                     {
                                         for (int j = 0; j < rowValues.Count(); j++)
                                         {
-                                            dtCsv.Columns.Add(rowValues[j].Trim().Replace(" ", "")); //add headers  
+                                            dtCsv.Columns.Add(rowValues[j].Trim().Replace(" ","")); //add headers  
                                         }
-
+                                        
                                     }
                                     else
                                     {
@@ -289,7 +286,7 @@ namespace Easyrewardz_TicketSystem.Services
                                         {
                                             dr[k] = rowValues[k].ToString().Trim();
                                         }
-
+                                      
                                         dtCsv.Rows.Add(dr); //add other rows  
 
                                     }
@@ -419,14 +416,14 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public static void ErrorLog(string sPathName, string sErrMsg)
         {
-            if (File.Exists(sPathName))
+           if( File.Exists(sPathName))
             {
                 StreamWriter sw = new StreamWriter(sPathName + sErrorTime, true);
                 sw.WriteLine(sLogFormat + sErrMsg);
                 sw.Flush();
                 sw.Close();
             }
-            else
+           else
             {
                 StreamWriter stwriter = File.CreateText(sPathName);
                 stwriter.WriteLine(sLogFormat + sErrMsg);
@@ -489,49 +486,6 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
-        public static string SendApiRequest1(string url, string Request)
-        {
-            string strresponse = "";
-
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {                   
-                    HttpContent inputContent = new StringContent(Request, Encoding.UTF8, "text/json");
-                    MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("text/json");
-                    client.DefaultRequestHeaders.Accept.Add(contentType);
-                    HttpResponseMessage responseMessage = client.PostAsync(url, inputContent).Result;
-                    strresponse = responseMessage.Content.ReadAsStringAsync().Result;
-                }
-            }
-            catch (WebException e)
-            {
-                using (WebResponse response = e.Response)
-                {
-                    HttpWebResponse httpResponse = (HttpWebResponse)response;
-
-                    using (Stream data = response.GetResponseStream())
-                    using (var reader = new StreamReader(data))
-                    {
-                        strresponse = reader.ReadToEnd();
-
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-
-
-
-
-            return strresponse;
-
-        }
-
         /// <summary>
         /// Send Image API Request
         /// </summary>
@@ -583,43 +537,6 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
-        public static string SendImageApiRequest1(string url, string Request)
-        {
-            string strresponse = "";
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    HttpContent inputContent = new StringContent(Request, Encoding.UTF8, "text/json");
-                    MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("text/json");
-                    client.DefaultRequestHeaders.Accept.Add(contentType);
-                    HttpResponseMessage responseMessage = client.PostAsync(url, inputContent).Result;
-                    strresponse = responseMessage.Content.ReadAsStringAsync().Result;
-                }
-            }
-            catch (WebException e)
-            {
-                using (WebResponse response = e.Response)
-                {
-                    HttpWebResponse httpResponse = (HttpWebResponse)response;
-
-                    using (Stream data = response.GetResponseStream())
-                    using (var reader = new StreamReader(data))
-                    {
-                        strresponse = reader.ReadToEnd();
-
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            return strresponse;
-
-        }
-
         /// <summary>
         /// Send Api Request Token
         /// </summary>
@@ -638,7 +555,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                 httpWebRequest.ContentType = "application/x-www-form-urlencoded";
 
-
+   
                 ASCIIEncoding encoding = new ASCIIEncoding();
                 byte[] byte1 = encoding.GetBytes(Request);
 
@@ -681,48 +598,6 @@ namespace Easyrewardz_TicketSystem.Services
 
         }
 
-        public static string SendApiRequestToken1(string url, string Request, string token = "")
-        {
-            string strresponse = "";
-            try
-            {
-                ASCIIEncoding encoding = new ASCIIEncoding();
-                byte[] byte1 = encoding.GetBytes(Request);
-                
-
-                using (HttpClient client = new HttpClient())
-                {
-                    HttpContent inputContent = new StringContent(byte1.ToString(), Encoding.UTF8, "application/x-www-form-urlencoded");
-                    MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded");
-                    client.DefaultRequestHeaders.Accept.Add(contentType);
-                    HttpResponseMessage responseMessage = client.PostAsync(url, inputContent).Result;
-                    strresponse = responseMessage.Content.ReadAsStringAsync().Result;
-                }               
-
-            }
-            catch (WebException e)
-            {
-                using (WebResponse response = e.Response)
-                {
-                    HttpWebResponse httpResponse = (HttpWebResponse)response;
-
-                    using (Stream data = response.GetResponseStream())
-                    using (var reader = new StreamReader(data))
-                    {
-                        strresponse = reader.ReadToEnd();
-
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            return strresponse;
-
-        }
-
         /// <summary>
         /// Send Api Request Merchant Api
         /// </summary>
@@ -738,7 +613,7 @@ namespace Easyrewardz_TicketSystem.Services
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
                 httpWebRequest.Method = "POST";
                 httpWebRequest.Accept = "text/plain";
-
+                
                 httpWebRequest.ContentType = "application/json ";
                 httpWebRequest.Headers.Add("Authorization", "Bearer " + token);
 

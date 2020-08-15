@@ -1,5 +1,4 @@
-﻿using Easyrewardz_TicketSystem.CustomModel;
-using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System.Collections.Generic;
 using System.Data;
@@ -30,7 +29,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <summary>
         ///get store Dashborad Details For Claim
         /// </summary>
-        public List<CustomClaimList> getStoreDashboardClaimList(IStoreDashboard DashBoard, StoreDashboardClaimModel ClaimSearchModel)
+        public List<StoreDashboardClaimResponseModel> getStoreDashboardClaimList(IStoreDashboard DashBoard, StoreDashboardClaimModel ClaimSearchModel)
         {
             _dashboard = DashBoard;
             return _dashboard.GetClaimDataForStoreDashboard(ClaimSearchModel);

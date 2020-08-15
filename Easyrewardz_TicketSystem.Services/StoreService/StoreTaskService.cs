@@ -43,6 +43,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     CommandType = CommandType.StoredProcedure
                 };
+
                 cmd.Parameters.AddWithValue("@Task_Title", taskMaster.TaskTitle);
                 cmd.Parameters.AddWithValue("@Task_Description", taskMaster.TaskDescription);
                 cmd.Parameters.AddWithValue("@Department_Id", taskMaster.DepartmentId);
@@ -53,6 +54,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", UserID);
 
                 taskId = Convert.ToInt32(cmd.ExecuteNonQuery());
+
             }
             catch (Exception)
             {
@@ -128,6 +130,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             catch (Exception)
+
             {
                 throw;
             }
@@ -240,6 +243,8 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_TaskFor", TaskComment.TaskFor == 0 ? 1 : TaskComment.TaskFor);
                 cmd.Parameters.AddWithValue("@_CommentBy", UserID);
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+
+
                 taskId = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
@@ -317,10 +322,6 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
-                if (ds != null)
-                {
-                    ds.Dispose();
-                }
             }
             return TaskCommentList;
         }
@@ -334,11 +335,13 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public List<CustomTaskHistory> GetTaskHistory(int TaskID, int TenantID, int UserID)
         {
+
             DataSet ds = new DataSet();
             List<CustomTaskHistory> ListTaskHistory = new List<CustomTaskHistory>();
             try
             {
                 conn.Open();
+
                 MySqlCommand cmd = new MySqlCommand("SP_GetHistoryOfTask", conn)
                 {
                     CommandType = CommandType.StoredProcedure
@@ -582,9 +585,11 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             catch (Exception)
+
             {
                 throw;
             }
+
             finally
             {
                 if (conn != null)
@@ -775,6 +780,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     CommandType = CommandType.StoredProcedure
                 };
+
                 cmd.Parameters.AddWithValue("@_TaskId", TaskId);
                 cmd.Parameters.AddWithValue("@_TaskBy", TaskBy);
 
@@ -885,6 +891,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_IsCommentOnAssign", assignTaskModel.IsCommentOnAssign);
                 cmd.Parameters.AddWithValue("@_CommentOnAssign", assignTaskModel.CommentOnAssign);
 
+
                 i = cmd.ExecuteNonQuery();
             }
             catch (Exception)
@@ -922,11 +929,14 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
                 cmd.Parameters.AddWithValue("@_UserID", UserID);
+
+
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
                 };
                 da.Fill(ds);
+
 
                 if (ds != null && ds.Tables[0] != null)
                 {
@@ -973,6 +983,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             catch (Exception)
+
             {
                 throw;
             }
@@ -991,11 +1002,6 @@ namespace Easyrewardz_TicketSystem.Services
             return objList;
         }
 
-        /// <summary>
-        /// ConvertDatetimeToString
-        /// </summary>
-        /// <param name="DateInString"></param>
-        /// <returns></returns>
         public string ConvertDatetimeToString(string DateInString)
         {
             string result = "";
@@ -1006,8 +1012,9 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     result = DateInString + GMT;
                 }
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -1023,11 +1030,13 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public CampaignStatusResponse GetCampaignStatusResponse(int TenantID, int UserID)
         {
+
             DataSet ds = new DataSet();
             CampaignStatusResponse obj = new CampaignStatusResponse();
             try
             {
                 conn.Open();
+
                 MySqlCommand cmd = new MySqlCommand("SP_GetCampaignStatusResponse", conn)
                 {
                     CommandType = CommandType.StoredProcedure
@@ -1097,11 +1106,13 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int UpdateCampaignStatusResponse(StoreCampaignCustomerRequest objRequest, int TenantID, int UserID)
         {
+
             int result = 0;
             CampaignStatusResponse obj = new CampaignStatusResponse();
             try
             {
                 conn.Open();
+
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateStoreCampaignCustomer", conn)
                 {
                     CommandType = CommandType.StoredProcedure
@@ -1109,10 +1120,12 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_CampaignCustomerID", objRequest.CampaignCustomerID);
                 cmd.Parameters.AddWithValue("@_StatusNameID", objRequest.StatusNameID);
                 cmd.Parameters.AddWithValue("@_ResponseID", objRequest.ResponseID);
+
                 if (!string.IsNullOrEmpty(objRequest.CallReScheduledTo))
                 {
                     objRequest.CallReScheduledToDate = Convert.ToDateTime(objRequest.CallReScheduledTo);
                 }
+
                 cmd.Parameters.AddWithValue("@_CallReScheduledTo", objRequest.CallReScheduledToDate);
 
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
@@ -1141,6 +1154,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int CloseCampaign(int CampaignTypeID, int IsClosed, int TenantID, int UserID)
         {
+
             int result = 0;
             CampaignStatusResponse obj = new CampaignStatusResponse();
             try
@@ -1190,11 +1204,14 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     diff = DateTime.Now - Convert.ToDateTime(time);
                     timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
+
                 }
                 else if (ColName == "RespondTimeRemainingSpan")
                 {
                     PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
                     DateTime assigneddate = Convert.ToDateTime(time.Split(new char[] { '|' })[1]);
+
+
                     switch (PriorityArr[1])
                     {
                         case "D":
@@ -1203,22 +1220,29 @@ namespace Easyrewardz_TicketSystem.Services
                                 diff = (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
                             }
                             break;
+
                         case "H":
 
                             if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
                             {
                                 diff = (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
                             }
+
+
                             break;
+
                         case "M":
 
                             if (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
                             {
                                 diff = (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
                             }
+
                             break;
+
                     }
                     timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
+
                 }
                 else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
                 {
@@ -1233,11 +1257,14 @@ namespace Easyrewardz_TicketSystem.Services
                                 diff = DateTime.Now - (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])));
                             }
                             break;
+
                         case "H":
                             if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
                             {
                                 diff = DateTime.Now - (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])));
                             }
+
+
                             break;
 
                         case "M":
@@ -1245,8 +1272,12 @@ namespace Easyrewardz_TicketSystem.Services
                             {
                                 diff = DateTime.Now - (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])));
                             }
+
+
                             break;
+
                     }
+
                     timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
                 }
             }
@@ -1260,6 +1291,7 @@ namespace Easyrewardz_TicketSystem.Services
                     Array.Clear(PriorityArr, 0, PriorityArr.Length);
             }
             return timespan;
+
         }
 
 
@@ -1268,6 +1300,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
+
         public List<TaskFilterRaisedBymeResponseModel> GetRaisedbyfiterData(TaskFilterRaisedBymeModel model)
         {
             DataSet ds = new DataSet();
@@ -1296,6 +1329,8 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
+
+
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
@@ -1324,12 +1359,14 @@ namespace Easyrewardz_TicketSystem.Services
                             ColorName = ds.Tables[0].Rows[i]["ColorName"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorName"]),
                             ColorCode = ds.Tables[0].Rows[i]["ColorCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorCode"])
                         };
+                        
                         raisedByfilter.Add(storeRaisedby);
                     }
                 }
             }
             catch (Exception ex)
             {
+
                 throw ex;
             }
             finally
@@ -1352,6 +1389,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
+
         public List<TaskFilterAssignBymeResponseModel> GetAssignBYfiterData(TaskFilterAssignBymeModel model)
         {
             DataSet ds = new DataSet();
@@ -1435,6 +1473,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
+
         public List<TaskFilterTicketByResponseModel> GetTaskTicketData(TaskFilterTicketByModel model)
         {
             DataSet ds = new DataSet();
@@ -1499,9 +1538,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             finally
             {
@@ -1526,6 +1565,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public List<StoreCampaign> GetStoreCampaignCustomerByStatus(string statusID, int TenantID, int UserID)
         {
+
             DataSet ds = new DataSet();
             List<StoreCampaign> objList = new List<StoreCampaign>();
             try
@@ -1538,11 +1578,14 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
                 cmd.Parameters.AddWithValue("@_UserID", UserID);
                 cmd.Parameters.AddWithValue("@status_ID", string.IsNullOrEmpty(statusID) ? "" : statusID.TrimEnd(','));
+
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
                 };
                 da.Fill(ds);
+
+
                 if (ds != null && ds.Tables[0] != null)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -1588,6 +1631,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             catch (Exception)
+
             {
                 throw;
             }
@@ -1635,6 +1679,7 @@ namespace Easyrewardz_TicketSystem.Services
                     if (!string.IsNullOrEmpty(apiResponse))
                     {
                         ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+
                         if (apiResponse != null)
                         {
                             objpopupDetails = JsonConvert.DeserializeObject<CustomerpopupDetails>(((apiResponse)));

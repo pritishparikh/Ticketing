@@ -34,18 +34,15 @@ namespace Easyrewardz_TicketSystem.Services
             List<AppointmentModel> appointments = new List<AppointmentModel>();
             try
             {
-                if (conn != null && conn.State == ConnectionState.Closed)
-                {
-                    conn.Open();
-                }
+                conn.Open();
                 cmd.Connection = conn;
-                cmd = new MySqlCommand("SP_HSAppointmentDeatils", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Tenant_Id", TenantID);
-                cmd.Parameters.AddWithValue("@User_Id", UserId);
-                cmd.Parameters.AddWithValue("@Apt_Date", AppDate);
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSAppointmentDeatils", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.Parameters.AddWithValue("@User_Id", UserId);
+                cmd1.Parameters.AddWithValue("@Apt_Date", AppDate);
                 MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd;
+                da.SelectCommand = cmd1;
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
@@ -110,18 +107,15 @@ namespace Easyrewardz_TicketSystem.Services
             List<AppointmentCount> appointmentsCount = new List<AppointmentCount>();
             try
             {
-                if (conn != null && conn.State == ConnectionState.Closed)
-                {
-                    conn.Open();
-                }
+                conn.Open();
                 cmd.Connection = conn;
-                cmd = new MySqlCommand("SP_HSGetAppointmentCount", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@_TenantId", TenantID);
-                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
-                cmd.Parameters.AddWithValue("@_UserID", UserId);
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetAppointmentCount", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@_TenantId", TenantID);
+                cmd1.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                cmd1.Parameters.AddWithValue("@_UserID", UserId);
                 MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd;
+                da.SelectCommand = cmd1;
                 da.Fill(ds);
 
                 if (ds != null && ds.Tables != null)
@@ -171,28 +165,22 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="appointmentCustomer"></param>
         /// <param name="TenantId"></param>
         /// <returns></returns>
-        public int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantID, string ProgramCode, int UserID)
+        public int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId)
         {
 
             MySqlCommand cmd = new MySqlCommand();
-            int Result = 0;
+            int i = 0;
             try
             {
-                if (conn != null && conn.State == ConnectionState.Closed)
-                {
-                    conn.Open();
-                }
+                conn.Open();
                 cmd.Connection = conn;
-                cmd = new MySqlCommand("SP_HSUpdateAppoinmentStatus", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_HSUpdateAppoinmentStatus", conn);
+                cmd1.Parameters.AddWithValue("@Appointment_ID", appointmentCustomer.AppointmentID);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.Parameters.AddWithValue("@_Status", appointmentCustomer.Status);
 
-                cmd.Parameters.AddWithValue("@_TenantId", TenantID);
-                cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
-                cmd.Parameters.AddWithValue("@_AptID", appointmentCustomer.AppointmentID);
-                cmd.Parameters.AddWithValue("@_AptStatus", appointmentCustomer.AppointmentID);
-                cmd.Parameters.AddWithValue("@_UserID", UserID);
-
-                cmd.CommandType = CommandType.StoredProcedure;
-                Result = Convert.ToInt32(cmd.ExecuteNonQuery());
+                cmd1.CommandType = CommandType.StoredProcedure;
+                i = cmd1.ExecuteNonQuery();
                 conn.Close();
             }
             catch (Exception)
@@ -207,7 +195,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
 
-            return Result;
+            return i;
         }
 
 

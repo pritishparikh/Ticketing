@@ -321,10 +321,6 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
-                if (ds != null)
-                {
-                    ds.Dispose();
-                }
             }
 
             return ItemList;
@@ -618,10 +614,6 @@ namespace Easyrewardz_TicketSystem.Services
             finally
             {
                 conn.Close();
-                if (ds != null)
-                {
-                    ds.Dispose();
-                }
             }
             return resultCount;
         }
@@ -639,6 +631,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int SendMessageToCustomer(int ChatID, string MobileNo, string ProgramCode, string Message, string WhatsAppMessage, string ImageURL, string ClientAPIURL, int CreatedBy, int InsertChat)
         {
+            MySqlCommand cmd = new MySqlCommand();
             CustomerChatModel ChatMessageDetails = new CustomerChatModel();
             ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
             ClientCustomSendImageModel SendImageRequest = new ClientCustomSendImageModel();

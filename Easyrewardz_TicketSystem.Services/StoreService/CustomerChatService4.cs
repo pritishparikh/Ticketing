@@ -322,7 +322,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="ItemCode"></param>
         /// </summary>
         /// <returns></returns>
-        public int RemoveProduct(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCode, string RemoveFrom, int UserID)
+        public int RemoveProduct(int TenantId, string ProgramCode, int CustomerID, string CustomerMobile, string ItemCode)
         {
             MySqlCommand cmd = new MySqlCommand();
             int Result = 0;
@@ -340,10 +340,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
                 cmd.Parameters.AddWithValue("@_CustomerID", CustomerID);
                 cmd.Parameters.AddWithValue("@_MobileNo", CustomerMobile);
-                cmd.Parameters.AddWithValue("@_RemoveFrom", RemoveFrom.ToLower());
-                
                 cmd.Parameters.AddWithValue("@_ItemCode", ItemCode);
-                cmd.Parameters.AddWithValue("@_UserID", UserID);
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
@@ -611,6 +608,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int SendProductsOnChat(SendProductsToCustomer ProductDetails, string ClientAPIURL)
         {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
             int Result = 0;
             ClientCustomSendProductModel Details = new ClientCustomSendProductModel();
             string ClientAPIResponse = string.Empty;
@@ -627,23 +626,23 @@ namespace Easyrewardz_TicketSystem.Services
 
                         #region call client api for sending message to customer
 
-                        CTAMessage += !string.IsNullOrEmpty(obj.uniqueItemCode) ? obj.uniqueItemCode + "," : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.productName) ? obj.productName + "," : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.categoryName) ? obj.categoryName + "," : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.subCategoryName) ? obj.subCategoryName + "," : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.brandName) ? obj.brandName + "," : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.price) ? obj.price + "," : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.color) ? obj.color + "," : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.size) ? obj.size + "," : " " + ",";
-                        CTAMessage += !string.IsNullOrEmpty(obj.imageURL) ? obj.imageURL + "," : "";
+                        CTAMessage += !string.IsNullOrEmpty(obj.uniqueItemCode) ? obj.uniqueItemCode : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.productName) ? obj.productName : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.categoryName) ? obj.categoryName : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.subCategoryName) ? obj.subCategoryName : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.brandName) ? obj.brandName : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.price) ? obj.price : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.color) ? obj.color : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.size) ? obj.size : " " + ",";
+                        CTAMessage += !string.IsNullOrEmpty(obj.imageURL) ? obj.imageURL : " " + ",";
 
 
                         Details.to = ProductDetails.CustomerMobile.Length > 10 ? ProductDetails.CustomerMobile : "91" + ProductDetails.CustomerMobile;
-                        Details.textToReply = CTAMessage;
+                        Details.textToReply = Message;
                         Details.programCode = ProductDetails.ProgramCode;
                         Details.imageUrl = obj.imageURL;
-                        Details.shoppingBag = obj.IsCard ? "0" : obj.IsShoppingBag ? "0" : "1";
-                        Details.like = obj.IsCard ? "0" : obj.IsWishList ? "0" : "1";
+                        Details.shoppingBag = obj.IsCard ? "0" : obj.IsShoppingBag ? "1" : "0";
+                        Details.like = obj.IsCard ? "0" : obj.IsWishList ? "1" : "0";
 
                         string JsonRequest = JsonConvert.SerializeObject(Details);
 
@@ -651,7 +650,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         #endregion
 
-                        if(!obj.IsCard && ClientAPIResponse.Equals("true"))
+                        if(!obj.IsCard)
                         {
                             //string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px; align-items: flex-end;\"><div class=\"col-md-2\">";
                             string Starthtml = "<div class=\"card-body position-relative\"><div class=\"row\" style=\"margin: 0px;\"><div class=\"col-md-2\">";

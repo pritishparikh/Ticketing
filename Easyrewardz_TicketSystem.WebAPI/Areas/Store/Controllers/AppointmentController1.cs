@@ -143,7 +143,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                int result = newAppointment.UpdateAppointmentStatus(new AppointmentServices(_connectioSting), appointment, authenticate.TenantId, authenticate.ProgramCode, authenticate.UserMasterID);
+                int result = newAppointment.UpdateAppoinment(new AppointmentServices(_connectioSting), appointment, authenticate.TenantId);
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

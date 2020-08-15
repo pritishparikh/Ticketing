@@ -25,6 +25,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
         /// </summary>
         public string Ticketdescription { get; set; }
         /// <summary>
+        /// Ticket Source Type
+        /// </summary>
+        public string TicketSourceType { get; set; }
+        /// <summary>
         /// Ticket Notes
         /// </summary>
         public string Ticketnotes { get; set; }

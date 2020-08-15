@@ -478,6 +478,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int SendMessageToCustomerForVisit(AppointmentMaster appointmentMaster, string ClientAPIURL, int CreatedBy)
         {
+            MySqlCommand cmd = new MySqlCommand();
             int resultCount = 0;
             ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
             string ClientAPIResponse = string.Empty;

@@ -169,47 +169,6 @@ namespace Easyrewardz_TicketSystem.Model
         /// Modified By
         /// </summary>
         public string ModifiedBy { get; set; }
-        /// <summary>
-        /// Function Name
-        /// </summary>
-        public string FunctionName { get; set; }
-        /// <summary>
-        /// Created ago
-        /// </summary>
-        public string Createdago { get; set; }
-
-        /// <summary>
-        /// Assigned ago
-        /// </summary>
-        public string Assignedago { get; set; }
-        /// <summary>
-        /// Updated ago
-        /// </summary>
-        public string Updatedago { get; set; }
-        /// <summary>
-        /// Task Closure Date
-        /// </summary>
-        public string TaskCloureDate { get; set; }
-
-        /// <summary>
-        /// Resolution Time Remaining
-        /// </summary>
-        public string ResolutionTimeRemaining { get; set; }
-
-        /// <summary>
-        /// Resolution Over due By
-        /// </summary>
-        public string ResolutionOverdueBy { get; set; }
-
-        /// <summary>
-        /// Color Name
-        /// </summary>
-        public string ColorName { get; set; }
-
-        /// <summary>
-        /// Color Code 
-        /// </summary>
-        public string ColorCode { get; set; }
     }
 
 
@@ -385,7 +344,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Claim Raised By
         /// </summary>
-        public string RaiseBy { get; set; }
+        public string ClaimRaisedBy { get; set; }
 
         /// <summary>
         /// Creation On
