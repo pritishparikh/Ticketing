@@ -1,0 +1,31 @@
+CampaignCustomerID,CustomerID,CustomerName,CustomerMobileNumber,CampaignTypeID,CampaignName,CampaignTypeDate,CallReScheduledTo,CreatedBy,CreatedByName,CreatedDate,CampaignStatus,AssignedTo,AssignedToName,Response,NoOfTimesNotContacted
+2,2,Pawan KumarDATA SCIENCE,9873786030,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+9,9,Vikas RanaData,9899913838,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+10,10,NineUser,9899973005,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+12,12,Kunal KalraStrategy,9910031235,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+13,13,Lohit Aggarwal,9910346906,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+14,14,Thirty threeUser,9911001851,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+15,15,Fourty NineUser,9911068120,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+16,16,TwelvethUser,9911107355,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+17,17,Mohit SharmaClient Operations,9911278239,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+19,19,Karishma Mantri,9930722030,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+20,20,Awaneesh PandeyTechnology,9930887199,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+21,21,SaloniSethi,9945905395,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+22,22,Thirty fourUser,9953522799,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+23,23,TwentyUser,9953595249,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+24,24,Bhavya Chanda,9953602260,1,ER Client Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+26,26,Ravi ShankarCorporate,9953817330,2,ER Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+27,27,Anshu SharmaHuman Resources,9958008480,2,ER Demo,20th May 2020,,0,,,Open,6,Shlok  Barot,,0
+28,28,Shubham AggarwalData Engineering,9960480604,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+30,30,RahulKumar,9971144597,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+31,31,Monica BaliTechnology,9971795842,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+33,33,Twenty sixUser,9988540758,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+34,34,Twenty threeUser,9990040055,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+35,35,Aakash JainTechnical,9990069907,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+36,36,Munmun SinghCustomer Support,9990107843,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+37,37,Kashish BhatnagarData,9990449463,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+38,38,Mohit MathurTechnology,9992218136,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+41,41,Neha SrivastavaTechnology,9999433489,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+42,42,Twenty oneUser,9999467547,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+44,44,Ritika KhandelwalTechnology,9999718022,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+45,45,Angad SinghCorporate,9999901550,2,ER Demo,20th May 2020,,0,,,Open,0,,,0

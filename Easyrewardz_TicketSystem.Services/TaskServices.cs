@@ -306,16 +306,16 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get list of claims
         /// <param name="TicketId"></param>
         /// </summary>
-        public List<CustomClaimMaster> GetClaimList(int TicketId)
+        public List<CustomClaimMaster> GetClaimList(int ticketId)
         {
             DataSet ds = new DataSet();
             List<CustomClaimMaster> lsttask = new List<CustomClaimMaster>();
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_GetClaimList", conn);
+                MySqlCommand cmd = new MySqlCommand("SP_GetClaimListByTicketID", conn);
                 cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@Ticket_ID", TicketId);
+                cmd.Parameters.AddWithValue("@Ticket_ID", ticketId);
                 cmd.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd;
@@ -325,14 +325,21 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CustomClaimMaster taskMaster = new CustomClaimMaster();
-                        taskMaster.TicketClaimID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                        taskMaster.TicketClaimID = ds.Tables[0].Rows[i]["ClaimID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ClaimID"]);
                         taskMaster.TaskStatus = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.ClaimStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
+                        taskMaster.BrandID= ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
+                        taskMaster.BrandName= ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                        taskMaster.CategoryID= ds.Tables[0].Rows[i]["CategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
+                        taskMaster.Category= ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                        taskMaster.SubCategoryID= ds.Tables[0].Rows[i]["SubCategoryID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        taskMaster.SubCategoryName= ds.Tables[0].Rows[i]["SubCategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        taskMaster.ClaimIssueID= ds.Tables[0].Rows[i]["IssueTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["IssueTypeID"]);
                         taskMaster.ClaimIssueType = ds.Tables[0].Rows[i]["IssueTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]);
-                        taskMaster.Category = ds.Tables[0].Rows[i]["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
-                        taskMaster.Creation_on = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
-                        taskMaster.Dateformat = taskMaster.Creation_on.ToString("dd/MMM/yyyy");
-                        taskMaster.RaisedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        taskMaster.AssignName = ds.Tables[0].Rows[i]["AssignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["AssignName"]);         
+                        taskMaster.CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
+                        taskMaster.RaisedBy = ds.Tables[0].Rows[i]["RaiseBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RaiseBy"]);
+                        taskMaster.AssignName = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
+                        taskMaster.ModifiedBy= ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        taskMaster.ModifiedDate= ds.Tables[0].Rows[i]["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]);
                         lsttask.Add(taskMaster);
                     }
                 }

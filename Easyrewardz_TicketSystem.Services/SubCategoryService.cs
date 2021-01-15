@@ -161,6 +161,56 @@ namespace Easyrewardz_TicketSystem.Services
             }
             return objSubCategory;
         }
+
+        public List<SubCategory> GetSubCategoryByCategoryOnSearch(int tenantID, int CategoryID, string searchText)
+        {
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<SubCategory> objSubCategory = new List<SubCategory>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetSubCategoryByCategoryIdOnSearch", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
+                cmd1.Parameters.AddWithValue("@Category_ID", CategoryID);
+                cmd1.Parameters.AddWithValue("@search_Text", searchText);
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        SubCategory SubCat = new SubCategory();
+                        SubCat.SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"]);
+                        SubCat.CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
+                        SubCat.SubCategoryName = Convert.ToString(ds.Tables[0].Rows[i]["SubCategoryName"]);
+                        SubCat.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+
+                        objSubCategory.Add(SubCat);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objSubCategory;
+        }
         #endregion
     }
 }

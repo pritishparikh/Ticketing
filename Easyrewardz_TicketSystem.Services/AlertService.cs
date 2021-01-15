@@ -16,10 +16,12 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public AlertService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
         /// <summary>
         /// Create Alert 
@@ -90,6 +92,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if(ds!=null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return AlertConfigInsertCount;
@@ -157,9 +163,8 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
-                }
+                }               
             }
-
             return AlertConfigUpdateCount;
         }
 
@@ -472,14 +477,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             return Message;
-        }
-
-
-        #region Communication Mode Mapping
-
-
-
-        #endregion
+        }       
 
     }
 }

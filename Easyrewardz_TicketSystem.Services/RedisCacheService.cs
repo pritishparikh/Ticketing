@@ -4,8 +4,7 @@ using StackExchange.Redis;
 namespace Easyrewardz_TicketSystem.Services
 {
     public class RedisCacheService: ICacheService
-    {
-        //private readonly ISettings _settings;
+    {        
         private readonly IDatabase _cache;
         private ConnectionMultiplexer _connectionMultiplexer;
 

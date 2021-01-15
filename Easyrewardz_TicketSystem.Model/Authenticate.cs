@@ -58,7 +58,11 @@ namespace Easyrewardz_TicketSystem.Model
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+        public string DeviceSource { get; set; }
 
+        public string FBNID { get; set; }
+
+        public string DeviceID { get; set; }
 
     }
 }

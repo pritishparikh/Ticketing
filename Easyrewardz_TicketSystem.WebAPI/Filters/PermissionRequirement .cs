@@ -43,7 +43,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);
                 return AuthenticateResult.Success(ticket);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return AuthenticateResult.Fail("Failed to validate token");
             }

@@ -42,16 +42,16 @@ namespace Easyrewardz_TicketSystem.Services
                     Success = Convert.ToInt32(cmd.ExecuteScalar());
 
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
+                    throw;
                 }
                 finally
                 {
                     if (conn != null)
                     {
                         conn.Close();
-                    }
+                    }                    
                 }
 
             }
@@ -86,9 +86,9 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                     Success = Convert.ToInt32(cmd.ExecuteNonQuery());
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
+                    throw;
                 }
                 finally
                 {
@@ -121,24 +121,22 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++) 
                     {
                         CustomHierarchymodel hierarchymodel = new CustomHierarchymodel();
-                        hierarchymodel.DesignationID= Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
-                        hierarchymodel.DesignationName= Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
-                        hierarchymodel.ReportTo= Convert.ToString(ds.Tables[0].Rows[i]["ReportTo"]);
-                        hierarchymodel.Createdbyperson= Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]);
-                        hierarchymodel.Updatedbyperson = Convert.ToString(ds.Tables[0].Rows[i]["UpdatedBy"]);
-                        hierarchymodel.Status= Convert.ToString(ds.Tables[0].Rows[i]["IsActive"]);
-                        hierarchymodel.Createddate= Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
-                        hierarchymodel.Createdateformat= hierarchymodel.Createddate.ToString("dd MMMM yyyy");
-                        hierarchymodel.Updateddate= Convert.ToDateTime(ds.Tables[0].Rows[i]["ModifiedDate"]);
-                        hierarchymodel.Updateddateformat = hierarchymodel.Updateddate.ToString("dd MMMM yyyy");
-                        hierarchymodel.ReportToDesignation = Convert.ToInt16(ds.Tables[0].Rows[i]["ReportToDesignation"]); 
+                        hierarchymodel.DesignationID= ds.Tables[0].Rows[i]["DesignationID"]==DBNull.Value? 0: Convert.ToInt32(ds.Tables[0].Rows[i]["DesignationID"]);
+                        hierarchymodel.DesignationName= ds.Tables[0].Rows[i]["DesignationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DesignationName"]);
+                        hierarchymodel.ReportTo= ds.Tables[0].Rows[i]["ReportTo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ReportTo"]);
+                        hierarchymodel.Createdbyperson= ds.Tables[0].Rows[i]["Createdby"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdby"]);
+                        hierarchymodel.Updatedbyperson = ds.Tables[0].Rows[i]["UpdatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["UpdatedBy"]);
+                        hierarchymodel.Status= ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["IsActive"]);                      
+                        hierarchymodel.Createdateformat= ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);                
+                        hierarchymodel.Updateddateformat = ds.Tables[0].Rows[i]["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]);
+                        hierarchymodel.ReportToDesignation = ds.Tables[0].Rows[i]["ReportToDesignation"] == DBNull.Value ? 0 : Convert.ToInt16(ds.Tables[0].Rows[i]["ReportToDesignation"]); 
                         listHierarchy.Add(hierarchymodel);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -146,13 +144,17 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return listHierarchy;
         }
 
         public List<string> BulkUploadHierarchy(int TenantID, int CreatedBy, int HierarchyFor, DataSet DataSetCSV)
         {
-            int insertcount = 0;
+
             XmlDocument xmlDoc = new XmlDocument();
             DataSet Bulkds = new DataSet();
             List<string> csvLst = new List<string>();

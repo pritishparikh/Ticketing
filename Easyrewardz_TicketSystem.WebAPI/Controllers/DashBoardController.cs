@@ -125,6 +125,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return objResponseModel;
         }
+
         /// <summary>
         /// Dashboard search ticket
         /// </summary>
@@ -164,6 +165,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return objResponseModel;
         }
+
         /// <summary>
         /// Export Dashboard search to CSV
         /// </summary>
@@ -203,6 +205,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+
         /// <summary>
         /// LoggedIn Account details
         /// </summary>
@@ -243,13 +246,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// DashBoardSaveSearch
+        /// DashBoard Save Search
         /// </summary>
+        /// <param name="SearchSaveName"></param>
+        /// <param name="parameter"></param>
         /// <returns></returns>
-
         [HttpPost]
         [Route("DashBoardSaveSearch")]
-
         public ResponseModel DashBoardSaveSearch(string SearchSaveName, string parameter)
         {
             ResponseModel objResponseModel = new ResponseModel();
@@ -284,11 +287,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Delete DashBoard SavedSearch
+        /// Delete DashBoard Saved Search
         /// </summary>
-        /// <param name="ticketingDetails"></param>
+        /// <param name="SearchParamID"></param>
         /// <returns></returns>
-
         [HttpPost]
         [Route("DeleteDashBoardSavedSearch")]
         public ResponseModel DeleteDashBoardSavedSearch(int SearchParamID)
@@ -323,9 +325,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// List of Saved Search
+        /// Get DashBoard Saved Search
         /// </summary>
-        /// <param name="UserID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetDashBoardSavedSearch")]

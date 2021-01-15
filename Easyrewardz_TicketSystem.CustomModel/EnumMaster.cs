@@ -61,6 +61,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
             [Description("Record Already Exists ")]
             RecordAlreadyExists = 1012,
 
+            [Description("Record Uploaded Partially")]
+            RecordUploadedPartially = 1013,
             #endregion
 
             #region HTTP Request/Response Code
@@ -91,6 +93,9 @@ namespace Easyrewardz_TicketSystem.CustomModel
 
             [Description("We had an error! Sorry about that.")]
             WehadanerrorSorryaboutthat = 404,
+
+            [Description("Process completed with some failed data..")]
+            Processcompletedwithsomefaileddata = 405,
 
             #endregion
 
@@ -196,16 +201,28 @@ namespace Easyrewardz_TicketSystem.CustomModel
             New = 220,
 
             /// <summary>
-            ///TaskStatus - Open
+            ///TaskStatus - Open/Pending
             /// </summary>
             [Description("Open/Pending")]
             Open = 221,
 
             /// <summary>
-            ///TaskStatus - Pending 
+            ///TaskStatus - Resolved 
             /// </summary>
             [Description("Resolved")]
-            Resolved = 222
+            Resolved = 222,
+
+            /// <summary>
+            ///TaskStatus - Closed  
+            /// </summary>
+            [Description("Closed")]
+            Closed = 223,
+
+            /// <summary>
+            ///TaskStatus - Re-Opened
+            /// </summary>
+            [Description("Re-Opened")]
+            ReOpened = 224,
         }
 
         /// <summary>
@@ -260,19 +277,19 @@ namespace Easyrewardz_TicketSystem.CustomModel
             ///CommunicationMode - Email
             /// </summary>
             [Description("Email")]
-            New = 240,
+            Email = 240,
 
             /// <summary>
             ///CommunicationMode - SMS
             /// </summary>
             [Description("SMS")]
-            Open = 241,
+            SMS = 241,
 
             /// <summary>
             ///CommunicationMode - Notification 
             /// </summary>
             [Description("Notification")]
-            Resolved = 242
+            Notification = 242
         }
 
         /// <summary>
@@ -284,19 +301,25 @@ namespace Easyrewardz_TicketSystem.CustomModel
             ///CommunicationFor - Customer
             /// </summary>
             [Description("Customer")]
-            New = 250,
+            Customer = 250,
 
             /// <summary>
             ///CommunicationFor - Internal
             /// </summary>
             [Description("Internal")]
-            Open = 251,
+            Internal = 251,
 
             /// <summary>
             ///CommunicationFor - Store 
             /// </summary>
             [Description("Store")]
-            Resolved = 252
+            Store = 252,
+
+            /// <summary>
+            ///CommunicationFor - Ticketing 
+            /// </summary>
+            [Description("Ticketing")]
+            Ticketing = 253
         }
 
         /// <summary>
@@ -354,7 +377,19 @@ namespace Easyrewardz_TicketSystem.CustomModel
             ///Chat 
             /// </summary>
             [Description("Chat")]
-            Chat = 4
+            Chat = 4,
+
+            /// <summary>
+            ///OrderTemplate 
+            /// </summary>
+            [Description("OrderTemplate")]
+            OrderTemplate = 5,
+
+            /// <summary>
+            ///Slot
+            /// </summary>
+            [Description("Slot")]
+            Slot = 6
         }
 
         public enum SavedSearch
@@ -374,6 +409,51 @@ namespace Easyrewardz_TicketSystem.CustomModel
           
         }
 
+        public enum CampaignScriptStatus
+        {
+            /// <summary>
+            /// New
+            /// </summary>
+            [Description("New")]
+            New = 101,
 
+            /// <summary>
+            /// InProgress
+            /// </summary>
+            [Description("InProgress")]
+            InProgress = 102,
+
+            /// <summary>
+            /// Close
+            /// </summary>
+            [Description("Close")]
+            Close = 103
         }
+
+
+        public enum DisplaySlotsFrom
+        {
+            /// <summary>
+            /// Current Slot
+            /// </summary>
+            [Description("Current Slot")]
+            New = 301,
+
+            /// <summary>
+            /// Skip Current Slot & Show Next Slot
+            /// </summary>
+            [Description("Skip Current Slot & Show Next Slot")]
+            InProgress = 302,
+
+            /// <summary>
+            /// Close
+            /// </summary>
+            [Description("Skip Current & Next Slot")]
+            Close = 303
+        }
+    }
+
+
+
+        
 }

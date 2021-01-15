@@ -86,8 +86,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// UpdateBrand
+        /// Update Brand
         /// </summary>
+        /// <param name="brand"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateBrand")]
@@ -130,8 +131,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// DeleteBrand
+        /// Delete Brand
         /// </summary>
+        /// <param name="BrandID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("DeleteBrand")]
@@ -174,7 +176,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// BrandList
+        /// Brand List
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -217,8 +219,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// AddBrand
+        /// Add Brand
         /// </summary>
+        /// <param name="brand"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("AddBrand")]

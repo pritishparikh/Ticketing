@@ -34,6 +34,9 @@ namespace Easyrewardz_TicketSystem.Model
         public bool IsSMSCustomer { get; set; }
         public bool IsNotificationInternal { get; set; }
 
+        public bool IsEmailTicketing { get; set; }
+        public bool IsNotificationTicketing { get; set; }
+        public bool IsCommunicationModeEnabled { get; set; }
         public string MailContent { get; set; }
         public string Subject { get; set; }
         public string SMSContent { get; set; }
@@ -52,6 +55,7 @@ namespace Easyrewardz_TicketSystem.Model
     public class AlertInsertModel
     {
         public int? TenantId { get; set; }
+        public int? AlertID { get; set; }
         public string AlertTypeName { get; set; }
         public int? CreatedBy { get; set; }
         public bool isAlertActive { get; set; }

@@ -3,10 +3,11 @@ using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
-    public class MasterCaller
+    public partial class MasterCaller
     {
         #region Variable
 
@@ -61,7 +62,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _brandList.AddBrand(brand, TenantId);
         }
 
-            public List<Brand> BrandList(IBrand _brand, int TenantId)
+        public List<Brand> BrandList(IBrand _brand, int TenantId)
         {
             _brandList = _brand;
             return _brandList.BrandList(TenantId);
@@ -83,16 +84,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region Methods for the Category
 
-        public List<Category> GetCategoryList(ICategory _category, int TenantID,int BrandID)
+        public List<Category> GetCategoryList(ICategory _category, int TenantID, int BrandID)
         {
             _categoryList = _category;
             return _categoryList.GetCategoryList(TenantID, BrandID);
         }
-
+        public List<Category> GetCategoryOnSearch(ICategory _category, int TenantID, int BrandID, string searchText)
+        {
+            _categoryList = _category;
+            return _categoryList.GetCategoryOnSearch(TenantID, BrandID, searchText);
+        }
         public int AddCategory(ICategory _category, string category, int TenantID, int UserID, int BrandID)
         {
             _categoryList = _category;
-            return _categoryList.AddCategory(category, TenantID, UserID,BrandID);
+            return _categoryList.AddCategory(category, TenantID, UserID, BrandID);
         }
 
         public List<Category> CategoryList(ICategory _category, int TenantID)
@@ -100,10 +105,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _categoryList = _category;
             return _categoryList.CategoryList(TenantID);
         }
-        public List<Category> GetCategoryListByMultiBrandID(ICategory _category, string BrandIDs , int TenantID)
+        public List<Category> GetCategoryListByMultiBrandID(ICategory _category, string BrandIDs, int TenantID)
         {
             _categoryList = _category;
-            return _categoryList.GetCategoryListByMultiBrandID(BrandIDs,TenantID);
+            return _categoryList.GetCategoryListByMultiBrandID(BrandIDs, TenantID);
         }
 
         public int DeleteCategory(ICategory _category, int CategoryID, int TenantId)
@@ -138,10 +143,15 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region Methods for the Subcategories
 
-        public List<SubCategory> GetSubCategoryByCategoryID(ISubCategories _SubCategory, int CategoryID,int TypeId)
+        public List<SubCategory> GetSubCategoryByCategoryID(ISubCategories _SubCategory, int CategoryID, int TypeId)
         {
             _subCategoryList = _SubCategory;
-            return _subCategoryList.GetSubCategoryByCategoryID(CategoryID,TypeId);
+            return _subCategoryList.GetSubCategoryByCategoryID(CategoryID, TypeId);
+        }
+        public List<SubCategory> GetSubCategoryByCategoryOnSearch(ISubCategories _SubCategory, int tenantID, int CategoryID, string searchText)
+        {
+            _subCategoryList = _SubCategory;
+            return _subCategoryList.GetSubCategoryByCategoryOnSearch(tenantID, CategoryID, searchText);
         }
         public List<SubCategory> GetSubCategoryByMultiCategoryID(ISubCategories _SubCategory, string CategoryIDs)
         {
@@ -152,7 +162,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public int AddSubCategory(ISubCategories _SubCategory, int CategoryID, string category, int TenantID, int UserID)
         {
             _subCategoryList = _SubCategory;
-            return _subCategoryList.AddSubCategory(CategoryID,category, TenantID, UserID);
+            return _subCategoryList.AddSubCategory(CategoryID, category, TenantID, UserID);
         }
 
 
@@ -160,25 +170,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region Methods for the Priority
 
-        public List<Priority> GetPriorityList(IPriority _priority, int TenantID,int PriorityFor)
+        public List<Priority> GetPriorityList(IPriority _priority, int TenantID, int PriorityFor)
         {
             _priorityList = _priority;
             return _priorityList.GetPriorityList(TenantID, PriorityFor);
         }
-        public int  Addpriority(IPriority _priority, string PriorityName, int status, int tenantID, int UserID,int PriorityFor)
+        public int Addpriority(IPriority _priority, string PriorityName, int status, int tenantID, int UserID, int PriorityFor)
         {
             _priorityList = _priority;
             return _priorityList.AddPriority(PriorityName, status, tenantID, UserID, PriorityFor);
         }
-        public int Updatepriority(IPriority _priority, int PriorityID, string PriorityName, int status, int tenantID, int UserID,int PriorityFor)
+        public int Updatepriority(IPriority _priority, int PriorityID, string PriorityName, int status, int tenantID, int UserID, int PriorityFor)
         {
             _priorityList = _priority;
-            return _priorityList.UpdatePriority(PriorityID,PriorityName, status, tenantID, UserID, PriorityFor);
+            return _priorityList.UpdatePriority(PriorityID, PriorityName, status, tenantID, UserID, PriorityFor);
         }
-        public int Deletepriority(IPriority _priority, int PriorityID, int tenantID, int UserID,int PriorityFor)
+        public int Deletepriority(IPriority _priority, int PriorityID, int tenantID, int UserID, int PriorityFor)
         {
             _priorityList = _priority;
-            return _priorityList.DeletePriority(PriorityID,tenantID, UserID, PriorityFor);
+            return _priorityList.DeletePriority(PriorityID, tenantID, UserID, PriorityFor);
         }
         public List<Priority> PriorityList(IPriority _priority, int TenantID, int PriorityFor)
         {
@@ -189,6 +199,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _priorityList = _priority;
             return _priorityList.UpdatePriorityOrder(TenantID, selectedPriorityID, currentPriorityID, PriorityFor);
+        }
+        public string VallidatePriority(IPriority _priority, string priorityName, int tenantID)
+        {
+            _priorityList = _priority;
+            return _priorityList.ValidatePriority(priorityName, tenantID);
+
         }
 
         #endregion
@@ -207,6 +223,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _issueList = _issue;
             return _issueList.GetIssueTypeList(TenantID, SubCategoryID);
         }
+        public List<IssueType> GetIssueTypeOnSearch(IIssueType _issue, int TenantID, int SubCategoryID, string searchText)
+        {
+            _issueList = _issue;
+            return _issueList.GetIssueTypeOnSearch(TenantID, SubCategoryID, searchText);
+        }
         public List<IssueType> IssueTypeListByMultiSubCategoryID(IIssueType _issue, int TenantID, string SubCategoryIDs)
         {
             _issueList = _issue;
@@ -220,7 +241,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #endregion
 
         #region Methods for the User
-        public List<User> GetUserList(IUser _user, int TenantID,int UserID)
+        public List<User> GetUserList(IUser _user, int TenantID, int UserID)
         {
             _userlist = _user;
             return _userlist.GetUserList(TenantID, UserID);
@@ -230,10 +251,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #region Department
 
         private IMasterInterface _ImasterDepartment;
-        public List<DepartmentMaster> GetDepartmentListDetails(IMasterInterface _department, int TenantID)
+        public async Task<List<DepartmentMaster>> GetDepartmentListDetails(IMasterInterface _department, int TenantID, int UserID)
         {
             _ImasterDepartment = _department;
-            return _ImasterDepartment.GetDepartmentList(TenantID);
+            return await _ImasterDepartment.GetDepartmentList(TenantID, UserID);
         }
 
         private IMasterInterface _ImasterFunctionbyDepartment;
@@ -251,10 +272,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         }
 
         private IMasterInterface _ImasterAddFunction;
-        public int AddFunction(IMasterInterface _AddFunction,int DepartmentID ,string FunctionName, int TenantID, int CreatedBy)
+        public int AddFunction(IMasterInterface _AddFunction, int DepartmentID, string FunctionName, int TenantID, int CreatedBy)
         {
             _ImasterAddFunction = _AddFunction;
-            return _ImasterAddFunction.Addfunction(DepartmentID, FunctionName,TenantID, CreatedBy);
+            return _ImasterAddFunction.Addfunction(DepartmentID, FunctionName, TenantID, CreatedBy);
         }
         #endregion
 
@@ -291,7 +312,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region State
 
-        public List <StateMaster> GetStatelist(IMasterInterface _ImasterInterface)
+        public List<StateMaster> GetStatelist(IMasterInterface _ImasterInterface)
         {
             _Imaster = _ImasterInterface;
             return _Imaster.GetStateList();
@@ -301,7 +322,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region City
 
-        public List<CityMaster> GetCitylist(IMasterInterface _ImasterInterface,int StateId)
+        public List<CityMaster> GetCitylist(IMasterInterface _ImasterInterface, int StateId)
         {
             _Imaster = _ImasterInterface;
             return _Imaster.GetCitylist(StateId);
@@ -326,7 +347,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _Imaster = _ImasterInterface;
             return _Imaster.GetStoreTypeList();
         }
-        public List<StoreTypeMaster> GetStoreNameWithStoreCode(IMasterInterface _ImasterInterface,int TenantID)
+        public List<StoreTypeMaster> GetStoreNameWithStoreCode(IMasterInterface _ImasterInterface, int TenantID)
         {
             _Imaster = _ImasterInterface;
             return _Imaster.GetStoreNameWithsStoreCode(TenantID);
@@ -344,10 +365,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #endregion
 
         #region getCityStateCountry
-        public List<CommonModel> GetCountryStateCityList(IMasterInterface _masterInterface,int TenantID,string Pincode)
+        public List<CommonModel> GetCountryStateCityList(IMasterInterface _masterInterface, int TenantID, string Pincode)
         {
             _Imaster = _masterInterface;
-            return _Imaster.GetCountryStateCityList(TenantID,Pincode);
+            return _Imaster.GetCountryStateCityList(TenantID, Pincode);
         }
 
         #endregion
@@ -372,7 +393,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         #region Get LogedInEmail
 
-        public CustomGetEmailID GetLogedInEmail(IMasterInterface _masterInterface, int UserID,int TenantID)
+        public CustomGetEmailID GetLogedInEmail(IMasterInterface _masterInterface, int UserID, int TenantID)
         {
             _Imaster = _masterInterface;
             return _Imaster.GetLogedInEmail(UserID, TenantID);

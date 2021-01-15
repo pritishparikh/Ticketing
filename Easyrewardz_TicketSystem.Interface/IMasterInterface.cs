@@ -3,6 +3,7 @@ using Easyrewardz_TicketSystem.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
@@ -23,7 +24,7 @@ namespace Easyrewardz_TicketSystem.Interface
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-        List<DepartmentMaster> GetDepartmentList(int TenantID);
+        Task<List<DepartmentMaster>> GetDepartmentList(int TenantID, int UserID);
 
         /// <summary>
         /// Get function by department

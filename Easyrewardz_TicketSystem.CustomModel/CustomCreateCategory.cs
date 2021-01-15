@@ -7,7 +7,7 @@ namespace Easyrewardz_TicketSystem.CustomModel
    public class CustomCreateCategory
     {
         public int BrandCategoryMappingID { get; set; }
-        public int BraindID { get; set; }
+        public string BraindID { get; set; }
         public string BrandName { get; set; }
         public int CategoryID { get; set; }
         public string CategoryName { get; set; }

@@ -77,10 +77,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
-      
+        /// <summary>
+        /// Add Knowledge Base
+        /// </summary>
+        /// <param name="knowlegeBaseMaster"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Route("AddKB")]
-        
+        [Route("AddKB")]        
         public ResponseModel AddKB([FromBody]KnowlegeBaseMaster knowlegeBaseMaster)
         {
 
@@ -114,6 +117,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Update Knowledge Base
+        /// </summary>
+        /// <param name="knowlegeBaseMaster"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateKB")]
         public ResponseModel UpdateKB([FromBody]KnowlegeBaseMaster knowlegeBaseMaster)
@@ -149,6 +157,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Delete Knowledge Base
+        /// </summary>
+        /// <param name="KBID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("DeleteKB")]
         public ResponseModel DeleteKB(int KBID)
@@ -183,6 +196,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Knowledge Base List
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("KBList")]
         public ResponseModel KBList()
@@ -220,6 +237,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Search Knowledge Base
+        /// </summary>
+        /// <param name="Category_ID"></param>
+        /// <param name="SubCategory_ID"></param>
+        /// <param name="type_ID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("SearchKB")]
         public ResponseModel SearchKB(int Category_ID, int SubCategory_ID, int type_ID)
@@ -257,6 +281,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Reject Approve Knowledge Base
+        /// </summary>
+        /// <param name="knowlegeBaseMaster"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("RejectApproveKB")]
         public ResponseModel RejectApproveKB([FromBody]KnowlegeBaseMaster knowlegeBaseMaster)

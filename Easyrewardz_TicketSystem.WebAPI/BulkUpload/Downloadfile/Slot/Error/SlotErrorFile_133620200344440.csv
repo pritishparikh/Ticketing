@@ -1,0 +1,7 @@
+StoreCode,OperationalDays,TemplateName,SlotStartTime,SlotEndTime,SlotOccupancy,SlotStatus,Slotdaysneedtodisplay,Applicablefrom,MaxPeoplePerApt,DisplaySlotCode,SlotSettingStatus,ErrorReason
+SMB7466,Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday,Manual template 3,10:00 AM,10:30 AM,2,1,10,04-08-2020,10,302,Active,Slot Not Created
+SMB7466,Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday,Manual template 3,10:30 AM,11:00 AM,5,1,10,04-08-2020,10,302,Active,Slot Not Created
+SMB7466,Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday,Manual template 3,11:00 AM,11:30 AM,5,0,10,04-08-2020,10,302,Active,Slot Not Created
+SMB7466,Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday,Manual template 3,11:30 AM,12:00 PM,5,1,10,04-08-2020,10,302,Active,Slot Not Created
+SMB7466,Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday,Manual template 3,12:00 PM,12:30 PM,5,0,10,04-08-2020,10,302,Active,Slot Not Created
+SMB7466,Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday,Manual template 3,12:30 PM,01:00 PM,5,1,10,04-08-2020,10,302,Active,Slot Not Created

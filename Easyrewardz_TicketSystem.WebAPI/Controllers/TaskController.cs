@@ -249,12 +249,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get claim list
+        /// Get Claim List By TicketID
         /// </summary>
-        /// <param name="TicketId"></param>
+        /// <param name="ticketId"></param>
         [HttpPost]
-        [Route("getclaimlist")]
-        public ResponseModel Getclaimlist(int TicketId)
+        [Route("GetClaimListByTicketID")]
+        public ResponseModel GetClaimListByTicketID(int ticketId)
         {
             List<CustomClaimMaster> obClaimMaster = new List<CustomClaimMaster>();
             TaskCaller taskcaller = new TaskCaller();
@@ -263,7 +263,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                obClaimMaster = taskcaller.GetClaimList(new TaskServices(_connectionSting), TicketId);
+                obClaimMaster = taskcaller.GetClaimList(new TaskServices(_connectionSting), ticketId);
                 StatusCode =
                    obClaimMaster.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

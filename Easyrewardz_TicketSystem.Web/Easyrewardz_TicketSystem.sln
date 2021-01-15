@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Easyrewardz_TicketSystem.Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Easyrewardz_TicketSystem.WebAPI", "..\Easyrewardz_TicketSystem.WebAPI\Easyrewardz_TicketSystem.WebAPI.csproj", "{985B6037-FF43-42C8-A658-E7E5DF771E29}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientAPIServiceCall", "ClientAPIServiceCall\ClientAPIServiceCall.csproj", "{7AB76616-1EAB-4067-87C7-20D1B622AF09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{985B6037-FF43-42C8-A658-E7E5DF771E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{985B6037-FF43-42C8-A658-E7E5DF771E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{985B6037-FF43-42C8-A658-E7E5DF771E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AB76616-1EAB-4067-87C7-20D1B622AF09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AB76616-1EAB-4067-87C7-20D1B622AF09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AB76616-1EAB-4067-87C7-20D1B622AF09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AB76616-1EAB-4067-87C7-20D1B622AF09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

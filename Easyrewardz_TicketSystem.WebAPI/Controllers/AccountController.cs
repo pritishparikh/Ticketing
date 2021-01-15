@@ -5,6 +5,7 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
@@ -20,6 +21,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Variable
         private IConfiguration configuration;
         private readonly string _connectioSting;
+        private readonly string _ErconnectioSting;
         private readonly string _radisCacheServerAddress;
         #endregion
 
@@ -28,6 +30,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         {
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
+            _ErconnectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessErMasterMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
         }
         #endregion
@@ -50,17 +53,36 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
                 /////Validate User
+                string X_Authorized_Programcode = Convert.ToString(Request.Headers["X-Authorized-Programcode"]);
+                string X_Authorized_Domainname = Convert.ToString(Request.Headers["X-Authorized-Domainname"]);
+                string _data = "";
+                if (X_Authorized_Programcode != null)
+                {
+                    X_Authorized_Programcode = SecurityService.DecryptStringAES(X_Authorized_Programcode);
+
+                    RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                    if (cacheService.Exists("Con" + X_Authorized_Programcode))
+                    {
+                        _data = cacheService.Get("Con" + X_Authorized_Programcode);
+                        _data = JsonConvert.DeserializeObject<string>(_data);
+                    }
+                }
+
+                if (X_Authorized_Domainname != null)
+                {
+                    X_Authorized_Domainname = SecurityService.DecryptStringAES(X_Authorized_Domainname);
+                }
                 securityCaller securityCaller = new securityCaller();
-                Authenticate authenticate = securityCaller.validateUserEmailId(new SecurityService(_connectioSting, _radisCacheServerAddress), EmailId);
+                Authenticate authenticate = securityCaller.validateUserEmailId(new SecurityService(_data, _radisCacheServerAddress), EmailId);
                 if (authenticate.UserMasterID > 0)
                 {
                     MasterCaller masterCaller = new MasterCaller();
-                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_connectioSting), authenticate.TenantId);
+                    SMTPDetails sMTPDetails = masterCaller.GetSMTPDetails(new MasterServices(_data), authenticate.TenantId);
 
                     CommonService commonService = new CommonService();
                     string encryptedEmailId = commonService.Encrypt(EmailId);
-                    string url = configuration.GetValue<string>("websiteURL") + "/userforgotPassword?Id:" + encryptedEmailId;
-                   // string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url;
+                    string url = X_Authorized_Domainname.TrimEnd('/') + "/userforgotPassword?Id:" + encryptedEmailId;
+                    // string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url;
 
                     string content = "";
                     string subject = "";
@@ -114,13 +136,30 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             try
             {
-                securityCaller newSecurityCaller = new securityCaller();
-               
+                securityCaller newSecurityCaller = new securityCaller();               
                 CommonService commonService = new CommonService();
+                EmailProgramCode bsObj = new EmailProgramCode();
                 string encryptedEmailId = commonService.Decrypt(cipherEmailId);
-               
+                if (encryptedEmailId != null)
+                {
+                    bsObj = JsonConvert.DeserializeObject<EmailProgramCode>(encryptedEmailId);
+                }
 
-                bool isUpdate = newSecurityCaller.UpdatePassword(new SecurityService(_connectioSting), encryptedEmailId, Password);
+                string _data = "";
+                if (bsObj.ProgramCode != null)
+                {
+                    // bsObj.ProgramCode = SecurityService.DecryptStringAES(bsObj.ProgramCode);
+
+                    RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                    if (cacheService.Exists("Con" + bsObj.ProgramCode))
+                    {
+                        _data = cacheService.Get("Con" + bsObj.ProgramCode);
+                        _data = JsonConvert.DeserializeObject<string>(_data);
+                    }
+                }
+
+
+                bool isUpdate = newSecurityCaller.UpdatePassword(new SecurityService(_data), encryptedEmailId, Password);
 
                 if (isUpdate)
                 {
@@ -165,9 +204,23 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string userId = X_Authorized_userId.Replace(' ', '+');
                 string password = X_Authorized_password.Replace(' ', '+');
 
+
+                string _data = "";
+                if (X_Authorized_Programcode != null)
+                {
+                    X_Authorized_Programcode = SecurityService.DecryptStringAES(X_Authorized_Programcode);
+
+                    RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+                    if (cacheService.Exists("Con" + X_Authorized_Programcode))
+                    {
+                        _data = cacheService.Get("Con" + X_Authorized_Programcode);
+                        _data = JsonConvert.DeserializeObject<string>(_data);
+                    }
+                }
+
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
                 {
-                    account = newSecurityCaller.validateUser(new SecurityService(_connectioSting, _radisCacheServerAddress), Programcode, Domainname, userId, password);
+                    account = newSecurityCaller.validateUser(new SecurityService(_data, _radisCacheServerAddress), Programcode, Domainname, userId, password);
 
                     if (!string.IsNullOrEmpty(account.Token))
                     {
@@ -250,7 +303,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 if (!string.IsNullOrEmpty(Programcode) && !string.IsNullOrEmpty(Domainname))
                 {
-                    bool isValid = newSecurityCaller.validateProgramCode(new SecurityService(_connectioSting, _radisCacheServerAddress), Programcode, Domainname);
+                    bool isValid = newSecurityCaller.validateProgramCode(new SecurityService(_ErconnectioSting, _radisCacheServerAddress), Programcode, Domainname);
 
                     if (isValid)
                     {

@@ -142,6 +142,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
+                customerMaster.CreatedBy = authenticate.UserMasterID;
+
                 int result = customerCaller.addCustomer(new CustomerService(_connectioSting), customerMaster, authenticate.TenantId);
                 statusCode =
                 result == 0?
@@ -200,7 +202,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <param name="Cust_EmailId"></param>
         /// <param name="Cust_PhoneNumber"></param>
-        /// <param name="TenantId"></param>
         /// <returns>Message</returns>
         [HttpPost]
         [Route("validateCustomerExist")]

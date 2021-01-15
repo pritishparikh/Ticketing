@@ -11,10 +11,13 @@ namespace Easyrewardz_TicketSystem.Services
     public class DesignationService:IDesignation
     {
         MySqlConnection conn = new MySqlConnection();
+
+        #region Constructor
         public DesignationService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
         /// <summary>
         /// Get Designations
@@ -59,6 +62,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -113,6 +120,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return designationMasters;
@@ -165,6 +176,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 

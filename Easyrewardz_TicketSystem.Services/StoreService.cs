@@ -2,9 +2,11 @@
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -13,12 +15,19 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region variable
         public static string Xpath = "//NewDataSet//Table1";
+        CustomResponse ApiResponse = null;
+        string apiResponse = string.Empty;
+        string apisecurityToken = string.Empty;
+        string apiURL = string.Empty;
+
         #endregion
         #region Cunstructor
         MySqlConnection conn = new MySqlConnection();
         public StoreService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
+            apisecurityToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9ncmFtQ29kZSI6IkJhdGEiLCJVc2VySUQiOiIzIiwiQXBwSUQiOiI3IiwiRGF5IjoiMjgiLCJNb250aCI6IjMiLCJZZWFyIjoiMjAyMSIsIlJvbGUiOiJBZG1pbiIsImlzcyI6IkF1dGhTZWN1cml0eUlzc3VlciIsImF1ZCI6IkF1dGhTZWN1cml0eUF1ZGllbmNlIn0.0XeF7V5LWfQn0NlSlG7Rb-Qq1hUCtUYRDg6dMGIMvg0";
+            apiURL = "http://searchapi.ercx.co/api/Search/";
         }
 
         /// <summary>
@@ -64,7 +73,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int CreateStore(StoreMaster storeMaster, int TenantID, int UserID)
         {
-          
+
             int storeId = 0;
             try
             {
@@ -73,7 +82,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 //cmd.Parameters.AddWithValue("@Brand_ID", storeMaster.BrandID);
                 cmd.Parameters.AddWithValue("@Store_Code", storeMaster.StoreCode);
-                cmd.Parameters.AddWithValue("@Store_Name", storeMaster.StoreName);
+                cmd.Parameters.AddWithValue("@Store_Name", string.IsNullOrEmpty(storeMaster.StoreName) ? "" : storeMaster.StoreName);
                 cmd.Parameters.AddWithValue("@State_ID", storeMaster.StateID);
                 cmd.Parameters.AddWithValue("@City_ID", storeMaster.CityID);
                 cmd.Parameters.AddWithValue("@Pincode_ID", storeMaster.Pincode);
@@ -159,8 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateStore", conn);
-                cmd.Connection = conn;
-                //cmd.Parameters.AddWithValue("@Brand_ID", storeMaster.BrandID);
+                cmd.Connection = conn;               
                 cmd.Parameters.AddWithValue("@Store_Code", storeMaster.StoreCode);
                 cmd.Parameters.AddWithValue("@Store_Name", storeMaster.StoreName);
                 cmd.Parameters.AddWithValue("@State_ID", storeMaster.StateID);
@@ -220,19 +228,26 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    if (ds.Tables[0].Rows.Count > 0)
                     {
-                        StoreMaster store = new StoreMaster();
-                        store.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        store.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        store.Pincode = ds.Tables[0].Rows[i]["PincodeID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PincodeID"]);
-                        store.StoreEmailID = ds.Tables[0].Rows[i]["StoreEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
-                        store.Address = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
-                        store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
-                        //store.StoreVisitDate= ds.Tables[0].Rows[i]["StoreVisitDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreVisitDate"]);
-                        //store.Purpose= ds.Tables[0].Rows[i]["Purpose"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Purpose"]);
-                        storeMaster.Add(store);
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            StoreMaster store = new StoreMaster();
+                            store.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
+                            store.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
+                            store.Pincode = ds.Tables[0].Rows[i]["PincodeID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PincodeID"]);
+                            store.StoreEmailID = ds.Tables[0].Rows[i]["StoreEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
+                            store.Address = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                            store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);                           
+                            storeMaster.Add(store);
+                        }
                     }
+                    else
+                    {
+                        storeMaster = GetStoreDetaisFromAPI(searchText);
+
+                    }
+
                 }
             }
             catch (Exception)
@@ -250,6 +265,66 @@ namespace Easyrewardz_TicketSystem.Services
                     ds.Dispose();
                 }
             }
+            return storeMaster;
+        }
+
+
+
+        /// <summary>
+        /// Get list of the Stores details from LPASS API
+        /// </summary>
+        /// <param name="searchText"></param>
+        /// <returns></returns>
+        public List<StoreMaster> GetStoreDetaisFromAPI(string searchText)
+        {
+            List<StoreMaster> storeMaster = new List<StoreMaster>();
+            CustomStoreSearch objStore = new CustomStoreSearch();
+            List<CustomStoreDetails> objStoreDetails = new List<CustomStoreDetails>();
+            try
+            {
+                objStore.programCode = "bata";
+                objStore.storeAddressPin = searchText;
+
+                objStore.securityToken = apisecurityToken;
+                objStore.userID = 3;
+                objStore.appID = 7;
+
+                string apiReq = JsonConvert.SerializeObject(objStore);
+                apiResponse = CommonService.SendApiRequest(apiURL + "StoreDetails", apiReq);
+
+                if (!string.IsNullOrEmpty(apiResponse))
+                {
+                    ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+
+                    if (ApiResponse != null)
+                    {
+
+                        objStoreDetails = JsonConvert.DeserializeObject<List<CustomStoreDetails>>(Convert.ToString((ApiResponse.Responce)));
+
+                        if (objStoreDetails.Count > 0)
+                        {
+                            for (int k = 0; k < objStoreDetails.Count; k++)
+                            {
+                                StoreMaster store = new StoreMaster();
+                                store.StoreCode = objStoreDetails[k].StoreCode;
+                                store.StoreName = objStoreDetails[k].StoreCode;// no store name provided in the api response hence mapped storecode mapped as per req
+                                store.Pincode = objStoreDetails[k].StorePinCode;
+                                store.StoreEmailID = objStoreDetails[k].StoreEmailId;
+                                store.Address = objStoreDetails[k].StoreAddress;
+                                store.StoreID = 0;
+                                store.LpassStoreID = objStoreDetails[k].StoreId;
+                                storeMaster.Add(store);
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
             return storeMaster;
         }
 
@@ -339,8 +414,7 @@ namespace Easyrewardz_TicketSystem.Services
                         store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
                         store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
                         store.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        store.StorePhoneNo = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        //store.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i][""]);
+                        store.StorePhoneNo = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);                       
                         storeMaster.Add(store);
                     }
                 }
@@ -390,7 +464,7 @@ namespace Easyrewardz_TicketSystem.Services
                         store.StoreID = ds.Tables[0].Rows[i]["StoreID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
                         store.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
                         store.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        //store.BranName = Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                       
                         store.CityName = ds.Tables[0].Rows[i]["CityName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CityName"]);
                         store.StateName = ds.Tables[0].Rows[i]["StateName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StateName"]);
                         store.strPinCode = ds.Tables[0].Rows[i]["PincodeID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PincodeID"]);
@@ -403,8 +477,10 @@ namespace Easyrewardz_TicketSystem.Services
                         store.CityID = ds.Tables[0].Rows[i]["CityID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CityID"]);
                         store.StateID = ds.Tables[0].Rows[i]["StateID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StateID"]);
                         store.RegionID = ds.Tables[0].Rows[i]["RegionID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["RegionID"]);
+                        store.RegionName = ds.Tables[0].Rows[i]["RegionName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RegionName"]);
                         store.ZoneID = ds.Tables[0].Rows[i]["ZoneID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ZoneID"]);
                         store.StoreTypeID = ds.Tables[0].Rows[i]["StoreTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreTypeID"]);
+                        store.StoreTypeName = ds.Tables[0].Rows[i]["StoreTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreTypeName"]);
                         store.StatusID = Convert.ToBoolean(ds.Tables[0].Rows[i]["StatusID"]);
                         store.BrandIDs = ds.Tables[0].Rows[i]["BrandIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandIDs"]);
                         store.BrandNames = ds.Tables[0].Rows[i]["BrandNames"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandNames"]);
@@ -468,7 +544,7 @@ namespace Easyrewardz_TicketSystem.Services
                         store.StoreVisitDate = ds.Tables[0].Rows[i]["StoreVisitDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreVisitDate"]) + GMT;
                         store.Purpose = ds.Tables[0].Rows[i]["Purpose"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Purpose"]);
                         storeMaster.Add(store);
-                    } 
+                    }
                 }
             }
             catch (Exception)
@@ -516,8 +592,7 @@ namespace Easyrewardz_TicketSystem.Services
                         MySqlCommand cmd = new MySqlCommand("SP_BulkUploadStore", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
-                        cmd.Parameters.AddWithValue("@_node", Xpath);
-                        //cmd.Parameters.AddWithValue("@_StoreFor", RoleFor);
+                        cmd.Parameters.AddWithValue("@_node", Xpath);                        
                         cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                         cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
                         cmd.CommandType = CommandType.StoredProcedure;
@@ -528,13 +603,13 @@ namespace Easyrewardz_TicketSystem.Services
                         if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
                         {
 
-                                //for success file
-                                SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
-                                csvLst.Add(SuccesFile);
+                            //for success file
+                            SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(SuccesFile);
 
-                                //for error file
-                                ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
-                                csvLst.Add(ErroFile);
+                            //for error file
+                            ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            csvLst.Add(ErroFile);
 
                         }
                     }
@@ -542,7 +617,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception )
+            catch (Exception)
             {
                 throw;
             }
@@ -625,6 +700,91 @@ namespace Easyrewardz_TicketSystem.Services
             return result;
         }
 
+
+        /// <summary>
+        /// Bulk Upload User 
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="UserFor"></param>
+        /// <param name="DataSetCSV"></param>
+        public List<string> BulkUploadUser(int TenantID, int CreatedBy, int UserFor, DataSet DataSetCSV)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            DataSet Bulkds = new DataSet();
+            List<string> csvLst = new List<string>();
+            MySqlCommand cmd = null;
+            string SuccesFile = string.Empty; string ErroFile = string.Empty;
+            try
+            {
+                if (DataSetCSV != null && DataSetCSV.Tables.Count > 0)
+                {
+                    if (DataSetCSV.Tables[0] != null && DataSetCSV.Tables[0].Rows.Count > 0)
+                    {
+
+                        //check if user ulpoad or brandcategory mapping
+                        xmlDoc.LoadXml(DataSetCSV.GetXml());
+                        conn.Open();
+
+
+                        string[] dtColumns = Array.ConvertAll(DataSetCSV.Tables[0].Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray(), d => d.ToLower());
+
+                        if (dtColumns.Contains("username"))
+                        {
+                            cmd = new MySqlCommand("SP_BulkUploadStoreUser", conn);
+                            cmd.Parameters.AddWithValue("@_tenantID", TenantID);
+                            cmd.Parameters.AddWithValue("@_UserFor", UserFor);
+
+                        }
+                        else
+                        {
+                            cmd = new MySqlCommand("SP_BulkUploadStoreBrandCategoryMapping", conn);
+                        }
+
+                        cmd.Connection = conn;
+                        cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
+                        cmd.Parameters.AddWithValue("@_node", Xpath);
+                        cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        MySqlDataAdapter da = new MySqlDataAdapter();
+                        da.SelectCommand = cmd;
+                        da.Fill(Bulkds);
+
+                        if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
+                        {
+
+                            //for success file
+                            SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(SuccesFile);
+
+                            //for error file
+                            ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            csvLst.Add(ErroFile);
+
+                        }
+                    }
+
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            finally
+            {
+                if (DataSetCSV != null)
+                {
+                    DataSetCSV.Dispose();
+                }
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return csvLst;
+        }
         #endregion
     }
 }

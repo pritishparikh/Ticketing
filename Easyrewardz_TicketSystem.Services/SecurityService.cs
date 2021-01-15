@@ -376,11 +376,7 @@ namespace Easyrewardz_TicketSystem.Services
             catch (Exception)
             {
                 throw;
-            }
-            finally
-            {
-
-            }
+            }           
 
             return accountModal;
         }
@@ -522,47 +518,7 @@ namespace Easyrewardz_TicketSystem.Services
             return authenticate;
         }
 
-        ///// <summary>
-        ///// Set data to Radhish Cache memory
-        ///// </summary>
-        ///// <param name="key"></param>
-        ///// <param name="Value"></param>
-        ////public void setRadishCacheData(string key, string Value)
-        ////{
-        ////    //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
-        ////    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
-        ////    IDatabase db = redis.GetDatabase();
-        ////    db.StringSet(key, Value);
-        ////}
-
-        /////// <summary>
-        /////// Get Data from the Radish cache memory
-        /////// </summary>
-        /////// <param name="key"></param>
-        /////// <returns></returns>
-        ////public string getDataFromRadishCache(string key)
-        ////{
-        ////    //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
-        ////    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
-        ////    IDatabase _db = redis.GetDatabase();
-        ////    return _db.StringGet(key);
-        ////}
-
-        ////public void removeDataFromRadishCache(string key)
-        ////{
-        ////    //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
-        ////    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
-        ////    IDatabase _db = redis.GetDatabase();
-        ////    _db.KeyDelete(key);
-        ////}
-
-        ////public bool checkDataExistInRadishCache(string key)
-        ////{
-        ////    //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("13.67.69.216:6379");
-        ////    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(radisCacheServerAddress);
-        ////    IDatabase _db = redis.GetDatabase();
-        ////    return _db.KeyExists(key);
-        ////}
+      
 
         /// <summary>
         /// Logout user
@@ -681,35 +637,60 @@ namespace Easyrewardz_TicketSystem.Services
         {
             bool isValid = false;
 
-          
-                DataSet ds = new DataSet();
-                MySqlCommand cmd = new MySqlCommand();
-                try
-                {
 
-                    Programcode = DecryptStringAES(Programcode);
-                    Domainname = DecryptStringAES(Domainname);
+            DataSet ds = new DataSet();
+            try
+            {
 
-                    conn.Open();
-                    cmd.Connection = conn;
-                    MySqlCommand cmd1 = new MySqlCommand("SP_validateProgramCode", conn);
-                    cmd1.CommandType = CommandType.StoredProcedure;
-                    cmd1.Parameters.AddWithValue("@Program_code", Programcode);
-                    cmd1.Parameters.AddWithValue("@Domain_name", Domainname);
-                    isValid = Convert.ToBoolean(cmd1.ExecuteScalar());
-                }
-                catch (Exception)
+                Programcode = DecryptStringAES(Programcode);
+                Domainname = DecryptStringAES(Domainname);
+
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_validateProgramCode", conn)
                 {
-                    throw;
-                }
-                finally
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@Program_code", Programcode);
+                cmd.Parameters.AddWithValue("@Domain_name", Domainname);              
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd)
                 {
-                    if (conn != null)
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
                     {
-                        conn.Close();
+                        bool status = Convert.ToBoolean(ds.Tables[0].Rows[0]["Return"]);
+                        isValid = status;
+
+                        if (status)
+                        {
+                            string ConnectionString = ds.Tables[0].Rows[0]["ConnectionString"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ConnectionString"]);
+                           
+                            string ProgramCodeString = Programcode;
+
+
+                            string jsonString = JsonConvert.SerializeObject(ConnectionString);
+
+                            RedisCacheService radisCacheService = new RedisCacheService(radisCacheServerAddress);
+                            radisCacheService.Set("Con" + ProgramCodeString, jsonString);
+                        }
                     }
                 }
-                return isValid;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return isValid;
         }
 
 
@@ -730,11 +711,11 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_ChangePassword", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_Password", customChangePassword.Password);
-                cmd.Parameters.AddWithValue("@_NewPassword", customChangePassword.NewPassword);
-                //cmd.Parameters.AddWithValue("@_UserID", customChangePassword.UserID);
+                cmd.Parameters.AddWithValue("@_NewPassword", customChangePassword.NewPassword);               
                 cmd.Parameters.AddWithValue("@Email_ID", customChangePassword.EmailID);
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 cmd.Parameters.AddWithValue("@User_ID", User_ID);
+                cmd.Parameters.AddWithValue("@_ProgramCode", customChangePassword.ProgramCode);
                 cmd.CommandType = CommandType.StoredProcedure;
                 success = Convert.ToInt32(cmd.ExecuteScalar());
                 if (success == 1)

@@ -1,0 +1,13 @@
+Store Code,Operational Days,Template Name,Slot Start Time,Slot End Time,Slot Occupancy,Slot Status,Slot days need to display,Applicable from,Max people allowed in one appointment,Display Slot from time,Status
+SMB3618,Monday|Tuesday,Manual template 3,10:00 AM,10:30 AM,2,1,10,03-08-2020,10,302,Active
+SMB3618,Monday|Tuesday,Manual template 3,10:30 AM,11:00 AM,5,1,10,03-08-2020,10,302,Active
+SMB3618,Monday|Tuesday,Manual template 3,11:00 AM,11:30 AM,5,0,10,03-08-2020,10,302,Active
+SMB3618,Monday|Tuesday,Manual template 3,11:30 AM,12:00 PM,5,1,10,03-08-2020,10,302,Active
+SMB3618,Monday|Tuesday,Manual template 3,12:00 PM,12:30 PM,5,0,10,03-08-2020,10,302,Active
+SMB3618,Monday|Tuesday,Manual template 3,12:30 PM,01:00 PM,5,1,10,03-08-2020,10,302,Active
+SMB3024,Monday|Tuesday,Manual template 3,10:00 AM,10:30 AM,2,1,10,03-08-2020,10,302,Active
+SMB3024,Monday|Tuesday,Manual template 3,10:30 AM,11:00 AM,5,1,10,03-08-2020,10,302,Active
+SMB3024,Monday|Tuesday,Manual template 3,11:00 AM,11:30 AM,5,0,10,03-08-2020,10,302,Active
+SMB3024,Monday|Tuesday,Manual template 3,11:30 AM,12:00 PM,5,1,10,03-08-2020,10,302,Active
+SMB3024,Monday|Tuesday,Manual template 3,12:00 PM,12:30 PM,5,0,10,03-08-2020,10,302,Active
+SMB3024,Monday|Tuesday,Manual template 3,12:30 PM,01:00 PM,5,1,10,03-08-2020,10,302,Active

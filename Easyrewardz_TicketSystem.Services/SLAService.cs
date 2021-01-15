@@ -313,13 +313,7 @@ namespace Easyrewardz_TicketSystem.Services
 
                         }
                     }
-                }
-
-                //paging here
-                //if (PageSize > 0 && objSLALst.Count > 0)
-                //    objSLALst[0].totalpages = objSLALst.Count > PageSize ? Math.Round(Convert.ToDouble(objSLALst.Count / PageSize)) : 1;
-
-                //objSLALst = objSLALst.Skip(rowStart).Take(PageSize).ToList();
+                }              
 
 
             }
@@ -362,8 +356,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
 
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetIssueTypeForSLACreation", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                //cmd1.Parameters.AddWithValue("@_tenantID", 1);
+                cmd1.CommandType = CommandType.StoredProcedure;             
                 cmd1.Parameters.AddWithValue("@_tenantID", tenantID);
                 cmd1.Parameters.AddWithValue("@Search_Text", string.IsNullOrEmpty(SearchText) ? "" : SearchText);
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -454,22 +447,15 @@ namespace Easyrewardz_TicketSystem.Services
                         {
 
                             //for success file
-                            if (Bulkds.Tables[0].Rows.Count > 0)
-                            {
-                                SuccesFile = CommonService.DataTableToCsv(Bulkds.Tables[0]);
-                                csvLst.Add(SuccesFile);
-
-                                //uploadcount = UploadSLATarget(Bulkds.Tables[0], TenantID, CreatedBy); //upload SLA Target
-
-                            }
+                            SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            csvLst.Add(SuccesFile);
 
                             //for error file
-                            if (Bulkds.Tables[1].Rows.Count > 0)
-                            {
-                                ErroFile = CommonService.DataTableToCsv(Bulkds.Tables[1]);
-                                csvLst.Add(ErroFile);
+                            ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            csvLst.Add(ErroFile);
 
-                            }
+
+                            
 
                         }
                     }
@@ -477,7 +463,7 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -755,6 +741,65 @@ namespace Easyrewardz_TicketSystem.Services
 
 
             return isUpdateDone;
+        }
+
+        /// <summary>
+        ///ValidateSLAByIssueTypeID
+        /// <param name="issueTypeID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="ticketID"></param>
+        /// </summary>
+        public List<ValidateSLA> ValidateSLAByIssueTypeID(int issueTypeID, int tenantID, int ticketID)
+        {
+            List<ValidateSLA> lstValidateSLA = new List<ValidateSLA>();
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                MySqlCommand cmd1 = new MySqlCommand("SP_ValidateSLAByIssueType", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@issueTypeID", issueTypeID);
+                cmd1.Parameters.AddWithValue("@tenantID", tenantID);
+                cmd1.Parameters.AddWithValue("@ticketID", ticketID);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd1
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        ValidateSLA objValidateSLA = new ValidateSLA
+                        {
+                            PriorityID = ds.Tables[0].Rows[i]["PriorityID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["PriorityID"]),
+                            PriortyName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"])
+                        };
+                        lstValidateSLA.Add(objValidateSLA);
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+
+            return lstValidateSLA;
         }
     }
 }

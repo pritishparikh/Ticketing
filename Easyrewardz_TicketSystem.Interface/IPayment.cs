@@ -9,6 +9,11 @@ namespace Easyrewardz_TicketSystem.Interface
 {
     public interface IPayment
     {
+        /// <summary>
+        /// Insert Cheque Details
+        /// </summary>
+        /// <param name="offlinePaymentModel"></param>
+        /// <returns></returns>
         int InsertChequeDetails(OfflinePaymentModel offlinePaymentModel);
     }
 }

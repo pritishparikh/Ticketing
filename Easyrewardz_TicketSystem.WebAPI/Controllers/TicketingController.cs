@@ -88,12 +88,16 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel CreateTicket(IFormFile File)
         {
             TicketingDetails ticketingDetails = new TicketingDetails();
+            OrderMaster orderDetails = new OrderMaster();
+            List<OrderItem> OrderItemDetails = new List<OrderItem>();
+            List<StoreMaster> storeMaster = new List<StoreMaster>();
+            List<string> ListStoreDetails = new List<string>();
             var files = Request.Form.Files;
             string timeStamp = DateTime.Now.ToString("ddmmyyyyhhssfff");
             string fileName = "";
             string finalAttchment = "";
             string ResponseMessage = "";
-
+            int result = 0;
             if (files.Count > 0)
             {
                 for (int i = 0; i < files.Count; i++)
@@ -104,6 +108,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             var Keys = Request.Form;
             ticketingDetails = JsonConvert.DeserializeObject<TicketingDetails>(Keys["ticketingDetails"]);
+
+            // get order details from form
+            orderDetails = JsonConvert.DeserializeObject<OrderMaster>(Keys["orderDetails"]);
+            OrderItemDetails = JsonConvert.DeserializeObject<List<OrderItem>>(Keys["orderItemDetails"]);
+            storeMaster = JsonConvert.DeserializeObject<List<StoreMaster>>(Keys["storeDetails"]);
 
 
             List<TicketingDetails> objTicketList = new List<TicketingDetails>();
@@ -116,53 +125,145 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
+
                 TicketingCaller newTicket = new TicketingCaller();
 
                 ticketingDetails.TenantID = authenticate.TenantId;
                 ticketingDetails.CreatedBy = authenticate.UserMasterID; ///Created  By from the token
                 ticketingDetails.AssignedID = authenticate.UserMasterID;
 
+             
+
                 var exePath = Path.GetDirectoryName(System.Reflection
-                     .Assembly.GetExecutingAssembly().CodeBase);
+                .Assembly.GetExecutingAssembly().CodeBase);
                 Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
                 var appRoot = appPathMatcher.Match(exePath).Value;
                 string Folderpath = appRoot + "\\" + _ticketAttachmentFolderName;
 
-                int result = newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
 
-                if(ticketingDetails.StatusID == 100)
+                #region check orderdetails and item details 
+
+                if (orderDetails != null)
                 {
-                    ResponseMessage = "Draft created successfully.";
-                }
-                else
-                {
-                    ResponseMessage = "Ticket created successfully.";
-                }
-                if (result > 0)
-                {
-                    if (files.Count > 0)
+
+                    if (orderDetails.OrderMasterID.Equals(0))
                     {
-                        string[] filesName = finalAttchment.Split(",");
-                        for (int i = 0; i < files.Count; i++)
-                        {
-                            using (var ms = new MemoryStream())
-                            {
-                                files[i].CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                MemoryStream msfile = new MemoryStream(fileBytes);
-                                FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
-                                msfile.WriteTo(docFile);
-                                docFile.Close();
-                                ms.Close();
-                                msfile.Close();
-                                string s = Convert.ToBase64String(fileBytes);
-                                byte[] a = Convert.FromBase64String(s);
-                                // act on the Base64 data
 
+                        string OrderNumber = string.Empty;
+                        string OrderItemsIds = string.Empty;
+                        OrderMaster objorderMaster = null;
+
+                        OrderCaller ordercaller = new OrderCaller();
+                        //call insert order
+                        orderDetails.CreatedBy = authenticate.UserMasterID;
+                        OrderNumber = ordercaller.addOrder(new OrderService(_connectioSting), orderDetails, authenticate.TenantId);
+                        if (!string.IsNullOrEmpty(OrderNumber))
+                        {
+                            objorderMaster = ordercaller.getOrderDetailsByNumber(new OrderService(_connectioSting), OrderNumber, authenticate.TenantId);
+
+
+                            if (objorderMaster != null)
+                            {
+                                if(OrderItemDetails!=null)
+                                {
+                                    foreach (var item in OrderItemDetails)
+                                    {
+                                        item.OrderMasterID = objorderMaster.OrderMasterID;
+                                        item.InvoiceDate = orderDetails.InvoiceDate;
+                                    }
+
+                                    OrderItemsIds = ordercaller.AddOrderItem(new OrderService(_connectioSting), OrderItemDetails, authenticate.TenantId, authenticate.UserMasterID);
+                                   
+                                }
+                                else
+                                {
+                                    OrderItemsIds = Convert.ToString(objorderMaster.OrderMasterID) + "|0|1";
+                                }
+
+                            }
+
+                            ticketingDetails.OrderMasterID = objorderMaster.OrderMasterID;
+                            ticketingDetails.OrderItemID = OrderItemsIds;
+                        }
+
+                    }
+                    
+
+                }
+                #endregion
+
+                #region check Store details
+
+                if (storeMaster != null)
+                {
+                  
+                    if (storeMaster.Count > 0)
+                    {
+                        StoreCaller newStore = new StoreCaller();
+
+                        foreach (var store in storeMaster)
+                        {
+                            if (store.StoreID.Equals(0))
+                            {
+                                int InsertedStoreID = 0;
+
+                                store.BrandIDs = Convert.ToString(ticketingDetails.BrandID);
+
+                                InsertedStoreID = newStore.AddStore(new StoreService(_connectioSting), store, authenticate.TenantId, authenticate.UserMasterID);
+                                if (InsertedStoreID > 0)
+                                {
+                                    store.StoreVisitDate = string.IsNullOrEmpty(store.StoreVisitDate) ? "" : store.StoreVisitDate; 
+                                    ListStoreDetails.Add(Convert.ToString(InsertedStoreID) + "|" + store.StoreVisitDate + "|" + store.Purpose);
+
+                                }
+                            }
+                        }
+
+                        ticketingDetails.StoreID = ListStoreDetails.Count > 0 ? string.Join(',', ListStoreDetails) : ticketingDetails.StoreID;
+                    }
+                }
+
+
+                #endregion
+
+                    result = newTicket.addTicketDetails(new TicketingService(_connectioSting), ticketingDetails, authenticate.TenantId, Folderpath, finalAttchment);
+
+
+                if (ticketingDetails.StatusID == 100)
+                    {
+                        ResponseMessage = "Draft created successfully.";
+                    }
+                    else
+                    {
+                        ResponseMessage = "Ticket created successfully.";
+                    }
+                    if (result > 0)
+                    {
+                        if (files.Count > 0)
+                        {
+                            string[] filesName = finalAttchment.Split(",");
+                            for (int i = 0; i < files.Count; i++)
+                            {
+                                using (var ms = new MemoryStream())
+                                {
+                                    files[i].CopyTo(ms);
+                                    var fileBytes = ms.ToArray();
+                                    MemoryStream msfile = new MemoryStream(fileBytes);
+                                    FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                                    msfile.WriteTo(docFile);
+                                    docFile.Close();
+                                    ms.Close();
+                                    msfile.Close();
+                                    string s = Convert.ToBase64String(fileBytes);
+                                    byte[] a = Convert.FromBase64String(s);
+                                    // act on the Base64 data
+
+                                }
                             }
                         }
                     }
-                }
+
+               
                 StatusCode =
                 result == 0 ?
                        (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -171,23 +272,24 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = ResponseMessage;
-                objResponseModel.ResponseData = result;
+                objResponseModel.ResponseData = result; 
             }
             catch (Exception)
             {
-                //if (ticketingDetails.StatusID == 100)
-                //{
-                //    ErrorResponseMessage = "Draft not created.";
-                //}
-                //else
-                //{
-                //    ErrorResponseMessage = "Ticket not created.";
-                //}
+                string ErrorResponseMessage = string.Empty;
+                if (ticketingDetails.StatusID == 100)
+                {
+                    ErrorResponseMessage = "Draft not created.";
+                }
+                else
+                {
+                    ErrorResponseMessage = "Ticket not created.";
+                }
 
-                //objResponseModel.Status = false;
-                //objResponseModel.StatusCode = StatusCode;
-                //objResponseModel.Message = ErrorResponseMessage;
-                //objResponseModel.ResponseData = null;
+                objResponseModel.Status = false;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = ErrorResponseMessage;
+                objResponseModel.ResponseData = null;
 
                 throw;
 

@@ -27,6 +27,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         private IConfiguration configuration;
         private readonly string _connectioSting;
         private readonly string _radisCacheServerAddress;
+        private readonly string rootPath;
+
+        private readonly string BulkUpload;
+        private readonly string UploadFiles;
+        private readonly string DownloadFile;
+
         #endregion
 
         #region Constructor
@@ -40,6 +46,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             configuration = _iConfig;
             _connectioSting = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
+
+            rootPath = configuration.GetValue<string>("APIURL");
+            BulkUpload = configuration.GetValue<string>("BulkUpload");
+            UploadFiles = configuration.GetValue<string>("Uploadfiles");
+            DownloadFile = configuration.GetValue<string>("Downloadfile");
         }
 
         #endregion
@@ -323,7 +334,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel BulkUploadSLA(int SLAFor=1)
         {
 
-
             string DownloadFilePath = string.Empty;
             string BulkUploadFilesPath = string.Empty;
             bool errorfilesaved = false;
@@ -349,7 +359,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-                #region Read from Form
+
 
                 if (files.Count > 0)
                 {
@@ -360,17 +370,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     finalAttchment = fileName.TrimEnd(',');
                 }
 
-                var exePath = Path.GetDirectoryName(System.Reflection
-                     .Assembly.GetExecutingAssembly().CodeBase);
-                Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
-                var appRoot = appPathMatcher.Match(exePath).Value;
-                string Folderpath = appRoot ;
+                #region FilePath
+                string Folderpath = Directory.GetCurrentDirectory();
+                filesName = finalAttchment.Split(",");
+
+
+                BulkUploadFilesPath = Path.Combine(Folderpath, BulkUpload, UploadFiles, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)SLAFor));
+                DownloadFilePath = Path.Combine(Folderpath, BulkUpload, DownloadFile, CommonFunction.GetEnumDescription((EnumMaster.FileUpload)SLAFor));
+
+
+                if (!Directory.Exists(BulkUploadFilesPath))
+                {
+                    Directory.CreateDirectory(BulkUploadFilesPath);
+                }
 
 
 
                 if (files.Count > 0)
                 {
-                    filesName = finalAttchment.Split(",");
+
                     for (int i = 0; i < files.Count; i++)
                     {
                         using (var ms = new MemoryStream())
@@ -378,53 +396,53 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                             files[i].CopyTo(ms);
                             var fileBytes = ms.ToArray();
                             MemoryStream msfile = new MemoryStream(fileBytes);
-                            FileStream docFile = new FileStream(Folderpath + "\\" + filesName[i], FileMode.Create, FileAccess.Write);
+                            FileStream docFile = new FileStream(Path.Combine(BulkUploadFilesPath, filesName[i]), FileMode.Create, FileAccess.Write);
                             msfile.WriteTo(docFile);
                             docFile.Close();
                             ms.Close();
                             msfile.Close();
+                            string s = Convert.ToBase64String(fileBytes);
+                            byte[] a = Convert.FromBase64String(s);
+                            // act on the Base64 data
 
                         }
                     }
                 }
 
-                
-                BulkUploadFilesPath = Folderpath + "\\" + "BulkUpload\\UploadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)SLAFor);
-                DownloadFilePath = Folderpath + "\\" + "BulkUpload\\DownloadFiles" + "\\" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)SLAFor);
+                #endregion
 
-              
 
-                DataSetCSV = CommonService.csvToDataSet(Folderpath + "\\" + filesName[0]);
+
+                DataSetCSV = CommonService.csvToDataSet(Path.Combine(BulkUploadFilesPath, filesName[0]));
                 CSVlist = newSLA.SLABulkUpload(new SLAServices(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, SLAFor, DataSetCSV);
 
+
+                #region Create Error and Success files and  Insert in FileUploadLog
+
+                string SuccessFileName = "SLASuccessFile_" + timeStamp + ".csv";
+                string ErrorFileName = "SLAErrorFile_" + timeStamp + ".csv";
+
+                string SuccessFileUrl = !string.IsNullOrEmpty(CSVlist[0]) ?
+                  rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)SLAFor) + "/Success/" + SuccessFileName : string.Empty;
+                string ErrorFileUrl = !string.IsNullOrEmpty(CSVlist[1]) ?
+                    rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)SLAFor) + "/Error/" + ErrorFileName : string.Empty;
+
+                if (!string.IsNullOrEmpty(CSVlist[0]))
+                    successfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Success", SuccessFileName), CSVlist[0]);
+
+                if (!string.IsNullOrEmpty(CSVlist[1]))
+                    errorfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Error", ErrorFileName), CSVlist[1]);
+
+                count = newSLA.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, filesName[0], true,
+                                 ErrorFileName, SuccessFileName, authenticate.UserMasterID, "SLA", SuccessFileUrl, ErrorFileUrl, SLAFor);
                 #endregion
 
-
-                #region Create Error and Succes files
-
-                
-                successfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Success" + "\\" + "SLAErrorFile.csv", CSVlist[0]);
-                errorfilesaved = CommonService.SaveFile(DownloadFilePath + "\\Error" + "\\" + "SLASuccessFile.csv", CSVlist[0]);
-
-                #endregion
-
-                #region Insert in FileUploadLog
-
-               
-                count = newSLA.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, finalAttchment, errorfilesaved,
-                                   "SLAErrorFile.csv", "SLASuccessFile.csv", authenticate.UserMasterID, "SLA",
-                                   DownloadFilePath + "\\SLA\\Error" + "\\" + "StoreErrorFile.csv",
-                                   DownloadFilePath + "\\SLA\\ Success" + "\\" + "StoreSuccessFile.csv", 1
-                                   );
-                #endregion
-
-                StatusCode = successfilesaved  ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = count;
-
             }
             catch (Exception)
             {
@@ -557,7 +575,41 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// ValidateSLAByIssueTypeID
+        /// </summary>
+        /// <param name="issueTypeID"></param>
+        [HttpPost]
+        [Route("ValidateSLAByIssueTypeID")]
+        public ResponseModel ValidateSLAByIssueTypeID(int issueTypeID, int ticketID)
+        {
+            SLACaller _newSLA = new SLACaller();
+            List<ValidateSLA> validateSLA = new List<ValidateSLA>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
 
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                validateSLA = _newSLA.ValidateSLAByIssueTypeID(new SLAServices(_connectioSting), issueTypeID, authenticate.TenantId, ticketID);
+                statusCode = validateSLA.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = validateSLA;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
 
         #endregion
     }

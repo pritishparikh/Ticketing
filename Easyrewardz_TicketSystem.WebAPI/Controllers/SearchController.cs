@@ -1,7 +1,9 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
+using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -11,6 +13,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = SchemesNamesConst.TokenAuthenticationDefaultScheme)]
     public class SearchController :ControllerBase
     {
         #region variable declaration
@@ -112,7 +115,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get tickets On page load
         /// </summary>
-        /// <param name="searchparams"></param>
+        /// <param name="HeaderStatusID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetTicketsOnPageLoad")]
@@ -196,7 +199,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get tickets On page load
         /// </summary>
-        /// <param name="searchparams"></param>
+        /// <param name="SearchParamID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetTicketsOnSavedSearch")]

@@ -1,0 +1,207 @@
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.CustomModel.StoreModal;
+using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.Model;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Easyrewardz_TicketSystem.WebAPI.Provider
+{
+    public class StoreTaskCaller
+    {
+        #region Variable
+        public IStoreTask _TaskRepository;
+        #endregion
+        
+        public int AddTask(IStoreTask task, TaskMaster taskMaster, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.AddTaskDetails(taskMaster, TenantID, UserID);
+        }
+        public List<CustomStoreTaskDetails> GettaskList(IStoreTask task, int tabFor,int tenantID,int userID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetTaskList(tabFor, tenantID, userID);
+        }
+        public StoreTaskMaster GetStoreTaskByID(IStoreTask task, int TaskID, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetStoreTaskByID(TaskID, TenantID, UserID);
+        }
+        public int AddStoreTaskComment(IStoreTask task, StoreTaskComment TaskComment, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.AddStoreTaskComment(TaskComment, TenantID, UserID);
+        }
+        public List<TaskCommentModel> GetCommentOnTask(IStoreTask task, int TaskID, int taskFor, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetCommentOnTask(TaskID, taskFor, TenantID, UserID);
+        }
+        public List<CustomTaskHistory> GetTaskHistory(IStoreTask task, int TaskID, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetTaskHistory(TaskID, TenantID, UserID);
+        }
+        public int SubmitTask(IStoreTask task, StoreTaskMaster taskMaster, int UserID, int TenantId)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.SubmitTask(taskMaster, UserID, TenantId);
+        }
+        public List<CustomStoreUserList> UserList(IStoreTask task, int TenantID, int TaskID, int TaskFor)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetUserList(TenantID, TaskID, TaskFor);
+        }
+        public int AssignTask(IStoreTask task, AssignTaskModel assignTaskModel, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.AssignTask(assignTaskModel, TenantID, UserID);
+
+        }
+        public List<CustomStoreTaskDetails> GetStoreTaskByTicket(IStoreTask task, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetStoreTaskByTicket(TenantID, UserID);
+
+        }
+        public StoreTaskWithTicket GetStoreTicketingTaskByTaskID(IStoreTask task, int TaskID, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetStoreTicketingTaskByTaskID(TaskID, TenantID, UserID);
+
+        }
+        public List<CustomUserAssigned> GetAssignedTo(IStoreTask task, int Function_ID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetAssignedTo(Function_ID);
+
+        }
+        public List<StoreTaskProcressBar> GetStoreTaskProcressBar(IStoreTask task, int TaskId, int TaskBy)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetStoreTaskProcressBar(TaskId, TaskBy);
+
+        }
+        public int SubmitTaskByTicket(IStoreTask task, StoreTaskMaster taskMaster, int UserID, int TenantId)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.SubmitTaskByTicket(taskMaster, UserID, TenantId);
+
+        }
+        public int AssignTaskByTicket(IStoreTask task, AssignTaskModel assignTaskModel, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.AssignTaskByTicket(assignTaskModel, TenantID, UserID);
+
+        }
+
+
+
+        public List<StoreCampaign> GetStoreCampaignCustomer(IStoreTask task, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetStoreCampaignCustomer(TenantID, UserID);
+        }
+
+
+
+        public async Task<List<StoreCampaign>> GetStoreCampaignCustomerNew(IStoreTask task, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return await _TaskRepository.GetStoreCampaignCustomerNew(TenantID, UserID);
+        }
+
+        public List<StoreCampaign> GetStoreCampaignCustomerByStatus(IStoreTask task, string statusID,int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetStoreCampaignCustomerByStatus(statusID,TenantID, UserID);
+        }
+
+        public async Task<List<StoreCampaign>> FilterStoreCampaignCustomer(IStoreTask task, int CampaignTypeID, string statusID, string ResponseID, string FromDate, string ToDate, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return await _TaskRepository.FilterStoreCampaignCustomer( CampaignTypeID, statusID, ResponseID, FromDate, ToDate, TenantID, UserID);
+        }
+
+
+        public async Task<List<CampaignResponse>> GetCampaignResponseByStatus(IStoreTask task, string statusID)
+        {
+            _TaskRepository = task;
+            return await _TaskRepository.GetCampaignResponseByStatus(statusID);
+        }
+
+
+        public CampaignStatusResponse GetCampaignStatusResponse(IStoreTask task, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetCampaignStatusResponse(TenantID, UserID);
+        }
+        public int UpdateCampaignStatusResponse(IStoreTask task, StoreCampaignCustomerRequest objRequest, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.UpdateCampaignStatusResponse(objRequest, TenantID, UserID);
+        }
+
+        public async Task<int> UpdateCampaignStatusResponseNew(IStoreTask task, StoreCampaignCustomerRequest objRequest, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return await  _TaskRepository.UpdateCampaignStatusResponseNew(objRequest, TenantID, UserID);
+        }
+
+        public async Task<int> AddStoreTaskCampaignComment(IStoreTask task, int TenantID, int UserID, int campaignCustomerID, string Comment)
+        {
+            _TaskRepository = task;
+            return await _TaskRepository.AddStoreTaskCampaignComment( TenantID,  UserID,  campaignCustomerID,  Comment);
+        }
+
+        public async Task<List<StoreTaskCampaignComments>>  GetStoreTaskCampaignComment(IStoreTask task, int TenantID, int campaignCustomerID)
+        {
+            _TaskRepository = task;
+            return await _TaskRepository.GetStoreTaskCampaignComment(TenantID,  campaignCustomerID);
+        }
+
+        public int CloseCampaign(IStoreTask task, int CampaignTypeID, int IsClosed, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.CloseCampaign(CampaignTypeID, IsClosed, TenantID, UserID);
+        }
+
+        public List<TaskFilterRaisedBymeResponseModel> GetRaisedbyfiterData(IStoreTask task, TaskFilterRaisedBymeModel taskMaster)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetRaisedbyfiterData(taskMaster);
+        }
+
+        public List<TaskFilterAssignBymeResponseModel> GetAssigenBYfiterData(IStoreTask task, TaskFilterAssignBymeModel taskMaster)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetAssignBYfiterData(taskMaster);
+        }
+
+
+        public List<TaskFilterTicketByResponseModel> GetTaskTicketData(IStoreTask task, TaskFilterTicketByModel taskMaster)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetTaskTicketData(taskMaster);
+        }
+
+        /// <summary>
+        /// Get Customer Popup Details List
+        /// </summary>
+        /// <param name="Campaign"></param>
+        /// <param name="mobileNumber"></param>
+        /// <param name="programCode"></param>
+        /// <param name="campaignID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <returns></returns>
+        public StoresCampaignDetailResponse GetStoreCustomerpopupDetailsList(IStoreTask Campaign, string mobileNumber, string programCode, int TenantID, int UserID, string ClientAPIURL)
+        {
+            _TaskRepository = Campaign;
+            return _TaskRepository.GetStoreCustomerpopupDetailsList(mobileNumber, programCode, TenantID, UserID, ClientAPIURL);
+
+        }
+    }
+}

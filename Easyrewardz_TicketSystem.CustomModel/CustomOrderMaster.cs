@@ -19,8 +19,10 @@ namespace Easyrewardz_TicketSystem.CustomModel
         public string StoreCode { get; set; }
         public string StoreAddress { get; set; }
         public decimal Discount { get; set; }
-        public List<OrderItem> OrderItems  { get; set; }
+       public List<OrderItem> OrderItems  { get; set; }
         public bool isChecked { get; set; }
+        public string PaymentModename { get; set; }
+        
 
     }
 }

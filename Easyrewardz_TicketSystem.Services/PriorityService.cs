@@ -180,11 +180,11 @@ namespace Easyrewardz_TicketSystem.Services
                         priority.PriortyName = ds.Tables[0].Rows[i]["PriortyName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyName"]);
                         priority.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
                         priority.CreatedByName = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        priority.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"]);
-                        priority.CreatedDateFormated = priority.CreatedDate.ToString("dd/MMM/yyyy");
-                        priority.ModifiedByName = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
-                        priority.ModifiedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["ModifiedDate"]);
-                        priority.ModifiedDateFormated = priority.ModifiedDate.ToString("dd/MMM/yyyy");
+                        
+                        priority.CreatedDateFormated = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
+                        priority.ModifiedByName = ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        
+                        priority.ModifiedDateFormated = ds.Tables[0].Rows[i]["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]);
                         priority.PriortyStatus = ds.Tables[0].Rows[i]["PriortyStatus"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PriortyStatus"]);
                         objPriority.Add(priority);
                     }
@@ -200,6 +200,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return objPriority;
@@ -275,11 +279,47 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                
             }
 
             return isUpdate;
         }
-               
+
+        public string ValidatePriority(string priorityName, int TenantID)
+        {
+
+            string Message = "";
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("Sp_ValidatePriorityExists", conn);
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                cmd.Parameters.AddWithValue("@priority_Name", priorityName);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                Message = Convert.ToString(cmd.ExecuteScalar());
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return Message;
+        }
+
         #endregion
     }
 }
