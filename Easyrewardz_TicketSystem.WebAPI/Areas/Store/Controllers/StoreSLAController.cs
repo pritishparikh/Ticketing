@@ -236,7 +236,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get SLA
         /// </summary>
-        /// <param name="SLAFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetStoreSLA")]
@@ -313,6 +312,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Bullk Upload Store SLA
         /// </summary>
+        /// <param name="SLAFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadStoreSLA")]
@@ -424,7 +424,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                                  ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store_SLA", SuccessFileUrl, ErrorFileUrl, SLAFor);
                 #endregion
 
-                StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                StatusCode = successfilesaved == true && errorfilesaved == false ?
+                    (int)EnumMaster.StatusCode.Success : successfilesaved == true && errorfilesaved == true ?
+                    (int)EnumMaster.StatusCode.RecordUploadedPartially : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;

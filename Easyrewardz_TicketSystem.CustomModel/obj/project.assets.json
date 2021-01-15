@@ -702,23 +702,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\rashmi.salaria\\.nuget\\packages\\": {},
+    "C:\\Users\\chetan.poojari\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj",
+      "projectUniqueName": "D:\\Ticketing Project\\Client_MultitenantHomeShopV2.0\\FinalAPIShopsterUAT-ForBuild\\HomeShopAPI\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj",
       "projectName": "Easyrewardz_TicketSystem.CustomModel",
-      "projectPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj",
-      "packagesPath": "C:\\Users\\rashmi.salaria\\.nuget\\packages\\",
-      "outputPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.CustomModel\\obj\\",
+      "projectPath": "D:\\Ticketing Project\\Client_MultitenantHomeShopV2.0\\FinalAPIShopsterUAT-ForBuild\\HomeShopAPI\\Easyrewardz_TicketSystem.CustomModel\\Easyrewardz_TicketSystem.CustomModel.csproj",
+      "packagesPath": "C:\\Users\\chetan.poojari\\.nuget\\packages\\",
+      "outputPath": "D:\\Ticketing Project\\Client_MultitenantHomeShopV2.0\\FinalAPIShopsterUAT-ForBuild\\HomeShopAPI\\Easyrewardz_TicketSystem.CustomModel\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\rashmi.salaria\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\chetan.poojari\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -731,8 +731,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
-              "projectPath": "D:\\Rashmi\\Projects\\Ticketing_API\\Ticketing-HomeShop-MultiTenant\\Ticketing\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
+            "D:\\Ticketing Project\\Client_MultitenantHomeShopV2.0\\FinalAPIShopsterUAT-ForBuild\\HomeShopAPI\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj": {
+              "projectPath": "D:\\Ticketing Project\\Client_MultitenantHomeShopV2.0\\FinalAPIShopsterUAT-ForBuild\\HomeShopAPI\\Easyrewardz_TicketSystem.Model\\Easyrewardz_TicketSystem.Model.csproj"
             }
           }
         }

@@ -11,10 +11,12 @@ namespace Easyrewardz_TicketSystem.Services
     {
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public BrandServices(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
         /// <summary>
         /// Get Brand List
@@ -43,11 +45,10 @@ namespace Easyrewardz_TicketSystem.Services
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         Brand brand = new Brand();
-                        brand.BrandID = Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
-                        brand.BrandName = Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
-                        brand.BrandCode = Convert.ToString(ds.Tables[0].Rows[i]["BrandCode"]);
-                        brand.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
+                        brand.BrandID = ds.Tables[0].Rows[i]["BrandID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
+                        brand.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                        brand.BrandCode = ds.Tables[0].Rows[i]["BrandCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandCode"]);
+                        brand.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);                   
 
                         brands.Add(brand);
                     }
@@ -62,6 +63,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -150,8 +155,9 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantId"></param>
         /// <returns></returns>
-        public List<Brand> BrandList(int TenantId)
+        public List<Brand> BrandList(int tenantId)
         {
+            DataSet ds = new DataSet();
             List<Brand> brands = new List<Brand>();
             MySqlCommand cmd = new MySqlCommand();
 
@@ -161,31 +167,26 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_BrandList", conn);
 
-                cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
+                cmd1.Parameters.AddWithValue("@Tenant_ID", tenantId);
                 cmd1.CommandType = CommandType.StoredProcedure;
 
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
-                DataTable dt = new DataTable();
-                 
-                da.Fill(dt);
-                if (dt != null && dt.Rows.Count > 0)
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
                 {
-                    for (int i = 0; i < dt.Rows.Count; i++)
-                    {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {                 
                         Brand brand = new Brand();
-                        brand.BrandID = Convert.ToInt32(dt.Rows[i]["BrandID"]);
-                        brand.TenantID = Convert.ToInt32(dt.Rows[i]["TenantID"]);
-                        brand.BrandName = Convert.ToString(dt.Rows[i]["BrandName"]);
-                        brand.BrandCode = Convert.ToString(dt.Rows[i]["BrandCode"]);
-                        brand.Created_By = Convert.ToString(dt.Rows[i]["Created_By"]);
-                        brand.CreatedDate = Convert.ToDateTime(dt.Rows[i]["CreatedDate"]);
-                        brand.CreatedDateFormat = brand.CreatedDate.ToString("dd/MMM/yyyy");
-                        brand.Modify_By = Convert.ToString(dt.Rows[i]["Modified_By"]);
-                        brand.ModifyDate = Convert.ToDateTime(dt.Rows[i]["ModifiedDate"]);
-                        brand.ModifyDateFormat = brand.ModifyDate.ToString("dd/MMM/yyyy");
-                        brand.Status = Convert.ToString(dt.Rows[i]["Status"]);
-
-
+                        brand.BrandID = ds.Tables[0].Rows[i]["BrandID"]== DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["BrandID"]);
+                        brand.TenantID = ds.Tables[0].Rows[i]["TenantID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
+                        brand.BrandName = ds.Tables[0].Rows[i]["BrandName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                        brand.BrandCode = ds.Tables[0].Rows[i]["BrandCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandCode"]);
+                        brand.Created_By = ds.Tables[0].Rows[i]["Created_By"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Created_By"]);                    
+                        brand.CreatedDateFormat = ds.Tables[0].Rows[i]["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
+                        brand.Modify_By = ds.Tables[0].Rows[i]["Modified_By"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Modified_By"]);                      
+                        brand.ModifyDateFormat = ds.Tables[0].Rows[i]["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]);
+                        brand.Status = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Status"]);
                         brands.Add(brand);
                     }
                 }
@@ -199,6 +200,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 

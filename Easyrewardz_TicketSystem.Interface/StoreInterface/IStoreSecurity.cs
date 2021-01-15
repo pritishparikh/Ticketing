@@ -1,6 +1,7 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
@@ -33,6 +34,30 @@ namespace Easyrewardz_TicketSystem.Interface
         /// <param name="User_Password"></param>
         /// <returns></returns>
         AccountModal AuthenticateUser(string Program_Code, string Domain_Name, string User_EmailID, string User_Password);
+
+        /// <summary>
+        /// Authenticate User 
+        /// </summary>
+        /// <param name="Program_Code"></param>
+        /// <param name="Domain_Name"></param>
+        /// <param name="User_EmailID"></param>
+        /// <param name="User_Password"></param>
+        ///  /// <param name="deviceSource"></param>
+        ///   /// <param name="FBId"></param>
+        ///    /// <param name="deviceID"></param>
+        /// <returns></returns>
+        AccountModal AuthenticateUser(string Program_Code, string Domain_Name, string User_EmailID, string User_Password, string deviceSource, string FBId, string deviceID);
+
+
+        /// <summary>
+        /// Update Mobile Details 
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="FBID"></param>
+        /// <param name="DeviceID"></param>
+        /// <returns></returns>
+        Task<int> UpdateMobileDetails(int TenantID, string FBID, string DeviceID);
+
 
         /// <summary>
         /// Logout 

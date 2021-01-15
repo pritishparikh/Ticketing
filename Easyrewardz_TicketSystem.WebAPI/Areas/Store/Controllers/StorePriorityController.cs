@@ -49,9 +49,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             try
             {
 
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StorePriorityCaller storePriorityCaller = new StorePriorityCaller();
 
@@ -94,9 +95,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 int result = storePriorityCaller.Addpriority(new StorePriorityService(connectionString), PriorityName, status, authenticate.TenantId, authenticate.UserMasterID);
                 statusCode =
                 result == 0 ?
@@ -132,9 +134,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 int result = storePriorityCaller.Updatepriority(new StorePriorityService(connectionString), PriorityID, PriorityName, status, authenticate.TenantId, authenticate.UserMasterID);
                 statusCode =
                 result == 0 ?
@@ -171,9 +174,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             try
             {
 
-                string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string _token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
                 int result = storePriorityCaller.Deletepriority(new StorePriorityService(connectionString), PriorityID, authenticate.TenantId, authenticate.UserMasterID);
                 statusCode =
                 result == 0 ?
@@ -208,9 +212,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 StorePriorityCaller storePriorityCaller = new StorePriorityCaller();
                 objPriority = storePriorityCaller.PriorityList(new StorePriorityService(connectionString), authenticate.TenantId);
 
@@ -250,9 +255,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StorePriorityCaller storePriorityCaller = new StorePriorityCaller();
                 bool iStatus = storePriorityCaller.UpdatePriorityOrder(new StorePriorityService(connectionString), authenticate.TenantId, selectedPriorityID, currentPriorityID);
@@ -293,9 +299,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                ///authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StorePriorityCaller storePriorityCaller = new StorePriorityCaller();
 

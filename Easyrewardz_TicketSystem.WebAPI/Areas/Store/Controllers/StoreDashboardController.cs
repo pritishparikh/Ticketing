@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -45,7 +46,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Stroe Dashboard Data
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="dasbhboardmodel"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetstoreDashboardList")]
@@ -90,14 +91,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Stroe Dashboard Data
         /// </summary>
-        /// <param name=StoreDashboardClaimModel></param>
+        /// <param name="ClaimSearchModel"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("getstoreDashboardListClaim")]
         public ResponseModel getstoreDashboardListClaim([FromBody] StoreDashboardClaimModel ClaimSearchModel)
         {
 
-            List<StoreDashboardClaimResponseModel> ClaimSearchResponse = new List<StoreDashboardClaimResponseModel>();
+            List<CustomClaimList> ClaimSearchResponse = new List<CustomClaimList>();
             ResponseModel objResponseModel = new ResponseModel();
             int StatusCode = 0;
             string statusMessage = "";
@@ -167,6 +168,124 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Get Store By TenantID 
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreByTenantID")]
+        public async Task<ResponseModel> GetStoreByTenantID()
+        {
 
+            List<GetStoreByTenantModel> lasGetStoreByTenantModel = new List<GetStoreByTenantModel>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreDashboardCaller dashBoardcaller = new StoreDashboardCaller();
+
+                lasGetStoreByTenantModel = await dashBoardcaller.GetStoreByTenantID(new StoreDashboardService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
+
+                statusCode = lasGetStoreByTenantModel.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = lasGetStoreByTenantModel;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// StoreUserProductivityReport
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UserProductivityReport")]
+        public async Task<ResponseModel> UserProductivityReport(ReportDataRequest reportDataRequest)
+        {
+
+            List<StoreUserProductivityReport> lstStoreUserProductivityReport = new List<StoreUserProductivityReport>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreDashboardCaller dashBoardcaller = new StoreDashboardCaller();
+
+                lstStoreUserProductivityReport = await dashBoardcaller.StoreUserProductivityReport(new StoreDashboardService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, reportDataRequest);
+
+                statusCode = lstStoreUserProductivityReport.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = lstStoreUserProductivityReport;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// StoreUserProductivityReport
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("StoreProductivityReport")]
+        public async Task<ResponseModel> StoreProductivityReport(ReportDataRequest reportDataRequest)
+        {
+
+            List<StoreProductivityReport> lstStoreProductivityReport = new List<StoreProductivityReport>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreDashboardCaller dashBoardcaller = new StoreDashboardCaller();
+
+                lstStoreProductivityReport = await dashBoardcaller.StoreProductivityReport(new StoreDashboardService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, reportDataRequest);
+
+                statusCode = lstStoreProductivityReport.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = lstStoreProductivityReport;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
     }
 }

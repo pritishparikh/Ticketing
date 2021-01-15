@@ -61,6 +61,8 @@ namespace Easyrewardz_TicketSystem.CustomModel
             [Description("Record Already Exists ")]
             RecordAlreadyExists = 1012,
 
+            [Description("Record Uploaded Partially")]
+            RecordUploadedPartially = 1013,
             #endregion
 
             #region HTTP Request/Response Code
@@ -91,6 +93,9 @@ namespace Easyrewardz_TicketSystem.CustomModel
 
             [Description("We had an error! Sorry about that.")]
             WehadanerrorSorryaboutthat = 404,
+
+            [Description("Process completed with some failed data..")]
+            Processcompletedwithsomefaileddata = 405,
 
             #endregion
 
@@ -372,7 +377,19 @@ namespace Easyrewardz_TicketSystem.CustomModel
             ///Chat 
             /// </summary>
             [Description("Chat")]
-            Chat = 4
+            Chat = 4,
+
+            /// <summary>
+            ///OrderTemplate 
+            /// </summary>
+            [Description("OrderTemplate")]
+            OrderTemplate = 5,
+
+            /// <summary>
+            ///Slot
+            /// </summary>
+            [Description("Slot")]
+            Slot = 6
         }
 
         public enum SavedSearch
@@ -414,5 +431,29 @@ namespace Easyrewardz_TicketSystem.CustomModel
         }
 
 
+        public enum DisplaySlotsFrom
+        {
+            /// <summary>
+            /// Current Slot
+            /// </summary>
+            [Description("Current Slot")]
+            New = 301,
+
+            /// <summary>
+            /// Skip Current Slot & Show Next Slot
+            /// </summary>
+            [Description("Skip Current Slot & Show Next Slot")]
+            InProgress = 302,
+
+            /// <summary>
+            /// Close
+            /// </summary>
+            [Description("Skip Current & Next Slot")]
+            Close = 303
         }
+    }
+
+
+
+        
 }

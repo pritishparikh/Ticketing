@@ -28,7 +28,6 @@ namespace Easyrewardz_TicketSystem.DBContext
             conn.ConnectionString = "server=192.168.11.19;userid=ticketing;password=Frv810FM#bBgI88;database=ticketing;";
         }
 
-        private MySqlHelper _connection;
         //userDetails _user = new userDetails();
         public string SaveRecord(string ProgramCode, string Domainname, string applicationid, string sessionid, string userId, string password, string newToken)
         {
@@ -47,7 +46,7 @@ namespace Easyrewardz_TicketSystem.DBContext
                 cmd1.Parameters.AddWithValue("@Password", password);
                 cmd1.ExecuteNonQuery();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (MySql.Data.MySqlClient.MySqlException)
             {
                 //Console.WriteLine("Error " + ex.Number + " has occurred: " + ex.Message);
             }
@@ -84,7 +83,7 @@ namespace Easyrewardz_TicketSystem.DBContext
                 }
                 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (MySql.Data.MySqlClient.MySqlException)
             {
             }
             finally

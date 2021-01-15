@@ -1,8 +1,9 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.CustomModel.StoreModal;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -95,11 +96,42 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         }
 
+
+
         public List<StoreCampaign> GetStoreCampaignCustomer(IStoreTask task, int TenantID, int UserID)
         {
             _TaskRepository = task;
             return _TaskRepository.GetStoreCampaignCustomer(TenantID, UserID);
         }
+
+
+
+        public async Task<List<StoreCampaign>> GetStoreCampaignCustomerNew(IStoreTask task, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return await _TaskRepository.GetStoreCampaignCustomerNew(TenantID, UserID);
+        }
+
+        public List<StoreCampaign> GetStoreCampaignCustomerByStatus(IStoreTask task, string statusID,int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return _TaskRepository.GetStoreCampaignCustomerByStatus(statusID,TenantID, UserID);
+        }
+
+        public async Task<List<StoreCampaign>> FilterStoreCampaignCustomer(IStoreTask task, int CampaignTypeID, string statusID, string ResponseID, string FromDate, string ToDate, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return await _TaskRepository.FilterStoreCampaignCustomer( CampaignTypeID, statusID, ResponseID, FromDate, ToDate, TenantID, UserID);
+        }
+
+
+        public async Task<List<CampaignResponse>> GetCampaignResponseByStatus(IStoreTask task, string statusID)
+        {
+            _TaskRepository = task;
+            return await _TaskRepository.GetCampaignResponseByStatus(statusID);
+        }
+
+
         public CampaignStatusResponse GetCampaignStatusResponse(IStoreTask task, int TenantID, int UserID)
         {
             _TaskRepository = task;
@@ -110,6 +142,25 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _TaskRepository = task;
             return _TaskRepository.UpdateCampaignStatusResponse(objRequest, TenantID, UserID);
         }
+
+        public async Task<int> UpdateCampaignStatusResponseNew(IStoreTask task, StoreCampaignCustomerRequest objRequest, int TenantID, int UserID)
+        {
+            _TaskRepository = task;
+            return await  _TaskRepository.UpdateCampaignStatusResponseNew(objRequest, TenantID, UserID);
+        }
+
+        public async Task<int> AddStoreTaskCampaignComment(IStoreTask task, int TenantID, int UserID, int campaignCustomerID, string Comment)
+        {
+            _TaskRepository = task;
+            return await _TaskRepository.AddStoreTaskCampaignComment( TenantID,  UserID,  campaignCustomerID,  Comment);
+        }
+
+        public async Task<List<StoreTaskCampaignComments>>  GetStoreTaskCampaignComment(IStoreTask task, int TenantID, int campaignCustomerID)
+        {
+            _TaskRepository = task;
+            return await _TaskRepository.GetStoreTaskCampaignComment(TenantID,  campaignCustomerID);
+        }
+
         public int CloseCampaign(IStoreTask task, int CampaignTypeID, int IsClosed, int TenantID, int UserID)
         {
             _TaskRepository = task;
@@ -133,6 +184,24 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _TaskRepository = task;
             return _TaskRepository.GetTaskTicketData(taskMaster);
+        }
+
+        /// <summary>
+        /// Get Customer Popup Details List
+        /// </summary>
+        /// <param name="Campaign"></param>
+        /// <param name="mobileNumber"></param>
+        /// <param name="programCode"></param>
+        /// <param name="campaignID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <returns></returns>
+        public StoresCampaignDetailResponse GetStoreCustomerpopupDetailsList(IStoreTask Campaign, string mobileNumber, string programCode, int TenantID, int UserID, string ClientAPIURL)
+        {
+            _TaskRepository = Campaign;
+            return _TaskRepository.GetStoreCustomerpopupDetailsList(mobileNumber, programCode, TenantID, UserID, ClientAPIURL);
+
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Easyrewardz_TicketSystem.Services
         MySqlConnection conn = new MySqlConnection();
         private readonly string rootPath;
 
+        #region Constructor
         public StoreFileUploadService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
@@ -25,6 +26,22 @@ namespace Easyrewardz_TicketSystem.Services
             conn.ConnectionString = _connectionString;
             rootPath = RootPath;
         }
+        #endregion
+
+        /// <summary>
+        /// Create File Upload Log
+        /// </summary>
+        /// <param name="tenantid"></param>
+        /// <param name="filename"></param>
+        /// <param name="isuploaded"></param>
+        /// <param name="errorlogfilename"></param>
+        /// <param name="successlogfilename"></param>
+        /// <param name="createdby"></param>
+        /// <param name="filetype"></param>
+        /// <param name="succesFilepath"></param>
+        /// <param name="errorFilepath"></param>
+        /// <param name="fileuploadFor"></param>
+        /// <returns></returns>
         public int CreateFileUploadLog(int tenantid, string filename, bool isuploaded, string errorlogfilename, string successlogfilename, int createdby, string filetype, string succesFilepath, string errorFilepath, int fileuploadFor)
         {
             int count = 0;
@@ -69,6 +86,12 @@ namespace Easyrewardz_TicketSystem.Services
             return count;
         }
 
+        /// <summary>
+        /// Get File Upload Logs
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="fileuploadFor"></param>
+        /// <returns></returns>
         public List<FileUploadLogs> GetFileUploadLogs(int tenantId, int fileuploadFor)
         {
             List<FileUploadLogs> objFileUploadLogLst = new List<FileUploadLogs>();
@@ -94,45 +117,7 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        /*
-                       for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                       {
-
-                           string successFilePath = string.Empty;
-                           string errorFilePath = string.Empty;
-                           FileUploadLogs objFileUploadLogs = new FileUploadLogs();
-                           if (!string.IsNullOrEmpty(ds.Tables[0].Rows[i]["SucessFilePath"].ToString()))
-                           {
-
-                               string successFile = ds.Tables[0].Rows[i]["SucessFilePath"].ToString();
-                               int lastIndexOfBackSlash = successFile.LastIndexOf('\\');
-                               int secondLastIndex = lastIndexOfBackSlash > 0 ? successFile.LastIndexOf('\\', lastIndexOfBackSlash - 1) : -1;
-                               int thirdLastIndex = secondLastIndex > 0 ? successFile.LastIndexOf('\\', secondLastIndex - 1) : -1;
-                               successFilePath = rootUrl + successFile.Substring(thirdLastIndex, successFile.Length - thirdLastIndex);
-                           }
-                           if(!string.IsNullOrEmpty(ds.Tables[0].Rows[i]["ErrorFilePath"].ToString()))
-                           {
-                               string errorFile = ds.Tables[0].Rows[i]["ErrorFilePath"].ToString();
-                               int lastIndexOfBackSlashError = errorFile.LastIndexOf('\\');
-                               int secondLastIndexError = lastIndexOfBackSlashError > 0 ? errorFile.LastIndexOf('\\', lastIndexOfBackSlashError - 1) : -1;
-                               int thirdLastIndexError = secondLastIndexError > 0 ? errorFile.LastIndexOf('\\', secondLastIndexError - 1) : -1;
-                               errorFilePath = rootUrl + errorFile.Substring(thirdLastIndexError, errorFile.Length - thirdLastIndexError);
-                           }
-                           objFileUploadLogs.ErrorFilePath = errorFilePath;
-                           objFileUploadLogs.SuccessFilePath = successFilePath;
-                           objFileUploadLogs.FileUploadLogsID =Convert.ToInt32(ds.Tables[0].Rows[i]["FileUploadLogsID"]);
-                           objFileUploadLogs.FileType =Convert.ToString(ds.Tables[0].Rows[i]["FileType"]);
-                           objFileUploadLogs.FileName = Convert.ToString(ds.Tables[0].Rows[i]["FileName"]);
-                           objFileUploadLogs.Date = Convert.ToString(ds.Tables[0].Rows[i]["FileUploadDate"]);
-                           objFileUploadLogs.FileUploadStatus = Convert.ToString(ds.Tables[0].Rows[i]["FileUploadStatus"]);
-                           objFileUploadLogs.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                           objFileUploadLogs.CreatedDate = Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]);
-                           objFileUploadLogs.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["UpdatedBy"]);
-                           objFileUploadLogs.ModifiedDate = Convert.ToString(ds.Tables[0].Rows[i]["UpdatedDate"]);
-                           objFileUploadLogLst.Add(objFileUploadLogs);
-
-                       }
-                       */
+                       
                         objFileUploadLogLst = ds.Tables[0].AsEnumerable().Select(r => new FileUploadLogs()
                         {
                             FileUploadLogsID = Convert.ToInt32(r.Field<object>("FileUploadLogsID")),

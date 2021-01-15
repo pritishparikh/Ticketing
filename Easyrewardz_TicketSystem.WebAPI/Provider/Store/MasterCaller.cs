@@ -5,6 +5,7 @@ using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Model.StoreModal;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -114,10 +115,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #endregion
 
 
-        public List<StoreDepartmentModel> GetStoreDepartmentList(IStoreDepartment _department, int TenantID)
+        public async Task<List<StoreDepartmentModel>> GetStoreDepartmentList(IStoreDepartment _department, int TenantID,int UserID)
         {
             _IStoreDepartment = _department;
-            return _IStoreDepartment.GetStoreDepartmentList(TenantID);
+            return await _IStoreDepartment.GetStoreDepartmentList(TenantID, UserID);
         }
 
         #region Methods for Store User
@@ -135,6 +136,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _IMaster.GetStoreFunctionList(TenantID, UserID);
         }
         #endregion
+
+        public List<RegionZoneMaster> GetRegionlist(IMaster _ImasterInterface, int UserID)
+        {
+            _IMaster = _ImasterInterface;
+            return _IMaster.GetRegionlist(UserID);
+        }
 
     }
 }

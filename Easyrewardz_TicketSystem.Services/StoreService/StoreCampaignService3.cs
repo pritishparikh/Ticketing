@@ -4,7 +4,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -14,76 +14,57 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Campaign Setting List
         /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="ProgramCode"></param>
         /// <returns></returns>
-        public StoreCampaignModel3 GetStoreCampignSetting(int TenantId, int UserId, string ProgramCode)
+        public async Task<StoreCampaignModel3> GetStoreCampignSetting(int TenantId, int UserId, string ProgramCode)
         {
-            DataSet ds = new DataSet();
             List<StoreCampaignSettingModel> lstCampaignSetting = new List<StoreCampaignSettingModel>();
             StoreCampaignSettingTimer CampaignSettingTimer = new StoreCampaignSettingTimer();
             StoreCampaignModel3 campaignObj = new StoreCampaignModel3();
-
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSGetCampaignSettingList", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
-                cmd.Parameters.AddWithValue("@_tenantID", TenantId);
-                cmd.Parameters.AddWithValue("@UserID", UserId);
-                cmd.Parameters.AddWithValue("@_prgramCode", ProgramCode);
-           
-
-                MySqlDataAdapter da = new MySqlDataAdapter
-                {
-                    SelectCommand = cmd
-                };
-                da.Fill(ds);
-                //if (ds != null && ds.Tables[0] != null)
-                //{
-                    //for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    //{
-                    //    StoreCampaignSettingModel storecampaign = new StoreCampaignSettingModel()
-                    //    {
-                    //        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
-                    //        CampaignName = ds.Tables[0].Rows[i]["CampaignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignName"]),
-                    //        CampaignCode = ds.Tables[0].Rows[i]["CampaignCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignCode"]),
-                    //        Programcode = ds.Tables[0].Rows[i]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Programcode"]),
-                           
-                    //        SmsFlag = ds.Tables[0].Rows[i]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["SmsFlag"]),
-                    //        EmailFlag = ds.Tables[0].Rows[i]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["EmailFlag"]),
-                    //        MessengerFlag = ds.Tables[0].Rows[i]["MessengerFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["MessengerFlag"]),
-                    //        BotFlag = ds.Tables[0].Rows[i]["BotFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["BotFlag"]),  
-
-
-                    //    };
-                    //    lstCampaignSetting.Add(storecampaign);
-                    //}
-
-                
-                    //campaignObj.CampaignSetting = lstCampaignSetting;
-               // }
-
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    if (ds.Tables[0].Rows.Count > 0)
-                    {
-                        CampaignSettingTimer.ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID"]);
-                        CampaignSettingTimer.MaxClickAllowed = ds.Tables[0].Rows[0]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["MaxClickAllowed"]);
-                        CampaignSettingTimer.EnableClickAfterValue = ds.Tables[0].Rows[0]["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["EnableClickAfterValue"]);
-                        CampaignSettingTimer.EnableClickAfterDuration = ds.Tables[0].Rows[0]["EnableClickAfterDuration"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["EnableClickAfterDuration"]);
-                        CampaignSettingTimer.Programcode = ds.Tables[0].Rows[0]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Programcode"]);
-                        CampaignSettingTimer.SmsFlag = ds.Tables[0].Rows[0]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["SmsFlag"]);
-                        CampaignSettingTimer.EmailFlag = ds.Tables[0].Rows[0]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["EmailFlag"]);
-                        CampaignSettingTimer.MessengerFlag = ds.Tables[0].Rows[0]["MessengerFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["MessengerFlag"]);
-                        CampaignSettingTimer.BotFlag = ds.Tables[0].Rows[0]["BotFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["BotFlag"]);
-                        CampaignSettingTimer.ProviderName = ds.Tables[0].Rows[0]["ProviderName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ProviderName"]);
-                    }
-
-                    campaignObj.CampaignSettingTimer = CampaignSettingTimer;
+                    await conn.OpenAsync();
                 }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_HSGetCampaignSettingList", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@_tenantID", TenantId);
+                    cmd.Parameters.AddWithValue("@UserID", UserId);
+                    cmd.Parameters.AddWithValue("@_prgramCode", ProgramCode);
 
+                    using (var dr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (dr.Read())  
+                        {
+                            CampaignSettingTimer.ID = Convert.ToInt32(dr["ID"]);
+                            CampaignSettingTimer.MaxClickAllowed = dr["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(dr["MaxClickAllowed"]);
+                            CampaignSettingTimer.EnableClickAfterValue = dr["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt32(dr["EnableClickAfterValue"]);
+                            CampaignSettingTimer.EnableClickAfterDuration = dr["EnableClickAfterDuration"] == DBNull.Value ? string.Empty : Convert.ToString(dr["EnableClickAfterDuration"]);
+                            CampaignSettingTimer.Programcode = dr["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Programcode"]);
+                            CampaignSettingTimer.SmsFlag = dr["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["SmsFlag"]);
+                            CampaignSettingTimer.EmailFlag = dr["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["EmailFlag"]);
+                            CampaignSettingTimer.MessengerFlag = dr["MessengerFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["MessengerFlag"]);
+                            CampaignSettingTimer.BotFlag = dr["BotFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["BotFlag"]);
+                            CampaignSettingTimer.ProviderName = dr["ProviderName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ProviderName"]);
+                            CampaignSettingTimer.CampaignAutoAssigned = dr["CampaignAutoAssigned"] == DBNull.Value ? false : Convert.ToBoolean(dr["CampaignAutoAssigned"]);
+                            CampaignSettingTimer.RaiseTicketFlag = dr["RaiseTicketFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["RaiseTicketFlag"]);
+                            CampaignSettingTimer.AddCommentFlag = dr["AddCommentFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["AddCommentFlag"]);
+                            CampaignSettingTimer.ZoneFlag = dr["ZoneFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["ZoneFlag"]);
+                            CampaignSettingTimer.StoreFlag = dr["StoreFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["StoreFlag"]);
+                            CampaignSettingTimer.UserProductivityReport = dr["UserProductivityReportFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["UserProductivityReportFlag"]);
+                            CampaignSettingTimer.StoreProductivityReport = dr["StoreProductivityReportFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["StoreProductivityReportFlag"]);
 
+                        }
+                        campaignObj.CampaignSettingTimer = CampaignSettingTimer;
+                    }
+                }
             }
             catch (Exception)
 
@@ -97,10 +78,6 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
-                if (ds != null)
-                {
-                    ds.Dispose();
-                }
             }
             return campaignObj;
         }
@@ -110,24 +87,29 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="CampaignModel"></param>
         /// <returns></returns>
-        public int UpdateStoreCampaignSetting(StoreCampaignSettingModel CampaignModel)
+        public async Task<int> UpdateStoreCampaignSetting(StoreCampaignSettingModel CampaignModel)
         {
             int UpdateCount = 0;
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateHSCampaignSetting", conn);
-                cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@_ID", CampaignModel.ID);
-                cmd.Parameters.AddWithValue("@_CampaignName", string.IsNullOrEmpty(CampaignModel.CampaignName) ? "" : CampaignModel.CampaignName);
-                cmd.Parameters.AddWithValue("@_SmsFlag", Convert.ToInt16(CampaignModel.SmsFlag));
-                cmd.Parameters.AddWithValue("@_EmailFlag", Convert.ToInt16(CampaignModel.EmailFlag));
-                cmd.Parameters.AddWithValue("@_MessengerFlag", Convert.ToInt16(CampaignModel.MessengerFlag));
-                cmd.Parameters.AddWithValue("@_BotFlag", Convert.ToInt16(CampaignModel.BotFlag));
-               
-                cmd.CommandType = CommandType.StoredProcedure;
-                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_HSUpdateHSCampaignSetting", conn);
+                    cmd.Connection = conn;
+                    cmd.Parameters.AddWithValue("@_ID", CampaignModel.ID);
+                    cmd.Parameters.AddWithValue("@_CampaignName", string.IsNullOrEmpty(CampaignModel.CampaignName) ? "" : CampaignModel.CampaignName);
+                    cmd.Parameters.AddWithValue("@_SmsFlag", Convert.ToInt16(CampaignModel.SmsFlag));
+                    cmd.Parameters.AddWithValue("@_EmailFlag", Convert.ToInt16(CampaignModel.EmailFlag));
+                    cmd.Parameters.AddWithValue("@_MessengerFlag", Convert.ToInt16(CampaignModel.MessengerFlag));
+                    cmd.Parameters.AddWithValue("@_BotFlag", Convert.ToInt16(CampaignModel.BotFlag));
 
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    UpdateCount = Convert.ToInt32(await cmd.ExecuteNonQueryAsync());
+                }
             }
             catch (Exception)
             {
@@ -146,31 +128,45 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        /// Update Campaign Setting
+        ///  Update Campaign Max Click Timer
         /// </summary>
-        /// <param name="CampaignModel"></param>
+        /// <param name="storeCampaignSettingTimer"></param>
+        /// <param name="ModifiedBy"></param>
         /// <returns></returns>
-        public int UpdateCampaignMaxClickTimer(StoreCampaignSettingTimer storeCampaignSettingTimer, int ModifiedBy)
+        public async Task<int> UpdateCampaignMaxClickTimer(StoreCampaignSettingTimer storeCampaignSettingTimer, int ModifiedBy)
         {
             int UpdateCount = 0;
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateCampaignMaxClickTimer", conn);
-                cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@timerID", storeCampaignSettingTimer.ID);
-                cmd.Parameters.AddWithValue("@_MaxClickAllowed", storeCampaignSettingTimer.MaxClickAllowed);
-                cmd.Parameters.AddWithValue("@_EnableClickAfterValue", storeCampaignSettingTimer.EnableClickAfterValue);
-                cmd.Parameters.AddWithValue("@_EnableClickAfterDuration", storeCampaignSettingTimer.EnableClickAfterDuration);
-                cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
-                cmd.Parameters.AddWithValue("@_SmsFlag", Convert.ToInt16(storeCampaignSettingTimer.SmsFlag));
-                cmd.Parameters.AddWithValue("@_EmailFlag", Convert.ToInt16(storeCampaignSettingTimer.EmailFlag));
-                cmd.Parameters.AddWithValue("@_MessengerFlag", Convert.ToInt16(storeCampaignSettingTimer.MessengerFlag));
-                cmd.Parameters.AddWithValue("@_BotFlag", Convert.ToInt16(storeCampaignSettingTimer.BotFlag));
-                cmd.Parameters.AddWithValue("@_ProviderName", Convert.ToString(storeCampaignSettingTimer.ProviderName));
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_HSUpdateCampaignMaxClickTimer", conn);
+                    cmd.Connection = conn;
+                    cmd.Parameters.AddWithValue("@timerID", storeCampaignSettingTimer.ID);
+                    cmd.Parameters.AddWithValue("@_MaxClickAllowed", storeCampaignSettingTimer.MaxClickAllowed);
+                    cmd.Parameters.AddWithValue("@_EnableClickAfterValue", storeCampaignSettingTimer.EnableClickAfterValue);
+                    cmd.Parameters.AddWithValue("@_EnableClickAfterDuration", storeCampaignSettingTimer.EnableClickAfterDuration);
+                    cmd.Parameters.AddWithValue("@_ModifiedBy", ModifiedBy);
+                    cmd.Parameters.AddWithValue("@_SmsFlag", Convert.ToInt16(storeCampaignSettingTimer.SmsFlag));
+                    cmd.Parameters.AddWithValue("@_EmailFlag", Convert.ToInt16(storeCampaignSettingTimer.EmailFlag));
+                    cmd.Parameters.AddWithValue("@_MessengerFlag", Convert.ToInt16(storeCampaignSettingTimer.MessengerFlag));
+                    cmd.Parameters.AddWithValue("@_BotFlag", Convert.ToInt16(storeCampaignSettingTimer.BotFlag));
+                    cmd.Parameters.AddWithValue("@_ProviderName", Convert.ToString(storeCampaignSettingTimer.ProviderName));
+                    cmd.Parameters.AddWithValue("@_CampaignAutoAssigned", Convert.ToBoolean(storeCampaignSettingTimer.CampaignAutoAssigned));
+                    cmd.Parameters.AddWithValue("@_RaiseTicketFlag", Convert.ToBoolean(storeCampaignSettingTimer.RaiseTicketFlag));
+                    cmd.Parameters.AddWithValue("@_AddCommentFlag", Convert.ToBoolean(storeCampaignSettingTimer.AddCommentFlag));
+                    cmd.Parameters.AddWithValue("@_StoreFlag", Convert.ToBoolean(storeCampaignSettingTimer.StoreFlag));
+                    cmd.Parameters.AddWithValue("@_ZoneFlag", Convert.ToBoolean(storeCampaignSettingTimer.ZoneFlag));
+                    cmd.Parameters.AddWithValue("@_UserProductivityReport", Convert.ToBoolean(storeCampaignSettingTimer.UserProductivityReport));
+                    cmd.Parameters.AddWithValue("@_StoreProductivityReport", Convert.ToBoolean(storeCampaignSettingTimer.StoreProductivityReport));
 
-                cmd.CommandType = CommandType.StoredProcedure;
-                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    UpdateCount = Convert.ToInt32(await cmd.ExecuteNonQueryAsync());
+                }
 
             }
             catch (Exception)
@@ -195,42 +191,41 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="UserId"></param>
         /// <param name="ProgramCode"></param>
         /// <returns></returns>
-        public StoreBroadcastConfiguration GetBroadcastConfiguration(int tenantId, int userId, string programCode)
+        public async Task<StoreBroadcastConfiguration> GetBroadcastConfiguration(int tenantId, int userId, string programCode)
         {
-            DataSet ds = new DataSet();
             StoreBroadcastConfiguration storeBroadcastConfiguration = new StoreBroadcastConfiguration();
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSGetBroadcastConfigurationList", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
-                cmd.Parameters.AddWithValue("@_tenantID", tenantId);
-                cmd.Parameters.AddWithValue("@UserID", userId);
-                cmd.Parameters.AddWithValue("@_prgramCode", programCode);
-
-                MySqlDataAdapter da = new MySqlDataAdapter
+                    await conn.OpenAsync();
+                }
+                using (conn)
                 {
-                    SelectCommand = cmd
-                };
-                da.Fill(ds);
-
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    if (ds.Tables[0].Rows.Count > 0)
+                    MySqlCommand cmd = new MySqlCommand("SP_HSGetBroadcastConfigurationList", conn)
                     {
-                        storeBroadcastConfiguration.ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID"]);
-                        storeBroadcastConfiguration.MaxClickAllowed = ds.Tables[0].Rows[0]["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["MaxClickAllowed"]);
-                        storeBroadcastConfiguration.EnableClickAfterValue = ds.Tables[0].Rows[0]["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["EnableClickAfterValue"]);
-                        storeBroadcastConfiguration.EnableClickAfterDuration = ds.Tables[0].Rows[0]["EnableClickAfterDuration"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["EnableClickAfterDuration"]);
-                        storeBroadcastConfiguration.Programcode = ds.Tables[0].Rows[0]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Programcode"]);
-                        storeBroadcastConfiguration.SmsFlag = ds.Tables[0].Rows[0]["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["SmsFlag"]);
-                        storeBroadcastConfiguration.EmailFlag = ds.Tables[0].Rows[0]["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["EmailFlag"]);
-                        storeBroadcastConfiguration.WhatsappFlag = ds.Tables[0].Rows[0]["WhatsappFlag"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["WhatsappFlag"]);
-                        storeBroadcastConfiguration.ProviderName = ds.Tables[0].Rows[0]["ProviderName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["ProviderName"]);
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@_tenantID", tenantId);
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    cmd.Parameters.AddWithValue("@_prgramCode", programCode);
+                    using (var dr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (dr.Read())
+                        {
+                            storeBroadcastConfiguration.ID = Convert.ToInt32(dr["ID"]);
+                            storeBroadcastConfiguration.MaxClickAllowed = dr["MaxClickAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(dr["MaxClickAllowed"]);
+                            storeBroadcastConfiguration.EnableClickAfterValue = dr["EnableClickAfterValue"] == DBNull.Value ? 0 : Convert.ToInt32(dr["EnableClickAfterValue"]);
+                            storeBroadcastConfiguration.EnableClickAfterDuration = dr["EnableClickAfterDuration"] == DBNull.Value ? string.Empty : Convert.ToString(dr["EnableClickAfterDuration"]);
+                            storeBroadcastConfiguration.Programcode = dr["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Programcode"]);
+                            storeBroadcastConfiguration.SmsFlag = dr["SmsFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["SmsFlag"]);
+                            storeBroadcastConfiguration.EmailFlag = dr["EmailFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["EmailFlag"]);
+                            storeBroadcastConfiguration.WhatsappFlag = dr["WhatsappFlag"] == DBNull.Value ? false : Convert.ToBoolean(dr["WhatsappFlag"]);
+                            storeBroadcastConfiguration.ProviderName = dr["ProviderName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ProviderName"]);
+                        }
                     }
                 }
+
             }
             catch (Exception)
             {
@@ -241,55 +236,64 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
-                }
-                if (ds != null)
-                {
-                    ds.Dispose();
                 }
             }
             return storeBroadcastConfiguration;
         }
 
         /// <summary>
-        /// GetAppointmentConfiguration
+        /// Get Appointment Configuration
         /// </summary>
         /// <param name="TenantId"></param>
         /// <param name="UserId"></param>
         /// <param name="ProgramCode"></param>
         /// <returns></returns>
-        public StoreAppointmentConfiguration GetAppointmentConfiguration(int tenantId, int userId, string programCode)
+        public async Task<StoreAppointmentConfiguration> GetAppointmentConfiguration(int tenantId, int userId, string programCode)
         {
-            DataSet ds = new DataSet();
             StoreAppointmentConfiguration storeAppointmentConfiguration = new StoreAppointmentConfiguration();
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSGetAppointmentConfigurationList", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
-                cmd.Parameters.AddWithValue("@_tenantID", tenantId);
-                cmd.Parameters.AddWithValue("@UserID", userId);
-                cmd.Parameters.AddWithValue("@_prgramCode", programCode);
-
-                MySqlDataAdapter da = new MySqlDataAdapter
+                    await conn.OpenAsync();
+                }
+                using (conn)
                 {
-                    SelectCommand = cmd
-                };
-                da.Fill(ds);
-
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    if (ds.Tables[0].Rows.Count > 0)
+                    MySqlCommand cmd = new MySqlCommand("SP_HSGetAppointmentConfigurationList", conn)
                     {
-                        storeAppointmentConfiguration.ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID"]);
-                        storeAppointmentConfiguration.GenerateOTP = ds.Tables[0].Rows[0]["GenerateOTP"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["GenerateOTP"]);
-                        storeAppointmentConfiguration.CardQRcode = ds.Tables[0].Rows[0]["CardQRcode"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CardQRcode"]);
-                        storeAppointmentConfiguration.CardBarcode = ds.Tables[0].Rows[0]["CardBarcode"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["CardBarcode"]);
-                        storeAppointmentConfiguration.OnlyCard = ds.Tables[0].Rows[0]["OnlyCard"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[0]["OnlyCard"]);
-                        storeAppointmentConfiguration.Programcode = ds.Tables[0].Rows[0]["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[0]["Programcode"]);
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@_tenantID", tenantId);
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    cmd.Parameters.AddWithValue("@_prgramCode", programCode);
+
+                    using (var dr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (dr.Read())
+                        {
+                            storeAppointmentConfiguration.ID = Convert.ToInt32(dr["ID"]);
+                            storeAppointmentConfiguration.GenerateOTP = dr["GenerateOTP"] == DBNull.Value ? false : Convert.ToBoolean(dr["GenerateOTP"]);
+                            storeAppointmentConfiguration.CardQRcode = dr["CardQRcode"] == DBNull.Value ? false : Convert.ToBoolean(dr["CardQRcode"]);
+                            storeAppointmentConfiguration.CardBarcode = dr["CardBarcode"] == DBNull.Value ? false : Convert.ToBoolean(dr["CardBarcode"]);
+                            storeAppointmentConfiguration.OnlyCard = dr["OnlyCard"] == DBNull.Value ? false : Convert.ToBoolean(dr["OnlyCard"]);
+                            storeAppointmentConfiguration.ViaWhatsApp = dr["CommViaWhatsApp"] == DBNull.Value ? false : Convert.ToBoolean(dr["CommViaWhatsApp"]);
+                            storeAppointmentConfiguration.IsMsgWithin24Hrs = dr["MsgWithin24Hrs"] == DBNull.Value ? false : Convert.ToBoolean(dr["MsgWithin24Hrs"]);
+                            storeAppointmentConfiguration.MessageViaWhatsApp = dr["MessageViaWhatsApp"] == DBNull.Value ? string.Empty : Convert.ToString(dr["MessageViaWhatsApp"]);
+                            storeAppointmentConfiguration.ViaSMS = dr["CommViaSMS"] == DBNull.Value ? false : Convert.ToBoolean(dr["CommViaSMS"]);
+                            storeAppointmentConfiguration.MessageViaSMS = dr["MessageViaSMS"] == DBNull.Value ? string.Empty : Convert.ToString(dr["MessageViaSMS"]);
+                            storeAppointmentConfiguration.Programcode = dr["Programcode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Programcode"]);
+
+                            storeAppointmentConfiguration.RemindBeforeValue = dr["RemindBeforeValue"] == DBNull.Value ? 0 : Convert.ToInt32(dr["RemindBeforeValue"]);
+                            storeAppointmentConfiguration.RemindBeforeDuration = dr["RemindBeforeDuration"] == DBNull.Value ? string.Empty : Convert.ToString(dr["RemindBeforeDuration"]);
+                            storeAppointmentConfiguration.ReminderViaWhatsApp = dr["ReminderViaWhatsApp"] == DBNull.Value ? false : Convert.ToBoolean(dr["ReminderViaWhatsApp"]);
+                            storeAppointmentConfiguration.ReminderViaSMS = dr["ReminderViaSMS"] == DBNull.Value ? false : Convert.ToBoolean(dr["ReminderViaSMS"]);
+                            storeAppointmentConfiguration.ReminderMessageViaSMS = dr["ReminderMessageViaSMS"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ReminderMessageViaSMS"]);
+
+                        }
+
                     }
                 }
+
             }
             catch (Exception)
             {
@@ -300,10 +304,6 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
-                }
-                if (ds != null)
-                {
-                    ds.Dispose();
                 }
             }
             return storeAppointmentConfiguration;
@@ -315,29 +315,33 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="storeBroadcastConfiguration"></param>
         /// <param name="modifiedBy"></param>
         /// <returns></returns>
-        public int UpdateBroadcastConfiguration(StoreBroadcastConfiguration storeBroadcastConfiguration, int modifiedBy)
+        public async Task<int> UpdateBroadcastConfiguration(StoreBroadcastConfiguration storeBroadcastConfiguration, int modifiedBy)
         {
             int UpdateCount = 0;
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateBroadcastConfiguration", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    Connection = conn
-                };
-                cmd.Parameters.AddWithValue("@_ID", storeBroadcastConfiguration.ID);
-                cmd.Parameters.AddWithValue("@_MaxClickAllowed", storeBroadcastConfiguration.MaxClickAllowed);
-                cmd.Parameters.AddWithValue("@_EnableClickAfterValue", storeBroadcastConfiguration.EnableClickAfterValue);
-                cmd.Parameters.AddWithValue("@_EnableClickAfterDuration", storeBroadcastConfiguration.EnableClickAfterDuration);
-                cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
-                cmd.Parameters.AddWithValue("@_SmsFlag", Convert.ToInt16(storeBroadcastConfiguration.SmsFlag));
-                cmd.Parameters.AddWithValue("@_EmailFlag", Convert.ToInt16(storeBroadcastConfiguration.EmailFlag));
-                cmd.Parameters.AddWithValue("@_WhatsappFlag", Convert.ToInt16(storeBroadcastConfiguration.WhatsappFlag));
-                cmd.Parameters.AddWithValue("@_ProviderName", Convert.ToString(storeBroadcastConfiguration.ProviderName));
-
-                cmd.CommandType = CommandType.StoredProcedure;
-                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
-
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_HSUpdateBroadcastConfiguration", conn)
+                    {
+                        Connection = conn
+                    };
+                    cmd.Parameters.AddWithValue("@_ID", storeBroadcastConfiguration.ID);
+                    cmd.Parameters.AddWithValue("@_MaxClickAllowed", storeBroadcastConfiguration.MaxClickAllowed);
+                    cmd.Parameters.AddWithValue("@_EnableClickAfterValue", storeBroadcastConfiguration.EnableClickAfterValue);
+                    cmd.Parameters.AddWithValue("@_EnableClickAfterDuration", storeBroadcastConfiguration.EnableClickAfterDuration);
+                    cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
+                    cmd.Parameters.AddWithValue("@_SmsFlag", Convert.ToInt16(storeBroadcastConfiguration.SmsFlag));
+                    cmd.Parameters.AddWithValue("@_EmailFlag", Convert.ToInt16(storeBroadcastConfiguration.EmailFlag));
+                    cmd.Parameters.AddWithValue("@_WhatsappFlag", Convert.ToInt16(storeBroadcastConfiguration.WhatsappFlag));
+                    cmd.Parameters.AddWithValue("@_ProviderName", Convert.ToString(storeBroadcastConfiguration.ProviderName));
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    UpdateCount = Convert.ToInt32(await cmd.ExecuteNonQueryAsync());
+                }
             }
             catch (Exception)
             {
@@ -360,26 +364,44 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="storeAppointmentConfiguration"></param>
         /// <param name="modifiedBy"></param>
         /// <returns></returns>
-        public int UpdateAppointmentConfiguration(StoreAppointmentConfiguration storeAppointmentConfiguration, int modifiedBy)
+        public async Task<int> UpdateAppointmentConfiguration(StoreAppointmentConfiguration storeAppointmentConfiguration, int modifiedBy)
         {
             int UpdateCount = 0;
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSUpdateAppointmentConfiguration", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    Connection = conn
-                };
-                cmd.Parameters.AddWithValue("@_ID", storeAppointmentConfiguration.ID);
-                cmd.Parameters.AddWithValue("@_GenerateOTP", Convert.ToInt16(storeAppointmentConfiguration.GenerateOTP));
-                cmd.Parameters.AddWithValue("@_CardQRcode", Convert.ToInt16(storeAppointmentConfiguration.CardQRcode));
-                cmd.Parameters.AddWithValue("@_CardBarcode", Convert.ToInt16(storeAppointmentConfiguration.CardBarcode));
-                cmd.Parameters.AddWithValue("@_OnlyCard", Convert.ToInt16(storeAppointmentConfiguration.OnlyCard));
-                cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
-              
-                cmd.CommandType = CommandType.StoredProcedure;
-                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_HSUpdateAppointmentConfiguration", conn)
+                    {
+                        Connection = conn
+                    };
+                    cmd.Parameters.AddWithValue("@_ID", storeAppointmentConfiguration.ID);
+                    cmd.Parameters.AddWithValue("@_GenerateOTP", Convert.ToInt16(storeAppointmentConfiguration.GenerateOTP));
+                    cmd.Parameters.AddWithValue("@_CardQRcode", Convert.ToInt16(storeAppointmentConfiguration.CardQRcode));
+                    cmd.Parameters.AddWithValue("@_CardBarcode", Convert.ToInt16(storeAppointmentConfiguration.CardBarcode));
+                    cmd.Parameters.AddWithValue("@_OnlyCard", Convert.ToInt16(storeAppointmentConfiguration.OnlyCard));
+                    cmd.Parameters.AddWithValue("@_ViaWhatsApp", Convert.ToInt16(storeAppointmentConfiguration.ViaWhatsApp));
+                    cmd.Parameters.AddWithValue("@_ViaSMS", Convert.ToInt16(storeAppointmentConfiguration.ViaSMS));
+                    cmd.Parameters.AddWithValue("@_MsgWithin24Hrs", Convert.ToInt16(storeAppointmentConfiguration.IsMsgWithin24Hrs));
+                    cmd.Parameters.AddWithValue("@_MessageViaWhatsApp", storeAppointmentConfiguration.MessageViaWhatsApp);
+                    cmd.Parameters.AddWithValue("@_MessageViaSMS", storeAppointmentConfiguration.MessageViaSMS);
 
+                    cmd.Parameters.AddWithValue("@_RemindBeforeValue", Convert.ToInt32(storeAppointmentConfiguration.RemindBeforeValue));
+                    cmd.Parameters.AddWithValue("@_RemindBeforeDuration", storeAppointmentConfiguration.RemindBeforeDuration);
+                    cmd.Parameters.AddWithValue("@_ReminderViaWhatsApp", Convert.ToInt16(storeAppointmentConfiguration.ReminderViaWhatsApp));
+                    cmd.Parameters.AddWithValue("@_ReminderViaSMS", Convert.ToInt16(storeAppointmentConfiguration.ReminderViaSMS) );
+                    cmd.Parameters.AddWithValue("@_ReminderMessageViaSMS", storeAppointmentConfiguration.ReminderMessageViaSMS);
+                   
+
+                    cmd.Parameters.AddWithValue("@_ModifiedBy", modifiedBy);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    UpdateCount = Convert.ToInt32(await cmd.ExecuteScalarAsync());
+                }
             }
             catch (Exception)
             {
@@ -397,45 +419,40 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// GetLanguageDetails
+        /// Get Language Details
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>
         /// <param name="programCode"></param>
         /// <returns></returns>
-        public List<Languages> GetLanguageDetails(int tenantId, int userId, string programCode)
+        public async Task<List<Languages>> GetLanguageDetails(int tenantId, int userId, string programCode)
         {
-            DataSet ds = new DataSet();
             List<Languages> languageslist = new List<Languages>();
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSGetLanguageDetails", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
-                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_UserID", userId);
-                cmd.Parameters.AddWithValue("@_Programcode", programCode);
-
-                MySqlDataAdapter da = new MySqlDataAdapter
+                    await conn.OpenAsync();
+                }
+                using (conn)
                 {
-                    SelectCommand = cmd
-                };
-                da.Fill(ds);
-
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    if (ds.Tables[0].Rows.Count > 0)
+                    MySqlCommand cmd = new MySqlCommand("SP_HSGetLanguageDetails", conn)
                     {
-                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                    cmd.Parameters.AddWithValue("@_UserID", userId);
+                    cmd.Parameters.AddWithValue("@_Programcode", programCode);
+
+                    using (var dr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (dr.Read())
                         {
                             Languages languages = new Languages()
                             {
-                                ID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
-                                Language = ds.Tables[0].Rows[i]["Language"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Language"]),
-                                IsActive = ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]),
-                                
+                                ID = Convert.ToInt32(dr["ID"]),
+                                Language = dr["Language"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Language"]),
+                                IsActive = dr["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsActive"]),
                             };
                             languageslist.Add(languages);
                         }
@@ -452,40 +469,41 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
-                if (ds != null)
-                {
-                    ds.Dispose();
-                }
             }
             return languageslist;
         }
 
         /// <summary>
-        /// InsertLanguageDetails
+        /// Insert Language Details
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>
         /// <param name="programCode"></param>
         /// <param name="languageID"></param>
         /// <returns></returns>
-        public int InsertLanguageDetails(int tenantId, int userId, string programCode, int languageID)
+        public async Task<int> InsertLanguageDetails(int tenantId, int userId, string programCode, int languageID)
         {
             int UpdateCount = 0;
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSInsertLanguageDetails", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    Connection = conn
-                };
-                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_UserID", userId);
-                cmd.Parameters.AddWithValue("@_Programcode", programCode);
-                cmd.Parameters.AddWithValue("@_LanguageID", languageID);
-                
-                cmd.CommandType = CommandType.StoredProcedure;
-                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_HSInsertLanguageDetails", conn)
+                    {
+                        Connection = conn
+                    };
+                    cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                    cmd.Parameters.AddWithValue("@_UserID", userId);
+                    cmd.Parameters.AddWithValue("@_Programcode", programCode);
+                    cmd.Parameters.AddWithValue("@_LanguageID", languageID);
 
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    UpdateCount = Convert.ToInt32(await cmd.ExecuteScalarAsync());
+                }
             }
             catch (Exception)
             {
@@ -503,53 +521,51 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// GetSelectedLanguageDetails
+        /// Get Selected Language Details
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>
         /// <param name="programCode"></param>
         /// <returns></returns>
-        public List<SelectedLanguages> GetSelectedLanguageDetails(int tenantId, int userId, string programCode)
+        public async Task<List<SelectedLanguages>> GetSelectedLanguageDetails(int tenantId, int userId, string programCode)
         {
-            DataSet ds = new DataSet();
             List<SelectedLanguages> languageslist = new List<SelectedLanguages>();
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSGetListLanguageSelected", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
-                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_UserID", userId);
-                cmd.Parameters.AddWithValue("@_Programcode", programCode);
-
-                MySqlDataAdapter da = new MySqlDataAdapter
+                    await conn.OpenAsync();
+                }
+                using (conn)
                 {
-                    SelectCommand = cmd
-                };
-                da.Fill(ds);
-
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    if (ds.Tables[0].Rows.Count > 0)
+                    MySqlCommand cmd = new MySqlCommand("SP_HSGetListLanguageSelected", conn)
                     {
-                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                    cmd.Parameters.AddWithValue("@_UserID", userId);
+                    cmd.Parameters.AddWithValue("@_Programcode", programCode);
+
+                    using (var dr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (dr.Read())
                         {
                             SelectedLanguages languages = new SelectedLanguages()
                             {
-                                ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
-                                LanguageID = ds.Tables[0].Rows[i]["LanguageID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["LanguageID"]),
-                                CreatedOn = ds.Tables[0].Rows[i]["CreatedOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedOn"]),
-                                CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CreatedBy"]),
-                                Language = ds.Tables[0].Rows[i]["Language"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Language"]),
-                                IsActive = ds.Tables[0].Rows[i]["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]),
-                                CreaterName = ds.Tables[0].Rows[i]["CreaterName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreaterName"]),
+                                ID = dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"]),
+                                LanguageID = dr["LanguageID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["LanguageID"]),
+                                CreatedOn = dr["CreatedOn"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedOn"]),
+                                CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CreatedBy"]),
+                                Language = dr["Language"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Language"]),
+                                IsActive = dr["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsActive"]),
+                                CreaterName = dr["CreaterName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreaterName"]),
                             };
                             languageslist.Add(languages);
                         }
                     }
+
                 }
+
             }
             catch (Exception)
             {
@@ -561,40 +577,42 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
-                if (ds != null)
-                {
-                    ds.Dispose();
-                }
             }
             return languageslist;
         }
 
         /// <summary>
-        /// DeleteSelectedLanguage
+        /// Delete Selected Language
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>
         /// <param name="programCode"></param>
         /// <param name="SelectedLanguageID"></param>
         /// <returns></returns>
-        public int DeleteSelectedLanguage(int tenantId, int userId, string programCode, int selectedLanguageID)
+        public async Task<int> DeleteSelectedLanguage(int tenantId, int userId, string programCode, int selectedLanguageID, bool isActive)
         {
             int UpdateCount = 0;
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSDeleteSelectedLanguage", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    Connection = conn
-                };
-                cmd.Parameters.AddWithValue("@_TenantID", tenantId);
-                cmd.Parameters.AddWithValue("@_UserID", userId);
-                cmd.Parameters.AddWithValue("@_Programcode", programCode);
-                cmd.Parameters.AddWithValue("@_SelectedLanguageID", selectedLanguageID);
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_HSDeleteSelectedLanguage", conn)
+                    {
+                        Connection = conn
+                    };
+                    cmd.Parameters.AddWithValue("@_TenantID", tenantId);
+                    cmd.Parameters.AddWithValue("@_UserID", userId);
+                    cmd.Parameters.AddWithValue("@_Programcode", programCode);
+                    cmd.Parameters.AddWithValue("@_SelectedLanguageID", selectedLanguageID);
+                    cmd.Parameters.AddWithValue("@_IsActive", isActive);
 
-                cmd.CommandType = CommandType.StoredProcedure;
-                UpdateCount = Convert.ToInt32(cmd.ExecuteNonQuery());
-
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    UpdateCount = Convert.ToInt32(await cmd.ExecuteNonQueryAsync());
+                }
             }
             catch (Exception)
             {

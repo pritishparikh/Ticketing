@@ -4,6 +4,7 @@ using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Model.StoreModal;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,118 +17,203 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         public IAppointment _AppointmentRepository;
         #endregion
 
-        #region Customer wrapper method 
-        public List<AppointmentModel> GetAppointmentList(IAppointment appointment,int tenantID, int UserId ,string AppDate)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.GetAppointmentList(tenantID, UserId, AppDate);
-        }
+        #region Custom method
 
-        public List<CustomerCountDetail> GetCustomerInStore(IAppointment appointment, int tenantID, int UserId)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.GetCustomerInStore(tenantID, UserId);
-        }
-        public CustomCustomerInStore CustomerInStore(IAppointment appointment, int tenantID, int UserId,string programCode)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.CustomerInStore(tenantID, UserId, programCode);
-        }
-        public List<AppointmentModel> SearchAppointment(IAppointment appointment, int tenantID, int UserId, string searchText, string appointmentDate)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.SearchAppointment(tenantID, UserId, searchText, appointmentDate);
-        }
-        public int GenerateOTP(IAppointment appointment, int tenantID, int UserId, string mobileNumber )
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.GenerateOTP(tenantID, UserId, mobileNumber);
-        }
-
-        public int VarifyOTP(IAppointment appointment, int tenantID, int UserId, int otpID, string otp)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.VarifyOTP(tenantID, UserId, otpID, otp);
-        }
         /// <summary>
-        ///     
+        /// Get Appointment List
         /// </summary>
         /// <param name="appointment"></param>
         /// <param name="tenantID"></param>
+        /// <param name="UserId"></param>
+        /// <param name="AppDate"></param>
         /// <returns></returns>
-        public List<AppointmentCount> GetAppointmentCountList(IAppointment appointment, int tenantID, int UserId)
+        public async Task<List<AppointmentModel>> GetAppointmentList(IAppointment appointment,int tenantID, int UserId ,string AppDate)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.GetAppointmentCount(tenantID, UserId);
+            return await _AppointmentRepository.GetAppointmentList(tenantID, UserId, AppDate);
         }
 
-
-        public int updateAppoinment(IAppointment appointment, AppointmentCustomer appointmentCustomer, int TenantId)
+        /// <summary>
+        /// Get Appointment Count List
+        /// </summary>
+        /// <param name="appointment"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <returns></returns>
+        public List<AppointmentCount> GetAppointmentCountList(IAppointment appointment, int tenantID,string ProgramCode, int UserId)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.UpdateAppointmentStatus(appointmentCustomer, TenantId);
+            return _AppointmentRepository.GetAppointmentCount(tenantID, ProgramCode,UserId);
         }
 
-        public List<AppointmentDetails> CreateAppointment(IAppointment appointment, AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty)
+        /// <summary>
+        /// Update Appointment
+        /// </summary>
+        /// <param name="appointment"></param>
+        /// <param name="appointmentCustomer"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
+        public int UpdateAppointmentStatus(IAppointment appointment, AppointmentCustomer appointmentCustomer, int TenantID, string ProgramCode, int UserID)
         {
             _AppointmentRepository = appointment;
-
-            return _AppointmentRepository.CreateAppointment(appointmentMaster, IsSMS, IsLoyalty);
+            return _AppointmentRepository.UpdateAppointmentStatus(appointmentCustomer, TenantID, ProgramCode, UserID);
         }
 
-        public List<AppointmentDetails> CreateNonExistCustAppointment(IAppointment appointment, AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty)
+        /// <summary>
+        /// <summary>
+        /// Get Appointment Message Tags
+        /// </summary>
+        /// <returns></returns>
+        public List<AppointmentMessageTag> AppointmentMessageTags(IAppointment appointment)
         {
             _AppointmentRepository = appointment;
-
-            return _AppointmentRepository.CreateNonExistCustAppointment(appointmentMaster, IsSMS, IsLoyalty);
+            return _AppointmentRepository.AppointmentMessageTags();
         }
 
-        public int AppoinmentStatus(IAppointment appointment, CustomUpdateAppointment appointmentCustomer)
+        /// <summary>
+        /// Get Appointment Search List
+        /// </summary>
+        /// <param name="appointment"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="UserId"></param>
+        /// <param name="appointmentSearchRequest"></param>
+        /// <returns></returns>
+        public async Task<List<AppointmentModel>> GetAppointmentSearchList(IAppointment appointment, int tenantID, int UserId, AppointmentSearchRequest appointmentSearchRequest)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.UpdateAppointment(appointmentCustomer);
+            return await _AppointmentRepository.GetAppointmentSearchList(tenantID, UserId, appointmentSearchRequest);
         }
-
-        public int StartVisit(IAppointment appointment, CustomUpdateAppointment appointmentCustomer)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.StartVisit(appointmentCustomer);
-        }
-
-        public List<AlreadyScheduleDetail> GetTimeSlotDetail(IAppointment appointment, int userMasterID, int tenantID, string AppDate)
-        {
-            _AppointmentRepository = appointment;
-
-            return _AppointmentRepository.GetTimeSlotDetail(userMasterID, tenantID, AppDate);
-        }
-        public int ValidateMobileNo(IAppointment appointment, int tenantID, int UserId, string mobileNumber)
-        {
-            _AppointmentRepository = appointment;
-            return _AppointmentRepository.ValidateMobileNo(tenantID, UserId, mobileNumber);
-        }
-
 
         #region TimeSlotMaster CRUD
 
-        public int InsertUpdateTimeSlotMaster(IAppointment appointment, StoreTimeSlotInsertUpdate Slot)
+        /// <summary>
+        /// Insert Update Time Slot Setting
+        /// </summary>
+        /// <param name="appointment"></param>
+        /// <param name="Slot"></param>
+        /// <returns></returns>
+        public int InsertUpdateTimeSlotSetting(IAppointment appointment, StoreTimeSlotInsertUpdate Slot)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.InsertUpdateTimeSlotMaster(Slot);
+            return _AppointmentRepository.InsertUpdateTimeSlotSetting(Slot);
         }
 
-        public int DeleteTimeSlotMaster(IAppointment appointment, int SlotID, int TenantID)
+
+        /// <summary>
+        ///Update Time Slot Setting New
+        /// </summary>
+        /// <param name="appointment"></param>
+        /// <param name="Slot"></param>
+        /// <returns></returns>
+        public async Task<int> UpdateTimeSlotSettingNew(IAppointment appointment, StoreTimeSlotInsertUpdate Slot)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.DeleteTimeSlotMaster(SlotID, TenantID);
+            return await _AppointmentRepository.UpdateTimeSlotSettingNew(Slot);
         }
 
-        public List<StoreTimeSlotMasterModel> GetStoreTimeSlotMasterList(IAppointment appointment, int TenantID, string ProgramCode)
+        /// <summary>
+        /// Delete Time Slot Master
+        /// </summary>
+        /// <param name="appointment"></param>
+        /// <param name="SlotIDs"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <returns></returns>
+        public async Task<int> BulkDeleteTimeSlotMaster(IAppointment appointment, string SlotIDs, int TenantID, string ProgramCode)
         {
             _AppointmentRepository = appointment;
-            return _AppointmentRepository.StoreTimeSlotMasterList( TenantID,  ProgramCode);
+            return await _AppointmentRepository.BulkDeleteTimeSlotMaster(SlotIDs, TenantID,  ProgramCode);
         }
 
-        
+        /// <summary>
+        /// Delete Time Slot Master
+        /// </summary>
+        /// <param name="appointment"></param>
+        /// <param name="SlotID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <returns></returns>
+        public int DeleteTimeSlotMaster(IAppointment appointment, int SlotID, int TenantID, string ProgramCode)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.DeleteTimeSlotMaster(SlotID, TenantID, ProgramCode);
+        }
+
+
+        /// <summary>
+        /// Get Store Setting Time Slot
+        /// </summary>
+        /// <param name="appointment"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="SlotID"></param>
+        /// <param name="StoreID"></param>
+        /// <returns></returns>
+        public List<StoreTimeSlotSettingModel> GetStoreSettingTimeSlot(IAppointment appointment, int TenantID, string ProgramCode, int SlotID, int StoreID)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.GetStoreSettingTimeSlot(TenantID, ProgramCode, SlotID, StoreID);
+        }
+
+        /// <summary>
+        /// Get Store Setting Time Slot
+        /// </summary>
+        /// <param name="appointment"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="SlotID"></param>
+        /// <param name="StoreID"></param>
+        /// <returns></returns>
+        public async Task<List<StoreTimeSlotSettingModel>> GetStoreSettingTimeSlotNew(IAppointment appointment, int TenantID, string ProgramCode, int SlotID, string StoreID, string Opdays, int SlotTemplateID)
+        {
+            _AppointmentRepository = appointment;
+            return await _AppointmentRepository.GetStoreSettingTimeSlotNew(TenantID,  ProgramCode, SlotID,  StoreID,  Opdays,  SlotTemplateID); 
+        }
+
+
+        /// <summary>
+        /// Slot bulk upload
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="RoleFor"></param>
+        /// <param name="DataSetCSV"></param>
+        /// <returns></returns>
+        public List<string> BulkUploadSlot(IAppointment appointment, int TenantID, string ProgramCode, int CreatedBy, DataSet DataSetCSV)
+        {
+            _AppointmentRepository = appointment;
+            return _AppointmentRepository.BulkUploadSlot(TenantID, ProgramCode, CreatedBy, DataSetCSV);
+        }
+
+
+        /// <summary>
+        /// Slot bulk upload New
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="RoleFor"></param>
+        /// <param name="DataSetCSV"></param>
+        /// <returns></returns>
+        public async Task<List<string>> BulkUploadSlotNew(IAppointment appointment, int TenantID, string ProgramCode, int CreatedBy, DataSet DataSetCSV)
+        {
+            _AppointmentRepository = appointment;
+            return await _AppointmentRepository.BulkUploadSlotNew(TenantID, ProgramCode, CreatedBy, DataSetCSV);
+        }
+
+        /// <summary>
+        ///Update Time Slot Setting New
+        /// </summary>
+        /// <param name="appointment"></param>
+        /// <param name="Slot"></param>
+        /// <returns></returns>
+        public async Task<int> BulkUpdateSlots(IAppointment appointment, SlotsBulkUpdate Slots)
+        {
+            _AppointmentRepository = appointment;
+            return await _AppointmentRepository.BulkUpdateSlots(Slots);
+        }
+
         #endregion
 
         #endregion

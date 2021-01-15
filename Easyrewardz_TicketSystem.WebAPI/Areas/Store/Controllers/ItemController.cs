@@ -46,8 +46,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        ///Bulk Upload Item
+        /// Bulk Upload Item
         /// </summary>
+        /// <param name="ItemFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadItem")]
@@ -164,7 +165,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                                  ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store_Item", SuccessFileUrl, ErrorFileUrl, ItemFor);
                 #endregion
 
-                StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                StatusCode = successfilesaved == true && errorfilesaved == false ?
+                    (int)EnumMaster.StatusCode.Success : successfilesaved == true && errorfilesaved == true ?
+                    (int)EnumMaster.StatusCode.RecordUploadedPartially : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;

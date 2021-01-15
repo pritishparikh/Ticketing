@@ -24,10 +24,12 @@ namespace Easyrewardz_TicketSystem.Services
 
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public CategoryServices(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
         /// <summary>
         /// Get Category List
@@ -60,9 +62,7 @@ namespace Easyrewardz_TicketSystem.Services
                         Category category = new Category();
                         category.CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
                         category.CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
-                        category.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
-
+                        category.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);                       
                         categoryList.Add(category);
                     }
                 }
@@ -77,16 +77,21 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return categoryList;
         }
 
         /// <summary>
-        /// AddCategory
+        /// Add Category
         /// </summary>
         /// <param name="categoryName"></param>
         /// <param name="TenantID"></param>
         /// <param name="UserID"></param>
+        /// <param name="BrandID"></param>
         /// <returns></returns>
         public int AddCategory(string categoryName, int TenantID, int UserID, int BrandID)
         {
@@ -139,7 +144,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@Category_ID", CategoryID);
                 cmd1.Parameters.AddWithValue("@Tenant_ID", TenantId);
                 cmd1.CommandType = CommandType.StoredProcedure;
-                k = Convert.ToInt32(cmd1.ExecuteNonQuery());
+                k = Convert.ToInt32(cmd1.ExecuteScalar());
             }
             catch (Exception)
             {
@@ -454,6 +459,7 @@ namespace Easyrewardz_TicketSystem.Services
                         cmd.Parameters.AddWithValue("@_node", Xpath);
 
                         cmd.Parameters.AddWithValue("@Created_By", CreatedBy);
+                        cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                         cmd.CommandType = CommandType.StoredProcedure;
                         MySqlDataAdapter da = new MySqlDataAdapter();
                         da.SelectCommand = cmd;
@@ -463,11 +469,11 @@ namespace Easyrewardz_TicketSystem.Services
                         {
 
                             //for success file
-                            SuccessFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
+                            SuccessFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
                             csvLst.Add(SuccessFile);
 
                             //for error file
-                            ErrorFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
+                            ErrorFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
                             csvLst.Add(ErrorFile);
 
 
@@ -475,7 +481,7 @@ namespace Easyrewardz_TicketSystem.Services
                     }
 
                 }
-            }
+            }          
             catch (Exception)
             {
                 throw;
@@ -565,8 +571,7 @@ namespace Easyrewardz_TicketSystem.Services
                         Category category = new Category();
                         category.CategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["CategoryID"]);
                         category.CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
-                        category.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
+                        category.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);                     
 
                         categoryList.Add(category);
                     }

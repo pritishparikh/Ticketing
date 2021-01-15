@@ -23,5 +23,9 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public int Suggestion { get; set; }
 
         public int FreeText { get; set; }
+
+        public int Attachment { get; set; }
+
+       // public int GrammarlyCheck { get; set; }
     }
 }

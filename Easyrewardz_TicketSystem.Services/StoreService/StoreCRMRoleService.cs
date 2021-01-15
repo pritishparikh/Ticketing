@@ -254,8 +254,6 @@ namespace Easyrewardz_TicketSystem.Services
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
 
-                var test = ds.Tables.Count;
-
                 if (ds != null && ds.Tables != null)
                 {
                     if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
@@ -270,6 +268,8 @@ namespace Easyrewardz_TicketSystem.Services
                             CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
                             ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
                             ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
+                            StoreCode = r.Field<object>("StoreCode") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("StoreCode")),
+                            AgentName = r.Field<object>("AgentName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("AgentName")).TrimEnd(),
                         }).FirstOrDefault();
 
                     }
@@ -286,8 +286,8 @@ namespace Easyrewardz_TicketSystem.Services
                                     ModuleID = Convert.ToInt32(r.Field<object>("ModuleID")),
                                     ModuleName = r.Field<object>("ModuleName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ModuleName")),
                                     Modulestatus = r.Field<object>("ModuleStatus") == System.DBNull.Value ? false : Convert.ToBoolean(Convert.ToInt16(r.Field<object>("ModuleStatus"))),
-
-                                }).OrderBy(x => x.ModuleID).ToList();
+                                    ModulePriority = r.Field<object>("ModulePriority") == System.DBNull.Value ? 0:  Convert.ToInt32(r.Field<object>("ModulePriority")),
+                                }).ToList();
 
                         }
                     }

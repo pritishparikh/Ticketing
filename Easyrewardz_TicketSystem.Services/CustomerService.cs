@@ -101,6 +101,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="searchText"></param>
         /// <param name="TenantId"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
         public List<CustomerMaster> getCustomerbyEmailIdandPhoneNo(string searchText, int TenantId, int UserID)
         {
@@ -227,6 +228,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@CustomerPhoneNumber", customerMaster.CustomerPhoneNumber);
                 cmd1.Parameters.AddWithValue("@CustomerEmailId", customerMaster.CustomerEmailId);
                 cmd1.Parameters.AddWithValue("@GenderID", customerMaster.GenderID);
+                cmd1.Parameters.AddWithValue("@dateOfBirth", customerMaster.DateOfBirth);
                 cmd1.Parameters.AddWithValue("@AltNumber", customerMaster.AltNumber);
                 cmd1.Parameters.AddWithValue("@AltEmailID", customerMaster.AltEmailID);
                 cmd1.Parameters.AddWithValue("@IsActive", customerMaster.IsActive);
@@ -289,6 +291,13 @@ namespace Easyrewardz_TicketSystem.Services
             return message;
         }
 
+        /// <summary>
+        /// Get Customer By API
+        /// </summary>
+        /// <param name="searchText"></param>
+        /// <param name="TenantId"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public List<CustomerMaster> GetCustomerByAPI(string searchText, int TenantId,int UserID)
         {
             List<CustomerMaster> customerMasters = new List<CustomerMaster>();
@@ -312,7 +321,8 @@ namespace Easyrewardz_TicketSystem.Services
 
                 if (!string.IsNullOrEmpty(apiResponse))
                 {
-                    ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+                    //ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+                    ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(JsonConvert.DeserializeObject<object>(apiResponse).ToString());
 
                     if (ApiResponse != null)
                     {

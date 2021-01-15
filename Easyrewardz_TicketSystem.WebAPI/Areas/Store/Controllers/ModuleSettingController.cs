@@ -366,6 +366,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
+        /// <summary>
+        /// Bulk Upload Campaign
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadCampaign")]
         public ResponseModel BulkUploadCampaign()

@@ -82,7 +82,14 @@ namespace Easyrewardz_TicketSystem.Model
         /// BotFlag
         /// </summary>
         public bool BotFlag { get; set; }
-
+        /// <summary>
+        /// IsCustomerChating
+        /// </summary>
+        public bool IsCustomerChating { get; set; }
+        /// <summary>
+        /// CustomerChatingID
+        /// </summary>
+        public int CustomerChatingID { get; set; }
         /// <summary>
         /// HSCampaignResponseList
         /// </summary>
@@ -91,16 +98,42 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class CampaingCustomerFilterRequest
     {
+        /// <summary>
+        /// Campaign Script ID
+        /// </summary>
         public int CampaignScriptID { get; set; }
+
+        /// <summary>
+        /// Page No
+        /// </summary>
         public int PageNo { get; set; }
+
+        /// <summary>
+        /// Page Size
+        /// </summary>
         public int PageSize { get; set; }
+
+        /// <summary>
+        /// Filter Status
+        /// </summary>
         public string FilterStatus { get; set; } = "All";
+
+        /// <summary>
+        /// Mobile Number
+        /// </summary>
         public string MobileNumber { get; set; } = "";
     }
 
     public class CampaignCustomerDetails
     {
+        /// <summary>
+        /// Campaign Customer Model
+        /// </summary>
         public List<CampaignCustomerModel> CampaignCustomerModel { get; set; }
+
+        /// <summary>
+        /// Campaign Customer Count
+        /// </summary>
         public int CampaignCustomerCount { get; set; }
     }
 
@@ -235,6 +268,14 @@ namespace Easyrewardz_TicketSystem.Model
         /// TemplateName
         /// </summary>
         public List<string> AdditionalInfo { get; set; }
+        /// <summary>
+        /// language
+        /// </summary>
+        public string language { get; set; }
+        /// <summary>
+        /// whatsAppNumber
+        /// </summary>
+        public string whatsAppNumber { get; set; }
     }
 
     public class GetWhatsappMessageDetailsModal
@@ -279,7 +320,14 @@ namespace Easyrewardz_TicketSystem.Model
 
     public class BroadcastDetails
     {
+        /// <summary>
+        /// List of Campaign Execution Details Response
+        /// </summary>
         public List<CampaignExecutionDetailsResponse> CampaignExecutionDetailsResponse { get; set; }
+
+        /// <summary>
+        /// Broadcast Configuration Response
+        /// </summary>
         public BroadcastConfigurationResponse BroadcastConfigurationResponse { get; set; }
     }
 
@@ -357,5 +405,37 @@ namespace Easyrewardz_TicketSystem.Model
         /// HideWhatsapp
         /// </summary>
         public bool DisableWhatsapp { get; set; }
+    }
+
+    public class CampaingURLList
+    {
+        /// <summary>
+        /// Getwhatsappmessagedetails
+        /// </summary>
+        public string Getwhatsappmessagedetails { get; set; }
+        /// <summary>
+        /// Sendcampaign
+        /// </summary>
+        public string Sendcampaign { get; set; }
+        /// <summary>
+        /// Sendsms
+        /// </summary>
+        public string Sendsms { get; set; }
+        /// <summary>
+        /// GetUserATVDetails
+        /// </summary>
+        public string GetUserATVDetails { get; set; }
+        /// <summary>
+        /// GetKeyInsight
+        /// </summary>
+        public string GetKeyInsight { get; set; }
+        /// <summary>
+        /// GetLastTransactionDetails
+        /// </summary>
+        public string GetLastTransactionDetails { get; set; }
+        /// <summary>
+        /// MakeBellActive
+        /// </summary>
+        public string MakeBellActive { get; set; }
     }
 }

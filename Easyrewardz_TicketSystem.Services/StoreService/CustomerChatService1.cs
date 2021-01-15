@@ -8,6 +8,8 @@ using System.Data;
 using System.Text;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -15,13 +17,20 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region variable
         MySqlConnection conn = new MySqlConnection();
+        ChatbotBellHttpClientService APICall = null;
+
+        ILogger<object> _logger;
         #endregion
 
         #region Constructor
-        public CustomerChatService(string _connectionString)
+        public CustomerChatService(string _connectionString, ChatbotBellHttpClientService _APICall=null, ILogger<object> logger=null)
         {
             conn.ConnectionString = _connectionString;
+            APICall = _APICall;
+            _logger = logger;
         }
+
+      
         #endregion
 
         /// <summary>
@@ -29,19 +38,26 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="chatID"></param>
         /// <returns></returns>
-        public int MarkAsReadOnGoingChat(int chatID)
+        public async Task<int> MarkAsReadOnGoingChat(int chatID)
         {
             int success = 0;
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_MarkAsReadOnGoingChat", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    Connection = conn
-                };
-                cmd.Parameters.AddWithValue("@chat_ID", chatID);
-                cmd.CommandType = CommandType.StoredProcedure;
-                success = cmd.ExecuteNonQuery();
+                  await  conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_MarkAsReadOnGoingChat", conn)
+                    {
+                        Connection = conn
+                    };
+                    cmd.Parameters.AddWithValue("@chat_ID", chatID);
+                    cmd.CommandType = CommandType.StoredProcedure; 
+                    success =await cmd.ExecuteNonQueryAsync();
+                }
+                   
             }
             catch (Exception)
             {
@@ -63,46 +79,59 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="userMasterID"></param>
         /// <param name="tenantID"></param>
         /// <returns></returns>
-        public List<CustomerChatMaster> NewChat(int userMasterID, int tenantID)
+        public async Task<List<CustomerChatMaster>> NewChat(int userMasterID, int tenantID)
         {
-            DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
-            List<CustomerChatMaster> lstCustomerChatMaster = new List<CustomerChatMaster>();
-
+            DataTable schemaTable = new DataTable();
+            List<CustomerChatMaster> lstCustomerChatMaster = new List<CustomerChatMaster>(); 
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSNewChat", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
-                cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
-                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
-                MySqlDataAdapter da = new MySqlDataAdapter
-                {
-                    SelectCommand = cmd1
-                };
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        CustomerChatMaster customerChatMaster = new CustomerChatMaster();
-                        customerChatMaster.ChatID = Convert.ToInt32(ds.Tables[0].Rows[i]["CurrentChatID"]);
-                       // customerChatMaster.CustomerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerID"]);
-                        customerChatMaster.CumtomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
-                        customerChatMaster.MobileNo = ds.Tables[0].Rows[i]["CustomerNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerNumber"]);
-                        customerChatMaster.MessageCount = ds.Tables[0].Rows[i]["NewMessageCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NewMessageCount"]);
-                        customerChatMaster.TimeAgo = ds.Tables[0].Rows[i]["TimeAgo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TimeAgo"]);
-                        customerChatMaster.ProgramCode = ds.Tables[0].Rows[i]["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ProgramCode"]);
-                        lstCustomerChatMaster.Add(customerChatMaster);
-                    }
+                    await conn.OpenAsync();
                 }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_HSNewChat", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@userMaster_ID", userMasterID);
+                    cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (reader.HasRows)
+                        {
+                            schemaTable.Load(reader);
+                            foreach (DataRow dr in schemaTable.Rows)
+                            {
+                                CustomerChatMaster customerChatMaster = new CustomerChatMaster()
+                                {
+                                    ChatID = Convert.ToInt32(dr["CurrentChatID"]),
+                                    CustomerID = dr["CustomerID"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerID"]),
+                                    CumtomerName = dr["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerName"]),
+                                    MobileNo = dr["CustomerNumber"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerNumber"]),
+                                    MessageCount = dr["NewMessageCount"] == DBNull.Value ? 0 : Convert.ToInt32(dr["NewMessageCount"]),
+                                    TimeAgo = dr["TimeAgo"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TimeAgo"]),
+                                    ProgramCode = dr["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ProgramCode"]),
+                                    StoreManagerId = dr["StoreManagerId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreManagerId"]),
+                                    StoreManagerName = dr["StoreManagerName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreManagerName"]),
+                                    StoreID = dr["StoreID"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreID"]),
+                                    ChatSourceID = dr["SourceID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SourceID"]),
+                                    SourceName = dr["SourceName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SourceName"]),
+                                    SourceAbbr = dr["SourceAbbr"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SourceAbbr"]),
+                                    SourceIconUrl = dr["SourceIconUrl"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SourceIconUrl"]),
+                                    ChatSourceIsActive = dr["SourceIsActive"] == DBNull.Value ? false : Convert.ToBoolean(dr["SourceIsActive"]),
+                                };
+                                lstCustomerChatMaster.Add(customerChatMaster);
+                            }
+
+                        }
+                    }                  
+                }
+
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -110,6 +139,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (schemaTable != null)
+                {
+                    schemaTable.Dispose();
                 }
             }
             return lstCustomerChatMaster;
@@ -121,51 +154,65 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="tenantID"></param>
         /// <param name="userMasterID"></param>
         /// <returns></returns>
-        public List<CustomerChatMaster> OngoingChat(int userMasterID, int tenantID, string Search, int StoreManagerID)
+        public async Task<List<CustomerChatMaster>> OngoingChat(int userMasterID, int tenantID, string Search, int StoreManagerID)
         {
-            DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
+            DataTable schemaTable = new DataTable();
             List<CustomerChatMaster> lstCustomerChatMaster = new List<CustomerChatMaster>();
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSOngoingChat", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
-                cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
-                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
-                cmd1.Parameters.AddWithValue("@search", string.IsNullOrEmpty(Search)? "": Search);
-                cmd1.Parameters.AddWithValue("@StoreMgr_ID", StoreManagerID);
-                
-                MySqlDataAdapter da = new MySqlDataAdapter
-                {
-                    SelectCommand = cmd1
-                };
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        CustomerChatMaster customerChatMaster = new CustomerChatMaster();
-                        customerChatMaster.ChatID = Convert.ToInt32(ds.Tables[0].Rows[i]["CurrentChatID"]);
-                        customerChatMaster.CustomerID = ds.Tables[0].Rows[i]["CustomerID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerID"]);
-                        customerChatMaster.CumtomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
-                        customerChatMaster.MobileNo = ds.Tables[0].Rows[i]["CustomerNumber"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerNumber"]);
-                        customerChatMaster.MessageCount= ds.Tables[0].Rows[i]["NewMessageCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["NewMessageCount"]);
-                        customerChatMaster.TimeAgo = ds.Tables[0].Rows[i]["TimeAgo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TimeAgo"]);
-                        customerChatMaster.ProgramCode = ds.Tables[0].Rows[i]["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ProgramCode"]);
-                        customerChatMaster.StoreID = ds.Tables[0].Rows[i]["StoreID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreID"]);
-                        customerChatMaster.StoreManagerId = ds.Tables[0].Rows[i]["StoreManagerId"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreManagerId"]);
-                        customerChatMaster.StoreManagerName= ds.Tables[0].Rows[i]["StoreManagerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreManagerName"]);
-                        lstCustomerChatMaster.Add(customerChatMaster);
-                    }
+                   await conn.OpenAsync();
                 }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_HSOngoingChat", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@userMaster_ID", userMasterID);
+                    cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                    cmd.Parameters.AddWithValue("@search", string.IsNullOrEmpty(Search) ? "" : Search);
+                    cmd.Parameters.AddWithValue("@StoreMgr_ID", StoreManagerID);
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (reader.HasRows)
+                        {
+                            schemaTable.Load(reader);
+                            foreach (DataRow dr in schemaTable.Rows)
+                            {
+                                CustomerChatMaster customerChatMaster = new CustomerChatMaster()
+                                {
+                                    ChatID = dr["CurrentChatID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CurrentChatID"]),
+                                    CustomerID = dr["CustomerID"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerID"]),
+                                    CumtomerName = dr["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerName"]),
+                                    MobileNo = dr["CustomerNumber"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerNumber"]),
+                                    MessageCount = dr["NewMessageCount"] == DBNull.Value ? 0 : Convert.ToInt32(dr["NewMessageCount"]),
+                                    TimeAgo = dr["TimeAgo"] == DBNull.Value ? string.Empty : Convert.ToString(dr["TimeAgo"]),
+                                    ProgramCode = dr["ProgramCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ProgramCode"]),
+                                    StoreID= dr["StoreID"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreID"]),
+                                    StoreManagerId = dr["StoreManagerId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StoreManagerId"]),
+                                    StoreManagerName = dr["StoreManagerName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreManagerName"]),
+                                    IsCustEndChat = dr["IsCustEndChat"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsCustEndChat"]),
+                                    IsCustTimeout = dr["IsCustTimeout"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsCustTimeout"]),
+                                    CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),
+                                    ChatSourceID = dr["SourceID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["SourceID"]),
+                                    SourceName = dr["SourceName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SourceName"]),
+                                    SourceAbbr = dr["SourceAbbr"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SourceAbbr"]),
+                                    SourceIconUrl = dr["SourceIconUrl"] == DBNull.Value ? string.Empty : Convert.ToString(dr["SourceIconUrl"]),
+                                    ChatSourceIsActive = dr["SourceIsActive"] == DBNull.Value ? false : Convert.ToBoolean(dr["SourceIsActive"]),
+                                };
+                                lstCustomerChatMaster.Add(customerChatMaster);
+                            }
+
+                        }
+                    }                 
+                }
+                   
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -173,6 +220,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (schemaTable != null)
+                {
+                    schemaTable.Dispose();
                 }
             }
             return lstCustomerChatMaster;
@@ -183,49 +234,54 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="AppointmentMaster"></param>
         /// <returns></returns>
-        public List<AppointmentDetails> ScheduleVisit(AppointmentMaster appointmentMaster)
+        public async Task<List<AppointmentDetails>> ScheduleVisit(AppointmentMaster appointmentMaster)
         {
-            int message;
-            DataSet ds = new DataSet();
+            DataTable schemaTable = new DataTable();
             List<AppointmentDetails> lstAppointmentDetails = new List<AppointmentDetails>();
-            try
+            try 
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_HSScheduleVisit", conn)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    Connection = conn
-                };
-                cmd.Parameters.AddWithValue("@Customer_ID", appointmentMaster.CustomerID);
-                cmd.Parameters.AddWithValue("@Appointment_Date", appointmentMaster.AppointmentDate); 
-                cmd.Parameters.AddWithValue("@Slot_ID", appointmentMaster.SlotID);
-                cmd.Parameters.AddWithValue("@Tenant_ID", appointmentMaster.TenantID);
-                cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
-                cmd.Parameters.AddWithValue("@NOof_People", appointmentMaster.NOofPeople);
-                cmd.Parameters.AddWithValue("@Mobile_No", appointmentMaster.MobileNo);
-                cmd.CommandType = CommandType.StoredProcedure;
-                //message = Convert.ToInt32(cmd.ExecuteScalar());
-                MySqlDataAdapter da = new MySqlDataAdapter
+                  await  conn.OpenAsync();
+                }
+                using (conn)
                 {
-                    SelectCommand = cmd
-                };
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    MySqlCommand cmd = new MySqlCommand("SP_HSScheduleVisit", conn)
                     {
-                        AppointmentDetails appointmentDetails = new AppointmentDetails();
-                        appointmentDetails.AppointmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["AppointmentID"]);
-                        appointmentDetails.CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
-                        appointmentDetails.MobileNo = ds.Tables[0].Rows[i]["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
-                        appointmentDetails.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        appointmentDetails.StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
-                        appointmentDetails.NoOfPeople = ds.Tables[0].Rows[i]["NOofPeople"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["NOofPeople"]);
+                        Connection = conn
+                    };
+                    cmd.Parameters.AddWithValue("@Customer_ID", appointmentMaster.CustomerID);
+                    cmd.Parameters.AddWithValue("@Appointment_Date", appointmentMaster.AppointmentDate);
+                    cmd.Parameters.AddWithValue("@Slot_ID", appointmentMaster.SlotID);
+                    cmd.Parameters.AddWithValue("@Tenant_ID", appointmentMaster.TenantID);
+                    cmd.Parameters.AddWithValue("@Created_By", appointmentMaster.CreatedBy);
+                    cmd.Parameters.AddWithValue("@NOof_People", appointmentMaster.NOofPeople);
+                    cmd.Parameters.AddWithValue("@Mobile_No", appointmentMaster.MobileNo);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (reader.HasRows)
+                        {
+                            schemaTable.Load(reader);
+                            foreach (DataRow dr in schemaTable.Rows)
+                            {
+                                AppointmentDetails appointmentDetails = new AppointmentDetails()
+                                {
+                                    AppointmentID = Convert.ToInt32(dr["AppointmentID"]),
+                                    CustomerName = dr["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerName"]),
+                                    CustomerMobileNo = dr["MobileNo"] == DBNull.Value ? string.Empty : Convert.ToString(dr["MobileNo"]),
+                                    StoreName = dr["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreName"]),
+                                    StoreAddress = dr["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreAddress"]),
+                                    NoOfPeople = dr["NOofPeople"] == DBNull.Value ? string.Empty : Convert.ToString(dr["NOofPeople"]),
+                                    StoreManagerMobile = dr["StoreManagerMobile"] == DBNull.Value ? string.Empty : Convert.ToString(dr["StoreManagerMobile"])
+                                };
+                                lstAppointmentDetails.Add(appointmentDetails);
+                            }
 
-                        lstAppointmentDetails.Add(appointmentDetails);
-                    }
+                        }
+                    }                
                 }
 
-                // int response = SendMessageToCustomer( /*ChatID*/0, appointmentMaster.MobileNo, appointmentMaster.ProgramCode, appointmentMaster.MessageToReply,/*ClientAPIURL*/"",appointmentMaster.CreatedBy);
             }
             catch (Exception)
             {
@@ -236,6 +292,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (schemaTable != null)
+                {
+                    schemaTable.Dispose();
                 }
             }
             return lstAppointmentDetails;
@@ -247,22 +307,28 @@ namespace Easyrewardz_TicketSystem.Services
         /// <param name="chatid"></param>
         /// <param name="tenantId"></param>
         /// <returns></returns>
-        public int UpdateCustomerChatIdStatus(int chatID, int tenantId)
+        public async Task<int> UpdateCustomerChatIdStatus(int chatID, int tenantId, int UserID)
         {
-
             int result = 0;
             try
             {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SP_UpdateCustomerChatStatus", conn);
-                cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@chat_id", chatID);
-                cmd.CommandType = CommandType.StoredProcedure;
-                result = Convert.ToInt32(cmd.ExecuteNonQuery());
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                   await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_UpdateCustomerChatStatus", conn);
+                    cmd.Connection = conn;
+                    cmd.Parameters.AddWithValue("@chat_id", chatID);
+                    cmd.Parameters.AddWithValue("@storemanager_Id", UserID);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    result = Convert.ToInt32( await cmd.ExecuteScalarAsync());
+                }
+                   
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -272,7 +338,6 @@ namespace Easyrewardz_TicketSystem.Services
                     conn.Close();
                 }
             }
-
             return result;
         }
 
@@ -281,35 +346,190 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="chatID"></param>
         /// <returns></returns>
-        public List<CustomerChatHistory> CustomerChatHistory(int chatID)
+        public async Task<List<CustomerChatHistory>> CustomerChatHistory(int chatID)
         {
-            DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
+            DataTable schemaTable = new DataTable();
             List<CustomerChatHistory> customerChatHistory = new List<CustomerChatHistory>();
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSCustomerChatHistory", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@chat_id", chatID);
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        CustomerChatHistory chatHistory = new CustomerChatHistory();
-                        chatHistory.ChatID = Convert.ToInt32(ds.Tables[0].Rows[i]["ChatID"]);
-                        chatHistory.CustomerName = ds.Tables[0].Rows[i]["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CustomerName"]);
-                        chatHistory.Time = ds.Tables[0].Rows[i]["Time"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Time"]);
-                        chatHistory.Message = ds.Tables[0].Rows[i]["Message"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
-                        customerChatHistory.Add(chatHistory);
-                    }
+                   await conn.OpenAsync();
                 }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_HSCustomerChatHistory", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@chat_id", chatID);
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (reader.HasRows)
+                        {
+                            schemaTable.Load(reader);
+                            foreach (DataRow dr in schemaTable.Rows)
+                            {
+                                CustomerChatHistory chatHistory = new CustomerChatHistory()
+                                {
+                                    ChatID = Convert.ToInt32(dr["ChatID"]),
+                                    CustomerName = dr["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CustomerName"]),
+                                    Time = dr["Time"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Time"]),
+                                    Message = dr["Message"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Message"])
+                                };
+                                customerChatHistory.Add(chatHistory);
+                            }
+
+                        }
+                    }                 
+                }
+             
             }
             catch (Exception ) 
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (schemaTable != null)
+                {
+                    schemaTable.Dispose();
+                }
+            }
+
+            return customerChatHistory;
+        }
+
+        /// <summary>
+        /// Get New Chat
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
+        public async Task<int> GetChatCount(int tenantID,int UserMasterID)
+        {
+            DataTable schemaTable = new DataTable();
+            int counts = 0;
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                   await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_HSCountTotalUnreadChat", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@tenant_ID", tenantID);
+                    cmd.Parameters.AddWithValue("@UserMaster_ID", UserMasterID);
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (reader.HasRows)
+                        {
+                            schemaTable.Load(reader);
+                            foreach (DataRow dr in schemaTable.Rows)
+                            {
+                                counts = dr["TotalUnreadChatCount"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TotalUnreadChatCount"]);
+                            }
+
+                        }
+                    }                
+                }
+                    
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (schemaTable != null)
+                {
+                    schemaTable.Dispose();
+                }
+            }
+            return counts;
+        }
+
+        /// <summary>
+        /// Get Time Slot
+        /// </summary>
+        /// <param name="userMasterID"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
+        public List<DateofSchedule> GetTimeSlot(int TenantID, string Programcode, int UserID)
+        {
+            DataSet ds = new DataSet();     
+            List<DateofSchedule> lstdateofSchedule = new List<DateofSchedule>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand("SP_HSGetTimeSlot", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@_TenantId", TenantID);
+                    cmd.Parameters.AddWithValue("@_ProgramCode", Programcode);
+                    cmd.Parameters.AddWithValue("@_UserID", UserID);
+
+                    MySqlDataAdapter da = new MySqlDataAdapter
+                    {
+                        SelectCommand = cmd
+                    };
+                    da.Fill(ds);
+                    if (ds != null && ds.Tables[0] != null)
+                    {
+                        if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                            {
+                                DateofSchedule dateofSchedule = new DateofSchedule();
+                                dateofSchedule.ID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
+                                dateofSchedule.Day = ds.Tables[0].Rows[i]["DayName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DayName"]);
+                                dateofSchedule.Dates = ds.Tables[0].Rows[i]["DateFormat"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DateFormat"]);
+                                dateofSchedule.MaxPeopleAllowed = ds.Tables[0].Rows[i]["MaxPeopleAllowed"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["MaxPeopleAllowed"]);
+                                if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                                {
+                                    dateofSchedule.AlreadyScheduleDetails = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<object>("AID")).Equals(dateofSchedule.ID))
+                                        .Select(x => new AlreadyScheduleDetail()
+                                        {
+                                            TimeSlotId = x.Field<object>("SlotId") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("SlotId")),
+                                            AppointmentDate = x.Field<object>("AppointmentDate") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("AppointmentDate")),
+                                            VisitedCount = x.Field<object>("VisitedCount") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("VisitedCount")),
+                                            MaxCapacity = x.Field<object>("MaxCapacity") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("MaxCapacity")),
+                                            Remaining = x.Field<object>("Remaining") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Remaining")),
+                                            TimeSlot = x.Field<object>("TimeSlot") == System.DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("TimeSlot")),
+                                            StoreId = x.Field<object>("StoreId") == System.DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("StoreId")),
+                                            IsDisabled = x.Field<object>("IsDisabled") == System.DBNull.Value ? false : Convert.ToBoolean(x.Field<object>("IsDisabled")),
+
+                                        }).ToList();
+                                }
+                                lstdateofSchedule.Add(dateofSchedule);
+                            }
+                        }
+
+
+                    }
+                }
+                   
+            }
+            catch (Exception)
             {
                 throw;
             }
@@ -323,162 +543,28 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     ds.Dispose();
                 }
-            }
-
-            return customerChatHistory;
-        }
-
-        /// <summary>
-        /// Get New Chat
-        /// </summary>
-        /// <param name=""></param>
-        /// <param name="tenantID"></param>
-        /// <returns></returns>
-        public int GetChatCount(int tenantID,int UserMasterID)
-        {
-            DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
-            int counts = 0;
-            try
-            {
-
-                conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSCountTotalUnreadChat", conn)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
-                cmd1.Parameters.AddWithValue("@UserMaster_ID", UserMasterID);
-                MySqlDataAdapter da = new MySqlDataAdapter
-                {
-                    SelectCommand = cmd1
-                };
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        counts= ds.Tables[0].Rows[i]["TotalUnreadChatCount"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TotalUnreadChatCount"]);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
-            }
-            return counts;
-        }
-
-        /// <summary>
-        /// GetTimeSlot
-        /// </summary>
-        /// <param name="userMasterID"></param>
-        /// <param name="tenantID"></param>
-        /// <param name="storeID"></param>
-        /// <returns></returns>
-        public List<DateofSchedule> GetTimeSlot(int storeID,int userMasterID, int tenantID)
-        {
-            DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();        
-            List<DateofSchedule> lstdateofSchedule = new List<DateofSchedule>();
-
-            try
-            {
-                conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_HSGetTimeSlot", conn)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-                cmd1.Parameters.AddWithValue("@userMaster_ID", userMasterID);
-                cmd1.Parameters.AddWithValue("@tenant_ID", tenantID);
-                //cmd1.Parameters.AddWithValue("@store_ID", storeID);
-                MySqlDataAdapter da = new MySqlDataAdapter
-                {
-                    SelectCommand = cmd1
-                };
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        DateofSchedule dateofSchedule = new DateofSchedule();
-                        dateofSchedule.Day = ds.Tables[0].Rows[i]["Today"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Today"]);
-                        dateofSchedule.Dates = ds.Tables[0].Rows[i]["Dates"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Dates"]);
-
-                        DataTable dataTable = new DataTable();
-
-                        if(i==0)
-                        {
-                            dataTable = ds.Tables[1];
-                        }
-                       else if (i == 1)
-                        {
-                            dataTable = ds.Tables[2];
-                        }
-                        else if (i == 2)
-                        {
-                            dataTable = ds.Tables[3];
-                        }
-
-                        List<AlreadyScheduleDetail> lstAlreadyScheduleDetail = new List<AlreadyScheduleDetail>();
-                        if (dataTable != null )
-                        {
-                            for (int j = 0; j < dataTable.Rows.Count; j++)
-                            {
-                                AlreadyScheduleDetail alreadyScheduleDetail = new AlreadyScheduleDetail();
-                                alreadyScheduleDetail.TimeSlotId= dataTable.Rows[j]["SlotId"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["SlotId"]);
-                                alreadyScheduleDetail.AppointmentDate= dataTable.Rows[j]["AppointmentDate"] == DBNull.Value ? string.Empty : Convert.ToString(dataTable.Rows[j]["AppointmentDate"]);
-                                alreadyScheduleDetail.VisitedCount = dataTable.Rows[j]["VisitedCount"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["VisitedCount"]);
-                                alreadyScheduleDetail.MaxCapacity = dataTable.Rows[j]["MaxCapacity"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["MaxCapacity"]);
-                                alreadyScheduleDetail.Remaining = dataTable.Rows[j]["Remaining"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["Remaining"]);
-                                alreadyScheduleDetail.TimeSlot = dataTable.Rows[j]["TimeSlot"] == DBNull.Value ? string.Empty: Convert.ToString(dataTable.Rows[j]["TimeSlot"]);
-                                alreadyScheduleDetail.StoreId = dataTable.Rows[j]["StoreId"] == DBNull.Value ? 0 : Convert.ToInt32(dataTable.Rows[j]["StoreId"]);
-                                lstAlreadyScheduleDetail.Add(alreadyScheduleDetail);
-                            }
-                            dateofSchedule.AlreadyScheduleDetails = lstAlreadyScheduleDetail;
-                        }
-                        lstdateofSchedule.Add(dateofSchedule);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
+                   
             }
             return lstdateofSchedule;
         }
 
+        /// <summary>
+        /// Send Message To Customer For Visit
+        /// </summary>
+        /// <param name="appointmentMaster"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <param name="CreatedBy"></param>
+        /// <returns></returns>
         public int SendMessageToCustomerForVisit(AppointmentMaster appointmentMaster, string ClientAPIURL, int CreatedBy)
         {
-            MySqlCommand cmd = new MySqlCommand();
             int resultCount = 0;
-            //CustomerChatModel ChatMessageDetails = new CustomerChatModel();
             ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
             string ClientAPIResponse = string.Empty;
-
             try
             {
-
                 string textToReply = "Dear" + appointmentMaster.CustomerName + ",Your Visit for Our Store is schedule On" + appointmentMaster.AppointmentDate +
                     "On Time Between"+ appointmentMaster.TimeSlot;
+
                 #region call client api for sending message to customer
 
                 SendTextRequest.To = appointmentMaster.MobileNo;
@@ -489,32 +575,13 @@ namespace Easyrewardz_TicketSystem.Services
 
                 ClientAPIResponse = CommonService.SendApiRequest(ClientAPIResponse + "api/ChatbotBell/SendText", JsonRequest);
 
-
-                // response binding pending as no response structure is provided yet from client------
-
-                //--------
-
                 #endregion
-
-                //if (ChatID > 0)
-                //{
-                //    ChatMessageDetails.ChatID = ChatID;
-                //    ChatMessageDetails.Message = Message;
-                //    ChatMessageDetails.ByCustomer = false;
-                //    ChatMessageDetails.ChatStatus = 1;
-                //    ChatMessageDetails.StoreManagerId = CreatedBy;
-                //    ChatMessageDetails.CreatedBy = CreatedBy;
-
-                //    resultCount = SaveChatMessages(ChatMessageDetails);
-
-                //}
-
+               
             }
             catch (Exception)
             {
                 throw;
             }
-
             return resultCount;
         }
     }

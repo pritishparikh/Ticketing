@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Model.StoreModal;
@@ -40,7 +41,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// </summary>
         [HttpPost]
         [Route("getStoreDepartmentList")]
-        public ResponseModel getStoreDepartmentList()
+        public async Task<ResponseModel> getStoreDepartmentList()
         {
             List<StoreDepartmentModel> objDepartmentList = new List<StoreDepartmentModel>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -54,7 +55,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 MasterCaller newMasterBrand = new MasterCaller();
 
-                objDepartmentList = newMasterBrand.GetStoreDepartmentList(new StoreDepartmentService(connectioSting), authenticate.TenantId);
+                objDepartmentList = await newMasterBrand.GetStoreDepartmentList(new StoreDepartmentService(connectioSting), authenticate.TenantId,authenticate.UserMasterID);
 
                 StatusCode =
                 objDepartmentList.Count == 0 ?
@@ -160,6 +161,54 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 throw;
             }
 
+            return objResponseModel;
+        }
+
+        /// <summary>
+        /// Get Region List
+        /// </summary>
+        /// <returns></returns>
+        [Route("getregionzonelist")]
+        public ResponseModel getRegionZoneList()
+        {
+            List<RegionZoneMaster> objRegionList = new List<RegionZoneMaster>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                MasterCaller _newMasterRegion = new MasterCaller();
+
+                objRegionList = _newMasterRegion.GetRegionlist(new MasterService(connectioSting), authenticate.UserMasterID);
+
+                if (objRegionList.Count > 0)
+                {
+                    foreach (var stores in objRegionList)
+                    {
+                        stores.ZoneName = stores.ZoneID > 0 ? CommonFunction.GetEnumDescription((EnumMaster.Zones)stores.ZoneID) : string.Empty;
+                    }
+
+                }
+
+                StatusCode =
+                objRegionList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objRegionList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
             return objResponseModel;
         }
     }

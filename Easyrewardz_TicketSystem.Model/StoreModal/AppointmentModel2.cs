@@ -8,7 +8,7 @@ namespace Easyrewardz_TicketSystem.Model
     public class StoreDetails
     {
         /// <summary>
-        /// StoreName
+        /// Store Name
         /// </summary>
         public string StoreName { get; set; }
         /// <summary>
@@ -16,7 +16,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// </summary>
         public string Address { get; set; }
         /// <summary>
-        /// StorePhoneNo
+        /// Store Phone No
         /// </summary>
         public string StorePhoneNo { get; set; }
     }

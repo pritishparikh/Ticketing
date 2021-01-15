@@ -1,18 +1,18 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Model;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
 using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Text.RegularExpressions;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -25,16 +25,63 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         private IConfiguration configuration;
         private readonly string _connectionString;
         private readonly string _radisCacheServerAddress;
-        private readonly string _ClientAPIUrl;
+        private static string _ClientAPIUrl;
+        private readonly string UploadFiles;
+        private readonly string rootPath;
+
+        #region API url variable declaration
+
+        private readonly string _getUserAtvDetails;
+        private readonly string _getKeyInsight;
+        private readonly string _getRecommendedList;
+        private readonly string _getLastTransactionDetails;
+        private readonly string _sendTextMessage;
+        private readonly string _sendImageMessage;
+        //private readonly string _sendImage;
+        //private readonly string _sendCtaImage;
+        //private readonly string _sendText;
+        private readonly string _sendSms;
+        private readonly string _makeBellActive;
+        private readonly string _getCustomerLastUpdatedTime;
+        private readonly string _searchItemDetails;
+        private readonly string _searchItemDetailsWB;
+        private readonly string _addOrderinPhygital; 
+        private readonly string _sendAttachment;
+        #endregion
+
+        private readonly ChatbotBellHttpClientService _chatbotBellHttpClientService;
+        private readonly ILogger<CustomerChatController> _logger;   
         #endregion
 
         #region Constructor
-        public CustomerChatController(IConfiguration  iConfig)
+        public CustomerChatController(IConfiguration  iConfig, ChatbotBellHttpClientService chatbotBellHttpClientService, ILogger<CustomerChatController> logger)
         {
             configuration = iConfig;
             _connectionString = configuration.GetValue<string>("ConnectionStrings:DataAccessMySqlProvider");
             _radisCacheServerAddress = configuration.GetValue<string>("radishCache");
             _ClientAPIUrl = configuration.GetValue<string>("ClientAPIURL");
+            UploadFiles = configuration.GetValue<string>("Uploadfiles");
+            rootPath = configuration.GetValue<string>("APIURL");
+           _chatbotBellHttpClientService = chatbotBellHttpClientService;
+            _logger = logger;
+
+            _getUserAtvDetails = configuration.GetValue<string>("ClientAPI:GetUserATVDetails");
+            _getKeyInsight = configuration.GetValue<string>("ClientAPI:GetKeyInsight");
+            _getRecommendedList = configuration.GetValue<string>("ClientAPI:GetRecommendedList");
+            _getLastTransactionDetails = configuration.GetValue<string>("ClientAPI:GetLastTransactionDetails");
+            _sendTextMessage = configuration.GetValue<string>("ClientAPI:SendTextMessage");
+            _sendImageMessage = configuration.GetValue<string>("ClientAPI:SendImageMessage");
+            //_sendImage = configuration.GetValue<string>("ClientAPI:SendImage");
+            //_sendCtaImage = configuration.GetValue<string>("ClientAPI:SendCtaImage");
+            //_sendText = configuration.GetValue<string>("ClientAPI:SendText");
+            _sendSms = configuration.GetValue<string>("ClientAPI:SendSMS");
+            _makeBellActive = configuration.GetValue<string>("ClientAPI:MakeBellActive");
+            _getCustomerLastUpdatedTime = configuration.GetValue<string>("ClientAPI:GetCustomerLastUpdatedTime");
+            _searchItemDetails = configuration.GetValue<string>("ClientAPI:SearchItemDetails");
+            _searchItemDetailsWB = configuration.GetValue<string>("ClientAPI:SearchItemDetailsWB");
+            _addOrderinPhygital = configuration.GetValue<string>("ClientAPI:AddOrderinPhygital");
+            _sendAttachment = configuration.GetValue<string>("ClientAPI:SendAttachment");
+
         }
         #endregion
 
@@ -42,11 +89,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Ongoing Chat
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="Search"></param>
+        /// <param name="StoreManagerID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetOngoingChat")]
-        public ResponseModel GetOngoingChat(string Search, int StoreManagerID)
+        public async Task<ResponseModel> GetOngoingChat(string Search, int StoreManagerID)
         {
             List<CustomerChatMaster> customerChatMaster = new List<CustomerChatMaster>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -60,11 +108,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                customerChatMaster = customerChatCaller.OngoingChat(new CustomerChatService(_connectionString), authenticate.UserMasterID, authenticate.TenantId, Search, StoreManagerID);
+                customerChatMaster =await customerChatCaller.OngoingChat(new CustomerChatService(_connectionString), authenticate.UserMasterID, authenticate.TenantId, Search, StoreManagerID);
 
-                statusCode =
-               customerChatMaster.Count == 0 ?
-                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode = customerChatMaster.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
@@ -88,7 +134,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetNewChat")]
-        public ResponseModel GetNewChat()
+        public async Task<ResponseModel> GetNewChat()
         {
             List<CustomerChatMaster> customerChatMaster = new List<CustomerChatMaster>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -102,7 +148,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                customerChatMaster = customerChatCaller.NewChat(new CustomerChatService(_connectionString), authenticate.UserMasterID, authenticate.TenantId);
+                customerChatMaster = await customerChatCaller.NewChat(new CustomerChatService(_connectionString), authenticate.UserMasterID, authenticate.TenantId);
 
                 statusCode =
                customerChatMaster.Count == 0 ?
@@ -130,7 +176,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]     
         [Route("MarkAsReadOnGoingChat")]
-        public ResponseModel ReadOnGoingMessage(int chatID)
+        public async Task<ResponseModel> ReadOnGoingMessage(int chatID)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
@@ -143,7 +189,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                int result = customerChatCaller.MarkAsReadMessage(new CustomerChatService(_connectionString), chatID);
+                int result =await customerChatCaller.MarkAsReadMessage(new CustomerChatService(_connectionString), chatID);
 
                 statusCode =
                result.Equals( 0) ?
@@ -165,13 +211,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// UpdateCustomerChatStatus
+        /// Update Customer Chat Status
         /// </summary>
         /// <param name="chatID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateCustomerChatStatus")]
-        public ResponseModel UpdateCustomerChatStatus(int chatID)
+        public async Task<ResponseModel> UpdateCustomerChatStatus(int chatID)
         {
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
@@ -184,7 +230,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                int result = customerChatCaller.UpdateCustomerChatIdStatus(new CustomerChatService(_connectionString), chatID, authenticate.TenantId);
+                int result =await customerChatCaller.UpdateCustomerChatIdStatus(new CustomerChatService(_connectionString), chatID, authenticate.TenantId,authenticate.UserMasterID);
 
                 statusCode =
                result == 0 ?
@@ -213,7 +259,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("ScheduleVisit")]
-        public ResponseModel ScheduleVisit([FromBody]AppointmentMaster appointmentMaster)
+        public async Task<ResponseModel> ScheduleVisit([FromBody]AppointmentMaster appointmentMaster)
         {
             ResponseModel objResponseModel = new ResponseModel();
             List<AppointmentDetails> appointmentDetails = new List<AppointmentDetails>();
@@ -229,7 +275,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 appointmentMaster.TenantID=authenticate.TenantId;
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                appointmentDetails = customerChatCaller.ScheduleVisit(new CustomerChatService(_connectionString), appointmentMaster);
+                appointmentDetails = await customerChatCaller.ScheduleVisit(new CustomerChatService(_connectionString), appointmentMaster);
 
                 statusCode =
               appointmentDetails.Count == 0 ?
@@ -251,13 +297,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// CustomerChatHistory
+        /// Customer Chat History
         /// </summary>
-        /// <param name="GetChatHistoryModel"></param>
+        /// <param name="chatHistory"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetCustomerChatHistory")]
-        public ResponseModel GetCustomerChatHistory([FromBody] GetChatHistoryModel chatHistory)
+        public async Task<ResponseModel> GetCustomerChatHistory([FromBody] GetChatHistoryModel chatHistory)
         {
             List<CustomerChatHistory> customerChatHistory = new List<CustomerChatHistory>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -271,7 +317,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                customerChatHistory = customerChatCaller.CustomerChatHistory(new CustomerChatService(_connectionString), chatHistory.ChatId);
+                customerChatHistory =await customerChatCaller.CustomerChatHistory(new CustomerChatService(_connectionString), chatHistory.ChatId);
 
                 //////////////////////////Paging//////////////////////
 
@@ -341,7 +387,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetChatNotificationCount")]
-        public ResponseModel GetChatNotificationCount()
+        public async Task<ResponseModel> GetChatNotificationCount()
         {
             ResponseModel objResponseModel = new ResponseModel();
             int statusCode = 0;
@@ -353,7 +399,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
-                int counts = customerChatCaller.GetChatCount(new CustomerChatService(_connectionString),authenticate.TenantId, authenticate.UserMasterID);
+                int counts =await customerChatCaller.GetChatCount(new CustomerChatService(_connectionString),authenticate.TenantId, authenticate.UserMasterID);
 
                 statusCode =
                counts== 0 ?
@@ -381,7 +427,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetTimeSlot")]
-        public ResponseModel GetTimeSlot(int storeID)
+        public ResponseModel GetTimeSlot()
         {
             List<DateofSchedule> dateOfSchedule = new List<DateofSchedule>();
             ResponseModel objResponseModel = new ResponseModel();
@@ -395,15 +441,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                dateOfSchedule = customerChatCaller.GetTimeSlot(new CustomerChatService(_connectionString), storeID, authenticate.UserMasterID, authenticate.TenantId);
+                dateOfSchedule = customerChatCaller.GetTimeSlot(new CustomerChatService(_connectionString), 
+                    authenticate.TenantId, authenticate.ProgramCode,authenticate.UserMasterID);
 
-                statusCode =
-               dateOfSchedule.Count == 0 ?
-                    (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusCode = dateOfSchedule.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
-
+               
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;
                 objResponseModel.Message = statusMessage;
@@ -417,33 +462,61 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// sendMessageToCustomerForScheduleVisit
+        /// send Message To Customer For Schedule Visit
         /// </summary>
-        /// <param name="ChatID"></param>
-        /// <param name="MobileNo"></param>
-        /// <param name="ProgramCode"></param>
-        /// <param name="Messsage"></param>
+        /// <param name="appointmentMaster"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("sendMessageToCustomerForScheduleVisit")]
-        public ResponseModel SendMessageToCustomerForScheduleVisit([FromBody]AppointmentMaster appointmentMaster)
+        public async Task<ResponseModel> SendMessageToCustomerForScheduleVisit([FromBody]AppointmentMaster appointmentMaster)
         {
             ResponseModel objResponseModel = new ResponseModel();
+
+            ClientCustomSendTextModel SendTextRequest = new ClientCustomSendTextModel();
             int result = 0;
             int statusCode = 0;
             string statusMessage = "";
+            string ClientAPIResponse = string.Empty;
+            string textToReply = string.Empty;
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
-                Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //Authenticate authenticate = new Authenticate();
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
 
-                CustomerChatCaller customerChatCaller = new CustomerChatCaller();
+                // CustomerChatCaller customerChatCaller = new CustomerChatCaller();
 
-                result = customerChatCaller.SendMessageToCustomerForVisit(new CustomerChatService(_connectionString), appointmentMaster, _ClientAPIUrl, authenticate.UserMasterID);
+                //  result = customerChatCaller.SendMessageToCustomerForVisit(new CustomerChatService(_connectionString), appointmentMaster, _ClientAPIUrl, authenticate.UserMasterID);
 
-                statusCode = result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+
+                #region call client api for sending message to customer
+
+                 textToReply = "Dear" + appointmentMaster.CustomerName + ",Your Visit for Our Store is schedule On" + appointmentMaster.AppointmentDate +
+                  "On Time Between" + appointmentMaster.TimeSlot;
+
+               // SendTextRequest.To = appointmentMaster.MobileNo.Length.Equals(12) ? appointmentMaster.MobileNo : "91"+ appointmentMaster.MobileNo;
+                SendTextRequest.To = appointmentMaster.MobileNo;
+                SendTextRequest.textToReply = textToReply;
+                SendTextRequest.programCode = appointmentMaster.ProgramCode;
+
+                string JsonRequest = JsonConvert.SerializeObject(SendTextRequest);
+
+                _ClientAPIUrl =  _ClientAPIUrl + _sendTextMessage;
+                ClientAPIResponse = await _chatbotBellHttpClientService.SendApiRequest(_ClientAPIUrl, JsonRequest);
+               // ClientAPIResponse =await _chatbotBellHttpClientService.SendApiRequest(_ClientAPIUrl + "api/ChatbotBell/SendText",JsonRequest);
+
+                #endregion
+
+                if (!string.IsNullOrEmpty(ClientAPIResponse))
+                {
+                    statusCode = ClientAPIResponse.ToLower().Equals("true") ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.InternalServerError;
+                }
+                else
+                {
+                    statusCode = (int)EnumMaster.StatusCode.InternalServerError; ;
+                }
+
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
 

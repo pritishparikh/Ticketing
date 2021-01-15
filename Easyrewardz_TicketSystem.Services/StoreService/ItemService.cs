@@ -24,10 +24,12 @@ namespace Easyrewardz_TicketSystem.Services
 
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public ItemService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
         /// <summary>
         /// Bulk Upload Item
@@ -152,6 +154,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return listItemMapping;

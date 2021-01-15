@@ -65,6 +65,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return listCategoryMapping;
         }
@@ -181,6 +185,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return categoryList;
@@ -442,6 +450,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return objIssueType;
         }
@@ -483,7 +495,7 @@ namespace Easyrewardz_TicketSystem.Services
                             IssueTypeName = Convert.ToString(ds.Tables[0].Rows[i]["IssueTypeName"]),
                             SubCategoryID = Convert.ToInt32(ds.Tables[0].Rows[i]["SubCategoryID"])
                         };
-                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
+                        
 
                         objIssueType.Add(issueType);
                     }
@@ -499,6 +511,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return objIssueType;

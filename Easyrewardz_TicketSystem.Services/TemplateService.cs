@@ -49,8 +49,7 @@ namespace Easyrewardz_TicketSystem.Services
                         Template template = new Template();
                         template.TenantID = Convert.ToInt32(ds.Tables[0].Rows[i]["TenantID"]);
                         template.TemplateID = Convert.ToInt32(ds.Tables[0].Rows[i]["TemplateID"]);
-                        template.TemplateName = Convert.ToString(ds.Tables[0].Rows[i]["TemplateName"]);
-                        //template.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
+                        template.TemplateName = Convert.ToString(ds.Tables[0].Rows[i]["TemplateName"]);                       
                         objtemplate.Add(template);
                     }
                 }

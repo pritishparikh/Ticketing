@@ -1,246 +1,40 @@
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Rashmi\Projects\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Kaustubh_bagwe\easyrewardz.com\Documents\Application\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\EMR-Ticketing\Easyrewardz_TicketSystem\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
-D:\Shlok Barot\Projects\Easy Rewardz\Ticketing Web Api\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.dll
-D:\Projects\E-Ticketing\Development\WebAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.xml
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.dll
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.xml
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Projects\API\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.dll
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.xml
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-E:\PROJECTS_NEW\EasyRewardsAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.dll
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.xml
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Ticketing Project\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.dll
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.xml
-D:\Ticketing Project\StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.dll
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.xml
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Rashmi\Projects\Ticketing-WebAPI\Ticketing_StoreBranch\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.dll
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.xml
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Ticketing\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.dll
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.xml
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Devesh\Devesh\Ticketing\Ticketings\HomeshopAPI\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.dll
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Newtonsoft.Json.xml
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
-D:\Rashmi\Projects\Ticketing_API\Ticketing-HomeShop-MultiTenant\Ticketing\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\ClientAPIServiceCall.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\ClientAPIServiceCall.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\Dev Clone\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.deps.json
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\ClientAPIServiceCall.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.DBContext.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Interface.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Model.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\ClientAPIServiceCall.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\bin\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.CustomModel.pdb
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csprojAssemblyReference.cache
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CoreCompileInputs.cache
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfoInputs.cache
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.AssemblyInfo.cs
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.csproj.CopyComplete
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.dll
+D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.Services\obj\Debug\netcoreapp2.2\Easyrewardz_TicketSystem.Services.pdb

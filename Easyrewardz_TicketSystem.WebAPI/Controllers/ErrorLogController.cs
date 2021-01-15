@@ -13,6 +13,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
     [ApiController]
     public class ErrorLogController : ControllerBase
     {
+        /// <summary>
+        /// Return Exception
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("ReturnException")]
         public ResponseModel ReturnException()

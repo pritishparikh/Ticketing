@@ -85,5 +85,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// MessageToReply
         /// </summary>
         public string MessageToReply { get; set; }
+
+        public string Source { get; set; }
     }
 }

@@ -1,7 +1,9 @@
-﻿using Easyrewardz_TicketSystem.Interface;
+﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -29,7 +31,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <summary>
         ///get store Dashborad Details For Claim
         /// </summary>
-        public List<StoreDashboardClaimResponseModel> getStoreDashboardClaimList(IStoreDashboard DashBoard, StoreDashboardClaimModel ClaimSearchModel)
+        public List<CustomClaimList> getStoreDashboardClaimList(IStoreDashboard DashBoard, StoreDashboardClaimModel ClaimSearchModel)
         {
             _dashboard = DashBoard;
             return _dashboard.GetClaimDataForStoreDashboard(ClaimSearchModel);
@@ -40,6 +42,32 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             _dashboard = dashboard;
             return _dashboard.GetLogginAccountInfo(tenantID, UserId, ProfilePicPath);
 
+        }
+        /// <summary>
+        ///get store  By Tenant
+        /// </summary>
+        public async Task<List<GetStoreByTenantModel>> GetStoreByTenantID(IStoreDashboard DashBoard, int tenantID, int userID)
+        {
+            _dashboard = DashBoard;
+            return await _dashboard.GetStoreByTenantID(tenantID, userID);
+        }
+
+        /// <summary>
+        ///StoreUserProductivityReport
+        /// </summary>
+        public async Task<List<StoreUserProductivityReport>> StoreUserProductivityReport(IStoreDashboard DashBoard, int tenantID, int userID, ReportDataRequest reportDataRequest)
+        {
+            _dashboard = DashBoard;
+            return await _dashboard.StoreUserProductivityReport(tenantID, userID, reportDataRequest);
+        }
+
+        /// <summary>
+        ///StoreUserProductivityReport
+        /// </summary>
+        public async Task<List<StoreProductivityReport>> StoreProductivityReport(IStoreDashboard DashBoard, int tenantID, int userID, ReportDataRequest reportDataRequest)
+        {
+            _dashboard = DashBoard;
+            return await _dashboard.StoreProductivityReport(tenantID, userID, reportDataRequest);
         }
         #endregion
     }

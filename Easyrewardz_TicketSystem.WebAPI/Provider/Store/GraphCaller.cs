@@ -1,7 +1,9 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.CustomModel.StoreModal;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -24,6 +26,18 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _IGraph = _Graph;
             return _IGraph.GetGraphData(TenantID, UserID, GraphCountData);
+        }
+
+        public async Task<List<CampaignNameList>> GetCampaignNameList(IGraph _Graph, int TenantID, string ProgramCode)
+        {
+            _IGraph = _Graph;
+            return await _IGraph.GetCampaignNameList( TenantID,  ProgramCode);
+        }
+
+        public async Task<List<DashboardCampaignGraphModel>> DashboardCampaignGraph(IGraph _Graph, CampaignStatusGraphRequest CampaignGraphRequest)
+        {
+            _IGraph = _Graph;
+            return await _IGraph.DashboardCampaignGraph(CampaignGraphRequest);
         }
     }
 }

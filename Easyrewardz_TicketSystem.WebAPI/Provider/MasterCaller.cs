@@ -3,6 +3,7 @@ using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -250,10 +251,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         #region Department
 
         private IMasterInterface _ImasterDepartment;
-        public List<DepartmentMaster> GetDepartmentListDetails(IMasterInterface _department, int TenantID)
+        public async Task<List<DepartmentMaster>> GetDepartmentListDetails(IMasterInterface _department, int TenantID, int UserID)
         {
             _ImasterDepartment = _department;
-            return _ImasterDepartment.GetDepartmentList(TenantID);
+            return await _ImasterDepartment.GetDepartmentList(TenantID, UserID);
         }
 
         private IMasterInterface _ImasterFunctionbyDepartment;

@@ -1,0 +1,904 @@
+2020-11-02 21:22:53.5155 Info Message Template Auto Format enabled
+2020-11-02 21:22:53.8250 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-02 21:22:54.5691 Info Adding target FileTarget(Name=alldata)
+2020-11-02 21:22:54.6198 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-02 21:22:55.1373 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-02 21:40:46.9060 Info Message Template Auto Format enabled
+2020-11-02 21:40:47.0072 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-02 21:40:47.2621 Info Adding target FileTarget(Name=alldata)
+2020-11-02 21:40:47.2943 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-02 21:40:47.3973 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-02 21:42:05.7878 Info Message Template Auto Format enabled
+2020-11-02 21:42:05.9335 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-02 21:42:06.1085 Info Adding target FileTarget(Name=alldata)
+2020-11-02 21:42:06.1552 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-02 21:42:06.2983 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-02 21:43:17.6219 Info Message Template Auto Format enabled
+2020-11-02 21:43:17.7505 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-02 21:43:18.0285 Info Adding target FileTarget(Name=alldata)
+2020-11-02 21:43:18.1454 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-02 21:43:18.2527 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-02 21:43:49.4984 Info Message Template Auto Format enabled
+2020-11-02 21:43:49.5969 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-02 21:43:49.8530 Info Adding target FileTarget(Name=alldata)
+2020-11-02 21:43:49.8921 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-02 21:43:49.9912 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-06 11:31:47.9348 Info Message Template Auto Format enabled
+2020-11-06 11:31:48.1111 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-06 11:31:48.6232 Info Adding target FileTarget(Name=alldata)
+2020-11-06 11:31:48.7026 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-06 11:31:48.9339 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-06 11:40:39.2914 Info Message Template Auto Format enabled
+2020-11-06 11:40:39.3538 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-06 11:40:39.5705 Info Adding target FileTarget(Name=alldata)
+2020-11-06 11:40:39.5977 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-06 11:40:39.7697 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-06 12:23:00.9978 Info Message Template Auto Format enabled
+2020-11-06 12:23:01.0595 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-06 12:23:01.2785 Info Adding target FileTarget(Name=alldata)
+2020-11-06 12:23:01.3776 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-06 12:23:01.4924 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-06 13:03:49.6257 Info Message Template Auto Format enabled
+2020-11-06 13:03:49.7154 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-06 13:03:49.9384 Info Adding target FileTarget(Name=alldata)
+2020-11-06 13:03:49.9763 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-06 13:03:50.0830 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-06 13:06:21.6574 Info Message Template Auto Format enabled
+2020-11-06 13:06:21.7041 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-06 13:06:21.9127 Info Adding target FileTarget(Name=alldata)
+2020-11-06 13:06:21.9777 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-06 13:06:22.1442 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-06 13:14:13.9839 Info Message Template Auto Format enabled
+2020-11-06 13:14:14.0554 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-06 13:14:14.2792 Info Adding target FileTarget(Name=alldata)
+2020-11-06 13:14:14.4843 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-06 13:14:14.6326 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-06 13:24:30.2909 Info Message Template Auto Format enabled
+2020-11-06 13:24:30.3621 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-06 13:24:30.5868 Info Adding target FileTarget(Name=alldata)
+2020-11-06 13:24:30.6225 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-06 13:24:30.7550 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-06 13:26:29.0063 Info Message Template Auto Format enabled
+2020-11-06 13:26:29.0544 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-06 13:26:29.2722 Info Adding target FileTarget(Name=alldata)
+2020-11-06 13:26:29.3369 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-06 13:26:29.4531 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-09 20:08:11.0866 Info Message Template Auto Format enabled
+2020-11-09 20:08:11.5514 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-09 20:08:11.7982 Info Adding target FileTarget(Name=alldata)
+2020-11-09 20:08:11.8300 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-09 20:08:11.9752 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-09 20:11:21.9629 Info Message Template Auto Format enabled
+2020-11-09 20:11:22.0234 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-09 20:11:22.2482 Info Adding target FileTarget(Name=alldata)
+2020-11-09 20:11:22.3102 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-09 20:11:22.4327 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-09 20:13:54.1462 Info Message Template Auto Format enabled
+2020-11-09 20:13:54.3505 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-09 20:13:54.5369 Info Adding target FileTarget(Name=alldata)
+2020-11-09 20:13:54.5631 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-09 20:13:54.7060 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-09 20:30:34.4732 Info Message Template Auto Format enabled
+2020-11-09 20:30:34.6105 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-09 20:30:35.0012 Info Adding target FileTarget(Name=alldata)
+2020-11-09 20:30:35.0354 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-09 20:30:35.2015 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-09 22:02:46.7425 Info Message Template Auto Format enabled
+2020-11-09 22:02:47.1820 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-09 22:02:47.9450 Info Adding target FileTarget(Name=alldata)
+2020-11-09 22:02:48.0297 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-09 22:02:48.2597 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-09 22:56:45.7661 Info Message Template Auto Format enabled
+2020-11-09 22:56:45.8690 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-09 22:56:46.3394 Info Adding target FileTarget(Name=alldata)
+2020-11-09 22:56:46.4552 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-09 22:56:46.6143 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-09 22:58:26.8795 Info Message Template Auto Format enabled
+2020-11-09 22:58:26.9898 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-09 22:58:27.2154 Info Adding target FileTarget(Name=alldata)
+2020-11-09 22:58:27.2646 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-09 22:58:27.3647 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-10 16:59:52.0853 Info Message Template Auto Format enabled
+2020-11-10 16:59:52.2695 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-10 16:59:52.5981 Info Adding target FileTarget(Name=alldata)
+2020-11-10 16:59:52.6272 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-10 16:59:52.7599 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-10 17:02:04.1728 Info Message Template Auto Format enabled
+2020-11-10 17:02:04.2082 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-10 17:02:04.4012 Info Adding target FileTarget(Name=alldata)
+2020-11-10 17:02:04.4318 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-10 17:02:04.5360 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-10 17:15:14.0257 Info Message Template Auto Format enabled
+2020-11-10 17:15:14.0672 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-10 17:15:14.2187 Info Adding target FileTarget(Name=alldata)
+2020-11-10 17:15:14.3578 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-10 17:15:14.4673 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-10 19:17:53.3763 Info Message Template Auto Format enabled
+2020-11-10 19:17:53.4738 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-10 19:17:53.7103 Info Adding target FileTarget(Name=alldata)
+2020-11-10 19:17:53.7546 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-10 19:17:53.8973 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 12:25:29.9646 Info Message Template Auto Format enabled
+2020-11-12 12:25:30.1590 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 12:25:30.7032 Info Adding target FileTarget(Name=alldata)
+2020-11-12 12:25:30.8014 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 12:25:31.1530 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 12:27:22.9121 Info Message Template Auto Format enabled
+2020-11-12 12:27:23.0790 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 12:27:23.6638 Info Adding target FileTarget(Name=alldata)
+2020-11-12 12:27:23.7710 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 12:27:23.9970 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 12:32:42.6030 Info Message Template Auto Format enabled
+2020-11-12 12:32:42.7164 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 12:32:42.9351 Info Adding target FileTarget(Name=alldata)
+2020-11-12 12:32:43.3443 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 12:32:43.4690 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 12:35:51.7440 Info Message Template Auto Format enabled
+2020-11-12 12:35:51.8009 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 12:35:52.0214 Info Adding target FileTarget(Name=alldata)
+2020-11-12 12:35:52.0737 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 12:35:52.2145 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 12:38:12.6851 Info Message Template Auto Format enabled
+2020-11-12 12:38:12.7699 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 12:38:13.0438 Info Adding target FileTarget(Name=alldata)
+2020-11-12 12:38:13.1303 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 12:38:13.3118 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 13:04:51.1454 Info Message Template Auto Format enabled
+2020-11-12 13:04:51.2377 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 13:04:51.5662 Info Adding target FileTarget(Name=alldata)
+2020-11-12 13:04:51.5951 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 13:04:51.6897 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 13:07:52.0815 Info Message Template Auto Format enabled
+2020-11-12 13:07:52.1804 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 13:07:52.4071 Info Adding target FileTarget(Name=alldata)
+2020-11-12 13:07:52.4579 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 13:07:52.5736 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 13:09:14.7904 Info Message Template Auto Format enabled
+2020-11-12 13:09:14.9525 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 13:09:15.2429 Info Adding target FileTarget(Name=alldata)
+2020-11-12 13:09:15.2696 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 13:09:15.3424 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 13:13:14.2347 Info Message Template Auto Format enabled
+2020-11-12 13:13:14.2789 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 13:13:14.4750 Info Adding target FileTarget(Name=alldata)
+2020-11-12 13:13:14.5054 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 13:13:14.6070 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 13:14:03.3549 Info Message Template Auto Format enabled
+2020-11-12 13:14:03.4390 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 13:14:03.5922 Info Adding target FileTarget(Name=alldata)
+2020-11-12 13:14:03.6395 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 13:14:03.7338 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 13:19:50.6359 Info Message Template Auto Format enabled
+2020-11-12 13:19:50.6773 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 13:19:50.9703 Info Adding target FileTarget(Name=alldata)
+2020-11-12 13:19:50.9973 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 13:19:51.2440 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 13:22:59.2988 Info Message Template Auto Format enabled
+2020-11-12 13:22:59.4047 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 13:22:59.7344 Info Adding target FileTarget(Name=alldata)
+2020-11-12 13:22:59.7638 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 13:22:59.8633 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 13:27:05.1521 Info Message Template Auto Format enabled
+2020-11-12 13:27:05.2268 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 13:27:05.4001 Info Adding target FileTarget(Name=alldata)
+2020-11-12 13:27:05.4433 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 13:27:05.5534 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 13:30:51.3703 Info Message Template Auto Format enabled
+2020-11-12 13:30:51.4552 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 13:30:51.6783 Info Adding target FileTarget(Name=alldata)
+2020-11-12 13:30:51.7058 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 13:30:51.8451 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 13:33:58.8437 Info Message Template Auto Format enabled
+2020-11-12 13:33:59.0087 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 13:33:59.3529 Info Adding target FileTarget(Name=alldata)
+2020-11-12 13:33:59.4601 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 13:33:59.6446 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 17:17:17.4028 Info Message Template Auto Format enabled
+2020-11-12 17:17:17.5449 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 17:17:17.8530 Info Adding target FileTarget(Name=alldata)
+2020-11-12 17:17:17.8972 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 17:17:18.0048 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 17:28:05.4926 Info Message Template Auto Format enabled
+2020-11-12 17:28:05.5601 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 17:28:05.8159 Info Adding target FileTarget(Name=alldata)
+2020-11-12 17:28:05.8843 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 17:28:06.0409 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 17:48:51.8503 Info Message Template Auto Format enabled
+2020-11-12 17:48:51.9296 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 17:48:52.1511 Info Adding target FileTarget(Name=alldata)
+2020-11-12 17:48:52.2049 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 17:48:52.3196 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 21:40:29.3297 Info Message Template Auto Format enabled
+2020-11-12 21:40:29.7388 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 21:40:30.0406 Info Adding target FileTarget(Name=alldata)
+2020-11-12 21:40:30.1513 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 21:40:30.3520 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 21:41:19.5408 Info Message Template Auto Format enabled
+2020-11-12 21:41:19.6160 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 21:41:19.8682 Info Adding target FileTarget(Name=alldata)
+2020-11-12 21:41:19.9059 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 21:41:20.1084 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 21:47:17.2347 Info Message Template Auto Format enabled
+2020-11-12 21:47:17.2894 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 21:47:17.5656 Info Adding target FileTarget(Name=alldata)
+2020-11-12 21:47:17.6157 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 21:47:17.7789 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 21:51:43.0936 Info Message Template Auto Format enabled
+2020-11-12 21:51:43.1626 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 21:51:43.4441 Info Adding target FileTarget(Name=alldata)
+2020-11-12 21:51:43.4947 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 21:51:43.6404 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 22:03:18.0051 Info Message Template Auto Format enabled
+2020-11-12 22:03:18.0494 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 22:03:18.2912 Info Adding target FileTarget(Name=alldata)
+2020-11-12 22:03:18.3708 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 22:03:18.5018 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 22:10:31.7729 Info Message Template Auto Format enabled
+2020-11-12 22:10:31.8929 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 22:10:32.5395 Info Adding target FileTarget(Name=alldata)
+2020-11-12 22:10:32.6352 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 22:10:32.7702 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 22:11:38.7468 Info Message Template Auto Format enabled
+2020-11-12 22:11:38.8127 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 22:11:39.1427 Info Adding target FileTarget(Name=alldata)
+2020-11-12 22:11:39.1880 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 22:11:39.3202 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 22:12:59.5993 Info Message Template Auto Format enabled
+2020-11-12 22:12:59.6823 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 22:12:59.9411 Info Adding target FileTarget(Name=alldata)
+2020-11-12 22:12:59.9711 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 22:13:00.3081 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 22:17:01.9640 Info Message Template Auto Format enabled
+2020-11-12 22:17:02.0594 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 22:17:02.5965 Info Adding target FileTarget(Name=alldata)
+2020-11-12 22:17:02.6882 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 22:17:02.8206 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 22:21:45.7023 Info Message Template Auto Format enabled
+2020-11-12 22:21:45.7822 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 22:21:46.0621 Info Adding target FileTarget(Name=alldata)
+2020-11-12 22:21:46.1073 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 22:21:46.2479 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 22:24:13.3807 Info Message Template Auto Format enabled
+2020-11-12 22:24:13.4853 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 22:24:13.7940 Info Adding target FileTarget(Name=alldata)
+2020-11-12 22:24:13.8689 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 22:24:13.9624 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-12 22:33:46.2847 Info Message Template Auto Format enabled
+2020-11-12 22:33:46.3254 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-12 22:33:46.5362 Info Adding target FileTarget(Name=alldata)
+2020-11-12 22:33:46.6149 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-12 22:33:46.7451 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 00:14:27.5339 Info Message Template Auto Format enabled
+2020-11-13 00:14:27.7197 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 00:14:28.2115 Info Adding target FileTarget(Name=alldata)
+2020-11-13 00:14:28.2668 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 00:14:28.5108 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 00:22:10.9119 Info Message Template Auto Format enabled
+2020-11-13 00:22:11.5890 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 00:22:11.9377 Info Adding target FileTarget(Name=alldata)
+2020-11-13 00:22:12.0007 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 00:22:12.1791 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 00:23:37.6214 Info Message Template Auto Format enabled
+2020-11-13 00:23:37.7538 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 00:23:38.1395 Info Adding target FileTarget(Name=alldata)
+2020-11-13 00:23:38.4846 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 00:23:39.1238 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 13:06:58.1933 Info Message Template Auto Format enabled
+2020-11-13 13:06:58.4122 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 13:06:58.7966 Info Adding target FileTarget(Name=alldata)
+2020-11-13 13:06:58.9207 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 13:06:59.1661 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 14:37:54.3598 Info Message Template Auto Format enabled
+2020-11-13 14:37:54.4434 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 14:37:54.6258 Info Adding target FileTarget(Name=alldata)
+2020-11-13 14:37:54.6542 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 14:37:54.7559 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 14:45:48.9964 Info Message Template Auto Format enabled
+2020-11-13 14:45:49.0959 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 14:45:49.2766 Info Adding target FileTarget(Name=alldata)
+2020-11-13 14:45:49.3066 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 14:45:49.4060 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 14:52:27.8262 Info Message Template Auto Format enabled
+2020-11-13 14:52:27.9355 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 14:52:28.1189 Info Adding target FileTarget(Name=alldata)
+2020-11-13 14:52:28.1446 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 14:52:28.2335 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 16:51:30.2424 Info Message Template Auto Format enabled
+2020-11-13 16:51:30.3480 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 16:51:30.6996 Info Adding target FileTarget(Name=alldata)
+2020-11-13 16:51:30.7839 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 16:51:30.9040 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 16:53:09.1194 Info Message Template Auto Format enabled
+2020-11-13 16:53:09.1569 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 16:53:09.4022 Info Adding target FileTarget(Name=alldata)
+2020-11-13 16:53:09.5237 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 16:53:09.6851 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 16:54:04.4789 Info Message Template Auto Format enabled
+2020-11-13 16:54:04.5355 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 16:54:04.7255 Info Adding target FileTarget(Name=alldata)
+2020-11-13 16:54:04.7579 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 16:54:04.9237 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 16:54:45.7199 Info Message Template Auto Format enabled
+2020-11-13 16:54:45.7631 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 16:54:45.9718 Info Adding target FileTarget(Name=alldata)
+2020-11-13 16:54:46.0012 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 16:54:46.1752 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 17:02:57.6822 Info Message Template Auto Format enabled
+2020-11-13 17:02:57.7212 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 17:02:57.9522 Info Adding target FileTarget(Name=alldata)
+2020-11-13 17:02:57.9804 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 17:02:58.1031 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 17:10:00.8479 Info Message Template Auto Format enabled
+2020-11-13 17:10:00.9215 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 17:10:01.3675 Info Adding target FileTarget(Name=alldata)
+2020-11-13 17:10:01.5378 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 17:10:01.7049 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 17:13:09.3206 Info Message Template Auto Format enabled
+2020-11-13 17:13:09.3640 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 17:13:09.5762 Info Adding target FileTarget(Name=alldata)
+2020-11-13 17:13:09.6107 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 17:13:09.7413 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 21:04:16.8968 Info Message Template Auto Format enabled
+2020-11-13 21:04:16.9851 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 21:04:17.2263 Info Adding target FileTarget(Name=alldata)
+2020-11-13 21:04:17.2742 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 21:04:17.3761 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 21:10:38.1220 Info Message Template Auto Format enabled
+2020-11-13 21:10:38.1683 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 21:10:38.3361 Info Adding target FileTarget(Name=alldata)
+2020-11-13 21:10:38.3741 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 21:10:38.4882 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-13 21:19:36.4181 Info Message Template Auto Format enabled
+2020-11-13 21:19:36.4787 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-13 21:19:36.6767 Info Adding target FileTarget(Name=alldata)
+2020-11-13 21:19:36.7202 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-13 21:19:36.8513 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-17 19:47:19.0998 Info Message Template Auto Format enabled
+2020-11-17 19:47:19.2703 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-17 19:47:19.5506 Info Adding target FileTarget(Name=alldata)
+2020-11-17 19:47:19.6022 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-17 19:47:19.7704 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Ticketing Project\Client_MultitenantHomeShopV2.0\FinalAPIShopsterUAT-ForBuild\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-30 16:37:50.3967 Info Message Template Auto Format enabled
+2020-11-30 16:37:50.7907 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-30 16:37:51.5110 Info Adding target FileTarget(Name=alldata)
+2020-11-30 16:37:51.5598 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-30 16:37:51.7353 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-30 17:08:24.0101 Info Message Template Auto Format enabled
+2020-11-30 17:08:24.1400 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-30 17:08:24.3382 Info Adding target FileTarget(Name=alldata)
+2020-11-30 17:08:24.3698 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-30 17:08:24.4900 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-30 17:48:22.4149 Info Message Template Auto Format enabled
+2020-11-30 17:48:22.4487 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-30 17:48:22.6428 Info Adding target FileTarget(Name=alldata)
+2020-11-30 17:48:22.6887 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-30 17:48:22.7805 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=39, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-30 17:50:20.7668 Info Configuration file change detected! Reloading in 1000ms...
+2020-11-30 17:50:20.7835 Info Configuration file change detected! Reloading in 1000ms...
+2020-11-30 17:50:21.7962 Info Reloading configuration...
+2020-11-30 17:50:21.8449 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-11-30 17:50:21.8540 Info Message Template Auto Format enabled
+2020-11-30 17:50:21.8648 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-30 17:50:21.8648 Info Adding target FileTarget(Name=alldata)
+2020-11-30 17:50:21.8892 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-30 17:50:21.9024 Info Closing old configuration.
+2020-11-30 17:50:22.0445 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=37, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-30 17:50:37.7199 Info Message Template Auto Format enabled
+2020-11-30 17:50:37.8033 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-30 17:50:38.0130 Info Adding target FileTarget(Name=alldata)
+2020-11-30 17:50:38.0264 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-30 17:50:38.1504 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=37, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-30 17:52:11.8740 Info Configuration file change detected! Reloading in 1000ms...
+2020-11-30 17:52:11.8842 Info Configuration file change detected! Reloading in 1000ms...
+2020-11-30 17:52:12.9235 Info Reloading configuration...
+2020-11-30 17:52:12.9364 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-11-30 17:52:12.9547 Info Message Template Auto Format enabled
+2020-11-30 17:52:13.0015 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-30 17:52:13.0204 Info Adding target FileTarget(Name=alldata)
+2020-11-30 17:52:13.0338 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-30 17:52:13.0477 Info Closing old configuration.
+2020-11-30 17:52:13.1033 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-30 17:53:26.0235 Info Message Template Auto Format enabled
+2020-11-30 17:53:26.0592 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-30 17:53:26.2974 Info Adding target FileTarget(Name=alldata)
+2020-11-30 17:53:26.3550 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-30 17:53:26.4371 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-11-30 17:58:30.4603 Info Message Template Auto Format enabled
+2020-11-30 17:58:30.4875 Info Loading assembly: NLog.Web.AspNetCore
+2020-11-30 17:58:30.6540 Info Adding target FileTarget(Name=alldata)
+2020-11-30 17:58:30.6804 Info Adding target FileTarget(Name=otherFile-web)
+2020-11-30 17:58:30.7605 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-07 16:42:01.7733 Info Message Template Auto Format enabled
+2020-12-07 16:42:02.0029 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-07 16:42:02.2267 Info Adding target FileTarget(Name=alldata)
+2020-12-07 16:42:02.2703 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-07 16:42:02.4024 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-09 14:18:36.2209 Info Message Template Auto Format enabled
+2020-12-09 14:18:39.8233 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-09 14:18:40.4538 Info Adding target FileTarget(Name=alldata)
+2020-12-09 14:18:40.4833 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-09 14:18:40.7332 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 15:31:57.3606 Info Message Template Auto Format enabled
+2020-12-14 15:31:57.5003 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 15:31:57.6877 Info Adding target FileTarget(Name=alldata)
+2020-12-14 15:31:57.7441 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 15:31:57.9168 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 15:45:35.6751 Info Message Template Auto Format enabled
+2020-12-14 15:45:35.7084 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 15:45:35.8430 Info Adding target FileTarget(Name=alldata)
+2020-12-14 15:45:35.8647 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 15:45:35.9699 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 16:42:00.0744 Info Message Template Auto Format enabled
+2020-12-14 16:42:00.1211 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 16:42:00.4735 Info Adding target FileTarget(Name=alldata)
+2020-12-14 16:42:00.5361 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 16:42:00.6537 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 16:43:25.0836 Info Message Template Auto Format enabled
+2020-12-14 16:43:25.1199 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 16:43:25.3702 Info Adding target FileTarget(Name=alldata)
+2020-12-14 16:43:25.3983 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 16:43:25.5166 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 16:56:47.6672 Info Message Template Auto Format enabled
+2020-12-14 16:56:47.7493 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 16:56:48.0220 Info Adding target FileTarget(Name=alldata)
+2020-12-14 16:56:48.0571 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 16:56:48.2686 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 17:57:08.2835 Info Message Template Auto Format enabled
+2020-12-14 17:57:08.3312 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 17:57:08.5580 Info Adding target FileTarget(Name=alldata)
+2020-12-14 17:57:08.5787 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 17:57:08.6488 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 17:59:08.0818 Info Message Template Auto Format enabled
+2020-12-14 17:59:08.1387 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 17:59:08.7542 Info Adding target FileTarget(Name=alldata)
+2020-12-14 17:59:08.8162 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 17:59:08.9559 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 18:01:27.9876 Info Message Template Auto Format enabled
+2020-12-14 18:01:28.0253 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 18:01:28.2083 Info Adding target FileTarget(Name=alldata)
+2020-12-14 18:01:28.2332 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 18:01:28.3214 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 18:02:24.7072 Info Message Template Auto Format enabled
+2020-12-14 18:02:24.7732 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 18:02:24.9923 Info Adding target FileTarget(Name=alldata)
+2020-12-14 18:02:25.0116 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 18:02:25.0778 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 18:03:43.6248 Info Message Template Auto Format enabled
+2020-12-14 18:03:43.6468 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 18:03:43.7621 Info Adding target FileTarget(Name=alldata)
+2020-12-14 18:03:43.7783 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 18:03:43.8456 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:03:24.9924 Info Message Template Auto Format enabled
+2020-12-14 19:03:25.0626 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:03:25.1975 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:03:25.2166 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:03:25.3022 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:09:01.7495 Info Message Template Auto Format enabled
+2020-12-14 19:09:01.7810 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:09:02.0220 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:09:02.0542 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:09:02.1849 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:09:40.3331 Info Message Template Auto Format enabled
+2020-12-14 19:09:40.3648 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:09:40.5455 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:09:40.5671 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:09:40.6321 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:11:26.1361 Info Message Template Auto Format enabled
+2020-12-14 19:11:26.1716 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:11:26.3654 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:11:26.3882 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:11:26.4563 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:12:32.8621 Info Message Template Auto Format enabled
+2020-12-14 19:12:32.9201 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:12:33.1355 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:12:33.2558 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:12:33.3153 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:17:56.3549 Info Message Template Auto Format enabled
+2020-12-14 19:17:56.3919 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:17:56.5231 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:17:56.5432 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:17:56.6502 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:19:06.6023 Info Message Template Auto Format enabled
+2020-12-14 19:19:06.6392 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:19:06.8312 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:19:06.8945 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:19:06.9884 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:20:37.1519 Info Message Template Auto Format enabled
+2020-12-14 19:20:37.1878 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:20:37.4113 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:20:37.4969 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:20:37.6074 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:21:41.6496 Info Message Template Auto Format enabled
+2020-12-14 19:21:41.6800 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:21:41.9172 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:21:41.9449 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:21:42.0213 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:25:11.4251 Info Message Template Auto Format enabled
+2020-12-14 19:25:11.4644 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:25:11.6673 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:25:11.6851 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:25:11.7620 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:26:20.7020 Info Message Template Auto Format enabled
+2020-12-14 19:26:20.8927 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:26:21.2719 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:26:21.3537 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:26:21.4656 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:28:54.8678 Info Message Template Auto Format enabled
+2020-12-14 19:28:54.9030 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:28:55.1537 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:28:55.1806 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:28:55.2678 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:30:33.5685 Info Message Template Auto Format enabled
+2020-12-14 19:30:33.6270 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:30:33.7363 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:30:33.7484 Info Adding target FileTarget(Name=otherFile-web)
+2020-12-14 19:30:33.8452 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=17, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:32:36.0703 Info Message Template Auto Format enabled
+2020-12-14 19:32:36.3230 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:32:36.5725 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:32:36.6070 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:32:36.6730 Info Validating config: TargetNames=alldata, ConfigItems=22, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:34:39.8057 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 19:34:39.8733 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 19:34:40.9027 Info Reloading configuration...
+2020-12-14 19:34:40.9346 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-12-14 19:34:40.9491 Info Message Template Auto Format enabled
+2020-12-14 19:34:40.9614 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:34:40.9722 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:34:40.9722 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:34:40.9981 Info Closing old configuration.
+2020-12-14 19:34:41.0485 Info Validating config: TargetNames=alldata, ConfigItems=16, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:34:44.4433 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 19:34:44.5175 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 19:34:45.5395 Info Reloading configuration...
+2020-12-14 19:34:45.5620 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-12-14 19:34:45.5799 Info Message Template Auto Format enabled
+2020-12-14 19:34:45.5907 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:34:45.6024 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:34:45.6122 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:34:45.6303 Info Closing old configuration.
+2020-12-14 19:34:45.6303 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:34:56.0887 Info Message Template Auto Format enabled
+2020-12-14 19:34:56.1268 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:34:56.3148 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:34:56.3931 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:34:56.4589 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:36:41.4129 Info Message Template Auto Format enabled
+2020-12-14 19:36:41.4988 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:36:41.7354 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:36:41.8098 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:36:41.9160 Info Validating config: TargetNames=alldata, ConfigItems=23, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:37:20.9382 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 19:37:20.9661 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 19:37:21.9909 Info Reloading configuration...
+2020-12-14 19:37:22.0393 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-12-14 19:37:22.0393 Info Message Template Auto Format enabled
+2020-12-14 19:37:22.0528 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:37:22.0528 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:37:22.0686 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:37:22.0686 Info Closing old configuration.
+2020-12-14 19:37:22.1159 Info Validating config: TargetNames=alldata, ConfigItems=15, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:37:44.8724 Info Message Template Auto Format enabled
+2020-12-14 19:37:44.9342 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:37:45.3827 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:37:45.4404 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:37:45.5280 Info Validating config: TargetNames=alldata, ConfigItems=15, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:38:33.8932 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 19:38:33.9126 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 19:38:34.9291 Info Reloading configuration...
+2020-12-14 19:38:34.9525 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-12-14 19:38:34.9621 Info Message Template Auto Format enabled
+2020-12-14 19:38:34.9621 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:38:34.9808 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:38:34.9896 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:38:35.0023 Info Closing old configuration.
+2020-12-14 19:38:35.0399 Info Validating config: TargetNames=alldata, ConfigItems=15, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:38:52.2387 Info Message Template Auto Format enabled
+2020-12-14 19:38:52.3103 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:38:52.4660 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:38:52.5063 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:38:52.5700 Info Validating config: TargetNames=alldata, ConfigItems=15, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:41:49.0383 Info Message Template Auto Format enabled
+2020-12-14 19:41:49.0816 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:41:49.3963 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:41:49.4405 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:41:49.6090 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:42:39.0565 Info Message Template Auto Format enabled
+2020-12-14 19:42:39.1322 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:42:39.3711 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:42:39.4084 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:42:39.4711 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:46:40.9087 Info Message Template Auto Format enabled
+2020-12-14 19:46:40.9616 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:46:41.8220 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:46:41.8668 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:46:42.1895 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:49:23.7536 Info Message Template Auto Format enabled
+2020-12-14 19:49:23.9745 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:49:24.4477 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:49:24.4878 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:49:24.5855 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:58:10.1537 Info Message Template Auto Format enabled
+2020-12-14 19:58:10.2337 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:58:10.4928 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:58:10.5289 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:58:10.6053 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 19:59:31.1097 Info Message Template Auto Format enabled
+2020-12-14 19:59:31.1547 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 19:59:31.4444 Info Adding target FileTarget(Name=alldata)
+2020-12-14 19:59:31.4709 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 19:59:31.5583 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:05:11.5169 Info Message Template Auto Format enabled
+2020-12-14 20:05:11.7351 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:05:11.9317 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:05:11.9906 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:05:12.0765 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:06:16.7849 Info Message Template Auto Format enabled
+2020-12-14 20:06:16.8319 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:06:17.0862 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:06:17.1288 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:06:17.2299 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:09:21.4944 Info Message Template Auto Format enabled
+2020-12-14 20:09:21.7747 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:09:22.0266 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:09:22.0684 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:09:22.1397 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:12:11.1405 Info Message Template Auto Format enabled
+2020-12-14 20:12:11.1806 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:12:11.3989 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:12:11.4318 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:12:11.4933 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:12:51.2006 Info Message Template Auto Format enabled
+2020-12-14 20:12:51.2643 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:12:51.4163 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:12:51.4502 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:12:51.5192 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:14:16.6466 Info Message Template Auto Format enabled
+2020-12-14 20:14:16.7306 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:14:16.8845 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:14:16.9210 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:14:17.0008 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:14:42.9463 Info Message Template Auto Format enabled
+2020-12-14 20:14:43.0228 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:14:43.2208 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:14:43.2596 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:14:43.3345 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:15:19.4443 Info Message Template Auto Format enabled
+2020-12-14 20:15:19.5686 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:15:19.7527 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:15:19.7843 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:15:19.8380 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:16:10.6041 Info Message Template Auto Format enabled
+2020-12-14 20:16:10.7733 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:16:11.0302 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:16:11.0634 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:16:11.1640 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:17:47.8397 Info Message Template Auto Format enabled
+2020-12-14 20:17:47.9230 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:17:48.2405 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:17:48.2854 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:17:48.3548 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:18:35.4291 Info Message Template Auto Format enabled
+2020-12-14 20:18:35.4662 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:18:35.6846 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:18:35.7084 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:18:35.7678 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:19:59.2184 Info Message Template Auto Format enabled
+2020-12-14 20:19:59.2555 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:19:59.3938 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:19:59.4257 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:19:59.5126 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:22:00.6494 Info Message Template Auto Format enabled
+2020-12-14 20:22:00.6902 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:22:00.9336 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:22:00.9605 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:22:01.0741 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:23:12.6685 Info Message Template Auto Format enabled
+2020-12-14 20:23:12.7208 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:23:12.9666 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:23:13.0015 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:23:13.1943 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:25:02.3521 Info Message Template Auto Format enabled
+2020-12-14 20:25:02.4092 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:25:02.6053 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:25:02.6522 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:25:02.7235 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:26:24.7544 Info Message Template Auto Format enabled
+2020-12-14 20:26:24.7891 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:26:24.9828 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:26:25.0137 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:26:25.1107 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:27:02.5520 Info Message Template Auto Format enabled
+2020-12-14 20:27:02.6130 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:27:02.8329 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:27:02.8751 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:27:02.9996 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:33:04.0571 Info Message Template Auto Format enabled
+2020-12-14 20:33:04.1276 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:33:04.3447 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:33:04.3725 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:33:04.4302 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:38:39.3931 Info Message Template Auto Format enabled
+2020-12-14 20:38:39.5744 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:38:39.8614 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:38:39.9361 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:38:40.0343 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 20:39:53.3423 Info Message Template Auto Format enabled
+2020-12-14 20:39:53.3786 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 20:39:53.6044 Info Adding target FileTarget(Name=alldata)
+2020-12-14 20:39:53.6392 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 20:39:53.7401 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:00:21.0943 Info Message Template Auto Format enabled
+2020-12-14 21:00:21.1348 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:00:21.3682 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:00:21.4130 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 21:00:21.4909 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:15:39.1411 Info Message Template Auto Format enabled
+2020-12-14 21:15:39.2680 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:15:39.6720 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:15:39.7329 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 21:15:39.8026 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:16:28.9003 Info Message Template Auto Format enabled
+2020-12-14 21:16:28.9914 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:16:29.1742 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:16:29.2108 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'otherFile-web' not found for logging rule: *.
+2020-12-14 21:16:29.2847 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:26:57.4882 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 21:26:57.5067 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 21:26:58.5234 Info Reloading configuration...
+2020-12-14 21:26:58.5711 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-12-14 21:26:58.5832 Info Message Template Auto Format enabled
+2020-12-14 21:26:58.5832 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:26:58.5832 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:26:58.6062 Info Closing old configuration.
+2020-12-14 21:26:58.6361 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:27:10.2418 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 21:27:10.2789 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 21:27:11.3048 Info Reloading configuration...
+2020-12-14 21:27:11.3048 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-12-14 21:27:11.3227 Info Message Template Auto Format enabled
+2020-12-14 21:27:11.3316 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:27:11.3316 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:27:11.3316 Info Closing old configuration.
+2020-12-14 21:27:11.3582 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:27:28.2491 Info Message Template Auto Format enabled
+2020-12-14 21:27:28.3405 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:27:28.6681 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:27:28.7310 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:28:57.6053 Info Message Template Auto Format enabled
+2020-12-14 21:28:57.6492 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:28:57.8939 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:28:58.2985 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:29:13.7299 Info Message Template Auto Format enabled
+2020-12-14 21:29:13.7772 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:29:13.9884 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:29:14.0505 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:37:50.1965 Info Message Template Auto Format enabled
+2020-12-14 21:37:50.3102 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:37:50.4646 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:37:50.5545 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:50:59.3787 Info Message Template Auto Format enabled
+2020-12-14 21:50:59.4407 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:50:59.5636 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:50:59.6661 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:52:07.3934 Info Message Template Auto Format enabled
+2020-12-14 21:52:07.4322 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:52:07.6528 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:52:07.7511 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:52:59.5846 Info Message Template Auto Format enabled
+2020-12-14 21:52:59.6162 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:52:59.7880 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:52:59.8621 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:53:09.4949 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 21:53:09.5198 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 21:53:10.5342 Info Reloading configuration...
+2020-12-14 21:53:10.5510 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-12-14 21:53:10.5510 Info Message Template Auto Format enabled
+2020-12-14 21:53:10.5737 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:53:10.5838 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:53:10.5838 Info Closing old configuration.
+2020-12-14 21:53:10.6312 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:53:24.1324 Info Message Template Auto Format enabled
+2020-12-14 21:53:24.2120 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:53:24.5841 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:53:24.6959 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 21:59:41.2049 Info Message Template Auto Format enabled
+2020-12-14 21:59:41.2292 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 21:59:41.3596 Info Adding target FileTarget(Name=alldata)
+2020-12-14 21:59:41.4683 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 22:16:33.8955 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 22:16:33.9056 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 22:16:34.9273 Info Reloading configuration...
+2020-12-14 22:16:34.9427 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-12-14 22:16:34.9572 Info Message Template Auto Format enabled
+2020-12-14 22:16:34.9685 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 22:16:34.9685 Info Adding target FileTarget(Name=alldata)
+2020-12-14 22:16:34.9876 Info Closing old configuration.
+2020-12-14 22:16:35.0238 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 22:16:45.4625 Info Message Template Auto Format enabled
+2020-12-14 22:16:45.4911 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 22:16:45.7021 Info Adding target FileTarget(Name=alldata)
+2020-12-14 22:16:45.7738 Info Validating config: TargetNames=alldata, ConfigItems=14, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 22:22:21.3327 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 22:22:21.3561 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 22:22:22.3856 Info Reloading configuration...
+2020-12-14 22:22:22.4182 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-12-14 22:22:22.4257 Info Message Template Auto Format enabled
+2020-12-14 22:22:22.4375 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 22:22:22.4375 Info Adding target FileTarget(Name=alldata)
+2020-12-14 22:22:22.4543 Info Closing old configuration.
+2020-12-14 22:22:22.4837 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 22:23:22.6545 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 22:23:22.6790 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 22:23:23.6997 Info Reloading configuration...
+2020-12-14 22:23:23.7200 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-12-14 22:23:23.7200 Info Message Template Auto Format enabled
+2020-12-14 22:23:23.7391 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 22:23:23.7391 Info Adding target FileTarget(Name=alldata)
+2020-12-14 22:23:23.7517 Info Closing old configuration.
+2020-12-14 22:23:23.7517 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 22:23:46.1217 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 22:23:46.1771 Info Configuration file change detected! Reloading in 1000ms...
+2020-12-14 22:23:47.2035 Info Reloading configuration...
+2020-12-14 22:23:47.2206 Info Configuring from an XML element in D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config...
+2020-12-14 22:23:47.2206 Info Message Template Auto Format enabled
+2020-12-14 22:23:47.2206 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 22:23:47.2408 Info Adding target FileTarget(Name=alldata)
+2020-12-14 22:23:47.2408 Info Closing old configuration.
+2020-12-14 22:23:47.2535 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 23:03:40.0071 Info Message Template Auto Format enabled
+2020-12-14 23:03:40.0749 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 23:03:40.2403 Info Adding target FileTarget(Name=alldata)
+2020-12-14 23:03:40.3165 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 23:06:55.2753 Info Message Template Auto Format enabled
+2020-12-14 23:06:55.3497 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 23:06:55.5763 Info Adding target FileTarget(Name=alldata)
+2020-12-14 23:06:55.6423 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 23:08:47.9636 Info Message Template Auto Format enabled
+2020-12-14 23:08:48.0032 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 23:08:48.2796 Info Adding target FileTarget(Name=alldata)
+2020-12-14 23:08:48.3575 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-14 23:10:12.6316 Info Message Template Auto Format enabled
+2020-12-14 23:10:12.7262 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-14 23:10:12.9146 Info Adding target FileTarget(Name=alldata)
+2020-12-14 23:10:12.9868 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-15 19:16:36.9869 Info Message Template Auto Format enabled
+2020-12-15 19:16:37.3618 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-15 19:16:37.7304 Info Adding target FileTarget(Name=alldata)
+2020-12-15 19:16:37.9611 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-15 19:33:41.9623 Info Message Template Auto Format enabled
+2020-12-15 19:33:42.0931 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-15 19:33:42.2946 Info Adding target FileTarget(Name=alldata)
+2020-12-15 19:33:42.4020 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-15 19:44:16.8696 Info Message Template Auto Format enabled
+2020-12-15 19:44:16.9093 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-15 19:44:17.0866 Info Adding target FileTarget(Name=alldata)
+2020-12-15 19:44:17.2572 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-15 19:45:03.5365 Info Message Template Auto Format enabled
+2020-12-15 19:45:03.5738 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-15 19:45:03.7508 Info Adding target FileTarget(Name=alldata)
+2020-12-15 19:45:03.8899 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-15 19:46:45.0569 Info Message Template Auto Format enabled
+2020-12-15 19:46:45.0911 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-15 19:46:45.3056 Info Adding target FileTarget(Name=alldata)
+2020-12-15 19:46:45.4264 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-15 19:52:25.8183 Info Message Template Auto Format enabled
+2020-12-15 19:52:26.0867 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-15 19:52:26.4189 Info Adding target FileTarget(Name=alldata)
+2020-12-15 19:52:26.6404 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-15 19:55:38.9736 Info Message Template Auto Format enabled
+2020-12-15 19:55:39.0821 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-15 19:55:39.6934 Info Adding target FileTarget(Name=alldata)
+2020-12-15 19:55:40.0124 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-15 20:07:52.9747 Info Message Template Auto Format enabled
+2020-12-15 20:07:53.1309 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-15 20:07:53.4464 Info Adding target FileTarget(Name=alldata)
+2020-12-15 20:07:53.5746 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-15 20:10:21.2739 Info Message Template Auto Format enabled
+2020-12-15 20:10:21.4082 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-15 20:10:21.7278 Info Adding target FileTarget(Name=alldata)
+2020-12-15 20:10:21.8916 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config
+2020-12-15 20:12:24.3640 Info Message Template Auto Format enabled
+2020-12-15 20:12:24.4366 Info Loading assembly: NLog.Web.AspNetCore
+2020-12-15 20:12:24.6268 Info Adding target FileTarget(Name=alldata)
+2020-12-15 20:12:24.7936 Info Validating config: TargetNames=alldata, ConfigItems=12, FilePath=D:\Devesh\Devesh\Ticketing\Client Ticketing File\API\Dev\HomeShopAPI\Easyrewardz_TicketSystem.WebAPI\bin\Debug\netcoreapp2.2\nlog.config

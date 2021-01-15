@@ -1,5 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
 using Easyrewardz_TicketSystem.Interface;
+using Easyrewardz_TicketSystem.Model.StoreModal;
 using Easyrewardz_TicketSystem.Services;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         {
             _IErrorLogging = errorLogging;
             return _IErrorLogging.InsertErrorLog(errorLog);
+        }
+
+        public async Task<int> AddAPILog(IErrorLogging errorLogging, APILogModel Log)
+        {
+            _IErrorLogging = errorLogging;
+            return await _IErrorLogging.InsertAPILog(Log);
         }
     }
 }

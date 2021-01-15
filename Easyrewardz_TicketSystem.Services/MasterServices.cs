@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -74,40 +75,59 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get DepartMent List
         /// </summary>
         /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
-        public List<DepartmentMaster> GetDepartmentList(int tenantID)
+        public async Task<List<DepartmentMaster>> GetDepartmentList(int tenantID, int UserID)
         {
 
-            DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
+            DataTable schemaTable = new DataTable();
+            MySqlCommand cmd = null;
             List<DepartmentMaster> departmentMasters = new List<DepartmentMaster>();
-
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetDepartmentList", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Tenant_Id", tenantID);
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
+
+                if (conn != null && conn.State == ConnectionState.Closed)
                 {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    cmd = new MySqlCommand("SP_GetDepartmentList", conn);
+                    cmd.Parameters.AddWithValue("@Tenant_Id", tenantID);
+                    cmd.Parameters.AddWithValue("@User_Id", tenantID);
+                    cmd.Connection = conn;
+
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var reader = await cmd.ExecuteReaderAsync())
                     {
-                        DepartmentMaster department = new DepartmentMaster();
-                        department.DepartmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["DepartmentID"]);
-                        department.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
-                        department.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        departmentMasters.Add(department);
+                        if (reader.HasRows)
+                        {
+                            schemaTable.Load(reader);
+                            if (schemaTable.Rows.Count > 0)
+                            {
+                                foreach (DataRow dr in schemaTable.Rows)
+                                {
+                                    DepartmentMaster obj = new DepartmentMaster()
+                                    {
+                                        DepartmentID = dr["DepartmentID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DepartmentID"]),
+                                        DepartmentName = dr["DepartmentName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["DepartmentName"]),
+                                        IsActive = dr["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsActive"])
+                                    };
+
+                                    departmentMasters.Add(obj);
+                                }
+                            }
+
+
+                        }
                     }
                 }
             }
             catch (Exception)
             {
 
-                throw ;
+                throw;
             }
             finally
             {
@@ -115,8 +135,14 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (schemaTable != null)
+                {
+                    schemaTable.Dispose();
+                }
             }
+
             return departmentMasters;
+
         }
         /// <summary>
         /// Get Function By DepartmentID
@@ -494,6 +520,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if(ds!=null)
+                {
+                    ds.Dispose();
+                }
             }
             return storeTypeMaster;
         }
@@ -606,6 +636,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return storeMaster;
         }
@@ -626,8 +660,7 @@ namespace Easyrewardz_TicketSystem.Services
                 conn.Open();
                 cmd.Connection = conn;
                 MySqlCommand cmd1 = new MySqlCommand("SP_GetLanguageList", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                //cmd1.Parameters.AddWithValue("@Tenant_Id", TenantID);
+                cmd1.CommandType = CommandType.StoredProcedure;               
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmd1;
                 da.Fill(ds);
@@ -638,23 +671,24 @@ namespace Easyrewardz_TicketSystem.Services
                         LanguageModel languageModel = new LanguageModel();
                         languageModel.LanguageID = Convert.ToInt32(ds.Tables[0].Rows[i]["LanguageID"]);
                         languageModel.LanguageName = Convert.ToString(ds.Tables[0].Rows[i]["LanguageName"]);  
-                        //languageModel.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        //brand.CreatedByName = Convert.ToString(ds.Tables[0].Rows[i]["dd"]);
-
                         languageModels.Add(languageModel);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -710,6 +744,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -793,6 +831,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return customGetEmailID;

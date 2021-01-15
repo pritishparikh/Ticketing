@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace Easyrewardz_TicketSystem.Services
@@ -31,37 +32,54 @@ namespace Easyrewardz_TicketSystem.Services
         /// Get DepartMent List
         /// </summary>
         /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
-        public List<StoreDepartmentModel> GetStoreDepartmentList(int tenantID)
+        public async Task<List<StoreDepartmentModel>> GetStoreDepartmentList(int tenantID, int UserID)
         {
-
-            DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
+            DataTable schemaTable = new DataTable();
+            MySqlCommand cmd = null;
             List<StoreDepartmentModel> departmentMasters = new List<StoreDepartmentModel>();
-
             try
             {
-                conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetDepartmentList", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@Tenant_Id", tenantID);
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
-                da.Fill(ds);
-                if (ds != null && ds.Tables[0] != null)
+
+                if (conn != null && conn.State == ConnectionState.Closed)
+            {
+                await conn.OpenAsync();
+            }
+            using (conn)
+            {
+                cmd = new MySqlCommand("SP_GetDepartmentList", conn);
+                 cmd.Parameters.AddWithValue("@Tenant_Id", tenantID);
+                 cmd.Parameters.AddWithValue("@User_Id", UserID);
+                  cmd.Connection = conn;
+
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                using (var reader = await cmd.ExecuteReaderAsync())
                 {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    if (reader.HasRows)
                     {
-                        StoreDepartmentModel department = new StoreDepartmentModel();
-                        department.DepartmentID = Convert.ToInt32(ds.Tables[0].Rows[i]["DepartmentID"]);
-                        department.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
-                       
-                        department.IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["IsActive"]);
-                        departmentMasters.Add(department);
+                        schemaTable.Load(reader);
+                        if (schemaTable.Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in schemaTable.Rows)
+                            {
+                                    StoreDepartmentModel obj = new StoreDepartmentModel()
+                                {
+                                    DepartmentID = dr["DepartmentID"] == DBNull.Value ? 0 :  Convert.ToInt32(dr["DepartmentID"]),
+                                    DepartmentName = dr["DepartmentName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["DepartmentName"]),
+                                    IsActive = dr["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsActive"])
+                                };
+
+                                    departmentMasters.Add(obj);
+                            }
+                        }
+
+
                     }
                 }
             }
+        }
             catch (Exception)
             {
 
@@ -73,17 +91,20 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
-                if (ds != null)
+                if (schemaTable != null)
                 {
-                    ds.Dispose();
+                    schemaTable.Dispose();
                 }
             }
+
             return departmentMasters;
+           
         }
 
         /// <summary>
         /// Get Department By Search
         /// </summary>
+        /// <param name="tenantID"></param>
         /// <param name="departmentName"></param>
         /// <returns></returns>
         public List<StoreDepartmentModel> GetStoreDepartmentBySearch(int tenantID, string departmentName)
@@ -130,6 +151,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return departmentMastersList;
         }
@@ -138,7 +163,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get Function By DepartmentID
         /// </summary>
-        /// <param name="DepartmentID"></param>
+        /// <param name="departmentID"></param>
+        /// <param name="tenantID"></param>
         /// <returns></returns>
         public List<StoreFunctionModel> GetStoreFunctionByDepartment(int departmentID, int tenantID)
         {
@@ -189,11 +215,11 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-
         /// <summary>
         /// Get Function By multiple DepartmentIDs
         /// </summary>
-        /// <param name="DepartmentID"></param>
+        /// <param name="DepartmentIds"></param>
+        /// <param name="TenantID"></param>
         /// <returns></returns>
         public List<StoreFunctionModel> GetStoreFunctionbyMultiDepartment(string DepartmentIds, int TenantID)
         {
@@ -235,18 +261,21 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return funcationMasters;
         }
 
 
-
         /// <summary>
-        /// Search function by department ID and Namne
+        /// Search function by department ID and Name
         /// </summary>
-        /// <param name="DepartmentID"></param>
+        /// <param name="departmentID"></param>
         /// <param name="SearchText"></param>
-        /// <param name="TenantID"></param>
+        /// <param name="tenantID"></param>
         /// <returns></returns>
         public List<StoreFunctionModel> SearchStoreFunctionByDepartment(int departmentID, string SearchText,int tenantID)
         {
@@ -301,10 +330,12 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
 
-
         /// <summary>
         /// Add Department
         /// </summary>
+        /// <param name="departmentName"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="createdBy"></param>
         /// <returns></returns>
         public int AddStoreDepartment(string departmentName, int tenantID, int createdBy)
         {
@@ -337,8 +368,12 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        ///Add function
+        /// Add function
         /// </summary>
+        /// <param name="departmentID"></param>
+        /// <param name="functionName"></param>
+        /// <param name="tenantID"></param>
+        /// <param name="createdBy"></param>
         /// <returns></returns>
         public int AddStorefunction(int departmentID, string functionName, int tenantID, int createdBy)
         {
@@ -372,9 +407,9 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Delete department Brand Mapping 
+        /// Delete department Brand Mapping
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name="tenantID"></param>
         /// <param name="DepartmentBrandMappingID"></param>
         /// <returns></returns>
         public int DeleteDepartmentMapping(int tenantID, int DepartmentBrandMappingID)
@@ -410,6 +445,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Update Department Mapping
         /// </summary>
+        /// <param name="updateDepartmentModel"></param>
         /// <returns></returns>
         public int UpdateDepartmentMapping(CreateStoreDepartmentModel updateDepartmentModel)
         {
@@ -452,7 +488,8 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Get list of Stores bY brandIDs
         /// </summary>
-        /// <param name="TicketId">Id of the Ticket</param>
+        /// <param name="BrandIDs"></param>
+        /// <param name="tenantID"></param>
         /// <returns></returns>
         public List<StoreCodeModel> getStoreByBrandID(string BrandIDs, int tenantID)
         {
@@ -509,6 +546,7 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// Create Department
         /// </summary>
+        /// <param name="createDepartmentModel"></param>
         /// <returns></returns>
         public int CreateDepartment(CreateStoreDepartmentModel createDepartmentModel)
         {
@@ -547,7 +585,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Get DepartmentMapping Listing
+        /// Get Department Mapping Listing
         /// <param name="TenantID"></param>
         /// </summary>
         /// <returns></returns>

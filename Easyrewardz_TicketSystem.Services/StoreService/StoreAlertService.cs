@@ -16,10 +16,12 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public StoreAlertService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
         /// <summary>
         /// Create Alert 
@@ -430,6 +432,61 @@ namespace Easyrewardz_TicketSystem.Services
             return Message;
         }
 
+        /// <summary>
+        /// Get Mail Parameter
+        /// <param name="tenantId"></param>
+        /// <param name="alertID"></param>
+        /// </summary>
+        public List<MailParameterModel> GetMailParameter(int tenantId, int alertID)
+        {
+            List<MailParameterModel> objTempLst = new List<MailParameterModel>();
+            DataSet ds = new DataSet();
+            try
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SP_StoreGetMailParameter", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_tenantId", tenantId);
+                cmd.Parameters.AddWithValue("@_AlertID", alertID);
+
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objTempLst = ds.Tables[0].AsEnumerable().Select(r => new MailParameterModel()
+                        {
+                            MailParameterID = Convert.ToInt32(r.Field<object>("MailParameterID")),
+                            ParameterName = r.Field<object>("ParameterName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("ParameterName")),
+                            Description = r.Field<object>("Description") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("Description")),
+                        }).ToList();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objTempLst;
+        }
 
         #region Communication Mode Mapping
 

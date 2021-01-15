@@ -72,7 +72,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         }
 
         /// <summary>
-        /// ReadNotification
+        /// Read Notification
         /// <param name="TicketID"></param>
         /// <param name="IsFollowUp"></param> 
         /// </summary>

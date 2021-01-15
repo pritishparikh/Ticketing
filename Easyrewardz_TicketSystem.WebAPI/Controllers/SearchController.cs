@@ -115,7 +115,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get tickets On page load
         /// </summary>
-        /// <param name="searchparams"></param>
+        /// <param name="HeaderStatusID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetTicketsOnPageLoad")]
@@ -199,7 +199,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get tickets On page load
         /// </summary>
-        /// <param name="searchparams"></param>
+        /// <param name="SearchParamID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetTicketsOnSavedSearch")]

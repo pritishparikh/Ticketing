@@ -3,49 +3,137 @@ using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Model.StoreModal;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
     public partial interface IAppointment
     {
-        
-        List<AppointmentModel> GetAppointmentList(int TenantID, int UserId, string AppDate);
+        /// <summary>
+        /// Get Appointment List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="UserId"></param>
+        /// <param name="AppDate"></param>
+        /// <returns></returns>
+        Task<List<AppointmentModel>> GetAppointmentList(int TenantID, int UserId, string AppDate);
 
-        List<AppointmentCount> GetAppointmentCount(int TenantID, int UserId);
+        /// <summary>
+        /// Get Appointment Count
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        List<AppointmentCount> GetAppointmentCount(int TenantID, string ProgramCode,int UserId);
 
-        int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantId);
+        /// <summary>
+        /// Update Appointment Status
+        /// </summary>
+        /// <param name="appointmentCustomer"></param>
+        /// <param name="TenantId"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        int UpdateAppointmentStatus(AppointmentCustomer appointmentCustomer, int TenantID, string ProgramCode, int UserID);
 
-        List<AppointmentDetails> CreateAppointment(AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty);
 
-        List<AppointmentDetails> CreateNonExistCustAppointment(AppointmentMaster appointmentMaster, bool IsSMS, bool IsLoyalty);
+        /// <summary>
+        /// Get Appointment Message Tags
+        /// </summary>
+        /// <returns></returns>
+        List<AppointmentMessageTag> AppointmentMessageTags();
 
-        List<AppointmentModel> SearchAppointment(int TenantID, int UserId, string searchText, string appointmentDate);
-
-        int GenerateOTP(int TenantID, int UserId, string mobileNumber);
-
-        int VarifyOTP(int TenantID, int UserId, int otpID, string otp);
-
-        List<AlreadyScheduleDetail> GetTimeSlotDetail(int userMasterID, int tenantID, string AppDate);
-
-        int UpdateAppointment(CustomUpdateAppointment appointmentCustomer);
-
-        int ValidateMobileNo(int TenantID, int UserId, string mobileNumber);
-
-        int StartVisit(CustomUpdateAppointment appointmentCustomer);
-
-        List<CustomerCountDetail> GetCustomerInStore(int TenantID, int UserId);
-
-        CustomCustomerInStore CustomerInStore(int TenantID, int UserId,string programCode);
+        Task<List<AppointmentModel>> GetAppointmentSearchList(int TenantID, int UserId, AppointmentSearchRequest appointmentSearchRequest);
 
         #region TimeSlotMaster CRUD
 
-        int InsertUpdateTimeSlotMaster(StoreTimeSlotInsertUpdate Slot);
+        /// <summary>
+        /// Insert Update Time Slot Setting
+        /// </summary>
+        /// <param name="Slot"></param>
+        /// <returns></returns>
+        int InsertUpdateTimeSlotSetting(StoreTimeSlotInsertUpdate Slot);
 
 
-        int DeleteTimeSlotMaster(int SlotID, int TenantID);
+        /// <summary>
+        /// Insert Update Time Slot Setting New
+        /// </summary>
+        /// <param name="Slot"></param>
+        /// <returns></returns>
+         Task<int> UpdateTimeSlotSettingNew(StoreTimeSlotInsertUpdate Slot);
 
-        List<StoreTimeSlotMasterModel> StoreTimeSlotMasterList(int TenantID, string ProgramCode);
+        /// <summary>
+        /// Delete Time Slot Master
+        /// </summary>
+        /// <param name="SlotID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <returns></returns>
+        int DeleteTimeSlotMaster(int SlotID, int TenantID, string ProgramCode);
+
+        /// <summary>
+        ///Bulk  Delete Time Slot Master
+        /// </summary>
+        /// <param name="SlotIDs"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <returns></returns>
+        Task<int> BulkDeleteTimeSlotMaster(string SlotIDs, int TenantID, string ProgramCode); 
+
+        /// <summary>
+        /// Get Store Setting Time Slot
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="SlotID"></param>
+        /// <param name="StoreID"></param>
+        /// <returns></returns>
+        List<StoreTimeSlotSettingModel> GetStoreSettingTimeSlot(int TenantID, string ProgramCode, int SlotID, int StoreID);
+
+        /// <summary>
+        /// Get Store Setting Time Slot
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="SlotID"></param>
+        /// <param name="StoreID"></param>
+        ///  <param name="Opdays"></param>
+        ///   <param name="SlotTemplateID"></param>
+        /// <returns></returns>
+        Task<List<StoreTimeSlotSettingModel>> GetStoreSettingTimeSlotNew(int TenantID, string ProgramCode, int SlotID, string StoreID, string Opdays, int SlotTemplateID);
+
+
+        /// <summary>
+        /// slot bulk upload
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="RoleFor"></param>
+        /// <param name="DataSetCSV"></param>
+        /// <returns></returns>
+        List<string> BulkUploadSlot(int TenantID,string ProgramCode, int CreatedBy, DataSet DataSetCSV);
+
+
+        /// <summary>
+        /// slot bulk upload New
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="RoleFor"></param>
+        /// <param name="DataSetCSV"></param>
+        /// <returns></returns>
+        Task<List<string>> BulkUploadSlotNew(int TenantID, string ProgramCode, int CreatedBy, DataSet DataSetCSV);
+
+        /// <summary>
+        /// Bulk Update Slots 
+        /// </summary>
+        /// <param name="Slot"></param>
+        /// <returns></returns>
+        Task<int> BulkUpdateSlots(SlotsBulkUpdate Slots);
 
         #endregion
     }

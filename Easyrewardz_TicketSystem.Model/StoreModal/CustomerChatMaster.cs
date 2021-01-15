@@ -9,7 +9,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Chat ID of Customer
         /// </summary>
-        public int ChatID { get; set; }
+        public int ChatID { get; set; } 
 
         /// <summary>
         /// Store ID 
@@ -74,7 +74,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// <summary>
         /// Created date 
         /// </summary>
-        public DateTime CreatedDate { get; set; }
+        public string CreatedDate { get; set; }
 
         /// <summary>
         /// Updated By
@@ -95,6 +95,59 @@ namespace Easyrewardz_TicketSystem.Model
         /// StoreManager Name
         /// </summary>
         public string StoreManagerName { get; set; }
+
+        /// <summary>
+        /// IS Chat Ended from Customer
+        /// </summary>
+        public bool IsCustEndChat { get; set; }
+
+        /// <summary>
+        ///  Is Customer Timeout
+        /// </summary>
+        public bool IsCustTimeout { get; set; }
+
+
+        /// <summary>
+        /// ChatTicketID
+        /// </summary>
+        public int ChatTicketID { get; set; }
+
+
+        /// <summary>
+        /// ChatSourceID
+        /// </summary>
+        public int ChatSourceID { get; set; }
+
+
+        /// <summary>
+        /// SourceName
+        /// </summary>
+        public string SourceName { get; set; }
+
+
+        /// <summary>
+        /// SourceAbbr
+        /// </summary>
+        public string SourceAbbr { get; set; }
+
+        /// <summary>
+        /// SourceIconUrl
+        /// </summary>
+        public string SourceIconUrl { get; set; }
+
+        /// <summary>
+        /// ChatSourceIsActive
+        /// </summary>
+        public bool ChatSourceIsActive { get; set; }
+    }
+
+
+    public class ChatMessageDetails
+    {
+        public List<CustomerChatMessages> ChatMessages { get; set; }
+        public int RecentChatCount { get; set; }
+        public int PrevPage { get; set; }
+        public int NextPage { get; set; }
     }
 
     public class CustomerChatMessages
@@ -182,6 +235,10 @@ namespace Easyrewardz_TicketSystem.Model
         /// 
         public bool IsBotReply { get; set; }
 
+        /// <summary>
+        /// is message an Attachment or not
+        /// </summary>
+        public bool IsAttachment { get; set; }
     }
 
 
@@ -217,6 +274,7 @@ namespace Easyrewardz_TicketSystem.Model
         /// StoreManagerId
         /// </summary>
         public int StoreManagerId { get; set; }
+
 
         /// <summary>
         /// Created BY

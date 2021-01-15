@@ -1,0 +1,14 @@
+CampaignCustomerID,CustomerID,CustomerName,CustomerMobileNumber,CampaignTypeID,CampaignName,CampaignTypeDate,CallReScheduledTo,CreatedBy,CreatedByName,CreatedDate,CampaignStatus,AssignedTo,AssignedToName,Response,NoOfTimesNotContacted
+28,28,Shubham AggarwalData Engineering,9960480604,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+30,30,RahulKumar,9971144597,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+31,31,Monica BaliTechnology,9971795842,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+33,33,Twenty sixUser,9988540758,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+34,34,Twenty threeUser,9990040055,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+35,35,Aakash JainTechnical,9990069907,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+36,36,Munmun SinghCustomer Support,9990107843,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+37,37,Kashish BhatnagarData,9990449463,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+38,38,Mohit MathurTechnology,9992218136,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+41,41,Neha SrivastavaTechnology,9999433489,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+42,42,Twenty oneUser,9999467547,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+44,44,Ritika KhandelwalTechnology,9999718022,2,ER Demo,20th May 2020,,0,,,Open,0,,,0
+45,45,Angad SinghCorporate,9999901550,2,ER Demo,20th May 2020,,0,,,Open,0,,,0

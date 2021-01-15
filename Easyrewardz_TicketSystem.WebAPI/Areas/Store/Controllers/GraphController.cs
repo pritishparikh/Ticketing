@@ -1,4 +1,5 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.CustomModel.StoreModal;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using Easyrewardz_TicketSystem.WebAPI.Filters;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -143,5 +145,84 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+
+        /// <summary>
+        /// Get Campaign Name List
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetCampaignNameList")]
+        public async Task<ResponseModel> GetCampaignNameList()
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            List < CampaignNameList > CampaignNameList = new  List<CampaignNameList>();
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                GraphCaller graphcaller = new GraphCaller();
+
+                CampaignNameList = await graphcaller.GetCampaignNameList(new GraphService(_connectionSting), authenticate.TenantId, authenticate.ProgramCode);
+
+                StatusCode = CampaignNameList.Count > 0 ?(int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = CampaignNameList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+
+        /// <summary>
+        /// Dashboard Campaign Graph
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("DashboardCampaignGraph")]
+        public async Task<ResponseModel> DashboardCampaignGraph([FromBody] CampaignStatusGraphRequest CampaignGraphRequest)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            List<DashboardCampaignGraphModel> CampaignList = new List<DashboardCampaignGraphModel>();
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                CampaignGraphRequest.TenantID = authenticate.TenantId;
+
+                GraphCaller graphcaller = new GraphCaller();
+
+                CampaignList = await graphcaller.DashboardCampaignGraph(new GraphService(_connectionSting), CampaignGraphRequest);
+
+                StatusCode = CampaignList.Count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = CampaignList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
     }
 }

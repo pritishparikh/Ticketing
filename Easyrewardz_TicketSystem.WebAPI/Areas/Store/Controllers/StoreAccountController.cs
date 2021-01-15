@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -90,9 +91,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                     CommonService commonService = new CommonService();
                     string encryptedEmailId = commonService.Encrypt(jsonData);
-                    // string url = configuration.GetValue<string>("websiteURL") + "/storeUserforgotPassword?Id:" + encryptedEmailId;
                     string url = X_Authorized_Domainname.TrimEnd('/') + "/storeUserforgotPassword?Id:" + encryptedEmailId;
-                    // string body = "Hello, This is Demo Mail for testing purpose. <br/>" + url;
 
                     string content = "";
                     string subject = "";
@@ -193,16 +192,102 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// Authenticate User
         /// </summary>
         /// <returns></returns>
+        //[AllowAnonymous]
+        //[Route("authenticateUser")]
+        //[HttpPost]
+        //public ResponseModel AuthenticateUser()
+        //{
+        //    string X_Authorized_Programcode = Convert.ToString(Request.Headers["X-Authorized-Programcode"]);
+        //    string X_Authorized_userId = Convert.ToString(Request.Headers["X-Authorized-userId"]);
+        //    string X_Authorized_password = Convert.ToString(Request.Headers["X-Authorized-password"]);
+        //    string X_Authorized_Domainname = Convert.ToString(Request.Headers["X-Authorized-Domainname"]);
+
+        //    ResponseModel resp = new ResponseModel();
+
+        //    try
+        //    {
+        //        StoreSecurityCaller newSecurityCaller = new StoreSecurityCaller();
+        //        AccountModal account = new AccountModal();
+        //        string programCode = X_Authorized_Programcode.Replace(' ', '+');
+        //        string domainName = X_Authorized_Domainname.Replace(' ', '+');
+        //        string userId = X_Authorized_userId.Replace(' ', '+');
+        //        string password = X_Authorized_password.Replace(' ', '+');
+
+        //        string _data = "";
+        //        if (X_Authorized_Programcode != null)
+        //        {
+        //            X_Authorized_Programcode = SecurityService.DecryptStringAES(X_Authorized_Programcode);
+
+        //            RedisCacheService cacheService = new RedisCacheService(_radisCacheServerAddress);
+        //            if (cacheService.Exists("Con" + X_Authorized_Programcode))
+        //            {
+        //                _data = cacheService.Get("Con" + X_Authorized_Programcode);
+        //                _data = JsonConvert.DeserializeObject<string>(_data);
+        //            }
+        //        }
+
+        //        if (!string.IsNullOrEmpty(programCode) && !string.IsNullOrEmpty(domainName) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
+        //        {
+        //            account = newSecurityCaller.validateUser(new StoreSecurityService(_data, _radisCacheServerAddress), programCode, domainName, userId, password);
+
+        //            if (!string.IsNullOrEmpty(account.Token))
+        //            {
+        //                account.IsActive = true;
+        //                resp.Status = true;
+        //                resp.StatusCode = (int)EnumMaster.StatusCode.Success;
+        //                resp.ResponseData = account;
+        //                resp.Message = "Valid Login";
+        //            }
+        //            else
+        //            {
+        //                account.IsActive = false;
+        //                resp.Status = true;
+        //                resp.StatusCode = (int)EnumMaster.StatusCode.Success;
+        //                resp.ResponseData = account;
+        //                resp.Message = "In-Valid Login";
+        //            }
+        //        }
+        //        else
+        //        {
+        //            resp.Status = false;
+        //            resp.ResponseData = account;
+        //            resp.Message = "Invalid Login";
+
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //    return resp;
+        //}
+
+        /// <summary>
+        /// Authenticate User
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("authenticateUser")]
         [HttpPost]
         public ResponseModel AuthenticateUser()
         {
+            string X_Authorized_FBID = string.Empty;
+            string X_Authorized_DeviceID = string.Empty;
             string X_Authorized_Programcode = Convert.ToString(Request.Headers["X-Authorized-Programcode"]);
             string X_Authorized_userId = Convert.ToString(Request.Headers["X-Authorized-userId"]);
             string X_Authorized_password = Convert.ToString(Request.Headers["X-Authorized-password"]);
             string X_Authorized_Domainname = Convert.ToString(Request.Headers["X-Authorized-Domainname"]);
+            string X_Authorized_deviceSource = Convert.ToString(Request.Headers["X-Authorized-Devicesource"]);
 
+            if (!string.IsNullOrEmpty(X_Authorized_deviceSource))
+            {
+                X_Authorized_deviceSource = SecurityService.DecryptStringAES(X_Authorized_deviceSource);
+                X_Authorized_FBID = X_Authorized_deviceSource.ToLower().Equals("android") || X_Authorized_deviceSource.ToLower().Equals("ios") ||
+                    X_Authorized_deviceSource.Equals("M")
+                    ? Convert.ToString(Request.Headers["X-Authorized-FBID"]) : X_Authorized_FBID;
+                X_Authorized_DeviceID = X_Authorized_deviceSource.ToLower().Equals("android") || X_Authorized_deviceSource.ToLower().Equals("ios") ||
+                    X_Authorized_deviceSource.Equals("M") ? Convert.ToString(Request.Headers["X-Authorized-DeviceID"]) : X_Authorized_DeviceID;
+            }
             ResponseModel resp = new ResponseModel();
 
             try
@@ -213,6 +298,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 string domainName = X_Authorized_Domainname.Replace(' ', '+');
                 string userId = X_Authorized_userId.Replace(' ', '+');
                 string password = X_Authorized_password.Replace(' ', '+');
+                string deviceSource = X_Authorized_deviceSource.Replace(' ', '+');
+                string FBId = X_Authorized_FBID.Replace(' ', '+');
+                string DeviceID = X_Authorized_DeviceID.Replace(' ', '+');
 
                 string _data = "";
                 if (X_Authorized_Programcode != null)
@@ -227,9 +315,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                     }
                 }
 
-                if (!string.IsNullOrEmpty(programCode) && !string.IsNullOrEmpty(domainName) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password))
+                if (!string.IsNullOrEmpty(programCode) && !string.IsNullOrEmpty(domainName) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(deviceSource))
                 {
-                    account = newSecurityCaller.validateUser(new StoreSecurityService(_data, _radisCacheServerAddress), programCode, domainName, userId, password);
+                    account = newSecurityCaller.validateUser(new StoreSecurityService(_data, _radisCacheServerAddress), programCode, domainName, userId, password, deviceSource, FBId, DeviceID);
 
                     if (!string.IsNullOrEmpty(account.Token))
                     {
@@ -262,6 +350,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return resp;
         }
+
         /// <summary>
         /// Logout Store User
         /// </summary>
@@ -338,7 +427,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                     resp.Message = "In-valid Program code";
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //CreateFile(ex.ToString());
                 throw;
@@ -346,6 +435,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return resp;
         }
 
+        /// <summary>
+        /// Create File
+        /// </summary>
+        /// <param name="contenttoprint"></param>
         public void CreateFile(string contenttoprint)
         {
             string FilesPath = string.Empty;
@@ -370,6 +463,88 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 throw ex;
             }
 
+        }
+
+
+        /// <summary>
+        /// Update Mobile Details
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        [Route("updateMobileUserDetails")]
+        [HttpPost]
+        public async Task<ResponseModel> UpdateMobileUserDetails()
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+
+
+            int statusCode = 0;
+            string statusMessage = "";
+            string FBID = string.Empty;
+            string DeviceID = string.Empty;
+            string Token = string.Empty;
+            int Result = 0;
+            try
+            {
+
+
+                FBID = Convert.ToString(Request.Headers["X-Authorized-FBID"]);
+                DeviceID = Convert.ToString(Request.Headers["X-Authorized-DeviceID"]);
+
+                Token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+
+
+                if (!string.IsNullOrEmpty(Token))
+                {
+
+                    Authenticate authenticate = new Authenticate();
+                    authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(Token));
+
+                    if (!string.IsNullOrEmpty(FBID) && !string.IsNullOrEmpty(DeviceID))
+                    {
+                        FBID = FBID.Replace(' ', '+');
+                        DeviceID = DeviceID.Replace(' ', '+');
+
+                        FBID = SecurityService.DecryptStringAES(FBID);
+                        DeviceID = SecurityService.DecryptStringAES(DeviceID);
+
+                        StoreSecurityCaller newSecurityCaller = new StoreSecurityCaller();
+                        Result = await newSecurityCaller.UpdateMobileDetails(new StoreSecurityService(_connectioSting, _radisCacheServerAddress),
+                        authenticate.TenantId, FBID, DeviceID);
+
+                        statusCode = Result > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                        statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                        objResponseModel.Status = true;
+                        objResponseModel.StatusCode = statusCode;
+                        objResponseModel.Message = statusMessage;
+                        objResponseModel.ResponseData = Result > 0;
+                    }
+                    else
+                    {
+                        objResponseModel.Status = false;
+                        objResponseModel.StatusCode = statusCode;
+                        objResponseModel.Message = "Please Provide Valid FBID/DeviceID";
+                        objResponseModel.ResponseData = false;
+                    }
+
+
+
+                }
+                else
+                {
+                    objResponseModel.Status = false;
+                    objResponseModel.StatusCode = statusCode;
+                    objResponseModel.Message = "Please Provide Valid Token";
+                    objResponseModel.ResponseData = false;
+
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
         }
 
         #endregion

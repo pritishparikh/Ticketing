@@ -1,3 +1,0 @@
-RoleName	Status	EnabledModules	DisabledModules
-HOD	InActive	Dashboard|Tickets|Knowledge Base	Settings|Chat|Notification|Reports
-Agent test	Active	Settings|Chat|Notification|Reports	Settings|Chat|Notification|Reports

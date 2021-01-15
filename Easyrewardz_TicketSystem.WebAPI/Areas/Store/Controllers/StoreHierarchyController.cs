@@ -80,7 +80,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// UpdateStoreHierarchy
+        /// Update Store Hierarchy
         /// </summary>
         /// <param name="CustomHierarchymodel"></param>
         /// <returns></returns>
@@ -118,7 +118,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// DeleteStoreHierarchy
+        /// Delete Store Hierarchy
         /// </summary>
         /// <param name="designationID"></param>
         /// <returns></returns>
@@ -192,8 +192,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// Bulk Upload StoreHierarchy
+        /// Bulk Upload Store Hierarchy
         /// </summary>
+        /// <param name="HierarchyFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadStoreHierarchy")]
@@ -311,7 +312,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                                  ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store_Hierarchy", SuccessFileUrl, ErrorFileUrl, HierarchyFor);
                 #endregion
 
-                StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                StatusCode = successfilesaved == true && errorfilesaved == false ?
+                    (int)EnumMaster.StatusCode.Success : successfilesaved == true && errorfilesaved == true ?
+                    (int)EnumMaster.StatusCode.RecordUploadedPartially : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;

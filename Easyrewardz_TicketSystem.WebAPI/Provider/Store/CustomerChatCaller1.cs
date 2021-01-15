@@ -1,8 +1,6 @@
 ﻿using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
@@ -20,11 +18,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        public List<CustomerChatMaster> OngoingChat(ICustomerChat customerChat,int userMasterID,int tenantID, string Search,int StoreManagerID)
+        public async Task<List<CustomerChatMaster>> OngoingChat(ICustomerChat customerChat,int UserMasterID,int TenantID, string Search,int StoreManagerID)
         {
             _customerChat = customerChat;
 
-            return _customerChat.OngoingChat(userMasterID, tenantID, Search, StoreManagerID);
+            return await _customerChat.OngoingChat(UserMasterID, TenantID, Search, StoreManagerID);
         }
 
         /// <summary>
@@ -32,11 +30,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        public List<CustomerChatMaster> NewChat(ICustomerChat customerChat, int userMasterID, int tenantID)
+        public async Task<List<CustomerChatMaster>> NewChat(ICustomerChat customerChat, int UserMasterID, int TenantID)
         {
             _customerChat = customerChat;
 
-            return _customerChat.NewChat(userMasterID, tenantID);
+            return await _customerChat.NewChat(UserMasterID, TenantID);
         }
 
         /// <summary>
@@ -44,11 +42,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        public int MarkAsReadMessage(ICustomerChat customerChat, int chatID)
+        public async Task<int> MarkAsReadMessage(ICustomerChat customerChat, int ChatID)
         {
             _customerChat = customerChat;
 
-            return _customerChat.MarkAsReadOnGoingChat(chatID);
+            return await _customerChat.MarkAsReadOnGoingChat(ChatID);
         }
 
         /// <summary>
@@ -56,11 +54,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name="chatid"></param>
         /// <returns></returns>
-        public int UpdateCustomerChatIdStatus(ICustomerChat customerChatStatus, int chatID, int TenantId)
+        public async Task<int> UpdateCustomerChatIdStatus(ICustomerChat customerChatStatus, int ChatID, int TenantId, int UserID)
         {
             _customerChat = customerChatStatus;
 
-            return _customerChat.UpdateCustomerChatIdStatus(chatID, TenantId);
+            return await _customerChat.UpdateCustomerChatIdStatus(ChatID, TenantId, UserID);
         }
 
         /// <summary>
@@ -68,11 +66,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        public List<AppointmentDetails> ScheduleVisit(ICustomerChat customerChatStatus, AppointmentMaster appointmentMaster)
+        public async Task<List<AppointmentDetails>> ScheduleVisit(ICustomerChat customerChatStatus, AppointmentMaster appointmentMaster)
         {
             _customerChat = customerChatStatus;
 
-            return _customerChat.ScheduleVisit(appointmentMaster);
+            return await _customerChat.ScheduleVisit(appointmentMaster);
         }
 
         /// <summary>
@@ -80,10 +78,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name="ChatId"></param>
         /// <returns></returns>
-        public List<CustomerChatHistory> CustomerChatHistory(ICustomerChat customerchatHistory, int ChatID)
+        public async Task<List<CustomerChatHistory>> CustomerChatHistory(ICustomerChat customerchatHistory, int ChatID)
         {
             _customerChat = customerchatHistory;
-            return _customerChat.CustomerChatHistory(ChatID);
+            return await _customerChat.CustomerChatHistory(ChatID);
         }
 
         /// <summary>
@@ -92,12 +90,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// <param name=""></param>
         /// <returns></returns>
         /// 
-        public int GetChatCount(ICustomerChat customerChat,int tenantID,int UserMasterID)
+        public async Task<int> GetChatCount(ICustomerChat customerChat,int TenantID,int UserMasterID)
         {
 
             _customerChat = customerChat;
 
-            return _customerChat.GetChatCount(tenantID, UserMasterID);
+            return await _customerChat.GetChatCount(TenantID, UserMasterID);
         }
 
         /// <summary>
@@ -105,12 +103,21 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
         /// </summary>
         /// <param name="tenantID"></param>
         /// <returns></returns>
-        public List<DateofSchedule> GetTimeSlot(ICustomerChat customerChat, int storeID, int userMasterID, int tenantID)
+        public List<DateofSchedule> GetTimeSlot(ICustomerChat customerChat, int TenantID, string Programcode, int UserID)
         {
             _customerChat = customerChat;
 
-            return _customerChat.GetTimeSlot(storeID,userMasterID, tenantID);
+            return _customerChat.GetTimeSlot( TenantID,  Programcode, UserID);
         }
+
+        /// <summary>
+        /// Send Message To Customer For Visit
+        /// </summary>
+        /// <param name="customerChat"></param>
+        /// <param name="appointmentMaster"></param>
+        /// <param name="ClientAPIURL"></param>
+        /// <param name="CreatedBy"></param>
+        /// <returns></returns>
         public int SendMessageToCustomerForVisit(ICustomerChat customerChat, AppointmentMaster appointmentMaster, string ClientAPIURL, int CreatedBy)
         {
             _customerChat = customerChat;

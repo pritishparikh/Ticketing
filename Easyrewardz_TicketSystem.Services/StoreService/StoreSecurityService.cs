@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -242,7 +243,7 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.ExecuteScalar();
                 isUpdated = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -313,6 +314,184 @@ namespace Easyrewardz_TicketSystem.Services
         }
         #endregion
         #region Login/Authenticate Methods
+
+
+        /// <summary>
+        /// Authenticate User for first login
+        /// </summary>
+        /// <param name="Program_Code"> Program Code </param>
+        /// <param name="Domain_Name"> Domain Name </param>
+        /// <param name="User_EmailID"> User EmailID </param>
+        /// <param name="User_Password"> User Password </param>
+        /// <param name="device Source">  device Source </param>
+        /// <param name="FBId">  FBId </param>
+        /// <returns>Authenticate</returns>
+        public AccountModal AuthenticateUser(string Program_Code, string Domain_Name, string User_EmailID, string User_Password, string deviceSource, string FBNId, string deviceID)
+        {
+            AccountModal accountModal = new AccountModal();
+
+            try
+            {
+                ////Decrypt Data 
+                Program_Code = DecryptStringAES(Program_Code);
+                Domain_Name = DecryptStringAES(Domain_Name);
+                User_EmailID = DecryptStringAES(User_EmailID);
+                // deviceSource = DecryptStringAES(deviceSource);
+                if (!string.IsNullOrEmpty(FBNId))
+                {
+                    FBNId = DecryptStringAES(FBNId);
+                }
+                if (!string.IsNullOrEmpty(deviceID))
+                {
+                    deviceID = DecryptStringAES(deviceID);
+                }
+
+
+                Authenticate authenticate = new Authenticate();
+                ////Check whether Login is valid or not
+                authenticate = isValidLogin(Program_Code, Domain_Name, User_EmailID, User_Password, deviceSource, FBNId, deviceID);
+
+                if (authenticate.UserMasterID > 0)
+                {
+                    /*Valid User then generate token and save to the database */
+
+                    ////Generate Token 
+                    string _token = generateAuthenticateToken(authenticate.ProgramCode, authenticate.Domain_Name, authenticate.AppID);
+
+                    authenticate.Token = _token;
+
+                    //Save User Token
+                    //SaveUserToken(authenticate);
+                    SaveUserTokenNew(authenticate);
+
+                    //Serialise Token & save token to Cache 
+                    string jsonString = JsonConvert.SerializeObject(authenticate);
+
+                    RedisCacheService radisCacheService = new RedisCacheService(radisCacheServerAddress);
+                    radisCacheService.Set(authenticate.Token, jsonString);
+
+                    accountModal.Message = "Valid user";
+
+                    ////Double encryption: We are doing encryption of encrypted token 
+                    accountModal.Token = Encrypt(_token);
+                    accountModal.IsValidUser = true;
+                    accountModal.FirstName = authenticate.FirstName;
+                    accountModal.LastName = authenticate.LastName;
+                    accountModal.UserEmailID = User_EmailID;
+                }
+                else
+                {
+                    //Wrong Username or password
+                    accountModal.Message = "Invalid username or password";
+                    accountModal.Token = "";
+                    accountModal.IsValidUser = false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+
+            }
+
+            return accountModal;
+        }
+
+        /// <summary>
+        ///is Valid Login
+        /// <param name="Program_Code"></param>
+        /// <param name="Domain_Name"></param>
+        /// <param name="User_EmailID"></param>
+        /// <param name="User_Password"></param>
+        /// <param name="deviceSource"></param>
+        /// <param name="FBNId"></param>
+        /// <param name="deviceID"></param>
+        /// </summary>
+        private Authenticate isValidLogin(string Program_Code, string Domain_Name, string User_EmailID, string User_Password, string deviceSource, string FBNId, string deviceID)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            DataSet ds = new DataSet();
+            Authenticate authenticate = new Authenticate();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+
+                //MySqlCommand cmd1 = new MySqlCommand("SP_ValidateStoreUserLogin", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_ValidateStoreUserLogin_New", conn);
+                //SP_ValidateStoreUserLogin_New
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@Program_Code", Program_Code);
+                cmd1.Parameters.AddWithValue("@Domain_Name", Domain_Name);
+                cmd1.Parameters.AddWithValue("@User_EmailID", User_EmailID);
+                cmd1.Parameters.AddWithValue("@User_Password", User_Password);
+                cmd1.Parameters.AddWithValue("@Device_Source", string.IsNullOrEmpty(deviceSource) ? "" : deviceSource);
+                cmd1.Parameters.AddWithValue("@FBN_ID", string.IsNullOrEmpty(FBNId) ? "" : FBNId);
+                cmd1.Parameters.AddWithValue("@Device_ID", string.IsNullOrEmpty(deviceID) ? "" : deviceID);
+
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd1)
+                {
+                    SelectCommand = cmd1
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+
+                        bool status = Convert.ToBoolean(ds.Tables[0].Rows[0]["Status"]);
+
+                        if (status)
+                        {
+                            authenticate.AppID = Convert.ToString(ds.Tables[0].Rows[0]["ApplicationId"]);
+                            authenticate.ProgramCode = Program_Code;
+                            authenticate.Domain_Name = Domain_Name;
+                            authenticate.UserMasterID = Convert.ToInt32(ds.Tables[0].Rows[0]["UserID"]);
+                            authenticate.TenantId = Convert.ToInt32(ds.Tables[0].Rows[0]["Tenant_Id"]);
+                            authenticate.FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]);
+                            authenticate.LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]);
+                            authenticate.Message = "Valid user";
+                            authenticate.UserEmailID = User_EmailID;
+                            authenticate.DeviceSource = string.IsNullOrEmpty(deviceSource) ? "" : deviceSource;
+                            authenticate.FBNID = string.IsNullOrEmpty(FBNId) ? "" : FBNId;
+                            authenticate.DeviceID = string.IsNullOrEmpty(deviceID) ? "" : deviceID;
+
+                        }
+                        else
+                        {
+                            authenticate.AppID = "";
+                            authenticate.ProgramCode = "";
+                            authenticate.Domain_Name = "";
+                            authenticate.Message = "In-valid username or passowrd";
+                            authenticate.Token = "";
+                            authenticate.UserMasterID = 0;
+                            authenticate.TenantId = 0;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return authenticate;
+        }
+
+
 
         /// <summary>
         /// Authenticate User for first login
@@ -523,6 +702,39 @@ namespace Easyrewardz_TicketSystem.Services
             return authenticate;
         }
 
+        private Authenticate SaveUserTokenNew(Authenticate authenticate)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_createStoreCurrentSession_New", conn);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                cmd1.Parameters.AddWithValue("@UserMaster_ID", authenticate.UserMasterID);
+                cmd1.Parameters.AddWithValue("@Security_Token", authenticate.Token);
+                cmd1.Parameters.AddWithValue("@App_Id", authenticate.AppID);
+                cmd1.Parameters.AddWithValue("@Program_Code", authenticate.ProgramCode);
+                cmd1.Parameters.AddWithValue("@Tenant_Id", authenticate.TenantId);
+                cmd1.Parameters.AddWithValue("@Device_Source", string.IsNullOrEmpty(authenticate.DeviceSource) ? "" : authenticate.DeviceSource);
+                cmd1.Parameters.AddWithValue("@FBN_ID", string.IsNullOrEmpty(authenticate.FBNID) ? "" : authenticate.FBNID);
+                cmd1.Parameters.AddWithValue("@Device_ID", string.IsNullOrEmpty(authenticate.DeviceID) ? "" : authenticate.DeviceID);
+                cmd1.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return authenticate;
+        }
+
         ///// <summary>
         ///// Set data to Radhish Cache memory
         ///// </summary>
@@ -564,6 +776,42 @@ namespace Easyrewardz_TicketSystem.Services
         ////    IDatabase _db = redis.GetDatabase();
         ////    return _db.KeyExists(key);
         ////}
+
+        public async Task<int> UpdateMobileDetails(int TenantID, string FBID, string DeviceID)
+        {
+            int Result = 0;
+            try
+            {
+                using (conn)
+                {
+                    using (MySqlCommand cmd = new MySqlCommand("SP_UpdateMobileLoginDetails", conn))
+                    {
+                        await conn.OpenAsync();
+                        cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                        cmd.Parameters.AddWithValue("@_FBID", FBID);
+                        cmd.Parameters.AddWithValue("@_DeviceID", DeviceID);
+
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        Result = Convert.ToInt32(cmd.ExecuteNonQuery());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return Result;
+        }
+
 
         /// <summary>
         /// Logout user
@@ -624,7 +872,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// 
+        /// validate User Email Id
         /// </summary>
         /// <param name="EmailId"></param>
         public Authenticate validateUserEmailId(string EmailId)
@@ -755,8 +1003,7 @@ namespace Easyrewardz_TicketSystem.Services
                 MySqlCommand cmd = new MySqlCommand("SP_StoreUserChangePassword", conn);
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@_Password", customChangePassword.Password);
-                cmd.Parameters.AddWithValue("@_NewPassword", customChangePassword.NewPassword);
-                //cmd.Parameters.AddWithValue("@_UserID", customChangePassword.UserID);
+                cmd.Parameters.AddWithValue("@_NewPassword", customChangePassword.NewPassword);               
                 cmd.Parameters.AddWithValue("@Email_ID", customChangePassword.EmailID);
                 cmd.Parameters.AddWithValue("@Tenant_Id", TenantId);
                 cmd.Parameters.AddWithValue("@User_ID", User_ID);
@@ -783,12 +1030,13 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Change Passsword
+        /// Get Forget Passowrd Mail Content
         /// </summary>
         /// <param name="TenantId"></param>
         /// <param name="url"></param>
         /// <param name="emailid"></param>
         /// <param name="content"></param>
+        /// <param name="subject"></param>
         public void GetForgetPassowrdMailContent(int TenantId, string url, string emailid, out string content, out string subject)
         {
             DataSet ds = new DataSet();
@@ -799,7 +1047,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("SP_GetForgetPassowrdMailContent", conn);
+                MySqlCommand cmd1 = new MySqlCommand("SP_StoreGetForgetPassowrdMailContent", conn);
                 cmd1.CommandType = CommandType.StoredProcedure;
                 cmd1.Parameters.AddWithValue("@_TenantId", TenantId);
                 cmd1.Parameters.AddWithValue("@_url", url);
@@ -827,6 +1075,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
         }

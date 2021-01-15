@@ -5,6 +5,7 @@ using Easyrewardz_TicketSystem.WebAPI.Provider;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -18,7 +19,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetCampaignSettingList")]
-        public ResponseModel GetCampaignSettingList()
+        public async Task<ResponseModel> GetCampaignSettingList()
         {
             StoreCampaignModel3 objStoreCampaignSetting =new StoreCampaignModel3();
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -29,9 +30,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                objStoreCampaignSetting = storecampaigncaller.GetStoreCampignSetting(new StoreCampaignService(_connectioSting),
+                objStoreCampaignSetting =await storecampaigncaller.GetStoreCampignSetting(new StoreCampaignService(_connectioSting),
                     authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
                 statusCode =
                    objStoreCampaignSetting.CampaignSettingTimer.Equals(0) ?
@@ -59,7 +61,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateCampaignSetting")]
-        public ResponseModel UpdateCampaignSetting([FromBody] StoreCampaignSettingModel CampaignModel)
+        public async Task<ResponseModel> UpdateCampaignSetting([FromBody] StoreCampaignSettingModel CampaignModel)
         {
 
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -72,9 +74,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                UpdateCount = storecampaigncaller.UpdateStoreCampaignSetting(new StoreCampaignService(_connectioSting), CampaignModel);
+                UpdateCount =await storecampaigncaller.UpdateStoreCampaignSetting(new StoreCampaignService(_connectioSting), CampaignModel);
                 statusCode = UpdateCount.Equals(0) ?
                            (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
 
@@ -103,7 +106,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateCampaignMaxClickTimer")]
-        public ResponseModel UpdateCampaignMaxClickTimer([FromBody] StoreCampaignSettingTimer storeCampaignSettingTimer)
+        public async Task<ResponseModel> UpdateCampaignMaxClickTimer([FromBody] StoreCampaignSettingTimer storeCampaignSettingTimer)
         {
 
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -116,9 +119,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                UpdateCount = storecampaigncaller.UpdateCampaignMaxClickTimer(new StoreCampaignService(_connectioSting), storeCampaignSettingTimer, authenticate.UserMasterID);
+                UpdateCount = await storecampaigncaller.UpdateCampaignMaxClickTimer(new StoreCampaignService(_connectioSting), storeCampaignSettingTimer, authenticate.UserMasterID);
                 statusCode = UpdateCount.Equals(0) ?
                            (int)EnumMaster.StatusCode.InternalServiceNotWorking : (int)EnumMaster.StatusCode.Success;
 
@@ -143,7 +147,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetBroadcastConfiguration")]
-        public ResponseModel GetBroadcastConfiguration()
+        public async Task<ResponseModel> GetBroadcastConfiguration()
         {
             StoreBroadcastConfiguration StoreBroadcastConfiguration = new StoreBroadcastConfiguration();
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -154,9 +158,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                StoreBroadcastConfiguration = storecampaigncaller.GetBroadcastConfiguration(new StoreCampaignService(_connectioSting),
+                StoreBroadcastConfiguration =await storecampaigncaller.GetBroadcastConfiguration(new StoreCampaignService(_connectioSting),
                     authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
                 statusCode =
                    StoreBroadcastConfiguration.ID.Equals(0) ?
@@ -183,7 +188,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetAppointmentConfiguration")]
-        public ResponseModel GetAppointmentConfiguration()
+        public async Task<ResponseModel> GetAppointmentConfiguration()
         {
             StoreAppointmentConfiguration StoreBroadcastConfiguration = new StoreAppointmentConfiguration();
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -194,9 +199,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                StoreBroadcastConfiguration = storecampaigncaller.GetAppointmentConfiguration(new StoreCampaignService(_connectioSting),
+                StoreBroadcastConfiguration =await storecampaigncaller.GetAppointmentConfiguration(new StoreCampaignService(_connectioSting),
                     authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
                 statusCode =
                    StoreBroadcastConfiguration.ID.Equals(0) ?
@@ -223,7 +229,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateBroadcastConfiguration")]
-        public ResponseModel UpdateBroadcastConfiguration([FromBody]StoreBroadcastConfiguration storeBroadcastConfiguration)
+        public async Task<ResponseModel> UpdateBroadcastConfiguration([FromBody]StoreBroadcastConfiguration storeBroadcastConfiguration)
         {
             int UpdateCount = 0;
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -234,9 +240,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                UpdateCount = storecampaigncaller.UpdateBroadcastConfiguration(new StoreCampaignService(_connectioSting),
+                UpdateCount =await storecampaigncaller.UpdateBroadcastConfiguration(new StoreCampaignService(_connectioSting),
                     storeBroadcastConfiguration, authenticate.UserMasterID);
                 statusCode =
                    UpdateCount.Equals(0) ?
@@ -263,7 +270,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateAppointmentConfiguration")]
-        public ResponseModel UpdateAppointmentConfiguration([FromBody]StoreAppointmentConfiguration storeAppointmentConfiguration)
+        public async Task<ResponseModel> UpdateAppointmentConfiguration([FromBody]StoreAppointmentConfiguration storeAppointmentConfiguration)
         {
             int UpdateCount = 0;
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -274,9 +281,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                UpdateCount = storecampaigncaller.UpdateAppointmentConfiguration(new StoreCampaignService(_connectioSting),
+                UpdateCount =await storecampaigncaller.UpdateAppointmentConfiguration(new StoreCampaignService(_connectioSting),
                     storeAppointmentConfiguration, authenticate.UserMasterID);
                 statusCode =
                    UpdateCount.Equals(0) ?
@@ -302,7 +310,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetLanguageDetails")]
-        public ResponseModel GetLanguageDetails()
+        public async Task<ResponseModel> GetLanguageDetails()
         {
             List<Languages> languageslist = new List<Languages>();
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -313,9 +321,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                languageslist = storecampaigncaller.GetLanguageDetails(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
+                languageslist =await storecampaigncaller.GetLanguageDetails(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
                 statusCode =
                    languageslist.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -341,7 +350,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("InsertLanguageDetails")]
-        public ResponseModel InsertLanguageDetails(int languageID)
+        public async Task<ResponseModel> InsertLanguageDetails(int languageID)
         {
             int UpdateCount = 0;
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -352,12 +361,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                UpdateCount = storecampaigncaller.InsertLanguageDetails(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, languageID);
+                UpdateCount =await storecampaigncaller.InsertLanguageDetails(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, languageID);
                 statusCode =
                    UpdateCount == 0 ?
-                           (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                           (int)EnumMaster.StatusCode.RecordNotFound : UpdateCount == 2 ? (int)EnumMaster.StatusCode.RecordAlreadyExists :  (int)EnumMaster.StatusCode.Success;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
 
@@ -379,7 +389,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetSelectedLanguageDetails")]
-        public ResponseModel GetSelectedLanguageDetails()
+        public async Task<ResponseModel> GetSelectedLanguageDetails()
         {
             List<SelectedLanguages> languageslist = new List<SelectedLanguages>();
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -390,9 +400,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                languageslist = storecampaigncaller.GetSelectedLanguageDetails(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
+                languageslist =await storecampaigncaller.GetSelectedLanguageDetails(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode);
                 statusCode =
                    languageslist.Count == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
@@ -412,13 +423,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// DeleteSelectedLanguage
+        /// Delete Selected Language
         /// </summary>
         /// <param name="selectedLanguageID"></param>
+        /// <param name="isActive"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("DeleteSelectedLanguage")]
-        public ResponseModel DeleteSelectedLanguage(int selectedLanguageID)
+        public async Task<ResponseModel> DeleteSelectedLanguage(int selectedLanguageID, bool isActive)
         {
             int UpdateCount = 0;
             StoreCampaignCaller storecampaigncaller = new StoreCampaignCaller();
@@ -429,9 +441,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             {
                 string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
-                UpdateCount = storecampaigncaller.DeleteSelectedLanguage(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, selectedLanguageID);
+                UpdateCount =await storecampaigncaller.DeleteSelectedLanguage(new StoreCampaignService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID, authenticate.ProgramCode, selectedLanguageID, isActive);
                 statusCode =
                    UpdateCount == 0 ?
                            (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;

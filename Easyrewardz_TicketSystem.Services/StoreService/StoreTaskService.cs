@@ -1,11 +1,14 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.CustomModel.StoreModal;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -13,9 +16,16 @@ namespace Easyrewardz_TicketSystem.Services
     {
         #region Constructor
         MySqlConnection conn = new MySqlConnection();
+        CustomResponse ApiResponse = null;
+        string apiResponse = string.Empty;
+        string apiResponse1 = string.Empty;
+        string apisecurityToken = string.Empty;
+        string apiURL = string.Empty;
+        string apiURLGetUserATVDetails = string.Empty;
         public StoreTaskService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
+            apisecurityToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9ncmFtQ29kZSI6IkJhdGEiLCJVc2VySUQiOiIzIiwiQXBwSUQiOiI3IiwiRGF5IjoiMjgiLCJNb250aCI6IjMiLCJZZWFyIjoiMjAyMSIsIlJvbGUiOiJBZG1pbiIsImlzcyI6IkF1dGhTZWN1cml0eUlzc3VlciIsImF1ZCI6IkF1dGhTZWN1cml0eUF1ZGllbmNlIn0.0XeF7V5LWfQn0NlSlG7Rb-Qq1hUCtUYRDg6dMGIMvg0";
         }
         #endregion
         /// <summary>
@@ -35,7 +45,6 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-
                 cmd.Parameters.AddWithValue("@Task_Title", taskMaster.TaskTitle);
                 cmd.Parameters.AddWithValue("@Task_Description", taskMaster.TaskDescription);
                 cmd.Parameters.AddWithValue("@Department_Id", taskMaster.DepartmentId);
@@ -46,7 +55,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@Created_By", UserID);
 
                 taskId = Convert.ToInt32(cmd.ExecuteNonQuery());
-
             }
             catch (Exception)
             {
@@ -122,7 +130,6 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             catch (Exception)
-
             {
                 throw;
             }
@@ -235,8 +242,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_TaskFor", TaskComment.TaskFor == 0 ? 1 : TaskComment.TaskFor);
                 cmd.Parameters.AddWithValue("@_CommentBy", UserID);
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
-
-
                 taskId = Convert.ToInt32(cmd.ExecuteNonQuery());
 
             }
@@ -314,6 +319,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return TaskCommentList;
         }
@@ -327,13 +336,11 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public List<CustomTaskHistory> GetTaskHistory(int TaskID, int TenantID, int UserID)
         {
-
             DataSet ds = new DataSet();
             List<CustomTaskHistory> ListTaskHistory = new List<CustomTaskHistory>();
             try
             {
                 conn.Open();
-
                 MySqlCommand cmd = new MySqlCommand("SP_GetHistoryOfTask", conn)
                 {
                     CommandType = CommandType.StoredProcedure
@@ -377,10 +384,11 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Update Task Status
+        /// Submit Task
         /// </summary>
         /// <param name="taskMaster"></param>
-        /// <param name="taskMaster"></param>
+        /// <param name="UserID"></param>
+        /// <param name="TenantId"></param>
         /// <returns></returns>
         public int SubmitTask(StoreTaskMaster taskMaster, int UserID, int TenantId)
         {
@@ -418,10 +426,11 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// GetUserList
+        ///  Get User List
         /// </summary>
         /// <param name="TenantID"></param>
         /// <param name="TaskID"></param>
+        /// <param name="TaskFor"></param>
         /// <returns></returns>
         public List<CustomStoreUserList> GetUserList(int TenantID, int TaskID, int TaskFor)
         {
@@ -475,12 +484,11 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// AssignTask
+        /// Assign Task
         /// </summary>
-        /// <param name="TaskID"></param>
+        /// <param name="assignTaskModel"></param>
         /// <param name="TenantID"></param>
         /// <param name="UserID"></param>
-        /// <param name="AgentID"></param>
         /// <returns></returns>
         public int AssignTask(AssignTaskModel assignTaskModel, int TenantID, int UserID)
         {
@@ -576,11 +584,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             catch (Exception)
-
             {
                 throw;
             }
-
             finally
             {
                 if (conn != null)
@@ -596,7 +602,7 @@ namespace Easyrewardz_TicketSystem.Services
         }
 
         /// <summary>
-        /// Get Store Ticketing TaskByTaskID
+        /// Get Store Ticketing Task By Task ID
         /// </summary>
         /// <param name="TaskID"></param>
         /// <param name="TenantID"></param>
@@ -771,7 +777,6 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-
                 cmd.Parameters.AddWithValue("@_TaskId", TaskId);
                 cmd.Parameters.AddWithValue("@_TaskBy", TaskBy);
 
@@ -882,7 +887,6 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_IsCommentOnAssign", assignTaskModel.IsCommentOnAssign);
                 cmd.Parameters.AddWithValue("@_CommentOnAssign", assignTaskModel.CommentOnAssign);
 
-
                 i = cmd.ExecuteNonQuery();
             }
             catch (Exception)
@@ -919,14 +923,12 @@ namespace Easyrewardz_TicketSystem.Services
                     CommandType = CommandType.StoredProcedure
                 };
                 cmd.Parameters.AddWithValue("@_TenantID", TenantID);
-
-
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
                 MySqlDataAdapter da = new MySqlDataAdapter
                 {
                     SelectCommand = cmd
                 };
                 da.Fill(ds);
-
 
                 if (ds != null && ds.Tables[0] != null)
                 {
@@ -973,7 +975,6 @@ namespace Easyrewardz_TicketSystem.Services
                 }
             }
             catch (Exception)
-
             {
                 throw;
             }
@@ -992,6 +993,144 @@ namespace Easyrewardz_TicketSystem.Services
             return objList;
         }
 
+
+        /// <summary>
+        /// Get Store Campaign Customer New
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public async Task<List<StoreCampaign>> GetStoreCampaignCustomerNew(int TenantID, int UserID)
+        {
+            DataTable schemaTable1 = new DataTable();
+            DataTable schemaTable2 = new DataTable();
+            DataTable schemaTable3 = new DataTable();
+            MySqlCommand cmd = null;
+            List<StoreCampaign> objList = new List<StoreCampaign>();
+            List<CampaignResponse> CampaignResponseList = new List<CampaignResponse>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    cmd = new MySqlCommand("SP_GetStoreCampaignCustomer_New", conn);
+                    cmd.Connection = conn;
+                    cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                    cmd.Parameters.AddWithValue("@_UserID", UserID);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (reader.HasRows)
+                        {
+                            schemaTable1.Load(reader);
+                            schemaTable2.Load(reader);
+                            schemaTable3.Load(reader);
+
+                            if (schemaTable3.Rows.Count > 0)
+                            {
+                                foreach (DataRow dr in schemaTable3.Rows)
+                                {
+                                    CampaignResponse CampResponse = new CampaignResponse()
+                                    {
+                                        ResponseID = Convert.ToInt32(dr["ResponseID"]),
+                                        Response = dr["Response"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Response"]),
+                                        StatusNameID = dr["Status"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Status"])
+                                    };
+
+                                    CampaignResponseList.Add(CampResponse);
+                                }
+                            }
+
+
+
+                            if (schemaTable1.Rows.Count > 0)
+                            {
+                                foreach (DataRow dr in schemaTable1.Rows)
+                                {
+                                    StoreCampaign obj = new StoreCampaign
+                                    {
+                                        CampaignTypeID = Convert.ToInt32(dr["CampaignTypeID"]),
+                                        CampaignName = dr["CampaignName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignName"]),
+                                        CampaignScript = dr["CampaignScript"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignScript"]),
+                                        CampaignScriptLess = dr["CampaignScript"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignScript"]).Length < 15 ? Convert.ToString(dr["CampaignScript"]) : Convert.ToString(dr["CampaignScript"]).Substring(0, 15),
+                                        ContactCount = Convert.ToInt32(dr["ContactCount"]),
+                                        CampaignEndDate = dr["CampaignEndDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignEndDate"]),
+                                        StoreCampaignCustomerList = new List<StoreCampaignCustomer>()
+                                    };
+
+                                    if (schemaTable2.Rows.Count > 0)
+                                    {
+                                        obj.StoreCampaignCustomerList = schemaTable2.AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("CampaignTypeID")).
+                                         Equals(obj.CampaignTypeID)).Select(x => new StoreCampaignCustomer()
+                                         {
+                                             CampaignCustomerID = Convert.ToInt32(x.Field<int>("CampaignCustomerID")),
+                                             CustomerID = Convert.ToInt32(x.Field<int>("CustomerID")),
+                                             CampaignTypeDate = x.Field<object>("CampaignTypeDate") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CampaignTypeDate")),
+                                             CampaignTypeID = Convert.ToInt32(x.Field<int>("CampaignTypeID")),
+                                             CampaignStatus = x.Field<object>("CampaignStatus") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("CampaignStatus")),
+                                             Response = x.Field<object>("Response") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Response")),
+                                             CallReScheduledTo = x.Field<object>("CallReScheduledTo") == DBNull.Value ? string.Empty : ConvertDatetimeToString(Convert.ToString(x.Field<object>("CallReScheduledTo"))),
+                                             IsRescheduleCallDisabled = x.Field<object>("IsRescheduleCallDisabled") == DBNull.Value ? false : Convert.ToBoolean(x.Field<object>("IsRescheduleCallDisabled")),
+                                             CustomerName = x.Field<object>("CustomerName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerName")),
+                                             CustomerPhoneNumber = x.Field<object>("CustomerPhoneNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerPhoneNumber")),
+                                             CustomerEmailId = x.Field<object>("CustomerEmailId") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerEmailId")),
+                                             DOB = x.Field<object>("DOB") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("DOB")),
+                                             NoOfTimesNotContacted = x.Field<object>("NoOfTimesNotContacted") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("NoOfTimesNotContacted")),
+
+                                             CampaignResponseList = CampaignResponseList.Count > 0 ? CampaignResponseList : null,
+
+                                         }).ToList();
+                                    }
+
+                                    objList.Add(obj);
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (schemaTable1 != null)
+                {
+                    schemaTable1.Dispose();
+                }
+                if (schemaTable2 != null)
+                {
+                    schemaTable2.Dispose();
+                }
+                if (schemaTable3 != null)
+                {
+                    schemaTable3.Dispose();
+                }
+            }
+
+            return objList;
+        }
+
+
+
+
+        /// <summary>
+        /// ConvertDatetimeToString
+        /// </summary>
+        /// <param name="DateInString"></param>
+        /// <returns></returns>
         public string ConvertDatetimeToString(string DateInString)
         {
             string result = "";
@@ -1002,7 +1141,6 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     result = DateInString + GMT;
                 }
-
             }
             catch (Exception)
             {
@@ -1020,13 +1158,11 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public CampaignStatusResponse GetCampaignStatusResponse(int TenantID, int UserID)
         {
-
             DataSet ds = new DataSet();
             CampaignStatusResponse obj = new CampaignStatusResponse();
             try
             {
                 conn.Open();
-
                 MySqlCommand cmd = new MySqlCommand("SP_GetCampaignStatusResponse", conn)
                 {
                     CommandType = CommandType.StoredProcedure
@@ -1096,13 +1232,11 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int UpdateCampaignStatusResponse(StoreCampaignCustomerRequest objRequest, int TenantID, int UserID)
         {
-
             int result = 0;
             CampaignStatusResponse obj = new CampaignStatusResponse();
             try
             {
                 conn.Open();
-
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateStoreCampaignCustomer", conn)
                 {
                     CommandType = CommandType.StoredProcedure
@@ -1110,12 +1244,10 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd.Parameters.AddWithValue("@_CampaignCustomerID", objRequest.CampaignCustomerID);
                 cmd.Parameters.AddWithValue("@_StatusNameID", objRequest.StatusNameID);
                 cmd.Parameters.AddWithValue("@_ResponseID", objRequest.ResponseID);
-
                 if (!string.IsNullOrEmpty(objRequest.CallReScheduledTo))
                 {
                     objRequest.CallReScheduledToDate = Convert.ToDateTime(objRequest.CallReScheduledTo);
                 }
-
                 cmd.Parameters.AddWithValue("@_CallReScheduledTo", objRequest.CallReScheduledToDate);
 
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
@@ -1134,6 +1266,183 @@ namespace Easyrewardz_TicketSystem.Services
             return result;
         }
 
+
+        /// <summary>
+        /// Update Campaign Status Response
+        /// </summary>
+        /// <param name="objRequest"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public async Task<int> UpdateCampaignStatusResponseNew(StoreCampaignCustomerRequest objRequest, int TenantID, int UserID)
+        {
+            int result = 0;
+            try
+            {
+
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand
+                    {
+                        Connection = conn,
+                        CommandType = CommandType.StoredProcedure,
+                        CommandText = "SP_UpdateStoreCampaignCustomer_New"
+                    };
+                    cmd.Parameters.AddWithValue("@_CampaignCustomerID", objRequest.CampaignCustomerID);
+                    cmd.Parameters.AddWithValue("@_StatusNameID", objRequest.StatusNameID);
+                    cmd.Parameters.AddWithValue("@_ResponseID", objRequest.ResponseID);
+                    cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                    cmd.Parameters.AddWithValue("@_UserID", UserID);
+                    if (!string.IsNullOrEmpty(objRequest.CallReScheduledTo))
+                    {
+                        objRequest.CallReScheduledToDate = Convert.ToDateTime(objRequest.CallReScheduledTo);
+                    }
+                    cmd.Parameters.AddWithValue("@_CallReScheduledTo", objRequest.CallReScheduledToDate);
+
+                    result = Convert.ToInt32(await cmd.ExecuteNonQueryAsync());
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+
+        public async Task<int> AddStoreTaskCampaignComment(int TenantID, int UserID, int campaignCustomerID, string Comment)
+        {
+            int result = 0;
+            try
+            {
+
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+
+                using (conn)
+                {
+                    MySqlCommand cmd = new MySqlCommand
+                    {
+                        Connection = conn,
+                        CommandType = CommandType.StoredProcedure,
+                        CommandText = "SP_InsertStoreTaskCampaignComment"
+                    };
+                    cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                    cmd.Parameters.AddWithValue("@User_ID", UserID);
+                    cmd.Parameters.AddWithValue("@CampaignCustomer_ID", campaignCustomerID);
+                    cmd.Parameters.AddWithValue("@Comments", Comment);
+
+
+
+                    result = Convert.ToInt32(await cmd.ExecuteScalarAsync());
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+
+
+        }
+
+
+        public async Task<List<StoreTaskCampaignComments>> GetStoreTaskCampaignComment(int TenantID, int campaignCustomerID)
+        {
+            DataTable schemaTable = new DataTable();
+            MySqlCommand cmd = new MySqlCommand();
+            List<StoreTaskCampaignComments> CommentList = new List<StoreTaskCampaignComments>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    cmd = new MySqlCommand("SP_GetStoreTaskCampaignComments", conn);
+                    cmd.Connection = conn;
+                    cmd.Parameters.AddWithValue("@Tenant_ID", TenantID);
+                    cmd.Parameters.AddWithValue("@CampaignCustomer_ID", campaignCustomerID);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (reader.HasRows)
+                        {
+                            schemaTable.Load(reader);
+                            if (schemaTable != null && schemaTable.Rows.Count > 0)
+                            {
+                                foreach (DataRow dr in schemaTable.Rows)
+                                {
+                                    StoreTaskCampaignComments obj = new StoreTaskCampaignComments()
+                                    {
+                                        CommentID = Convert.ToInt32(dr["CommentID"]),
+                                        CampaignCustomerID = dr["CampaignCustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CampaignCustomerID"]),
+                                        Comment = dr["Comment"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Comment"]),
+
+                                        CreatedBy = dr["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CreatedBy"]),
+                                        CreatedByName = dr["CreatedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedByName"]),
+                                        CreatedDate = dr["CreatedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CreatedDate"]),
+
+                                        ModifiedBy = dr["ModifiedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ModifiedBy"]),
+                                        ModifiedByName = dr["ModifiedByName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifiedByName"]),
+                                        ModifiedDate = dr["ModifiedDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["ModifiedDate"]),
+                                    };
+                                    CommentList.Add(obj);
+                                }
+                            }
+
+
+                        }
+                    }
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (schemaTable != null)
+                {
+                    schemaTable.Dispose();
+                }
+            }
+
+            return CommentList;
+        }
+
+
         /// <summary>
         /// Close Campaign
         /// </summary>
@@ -1144,7 +1453,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// <returns></returns>
         public int CloseCampaign(int CampaignTypeID, int IsClosed, int TenantID, int UserID)
         {
-
             int result = 0;
             CampaignStatusResponse obj = new CampaignStatusResponse();
             try
@@ -1157,6 +1465,7 @@ namespace Easyrewardz_TicketSystem.Services
                 };
                 cmd.Parameters.AddWithValue("@_CampaignTypeID", CampaignTypeID);
                 cmd.Parameters.AddWithValue("@_IsClosed", IsClosed);
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
 
                 result = Convert.ToInt32(cmd.ExecuteNonQuery());
             }
@@ -1193,14 +1502,11 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     diff = DateTime.Now - Convert.ToDateTime(time);
                     timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
-
                 }
                 else if (ColName == "RespondTimeRemainingSpan")
                 {
                     PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
                     DateTime assigneddate = Convert.ToDateTime(time.Split(new char[] { '|' })[1]);
-
-
                     switch (PriorityArr[1])
                     {
                         case "D":
@@ -1209,29 +1515,22 @@ namespace Easyrewardz_TicketSystem.Services
                                 diff = (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
                             }
                             break;
-
                         case "H":
 
                             if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
                             {
                                 diff = (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
                             }
-
-
                             break;
-
                         case "M":
 
                             if (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])) > DateTime.Now)
                             {
                                 diff = (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0]))) - DateTime.Now;
                             }
-
                             break;
-
                     }
                     timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
-
                 }
                 else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
                 {
@@ -1246,14 +1545,11 @@ namespace Easyrewardz_TicketSystem.Services
                                 diff = DateTime.Now - (assigneddate.AddDays(Convert.ToDouble(PriorityArr[0])));
                             }
                             break;
-
                         case "H":
                             if (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])) < DateTime.Now)
                             {
                                 diff = DateTime.Now - (assigneddate.AddHours(Convert.ToDouble(PriorityArr[0])));
                             }
-
-
                             break;
 
                         case "M":
@@ -1261,12 +1557,8 @@ namespace Easyrewardz_TicketSystem.Services
                             {
                                 diff = DateTime.Now - (assigneddate.AddMinutes(Convert.ToDouble(PriorityArr[0])));
                             }
-
-
                             break;
-
                     }
-
                     timespan = string.Format(spantext, Math.Abs(diff.Days), Math.Abs(diff.Hours), Math.Abs(diff.Minutes));
                 }
             }
@@ -1280,7 +1572,6 @@ namespace Easyrewardz_TicketSystem.Services
                     Array.Clear(PriorityArr, 0, PriorityArr.Length);
             }
             return timespan;
-
         }
 
 
@@ -1289,60 +1580,68 @@ namespace Easyrewardz_TicketSystem.Services
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-
         public List<TaskFilterRaisedBymeResponseModel> GetRaisedbyfiterData(TaskFilterRaisedBymeModel model)
         {
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
             List<TaskFilterRaisedBymeResponseModel> raisedByfilter = new List<TaskFilterRaisedBymeResponseModel>();
             try
             {
                 conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("sp_getStoreRaisebyData", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@objtaskID", model.taskid);
-                cmd1.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
-                cmd1.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
-                cmd1.Parameters.AddWithValue("@objDepartment", model.Department);
-                cmd1.Parameters.AddWithValue("@objfuncation", model.functionID);
-                cmd1.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
-                cmd1.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
-                cmd1.Parameters.AddWithValue("@objassignTo", model.AssigntoId);
-                cmd1.Parameters.AddWithValue("@objtaskPriority", model.Priority);
-                cmd1.Parameters.AddWithValue("@objuserid", model.userid);
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                MySqlCommand cmd = new MySqlCommand("sp_getStoreRaisebyData", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@objtaskID", model.taskid);
+                cmd.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
+                cmd.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
+                cmd.Parameters.AddWithValue("@objDepartment", model.Department);
+                cmd.Parameters.AddWithValue("@objfuncation", model.functionID);
+                cmd.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
+                cmd.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
+                cmd.Parameters.AddWithValue("@objassignTo", model.AssigntoId);
+                cmd.Parameters.AddWithValue("@objtaskPriority", model.Priority);
+                cmd.Parameters.AddWithValue("@objuserid", model.userid);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-
-
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
 
-                        TaskFilterRaisedBymeResponseModel storeRaisedby = new TaskFilterRaisedBymeResponseModel();
-                        storeRaisedby.totalCount = ds.Tables[0].Rows.Count;
-                        storeRaisedby.StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        storeRaisedby.TaskStatus = TaskStatusName;
-                        storeRaisedby.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        storeRaisedby.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
-                        storeRaisedby.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        storeRaisedby.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
-                        storeRaisedby.PriorityName = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
-                        storeRaisedby.CreationOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
-                        storeRaisedby.Assignto = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
-                        storeRaisedby.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        storeRaisedby.Updatedago = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
-                        storeRaisedby.UpdatedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        TaskFilterRaisedBymeResponseModel storeRaisedby = new TaskFilterRaisedBymeResponseModel
+                        {
+                            totalCount = ds.Tables[0].Rows.Count,
+                            StoreTaskID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            TaskStatus = TaskStatusName,
+                            TaskTitle = ds.Tables[0].Rows[i]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]),
+                            DepartmentName = ds.Tables[0].Rows[i]["DepartmentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]),
+                            StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
+                            StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
+                            PriorityName = ds.Tables[0].Rows[i]["Priorty"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]),
+                            CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
+                            CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
+                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]),
+                            Createdago = ds.Tables[0].Rows[i]["CreatedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]), "CreatedSpan"),
+                            Assignedago = ds.Tables[0].Rows[i]["AssignedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["AssignedDate"]), "AssignedSpan"),
+                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]), "ModifiedSpan"),
+                            TaskCloureDate = ds.Tables[0].Rows[i]["ClosureTaskDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureTaskDate"]),
+                            ResolutionTimeRemaining = ds.Tables[0].Rows[i]["RemainingTime"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RemainingTime"]),
+                            ResolutionOverdueBy = ds.Tables[0].Rows[i]["taskoverDue"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["taskoverDue"]),
+                            ColorName = ds.Tables[0].Rows[i]["ColorName"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorName"]),
+                            ColorCode = ds.Tables[0].Rows[i]["ColorCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorCode"])
+                        };
                         raisedByfilter.Add(storeRaisedby);
                     }
                 }
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
@@ -1350,74 +1649,83 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return raisedByfilter;
 
         }
 
-
-
-
         /// <summary>
         /// Get task Data for raised by me filter---
         /// </summary>
         /// <param name="TenantID"></param>
         /// <returns></returns>
-
         public List<TaskFilterAssignBymeResponseModel> GetAssignBYfiterData(TaskFilterAssignBymeModel model)
         {
             DataSet ds = new DataSet();
-            MySqlCommand cmd = new MySqlCommand();
             List<TaskFilterAssignBymeResponseModel> assignByfilter = new List<TaskFilterAssignBymeResponseModel>();
             try
             {
                 conn.Open();
-                cmd.Connection = conn;
-                MySqlCommand cmd1 = new MySqlCommand("sp_getStoreAssigbBYdatafilter", conn);
-                cmd1.CommandType = CommandType.StoredProcedure;
-                cmd1.Parameters.AddWithValue("@objtaskID", model.taskid);
-                cmd1.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
-                cmd1.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
-                cmd1.Parameters.AddWithValue("@objDepartment", model.Department);
-                cmd1.Parameters.AddWithValue("@objfuncation", model.functionID);
-                cmd1.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
-                cmd1.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
-                cmd1.Parameters.AddWithValue("@objcreatedby", model.createdID);
-                cmd1.Parameters.AddWithValue("@objtaskPriority", model.Priority);
-                cmd1.Parameters.AddWithValue("@objuserid", model.userid);
-                MySqlDataAdapter da = new MySqlDataAdapter();
-                da.SelectCommand = cmd1;
+                MySqlCommand cmd = new MySqlCommand("sp_getStoreAssigbBYdatafilter", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@objtaskID", model.taskid);
+                cmd.Parameters.AddWithValue("@objtaskTitle", model.tasktitle);
+                cmd.Parameters.AddWithValue("@objtaskStatus", model.taskstatus);
+                cmd.Parameters.AddWithValue("@objDepartment", model.Department);
+                cmd.Parameters.AddWithValue("@objfuncation", model.functionID);
+                cmd.Parameters.AddWithValue("@objcreatedFrom", model.CreatedOnFrom);
+                cmd.Parameters.AddWithValue("@objcreatedTo", model.CreatedOnTo);
+                cmd.Parameters.AddWithValue("@objcreatedby", model.createdID);
+                cmd.Parameters.AddWithValue("@objtaskPriority", model.Priority);
+                cmd.Parameters.AddWithValue("@objuserid", model.userid);
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-
-
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
 
-                        TaskFilterAssignBymeResponseModel storeAssignBY = new TaskFilterAssignBymeResponseModel();
-                        storeAssignBY.totalCount = ds.Tables[0].Rows.Count;
-                        storeAssignBY.StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
-                        storeAssignBY.TaskStatus = TaskStatusName;
-                        storeAssignBY.TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]);
-                        storeAssignBY.DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]);
-                        storeAssignBY.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
-                        storeAssignBY.StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]);
-                        storeAssignBY.PriorityName = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]);
-                        storeAssignBY.CreationOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]);
-                        storeAssignBY.Assignto = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]);
-                        storeAssignBY.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
-                        storeAssignBY.Updatedago = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]);
-                        storeAssignBY.UpdatedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                        TaskFilterAssignBymeResponseModel storeAssignBY = new TaskFilterAssignBymeResponseModel
+                        {
+                            totalCount = ds.Tables[0].Rows.Count,
+                            StoreTaskID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            TaskStatus = TaskStatusName,
+                            TaskTitle = ds.Tables[0].Rows[i]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]),
+                            DepartmentName = ds.Tables[0].Rows[i]["DepartmentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]),
+                            StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
+                            StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
+                            PriorityName = ds.Tables[0].Rows[i]["Priorty"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]),
+                            CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
+                            CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
+                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]),
+                            Createdago = ds.Tables[0].Rows[i]["CreatedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["CreatedDate"]), "CreatedSpan"),
+                            Assignedago = ds.Tables[0].Rows[i]["AssignedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["AssignedDate"]), "AssignedSpan"),
+                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : SetCreationdetails(Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]), "ModifiedSpan"),
+                            TaskCloureDate = ds.Tables[0].Rows[i]["ClosureTaskDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureTaskDate"]),
+                            ResolutionTimeRemaining = ds.Tables[0].Rows[i]["RemainingTime"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RemainingTime"]),
+                            ResolutionOverdueBy = ds.Tables[0].Rows[i]["taskoverDue"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["taskoverDue"]),
+                            ColorName = ds.Tables[0].Rows[i]["ColorName"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorName"]),
+                            ColorCode = ds.Tables[0].Rows[i]["ColorCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorCode"])
+                        };
                         assignByfilter.Add(storeAssignBY);
                     }
                 }
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
@@ -1426,21 +1734,19 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return assignByfilter;
-
         }
 
-
-
-
-
         /// <summary>
-        /// Get task Data for task for ticket data
+        /// Get Task Ticket Data
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-
         public List<TaskFilterTicketByResponseModel> GetTaskTicketData(TaskFilterTicketByModel model)
         {
             DataSet ds = new DataSet();
@@ -1472,8 +1778,6 @@ namespace Easyrewardz_TicketSystem.Services
                 da.Fill(ds);
                 if (ds != null && ds.Tables[0] != null)
                 {
-
-
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         string TaskStatusName = ds.Tables[0].Rows[i]["Status"] == DBNull.Value ? string.Empty : Convert.ToString((EnumMaster.TaskStatus)Convert.ToInt32(ds.Tables[0].Rows[i]["Status"]));
@@ -1481,28 +1785,35 @@ namespace Easyrewardz_TicketSystem.Services
                         TaskFilterTicketByResponseModel taskTicket = new TaskFilterTicketByResponseModel
                         {
                             totalCount = ds.Tables[0].Rows.Count,
-                            StoreTaskID = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
-                            TaskStatus = TaskStatusName,
-                            TaskTitle = Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]),
-                            TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]),
-                            DepartmentName = Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]),
-                            StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
-                            StoreAddress = Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
-                            PriorityName = Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]),
-                            CreationOn = Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
-                            Assignto = Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
-                            CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
-                            Updatedago = Convert.ToString(ds.Tables[0].Rows[i]["Modifiedon"]),
-                            UpdatedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"])
+                            StoreTaskID = ds.Tables[0].Rows[i]["ID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                            TaskStatus = string.IsNullOrEmpty(TaskStatusName) ? "" : TaskStatusName,
+                            TaskTitle = ds.Tables[0].Rows[i]["TaskTitle"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["TaskTitle"]),
+                            TicketID = ds.Tables[0].Rows[i]["TicketID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]),
+                            DepartmentName = ds.Tables[0].Rows[i]["DepartmentName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["DepartmentName"]),
+                            StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]),
+                            StoreAddress = ds.Tables[0].Rows[i]["StoreAddress"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreAddress"]),
+                            PriorityName = ds.Tables[0].Rows[i]["Priorty"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Priorty"]),
+                            CreationOn = ds.Tables[0].Rows[i]["CreationOn"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreationOn"]),
+                            Assignto = ds.Tables[0].Rows[i]["Assignto"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignto"]),
+                            CreatedBy = ds.Tables[0].Rows[i]["CreatedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
+                            UpdatedBy = ds.Tables[0].Rows[i]["ModifiedBy"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
+                            FunctionName = ds.Tables[0].Rows[i]["FuncationName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["FuncationName"]),
+                            Createdago = ds.Tables[0].Rows[i]["Createdago"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Createdago"]),
+                            Assignedago = ds.Tables[0].Rows[i]["Assignedago"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Assignedago"]),
+                            Updatedago = ds.Tables[0].Rows[i]["ModifiedDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ModifiedDate"]),
+                            TaskCloureDate = ds.Tables[0].Rows[i]["ClosureTaskDate"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ClosureTaskDate"]),
+                            ResolutionTimeRemaining = ds.Tables[0].Rows[i]["RemainingTime"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RemainingTime"]),
+                            ResolutionOverdueBy = ds.Tables[0].Rows[i]["taskoverDue"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["taskoverDue"]),
+                            ColorName = ds.Tables[0].Rows[i]["ColorName"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorName"]),
+                            ColorCode = ds.Tables[0].Rows[i]["ColorCode"] == System.DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["ColorCode"])
                         };
                         ticketByTask.Add(taskTicket);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -1510,11 +1821,421 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return ticketByTask;
-
         }
 
+        /// <summary>
+        /// Get Store Campaign Customer By Status
+        /// </summary>
+        /// <param name="statusID"></param>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public List<StoreCampaign> GetStoreCampaignCustomerByStatus(string statusID, int TenantID, int UserID)
+        {
+            DataSet ds = new DataSet();
+            List<StoreCampaign> objList = new List<StoreCampaign>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SP_GetStoreCampaignCustomerByStatus", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
+                cmd.Parameters.AddWithValue("@status_ID", string.IsNullOrEmpty(statusID) ? "" : statusID.TrimEnd(','));
+                MySqlDataAdapter da = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        StoreCampaign obj = new StoreCampaign
+                        {
+                            CampaignTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["CampaignTypeID"]),
+                            CampaignName = ds.Tables[0].Rows[i]["CampaignName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignName"]),
+                            CampaignScript = ds.Tables[0].Rows[i]["CampaignScript"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignScript"]),
+                            CampaignScriptLess = ds.Tables[0].Rows[i]["CampaignScript"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignScript"]).Length < 15 ? Convert.ToString(ds.Tables[0].Rows[i]["CampaignScript"]) : Convert.ToString(ds.Tables[0].Rows[i]["CampaignScript"]).Substring(0, 15),
+                            ContactCount = Convert.ToInt32(ds.Tables[0].Rows[i]["ContactCount"]),
+                            CampaignEndDate = ds.Tables[0].Rows[i]["CampaignEndDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CampaignEndDate"]),
+                            StoreCampaignCustomerList = new List<StoreCampaignCustomer>()
+                        };
+
+                        obj.StoreCampaignCustomerList = ds.Tables[1].AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("CampaignTypeID")).
+                        Equals(obj.CampaignTypeID)).Select(x => new StoreCampaignCustomer()
+                        {
+                            CampaignCustomerID = Convert.ToInt32(x.Field<int>("CampaignCustomerID")),
+                            CustomerID = Convert.ToInt32(x.Field<int>("CustomerID")),
+                            CampaignTypeDate = x.Field<object>("CampaignTypeDate") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CampaignTypeDate")),
+                            CampaignTypeID = Convert.ToInt32(x.Field<int>("CampaignTypeID")),
+                            CampaignStatus = x.Field<object>("CampaignStatus") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("CampaignStatus")),
+                            Response = x.Field<object>("Response") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Response")),
+                            CallReScheduledTo = x.Field<object>("CallReScheduledTo") == DBNull.Value ? string.Empty : ConvertDatetimeToString(Convert.ToString(x.Field<object>("CallReScheduledTo"))),
+                            CustomerName = x.Field<object>("CustomerName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerName")),
+                            CustomerPhoneNumber = x.Field<object>("CustomerPhoneNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerPhoneNumber")),
+                            CustomerEmailId = x.Field<object>("CustomerEmailId") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerEmailId")),
+                            DOB = x.Field<object>("DOB") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("DOB")),
+                            NoOfTimesNotContacted = x.Field<object>("NoOfTimesNotContacted") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("NoOfTimesNotContacted")),
+                            CampaignResponseList = ds.Tables[2].AsEnumerable().Select(r => new CampaignResponse()
+                            {
+                                ResponseID = Convert.ToInt32(r.Field<object>("ResponseID")),
+                                Response = r.Field<object>("Response") == DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("Response")),
+                                StatusNameID = Convert.ToInt32(r.Field<object>("Status"))
+
+                            }).ToList()
+
+                        }).ToList();
+
+                        objList.Add(obj);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return objList;
+        }
+
+        public async Task<List<StoreCampaign>> FilterStoreCampaignCustomer(int CampaignTypeID, string statusID, string ResponseID, string FromDate, string ToDate, int TenantID, int UserID)
+        {
+            DataTable schemaTable1 = new DataTable();
+            DataTable schemaTable2 = new DataTable();
+            DataTable schemaTable3 = new DataTable();
+            MySqlCommand cmd = null;
+            List<StoreCampaign> objList = new List<StoreCampaign>();
+            List<CampaignResponse> CampaignResponseList = new List<CampaignResponse>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    cmd = new MySqlCommand("SP_FilterStoreCampaignCustomer", conn);
+                    cmd.Connection = conn;
+                    cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                    cmd.Parameters.AddWithValue("@_UserID", UserID);
+                    cmd.Parameters.AddWithValue("@_CampaignTypeID", CampaignTypeID);
+                    cmd.Parameters.AddWithValue("@_StatusID", string.IsNullOrEmpty(statusID) ? "" : statusID.TrimEnd(','));
+                    cmd.Parameters.AddWithValue("@_ResponseID", string.IsNullOrEmpty(ResponseID) ? "" : ResponseID.TrimEnd(','));
+                    cmd.Parameters.AddWithValue("@_FormDate", string.IsNullOrEmpty(FromDate) ? "" : FromDate);
+                    cmd.Parameters.AddWithValue("@_ToDate", string.IsNullOrEmpty(ToDate) ? "" : ToDate);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (reader.HasRows)
+                        {
+                            schemaTable1.Load(reader);
+                            schemaTable2.Load(reader);
+                            schemaTable3.Load(reader);
+
+                            if (schemaTable3.Rows.Count > 0)
+                            {
+                                foreach (DataRow dr in schemaTable3.Rows)
+                                {
+                                    CampaignResponse CampResponse = new CampaignResponse()
+                                    {
+                                        ResponseID = Convert.ToInt32(dr["ResponseID"]),
+                                        Response = dr["Response"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Response"]),
+                                        StatusNameID = dr["Status"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Status"])
+                                    };
+
+                                    CampaignResponseList.Add(CampResponse);
+                                }
+                            }
+
+
+
+                            if (schemaTable1.Rows.Count > 0)
+                            {
+                                foreach (DataRow dr in schemaTable1.Rows)
+                                {
+                                    StoreCampaign obj = new StoreCampaign
+                                    {
+                                        CampaignTypeID = Convert.ToInt32(dr["CampaignTypeID"]),
+                                        CampaignName = dr["CampaignName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignName"]),
+                                        CampaignScript = dr["CampaignScript"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignScript"]),
+                                        CampaignScriptLess = dr["CampaignScript"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignScript"]).Length < 15 ? Convert.ToString(dr["CampaignScript"]) : Convert.ToString(dr["CampaignScript"]).Substring(0, 15),
+                                        ContactCount = Convert.ToInt32(dr["ContactCount"]),
+                                        CampaignEndDate = dr["CampaignEndDate"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignEndDate"]),
+                                        StoreCampaignCustomerList = new List<StoreCampaignCustomer>()
+                                    };
+
+                                    if (schemaTable2.Rows.Count > 0)
+                                    {
+                                        obj.StoreCampaignCustomerList = schemaTable2.AsEnumerable().Where(x => Convert.ToInt32(x.Field<int>("CampaignTypeID")).
+                                         Equals(obj.CampaignTypeID)).Select(x => new StoreCampaignCustomer()
+                                         {
+                                             CampaignCustomerID = Convert.ToInt32(x.Field<int>("CampaignCustomerID")),
+                                             CustomerID = Convert.ToInt32(x.Field<int>("CustomerID")),
+                                             CampaignTypeDate = x.Field<object>("CampaignTypeDate") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CampaignTypeDate")),
+                                             CampaignTypeID = Convert.ToInt32(x.Field<int>("CampaignTypeID")),
+                                             CampaignStatus = x.Field<object>("CampaignStatus") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("CampaignStatus")),
+                                             Response = x.Field<object>("Response") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("Response")),
+                                             CallReScheduledTo = x.Field<object>("CallReScheduledTo") == DBNull.Value ? string.Empty : ConvertDatetimeToString(Convert.ToString(x.Field<object>("CallReScheduledTo"))),
+                                              IsRescheduleCallDisabled = x.Field<object>("IsRescheduleCallDisabled") == DBNull.Value ? false : Convert.ToBoolean(x.Field<object>("IsRescheduleCallDisabled")),
+                                             CustomerName = x.Field<object>("CustomerName") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerName")),
+                                             CustomerPhoneNumber = x.Field<object>("CustomerPhoneNumber") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerPhoneNumber")),
+                                             CustomerEmailId = x.Field<object>("CustomerEmailId") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("CustomerEmailId")),
+                                             DOB = x.Field<object>("DOB") == DBNull.Value ? string.Empty : Convert.ToString(x.Field<object>("DOB")),
+                                             NoOfTimesNotContacted = x.Field<object>("NoOfTimesNotContacted") == DBNull.Value ? 0 : Convert.ToInt32(x.Field<object>("NoOfTimesNotContacted")),
+
+                                             CampaignResponseList = CampaignResponseList.Count > 0 ? CampaignResponseList : null,
+
+                                         }).ToList();
+                                    }
+
+                                    objList.Add(obj);
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (schemaTable1 != null)
+                {
+                    schemaTable1.Dispose();
+                }
+                if (schemaTable2 != null)
+                {
+                    schemaTable2.Dispose();
+                }
+                if (schemaTable3 != null)
+                {
+                    schemaTable3.Dispose();
+                }
+            }
+
+            return objList;
+        }
+
+
+        public async Task<List<CampaignResponse>> GetCampaignResponseByStatus(string statusID)
+        {
+            DataTable schemaTable = new DataTable();
+            MySqlCommand cmd = null;
+            List<CampaignResponse> ResponseList = new List<CampaignResponse>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    cmd = new MySqlCommand("SP_GetCampaignResponseByStatus", conn);
+                    cmd.Connection = conn;
+                    cmd.Parameters.AddWithValue("@_StatusID", string.IsNullOrEmpty(statusID) ? "" : statusID.TrimEnd(','));
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (reader.HasRows)
+                        {
+                            schemaTable.Load(reader);
+                            if ( schemaTable.Rows.Count > 0)
+                            {
+                                foreach (DataRow dr in schemaTable.Rows)
+                                {
+                                    CampaignResponse CampResponse = new CampaignResponse()
+                                    {
+                                        ResponseID = Convert.ToInt32(dr["ResponseID"]),
+                                        Response = dr["Response"] == DBNull.Value ? string.Empty : Convert.ToString(dr["Response"]),
+                                        StatusNameID = dr["Status"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Status"])
+                                    };
+
+                                    ResponseList.Add(CampResponse);
+                                }
+                            }
+
+
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (schemaTable != null)
+                {
+                    schemaTable.Dispose();
+                }
+            }
+
+            return ResponseList;
+        }
+
+        /// <summary>
+        ///Get Customer popup Details List
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="userID"></param>
+        /// <param name="mobileNumber"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
+        public StoresCampaignDetailResponse GetStoreCustomerpopupDetailsList(string mobileNumber, string programCode, int tenantID, int userID, string ClientAPIURL)
+        {
+            StoresCampaignDetailResponse obj = new StoresCampaignDetailResponse();
+            StoreCampaignSearchOrder objOrderSearch = new StoreCampaignSearchOrder();
+            CustomerpopupDetails objpopupDetails = new CustomerpopupDetails();
+            StoreCampaignLastTransactionDetails objLastTransactionDetails = new StoreCampaignLastTransactionDetails();
+            string apiReq = string.Empty;
+            DataSet ds = new DataSet();
+            try
+            {
+                objOrderSearch.mobileNumber = mobileNumber;
+                objOrderSearch.programCode = programCode;
+                objOrderSearch.securityToken = apisecurityToken;
+                try
+                {
+                    apiReq = JsonConvert.SerializeObject(objOrderSearch);
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetUserATVDetails", apiReq);
+
+                    if (!string.IsNullOrEmpty(apiResponse))
+                    {
+                        ApiResponse = JsonConvert.DeserializeObject<CustomResponse>(apiResponse);
+                        if (apiResponse != null)
+                        {
+                            objpopupDetails = JsonConvert.DeserializeObject<CustomerpopupDetails>(((apiResponse)));
+
+                            if (objpopupDetails != null)
+                            {
+                                CustomerpopupDetails popupDetail = new CustomerpopupDetails
+                                {
+                                    name = objpopupDetails.name,
+                                    mobileNumber = objpopupDetails.mobileNumber,
+                                    tiername = objpopupDetails.tiername,
+                                    lifeTimeValue = objpopupDetails.lifeTimeValue,
+                                    visitCount = objpopupDetails.visitCount
+                                };
+                                obj.useratvdetails = popupDetail;
+                            }
+                            else
+                            {
+                                CustomerpopupDetails popupDetail = new CustomerpopupDetails
+                                {
+                                    name = "",
+                                    mobileNumber = "",
+                                    tiername = "",
+                                    lifeTimeValue = "",
+                                    visitCount = ""
+                                };
+                                obj.useratvdetails = popupDetail;
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    if (obj.useratvdetails == null)
+                    {
+                        CustomerpopupDetails popupDetail = new CustomerpopupDetails
+                        {
+                            name = "",
+                            mobileNumber = "",
+                            tiername = "",
+                            lifeTimeValue = "",
+                            visitCount = ""
+                        };
+                        obj.useratvdetails = popupDetail;
+                    }
+                }
+                try
+                {
+                    apiResponse = string.Empty;
+                    apiResponse = CommonService.SendApiRequest(ClientAPIURL + "api/ChatbotBell/GetLastTransactionDetails", apiReq);
+
+                    if (!string.IsNullOrEmpty(apiResponse))
+                    {
+
+                        if (apiResponse != null)
+                        {
+                            objLastTransactionDetails = JsonConvert.DeserializeObject<StoreCampaignLastTransactionDetails>(((apiResponse)));
+
+                            if (objLastTransactionDetails != null)
+                            {
+
+                                obj.lasttransactiondetails = objLastTransactionDetails;
+                            }
+                            else
+                            {
+                                StoreCampaignLastTransactionDetails LastTransactionDetails = new StoreCampaignLastTransactionDetails();
+
+                                LastTransactionDetails.billNo = "";
+                                LastTransactionDetails.billDate = "";
+                                LastTransactionDetails.storeName = "";
+                                LastTransactionDetails.amount = "";
+                                obj.lasttransactiondetails = LastTransactionDetails;
+                            }
+
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    if (obj.lasttransactiondetails == null)
+                    {
+                        StoreCampaignLastTransactionDetails LastTransactionDetails = new StoreCampaignLastTransactionDetails();
+
+                        LastTransactionDetails.billNo = "";
+                        LastTransactionDetails.billDate = "";
+                        LastTransactionDetails.storeName = "";
+                        LastTransactionDetails.amount = "";
+                        obj.lasttransactiondetails = LastTransactionDetails;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return obj;
+        }
 
         #endregion
 

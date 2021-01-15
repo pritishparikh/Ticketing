@@ -334,7 +334,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         public ResponseModel BulkUploadSLA(int SLAFor=1)
         {
 
-
             string DownloadFilePath = string.Empty;
             string BulkUploadFilesPath = string.Empty;
             bool errorfilesaved = false;
@@ -360,7 +359,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(_token));
 
-             
+
 
                 if (files.Count > 0)
                 {
@@ -423,8 +422,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 string SuccessFileName = "SLASuccessFile_" + timeStamp + ".csv";
                 string ErrorFileName = "SLAErrorFile_" + timeStamp + ".csv";
 
-                string SuccessFileUrl = rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)SLAFor) + "/Success/" + SuccessFileName;
-                string ErrorFileUrl = rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)SLAFor) + "/Error/" + ErrorFileName;
+                string SuccessFileUrl = !string.IsNullOrEmpty(CSVlist[0]) ?
+                  rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)SLAFor) + "/Success/" + SuccessFileName : string.Empty;
+                string ErrorFileUrl = !string.IsNullOrEmpty(CSVlist[1]) ?
+                    rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)SLAFor) + "/Error/" + ErrorFileName : string.Empty;
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
                     successfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Success", SuccessFileName), CSVlist[0]);
@@ -432,7 +433,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 if (!string.IsNullOrEmpty(CSVlist[1]))
                     errorfilesaved = CommonService.SaveFile(Path.Combine(DownloadFilePath, "Error", ErrorFileName), CSVlist[1]);
 
-                count = newSLA.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, filesName[0], errorfilesaved,
+                count = newSLA.CreateFileUploadLog(new FileUploadService(_connectioSting), authenticate.TenantId, filesName[0], true,
                                  ErrorFileName, SuccessFileName, authenticate.UserMasterID, "SLA", SuccessFileUrl, ErrorFileUrl, SLAFor);
                 #endregion
 
@@ -442,7 +443,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 objResponseModel.StatusCode = StatusCode;
                 objResponseModel.Message = statusMessage;
                 objResponseModel.ResponseData = count;
-
             }
             catch (Exception)
             {
@@ -575,7 +575,41 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return _objResponseModel;
         }
 
+        /// <summary>
+        /// ValidateSLAByIssueTypeID
+        /// </summary>
+        /// <param name="issueTypeID"></param>
+        [HttpPost]
+        [Route("ValidateSLAByIssueTypeID")]
+        public ResponseModel ValidateSLAByIssueTypeID(int issueTypeID, int ticketID)
+        {
+            SLACaller _newSLA = new SLACaller();
+            List<ValidateSLA> validateSLA = new List<ValidateSLA>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int statusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
 
+                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                validateSLA = _newSLA.ValidateSLAByIssueTypeID(new SLAServices(_connectioSting), issueTypeID, authenticate.TenantId, ticketID);
+                statusCode = validateSLA.Count == 0 ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = statusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = validateSLA;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
 
         #endregion
     }

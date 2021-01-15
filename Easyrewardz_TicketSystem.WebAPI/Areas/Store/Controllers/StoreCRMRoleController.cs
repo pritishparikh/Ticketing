@@ -50,6 +50,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Create /Update CRMRole
         /// </summary>
+        /// <param name="CRMRoleID"></param>
+        /// <param name="RoleName"></param>
+        /// <param name="RoleisActive"></param>
+        /// <param name="ModulesEnabled"></param>
+        /// <param name="ModulesDisabled"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("CreateUpdateStoreCRMRole")]
@@ -95,8 +100,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         }
 
         /// <summary>
-        /// Delete CRMROLE
+        /// Delete CRM ROLE
         /// </summary>
+        /// <param name="CRMRoleID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("DeleteStoreCRMRole")]
@@ -179,7 +185,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
 
         /// <summary>
-        /// View  CRMROLE
+        /// Get Store Roles By User ID
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -198,8 +204,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                 Authenticate authenticate = new Authenticate();
                 authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
+             
+
                 StoreCRMRoleCaller newCRM = new StoreCRMRoleCaller();
                 objCRMRoleModel = newCRM.GetCRMRoleByUserID(new StoreCRMRoleService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
+
+                objCRMRoleModel.TenantID = authenticate.TenantId;
+                objCRMRoleModel.ProgramCode = authenticate.ProgramCode;
+                objCRMRoleModel.UserID = authenticate.UserMasterID;
 
                 statusCode = objCRMRoleModel == null ? (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
 
@@ -264,6 +276,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Bullk Upload  CRMRole
         /// </summary>
+        /// <param name="RoleFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadStoreCRMRole")]
@@ -371,7 +384,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                                  ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store_CRMRole", SuccessFileUrl, ErrorFileUrl, RoleFor);
                 #endregion
 
-                statusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.WehadanerrorSorryaboutthat;
+                statusCode = successfilesaved == true && errorfilesaved == false ?
+                    (int)EnumMaster.StatusCode.Success : successfilesaved == true && errorfilesaved == true ?
+                    (int)EnumMaster.StatusCode.RecordUploadedPartially : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)statusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = statusCode;

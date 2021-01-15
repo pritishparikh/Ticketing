@@ -3,6 +3,7 @@ using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using Easyrewardz_TicketSystem.Services;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Provider
 {
@@ -92,6 +93,38 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
             return _SecurityRepository.AuthenticateUser(ProgramCode, Domainname, userId, password);
         }
 
+
+        /// <summary>
+        /// Validate User Account
+        /// </summary>
+        /// <param name="security"></param>
+        /// <param name="ProgramCode"></param>
+        /// <param name="Domainname"></param>
+        /// <param name="userId"></param>
+        /// <param name="password"></param>
+        /// <param name="deviceSource"></param>
+        /// <param name="FBId"></param>
+        /// <param name="deviceID"></param>
+        /// <returns></returns>
+        public AccountModal validateUser(IStoreSecurity security, string ProgramCode, string Domainname, string userId, string password, string deviceSource, string FBId, string deviceID)
+        {
+            _SecurityRepository = security;
+            return _SecurityRepository.AuthenticateUser(ProgramCode, Domainname, userId, password, deviceSource, FBId, deviceID);
+        }
+
+
+        /// <summary>
+        /// Update Mobile Details 
+        /// </summary>     
+        /// <param name="ProgramCode"></param>
+        /// <param name="FBID"></param>
+        /// <param name="DeviceID"></param>
+        /// <returns></returns>
+        public async Task<int> UpdateMobileDetails(IStoreSecurity security, int TenantID, string FBID, string DeviceID)
+        {
+            _SecurityRepository = security;
+            return await _SecurityRepository.UpdateMobileDetails(TenantID, FBID, DeviceID);
+        }
         /// <summary>
         /// Logout user
         /// </summary>

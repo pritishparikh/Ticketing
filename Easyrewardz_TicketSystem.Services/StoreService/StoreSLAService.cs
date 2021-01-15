@@ -16,14 +16,16 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
         MySqlConnection conn = new MySqlConnection();
 
+        #region Constructor
         public StoreSLAService(string _connectionString)
         {
             conn.ConnectionString = _connectionString;
         }
+        #endregion
 
 
         /// <summary>
-        /// Bind issuetype 
+        /// Bind Function List 
         /// <param name="tenantID"></param>
         /// <param name="SearchText"></param>
         /// </summary>
@@ -181,7 +183,7 @@ namespace Easyrewardz_TicketSystem.Services
 
 
         /// <summary>
-        /// Create SLA 
+        /// Update SLA 
         /// <param name="SLAModel"></param>
         /// </summary>
         public int UpdateStoreSLA(StoreSLAModel SLA)
@@ -286,7 +288,6 @@ namespace Easyrewardz_TicketSystem.Services
         /// <summary>
         /// GET SLA
         /// <param name="tenantID"></param>
-        /// <param name="SLAFor"></param>
         /// </summary>
         public List<StoreSLAResponseModel> StoreSLAList(int tenantID)
         {
@@ -312,24 +313,7 @@ namespace Easyrewardz_TicketSystem.Services
                     {
                         objSLALst = ds.Tables[0].AsEnumerable().Select(r => new StoreSLAResponseModel()
                         {
-                            /*
-                            SLAID = Convert.ToInt32(r.Field<object>("SlaId")),
-
-                            FunctionID = r.Field<object>("FunctionID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("FunctionID")),
-                            FunctionName = r.Field<object>("FunctionName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("FunctionName")),
                            
-                            BrandID = r.Field<object>("BrandID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("BrandID")),
-                            BrandName = r.Field<object>("BrandName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("BrandName")),
-                            StoreID = r.Field<object>("StoreID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("StoreID")),
-                            StoreName = r.Field<object>("StoreName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("StoreName")),
-                            DepartmentID = r.Field<object>("DepartmentID") == System.DBNull.Value ? 0 : Convert.ToInt32(r.Field<object>("DepartmentID")),
-                            DepartmentName = r.Field<object>("DepartmentName") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("DepartmentName")),
-                            isSLAActive = r.Field<object>("SLAStatus") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("SLAStatus")),
-                            CreatedBy = r.Field<object>("CreatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedBy")),
-                            CreatedDate = r.Field<object>("CreatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("CreatedDate")),
-                            ModifiedBy = r.Field<object>("UpdatedBy") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedBy")),
-                            ModifiedDate = r.Field<object>("UpdatedDate") == System.DBNull.Value ? string.Empty : Convert.ToString(r.Field<object>("UpdatedDate")),
-                            */
 
                             SLAID = Convert.ToInt32(r.Field<object>("SlaId")),
 
@@ -527,24 +511,15 @@ namespace Easyrewardz_TicketSystem.Services
                         if (Bulkds != null && Bulkds.Tables[0] != null && Bulkds.Tables[1] != null)
                         {
 
-                            //for success file
-                            //if (Bulkds.Tables[0].Rows.Count > 0)
-                            //{
+                           
                                 SuccesFile = Bulkds.Tables[0].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[0]) : string.Empty;
                                 csvLst.Add(SuccesFile);
 
-                                //uploadcount = UploadSLATarget(Bulkds.Tables[0], TenantID, CreatedBy); //upload SLA Target
-
-                            //}
-
-                            ////for error file
-                            //if (Bulkds.Tables[1].Rows.Count > 0)
-                            //{
+                               
                                 ErroFile = Bulkds.Tables[1].Rows.Count > 0 ? CommonService.DataTableToCsv(Bulkds.Tables[1]) : string.Empty;
                                 csvLst.Add(ErroFile);
 
-                            //}
-
+                            
                         }
                     }
 

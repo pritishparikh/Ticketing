@@ -202,7 +202,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// </summary>
         /// <param name="Cust_EmailId"></param>
         /// <param name="Cust_PhoneNumber"></param>
-        /// <param name="TenantId"></param>
         /// <returns>Message</returns>
         [HttpPost]
         [Route("validateCustomerExist")]

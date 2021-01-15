@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -167,7 +168,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("getDepartmentList")]
-        public ResponseModel getDepartmentList()
+        public async  Task<ResponseModel> getDepartmentList()
         {
 
             List<DepartmentMaster> objDepartmentList = new List<DepartmentMaster>();
@@ -182,11 +183,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                 MasterCaller newMasterBrand = new MasterCaller();
 
-                objDepartmentList = newMasterBrand.GetDepartmentListDetails(new MasterServices(connectioSting), authenticate.TenantId);
+                objDepartmentList = await newMasterBrand.GetDepartmentListDetails(new MasterServices(connectioSting), authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =
-                objDepartmentList.Count == 0 ?
-                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                objDepartmentList.Count > 0 ?
+                     (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
@@ -364,9 +365,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region City List 
 
         /// <summary>
-        /// get state list 
+        /// get state list
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="StateId"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("getcitylist")]
@@ -579,12 +580,13 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
         #endregion
-      
+
         #region Get  Country State City List
+
         /// <summary>
-        ///Get Country State City List
+        /// Get Country State City List
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="Pincode"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetCountryStateCityList")]
@@ -626,6 +628,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region Create Department
+
         /// <summary>
         ///CreateDepartment
         /// </summary>
@@ -674,6 +677,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #endregion
 
         #region Get LogedInEmail
+
         /// <summary>
         ///Get Logged in Email
         /// </summary>

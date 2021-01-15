@@ -81,7 +81,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get designation list for the Designation dropdown
         /// </summary>
-        /// <param name="TenantID"></param>
+        /// <param name="DesignationID"></param>
+        /// <param name="HierarchyFor"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetReporteeDesignation")]
@@ -116,10 +117,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             }
             return objResponseModel;
         }
+
         /// <summary>
         /// GetReportTo user based reportee Designation
         /// </summary>
         /// <param name="DesignationID"></param>
+        /// <param name="IsStoreUser"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetReportTo")]

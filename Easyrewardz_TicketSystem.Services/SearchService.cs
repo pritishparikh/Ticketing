@@ -153,10 +153,10 @@ namespace Easyrewardz_TicketSystem.Services
 
                 objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -199,18 +199,12 @@ namespace Easyrewardz_TicketSystem.Services
                             ticketCount = Convert.ToInt32(r.Field<object>("TicketStatusCount"))
 
                         }).ToList();
-
-                        //for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                        //{
-                        //    string ticketStatus = Convert.ToString(ds.Tables[0].Rows[i]["TicketStatus"]) + "|" + Convert.ToString(ds.Tables[0].Rows[i]["TicketStatusCount"]);
-                        //    ticketCount.Add(ticketStatus);
-                        //}
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -294,16 +288,11 @@ namespace Easyrewardz_TicketSystem.Services
                     }
                 }
 
-                //paging here
-                //if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
-                //    objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
-
-                //objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList();
+                
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                //throw ex;
+                throw;
             }
             finally
             {
@@ -487,17 +476,11 @@ namespace Easyrewardz_TicketSystem.Services
                         }).ToList();
                     }
                 }
-
-                //paging here
-                //if (searchparams.pageSize > 0 && objSearchResult.Count > 0)
-                //    objSearchResult[0].totalpages = objSearchResult.Count > searchparams.pageSize ? Math.Round(Convert.ToDouble(objSearchResult.Count / searchparams.pageSize)) : 1;
-
-                //objSearchResult = objSearchResult.Skip(rowStart).Take(searchparams.pageSize).ToList();
+               
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                //throw ex;
+                throw;
             }
             finally
             {
@@ -563,10 +546,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string message = Convert.ToString(ex.InnerException);
-                //throw ex;
+                throw;
             }
             finally
             {
@@ -590,19 +572,7 @@ namespace Easyrewardz_TicketSystem.Services
                 if (string.IsNullOrEmpty(time))
                 {
                     return "";
-                }
-                if (time.Split(new char[] { '|' }).Length < 2)
-                {
-                    return "";
-                }
-                if (time.Split(new char[] { '|' })[0].Trim().Length < 1)
-                {
-                    return "";
-                }
-                if (time.Split(new char[] { '|' })[1].Trim().Length < 1)
-                {
-                    return "";
-                }
+                }               
 
                 if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
                 {
@@ -697,85 +667,7 @@ namespace Easyrewardz_TicketSystem.Services
             return timespan;
 
         }
-        /*
-        public string setCreationdetails1(string time, string ColName)
-        {
-            string timespan = string.Empty;
-            DateTime now = DateTime.Now;
-            TimeSpan diff = new TimeSpan();
-            string[] PriorityArr = null;
-
-            try
-            {
-                if (ColName == "CreatedSpan" || ColName == "ModifiedSpan" || ColName == "AssignedSpan")
-                {
-                    diff = now - Convert.ToDateTime(time);
-                    timespan = CalculateSpan(diff) + " ago";
-
-                }
-                else if (ColName == "RespondTimeRemainingSpan")
-                {
-                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
-
-                    switch (PriorityArr[1])
-                    {
-                        case "D":
-                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0]))) - now;
-
-                            break;
-
-                        case "H":
-                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0]))) - now;
-
-                            break;
-
-                        case "M":
-                            diff = (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0]))) - now;
-
-                            break;
-
-                    }
-                    timespan = CalculateSpan(diff);
-                }
-                else if (ColName == "ResponseOverDueSpan" || ColName == "ResolutionOverDueSpan")
-                {
-                    PriorityArr = time.Split(new char[] { '|' })[0].Split(new char[] { '-' });
-
-                    switch (PriorityArr[1])
-                    {
-                        case "D":
-                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddDays(Convert.ToDouble(PriorityArr[0])));
-
-                            break;
-
-                        case "H":
-                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddHours(Convert.ToDouble(PriorityArr[0])));
-
-                            break;
-
-                        case "M":
-                            diff = now - (Convert.ToDateTime(time.Split(new char[] { '|' })[1]).AddMinutes(Convert.ToDouble(PriorityArr[0])));
-
-                            break;
-
-                    }
-
-                    timespan = CalculateSpan(diff);
-                }
-
-            }
-            catch (Exception)
-            {
-
-            }
-            finally
-            {
-                if (PriorityArr != null && PriorityArr.Length > 0)
-                    Array.Clear(PriorityArr, 0, PriorityArr.Length);
-            }
-            return timespan;
-        }
-        */
+       
         public string CalculateSpan(TimeSpan ts)
         {
             string span = string.Empty;

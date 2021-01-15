@@ -54,10 +54,9 @@ namespace Easyrewardz_TicketSystem.Services
                 count = cmd.ExecuteNonQuery();
 
             }
-            catch (Exception ex)
-            {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+            catch (Exception)
+            {               
+                throw;
             }
             finally
             {
@@ -119,10 +118,9 @@ namespace Easyrewardz_TicketSystem.Services
                 }
 
             }
-            catch (Exception ex)
-            {
-                string message = Convert.ToString(ex.InnerException);
-                throw ex;
+            catch (Exception)
+            {                
+                throw;
             }
             finally
             {

@@ -2,31 +2,111 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.Interface
 {
     public partial interface IStoreCampaign
     {
-        StoreCampaignModel3 GetStoreCampignSetting(int TenantId, int UserId, string ProgramCode);
+        #region Custom Method
 
-        int UpdateStoreCampaignSetting(StoreCampaignSettingModel CampaignModel);
+        /// <summary>
+        /// Get Store Campaign Setting
+        /// </summary>
+        /// <param name="TenantId"></param>
+        /// <param name="UserId"></param>
+        /// <param name="ProgramCode"></param>
+        /// <returns></returns>
+        Task<StoreCampaignModel3> GetStoreCampignSetting(int TenantId, int UserId, string ProgramCode);
 
-        int UpdateCampaignMaxClickTimer(StoreCampaignSettingTimer storeCampaignSettingTimer, int ModifiedBy);
+        /// <summary>
+        /// Update Store Campaign Setting
+        /// </summary>
+        /// <param name="CampaignModel"></param>
+        /// <returns></returns>
+        Task<int> UpdateStoreCampaignSetting(StoreCampaignSettingModel CampaignModel);
 
-        StoreBroadcastConfiguration GetBroadcastConfiguration(int tenantId, int userId, string programCode);
+        /// <summary>
+        /// Update Campaign Max Click Timer
+        /// </summary>
+        /// <param name="storeCampaignSettingTimer"></param>
+        /// <param name="ModifiedBy"></param>
+        /// <returns></returns>
+        Task<int> UpdateCampaignMaxClickTimer(StoreCampaignSettingTimer storeCampaignSettingTimer, int ModifiedBy);
 
-        StoreAppointmentConfiguration GetAppointmentConfiguration(int tenantId, int userId, string programCode);
+        /// <summary>
+        /// Get Broadcast Configuration
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
+        Task<StoreBroadcastConfiguration> GetBroadcastConfiguration(int tenantId, int userId, string programCode);
 
-        int UpdateBroadcastConfiguration(StoreBroadcastConfiguration storeBroadcastConfiguration, int modifiedBy);
+        /// <summary>
+        /// Get Appointment Configuration
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
+        Task<StoreAppointmentConfiguration> GetAppointmentConfiguration(int tenantId, int userId, string programCode);
 
-        int UpdateAppointmentConfiguration(StoreAppointmentConfiguration storeAppointmentConfiguration, int modifiedBy);
+        /// <summary>
+        /// Update Broadcast Configuration
+        /// </summary>
+        /// <param name="storeBroadcastConfiguration"></param>
+        /// <param name="modifiedBy"></param>
+        /// <returns></returns>
+        Task<int> UpdateBroadcastConfiguration(StoreBroadcastConfiguration storeBroadcastConfiguration, int modifiedBy);
 
-        List<Languages> GetLanguageDetails(int tenantId, int userId, string programCode);
+        /// <summary>
+        /// Update Appointment Configuration
+        /// </summary>
+        /// <param name="storeAppointmentConfiguration"></param>
+        /// <param name="modifiedBy"></param>
+        /// <returns></returns>
+        Task<int> UpdateAppointmentConfiguration(StoreAppointmentConfiguration storeAppointmentConfiguration, int modifiedBy);
 
-        int InsertLanguageDetails(int tenantId, int userId, string programCode, int languageID);
+        /// <summary>
+        /// Get Language Details
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
+        Task<List<Languages>> GetLanguageDetails(int tenantId, int userId, string programCode);
 
-        List<SelectedLanguages> GetSelectedLanguageDetails(int tenantId, int userId, string programCode);
+        /// <summary>
+        /// Insert Language Details
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="programCode"></param>
+        /// <param name="languageID"></param>
+        /// <returns></returns>
+       Task<int> InsertLanguageDetails(int tenantId, int userId, string programCode, int languageID);
 
-        int DeleteSelectedLanguage(int tenantId, int userId, string programCode, int selectedLanguageID);
+        /// <summary>
+        /// Get Selected Language Details
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="programCode"></param>
+        /// <returns></returns>
+       Task< List<SelectedLanguages>> GetSelectedLanguageDetails(int tenantId, int userId, string programCode);
+
+        /// <summary>
+        /// Delete Selected Language
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="programCode"></param>
+        /// <param name="selectedLanguageID"></param>
+        /// <param name="isActive"></param>
+        /// <returns></returns>
+        Task<int> DeleteSelectedLanguage(int tenantId, int userId, string programCode, int selectedLanguageID, bool isActive);
+
+        #endregion
     }
 }

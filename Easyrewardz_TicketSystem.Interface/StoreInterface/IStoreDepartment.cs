@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.Interface.StoreInterface
 {
@@ -12,8 +13,9 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         /// Get department list
         /// </summary>
         /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
         /// <returns></returns>
-        List<StoreDepartmentModel> GetStoreDepartmentList(int TenantID);
+        Task<List<StoreDepartmentModel>> GetStoreDepartmentList(int TenantID, int UserID);
 
 
 
@@ -68,10 +70,27 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         /// <returns></returns>
         int AddStorefunction(int DepartmentID, string FunctionName, int TenantID, int CreatedBy);
 
+        /// <summary>
+        /// Delete Department Mapping
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="DepartmentBrandMappingID"></param>
+        /// <returns></returns>
         int DeleteDepartmentMapping(int tenantID, int DepartmentBrandMappingID);
 
+        /// <summary>
+        /// Update Department Mapping
+        /// </summary>
+        /// <param name="updateDepartmentModel"></param>
+        /// <returns></returns>
         int UpdateDepartmentMapping(CreateStoreDepartmentModel updateDepartmentModel);
 
+        /// <summary>
+        /// get Store By Brand ID
+        /// </summary>
+        /// <param name="BrandIDs"></param>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
         List<StoreCodeModel> getStoreByBrandID(string BrandIDs, int tenantID);
 
         /// <summary>
@@ -80,9 +99,21 @@ namespace Easyrewardz_TicketSystem.Interface.StoreInterface
         /// <returns></returns>
         int CreateDepartment(CreateStoreDepartmentModel createDepartmentModel);
 
-
+        /// <summary>
+        /// Get Brand Department Mapping List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <returns></returns>
         List<DepartmentListingModel> GetBrandDepartmentMappingList(int TenantID);
 
+        /// <summary>
+        /// Department Bulk Upload
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="CreatedBy"></param>
+        /// <param name="CategoryFor"></param>
+        /// <param name="DataSetCSV"></param>
+        /// <returns></returns>
         List<string> DepartmentBulkUpload(int TenantID, int CreatedBy, int CategoryFor, DataSet DataSetCSV);
     }
 }

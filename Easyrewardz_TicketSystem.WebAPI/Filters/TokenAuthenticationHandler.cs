@@ -60,6 +60,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                 //{
                 //    return AuthenticateResult.Fail("Invalid Authorization");
                 //}
+                Authenticate authenticates = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 var routeData = Context.Request.Path.Value;
                 //var XAuthorizedToken = Convert.ToString(context.Request.Headers["X-Authorized-Token"]);
@@ -72,10 +73,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                             var XAuthorizedProgramcode = Convert.ToString(Context.Request.Headers["X-Authorized-Programcode"]);
                             if (string.IsNullOrEmpty(XAuthorizedProgramcode))
                             {
-                                var XAuthorizedToken = Convert.ToString(Context.Request.Headers["X-Authorized-Token"]);
+                               // var XAuthorizedToken = Convert.ToString(Context.Request.Headers["X-Authorized-Token"]);
 
-                                Authenticate authenticates = new Authenticate();
-                                authenticates = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(XAuthorizedToken));
+                                //Authenticate authenticates = new Authenticate();
+                                //authenticates = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(XAuthorizedToken));
+                                Context.Request.HttpContext.Items["Authenticate"] = authenticates;
                                 XAuthorizedProgramcode = authenticates.ProgramCode;
                             }
                             else
@@ -96,24 +98,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                     }
                 }
 
-
-                Authenticate authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
-
-                if (!string.IsNullOrEmpty(authenticate.Token))
+                if (!string.IsNullOrEmpty(authenticates.Token))
                 {
                     var claims = new[] { new Claim(ClaimTypes.Name, "1") };
                     var identity = new ClaimsIdentity(claims, Scheme.Name);
                     var principal = new ClaimsPrincipal(identity);
                     var ticket = new AuthenticationTicket(principal, Scheme.Name);
                     return AuthenticateResult.Success(ticket);
-
                 }
                 else
                 {
                     return AuthenticateResult.Fail("Invalid Authorization");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return AuthenticateResult.Fail("Failed to validate token");
             }
@@ -171,7 +169,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Filters
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     plaintext = "keyError";
                 }

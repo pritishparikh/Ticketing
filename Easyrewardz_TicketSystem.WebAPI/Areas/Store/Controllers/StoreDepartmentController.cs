@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 {
@@ -94,7 +95,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Delete department Brand Mapping 
         /// </summary>
-        /// <param name="TenantID"></param>
         /// <param name="DepartmentBrandMappingID"></param>
         /// <returns></returns>
         [HttpPost]
@@ -268,11 +268,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get Department List 
         /// </summary>
-        /// <param name="TenantID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("getDepartmentList")]
-        public ResponseModel getDepartmentList()
+        public async Task<ResponseModel> getDepartmentList()
         {
 
             List<StoreDepartmentModel> objDepartmentList = new List<StoreDepartmentModel>();
@@ -287,11 +286,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
 
                 StoreDepartmentCaller newMasterBrand = new StoreDepartmentCaller();
 
-                objDepartmentList = newMasterBrand.GetDepartmentListDetails(new StoreDepartmentService(_connectioSting), authenticate.TenantId);
+                objDepartmentList = await newMasterBrand.GetDepartmentListDetails(new StoreDepartmentService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =
-                objDepartmentList.Count == 0 ?
-                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                objDepartmentList.Count > 0 ?
+                     (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
 
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
 
@@ -465,7 +464,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             return objResponseModel;
         }
 
-
+        /// <summary>
+        /// Create Department
+        /// </summary>
+        /// <param name="createDepartmentModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("CreateDepartment")]
         public ResponseModel CreateDepartment([FromBody] CreateStoreDepartmentModel createDepartmentModel)
@@ -509,7 +512,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
         /// <summary>
         /// Get DeparmentBrandMapping List 
         /// </summary>
-        /// <param name="TenantID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetDeparmentBrandMappingList")]
@@ -547,6 +549,12 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
             }
             return objResponseModel;
         }
+
+        /// <summary>
+        /// Bulk Upload Department
+        /// </summary>
+        /// <param name="DeptFor"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("BulkUploadDepartment")]
         public ResponseModel BulkUploadDepartment(int DeptFor = 3)
@@ -655,7 +663,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Areas.Store.Controllers
                                  ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store_Department", SuccessFileUrl, ErrorFileUrl, DeptFor);
                 #endregion
 
-                StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                StatusCode = successfilesaved == true && errorfilesaved == false ? 
+                    (int)EnumMaster.StatusCode.Success : successfilesaved == true && errorfilesaved == true? 
+                    (int)EnumMaster.StatusCode.RecordUploadedPartially : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;

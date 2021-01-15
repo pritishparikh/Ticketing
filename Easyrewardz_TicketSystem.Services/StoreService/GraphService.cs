@@ -1,10 +1,12 @@
 ﻿using Easyrewardz_TicketSystem.CustomModel;
+using Easyrewardz_TicketSystem.CustomModel.StoreModal;
 using Easyrewardz_TicketSystem.Interface;
 using Easyrewardz_TicketSystem.Model;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.Services
 {
@@ -74,6 +76,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return users;
@@ -137,6 +143,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
 
@@ -296,9 +306,153 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return obj;
+        }
+
+
+        /// <summary>
+        /// Get Campaign Name List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="ProgramCode"></param>
+        /// <returns></returns>
+        /// 
+        public async Task<List<CampaignNameList>> GetCampaignNameList( int TenantID, string ProgramCode)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            List<CampaignNameList> CampaignNameList = new List<CampaignNameList>();
+            try
+            {
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    cmd = new MySqlCommand("SP_GetCampaignNameList", conn);
+                    cmd.Connection = conn;
+                    cmd.Parameters.AddWithValue("@_TenantID", TenantID);
+                    cmd.Parameters.AddWithValue("@_ProgramCode", ProgramCode);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (var dr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (dr.Read())
+                        {
+                            CampaignNameList obj = new CampaignNameList()
+                            {
+                                CampaignNameID = dr["CampaignNameID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CampaignNameID"]),
+                                CampaignName = dr["CampaignName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignName"]),
+                                CampaignCode = dr["CampaignCode"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignCode"])
+
+                            };
+                            CampaignNameList.Add(obj);
+                        }
+
+                    }
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return CampaignNameList;
+        }
+
+
+        /// <summary>
+        /// Dashboard Campaign Graph
+        /// </summary>
+        /// <param name="CampaignGraphRequest"></param>W
+        /// <returns></returns>
+        /// 
+        public async Task<List<DashboardCampaignGraphModel>> DashboardCampaignGraph(CampaignStatusGraphRequest CampaignGraphRequest)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            List<DashboardCampaignGraphModel> CampaignList = new List<DashboardCampaignGraphModel>();
+            string TemStartDate = string.Empty;
+            string TemEndDate = string.Empty;
+            try
+            {
+
+                if(string.IsNullOrEmpty(CampaignGraphRequest.StartDate) || string.IsNullOrEmpty(CampaignGraphRequest.EndDate))
+                {
+                    DateTime now = DateTime.Now;
+                    DateTime startDate = new DateTime(now.Year, now.Month, 1);
+                    TemStartDate = startDate.ToString("yyyy-MM-dd");
+                    TemEndDate = startDate.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd");
+                }
+
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                using (conn)
+                {
+                    cmd = new MySqlCommand("SP_GetCampaignResponseStatusGraph", conn);
+                    cmd.Connection = conn;
+                    cmd.Parameters.AddWithValue("@_TenantID", CampaignGraphRequest.TenantID);
+                    cmd.Parameters.AddWithValue("@_CampaignNameIDs", string.IsNullOrEmpty(CampaignGraphRequest.CampaignNameIDs) ? "" : CampaignGraphRequest.CampaignNameIDs.TrimEnd(','));
+                    cmd.Parameters.AddWithValue("@_UserIDs", string.IsNullOrEmpty(CampaignGraphRequest.UserIds) ? "" : CampaignGraphRequest.UserIds.TrimEnd(','));
+                    cmd.Parameters.AddWithValue("@_StartDate", string.IsNullOrEmpty(CampaignGraphRequest.StartDate) ? TemStartDate : CampaignGraphRequest.StartDate);
+                    cmd.Parameters.AddWithValue("@_EndDate", string.IsNullOrEmpty(CampaignGraphRequest.EndDate) ? TemEndDate : CampaignGraphRequest.EndDate);
+                    cmd.Parameters.AddWithValue("@_StoreIDs", string.IsNullOrEmpty(CampaignGraphRequest.StoreIDs) ? "" : CampaignGraphRequest.StoreIDs.TrimEnd(','));
+                    cmd.Parameters.AddWithValue("@_ZoneIDs", string.IsNullOrEmpty(CampaignGraphRequest.ZoneIDs) ? "" : CampaignGraphRequest.ZoneIDs.TrimEnd(','));
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (var dr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (dr.Read())
+                        {
+                            DashboardCampaignGraphModel obj = new DashboardCampaignGraphModel()
+                            {
+                                CampaignStatusCount = dr["CampaignStatusCount"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CampaignStatusCount"]),
+                                CampaignStatus = dr["CampaignStatus"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CampaignStatus"]),
+                                CampaignStatusName = dr["CampaignStatusName"] == DBNull.Value ? string.Empty : Convert.ToString(dr["CampaignStatusName"])
+
+                            };
+                            CampaignList.Add(obj);
+                        }
+
+                    }
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return CampaignList;
         }
 
     }

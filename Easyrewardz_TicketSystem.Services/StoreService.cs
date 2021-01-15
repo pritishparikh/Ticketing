@@ -168,8 +168,7 @@ namespace Easyrewardz_TicketSystem.Services
             {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SP_UpdateStore", conn);
-                cmd.Connection = conn;
-                //cmd.Parameters.AddWithValue("@Brand_ID", storeMaster.BrandID);
+                cmd.Connection = conn;               
                 cmd.Parameters.AddWithValue("@Store_Code", storeMaster.StoreCode);
                 cmd.Parameters.AddWithValue("@Store_Name", storeMaster.StoreName);
                 cmd.Parameters.AddWithValue("@State_ID", storeMaster.StateID);
@@ -239,9 +238,7 @@ namespace Easyrewardz_TicketSystem.Services
                             store.Pincode = ds.Tables[0].Rows[i]["PincodeID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PincodeID"]);
                             store.StoreEmailID = ds.Tables[0].Rows[i]["StoreEmailID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreEmailID"]);
                             store.Address = ds.Tables[0].Rows[i]["Address"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
-                            store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
-                            //store.StoreVisitDate= ds.Tables[0].Rows[i]["StoreVisitDate"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreVisitDate"]);
-                            //store.Purpose= ds.Tables[0].Rows[i]["Purpose"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Purpose"]);
+                            store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);                           
                             storeMaster.Add(store);
                         }
                     }
@@ -316,8 +313,6 @@ namespace Easyrewardz_TicketSystem.Services
                                 store.Address = objStoreDetails[k].StoreAddress;
                                 store.StoreID = 0;
                                 store.LpassStoreID = objStoreDetails[k].StoreId;
-
-
                                 storeMaster.Add(store);
                             }
                         }
@@ -419,8 +414,7 @@ namespace Easyrewardz_TicketSystem.Services
                         store.StoreID = Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
                         store.StoreName = Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
                         store.StoreCode = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        store.StorePhoneNo = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        //store.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i][""]);
+                        store.StorePhoneNo = Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);                       
                         storeMaster.Add(store);
                     }
                 }
@@ -470,7 +464,7 @@ namespace Easyrewardz_TicketSystem.Services
                         store.StoreID = ds.Tables[0].Rows[i]["StoreID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreID"]);
                         store.StoreName = ds.Tables[0].Rows[i]["StoreName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreName"]);
                         store.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
-                        //store.BranName = Convert.ToString(ds.Tables[0].Rows[i]["BrandName"]);
+                       
                         store.CityName = ds.Tables[0].Rows[i]["CityName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["CityName"]);
                         store.StateName = ds.Tables[0].Rows[i]["StateName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StateName"]);
                         store.strPinCode = ds.Tables[0].Rows[i]["PincodeID"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["PincodeID"]);
@@ -483,8 +477,10 @@ namespace Easyrewardz_TicketSystem.Services
                         store.CityID = ds.Tables[0].Rows[i]["CityID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["CityID"]);
                         store.StateID = ds.Tables[0].Rows[i]["StateID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StateID"]);
                         store.RegionID = ds.Tables[0].Rows[i]["RegionID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["RegionID"]);
+                        store.RegionName = ds.Tables[0].Rows[i]["RegionName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["RegionName"]);
                         store.ZoneID = ds.Tables[0].Rows[i]["ZoneID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["ZoneID"]);
                         store.StoreTypeID = ds.Tables[0].Rows[i]["StoreTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["StoreTypeID"]);
+                        store.StoreTypeName = ds.Tables[0].Rows[i]["StoreTypeName"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreTypeName"]);
                         store.StatusID = Convert.ToBoolean(ds.Tables[0].Rows[i]["StatusID"]);
                         store.BrandIDs = ds.Tables[0].Rows[i]["BrandIDs"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandIDs"]);
                         store.BrandNames = ds.Tables[0].Rows[i]["BrandNames"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["BrandNames"]);
@@ -596,8 +592,7 @@ namespace Easyrewardz_TicketSystem.Services
                         MySqlCommand cmd = new MySqlCommand("SP_BulkUploadStore", conn);
                         cmd.Connection = conn;
                         cmd.Parameters.AddWithValue("@_xml_content", xmlDoc.InnerXml);
-                        cmd.Parameters.AddWithValue("@_node", Xpath);
-                        //cmd.Parameters.AddWithValue("@_StoreFor", RoleFor);
+                        cmd.Parameters.AddWithValue("@_node", Xpath);                        
                         cmd.Parameters.AddWithValue("@_tenantID", TenantID);
                         cmd.Parameters.AddWithValue("@_createdBy", CreatedBy);
                         cmd.CommandType = CommandType.StoredProcedure;

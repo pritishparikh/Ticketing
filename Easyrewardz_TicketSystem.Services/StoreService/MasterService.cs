@@ -20,6 +20,12 @@ namespace Easyrewardz_TicketSystem.Services.StoreServices
 
         #endregion
 
+        /// <summary>
+        /// Get Store User List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public List<StoreUser> GetStoreUserList(int TenantID, int UserID)
         {
             DataSet ds = new DataSet();
@@ -63,11 +69,21 @@ namespace Easyrewardz_TicketSystem.Services.StoreServices
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return users;
         }
 
+        /// <summary>
+        /// Get Store Function List
+        /// </summary>
+        /// <param name="TenantID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public List<StoreFunctionModel> GetStoreFunctionList(int TenantID, int UserID)
         {
             DataSet ds = new DataSet();
@@ -109,9 +125,65 @@ namespace Easyrewardz_TicketSystem.Services.StoreServices
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
 
             return users;
+        }
+
+        /// <summary>
+        /// Get Region List
+        /// </summary>
+        /// <returns></returns>
+        public List<RegionZoneMaster> GetRegionlist(int UserID)
+        {
+
+            DataSet ds = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            List<RegionZoneMaster> regionMaster = new List<RegionZoneMaster>();
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                MySqlCommand cmd1 = new MySqlCommand("SP_GetRegionZoneByUserID", conn);
+                cmd1.Parameters.AddWithValue("@_UserID", UserID);
+                cmd1.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                da.SelectCommand = cmd1;
+                da.Fill(ds);
+                if (ds != null && ds.Tables[0] != null)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        RegionZoneMaster region = new RegionZoneMaster();
+                        region.RegionID = Convert.ToInt32(ds.Tables[0].Rows[i]["RegionID"]);
+                        region.RegionName = Convert.ToString(ds.Tables[0].Rows[i]["RegionName"]);
+                        region.ZoneID = Convert.ToInt32(ds.Tables[0].Rows[i]["ZoneID"]);
+                        regionMaster.Add(region);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return regionMaster;
         }
     }
 }

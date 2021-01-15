@@ -7,40 +7,83 @@ namespace Easyrewardz_TicketSystem.Model
     public class StoreCampaignModel3
     {
         //public List<StoreCampaignSettingModel> CampaignSetting { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public  StoreCampaignSettingTimer CampaignSettingTimer { get; set; }
     } 
 
 
     public class StoreCampaignSettingModel
     {
+        /// <summary>
+        /// ID
+        /// </summary>
         public int ID { get; set; }
 
+        /// <summary>
+        /// Campaign Name
+        /// </summary>
         public string CampaignName { get; set; }
 
+        /// <summary>
+        /// Campaign Code
+        /// </summary>
         public string CampaignCode { get; set; }
 
+        /// <summary>
+        /// Program code
+        /// </summary>
         public string Programcode { get; set; }
 
-
+        /// <summary>
+        /// Sms Flag
+        /// </summary>
         public bool SmsFlag { get; set; }
 
+        /// <summary>
+        /// Email Flag
+        /// </summary>
         public bool EmailFlag { get; set; }
 
+        /// <summary>
+        /// Messenger Flag
+        /// </summary>
         public bool MessengerFlag { get; set; }
 
+        /// <summary>
+        /// Bot Flag
+        /// </summary>
         public bool BotFlag { get; set; }
 
-
+        /// <summary>
+        /// Created By
+        /// </summary>
         public int CreatedBy { get; set; }
 
-         public string CreatedOnName { get; set; }
+        /// <summary>
+        /// Created On Name
+        /// </summary>
+        public string CreatedOnName { get; set; }
 
+        /// <summary>
+        /// Created On
+        /// </summary>
         public string CreatedOn { get; set; }
 
-
+        /// <summary>
+        /// Modified By
+        /// </summary>
         public int ModifiedBy { get; set; }
 
+        /// <summary>
+        /// Modified By Name
+        /// </summary>
         public string ModifiedByName { get; set; }
+
+        /// <summary>
+        /// Modified On
+        /// </summary>
         public string ModifiedOn { get; set; }
 
     }
@@ -87,6 +130,36 @@ namespace Easyrewardz_TicketSystem.Model
         /// ProviderName
         /// </summary>
         public string ProviderName { get; set; } = "";
+        /// <summary>
+        /// CampaignAutoAssigned
+        /// </summary>
+        public bool CampaignAutoAssigned { get; set; }
+        /// <summary>
+        /// RaiseTicketFlag
+        /// </summary>
+        public bool RaiseTicketFlag { get; set; }
+        /// <summary>
+        /// AddCommentFlag
+        /// </summary>
+        public bool AddCommentFlag { get; set; }
+
+        // <summary>
+        /// StoreFlag
+        /// </summary>
+        public bool StoreFlag { get; set; }
+        /// <summary>
+        /// ZoneFlag
+        /// </summary>
+        public bool ZoneFlag { get; set; }
+
+        // <summary>
+        /// UserProductivityReport
+        /// </summary>
+        public bool UserProductivityReport { get; set; }
+        /// <summary>
+        /// StoreProductivityReport
+        /// </summary>
+        public bool StoreProductivityReport { get; set; }
 
     }
 
@@ -156,6 +229,69 @@ namespace Easyrewardz_TicketSystem.Model
         /// OnlyCard
         /// </summary>
         public bool OnlyCard { get; set; }
+
+        /// <summary>
+        /// Send Message to Customer Via WhatsApp Incase od Cancellation
+        /// </summary>
+        public bool ViaWhatsApp { get; set; }
+
+
+
+        /// <summary>
+        ///         /// Chck if customer last msg within 24 hours
+        /// </summary>
+        public bool IsMsgWithin24Hrs { get; set; }
+
+        /// <summary>
+        /// Message content to be sent Via WhatsApp
+        /// </summary>
+        public string MessageViaWhatsApp { get; set; }
+
+
+        /// <summary>
+        ///         /// Send Message to Customer Via WhatsApp Incase od Cancellation
+        /// </summary>
+        public bool ViaSMS { get; set; }
+
+        /// <summary>
+        /// Message content to be sent Via SMS
+        /// </summary>
+        public string MessageViaSMS { get; set; }
+
+
+
+
+        /// <summary>
+        /// Reminder to Customer Via WhatsApp 
+        /// </summary>
+        public bool ReminderViaWhatsApp { get; set; }
+
+
+        /// <summary>
+        /// Reminder to Customer Via SMS 
+        /// </summary>
+        public bool ReminderViaSMS { get; set; }
+
+
+
+        /// <summary>
+        /// Reminder Message content to be sent Via SMS
+        /// </summary>
+        public string ReminderMessageViaSMS { get; set; }
+
+        /// <summary>
+        /// Remind Before Value
+        /// </summary>
+        public int RemindBeforeValue { get; set; }
+
+
+
+        /// <summary>
+        ///Remind Before Duration
+        /// </summary>
+        public string RemindBeforeDuration { get; set; }
+
+
     }
 
     public class Languages

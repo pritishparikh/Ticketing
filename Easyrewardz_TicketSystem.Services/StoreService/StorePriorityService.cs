@@ -141,6 +141,10 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return objPriority;
         }
@@ -195,6 +199,10 @@ namespace Easyrewardz_TicketSystem.Services
                 if (conn != null)
                 {
                     conn.Close();
+                }
+                if (ds != null)
+                {
+                    ds.Dispose();
                 }
             }
             return objPriority;
@@ -266,11 +274,21 @@ namespace Easyrewardz_TicketSystem.Services
             }
             finally
             {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
             }
 
             return isUpdate;
         }
 
+        /// <summary>
+        /// Validate Priority
+        /// </summary>
+        /// <param name="priorityName"></param>
+        /// <param name="tenantID"></param>
+        /// <returns></returns>
         public string ValidatePriority(string priorityName, int tenantID)
         {
             string Message = "";

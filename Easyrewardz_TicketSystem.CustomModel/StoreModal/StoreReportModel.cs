@@ -57,7 +57,15 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public string CampaignEndDate { get; set; }
         public string CampaignStatusids { get; set; }
         public string CampaignAssignedIds { get; set; }
+        public int CampaignRegion { get; set; }
+        public int CampaignZone { get; set; }
         //ends here
+
+        // Login Report parameter
+        public string UserIDs { get; set; }
+        public string Startdate { get; set; }
+        public string Enddate { get; set; }
+        //// End Login Report parameter
 
     }
 
@@ -78,12 +86,12 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
     #region Store report Model
 
 
-
     public class SearchStoreResponseReport
     {
         public List<SearchStoreTaskReportResponse> TaskReport { get; set; }
         public List<SearchStoreClaimReportResponse> ClaimReport { get; set; }
         public List<SearchStoreCampaignReportResponse> CampaignReport { get; set; }
+        public List<LoginReportResponse> LoginReportResponse { get; set; }
     }
 
 
@@ -169,6 +177,7 @@ namespace Easyrewardz_TicketSystem.CustomModel.StoreModal
         public int CampaignCustomerID { get; set; }
         public int CustomerID { get; set; }
         public string CustomerName { get; set; }
+        public string CustomerMobileNumber { get; set; }
         public int CampaignTypeID { get; set; }
         public string CampaignName { get; set; }
         public string CampaignTypeDate { get; set; }

@@ -15,10 +15,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Provider
 
         private IStoreDepartment ImasterDepartment;
 
-        public List<StoreDepartmentModel> GetDepartmentListDetails(IStoreDepartment department, int TenantID)
+        public async Task<List<StoreDepartmentModel>> GetDepartmentListDetails(IStoreDepartment department, int TenantID, int UserID)
         {
             ImasterDepartment = department;
-            return ImasterDepartment.GetStoreDepartmentList(TenantID);
+            return await ImasterDepartment.GetStoreDepartmentList(TenantID, UserID);
         }
 
         public List<StoreDepartmentModel> GetDepartmentListBySearch(IStoreDepartment department, int TenantID, string DepartmentName)

@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Net.Http.Headers;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 {
@@ -71,9 +71,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                // authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
                 storeUser.CreatedBy = authenticate.UserMasterID;
@@ -113,9 +114,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             int Result = 0;
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
@@ -164,9 +166,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             int Result = 0;
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
                 storeUser.CreatedBy = authenticate.UserMasterID;
@@ -202,6 +205,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
         /// <summary>
         /// Edit Store User
+        /// 
         /// </summary>
         /// <param name="editStoreUser"></param>
         [HttpPost]
@@ -213,9 +217,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
                 editStoreUser.CreatedBy = authenticate.UserMasterID;
@@ -244,9 +249,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
         /// <summary>
-        /// AddBrandStore
+        /// Add Brand Store
         /// </summary>
-        /// <param name="storeUser"></param>
+        /// <param name="brandID"></param>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddUserBrandStore")]
         public ResponseModel AddUserBrandStore(int brandID, int storeID)
@@ -257,9 +264,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             int Result = 0;
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
                 Result = userCaller.AddBrandStore(new StoreUserService(_connectioSting), authenticate.TenantId, brandID, storeID, authenticate.UserMasterID);
@@ -280,10 +288,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+
         /// <summary>
-        /// Update User BrandStore
+        /// Update User Brand Store
         /// </summary>
-        /// <param name="storeUser"></param>
+        /// <param name="UserID"></param>
+        /// <param name="brandID"></param>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateUserBrandStore")]
         public ResponseModel UpdateUserBrandStore(int UserID, int brandID, int storeID)
@@ -294,9 +306,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             int Result = 0;
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
                 Result = userCaller.UpdateBrandStore(new StoreUserService(_connectioSting), authenticate.TenantId, brandID, storeID, authenticate.UserMasterID, UserID);
@@ -336,9 +349,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
@@ -368,8 +382,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get  Store User List
         /// </summary>
-        /// <param name="tenantID"></param>
-
         /// <returns></returns>
         [HttpPost]
         [Route("GetStoreUsers")]
@@ -381,13 +393,14 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
-                objUser = userCaller.GetStoreUserList(new StoreUserService(_connectioSting), authenticate.TenantId);
+                objUser = userCaller.GetStoreUserList(new StoreUserService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
 
                 StatusCode =
                objUser.Count == 0 ?
@@ -413,8 +426,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get  Store User List on USerID
         /// </summary>
-        /// <param name="tenantID"></param>
-
+        /// <param name="UserID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetStoreUserDetailsByUserID")]
@@ -426,9 +438,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
@@ -471,9 +484,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
@@ -504,7 +518,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// Get  reportee designation on designation id
         /// </summary>
         /// <param name="DesignationID"></param>
-        /// <param name="storeID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BindStoreReporteeDesignation")]
@@ -516,9 +529,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
@@ -544,12 +558,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             return objResponseModel;
         }
 
-        // <summary>
+        /// <summary>
         /// Get Store Report To User
         /// </summary>
         /// <param name="DesignationID"></param>
         /// <param name="IsStoreUser"></param>
-        /// <param name="TenantID"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BindStoreReportToUser")]
@@ -561,9 +574,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
@@ -594,10 +608,9 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         #region Bind Claim 
 
         /// <summary>
-        /// Get Claim Category List by muliptle brandID
+        /// Bind Store Claim Category
         /// </summary>
-        /// <param name="TenantID"></param>
-        /// <param name="BrandID"></param>
+        /// <param name="BrandIds"></param>
         /// <returns></returns>
         /// 
         [HttpPost]
@@ -610,9 +623,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
@@ -642,8 +656,7 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get Claim sub Category List by muliptle CategoryID
         /// </summary>
-        /// <param name="TenantID"></param>
-        /// <param name="BrandID"></param>
+        /// <param name="CategoryIDs"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("BindStoreClaimSubCategory")]
@@ -655,9 +668,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
@@ -687,7 +701,6 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
         /// <summary>
         /// Get Claim Issue Type List by multiple subcat Id
         /// </summary>
-        /// <param name="TenantID">Tenant Id</param>
         /// <param name="SubCategoryID">SubCategory ID</param>
         /// <returns></returns>
         [HttpPost]
@@ -700,9 +713,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
 
@@ -750,9 +764,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 campaignScript.CreatedBy = authenticate.UserMasterID;
                 campaignScript.TenantID = authenticate.TenantId;
@@ -796,9 +811,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             try
             {
                 ////Get token (Double encrypted) and get the tenant id 
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 claimAttechment.CreatedBy = authenticate.UserMasterID;
                 claimAttechment.TenantID = authenticate.TenantId;
@@ -865,9 +881,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
 
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
 
 
@@ -923,10 +940,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
 
 
-                string SuccessFileUrl = !string.IsNullOrEmpty(CSVlist[0]) ?
-                  rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor) + "/Success/" + SuccessFileName : string.Empty;
-                string ErrorFileUrl = !string.IsNullOrEmpty(CSVlist[1]) ?
-                    rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor) + "/Error/" + ErrorFileName : string.Empty;
+                //string SuccessFileUrl = !string.IsNullOrEmpty(CSVlist[0]) ?
+                //  rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor) + "/Success/" + SuccessFileName : string.Empty;
+                //string ErrorFileUrl = !string.IsNullOrEmpty(CSVlist[1]) ?
+                //    rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor) + "/Error/" + ErrorFileName : string.Empty;
 
                 if (!string.IsNullOrEmpty(CSVlist[0]))
                 {
@@ -944,13 +961,20 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 }
 
 
+                string SuccessFileUrl = !string.IsNullOrEmpty(CSVlist[0]) ?
+                  rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor) + "/Success/" + SuccessFileName : string.Empty;
+                string ErrorFileUrl = !string.IsNullOrEmpty(CSVlist[1]) ?
+                    rootPath + BulkUpload + "/" + DownloadFile + "/" + CommonFunction.GetEnumDescription((EnumMaster.FileUpload)UserFor) + "/Error/" + ErrorFileName : string.Empty;
+
                 count = fileU.CreateFileUploadLog(new StoreFileUploadService(_connectioSting), authenticate.TenantId, filesName[0], true,
                                  ErrorFileName, SuccessFileName, authenticate.UserMasterID, "Store_User", SuccessFileUrl, ErrorFileUrl, UserFor);
                 #endregion
 
 
 
-                StatusCode = count > 0 ? (int)EnumMaster.StatusCode.Success : (int)EnumMaster.StatusCode.RecordNotFound;
+                StatusCode = successfilesaved == true && errorfilesaved == false ?
+                    (int)EnumMaster.StatusCode.Success : successfilesaved == true && errorfilesaved == true ?
+                    (int)EnumMaster.StatusCode.RecordUploadedPartially : (int)EnumMaster.StatusCode.RecordNotFound;
                 statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
                 objResponseModel.Status = true;
                 objResponseModel.StatusCode = StatusCode;
@@ -982,10 +1006,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
                 string url = configuration.GetValue<string>("APIURL") + ProfileImg_Resources + "/" + StoreProfileImage;
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+               // authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
                 StoreUserCaller userCaller = new StoreUserCaller();
                 objUserList = userCaller.GetUserProfileDetails(new StoreUserService(_connectioSting), authenticate.UserMasterID, url);
                 StatusCode =
@@ -1052,9 +1077,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                 int StatusCode = 0;
                 string statusMessage = "";
 
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
                 int Result = userCaller.UpdateUserProfileDetail(new StoreUserService(_connectioSting), UpdateUserProfiledetailsModel);
@@ -1093,9 +1119,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             ResponseModel objResponseModel = new ResponseModel();
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 string _data = "";
                 string ProgramCode = authenticate.ProgramCode;
@@ -1120,9 +1147,11 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
                     StoreSecurityCaller _securityCaller = new StoreSecurityCaller();
                     CommonService commonService = new CommonService();
 
-                    EmailProgramCode emailProgramCode = new EmailProgramCode();
-                    emailProgramCode.EmailID = customChangePassword.EmailID;
-                    emailProgramCode.ProgramCode = ProgramCode;
+                    EmailProgramCode emailProgramCode = new EmailProgramCode
+                    {
+                        EmailID = customChangePassword.EmailID,
+                        ProgramCode = ProgramCode
+                    };
                     string jsonData = JsonConvert.SerializeObject(emailProgramCode);
 
                     string encryptedEmailId = commonService.Encrypt(jsonData);
@@ -1130,7 +1159,8 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
                     string decriptedPassword = SecurityService.DecryptStringAES(customChangePassword.Password);
                     string url = X_Authorized_Domainname.TrimEnd('/') + "/StoreChangePassword";
-                    string body = "Dear User, <br/>Please find the below details.  <br/><br/>" + "Your Email ID  : " + customChangePassword.EmailID + "<br/>" + "Your Password : " + decriptedPassword + "<br/><br/>" + "Click on Below link to change the Password <br/>" + url + "?Id:" + encryptedEmailId;
+                    string body = "Dear User, <br/>Please find the below details.  <br/><br/>" + "Your Email ID  : " + customChangePassword.EmailID + "<br/>" + "Your Password : " + decriptedPassword + "<br/><br/>" + "Click on Below link to change the Password <br/>" + url + "?Id:" + encryptedEmailId; 
+
                     bool isUpdate = _securityCaller.sendMailForChangePassword(new StoreSecurityService(_data), sMTPDetails, customChangePassword.EmailID, body, authenticate.TenantId);
                     if (isUpdate)
                     {
@@ -1176,9 +1206,10 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
             string statusMessage = "";
             try
             {
-                string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
                 Authenticate authenticate = new Authenticate();
-                authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
 
                 StoreUserCaller userCaller = new StoreUserCaller();
                 int Result = userCaller.DeleteProfilePicture(new StoreUserService(_connectioSting), authenticate.TenantId, authenticate.UserMasterID);
@@ -1285,6 +1316,181 @@ namespace Easyrewardz_TicketSystem.WebAPI.Controllers
 
             return objResponseModel;
         }
+
+
+        /// <summary>
+        /// GetStoreReportUserList
+        /// </summary>
+        /// <param name="RegionID"></param>
+        /// <param name="ZoneID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreReportUser")]
+        public ResponseModel GetStoreReportUser(int RegionID, int ZoneID)
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<StoreUserListing> objUser = new List<StoreUserListing>();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                objUser = userCaller.GetStoreReportUser(new StoreUserService(_connectioSting), authenticate.TenantId, RegionID, ZoneID, authenticate.UserMasterID);
+
+                StatusCode =
+               objUser.Count == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objUser;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// GetStoreReportUsersList
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetStoreReportUsersList")]
+        public ResponseModel GetStoreReportUsersList()
+        {
+            ResponseModel objResponseModel = new ResponseModel();
+            List<StoreUserListing> objUser = new List<StoreUserListing>();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+
+                StoreUserCaller userCaller = new StoreUserCaller();
+
+                objUser = userCaller.GetStoreReportUsersList(new StoreUserService(_connectioSting), authenticate.TenantId);
+
+                StatusCode =
+               objUser.Count == 0 ?
+                      (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objUser;
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Store List
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("StoreListByBrand")]
+        public ResponseModel StoreListByBrand(int BrandID)
+        {
+            List<StoreCodeModel> objstoreList = new List<StoreCodeModel>();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                //string token = Convert.ToString(Request.Headers["X-Authorized-Token"]);
+                Authenticate authenticate = new Authenticate();
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+                //authenticate = SecurityService.GetAuthenticateDataFromToken(_radisCacheServerAddress, SecurityService.DecryptStringAES(token));
+                StoreUserCaller newStore = new StoreUserCaller();
+
+                objstoreList = newStore.StoreListByBrand(new StoreUserService(_connectioSting), authenticate.TenantId, BrandID);
+
+                StatusCode =
+                objstoreList.Count == 0 ?
+                     (int)EnumMaster.StatusCode.RecordNotFound : (int)EnumMaster.StatusCode.Success;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = objstoreList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
+        /// <summary>
+        /// Validate UserName
+        /// </summary>
+        /// <param name="UserName"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("ValidateUserName")]
+        public async Task<ResponseModel> ValidateUserName([FromBody] StoreUserPersonalDetails storeUser)
+        {
+            UsercodeSuggestion Suggestion = new UsercodeSuggestion();
+            ResponseModel objResponseModel = new ResponseModel();
+            int StatusCode = 0;
+            string statusMessage = "";
+            try
+            {
+                Authenticate authenticate = new Authenticate();
+                authenticate = (Authenticate)HttpContext.Items["Authenticate"];
+
+                storeUser.TenantID = authenticate.TenantId;
+
+                StoreUserCaller newStore = new StoreUserCaller();
+
+                Suggestion = await newStore.ValidateUserName(new StoreUserService(_connectioSting), storeUser);
+
+                StatusCode = Suggestion.UserAlreadyExists ? (int)EnumMaster.StatusCode.RecordAlreadyExists : (int)EnumMaster.StatusCode.RecordNotFound;
+                statusMessage = CommonFunction.GetEnumDescription((EnumMaster.StatusCode)StatusCode);
+                objResponseModel.Status = true;
+                objResponseModel.StatusCode = StatusCode;
+                objResponseModel.Message = statusMessage;
+                objResponseModel.ResponseData = Suggestion;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return objResponseModel;
+        }
+
+
         #endregion
+
+
+
+
     }
 }

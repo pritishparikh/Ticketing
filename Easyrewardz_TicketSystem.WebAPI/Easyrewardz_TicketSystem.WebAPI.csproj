@@ -3,13 +3,24 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <AssemblyVersion>1.0.1.20217</AssemblyVersion>
+    <FileVersion>1.0.1.20217</FileVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Filters\Authorization.cs" />
+    <Compile Remove="Filters\PermissionRequirement .cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.18" />
+    <PackageReference Include="NLog" Version="4.7.5" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.6.5" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.3" />
+    <PackageReference Include="Site24x7.DotNetCoreAgent" Version="4.4.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +28,7 @@
     <ProjectReference Include="..\Easyrewardz_TicketSystem.DBContext\Easyrewardz_TicketSystem.DBContext.csproj" />
     <ProjectReference Include="..\Easyrewardz_TicketSystem.Interface\Easyrewardz_TicketSystem.Interface.csproj" />
     <ProjectReference Include="..\Easyrewardz_TicketSystem.Services\Easyrewardz_TicketSystem.Services.csproj" />
+    <ProjectReference Include="..\Easyrewardz_TicketSystem.Web\ClientAPIServiceCall\ClientAPIServiceCall.csproj" />
   </ItemGroup>
 
   <ItemGroup>

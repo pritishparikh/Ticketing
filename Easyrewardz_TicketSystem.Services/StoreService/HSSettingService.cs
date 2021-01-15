@@ -19,6 +19,14 @@ namespace Easyrewardz_TicketSystem.Services
         #endregion
 
         #region Custom Methods
+
+        /// <summary>
+        /// Get Store Agent List
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="BrandID"></param>
+        /// <param name="StoreID"></param>
+        /// <returns></returns>
         public List<HSSettingModel> GetStoreAgentList(int tenantID, int BrandID, int StoreID)
         {
             DataSet ds = new DataSet();
@@ -55,6 +63,8 @@ namespace Easyrewardz_TicketSystem.Services
                         hSSettingModel.StoreCode = ds.Tables[0].Rows[i]["StoreCode"] == DBNull.Value ? string.Empty : Convert.ToString(ds.Tables[0].Rows[i]["StoreCode"]);
                         hSSettingModel.Suggestion = ds.Tables[0].Rows[i]["Suggestion"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Suggestion"]);
                         hSSettingModel.FreeText = ds.Tables[0].Rows[i]["FreeText"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["FreeText"]);
+                        hSSettingModel.Attachment = ds.Tables[0].Rows[i]["Attachment"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Attachment"]);
+                        //hSSettingModel.GrammarlyCheck = ds.Tables[0].Rows[i]["GrammarlyCheck"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["GrammarlyCheck"]);
                         listHierarchy.Add(hSSettingModel);
                     }
                 }
@@ -69,10 +79,20 @@ namespace Easyrewardz_TicketSystem.Services
                 {
                     conn.Close();
                 }
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
             }
             return listHierarchy;
         }
 
+        /// <summary>
+        /// Insert And Update Agent Details
+        /// </summary>
+        /// <param name="hSSettingModel"></param>
+        /// <param name="TenantId"></param>
+        /// <returns></returns>
         public int InsertUpdateAgentDetails(HSSettingModel hSSettingModel, int TenantId)
         {
 
@@ -89,9 +109,11 @@ namespace Easyrewardz_TicketSystem.Services
                 cmd1.Parameters.AddWithValue("@StoreAgent_ID", hSSettingModel.AgentID);
                 cmd1.Parameters.AddWithValue("@Suggestion", hSSettingModel.Suggestion);
                 cmd1.Parameters.AddWithValue("@Free_Text", hSSettingModel.FreeText);
+                cmd1.Parameters.AddWithValue("@_Attachment", hSSettingModel.Attachment);
+               // cmd1.Parameters.AddWithValue("@_GrammarlyCheck", hSSettingModel.GrammarlyCheck);
 
                 cmd1.CommandType = CommandType.StoredProcedure;
-                i = cmd1.ExecuteNonQuery();
+                i = Convert.ToInt32(cmd1.ExecuteScalar());
                 conn.Close();
             }
             catch (Exception)
@@ -109,6 +131,12 @@ namespace Easyrewardz_TicketSystem.Services
             return i;
         }
 
+        /// <summary>
+        /// Get Store Agent Details By Id
+        /// </summary>
+        /// <param name="tenantID"></param>
+        /// <param name="AgentID"></param>
+        /// <returns></returns>
         public List<HSSettingModel> GetStoreAgentDetailsById(int tenantID, int AgentID)
         {
             DataSet ds = new DataSet();
@@ -137,6 +165,8 @@ namespace Easyrewardz_TicketSystem.Services
                         hSSettingModel.AgentID = ds.Tables[0].Rows[i]["AgentID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["AgentID"]);
                         hSSettingModel.Suggestion = ds.Tables[0].Rows[i]["Suggestion"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Suggestion"]);
                         hSSettingModel.FreeText = ds.Tables[0].Rows[i]["FreeText"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["FreeText"]);
+                        hSSettingModel.Attachment = ds.Tables[0].Rows[i]["Attachment"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["Attachment"]);
+                       // hSSettingModel.GrammarlyCheck = ds.Tables[0].Rows[i]["GrammarlyCheck"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i]["GrammarlyCheck"]);
                         listHierarchy.Add(hSSettingModel);
                     }
                 }
